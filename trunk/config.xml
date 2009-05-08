@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Layout name="DemoLayout">
+<![CDATA[   
+TODO:
+* Menu and items
+* Radio groups 
+* HScript scope's
+]]>
+    <Window name="XmlWindow" x="300" y="30" width="512" height="512" sizeable="true" >
+	<Menubar name="menubar" width="512" x="10" y="20">
+		<Menu type="Object" name="menu1">
+			<Item type="String">a</Item>
+			<Item type="String">b</Item>
+			<Item type="String">c</Item>
+		</Menu>		
+		<Menu type="Object" name="menu2">
+			<Item type="String">a2</Item>
+			<Item type="String">b2</Item>
+			<Item type="String">c2</Item>
+		</Menu>		
+	</Menubar>
+	<ScrollPane name="ScrollPane1" x="10" y="44" >
+		<Container name="Container1" width="512" height="512" >
+			<Label x="30" y="8" >This window and it's content are dynamically generated from xml,
+			Some events are also defined in hscript.</Label>
+			<controls:Button label="Click" x="30" y="50" width="120" />
+			<controls:Button label="me" x="160" y="50" width="40" />
+			<controls:Button label="disabled" x="210" y="50" disabled="true" />
+			<controls:Button name="colorButton" label="Red" x="310" y="50" color="0xB35959" />
+		    
+			<controls:CheckBox name="CheckBox1" x="30" y="90" />
+			<controls:CheckBox name="CheckBox2" x="170" y="90" checked="true" />
+			<controls:CheckBox name="CheckBox3" x="310" y="90" disabled="true"/>
+			<controls:ComboBox name="ComboBox1" x="30" y="130" />
+			<controls:ComboBox name="ComboBox2" x="30" y="170" />
+			<controls:ComboBox name="ComboBox3" x="30" y="210" disabled="true" />
+			<controls:Slider name="Slider1" x="200" y="130" />
+			<controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="128"/>
+			<controls:Slider name="Slider2" x="200" y="170" />
+			<controls:Stepper name="Stepper2" x="360" y="170" step="4" max="128" />
+			<controls:Slider name="Slider3" x="200" y="210" />
+			<controls:Stepper name="Stepper3" x="360" y="210" step="10" max="128" />
+			<controls:RadioButton name="RadioButton1" x="30" y="250" />
+			<controls:RadioButton name="RadioButton2" x="30" y="290" />
+			<controls:RadioButton name="RadioButton3" x="30" y="330" disabled="true" />
+			
+			<controls:UiList name="List1" x="200" y="250" >Apples,Bannanas,Oranges</controls:UiList>
+			
+		</Container>
+
+		<script type="text/hscript">
+		
+		trace("Parsing hscript.");
+		
+		
+		var o = root.getChildByName("XmlWindow");
+		o = o.getChildByName("ScrollPane1");
+		o = o.getChildByName("content");
+		o = o.getChildByName("Container1");
+
+		var btn = o.getChildByName("colorButton");
+		btn.addEventListener(MouseEvent.MOUSE_UP, 
+		    function(e){ 
+		    if(btn.color == 0xB35959) 
+				{ btn.color=0xA1F02A; btn.label.tf.text = "Green"; }
+		    else 
+				{ btn.color=0xB35959; btn.label.tf.text = "Red"; }
+		    btn.redraw(); 
+		    btn.label.tf.setTextFormat(StyleManager.getTextFormat());
+		    } );
+		
+		var list = o.getChildByName("List1");
+		list.data.push("Milk");
+		list.data.push("Bread");
+		list.data.push("Eggs");
+		list.redraw();
+		
+		for( i in 1...4 )
+		{
+		    var slider = o.getChildByName("Slider"+i);
+		    var stepper = o.getChildByName("Stepper"+i);
+		    
+		    function adjustStepper( e )
+		    {
+			var x = e.target.getChildByName("handle").x;
+			stepper.value = x;
+			stepper.tf.text = Std.string(x);
+			stepper.tf.setTextFormat( StyleManager.getTextFormat() );
+		    }
+
+		    function adjustSlider( e )
+		    {
+			var x = e.target.value;
+			slider.getChildByName("handle").x = x;
+		    }
+
+
+		    slider.addEventListener( Event.CHANGE, adjustStepper );
+		    stepper.addEventListener( Event.CHANGE, adjustSlider );
+		
+		}
+				
+		
+		trace("Success.");
+		
+		</script>
+
+		<Window name="ChildWindow" x="120" y="120" width="180" height="140" color="0xA5DE33">
+		    <Container name="Container1"  x="10" y="20" width="100%" height="100%" color="0xA5DE33"  >
+			<Label x="20" y="4" >I'm a green child window</Label>
+			<controls:Button label="Click" x="20" y="30" width="120" color="0xA5DE33" />
+		    </Container>
+		</Window>
+
+		    <Component type="Class" name="comp" />
+					
+	</ScrollPane>
+    </Window>	
+
+    <Window name="PicWindow" x="200" y="30" width="320" height="240" sizeable="true" color="0xC5A466" >
+		<ScrollPane name="ScrollPane1" x="10" y="20" height="220">
+			<Image name="Image" src="assets/palm.jpg" x="0" y="0" />
+		</ScrollPane>
+    </Window>
+
+    <script type="text/hscript">
+	
+	var window = root.getChildByName("PicWindow");
+	var scrollpane = window.getChildByName("ScrollPane1");
+	var image = scrollpane.content.getChildByName("Image");
+	
+	var x=0;
+	var y=0;
+
+	function onRollOver(e)
+	    {
+	    CursorManager.getInstance ().setCursor (Cursor.HAND);
+	    }
+
+	function onRollOut(e)
+	    {
+	    CursorManager.getInstance ().setCursor (Cursor.ARROW);
+	    }
+
+	
+	function onMouseDown(e)
+	    {
+	    x = e.localX;
+	    y = e.localY;
+	    
+	    CursorManager.getInstance ().setCursor (Cursor.DRAG);
+	    }
+
+	function onMouseUp(e)
+	    {
+	    CursorManager.getInstance ().setCursor (Cursor.ARROW);
+	    }
+
+	function onMouseMove(e)
+	    {
+		if (e.buttonDown)
+		{
+		/*trace(Std.string(e));*/
+		var vert = scrollpane.vert.handle;
+		vert.y -= (e.localY - y) / 100;
+		scrollpane.vert.adjust();
+
+		var horz = scrollpane.horz.handle;
+		horz.y -= (e.localX - x) / 100;
+		scrollpane.horz.adjust();
+
+		}
+	    }
+	    
+
+	image.addEventListener(MouseEvent.MOUSE_OVER, onRollOver);
+	image.addEventListener(MouseEvent.MOUSE_OUT, onRollOut);
+	image.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+	image.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+	image.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+	
+	trace("MouseEvent added to "+image);
+    </script>
+    
+
+    <Window name="Window" x="100" y="100" width="320" height="240" sizeable="true"  >
+		<Container name="Container" x="10" y="20" >
+
+			<Label x="10" y="40" >Left:</Label>
+			<controls:Stepper name="left" x="50" y="40" />
+
+			<Label x="120" y="40" >Right:</Label>
+			<controls:Stepper name="right" x="160" y="40" />
+	
+			<controls:Button name="Button" x="160" y="120" />
+		</Container>
+	</Window>
+
+
+
+			<script type="text/hscript">
+			var o = root.getChildByName("Window");
+			o = o.getChildByName("Container");
+			
+			var left = o.getChildByName("left");
+			var right = o.getChildByName("right");
+			
+			function move(e)
+			{
+				trace(Std.string(e));
+			}
+
+		  	left.addEventListener( Event.CHANGE, move );
+		  	right.addEventListener( Event.CHANGE, move );
+
+			</script>
+    
+    <Float id="aNumber">3.45</Float>
+    <Array type="Array">
+	    <item id="1" type="Int">1</item>
+	    <item id="2" type="Int">2</item>
+	    <item id="3" type="Int">3</item>
+    </Array>
+
+
+    
+</Layout>
