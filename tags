@@ -1,0 +1,315 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.7	//
+BACKGROUND	StyleManager.hx	/^		public static var BACKGROUND:UInt = 0xADD8E6;$/;"	v
+BUTTON_FACE	StyleManager.hx	/^		public static var BUTTON_FACE:UInt = 0xCFB675;$/;"	v
+CHANGE	events/MenuEvent.hx	/^	static var CHANGE : String;$/;"	v
+DRAG_COMPLETE	events/DragEvent.hx	/^	public static var DRAG_COMPLETE : String = "stopDrag";$/;"	v
+DRAG_DROP	events/DragEvent.hx	/^	static var DRAG_DROP : String;$/;"	v
+DRAG_ENTER	events/DragEvent.hx	/^	static var DRAG_ENTER : String;$/;"	v
+DRAG_EXIT	events/DragEvent.hx	/^	static var DRAG_EXIT : String;$/;"	v
+DRAG_OVER	events/DragEvent.hx	/^	public static var DRAG_OVER : String = "dragOver";$/;"	v
+DRAG_START	events/DragEvent.hx	/^	public static var DRAG_START : String = "startDrag";$/;"	v
+DROPSHADOW	StyleManager.hx	/^		public static var DROPSHADOW:UInt = 0x000000;$/;"	v
+INPUT_BACK	StyleManager.hx	/^		public static var INPUT_BACK:UInt = 0xE5E5E5;$/;"	v
+INPUT_TEXT	StyleManager.hx	/^		public static var INPUT_TEXT:UInt = 0x333333;$/;"	v
+ITEM_CLICK	events/MenuEvent.hx	/^	public static var ITEM_CLICK : String = "itemClick";$/;"	v
+ITEM_ROLL_OUT	events/MenuEvent.hx	/^	static var ITEM_ROLL_OUT : String;$/;"	v
+ITEM_ROLL_OVER	events/MenuEvent.hx	/^	static var ITEM_ROLL_OVER : String;$/;"	v
+LABEL_TEXT	StyleManager.hx	/^		public static var LABEL_TEXT:UInt = 0x1A1A1A;$/;"	v
+MENU_HIDE	events/MenuEvent.hx	/^	public static var MENU_HIDE : String = "MenuHide";$/;"	v
+MENU_SHOW	events/MenuEvent.hx	/^	public static var MENU_SHOW : String = "MenuShow";$/;"	v
+MOVE	events/MoveEvent.hx	/^	public static var MOVE : String = "Move";$/;"	v
+PANEL	StyleManager.hx	/^		public static var PANEL:UInt = 0xF3F3F3;$/;"	v
+PROGRESS_BAR	StyleManager.hx	/^		public static var PROGRESS_BAR:UInt = 0xFFFFFF;	$/;"	v
+RESIZE	events/ResizeEvent.hx	/^	public static var RESIZE : String = "Resize";$/;"	v
+TARGET	makefile	/^TARGET = assets.swf$/;"	m
+_clip	Container.hx	/^	private var _clip : Bool;$/;"	v
+_cursor	CursorManager.hx	/^  public var _cursor : Cursor;$/;"	v
+_focus	FocusManager.hx	/^  private static var _focus: DisplayObject; $/;"	v
+_instance	CursorManager.hx	/^  private static var _instance : CursorManager = null;$/;"	v
+_instance	DragManager.hx	/^  private static var _instance : DragManager = null;$/;"	v
+_instance	FocusManager.hx	/^  private static var _instance:FocusManager = null;$/;"	v
+_instance	MouseManager.hx	/^  private static var _instance : MouseManager = null;$/;"	v
+_instance	PopupMenu.hx	/^  private static var _instance:PopupMenu = null;$/;"	v
+_instance	WindowManager.hx	/^  private static var _instance : WindowManager = null;$/;"	v
+_item	PopupMenu.hx	/^  private var _item : UInt;$/;"	v
+_mc	CursorManager.hx	/^  public var _mc : MovieClip;$/;"	v
+_menu	Menubar.hx	/^  private var _menu:Int;$/;"	v
+_oldFocus	FocusManager.hx	/^  private static var _oldFocus: DisplayObject; $/;"	v
+_showFocus	FocusManager.hx	/^  private static var _showFocus : Bool;$/;"	v
+action	events/DragEvent.hx	/^	var action : String;$/;"	v
+af	PopupMenu.hx	/^    var af:Array < Dynamic > = new Array ();$/;"	v
+alphas	App.hx	/^		  var alphas = [ 100, 100 ];$/;"	v
+alphas	Menubar.hx	/^		  var alphas = [ 100, 100 ];$/;"	v
+alphas	Scrollbar.hx	/^		  var alphas = [ 100, 100 ];$/;"	v
+alphas	Window.hx	/^	var alphas = [ 100, 0 ];$/;"	v
+alphas	controls/Button.hx	/^		  var alphas = [ 100, 100 ];$/;"	v
+alphas	controls/CheckBox.hx	/^			var alphas = [ 100, 0 ];$/;"	v
+alphas	controls/ComboBox.hx	/^		  var alphas = [ 100, 100 ];$/;"	v
+alphas	controls/Slider.hx	/^		  var alphas = [ 100, 100 ];$/;"	v
+args	XmlDeserializer.hx	/^		var args : Dynamic = {};$/;"	v
+avg	Stats.hx	/^        var avg : Float = 0;$/;"	v
+avgFPS	Stats.hx	/^  var avgFPS : Array<Float>;$/;"	v
+back	App.hx	/^		var back = cast flash.Lib.current.getChildByName("desktop");$/;"	v
+bevel	controls/Button.hx	/^		var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );$/;"	v
+bl	Window.hx	/^  public var bl:Sprite;$/;"	v
+bounds	Scrollbar.hx	/^			var bounds = transform.pixelBounds.clone();$/;"	v
+box	controls/Component.hx	/^  public var box : Rectangle;$/;"	v
+br	Window.hx	/^  public var br:Sprite;$/;"	v
+btn	App.hx	/^			var btn = new Button(container);$/;"	v
+button	controls/CheckBox.hx	/^  public var button : Sprite;$/;"	v
+button	controls/RadioButton.hx	/^  var button : Sprite;$/;"	v
+checked	controls/CheckBox.hx	/^  public var checked(default, default) : Bool;$/;"	v
+checked	controls/RadioButton.hx	/^  public var checked(default, default) : Bool;$/;"	v
+child	App.hx	/^				var child : Dynamic = cast flash.Lib.current.getChildAt(i) ;$/;"	v
+child	Utils.hx	/^			var child = obj.getChildAt(i);$/;"	v
+child	controls/RadioButton.hx	/^				var child = parent.getChildAt(i);$/;"	v
+chkbox	App.hx	/^			var chkbox = new CheckBox(container, "CheckBox1");$/;"	v
+closeButton	Window.hx	/^  public var closeButton : Component;$/;"	v
+cmbbox	App.hx	/^			var cmbbox = new ComboBox(container, "ComboBox1");$/;"	v
+color	Container.hx	/^	public var color : UInt;$/;"	v
+color	Menubar.hx	/^  public var color : UInt;$/;"	v
+color	PopupMenu.hx	/^	    var color = (i==_item) ? color + 0x202020 : color;$/;"	v
+color	PopupMenu.hx	/^  public var color : UInt;$/;"	v
+color	ScrollPane.hx	/^	public var color : UInt;$/;"	v
+color	Scrollbar.hx	/^	public var color : UInt;$/;"	v
+color	Window.hx	/^    var color:UInt = this.color - 0x141414;$/;"	v
+color	Window.hx	/^  public var color:UInt;$/;"	v
+color	controls/Button.hx	/^		var color = this.hasFocus ()? StyleManager.BACKGROUND | 0x141414: StyleManager.BACKGROUND;$/;"	v
+color	controls/Button.hx	/^	public var color(default, default) : UInt;$/;"	v
+color	controls/CheckBox.hx	/^  public var color : UInt;$/;"	v
+color	controls/RadioButton.hx	/^		var color : UInt= checked ? color - 0x202020 : color;$/;"	v
+color	controls/RadioButton.hx	/^		var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;$/;"	v
+color	controls/RadioButton.hx	/^  public var color : UInt;$/;"	v
+color	controls/Slider.hx	/^  public var color : UInt;$/;"	v
+color	controls/Stepper.hx	/^  var color : UInt;$/;"	v
+color	controls/UiList.hx	/^	var color : UInt;$/;"	v
+colors	App.hx	/^		  var colors = [ StyleManager.BACKGROUND, StyleManager.BACKGROUND - 0x4D4D4D ];$/;"	v
+colors	Menubar.hx	/^       		  var colors = [ color - 0x141414, color | 0x323232 ];$/;"	v
+colors	Menubar.hx	/^       		  var colors = [ color | 0x323232, color - 0x141414 ];$/;"	v
+colors	Menubar.hx	/^       		  var colors = [ color | 0x323232, color - 0x4D4D4D ];$/;"	v
+colors	Scrollbar.hx	/^   		  var colors = [ color - 0x141414, color | 0x323232 ];$/;"	v
+colors	Window.hx	/^	var colors = [ color | 0x323232, color - 0x141414 ];$/;"	v
+colors	controls/Button.hx	/^   		  var colors = [ color | 0x323232, color - 0x141414 ];$/;"	v
+colors	controls/CheckBox.hx	/^			var colors = [ color - 0x141414, color | 0x323232 ];$/;"	v
+colors	controls/CheckBox.hx	/^			var colors = [ color | 0x323232, color - 0x141414 ];$/;"	v
+colors	controls/ComboBox.hx	/^   		  var colors = [ color | 0x323232, color - 0x141414 ];$/;"	v
+colors	controls/Slider.hx	/^       		  var colors = [ color | 0x323232, color - 0x141414 ];$/;"	v
+com	FocusManager.hx	/^    var com = cast(_focus, Component);    $/;"	v
+console	App.hx	/^		var console = new Console (flash.Lib.current);$/;"	v
+container	App.hx	/^			var container = new Container (scrollPane, "Container");$/;"	v
+container	Console.hx	/^	var container = new Container (this, "Container", 10, 44);$/;"	v
+container	Console.hx	/^    var container = cast this.getChildByName("Container");$/;"	v
+container	Stats.hx	/^        var container = new Container (this, "container", 10, 20);$/;"	v
+content	ScrollPane.hx	/^	public var content : Sprite;$/;"	v
+damaged	Window.hx	/^    var damaged:Bool = true;$/;"	v
+data	controls/UiList.hx	/^	public var data : Array<Dynamic>;$/;"	v
+delta	Stats.hx	/^  var delta : Float;$/;"	v
+delta	controls/Stepper.hx	/^  var delta : Float;$/;"	v
+desktop	App.hx	/^		var desktop = new Sprite();$/;"	v
+disabled	controls/Component.hx	/^  public var disabled : Bool;$/;"	v
+down	Scrollbar.hx	/^	var down : Sprite;$/;"	v
+down	controls/Stepper.hx	/^  public var down : Button;$/;"	v
+dragInitiator	events/DragEvent.hx	/^	var dragInitiator : controls.Component;$/;"	v
+dragItem	controls/UiList.hx	/^	var dragItem : Int;$/;"	v
+draggedItem	events/DragEvent.hx	/^	var draggedItem : Dynamic;$/;"	v
+dropButton	controls/ComboBox.hx	/^  public var dropButton : Button;$/;"	v
+event	controls/Component.hx	/^        var event = new ResizeEvent(ResizeEvent.RESIZE);$/;"	v
+event	controls/Component.hx	/^    var event = new MoveEvent(MoveEvent.MOVE);$/;"	v
+field	Utils.hx	/^			var field = Reflect.field(obj, i) ;$/;"	v
+fill	Window.hx	/^    var fill:UInt = this.color;$/;"	v
+fmt	Menubar.hx	/^	var fmt = new TextFormat ();$/;"	v
+fmt	PopupMenu.hx	/^	    var fmt = new TextFormat ();$/;"	v
+fmt	StyleManager.hx	/^			var fmt = new TextFormat ();$/;"	v
+fmt	controls/Button.hx	/^	public var fmt : TextFormat;$/;"	v
+fmt	controls/CheckBox.hx	/^			var fmt = StyleManager.getTextFormat();$/;"	v
+fmt	controls/RadioButton.hx	/^			var fmt = StyleManager.getTextFormat();$/;"	v
+focusRect	FocusManager.hx	/^    var focusRect = new Sprite();$/;"	v
+fps	Stats.hx	/^        var fps = frameCounter\/(haxe.Timer.stamp() - delta);$/;"	v
+frame	Scrollbar.hx	/^	var frame : Sprite;$/;"	v
+frame	Window.hx	/^  public var frame:Sprite;$/;"	v
+frameCounter	Stats.hx	/^  var frameCounter : Int;$/;"	v
+h	Scrollbar.hx	/^		var h = 20 + .5*(frame.height - handle.height); $/;"	v
+handle	Scrollbar.hx	/^	var handle : Sprite;$/;"	v
+handle	controls/Slider.hx	/^  public var handle : Component;$/;"	v
+header	controls/UiList.hx	/^	public var header : Sprite;$/;"	v
+history	Console.hx	/^  var history : Array<String>;$/;"	v
+horizontal	Scrollbar.hx	/^	var horizontal : Bool;$/;"	v
+horz	ScrollPane.hx	/^	public var horz : Scrollbar;$/;"	v
+i	controls/UiList.hx	/^		var i = numChildren;$/;"	v
+icon	App.hx	/^			var icon = flash.Lib.attach("Clear");$/;"	v
+index	events/MenuEvent.hx	/^	var index : Int;$/;"	v
+infos	App.hx	/^        var infos = new haxe.rtti.XmlParser().processElement(x);$/;"	v
+input	Console.hx	/^  var input : TextField;$/;"	v
+interp	Console.hx	/^            var interp = new hscript.Interp();$/;"	v
+interp	Window.hx	/^    var interp = new hscript.Interp();$/;"	v
+interp	XmlDeserializer.hx	/^		var interp = new hscript.Interp();$/;"	v
+interval	Stats.hx	/^  var interval : Int;$/;"	v
+item	PopupMenu.hx	/^	    var item = cast(this.getChildAt(i), Sprite);$/;"	v
+item	PopupMenu.hx	/^	var item = new Sprite();$/;"	v
+item	PopupMenu.hx	/^    var item = cast (this.getChildAt (_item), Sprite);$/;"	v
+item	PopupMenu.hx	/^    var item = cast(this.getChildAt(_item), Sprite);$/;"	v
+item	controls/UiList.hx	/^				var item = getChildAt(i);$/;"	v
+item	controls/UiList.hx	/^		var item = new Sprite();$/;"	v
+item	events/MenuEvent.hx	/^	public var item : Dynamic;$/;"	v
+items	PopupMenu.hx	/^  private var items : UInt;$/;"	v
+label	App.hx	/^			var label = new Label(container);$/;"	v
+label	controls/Button.hx	/^	public var label : Label;$/;"	v
+label	controls/CheckBox.hx	/^  public var label : TextField;$/;"	v
+label	controls/RadioButton.hx	/^  public var label : Label;$/;"	v
+label	events/MenuEvent.hx	/^	var label : String;$/;"	v
+list	App.hx	/^			var list = new UiList(container, "List1", 200, 280);$/;"	v
+list	Stats.hx	/^  var list : UiList;$/;"	v
+listener	WindowManager.hx	/^                var listener = listeners[i];$/;"	v
+listeners	CursorManager.hx	/^  public var listeners:Array<ITraceListener>;$/;"	v
+listeners	DragManager.hx	/^  public var listeners:Array<ITraceListener>;$/;"	v
+listeners	MouseManager.hx	/^  public var listeners:Array<ITraceListener>;$/;"	v
+listeners	WindowManager.hx	/^  public var listeners:Array<ITraceListener>;$/;"	v
+loader	App.hx	/^		var loader:URLLoader = new URLLoader();$/;"	v
+log	App.hx	/^	static var log:Log;$/;"	v
+margin	controls/Component.hx	/^  public var margin : Array<Float>;$/;"	v
+matrix	App.hx	/^		  var matrix = new flash.geom.Matrix();$/;"	v
+matrix	Menubar.hx	/^		  var matrix = new flash.geom.Matrix();$/;"	v
+matrix	Scrollbar.hx	/^		  var matrix = new flash.geom.Matrix();$/;"	v
+matrix	Window.hx	/^	var matrix = new flash.geom.Matrix();$/;"	v
+matrix	controls/Button.hx	/^		  var matrix = new flash.geom.Matrix();$/;"	v
+matrix	controls/CheckBox.hx	/^			var matrix = new flash.geom.Matrix();$/;"	v
+matrix	controls/ComboBox.hx	/^		  var matrix = new flash.geom.Matrix();$/;"	v
+matrix	controls/Slider.hx	/^		  var matrix = new flash.geom.Matrix();$/;"	v
+max	controls/Stepper.hx	/^  public var max : Float;$/;"	v
+maxFPS	Stats.hx	/^  var maxFPS : Float;$/;"	v
+maxValue	controls/Slider.hx	/^  public var maxValue : Float;$/;"	v
+menu	Menubar.hx	/^	var menu = cast(this.getChildAt(_menu), Sprite);$/;"	v
+menu	Menubar.hx	/^	var menu = new Sprite ();$/;"	v
+menu	Menubar.hx	/^    var menu = cast (this.getChildAt (_menu), Sprite);$/;"	v
+menu	Menubar.hx	/^    var menu = this.getChildAt (i);$/;"	v
+menu	Menubar.hx	/^    var menu = this.getChildByName (name);$/;"	v
+menu	events/MenuEvent.hx	/^	public var menu : controls.Component;$/;"	v
+menuBar	events/MenuEvent.hx	/^	public var menuBar : controls.Component;$/;"	v
+menubar	App.hx	/^			var menubar =  new Menubar (window, "Menubar", 10, 20);$/;"	v
+menubar	App.hx	/^		var menubar =  cast window.addChild(new Menubar ());$/;"	v
+menubar	Console.hx	/^    var menubar = new Menubar (this, "Menubar", 10,20);$/;"	v
+menubar	Console.hx	/^    var menubar = untyped this.getChildByName("Menubar");$/;"	v
+min	controls/Stepper.hx	/^  public var min : Float;$/;"	v
+minFPS	Stats.hx	/^  var minFPS : Float;$/;"	v
+minimizeButton	Window.hx	/^  public var minimizeButton : Component;$/;"	v
+myPath	PopupMenu.hx	/^		var myPath = new Array<Dynamic>();$/;"	v
+name	XmlDeserializer.hx	/^		var name = node.nodeName;$/;"	v
+numMenus	Menubar.hx	/^  public var numMenus : Int;$/;"	v
+numWindows	WindowManager.hx	/^  public var numWindows : UInt;$/;"	v
+obj	FocusManager.hx	/^    var obj = cast(_focus, DisplayObjectContainer);$/;"	v
+oldHeight	events/ResizeEvent.hx	/^	public var oldHeight : Float;$/;"	v
+oldWidth	events/ResizeEvent.hx	/^	public var oldWidth : Float;$/;"	v
+oldX	events/MoveEvent.hx	/^	public var oldX : Float;$/;"	v
+oldY	events/MoveEvent.hx	/^	public var oldY : Float;$/;"	v
+oldmenu	Menubar.hx	/^    var oldmenu = _menu;$/;"	v
+p	PopupMenu.hx	/^		var p = new flash.geom.Point(x,y);$/;"	v
+parser	Console.hx	/^  var parser : hscript.Parser;$/;"	v
+parser	Window.hx	/^    var parser = new hscript.Parser();$/;"	v
+parser	XmlDeserializer.hx	/^		var parser = new hscript.Parser();$/;"	v
+pictLdr	App.hx	/^		var pictLdr:Loader = new Loader();$/;"	v
+pictURLReq	App.hx	/^		var pictURLReq:URLRequest = new URLRequest(".\/assets\/palm.jpg");$/;"	v
+point	CursorManager.hx	/^      var point : Point = new Point();$/;"	v
+popmenu	Menubar.hx	/^    var popmenu:UInt;$/;"	v
+popup	App.hx	/^		var popup = PopupMenu.getInstance ();$/;"	v
+popup	Menubar.hx	/^	var popup = PopupMenu.getInstance ();$/;"	v
+popup	Menubar.hx	/^    var popup = PopupMenu.getInstance ();$/;"	v
+program	Console.hx	/^            var program = parser.parseString(input.text);$/;"	v
+program	Window.hx	/^    var program = parser.parseString(script);$/;"	v
+program	XmlDeserializer.hx	/^		var program = parser.parseString(script);$/;"	v
+pwd	Console.hx	/^  var pwd : DisplayObjectContainer;$/;"	v
+r	ScrollPane.hx	/^		var r = box.clone();$/;"	v
+radio	App.hx	/^				var radio = new RadioButton(container, "RadioButton"+i);$/;"	v
+ratios	App.hx	/^		  var ratios = [ 0, 0xFF ];$/;"	v
+ratios	Menubar.hx	/^		  var ratios = [ 0, 0xFF ];$/;"	v
+ratios	Scrollbar.hx	/^		  var ratios = [ 0, 0xFF ];$/;"	v
+ratios	Window.hx	/^	var ratios = [ 0, 0xFF ];$/;"	v
+ratios	controls/Button.hx	/^		  var ratios = [ 0, 0xFF ];$/;"	v
+ratios	controls/CheckBox.hx	/^			var ratios = [ 0, 0xFF ];$/;"	v
+ratios	controls/ComboBox.hx	/^		  var ratios = [ 0, 0xFF ];$/;"	v
+ratios	controls/Slider.hx	/^		  var ratios = [ 0, 0xFF ];$/;"	v
+rect	FocusManager.hx	/^    var rect = com.box.clone();$/;"	v
+rect	Scrollbar.hx	/^			var rect = scrollee.scrollRect.clone();$/;"	v
+relatedObject	events/MoveEvent.hx	/^	public var relatedObject : flash.display.InteractiveObject;$/;"	v
+resizeEvent	Window.hx	/^	var resizeEvent = new ResizeEvent (ResizeEvent.RESIZE);$/;"	v
+resolved	XmlDeserializer.hx	/^		var resolved = Type.resolveClass(name);$/;"	v
+ret	Console.hx	/^            var ret : Dynamic = interp.execute(program);$/;"	v
+ret	XmlDeserializer.hx	/^		var ret = interp.execute(program); $/;"	v
+rtti	App.hx	/^		var rtti : String = untyped App.__rtti;$/;"	v
+script	Window.hx	/^    var script = "$/;"	v
+script	XmlDeserializer.hx	/^		var script : String = node.firstChild().nodeValue;$/;"	v
+scroll	Scrollbar.hx	/^	public var scroll : Float;$/;"	v
+scrollPane	App.hx	/^			var scrollPane = new ScrollPane(window, "ScrollPane", 10, 44);$/;"	v
+scrollPane	App.hx	/^		var scrollPane = cast window.addChild(new ScrollPane(12,46));$/;"	v
+scrollee	Scrollbar.hx	/^	public var scrollee : Dynamic;$/;"	v
+shadow	Container.hx	/^		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);$/;"	v
+shadow	Menubar.hx	/^    var shadow:DropShadowFilter = new DropShadowFilter (4, 45, 0x000000, 0.5,4, 4,0.75,BitmapFilterQuality.LOW,true,false,false);$/;"	v
+shadow	PopupMenu.hx	/^    var shadow:DropShadowFilter = new DropShadowFilter (4, 45, 0x000000, 0.8,$/;"	v
+shadow	Scrollbar.hx	/^		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 4, 4, .75, BitmapFilterQuality.LOW, true, false, false);$/;"	v
+shadow	Window.hx	/^    var shadow:DropShadowFilter =$/;"	v
+shadow	controls/Button.hx	/^			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );$/;"	v
+shadow	controls/Button.hx	/^		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );$/;"	v
+shadow	controls/CheckBox.hx	/^			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );$/;"	v
+shadow	controls/CheckBox.hx	/^		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, true, false, false );$/;"	v
+shadow	controls/ComboBox.hx	/^			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );$/;"	v
+shadow	controls/ComboBox.hx	/^			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );$/;"	v
+shadow	controls/ComboBox.hx	/^		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );$/;"	v
+shadow	controls/ComboBox.hx	/^		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );$/;"	v
+shadow	controls/RadioButton.hx	/^			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );$/;"	v
+shadow	controls/RadioButton.hx	/^		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );$/;"	v
+shadow	controls/Slider.hx	/^		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );$/;"	v
+shadow	controls/Stepper.hx	/^	var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );$/;"	v
+shadow	controls/UiList.hx	/^		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );$/;"	v
+sizeable	Window.hx	/^  private var sizeable:Bool;$/;"	v
+slider	App.hx	/^				var slider = new Slider(container, "Slider"+(4+i));$/;"	v
+slider	App.hx	/^				var slider = new Slider(container, "Slider"+i);$/;"	v
+stage	App.hx	/^		var stage = e.target;$/;"	v
+stage	App.hx	/^		var stage = flash.Lib.current.stage;$/;"	v
+stage	MouseManager.hx	/^        var stage = flash.Lib.current.stage;$/;"	v
+stats	App.hx	/^		var stats = new Stats (flash.Lib.current);$/;"	v
+step	controls/Stepper.hx	/^  public var step : Float;$/;"	v
+stepper	App.hx	/^				var stepper = new Stepper(container, "Stepper"+i);$/;"	v
+str	App.hx	/^		var str = e.target.data;$/;"	v
+str	Utils.hx	/^		var str : String = "\\n"+indent + type;$/;"	v
+str	Utils.hx	/^		var str : String = "\\n";$/;"	v
+str	XmlDeserializer.hx	/^						var str : String = node.firstChild().nodeValue;$/;"	v
+t	CursorManager.hx	/^    var t = new flash.geom.Transform(_mc);$/;"	v
+text	Console.hx	/^    var text:String =  "<FONT FACE=\\"MONO\\" SIZE=\\"10\\" COLOR=\\"#eeeeee\\">";$/;"	v
+text	IToolTip.hx	/^	var text : String;$/;"	v
+text	controls/Component.hx	/^  public var text : String;$/;"	v
+tf	Console.hx	/^  var tf : TextField;$/;"	v
+tf	Label.hx	/^	public var tf : TextField;$/;"	v
+tf	Menubar.hx	/^	var tf : TextField = cast e.target.getChildByName("tf");$/;"	v
+tf	Menubar.hx	/^	var tf : TextField = cast menu.getChildByName("tf");$/;"	v
+tf	Menubar.hx	/^	var tf = new TextField ();$/;"	v
+tf	PopupMenu.hx	/^	    var tf : TextField = cast item.getChildByName("tf");$/;"	v
+tf	PopupMenu.hx	/^	var tf = new TextField ();$/;"	v
+tf	controls/ComboBox.hx	/^  public var tf : TextField;$/;"	v
+tf	controls/Stepper.hx	/^  public var tf : TextField;$/;"	v
+tf	controls/UiList.hx	/^		var tf = new TextField ();$/;"	v
+timer	Stats.hx	/^  var timer : Timer;$/;"	v
+timer	controls/Stepper.hx	/^  var timer : Timer;$/;"	v
+title	Window.hx	/^  public var title : TextField;$/;"	v
+titlebar	Window.hx	/^  public var titlebar:Titlebar;$/;"	v
+toColor	CursorManager.hx	/^    var toColor = new flash.geom.ColorTransform(.8, 1, .9, 1, 0, 0, 0, 1);$/;"	v
+transform	Scrollbar.hx	/^			var transform = scrollee.transform;$/;"	v
+type	Utils.hx	/^		var type = obj.constructor;$/;"	v
+type	Window.hx	/^  public var type:WindowType;$/;"	v
+up	Scrollbar.hx	/^	var up : Sprite;$/;"	v
+up	controls/Stepper.hx	/^  public var up : Button;$/;"	v
+v	XmlDeserializer.hx	/^		var v : Dynamic = {};	$/;"	v
+validate	controls/Component.hx	/^  public var validate : Bool;$/;"	v
+value	controls/Stepper.hx	/^  public var value : Float;$/;"	v
+vert	Console.hx	/^  var vert : Scrollbar;$/;"	v
+vert	ScrollPane.hx	/^	public var vert : Scrollbar;$/;"	v
+window	App.hx	/^			var window = WindowManager.getInstance().addWindow (flash.Lib.current);$/;"	v
+window	WindowManager.hx	/^    var window =  new Window(parent);$/;"	v
+windows	WindowManager.hx	/^  public var windows : IntHash<Window>;$/;"	v
+x	App.hx	/^		var x = Xml.parse(rtti).firstElement();$/;"	v
+xml	App.hx	/^		var xml = Xml.parse(str);$/;"	v
+xml	XmlDeserializer.hx	/^	public var xml : Xml;$/;"	v
+xmlds	App.hx	/^		var xmlds : XmlDeserializer = new XmlDeserializer(xml);$/;"	v

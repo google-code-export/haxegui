@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<haxegui:Layout name="DemoLayout">
+<![CDATA[   
+TODO:
+* Menu and items
+* Radio groups 
+* HScript scope's
+]]>
+
+    <String name="hello">Hello World</String>/>
+    <Float name="aNumber">3.45</Float>
+    
+    <Array name="IntArray">
+	<String>Item1</String>
+	<String>Item2</String>
+	<String>Item3</String>
+	<String>Item4</String>
+	<String>Item5</String>
+    </Array>
+
+
+    
+    <haxegui:Window name="Xml hScript Widgets Window" x="300" y="30" width="512" height="512" sizeable="true" >
+	<haxegui:Menubar name="menubar" width="512" x="10" y="20">
+		<haxegui:Menu type="Object" name="menu1">
+			<Item type="String">a</Item>
+			<Item type="String">b</Item>
+			<Item type="String">c</Item>
+		</haxegui:Menu>		
+		<haxegui:Menu type="Object" name="menu2">
+			<Item type="String">a2</Item>
+			<Item type="String">b2</Item>
+			<Item type="String">c2</Item>
+		</haxegui:Menu>		
+	</haxegui:Menubar>
+	<haxegui:ScrollPane name="ScrollPane1" x="10" y="44" >
+		<haxegui:Container name="Container1" width="512" height="512" >
+			<haxegui:controls:Label x="30" y="8" >This window and it's content are dynamically generated from xml,
+			Some events are also defined in hscript.</haxegui:controls:Label>
+			<haxegui:controls:Button label="Click" x="30" y="50" width="120" />
+			<haxegui:controls:Button label="me" x="160" y="50" width="40" />
+			<haxegui:controls:Button label="disabled" x="210" y="50" disabled="true" />
+			<haxegui:controls:Button name="colorButton" label="Red" x="310" y="50" color="0xB35959" />
+		    
+			<haxegui:controls:CheckBox name="CheckBox1" x="30" y="90" />
+			<haxegui:controls:CheckBox name="CheckBox2" x="170" y="90" checked="true" />
+			<haxegui:controls:CheckBox name="CheckBox3" x="310" y="90" disabled="true"/>
+			<haxegui:controls:ComboBox name="ComboBox1" x="30" y="130" />
+			<haxegui:controls:ComboBox name="ComboBox2" x="30" y="160" />
+			<haxegui:controls:ComboBox name="ComboBox3" x="30" y="190" disabled="true" />
+			<haxegui:controls:Slider name="Slider1" x="200" y="130" />
+			<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="128"/>
+			<haxegui:controls:Slider name="Slider2" x="200" y="160" />
+			<haxegui:controls:Stepper name="Stepper2" x="360" y="160" step="5" max="128" />
+			<haxegui:controls:Slider name="Slider3" x="200" y="190" />
+			<haxegui:controls:Stepper name="Stepper3" x="360" y="190" step="10" max="128" />
+
+			<haxegui:controls:Input name="Input1" x="30" y="220" />
+			<haxegui:controls:Input name="Input2" x="30" y="250" />
+			<haxegui:controls:Input name="Input3" x="30" y="280" disabled="true"/>
+
+
+			<haxegui:controls:RadioButton name="RadioButton1" x="30" y="310" />
+			<haxegui:controls:RadioButton name="RadioButton2" x="30" y="340" />
+			<haxegui:controls:RadioButton name="RadioButton3" x="30" y="370" disabled="true" />
+			<haxegui:controls:RadioButton name="RadioButton4" x="30" y="400" selected="true" disabled="true" />
+			
+			<haxegui:controls:UiList name="List1" x="180" y="250" >Apples,Bannanas,Oranges</haxegui:controls:UiList>
+			<haxegui:controls:UiList name="List2" x="330" y="250" width="300" data="@IntArray" />
+			
+		</haxegui:Container>
+
+		<haxegui:Window name="ChildWindow" x="120" y="120" width="180" height="140" color="0xA5DE33">
+		    <haxegui:Container name="Container1"  x="10" y="20" width="100%" height="100%" color="0xA5DE33"  >
+			<haxegui:controls:Label x="20" y="4" >I'm a green child window</haxegui:controls:Label>
+			<haxegui:controls:Button label="Click" x="20" y="30" width="120" color="0xA5DE33" />
+		    </haxegui:Container>
+		</haxegui:Window>
+
+		    <haxegui:controls:Component type="Class" name="comp" />
+					
+	</haxegui:ScrollPane>
+    </haxegui:Window>	
+
+<![CDATA[   
+This hscript does the following:
+* Make a button into color changing toggle button
+* Link Sliders & Steppers
+]]>
+<script type="text/hscript">
+		
+		trace("Parsing hscript.");
+		
+		
+		var o = root.getChildByName("Xml hScript Widgets Window");
+		o = o.getChildByName("ScrollPane1");
+		o = o.getChildByName("content");
+		o = o.getChildByName("Container1");
+
+		var btn = o.getChildByName("colorButton");
+		btn.addEventListener(MouseEvent.MOUSE_UP, 
+		    function(e){ 
+		    if(btn.color == 0xB35959) 
+				{ btn.color=0xA1F02A; btn.label.tf.text = "Green"; }
+		    else 
+				{ btn.color=0xB35959; btn.label.tf.text = "Red"; }
+		    btn.redraw(); 
+		    btn.label.tf.setTextFormat(StyleManager.getTextFormat());
+		    } );
+		
+		var list = o.getChildByName("List1");
+		list.data.push("Milk");
+		list.data.push("Bread");
+		list.data.push("Eggs");
+		list.redraw();
+		
+		for( i in 1...4 )
+		{
+		    var slider = o.getChildByName("Slider"+i);
+		    var stepper = o.getChildByName("Stepper"+i);
+		    
+		    function adjustStepper( e )
+		    {
+			var x = e.target.getChildByName("handle").x;
+			stepper.value = x;
+			stepper.tf.text = Std.string(x);
+			stepper.tf.setTextFormat( StyleManager.getTextFormat() );
+		    }
+
+		    function adjustSlider( e )
+		    {
+			var x = e.target.value;
+			slider.getChildByName("handle").x = x;
+		    }
+
+
+		    slider.addEventListener( Event.CHANGE, adjustStepper );
+		    stepper.addEventListener( Event.CHANGE, adjustSlider );
+		
+		}
+				
+		
+		trace("Success.");
+		
+		</script>
+
+
+
+    <haxegui:Window name="Draggable Image Window" x="200" y="30" width="320" height="240" sizeable="true" color="0xC5A466" >
+		<haxegui:ScrollPane name="ScrollPane1" x="10" y="20" height="220">
+			<haxegui:Image name="Image" src="haxegui/assets/118980243_2491ef8407_o.jpg" x="0" y="0" />
+		</haxegui:ScrollPane>
+		<haxegui:controls:Label name="Label" x="20" y="30" ></haxegui:controls:Label>
+    </haxegui:Window>
+
+<![CDATA[   
+This hscript does the following:
+* Make image draggable & Send changes to scrollbars.
+]]>
+    <script type="text/hscript">
+	
+	var window = root.getChildByName("Draggable Image Window");
+	var scrollpane = window.getChildByName("ScrollPane1");
+	var label = window.getChildByName("Label");
+	var image = scrollpane.content.getChildByName("Image");
+
+	
+	var x=0;
+	var y=0;
+
+	function onRollOver(e)
+	    {
+	    CursorManager.getInstance ().setCursor (Cursor.HAND);
+	    }
+
+	function onRollOut(e)
+	    {
+	    CursorManager.getInstance ().setCursor (Cursor.ARROW);
+	    }
+	
+	function onMouseDown(e)
+	    {
+	    x = e.localX;
+	    y = e.localY;
+	    
+	    CursorManager.getInstance ().setCursor (Cursor.DRAG);
+	    }
+
+	function onMouseUp(e)
+	    {
+	    CursorManager.getInstance ().setCursor (Cursor.ARROW);
+	    label.getChildByName("tf").text = "";
+
+	    }
+
+	function onMouseMove(e)
+	    {
+		if (e.buttonDown)
+		{
+		/*trace(Std.string(e));*/
+		var vert = scrollpane.vert.handle;
+		vert.y -= (e.localY - y) / 50*Math.exp(1);
+		scrollpane.vert.adjust();
+
+		var horz = scrollpane.horz.handle;
+		horz.y -= (e.localX - x) / 50*Math.exp(1);
+		scrollpane.horz.adjust();
+		
+	label.getChildByName("tf").text = Std.string(scrollpane.content.scrollRect) ;
+	label.getChildByName("tf").setTextFormat(StyleManager.getTextFormat());
+
+		
+		}
+	    }
+	    
+	image.addEventListener(MouseEvent.MOUSE_OVER, onRollOver);
+	image.addEventListener(MouseEvent.MOUSE_OUT, onRollOut);
+	image.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+	image.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+	image.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+	
+	trace("MouseEvent added to "+image);
+    </script>
+
+
+
+    <haxegui:Window name="Align Test Window" x="100" y="100" width="512" height="512" sizeable="false"  >
+		<haxegui:Container name="Container" x="10" y="20" >
+
+			<haxegui:controls:RadioButton name="Top" x="230" y="10" />
+			<haxegui:controls:Stepper name="topMargin" x="230" y="50" />
+
+			<haxegui:controls:RadioButton name="Left" x="10" y="210" />
+			<haxegui:controls:Stepper name="leftMargin" x="10" y="250" />
+
+			<haxegui:controls:RadioButton name="Right" x="430" y="210" />
+			<haxegui:controls:Stepper name="rightMargin" x="430" y="250" />
+
+			<haxegui:controls:RadioButton name="Bottom" x="230" y="410" />
+			<haxegui:controls:Stepper name="bottomMargin" x="230" y="450" />
+	
+		    <haxegui:controls:Component name="outer" >
+			<haxegui:controls:Component name="inner" />
+		    </haxegui:controls:Component>
+			
+		</haxegui:Container>
+	</haxegui:Window>
+
+
+
+			<script type="text/hscript">
+			
+			var win = root.getChildByName("Align Test Window");
+			var c = win.getChildByName("Container");
+		
+			var o = c.getChildAt(c.numChildren-1);
+			o.graphics.lineStyle(2, StyleManager.BACKGROUND - 0x141414 );
+			o.graphics.beginFill(0xffffff);
+			o.graphics.drawRect(0,0,300,300);
+			o.graphics.endFill();
+			o.move( (win.width - 300 ) / 2 - 10, (win.height - 300 ) / 2 - 20);
+
+
+			o = o.getChildAt(0);
+			o.graphics.lineStyle(2,0);
+			o.graphics.beginFill(0xff0000);
+			o.graphics.drawRect(0,0,100,100);
+			o.graphics.endFill();
+			o.move(100,100);
+	
+			
+			function align(e)
+			{
+			trace(e.target.name);
+				if(e.target.name=="Left")
+				    o.x = 0;
+
+				if(e.target.name=="Right")
+				    o.x = o.parent.width - o.width;
+
+				if(e.target.name=="Top")
+				    o.y = 0;
+
+				if(e.target.name=="Bottom")
+				    o.y = o.parent.height - o.height;
+				
+			}
+			
+			c.getChildByName("Left").addEventListener(MouseEvent.MOUSE_DOWN, align);
+			c.getChildByName("Right").addEventListener(MouseEvent.MOUSE_DOWN, align);
+			c.getChildByName("Top").addEventListener(MouseEvent.MOUSE_DOWN, align);
+			c.getChildByName("Bottom").addEventListener(MouseEvent.MOUSE_DOWN, align);
+			
+
+			</script>
+    
+
+    
+</haxegui:Layout>

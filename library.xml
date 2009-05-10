@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<movie width="960" height="600" framerate="300" version="9" >
+	<background color="#000000"/>
+	<frame>
+		<library>
+			<!-- FONTS -->
+			<font id="Impact" name="Impact" import="haxegui/assets/fonts/Impact.ttf"/>		
+			<font id="FFF_Forward" name="FFF_Forward" import="haxegui/assets/fonts/FFFFORWA.TTF"/>
+			<font id="FFF_Manager_Bold" name="FFF_Manager_Bold" import="haxegui/assets/fonts/FFFMB___.TTF" />
+			<font id="FFF_Harmony" name="FFF_Harmony" import="haxegui/assets/fonts/FFFHARMO.TTF" />
+			<font id="FFF_Freedom_Trial" name="FFF_Freedom_Trial" import="haxegui/assets/fonts/FFFFT___.TTF" />
+			<font id="FFF_Reaction_Trial" name="FFF_Reaction_Trial" import="haxegui/assets/fonts/FFFRT___.TTF" />
+			<font id="Amiga_Forever_Pro2" name="Amiga_Forever_Pro2" import="haxegui/assets/fonts/amigaforeverpro2.ttf" />
+			<font id="Silkscreen" name="Silkscreen" import="haxegui/assets/fonts/slkscr.ttf" />
+			<font id="04b25" name="04b25" import="haxegui/assets/fonts/04B_25__.TTF" />
+			<font id="Pixel_Classic" name="Pixel_Classic" import="haxegui/assets/fonts/PixelClassic.ttf" />
+			
+			
+			<!-- CURSORS -->
+			<clip id="Arrow" import="haxegui/assets/cursor/Arrow.png"/>
+			<clip id="Hand" import="haxegui/assets/cursor/HandPointer.png"/>
+			<clip id="Hand2" import="haxegui/assets/cursor/Hand.png"/>
+			<clip id="Drag" import="haxegui/assets/cursor/Handsqueezed.png"/>
+			<clip id="AngleNW" import="haxegui/assets/cursor/AngleNW.png"/>
+			<clip id="AngleNE" import="haxegui/assets/cursor/AngleNE.png"/>
+			<clip id="SizeAll" import="haxegui/assets/cursor/SizeAll.png"/>
+			<clip id="Crosshair" import="haxegui/assets/cursor/Crosshair.png"/>
+			
+			<!-- ICONS -->
+			<clip id="Stop" import="haxegui/assets/icons/stop.svg"/>
+			<clip id="Clear" import="haxegui/assets/icons/clear.svg"/>
+			
+			<clip id="ScrollbarFrame" import="haxegui/assets/svg/scrollbarFrame.svg" />
+			<clip id="scrollbarHandle" import="haxegui/assets/svg/scrollbarHandle.svg" />
+<!--
+			<clip id="ScrollbarButtonUp" import="haxegui/assets/svg/scrollButtonUp.svg" />
+-->
+			<clip id="ScrollbarButtonUp" import="haxegui/assets/svg/scrollButtonUp.png" />
+			<clip id="scrollbarButtonDown" import="haxegui/assets/svg/scrollButtonDown.svg" />
+			
+<!--
+			<textfield id="warning" width="200" height="50" size="10" font="_mono" color="#ffffff" text="Please do not run this file directly."/>
+-->
+
+		</library>
+<!--
+		<place id="warning" name="output" depth="10"/>
+-->
+
+	</frame>
+</movie>
