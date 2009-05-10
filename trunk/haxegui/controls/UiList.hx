@@ -224,7 +224,7 @@ if(e.target==header) drawHeader();
 
 		var tf = new TextField ();
 		tf.name = "tf";
-		tf.text = header.name;
+		//~ tf.text = header.name;
 		tf.selectable = false;
 		//~ tf.width = 40;
 		tf.autoSize = flash.text.TextFieldAutoSize.LEFT;		

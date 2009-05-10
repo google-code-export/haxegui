@@ -71,7 +71,14 @@ import feffects.easing.Quart;
 
 
 
-
+/**
+ * 
+ * Button Class
+ * 
+ * @version 0.1
+ * @author <gershon@goosemoose.com>
+ * 
+ */
 class Button extends Component, implements Dynamic
 {
 
@@ -86,6 +93,14 @@ class Button extends Component, implements Dynamic
 
 	}
 
+
+	/**
+	 * Init Function
+	 * 
+	 * 
+	 * @param initObj Dynamic object
+	 * 
+	 */
 	public function init(?initObj:Dynamic)
 	{
 		if(color == 0)
@@ -179,6 +194,7 @@ class Button extends Component, implements Dynamic
 
 	/**
 	*
+	* 
 	*/
 	public dynamic function redraw(?color:UInt) : Void
 	{
@@ -235,27 +251,7 @@ class Button extends Component, implements Dynamic
 	public function onRollOver(e:MouseEvent) 
 	{
 		if(disabled) return;
-		//~ redraw(StyleManager.BACKGROUND + 0x323232 );
-//		redraw(StyleManager.BACKGROUND | 0x141414 );
-		//~ redraw(color + 0x141414 );
-		//~ redraw(color | 0x323232 );
-			
-			//~ var r:UInt = ( color & 0xFF0000 ) >> 16;
-			//~ var g:UInt = ( color & 0x00FF00 ) >> 8;
-			//~ var b:UInt = ( color & 0x0000FF );
-//~ 
-			//~ var i = 40;
-			//~ 
-			//~ var colors = { r:r, g:g, b:b };
-			//~ var t1 = new Tween( r, r+i > 255 ? 255 : r+i, 150, colors, "r", Linear.easeNone );
-			//~ var t2 = new Tween( g, g+i > 255 ? 255 : g+i, 150, colors, "g", Linear.easeNone );
-			//~ var t3 = new Tween( b, b+i > 255 ? 255 : b+i, 150, colors, "b", Linear.easeNone );
-			//~ 
-			//~ t1.start();
-			//~ t2.start();
-			//~ t3.start();
-            //~ var self = this;
-			//~ t1.setTweenHandlers( function ( e ) self.redraw((colors.r << 16) | (colors.g << 8) | colors.b) );
+
 		var colorTrans: ColorTransform  = new ColorTransform();
 
 		var r = new Tween(0, 50, 350, colorTrans, "redOffset", Expo.easeOut );
@@ -266,7 +262,6 @@ class Button extends Component, implements Dynamic
 		g.start();
 		b.start();
 		
-		//~ this.transform.colorTransform = colorTrans;
 		var self = this;
 		r.setTweenHandlers( function ( e ) { self.transform.colorTransform = colorTrans; }  );
 
