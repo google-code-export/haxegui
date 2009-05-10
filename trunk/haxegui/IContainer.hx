@@ -1,0 +1,5 @@
+package haxegui;
+
+interface IContainer {
+
+}

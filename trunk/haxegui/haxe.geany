@@ -1,0 +1,18 @@
+
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=true
+indent_mode=2
+
+[project]
+name=haxegui
+base_path=/home/gershon/Desktop/HAXE/
+make_in_base_path=true
+description=haxegui
+run_cmd=make run
+
+[files]
+current_page=0
+FILE_NAME_0=0;Haxe;0;16;1;1;0;/home/gershon/Desktop/haxeGUI_SVN/App.hx;0
