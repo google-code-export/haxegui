@@ -21,6 +21,9 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
+//TODO: frame rendering to hscript
+//TODO: corners to components
+
 
 package haxegui;
 
@@ -255,17 +258,20 @@ class Titlebar extends Sprite, implements Dynamic
 
 }
 
-/*
- * Window Class
+/**
  * 
- * A movable, resizeable window.
+ * Window class
+ * 
+ * Dragable & Resizable  window.
  * 
  * 
- * 
- * 
+ * @author <gershon@goosemoose.com>
+ * @version 0.1
  */
-class Window extends haxegui.controls.Component, implements Dynamic
+class Window extends Component, implements Dynamic
 {
+    
+  
   public var titlebar:Titlebar;
 
   public var frame:Sprite;
@@ -662,7 +668,6 @@ class Window extends haxegui.controls.Component, implements Dynamic
  * Redraw entire window
  *
  */
-//~ public function redraw (?damaged : Bool = true, ?color : UInt, ?fill : Int) : Void
   public function redraw (e:Dynamic):Void
   {
 

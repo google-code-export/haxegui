@@ -104,8 +104,10 @@ class Stepper extends Component, implements Dynamic
 					
 			box.width = ( Math.isNaN(initObj.width) ) ? box.width : initObj.width;
 			box.height = ( Math.isNaN(initObj.height) ) ? box.height : initObj.height;
-
+	    
+	    
 			//~ step = ( Math.isNaN(initObj.step) ) ? step : initObj.step;
+			//~ value = ( Math.isNaN(initObj.value) ) ? value : initObj.value;
 		}
 
 	back = new Sprite();
@@ -130,7 +132,7 @@ class Stepper extends Component, implements Dynamic
 	//~ tf.y = .5*(box.height - tf.height);
 	tf.x = 4;
 	tf.y = 4;
-	tf.text = "0";
+	tf.text = Std.string(value);
 	
 	tf.embedFonts = true;
 	//~ tf.setTextFormat(StyleManager.getTextFormat(12));

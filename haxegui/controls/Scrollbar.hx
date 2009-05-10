@@ -25,6 +25,7 @@ package haxegui.controls;
 
 import flash.geom.Rectangle;
 import flash.geom.Transform;
+import flash.geom.ColorTransform;
 
 import flash.display.LineScaleMode;
 import flash.display.DisplayObject;
@@ -61,6 +62,18 @@ import feffects.easing.Linear;
 import feffects.easing.Quad;
 import feffects.easing.Quart;
 
+import feffects.Tween;
+import feffects.easing.Quint;
+import feffects.easing.Sine;
+import feffects.easing.Back;
+import feffects.easing.Bounce;
+import feffects.easing.Circ;
+import feffects.easing.Cubic;
+import feffects.easing.Elastic;
+import feffects.easing.Expo;
+import feffects.easing.Linear;
+import feffects.easing.Quad;
+import feffects.easing.Quart;
 
 //~ class ScrollbarButtonUp extends flash.display.MovieClip { public function new() { super(); } }
 
@@ -71,7 +84,13 @@ enum ScrollbarType {
 }
 
 
-
+/**
+ * 
+ * Scrollbar class
+ * 
+ * @author <gershon@goosemoose.com>
+ * @version 0.1
+ */
 class Scrollbar extends haxegui.controls.Component 
 {
 	
@@ -205,8 +224,10 @@ class Scrollbar extends haxegui.controls.Component
 
 
 
-		this.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
-		this.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+		up.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+		up.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+		down.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+		down.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
 
 		this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
@@ -283,8 +304,22 @@ class Scrollbar extends haxegui.controls.Component
 	
     public function onRollOver(e:MouseEvent)  : Void	
 	{
-		if(e.target == handle)
-			redrawHandle(color | 0x4D4D4D);
+		
+			//~ redrawHandle(color | 0x4D4D4D);
+
+		var colorTrans: ColorTransform  = new ColorTransform();
+
+		var r = new Tween(0, 50, 350, colorTrans, "redOffset", Expo.easeOut );
+		var g = new Tween(0, 50, 350, colorTrans, "greenOffset", Expo.easeOut );
+		var b = new Tween(0, 50, 350, colorTrans, "blueOffset", Expo.easeOut );
+		//~ 
+		r.start();
+		g.start();
+		b.start();
+		
+		//~ var self = this;
+		r.setTweenHandlers( function ( ev ) { e.target.transform.colorTransform = colorTrans; }  );
+
 			
 	    CursorManager.getInstance().setCursor(Cursor.HAND);
 		//~ Tweener.addTween(e.target, {_brightness:.5, time:.15, transition:"linear"});
@@ -292,6 +327,23 @@ class Scrollbar extends haxegui.controls.Component
 
     public function onRollOut(e:MouseEvent) 
 	{
+		
+
+		if(!e.buttonDown)
+		{
+			var colorTrans: ColorTransform  = new ColorTransform();
+
+			var r = new Tween(50, 0, 350, colorTrans, "redOffset", Expo.easeOut );
+			var g = new Tween(50, 0, 350, colorTrans, "greenOffset", Expo.easeOut );
+			var b = new Tween(50, 0, 350, colorTrans, "blueOffset", Expo.easeOut );
+			//~ 
+			r.start();
+			g.start();
+			b.start();
+
+			r.setTweenHandlers( function ( ev ) { e.target.transform.colorTransform = colorTrans; }  );
+		}	
+	
 
 		if(!e.buttonDown) 
 			{
@@ -305,11 +357,14 @@ class Scrollbar extends haxegui.controls.Component
 			//~ Tweener.addTween(e.target, {_brightness:0, time:.35, transition:"linear"});		
     }	
 	
-	
+	/**
+	 * 
+	 * 
+	 */
 	public function onMouseWheel(e:MouseEvent)
 	{
 
-			redrawHandle(color | 0x666666);
+			//~ redrawHandle(color | 0x666666);
 
 			//~ var y = handle.y + 50 * e.delta;
 			var y = handle.y + 50 * -e.delta;
@@ -334,12 +389,26 @@ class Scrollbar extends haxegui.controls.Component
     public function onMouseDown(e:MouseEvent) 
 	{
 			//~ redrawHandle(color | 0x4D4D4D);
+
+		var colorTrans: ColorTransform  = new ColorTransform();
+
+		var r = new Tween(50, -25, 350, colorTrans, "redOffset", Expo.easeOut );
+		var g = new Tween(50, -25, 350, colorTrans, "greenOffset", Expo.easeOut );
+		var b = new Tween(50, -25, 350, colorTrans, "blueOffset", Expo.easeOut );
+		//~ 
+		r.start();
+		g.start();
+		b.start();
+		
+		r.setTweenHandlers( function ( ev ) { e.target.transform.colorTransform = colorTrans; }  );
+
+
 		
 		switch(e.target)
 		{
 		case handle:
 		
-			redrawHandle( color | 0x666666);
+			//~ redrawHandle( color | 0x666666);
 
 			if(horizontal) 
 				e.target.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
@@ -427,11 +496,28 @@ class Scrollbar extends haxegui.controls.Component
 
     public function onMouseUp(e:MouseEvent) 
 	{		
+		
+		var c = 0;
+
 		if(e.target.hitTestObject( CursorManager.getInstance().getCursor() ))
 			{
 			//~ redrawHandle(color | 0x4D4D4D);
+			c = 50;
 			CursorManager.getInstance().setCursor (Cursor.HAND);	    
 			}
+
+		var colorTrans: ColorTransform  = new ColorTransform();
+
+		var r = new Tween(-25, c, 500, colorTrans, "redOffset", Expo.easeOut );
+		var g = new Tween(-25, c, 500, colorTrans, "greenOffset", Expo.easeOut );
+		var b = new Tween(-25, c, 500, colorTrans, "blueOffset", Expo.easeOut );
+		//~ 
+		r.start();
+		g.start();
+		b.start();
+		
+		r.setTweenHandlers( function ( ev ) { e.target.transform.colorTransform = colorTrans; }  );
+
 		
 	}	
 

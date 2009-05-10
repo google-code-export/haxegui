@@ -8,11 +8,17 @@ indent_mode=2
 
 [project]
 name=haxegui
-base_path=/home/gershon/Desktop/HAXE/
+base_path=/home/gershon/Desktop/HAXE/Framework
 make_in_base_path=true
 description=haxegui
 run_cmd=make run
 
 [files]
-current_page=0
-FILE_NAME_0=0;Haxe;0;16;1;1;0;/home/gershon/Desktop/haxeGUI_SVN/App.hx;0
+current_page=1
+FILE_NAME_0=1468;Haxe;0;16;1;1;0;/home/gershon/Desktop/HAXE/Framework/haxegui/controls/UiList.hx;0
+FILE_NAME_1=7150;Haxe;0;16;0;1;0;/home/gershon/Desktop/HAXE/Framework/haxegui/Stats.hx;0
+FILE_NAME_2=1256;None;0;16;1;1;0;/home/gershon/.config/geany/filedefs/filetypes.common;0
+FILE_NAME_3=2664;Haxe;0;16;1;1;0;/home/gershon/Desktop/HAXE/Framework/haxegui/controls/Button.hx;0
+FILE_NAME_4=10296;Haxe;0;16;1;1;0;/home/gershon/Desktop/HAXE/Framework/haxegui/controls/Scrollbar.hx;0
+FILE_NAME_5=1304;Haxe;0;16;2;1;0;/home/gershon/Desktop/HAXE/Framework/haxegui/Window.hx;0
+FILE_NAME_6=3216;Haxe;0;16;1;1;0;/home/gershon/Desktop/HAXE/Framework/App.hx;0
