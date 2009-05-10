@@ -158,7 +158,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 
 		// Statistics
-		var stats = new Stats (flash.Lib.current, 750, 80);
+		var stats = new Stats (flash.Lib.current, 540, 80);
 		stats.init();
 
 
@@ -291,7 +291,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 				//~ stepper.init();
 				stepper.move(360, 120+40*i);
 							
-				slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value=e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); });
+				slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value = e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); });
 				stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = e.target.value;  });
 				
 			}
