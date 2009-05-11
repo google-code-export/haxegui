@@ -1,7 +1,4 @@
-//
-// The MIT License
-//
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
+// Copyright (c) 2009 The haxegui developers
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -20,41 +17,27 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
-
 package haxegui.controls;
 
-import flash.geom.Rectangle;
-import flash.geom.Transform;
-import flash.geom.ColorTransform;
-
-import flash.display.Sprite;
-import flash.display.MovieClip;
-import flash.display.DisplayObject;
+// import flash.display.Sprite;
+// import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
-import flash.text.TextField;
-import flash.text.TextFormat;
-
-import flash.events.Event;
+// import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-
-import haxegui.events.MoveEvent;
-
 import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
+// import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
-import flash.filters.BevelFilter;
+// import flash.filters.BevelFilter;
+import flash.geom.Rectangle;
+// import flash.geom.Transform;
+// import flash.text.TextField;
+import flash.text.TextFormat;
 
 import haxegui.StyleManager;
 import haxegui.CursorManager;
-
-import Reflect;
-
-import haxegui.controls.Label;
-
+import haxegui.events.MoveEvent;
 
 import feffects.Tween;
 import feffects.easing.Quint;
@@ -89,7 +72,7 @@ class Button extends Component, implements Dynamic
 
 	public var color(default, default) : UInt;
 
-	private var curTween : Tween;
+
 
 	/**
 	*
@@ -326,25 +309,5 @@ class Button extends Component, implements Dynamic
 
 		//~ trace(e);
 	}
-
-
-	private function updateColorTween(t : Tween) {
-		var me = this;
-		var colorTrans: ColorTransform  = new ColorTransform();
-
-		if(curTween != null)
-			curTween.stop();
-		curTween = t;
-		curTween.setTweenHandlers(
-				function(v) {
-					colorTrans.redOffset = v;
-					colorTrans.greenOffset = v;
-					colorTrans.blueOffset = v;
-					me.transform.colorTransform = colorTrans;
-				},
-				null);
-		curTween.start();
-	}
-
 }
 
