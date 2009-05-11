@@ -295,5 +295,110 @@ This hscript does the following:
 			</script>
     
 
+
+    <haxegui:Window name="Step Sequencer" x="100" y="40" width="512" height="512" sizeable="true" color="0x666666">
+	<haxegui:Menubar name="menubar" width="512" x="10" y="20" />
+	<haxegui:ScrollPane name="ScrollPane1" x="10" y="44" >
+		<haxegui:Container name="Container1" width="512" height="512" color="0x666666" >    
+
+		<haxegui:controls:Button name="Start" label="Start" x="20" y="20" width="60" color="0x666666" />
+		<haxegui:controls:Button name="Stop" label="Stop" x="90" y="20" width="60" color="0x666666" />
+		<haxegui:controls:Stepper name="Stepper1" x="170" y="28" value="120" step="1" min="1" max="300" color="0x666666"/>
+		<haxegui:controls:Stepper name="Stepper2" x="250" y="28" disabled="true" min="1" max="16" color="0x666666"/>
+
+		</haxegui:Container>
+	</haxegui:ScrollPane>
+    </haxegui:Window>
+
+    <script type="text/hscript">
+    
+	var window = root.getChildByName("Step Sequencer");
+	var scrollpane = window.getChildByName("ScrollPane1");
+	var container = scrollpane.content.getChildByName("Container1");
+
+	/*
+	var checkbox = new haxegui.controls.CheckBox(container, "CheckBox", 20, 60);
+	checkbox.init();
+	*/
+	
+	var BPM_TO_MS = 60*1000;
+	
+	var start = container.getChildByName("Start");
+	var stop = container.getChildByName("Stop");
+	
+	var step1 = container.getChildByName("Stepper1");
+	var step2 = container.getChildByName("Stepper2");
+	
+	
+	
+	for(i in 1...16)
+	    {
+		var radio = new haxegui.controls.RadioButton(container, "RadioButton"+i, -10+30*i, 70);
+		radio.init();
+		radio.color =  0x666666;
+		radio.removeChild(radio.label);
+		radio.redraw();
+	    }
+
+	function changeColor(rb)
+	    {
+		rb.on = true;
+		rb.color = 0xff0000;
+		rb.redraw();
+	    }    
+
+
+	function update()
+	    {
+		step2.value ++ ;
+		if(step2.value > step2.max - 1) step2.value = step2.min;
+		step2.onChanged();
+		
+		var rb = container.getChildByName("RadioButton"+step2.value);
+		changeColor(rb);
+		rb.color =  0x666666;
+		Timer.delay( rb.redraw, BPM_TO_MS / step1.value );
+	    }
+	    
+	var t = new haxe.Timer( BPM_TO_MS / step1.value );
+	t.run = update;
+
+	step1.addEventListener( Event.CHANGE, 
+	    function(e)
+	    {
+		step2.value = 1;
+		for(i in 1...16)
+		{
+		    var rb = container.getChildByName("RadioButton"+i);
+		    rb.color = 0x666666;
+		    rb.redraw();
+		    rb.on = false;
+		}
+		t.stop();	    
+		t = new haxe.Timer( BPM_TO_MS / step1.value );
+		t.run = update;	    
+	    } );
+	
+
+	start.addEventListener(MouseEvent.MOUSE_UP, function(e){ t.stop(); t = new haxe.Timer( BPM_TO_MS / step1.value ); t.run = update; });
+	stop.addEventListener( MouseEvent.MOUSE_UP, function(e){ t.stop(); });
+
+	
+	for(i in 0...9)
+	    for(j in 1...16)
+	    {
+		var chkbox = new haxegui.controls.CheckBox(container, "CheckBox"+i+j, -10+30*j, 100 + 30*i);
+		chkbox.init();
+		chkbox.removeChild(chkbox.label);
+		/*chkbox.box.height = 30;*/
+		/*if(j==1 || j%5==0) chkbox.color -= 0x191919;*/
+		chkbox.color = (j==1 || j%5==0) ? 0x999999 : 0x666666;
+		chkbox.redraw();
+	    }	
+	
+    trace(print_r(window));
+    
+    </script>
+
     
 </haxegui:Layout>
