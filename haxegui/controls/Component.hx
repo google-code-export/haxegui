@@ -39,26 +39,35 @@ import haxegui.StyleManager;
 import haxegui.FocusManager;
 
 
-
 /**
- * 
- * 
- * 
- * 
- */
+
+    Component Class 
+
+**/
 class Component extends Sprite, implements haxegui.IMovable, implements haxegui.IToolTip, implements Dynamic
 //~ implements haxe.rtti.Infos
 {
 	
+  /** Rectangular dimensions **/
   public var box : Rectangle;
-  public var disabled : Bool;
+  
+  /** Disabled \ Enabled **/
+  public var disabled(default, default) : Bool;
+  
+  /** Does object validate ? **/
   public var validate : Bool;
+  
+  /** Text for tooltip **/
   public var text : String;
   
-  public var margin : Rectangle;
+  //~ public var margin : Rectangle;
   //~ public var padding : Array<Float>;
   //~ public var getBox : Void -> Rectangle;
   
+  
+ /**
+    
+  **/
   public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
   {
     super ();
@@ -79,30 +88,32 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
         
     move(x,y);
     
-    margin = new Rectangle();
+    //~ margin = new Rectangle();
     //~ trace("New " + this);
   }
 
 
 
-  
-	/**
-	 * 
-	 */
-  public function move (x : Float, y : Float) : Void
-  {
-    var event = new MoveEvent(MoveEvent.MOVE);
-    event.oldX = this.x;
-    event.oldY = this.y;
-    this.x += x;
-    this.y += y;
-    box.offset(x,y);
-    dispatchEvent(event);
-  }
+    /**
+
+        Move relative to current location.
+
+     **/
+    public function move (x : Float, y : Float) : Void
+    {
+        var event = new MoveEvent(MoveEvent.MOVE);
+        event.oldX = this.x;
+        event.oldY = this.y;
+        this.x += x;
+        this.y += y;
+        box.offset(x,y);
+        dispatchEvent(event);
+    }
 
     /**
-     * 
-     */
+     
+     
+     **/
     public function setBox(b:Rectangle) : Rectangle
     {
         var event = new ResizeEvent(ResizeEvent.RESIZE);
@@ -126,7 +137,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
   }
 
     
-    
+  /** Returns whether object validates **/
   public function isValid() : Bool
   {
       return true;
