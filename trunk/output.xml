@@ -315,45 +315,66 @@
 		<extends path="flash.display.Sprite"/>
 		<implements path="haxegui.IToolTip"/>
 		<implements path="haxegui.IMovable"/>
-		<box public="1"><c path="flash.geom.Rectangle"/></box>
-		<disabled public="1"><e path="Bool"/></disabled>
-		<validate public="1"><e path="Bool"/></validate>
-		<text public="1"><c path="String"/></text>
-		<margin public="1"><c path="flash.geom.Rectangle"/></margin>
-		<move public="1" line="92">
+		<box public="1">
+			<c path="flash.geom.Rectangle"/>
+			<haxe_doc> Rectangular dimensions </haxe_doc>
+		</box>
+		<disabled public="1">
+			<e path="Bool"/>
+			<haxe_doc> Disabled \ Enabled </haxe_doc>
+		</disabled>
+		<validate public="1">
+			<e path="Bool"/>
+			<haxe_doc> Does object validate ? </haxe_doc>
+		</validate>
+		<text public="1">
+			<c path="String"/>
+			<haxe_doc> Text for tooltip </haxe_doc>
+		</text>
+		<move public="1" line="102">
 			<f a="x:y">
 				<c path="Float"/>
 				<c path="Float"/>
 				<e path="Void"/>
 			</f>
 			<haxe_doc>
-	 * 
-	 </haxe_doc>
+
+        Move relative to current location.
+
+     </haxe_doc>
 		</move>
-		<setBox public="1" line="106">
+		<setBox public="1" line="117">
 			<f a="b">
 				<c path="flash.geom.Rectangle"/>
 				<c path="flash.geom.Rectangle"/>
 			</f>
 			<haxe_doc>
-     * 
+     
+     
      </haxe_doc>
 		</setBox>
-		<hasFocus public="1" line="120"><f a=""><e path="Bool"/></f></hasFocus>
-		<isValid public="1" line="130"><f a=""><e path="Bool"/></f></isValid>
-		<new public="1" line="62"><f a="?parent:?name:?x:?y">
-	<c path="flash.display.DisplayObjectContainer"/>
-	<c path="String"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></new>
+		<hasFocus public="1" line="131"><f a=""><e path="Bool"/></f></hasFocus>
+		<isValid public="1" line="141">
+			<f a=""><e path="Bool"/></f>
+			<haxe_doc> Returns whether object validates </haxe_doc>
+		</isValid>
+		<new public="1" line="71">
+			<f a="?parent:?name:?x:?y">
+				<c path="flash.display.DisplayObjectContainer"/>
+				<c path="String"/>
+				<c path="Float"/>
+				<c path="Float"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+    
+  </haxe_doc>
+		</new>
 		<haxe_doc>
- * 
- * 
- * 
- * 
- </haxe_doc>
+
+    Component Class 
+
+</haxe_doc>
 		<haxe_dynamic><d/></haxe_dynamic>
 	</class>
 	<class path="haxegui.controls.Slider" params="" file="./haxegui/controls/Slider.hx">
@@ -2083,7 +2104,7 @@
 		<color public="1"><t path="UInt"/></color>
 		<type public="1"><e path="haxegui.WindowType"/></type>
 		<sizeable><e path="Bool"/></sizeable>
-		<init public="1" line="306">
+		<init public="1" line="312">
 			<f a="?initObj">
 				<d/>
 				<e path="Void"/>
@@ -2097,12 +2118,12 @@
     * 
     </haxe_doc>
 		</init>
-		<isSizeable public="1" line="381"><f a=""><e path="Bool"/></f></isSizeable>
-		<onMove public="1" line="388"><f a="e">
+		<isSizeable public="1" line="387"><f a=""><e path="Bool"/></f></isSizeable>
+		<onMove public="1" line="394"><f a="e">
 	<c path="haxegui.events.MoveEvent"/>
 	<e path="Void"/>
 </f></onMove>
-		<draw public="1" line="400">
+		<draw public="1" line="406">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
      * 
@@ -2111,7 +2132,7 @@
      * 
      </haxe_doc>
 		</draw>
-		<onRollOut public="1" line="476">
+		<onRollOut public="1" line="482">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -2121,7 +2142,7 @@
      * 
      </haxe_doc>
 		</onRollOut>
-		<onRollOver public="1" line="492">
+		<onRollOver public="1" line="498">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -2131,7 +2152,7 @@
      * 
      </haxe_doc>
 		</onRollOver>
-		<onMouseMove public="1" line="505">
+		<onMouseMove public="1" line="511">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -2142,7 +2163,7 @@
      * 
      </haxe_doc>
 		</onMouseMove>
-		<onResize public="1" line="559">
+		<onResize public="1" line="565">
 			<f a="e">
 				<c path="haxegui.events.ResizeEvent"/>
 				<e path="Void"/>
@@ -2153,7 +2174,7 @@
      * 
      </haxe_doc>
 		</onResize>
-		<onMouseDown public="1" line="577">
+		<onMouseDown public="1" line="583">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -2162,7 +2183,7 @@
    *
    </haxe_doc>
 		</onMouseDown>
-		<onMouseUp public="1" line="623">
+		<onMouseUp public="1" line="629">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -2173,7 +2194,7 @@
    * 
    </haxe_doc>
 		</onMouseUp>
-		<redrawFrame public="1" line="647">
+		<redrawFrame public="1" line="653">
 			<f a="fill:color">
 				<t path="UInt"/>
 				<t path="UInt"/>
@@ -2184,7 +2205,7 @@
      * 
      </haxe_doc>
 		</redrawFrame>
-		<redraw public="1" line="666">
+		<redraw public="1" line="671">
 			<f a="e">
 				<d/>
 				<e path="Void"/>
@@ -2194,11 +2215,11 @@
  *
  </haxe_doc>
 		</redraw>
-		<onRaise public="1" line="724"><f a="e">
+		<onRaise public="1" line="729"><f a="e">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></onRaise>
-		<new public="1" line="282"><f a="?parent:?name:?x:?y:?width:?height:?sizeable">
+		<new public="1" line="288"><f a="?parent:?name:?x:?y:?width:?height:?sizeable">
 	<c path="flash.display.DisplayObjectContainer"/>
 	<c path="String"/>
 	<c path="Float"/>
@@ -2208,6 +2229,16 @@
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></new>
+		<haxe_doc><![CDATA[
+ * 
+ * Window class
+ * 
+ * Dragable & Resizable  window.
+ * 
+ * 
+ * @author <gershon@goosemoose.com>
+ * @version 0.1
+ ]]></haxe_doc>
 		<haxe_dynamic><d/></haxe_dynamic>
 	</class>
 	<class path="haxegui.Console" params="" file="./haxegui/Console.hx">
@@ -3085,7 +3116,7 @@
    * 
    </haxe_doc>
 		</init>
-		<onRollOver public="1" line="182">
+		<onRollOver public="1" line="184">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -3095,7 +3126,7 @@
 	*
 	</haxe_doc>
 		</onRollOver>
-		<onRollOut public="1" line="198">
+		<onRollOut public="1" line="200">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -3105,7 +3136,7 @@
 	*
 	</haxe_doc>
 		</onRollOut>
-		<onMouseDown line="209">
+		<onMouseDown line="211">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -3114,15 +3145,15 @@
    *
    </haxe_doc>
 		</onMouseDown>
-		<onEnterFrame line="239"><f a="e">
+		<onEnterFrame line="241"><f a="e">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></onEnterFrame>
-		<onMouseUp line="263"><f a="e">
+		<onMouseUp line="265"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></onMouseUp>
-		<onChanged public="1" line="280"><f a="?e">
+		<onChanged public="1" line="282"><f a="?e">
 	<d/>
 	<e path="Void"/>
 </f></onChanged>
@@ -3665,53 +3696,63 @@
 	</enum>
 	<class path="haxegui.controls.Button" params="" file="./haxegui/controls/Button.hx">
 		<extends path="haxegui.controls.Component"/>
-		<label public="1"><c path="haxegui.controls.Label"/></label>
+		<label public="1">
+			<c path="haxegui.controls.Label"/>
+			<haxe_doc>
+	 *  @see Label
+	 </haxe_doc>
+		</label>
 		<fmt public="1"><c path="flash.text.TextFormat"/></fmt>
 		<color public="1"><t path="UInt"/></color>
-		<init public="1" line="89"><f a="?initObj">
-	<d/>
-	<e path="Void"/>
-</f></init>
-		<onFocusChanged public="1" line="173">
+		<init public="1" line="114">
+			<f a="?initObj">
+				<d/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * Init Function
+	 * 
+	 * 
+	 * @param initObj Dynamic object
+	 * 
+	 </haxe_doc>
+		</init>
+		<onFocusChanged public="1" line="199">
 			<f a="e">
 				<c path="flash.events.FocusEvent"/>
 				<e path="Void"/>
 			</f>
 			<haxe_doc>
-	*
+	* 
+	* @param e 
 	*
 	</haxe_doc>
 		</onFocusChanged>
-		<redraw public="1" line="183">
+		<redraw public="1" line="210">
 			<f a="?color">
 				<t path="UInt"/>
 				<e path="Void"/>
 			</f>
 			<haxe_doc>
 	*
+	* @param color
 	</haxe_doc>
 		</redraw>
-		<onRollOver public="1" line="235">
+		<onRollOver public="1" line="260">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
 			</f>
-			<haxe_doc>
-	*
-	*
-	</haxe_doc>
+			<haxe_doc> onRollOver Event </haxe_doc>
 		</onRollOver>
-		<onRollOut public="1" line="282">
+		<onRollOut public="1" line="284">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
 			</f>
-			<haxe_doc>
-	*
-	*
-	</haxe_doc>
+			<haxe_doc> onRollOut Event </haxe_doc>
 		</onRollOut>
-		<onMouseDown public="1" line="308">
+		<onMouseDown public="1" line="310">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -3721,7 +3762,7 @@
 	*
 	</haxe_doc>
 		</onMouseDown>
-		<onMouseUp public="1" line="344">
+		<onMouseUp public="1" line="346">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -3731,17 +3772,34 @@
 	*
 	</haxe_doc>
 		</onMouseUp>
-		<onKeyDown public="1" line="391"><f a="e">
+		<onKeyDown public="1" line="393"><f a="e">
 	<c path="flash.events.KeyboardEvent"/>
 	<e path="Void"/>
 </f></onKeyDown>
-		<new public="1" line="83"><f a="?parent:?name:?x:?y">
-	<c path="flash.display.DisplayObjectContainer"/>
-	<c path="String"/>
-	<c path="Float"/>
-	<c path="Float"/>
-	<e path="Void"/>
-</f></new>
+		<new public="1" line="100">
+			<f a="?parent:?name:?x:?y">
+				<c path="flash.display.DisplayObjectContainer"/>
+				<c path="String"/>
+				<c path="Float"/>
+				<c path="Float"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	* 
+	* @param parent  Parent object
+	* @param name    Name of new instance
+	* @param x       Horizontal location
+	* @param y       Vertical location
+	</haxe_doc>
+		</new>
+		<haxe_doc><![CDATA[
+ * 
+ * Button Class
+ * 
+ * @version 0.1
+ * @author <gershon@goosemoose.com>
+ * 
+ ]]></haxe_doc>
 		<haxe_dynamic><d/></haxe_dynamic>
 	</class>
 	<class path="flash.display.LoaderInfo" params="" file="/usr/lib/haxe/std/flash9/display/LoaderInfo.hx" extern="1">
@@ -4008,27 +4066,36 @@
 	<class path="haxegui.Stats" params="" file="./haxegui/Stats.hx">
 		<extends path="haxegui.Window"/>
 		<list><c path="haxegui.controls.UiList"/></list>
-		<interval><c path="Int"/></interval>
+		<gridSpacing><t path="UInt"/></gridSpacing>
+		<graph><c path="flash.display.Sprite"/></graph>
+		<grid><c path="flash.display.Sprite"/></grid>
+		<ploter><c path="flash.display.Sprite"/></ploter>
+		<data><c path="Array"><c path="flash.geom.Point"/></c></data>
+		<data2><c path="Array"><c path="flash.geom.Point"/></c></data2>
+		<data3><c path="Array"><c path="flash.geom.Point"/></c></data3>
+		<interval public="1"><c path="Int"/></interval>
+		<avgFPS><c path="Array"><c path="Float"/></c></avgFPS>
 		<frameCounter><c path="Int"/></frameCounter>
 		<timer><c path="haxe.Timer"/></timer>
+		<last><c path="Float"/></last>
 		<delta><c path="Float"/></delta>
 		<maxFPS><c path="Float"/></maxFPS>
 		<minFPS><c path="Float"/></minFPS>
-		<avgFPS><c path="Array"><c path="Float"/></c></avgFPS>
-		<update public="1" line="149">
+		<update public="1" line="261">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
      *
      * 
      </haxe_doc>
 		</update>
-		<onEnterFrame public="1" line="191"><f a="e">
+		<onEnterFrame public="1" line="352"><f a="e">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></onEnterFrame>
-		<new public="1" line="89">
-			<f a="?parent:?x:?y">
+		<new public="1" line="123">
+			<f a="?parent:?name:?x:?y">
 				<c path="flash.display.DisplayObjectContainer"/>
+				<c path="String"/>
 				<c path="Float"/>
 				<c path="Float"/>
 				<e path="Void"/>
@@ -4655,63 +4722,43 @@
 		<down><c path="flash.display.Sprite"/></down>
 		<scrollee public="1"><d/></scrollee>
 		<scroll public="1"><c path="Float"/></scroll>
-		<init public="1" line="102"><f a="?scrollee">
-	<d/>
-	<e path="Void"/>
-</f></init>
-		<onResize public="1" line="232"><f a="e">
-	<d/>
-	<e path="Void"/>
-</f></onResize>
-		<onRollOver public="1" line="284"><f a="e">
-	<c path="flash.events.MouseEvent"/>
-	<e path="Void"/>
-</f></onRollOver>
-		<onRollOut public="1" line="293"><f a="e">
-	<c path="flash.events.MouseEvent"/>
-	<e path="Void"/>
-</f></onRollOut>
-		<onMouseWheel public="1" line="309"><f a="e">
-	<c path="flash.events.MouseEvent"/>
-	<e path="Void"/>
-</f></onMouseWheel>
-		<onMouseDown public="1" line="334">
-			<f a="e">
-				<c path="flash.events.MouseEvent"/>
-				<e path="Void"/>
-			</f>
-			<haxe_doc>
-	 * onMouseDown
-	 * 
-	 * 
-	 </haxe_doc>
-		</onMouseDown>
-		<onEnterFrame public="1" line="411"><f a="e">
-	<c path="flash.events.Event"/>
-	<e path="Void"/>
-</f></onEnterFrame>
-		<onMouseUp public="1" line="428"><f a="e">
-	<c path="flash.events.MouseEvent"/>
-	<e path="Void"/>
-</f></onMouseUp>
-		<onMouseMove public="1" line="439"><f a="e">
-	<c path="flash.events.MouseEvent"/>
-	<e path="Void"/>
-</f></onMouseMove>
-		<adjust public="1" line="451">
-			<f a="?e">
+		<init public="1" line="127">
+			<f a="?scrollee">
 				<d/>
 				<e path="Void"/>
 			</f>
 			<haxe_doc>
 	 * 
 	 * 
+	 * @param scrolle Object to scroll, either a DisplayObject or TextField
 	 * 
 	 </haxe_doc>
-		</adjust>
-		<redrawHandle line="518">
-			<f a="?color">
-				<t path="UInt"/>
+		</init>
+		<onResize public="1" line="249">
+			<f a="e">
+				<d/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * 
+	 * 
+	 * @param 
+	 * 
+	 </haxe_doc>
+		</onResize>
+		<onRollOver public="1" line="305">
+			<f a="e">
+				<c path="flash.events.MouseEvent"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * 
+	 * 
+	 </haxe_doc>
+		</onRollOver>
+		<onRollOut public="1" line="334">
+			<f a="e">
+				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
 			</f>
 			<haxe_doc>
@@ -4719,8 +4766,70 @@
 	 * 
 	 * 
 	 </haxe_doc>
+		</onRollOut>
+		<onMouseWheel public="1" line="366">
+			<f a="e">
+				<c path="flash.events.MouseEvent"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * 
+	 * 
+	 </haxe_doc>
+		</onMouseWheel>
+		<onMouseDown public="1" line="391">
+			<f a="e">
+				<c path="flash.events.MouseEvent"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * 
+	 * @param
+	 * 
+	 </haxe_doc>
+		</onMouseDown>
+		<onEnterFrame public="1" line="487">
+			<f a="e">
+				<c path="flash.events.Event"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * 
+	 * @param
+	 * 
+	 </haxe_doc>
+		</onEnterFrame>
+		<onMouseUp public="1" line="504"><f a="e">
+	<c path="flash.events.MouseEvent"/>
+	<e path="Void"/>
+</f></onMouseUp>
+		<onMouseMove public="1" line="532"><f a="e">
+	<c path="flash.events.MouseEvent"/>
+	<e path="Void"/>
+</f></onMouseMove>
+		<adjust public="1" line="544">
+			<f a="?e">
+				<d/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * 
+	 * @param
+	 * 
+	 </haxe_doc>
+		</adjust>
+		<redrawHandle line="611">
+			<f a="?color">
+				<t path="UInt"/>
+				<e path="Void"/>
+			</f>
+			<haxe_doc>
+	 * 
+	 * @param color 
+	 * 
+	 </haxe_doc>
 		</redrawHandle>
-		<new public="1" line="90"><f a="?parent:?name:?x:?y:?horz">
+		<new public="1" line="108"><f a="?parent:?name:?x:?y:?horz">
 	<c path="flash.display.DisplayObjectContainer"/>
 	<c path="String"/>
 	<c path="Float"/>
@@ -4728,6 +4837,13 @@
 	<e path="Bool"/>
 	<e path="Void"/>
 </f></new>
+		<haxe_doc><![CDATA[
+ * 
+ * Scrollbar class
+ * 
+ * @author <gershon@goosemoose.com>
+ * @version 0.1
+ ]]></haxe_doc>
 	</class>
 	<class path="feffects.easing.Elastic" params="" file="/home/gershon/haxelib/feffects/1,1,2/feffects/easing/Elastic.hx">
 		<implements path="haxe.Public"/>
@@ -5209,7 +5325,7 @@
 		<title public="1"><c path="flash.text.TextField"/></title>
 		<closeButton public="1"><c path="haxegui.controls.Component"/></closeButton>
 		<minimizeButton public="1"><c path="haxegui.controls.Component"/></minimizeButton>
-		<redraw public="1" line="158">
+		<redraw public="1" line="161">
 			<f a="?color:?w">
 				<c path="Int"/>
 				<c path="Float"/>
@@ -5220,19 +5336,19 @@
      * 
      </haxe_doc>
 		</redraw>
-		<onRollOver public="1" line="240"><f a="e">
+		<onRollOver public="1" line="243"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></onRollOver>
-		<onRollOut public="1" line="245"><f a="e">
+		<onRollOut public="1" line="248"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></onRollOut>
-		<onMouseUp public="1" line="250"><f a="e">
+		<onMouseUp public="1" line="253"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></onMouseUp>
-		<new public="1" line="87"><f a="?w">
+		<new public="1" line="90"><f a="?w">
 	<c path="Float"/>
 	<e path="Void"/>
 </f></new>

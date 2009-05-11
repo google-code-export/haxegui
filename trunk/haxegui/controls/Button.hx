@@ -81,12 +81,22 @@ import feffects.easing.Quart;
  */
 class Button extends Component, implements Dynamic
 {
-
+	/**
+	 *  @see Label
+	 */
 	public var label :Label;
 	public var fmt : TextFormat;
 	
 	public var color(default, default) : UInt;
 
+
+	/**
+	* 
+	* @param parent  Parent object
+	* @param name    Name of new instance
+	* @param x       Horizontal location
+	* @param y       Vertical location
+	*/
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super (parent, name, x, y);
@@ -182,7 +192,8 @@ class Button extends Component, implements Dynamic
 	}
 
 	/**
-	*
+	* 
+	* @param e 
 	*
 	*/
 	public function onFocusChanged (e:FocusEvent)
@@ -194,7 +205,7 @@ class Button extends Component, implements Dynamic
 
 	/**
 	*
-	* 
+	* @param color
 	*/
 	public dynamic function redraw(?color:UInt) : Void
 	{
@@ -244,10 +255,8 @@ class Button extends Component, implements Dynamic
 		
 
 	}
-	/**
-	*
-	*
-	*/
+
+	/** onRollOver Event **/
 	public function onRollOver(e:MouseEvent) 
 	{
 		if(disabled) return;
@@ -270,10 +279,8 @@ class Button extends Component, implements Dynamic
 		CursorManager.getInstance().setCursor(Cursor.HAND);
 
 	}
-	/**
-	*
-	*
-	*/
+
+	/** onRollOut Event **/
 	public function onRollOut(e:MouseEvent) : Void
 	{
 		if(disabled) return;

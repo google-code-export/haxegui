@@ -48,7 +48,6 @@ import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 
-
 import feffects.Tween;
 import feffects.easing.Quint;
 import feffects.easing.Sine;
@@ -117,7 +116,14 @@ class Scrollbar extends haxegui.controls.Component
 		down = new Sprite();
 
 	}
-	
+
+
+	/**
+	 * 
+	 * 
+	 * @param scrolle Object to scroll, either a DisplayObject or TextField
+	 * 
+	 */
 	public function init(?scrollee:Dynamic)
 	{
 		scroll = 0;
@@ -148,9 +154,6 @@ class Scrollbar extends haxegui.controls.Component
     
 		this.addChild(frame);
 		
-
-		
-		
 		handle.buttonMode = true;
 		handle.focusRect = true;
 		handle.tabEnabled = true;
@@ -160,8 +163,6 @@ class Scrollbar extends haxegui.controls.Component
 
 		redrawHandle();
 
-
-
 		shadow = new DropShadowFilter (0, 0, StyleManager.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, 0.75, BitmapFilterQuality.LOW, false, false, false);
 		handle.filters = [shadow];
 
@@ -169,8 +170,6 @@ class Scrollbar extends haxegui.controls.Component
 		handle.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
 
 		this.addChild(handle);
-
-
 		
 		up.buttonMode = true;
 		up.focusRect = true;
@@ -197,8 +196,7 @@ class Scrollbar extends haxegui.controls.Component
 		up.y=0;
 
 		this.addChild(up);
-		
-		
+				
 		down.buttonMode = true;
 		down.focusRect = true;
 		down.tabEnabled = true;			
@@ -222,8 +220,6 @@ class Scrollbar extends haxegui.controls.Component
 
 		this.addChild(down);
 
-
-
 		up.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
 		up.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
 		down.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
@@ -244,10 +240,10 @@ class Scrollbar extends haxegui.controls.Component
 
 
 
-	/*
+	/**
 	 * 
 	 * 
-	 * 
+	 * @param 
 	 * 
 	 */
 	public function onResize(e:Dynamic) 
@@ -302,11 +298,16 @@ class Scrollbar extends haxegui.controls.Component
 		
 	}
 	
+	/**
+	 * 
+	 * 
+	 */
     public function onRollOver(e:MouseEvent)  : Void	
 	{
 		
 			//~ redrawHandle(color | 0x4D4D4D);
-
+		if(e.buttonDown) return;
+	
 		var colorTrans: ColorTransform  = new ColorTransform();
 
 		var r = new Tween(0, 50, 350, colorTrans, "redOffset", Expo.easeOut );
@@ -325,6 +326,11 @@ class Scrollbar extends haxegui.controls.Component
 		//~ Tweener.addTween(e.target, {_brightness:.5, time:.15, transition:"linear"});
     }
 
+	/**
+	 * 
+	 * 
+	 * 
+	 */
     public function onRollOut(e:MouseEvent) 
 	{
 		
@@ -342,18 +348,14 @@ class Scrollbar extends haxegui.controls.Component
 			b.start();
 
 			r.setTweenHandlers( function ( ev ) { e.target.transform.colorTransform = colorTrans; }  );
-		}	
 	
-
-		if(!e.buttonDown) 
-			{
 			
 			if(e.target == handle)
 				redrawHandle();
 			flash.Lib.current.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			e.target.stopDrag();		
 			//~ Tweener.addTween(e.target, {_brightness:0, time:.35, transition:"linear"});		
-			}
+		}
 			//~ Tweener.addTween(e.target, {_brightness:0, time:.35, transition:"linear"});		
     }	
 	
@@ -382,8 +384,8 @@ class Scrollbar extends haxegui.controls.Component
 	
 	
 	/**
-	 * onMouseDown
 	 * 
+	 * @param
 	 * 
 	 */
     public function onMouseDown(e:MouseEvent) 
@@ -477,6 +479,11 @@ class Scrollbar extends haxegui.controls.Component
 	}	
 
 
+	/**
+	 * 
+	 * @param
+	 * 
+	 */
 	public function onEnterFrame(e:Event)
 	{
 
@@ -531,7 +538,7 @@ class Scrollbar extends haxegui.controls.Component
 	
 	/**
 	 * 
-	 * 
+	 * @param
 	 * 
 	 */
 	public function adjust(?e:Dynamic)
@@ -598,7 +605,7 @@ class Scrollbar extends haxegui.controls.Component
 
 	/**
 	 * 
-	 * 
+	 * @param color 
 	 * 
 	 */
 	function redrawHandle(?color:UInt)
