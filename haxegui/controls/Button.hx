@@ -113,8 +113,7 @@ class Button extends Component, implements Dynamic
 	 */
 	public function init(?initObj:Dynamic)
 	{
-		if(color == 0)
-			color = StyleManager.BACKGROUND;
+		color = StyleManager.BACKGROUND;
 		
 		label = new Label();
 		//~ label.init();
@@ -157,11 +156,7 @@ class Button extends Component, implements Dynamic
 			//~ box.height = 30;
 			
 
-		//~ this.graphics.clear();
-		//~ this.graphics.lineStyle (2, ~StyleManager.BACKGROUND);
-		//~ this.graphics.beginFill (StyleManager.BACKGROUND);
-		//~ this.graphics.drawRoundRect (0, 0, box.width, box.height, 8, 8 );
-		//~ this.graphics.endFill ();
+
 
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
@@ -198,8 +193,8 @@ class Button extends Component, implements Dynamic
 	*/
 	public function onFocusChanged (e:FocusEvent)
 	{
-		var color = this.hasFocus ()? StyleManager.BACKGROUND | 0x141414: StyleManager.BACKGROUND;
-		redraw (color);
+		//~ var color = this.hasFocus ()? StyleManager.BACKGROUND | 0x141414: StyleManager.BACKGROUND;
+		redraw ();
 	}
 
 
@@ -207,11 +202,11 @@ class Button extends Component, implements Dynamic
 	*
 	* @param color
 	*/
-	public dynamic function redraw(?color:UInt) : Void
+	//~ public dynamic function redraw(?color:UInt) : Void
+	public dynamic function redraw() : Void
 	{
-		if(color == 0 || Math.isNaN(color))
+		//~ if(color == 0 || Math.isNaN(color))
 			//~ color = StyleManager.BACKGROUND;
-			color = this.color;
 
 
 		this.graphics.clear();
@@ -219,7 +214,7 @@ class Button extends Component, implements Dynamic
 
 		if( disabled ) 
 			{
-			color = StyleManager.BACKGROUND - 0x141414;
+			//~ color = StyleManager.BACKGROUND - 0x141414;
 			this.graphics.lineStyle (2, color);		
 			 
 			fmt = StyleManager.getTextFormat();
@@ -333,7 +328,6 @@ class Button extends Component, implements Dynamic
 		
 		//~ var fmt = StyleManager.getTextFormat();
 		//~ fmt.align = flash.text.TextFormatAlign.CENTER;
-		//~ fmt.color = ~StyleManager.LABEL_TEXT;
 		//~ label.setTextFormat (fmt);
 		CursorManager.getInstance().setCursor(Cursor.HAND2);
 		
@@ -347,7 +341,7 @@ class Button extends Component, implements Dynamic
 	{
 		if(disabled) return;
 		
-		redraw(color);
+		redraw();
 
 		//~ var fmt = new TextFormat ();
 		//~ fmt.align = flash.text.TextFormatAlign.CENTER;
@@ -355,7 +349,6 @@ class Button extends Component, implements Dynamic
 		//fmt.font = "Impact";
 		//~ fmt.font = "FFF_Manager_Bold";
 		//~ fmt.size = 12;
-		//~ fmt.color = StyleManager.LABEL_TEXT ;
 		//~ label.setTextFormat (fmt);
 
 		var colorTrans: ColorTransform  = new ColorTransform();

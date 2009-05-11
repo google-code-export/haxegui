@@ -149,10 +149,11 @@ class ComboBox extends Button, implements Dynamic
 	/**
 	*
 	*/
-	public function redrawButton(?color:UInt) : Void
+	//~ public function redrawButton(?color:UInt) : Void
+	public function redrawButton() : Void
 	{
 
-		if(color == 0 ) color = this.color;
+		//~ if(color == 0 ) color = this.color;
 
 		dropButton.graphics.clear();
 		//~ dropButton.graphics.lineStyle (2, color - 0x191919 );		
@@ -197,7 +198,8 @@ class ComboBox extends Button, implements Dynamic
 	/**
 	 *
 	 */
-	public override function redraw(?color:UInt) : Void {
+	//~ public override function redraw(?color:UInt) : Void {
+	public override function redraw() : Void {
 
 		if(color==0 || Math.isNaN(color))
 			color = StyleManager.BACKGROUND;
@@ -228,7 +230,7 @@ class ComboBox extends Button, implements Dynamic
 		back.graphics.endFill ();
 
 			
-		dropButton.redraw(color);
+		dropButton.redraw();
 		//~ dropButton.filters = null;
 
 

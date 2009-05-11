@@ -3116,7 +3116,7 @@
    * 
    </haxe_doc>
 		</init>
-		<onRollOver public="1" line="184">
+		<onRollOver public="1" line="185">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -3126,7 +3126,7 @@
 	*
 	</haxe_doc>
 		</onRollOver>
-		<onRollOut public="1" line="200">
+		<onRollOut public="1" line="201">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -3136,7 +3136,7 @@
 	*
 	</haxe_doc>
 		</onRollOut>
-		<onMouseDown line="211">
+		<onMouseDown line="212">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -3145,15 +3145,15 @@
    *
    </haxe_doc>
 		</onMouseDown>
-		<onEnterFrame line="241"><f a="e">
+		<onEnterFrame line="242"><f a="e">
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></onEnterFrame>
-		<onMouseUp line="265"><f a="e">
+		<onMouseUp line="266"><f a="e">
 	<c path="flash.events.MouseEvent"/>
 	<e path="Void"/>
 </f></onMouseUp>
-		<onChanged public="1" line="282"><f a="?e">
+		<onChanged public="1" line="283"><f a="?e">
 	<d/>
 	<e path="Void"/>
 </f></onChanged>
@@ -3717,7 +3717,7 @@
 	 * 
 	 </haxe_doc>
 		</init>
-		<onFocusChanged public="1" line="199">
+		<onFocusChanged public="1" line="194">
 			<f a="e">
 				<c path="flash.events.FocusEvent"/>
 				<e path="Void"/>
@@ -3728,31 +3728,28 @@
 	*
 	</haxe_doc>
 		</onFocusChanged>
-		<redraw public="1" line="210">
-			<f a="?color">
-				<t path="UInt"/>
-				<e path="Void"/>
-			</f>
+		<redraw public="1" line="206">
+			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	*
 	* @param color
 	</haxe_doc>
 		</redraw>
-		<onRollOver public="1" line="260">
+		<onRollOver public="1" line="255">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
 			</f>
 			<haxe_doc> onRollOver Event </haxe_doc>
 		</onRollOver>
-		<onRollOut public="1" line="284">
+		<onRollOut public="1" line="279">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
 			</f>
 			<haxe_doc> onRollOut Event </haxe_doc>
 		</onRollOut>
-		<onMouseDown public="1" line="310">
+		<onMouseDown public="1" line="305">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -3762,7 +3759,7 @@
 	*
 	</haxe_doc>
 		</onMouseDown>
-		<onMouseUp public="1" line="346">
+		<onMouseUp public="1" line="340">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -3772,7 +3769,7 @@
 	*
 	</haxe_doc>
 		</onMouseUp>
-		<onKeyDown public="1" line="393"><f a="e">
+		<onKeyDown public="1" line="386"><f a="e">
 	<c path="flash.events.KeyboardEvent"/>
 	<e path="Void"/>
 </f></onKeyDown>
@@ -6341,7 +6338,7 @@
 		<__rtti public="1" line="101" static="1"><c path="String"/></__rtti>
 		<log static="1"><c path="haxe.Log"/></log>
 		<main public="1" line="106" static="1"><f a=""><e path="Void"/></f></main>
-		<loadXML public="1" line="415" static="1">
+		<loadXML public="1" line="414" static="1">
 			<f a="e">
 				<c path="flash.events.Event"/>
 				<e path="Void"/>
@@ -6350,14 +6347,14 @@
 	*
 	</haxe_doc>
 		</loadXML>
-		<tweenWindows public="1" line="438" static="1">
+		<tweenWindows public="1" line="437" static="1">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * 
 	 * 
 	 </haxe_doc>
 		</tweenWindows>
-		<setRedirection public="1" line="460" static="1">
+		<setRedirection public="1" line="459" static="1">
 			<f a="f">
 				<d/>
 				<e path="Void"/>
@@ -6367,7 +6364,7 @@
 	*
 	</haxe_doc>
 		</setRedirection>
-		<onStageResize public="1" line="469" static="1">
+		<onStageResize public="1" line="468" static="1">
 			<f a="e">
 				<c path="flash.events.Event"/>
 				<e path="Void"/>
@@ -6642,11 +6639,8 @@
 	<c path="flash.events.Event"/>
 	<e path="Void"/>
 </f></onDisabled>
-		<redrawButton public="1" line="152">
-			<f a="?color">
-				<t path="UInt"/>
-				<e path="Void"/>
-			</f>
+		<redrawButton public="1" line="153">
+			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	*
 	</haxe_doc>
