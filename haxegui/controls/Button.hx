@@ -72,18 +72,18 @@ import feffects.easing.Quart;
 
 
 /**
- *
- * Button Class
- *
- * @version 0.1
- * @author <gershon@goosemoose.com>
- *
- */
+*
+* Button Class
+*
+* @version 0.1
+* @author <gershon@goosemoose.com>
+*
+*/
 class Button extends Component, implements Dynamic
 {
 	/**
-	 *  @see Label
-	 */
+	*  @see Label
+	*/
 	public var label :Label;
 	public var fmt : TextFormat;
 
@@ -106,12 +106,12 @@ class Button extends Component, implements Dynamic
 
 
 	/**
-	 * Init Function
-	 *
-	 *
-	 * @param initObj Dynamic object
-	 *
-	 */
+	* Init Function
+	*
+	*
+	* @param initObj Dynamic object
+	*
+	*/
 	public function init(?initObj:Dynamic)
 	{
 		color = StyleManager.BACKGROUND;
@@ -121,12 +121,10 @@ class Button extends Component, implements Dynamic
 
 		if(Reflect.isObject(initObj))
 		{
-
-
-	for (f in Reflect.fields (initObj))
-	  if (Reflect.hasField (this, f))
-	    if (f!="label" && f != "width" && f != "height")
-	      Reflect.setField (this, f, Reflect.field (initObj, f));
+			for (f in Reflect.fields (initObj))
+				if (Reflect.hasField (this, f))
+					if (f!="label" && f != "width" && f != "height")
+						Reflect.setField (this, f, Reflect.field (initObj, f));
 			//~
 			//~ name = (initObj.name == null) ? name : initObj.name;
 			//~ name = (initObj.id == null) ? name : initObj.id;
@@ -207,14 +205,13 @@ class Button extends Component, implements Dynamic
 	public dynamic function redraw() : Void
 	{
 		//~ if(color == 0 || Math.isNaN(color))
-			//~ color = StyleManager.BACKGROUND;
-
+		//~ color = StyleManager.BACKGROUND;
 
 		this.graphics.clear();
 		this.graphics.lineStyle (2, color - 0x141414 );
 
 		if( disabled )
-			{
+		{
 			//~ color = StyleManager.BACKGROUND - 0x141414;
 			this.graphics.lineStyle (2, color);
 
@@ -227,24 +224,21 @@ class Button extends Component, implements Dynamic
 			//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x202020 ,1 ,0x000000, .15, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
 			//~ this.filters = [shadow, bevel];
 			this.filters = [shadow];
-
-			}
+		}
 
 
 		//~ this.graphics.beginFill (color);
 
-		  //~ var colors = [ color | 0x1A1A1A, color - 0x1A1A1A ];
-   		  //~ var colors = [ color | 0x323232, color - 0x333333 ];
-   		  var colors = [ color | 0x323232, color - 0x141414 ];
+		//~ var colors = [ color | 0x1A1A1A, color - 0x1A1A1A ];
+		//~ var colors = [ color | 0x323232, color - 0x333333 ];
+		var colors = [ color | 0x323232, color - 0x141414 ];
 
 
-		  var alphas = [ 100, 100 ];
-		  var ratios = [ 0, 0xFF ];
-		  var matrix = new flash.geom.Matrix();
-		  matrix.createGradientBox(box.width, box.height, Math.PI/2, 0, 0);
-		  this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-
+		var alphas = [ 100, 100 ];
+		var ratios = [ 0, 0xFF ];
+		var matrix = new flash.geom.Matrix();
+		matrix.createGradientBox(box.width, box.height, Math.PI/2, 0, 0);
+		this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
 		this.graphics.drawRoundRect (0, 0, box.width, box.height, 8, 8 );
 		this.graphics.endFill ();
@@ -257,22 +251,7 @@ class Button extends Component, implements Dynamic
 	{
 		if(disabled) return;
 
-		var me = this;
-		var colorTrans: ColorTransform  = new ColorTransform();
-
-		if(curTween != null)
-			curTween.stop();
-
-		curTween = new Tween(0, 50, 275, Expo.easeOut );
-		curTween.setTweenHandlers(
-				function(v) {
-					colorTrans.redOffset = v;
-					colorTrans.greenOffset = v;
-					colorTrans.blueOffset = v;
-					me.transform.colorTransform = colorTrans;
-				},
-				null);
-		curTween.start();
+		updateColorTween( new Tween(0, 50, 275, Expo.easeOut ) );
 
 		//~ redraw(color | 0x4C4C4C );
 
@@ -284,21 +263,7 @@ class Button extends Component, implements Dynamic
 	{
 		if(disabled) return;
 
-		var colorTrans: ColorTransform  = new ColorTransform();
-
-		var c = e.buttonDown ? -50 : 50;
-
-		var r = new Tween(c, 0, 350, colorTrans, "redOffset", Linear.easeOut );
-		var g = new Tween(c, 0, 350, colorTrans, "greenOffset", Linear.easeOut );
-		var b = new Tween(c, 0, 350, colorTrans, "blueOffset", Linear.easeOut );
-		//~
-		r.start();
-		g.start();
-		b.start();
-
-		var self = this;
-		r.setTweenHandlers( function ( e ) { self.transform.colorTransform = colorTrans; }  );
-
+		updateColorTween( new Tween(e.buttonDown ? -50 : 50, 0, 350, Linear.easeOut ) );
 
 //		CursorManager.getInstance().setCursor(Cursor.ARROW);
 	}
@@ -316,19 +281,7 @@ class Button extends Component, implements Dynamic
 
 		//~ redraw(color - 0x141414);
 
-		var colorTrans: ColorTransform  = new ColorTransform();
-
-		var r = new Tween(50, -50, 350, colorTrans, "redOffset", Linear.easeOut );
-		var g = new Tween(50, -50, 350, colorTrans, "greenOffset", Linear.easeOut );
-		var b = new Tween(50, -50, 350, colorTrans, "blueOffset", Linear.easeOut );
-		//~
-		r.start();
-		g.start();
-		b.start();
-
-		var self = this;
-		r.setTweenHandlers( function ( e ) { self.transform.colorTransform = colorTrans; }  );
-
+		updateColorTween( new Tween(50, -50, 350, Linear.easeOut) );
 
 		//~ var fmt = StyleManager.getTextFormat();
 		//~ fmt.align = flash.text.TextFormatAlign.CENTER;
@@ -355,35 +308,15 @@ class Button extends Component, implements Dynamic
 		//~ fmt.size = 12;
 		//~ label.setTextFormat (fmt);
 
-		var colorTrans: ColorTransform  = new ColorTransform();
-
-		var r = new Tween(-50, 0, 120, colorTrans, "redOffset", Linear.easeNone );
-		var g = new Tween(-50, 0, 120, colorTrans, "greenOffset", Linear.easeNone );
-		var b = new Tween(-50, 0, 120, colorTrans, "blueOffset", Linear.easeNone );
-
-
-	if(hitTestObject( CursorManager.getInstance().getCursor() ))
-		{
-		//~ redraw(color | 0x4C4C4C );
-
-		r = new Tween(-50, 50, 150, colorTrans, "redOffset", Linear.easeNone );
-		g = new Tween(-50, 50, 150, colorTrans, "greenOffset", Linear.easeNone );
-		b = new Tween(-50, 50, 150, colorTrans, "blueOffset", Linear.easeNone );
-
-
-		CursorManager.getInstance().setCursor(Cursor.HAND);
+		if(hitTestObject( CursorManager.getInstance().getCursor() ))
+			{
+			//~ redraw(color | 0x4C4C4C );
+			updateColorTween( new Tween(-50, 50, 150, Linear.easeNone) );
+			CursorManager.getInstance().setCursor(Cursor.HAND);
 		}
-
-
-		//~
-		r.start();
-		g.start();
-		b.start();
-
-		var self = this;
-		r.setTweenHandlers( function ( e ) { self.transform.colorTransform = colorTrans; }  );
-
-
+		else {
+			updateColorTween( new Tween(-50, 0, 120, Linear.easeNone) );
+		}
 	}
 
 
@@ -394,6 +327,24 @@ class Button extends Component, implements Dynamic
 		//~ trace(e);
 	}
 
+
+	private function updateColorTween(t : Tween) {
+		var me = this;
+		var colorTrans: ColorTransform  = new ColorTransform();
+
+		if(curTween != null)
+			curTween.stop();
+		curTween = t;
+		curTween.setTweenHandlers(
+				function(v) {
+					colorTrans.redOffset = v;
+					colorTrans.greenOffset = v;
+					colorTrans.blueOffset = v;
+					me.transform.colorTransform = colorTrans;
+				},
+				null);
+		curTween.start();
+	}
 
 }
 
