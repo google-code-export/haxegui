@@ -1,18 +1,18 @@
-// 
+//
 // The MIT License
-// 
+//
 // Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -72,12 +72,12 @@ import feffects.easing.Quart;
 
 
 /**
- * 
+ *
  * Button Class
- * 
+ *
  * @version 0.1
  * @author <gershon@goosemoose.com>
- * 
+ *
  */
 class Button extends Component, implements Dynamic
 {
@@ -86,12 +86,13 @@ class Button extends Component, implements Dynamic
 	 */
 	public var label :Label;
 	public var fmt : TextFormat;
-	
+
 	public var color(default, default) : UInt;
 
+	private var curTween : Tween;
 
 	/**
-	* 
+	*
 	* @param parent  Parent object
 	* @param name    Name of new instance
 	* @param x       Horizontal location
@@ -106,15 +107,15 @@ class Button extends Component, implements Dynamic
 
 	/**
 	 * Init Function
-	 * 
-	 * 
+	 *
+	 *
 	 * @param initObj Dynamic object
-	 * 
+	 *
 	 */
 	public function init(?initObj:Dynamic)
 	{
 		color = StyleManager.BACKGROUND;
-		
+
 		label = new Label();
 		//~ label.init();
 
@@ -126,7 +127,7 @@ class Button extends Component, implements Dynamic
 	  if (Reflect.hasField (this, f))
 	    if (f!="label" && f != "width" && f != "height")
 	      Reflect.setField (this, f, Reflect.field (initObj, f));
-			//~ 
+			//~
 			//~ name = (initObj.name == null) ? name : initObj.name;
 			//~ name = (initObj.id == null) ? name : initObj.id;
 			label.text = (initObj.label == null) ? name : initObj.label;
@@ -154,7 +155,7 @@ class Button extends Component, implements Dynamic
 		//~ else
 		//~ if(Math.isNaN(box.height))
 			//~ box.height = 30;
-			
+
 
 
 
@@ -182,13 +183,13 @@ class Button extends Component, implements Dynamic
 		//~ FocusManager.getInstance().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
 
 		//~ if(color==null || Math.isNaN(color))
-			
+
 		redraw();
 	}
 
 	/**
-	* 
-	* @param e 
+	*
+	* @param e
 	*
 	*/
 	public function onFocusChanged (e:FocusEvent)
@@ -210,33 +211,33 @@ class Button extends Component, implements Dynamic
 
 
 		this.graphics.clear();
-		this.graphics.lineStyle (2, color - 0x141414 );		
+		this.graphics.lineStyle (2, color - 0x141414 );
 
-		if( disabled ) 
+		if( disabled )
 			{
 			//~ color = StyleManager.BACKGROUND - 0x141414;
-			this.graphics.lineStyle (2, color);		
-			 
+			this.graphics.lineStyle (2, color);
+
 			fmt = StyleManager.getTextFormat();
 			fmt.color = color - 0x202020;
 			fmt.align = flash.text.TextFormatAlign.CENTER;
 			label.tf.setTextFormat(fmt);
-			
+
 			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 			//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x202020 ,1 ,0x000000, .15, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
 			//~ this.filters = [shadow, bevel];
 			this.filters = [shadow];
-			
+
 			}
-			
+
 
 		//~ this.graphics.beginFill (color);
-		
+
 		  //~ var colors = [ color | 0x1A1A1A, color - 0x1A1A1A ];
    		  //~ var colors = [ color | 0x323232, color - 0x333333 ];
    		  var colors = [ color | 0x323232, color - 0x141414 ];
-		  
-	  
+
+
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];
 		  var matrix = new flash.geom.Matrix();
@@ -244,93 +245,96 @@ class Button extends Component, implements Dynamic
 		  this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
 
-		
+
 		this.graphics.drawRoundRect (0, 0, box.width, box.height, 8, 8 );
 		this.graphics.endFill ();
-		
+
 
 	}
 
 	/** onRollOver Event **/
-	public function onRollOver(e:MouseEvent) 
+	public function onRollOver(e:MouseEvent)
 	{
 		if(disabled) return;
 
+		var me = this;
 		var colorTrans: ColorTransform  = new ColorTransform();
 
-		var r = new Tween(0, 50, 275, colorTrans, "redOffset", Expo.easeOut );
-		var g = new Tween(0, 50, 275, colorTrans, "greenOffset", Expo.easeOut );
-		var b = new Tween(0, 50, 275, colorTrans, "blueOffset", Expo.easeOut );
-		//~ 
-		r.start();
-		g.start();
-		b.start();
-		
-		var self = this;
-		r.setTweenHandlers( function ( e ) { self.transform.colorTransform = colorTrans; }  );
+		if(curTween != null)
+			curTween.stop();
+
+		curTween = new Tween(0, 50, 275, Expo.easeOut );
+		curTween.setTweenHandlers(
+				function(v) {
+					colorTrans.redOffset = v;
+					colorTrans.greenOffset = v;
+					colorTrans.blueOffset = v;
+					me.transform.colorTransform = colorTrans;
+				},
+				null);
+		curTween.start();
 
 		//~ redraw(color | 0x4C4C4C );
 
 		CursorManager.getInstance().setCursor(Cursor.HAND);
-
 	}
 
 	/** onRollOut Event **/
 	public function onRollOut(e:MouseEvent) : Void
 	{
 		if(disabled) return;
-		
+
 		var colorTrans: ColorTransform  = new ColorTransform();
-		
+
 		var c = e.buttonDown ? -50 : 50;
-		
+
 		var r = new Tween(c, 0, 350, colorTrans, "redOffset", Linear.easeOut );
 		var g = new Tween(c, 0, 350, colorTrans, "greenOffset", Linear.easeOut );
 		var b = new Tween(c, 0, 350, colorTrans, "blueOffset", Linear.easeOut );
-		//~ 
+		//~
 		r.start();
 		g.start();
 		b.start();
-		
+
 		var self = this;
 		r.setTweenHandlers( function ( e ) { self.transform.colorTransform = colorTrans; }  );
 
-		
+
 //		CursorManager.getInstance().setCursor(Cursor.ARROW);
 	}
 	/**
 	*
 	*
 	*/
-	public function onMouseDown(e:MouseEvent) : Void 
+	public function onMouseDown(e:MouseEvent) : Void
 	{
 		if(disabled) return;
-			
+
 		//~ trace(Std.string(here)+Std.string(e));
 		//~ if(!this.hasFocus())
 		//~ FocusManager.getInstance().setFocus(this);
 
 		//~ redraw(color - 0x141414);
-		
+
 		var colorTrans: ColorTransform  = new ColorTransform();
-			
+
 		var r = new Tween(50, -50, 350, colorTrans, "redOffset", Linear.easeOut );
 		var g = new Tween(50, -50, 350, colorTrans, "greenOffset", Linear.easeOut );
 		var b = new Tween(50, -50, 350, colorTrans, "blueOffset", Linear.easeOut );
-		//~ 
+		//~
 		r.start();
 		g.start();
 		b.start();
-		
+
 		var self = this;
 		r.setTweenHandlers( function ( e ) { self.transform.colorTransform = colorTrans; }  );
 
-		
+
 		//~ var fmt = StyleManager.getTextFormat();
 		//~ fmt.align = flash.text.TextFormatAlign.CENTER;
 		//~ label.setTextFormat (fmt);
 		CursorManager.getInstance().setCursor(Cursor.HAND2);
-		
+
 	}
 
 	/**
@@ -340,7 +344,7 @@ class Button extends Component, implements Dynamic
 	public function onMouseUp(e:MouseEvent) : Void
 	{
 		if(disabled) return;
-		
+
 		redraw();
 
 		//~ var fmt = new TextFormat ();
@@ -352,30 +356,30 @@ class Button extends Component, implements Dynamic
 		//~ label.setTextFormat (fmt);
 
 		var colorTrans: ColorTransform  = new ColorTransform();
-			
+
 		var r = new Tween(-50, 0, 120, colorTrans, "redOffset", Linear.easeNone );
 		var g = new Tween(-50, 0, 120, colorTrans, "greenOffset", Linear.easeNone );
 		var b = new Tween(-50, 0, 120, colorTrans, "blueOffset", Linear.easeNone );
 
-		
+
 	if(hitTestObject( CursorManager.getInstance().getCursor() ))
 		{
 		//~ redraw(color | 0x4C4C4C );
-		
+
 		r = new Tween(-50, 50, 150, colorTrans, "redOffset", Linear.easeNone );
 		g = new Tween(-50, 50, 150, colorTrans, "greenOffset", Linear.easeNone );
 		b = new Tween(-50, 50, 150, colorTrans, "blueOffset", Linear.easeNone );
 
-		
+
 		CursorManager.getInstance().setCursor(Cursor.HAND);
 		}
 
 
-		//~ 
+		//~
 		r.start();
 		g.start();
 		b.start();
-		
+
 		var self = this;
 		r.setTweenHandlers( function ( e ) { self.transform.colorTransform = colorTrans; }  );
 
@@ -386,7 +390,7 @@ class Button extends Component, implements Dynamic
 	public function onKeyDown(e:KeyboardEvent)
 	{
 		if(disabled) return;
-	
+
 		//~ trace(e);
 	}
 
