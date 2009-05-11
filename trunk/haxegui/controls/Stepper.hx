@@ -111,7 +111,8 @@ class Stepper extends Component, implements Dynamic
 		}
 
 	back = new Sprite();
-	back.graphics.lineStyle(2, StyleManager.BACKGROUND - 0x141414);
+	back.graphics.lineStyle(2, color - 0x141414);
+	//~ back.graphics.beginFill(color);
 	back.graphics.beginFill(StyleManager.INPUT_BACK);
 	//~ back.graphics.drawRoundRect(0,0,40,20,8,8);
 	back.graphics.drawRoundRectComplex (0, 0, box.width - 10, box.height, 4, 0, 4, 0 );

@@ -212,7 +212,7 @@ class Stats extends Window, implements Dynamic
         label.init();
         
         var stepper = new Stepper(container, "Stepper", 250, 10);
-        stepper.init({value: interval, step: 5, min: 20, max: 5000});
+        stepper.init({value: interval, step: 5, min: 20, max: 5000, color: 0x2A7ACD});
         var self = this;
 		stepper.addEventListener(Event.CHANGE, 
             function(e:Event) {

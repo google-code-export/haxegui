@@ -223,7 +223,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 			//
 			btn = new Button(container);
-			btn.init({label:"1", x:330, y: 40, width: 70, height: 70});
+			btn.init({label:"1", x:330, y: 40, width: 70, height: 70, color: 0xE86B26});
 			btn.label.x = btn.label.y = 4;
 			
 			btn.label.tf.multiline = true;
@@ -231,8 +231,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 			btn.label.tf.width = 60;
 			btn.label.tf.height = 60;
 			btn.label.x = btn.label.y = 10;
-			btn.label.tf.text = "Button4, with Multi line label ";
-			//~ btn.label.text = "Button4 Multi line label ";
+			btn.label.tf.text = "Button4 Multi line label colored";
 			btn.label.tf.setTextFormat(StyleManager.getTextFormat());
 
 	
