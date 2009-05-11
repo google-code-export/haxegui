@@ -160,6 +160,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 		// Statistics
 		var stats = new Stats (flash.Lib.current, 540, 80);
 		stats.init();
+		//~ haxe.Timer.delay( function(){ stats.init(); }, 1500 );
 
 
 
@@ -443,9 +444,9 @@ class App extends Sprite, implements haxe.rtti.Infos
 			if(child.name!="Console")
 			{
 			child.alpha = 0;
-			var t = new Tween( 0, 1, 750, child, "alpha", Back.easeInOut );
+			var t = new Tween( 0, 1, 500, child, "alpha", Linear.easeNone );
 			
-			haxe.Timer.delay( t.start, 150 + 350*flash.Lib.current.getChildIndex(child) );
+			haxe.Timer.delay( t.start, 350*flash.Lib.current.getChildIndex(child) );
 			haxe.Timer.delay( function(){trace("\""+child.name+"\" has done tweening.");}, 150 + 350*flash.Lib.current.getChildIndex(child) );
 
 			}

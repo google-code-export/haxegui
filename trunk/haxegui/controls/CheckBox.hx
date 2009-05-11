@@ -96,7 +96,7 @@ class CheckBox extends Component, implements Dynamic
 		//~ this.graphics.clear();
 		button = new Sprite();
 		button.name = "button";
-		button.graphics.lineStyle (2, color - 0x202020);
+		button.graphics.lineStyle (2, color - 0x141414);
 		button.graphics.beginFill (color);
 		button.graphics.drawRoundRect (0, 0, 20, box.height, 8, 8 );
 		button.graphics.endFill ();
@@ -160,11 +160,11 @@ class CheckBox extends Component, implements Dynamic
 	 *
 	 * 
 	 */
-	public function redraw(?color:UInt) : Void {
+	public function redraw() : Void {
 
 		
-		if(color==0 || Math.isNaN(color))
-			color = StyleManager.BACKGROUND;
+		//~ if(color==0 || Math.isNaN(color))
+			//~ color = StyleManager.BACKGROUND;
 				//~ color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
 	
 
@@ -184,7 +184,7 @@ class CheckBox extends Component, implements Dynamic
 				
 			
 		button.graphics.clear();
-		button.graphics.lineStyle (2, disabled ? color - 0x191919 : color - 0x333333 );
+		button.graphics.lineStyle (2, disabled ? color - 0x141414 : color - 0x282828 );
 
 		if(checked)
 		{
@@ -199,7 +199,7 @@ class CheckBox extends Component, implements Dynamic
 			button.graphics.drawRoundRect (0, 0, 20, box.height, 8, 8 );
 		
 
-		button.graphics.lineStyle (4, color - 0x333333);
+		button.graphics.lineStyle (4, color - 0x282828);
 		button.graphics.moveTo (6, 6);
 		button.graphics.lineTo (14, 14);
 		button.graphics.moveTo (14, 6);
@@ -238,7 +238,7 @@ class CheckBox extends Component, implements Dynamic
 		//~ redraw(StyleManager.BACKGROUND + 0x323232 );
 //		redraw(StyleManager.BACKGROUND | 0x141414 );
 		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
-		redraw(color | 0x202020 );
+		//~ redraw();
 		//~ redraw(color + 0x141414 );
 		CursorManager.getInstance().setCursor(Cursor.HAND);
 
@@ -251,7 +251,7 @@ class CheckBox extends Component, implements Dynamic
 	public  function onRollOut(e:MouseEvent) : Void	
 	{
 		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
-		redraw(color);
+		//~ redraw(color);
 //		CursorManager.getInstance().setCursor(Cursor.ARROW);
 	}	
 	
@@ -267,7 +267,7 @@ class CheckBox extends Component, implements Dynamic
 		//~ if(!this.hasFocus())
 		FocusManager.getInstance().setFocus(this);
 
-		redraw(StyleManager.BACKGROUND - 0x141414);
+		redraw();
 	
 	}
 
@@ -280,7 +280,8 @@ class CheckBox extends Component, implements Dynamic
 
 		//~ redraw(StyleManager.BACKGROUND);
 		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
-		redraw(color);
+		
+		redraw();
 	}
 	
 }

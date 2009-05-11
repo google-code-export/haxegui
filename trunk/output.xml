@@ -4438,10 +4438,7 @@
 	 </haxe_doc>
 		</onEnabled>
 		<redraw public="1" line="163">
-			<f a="?color">
-				<t path="UInt"/>
-				<e path="Void"/>
-			</f>
+			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 *
 	 * 
@@ -5474,7 +5471,7 @@
 	<c path="Xml"/>
 	<d/>
 </f></getScript>
-		<deserialize public="1" line="207">
+		<deserialize public="1" line="205">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * 
@@ -5482,7 +5479,7 @@
 	 * 
 	 </haxe_doc>
 		</deserialize>
-		<createInstance line="223">
+		<createInstance line="221">
 			<f a="s:a">
 				<c path="String"/>
 				<c path="Array"><d/></c>
@@ -5495,7 +5492,7 @@
 	 * 
 	 </haxe_doc>
 		</createInstance>
-		<getClass line="228"><f a="s">
+		<getClass line="226"><f a="s">
 	<c path="String"/>
 	<c path="Class"><d/></c>
 </f></getClass>
@@ -6338,7 +6335,7 @@
 		<__rtti public="1" line="101" static="1"><c path="String"/></__rtti>
 		<log static="1"><c path="haxe.Log"/></log>
 		<main public="1" line="106" static="1"><f a=""><e path="Void"/></f></main>
-		<loadXML public="1" line="414" static="1">
+		<loadXML public="1" line="415" static="1">
 			<f a="e">
 				<c path="flash.events.Event"/>
 				<e path="Void"/>
@@ -6347,14 +6344,14 @@
 	*
 	</haxe_doc>
 		</loadXML>
-		<tweenWindows public="1" line="437" static="1">
+		<tweenWindows public="1" line="438" static="1">
 			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 * 
 	 * 
 	 </haxe_doc>
 		</tweenWindows>
-		<setRedirection public="1" line="459" static="1">
+		<setRedirection public="1" line="460" static="1">
 			<f a="f">
 				<d/>
 				<e path="Void"/>
@@ -6364,7 +6361,7 @@
 	*
 	</haxe_doc>
 		</setRedirection>
-		<onStageResize public="1" line="468" static="1">
+		<onStageResize public="1" line="469" static="1">
 			<f a="e">
 				<c path="flash.events.Event"/>
 				<e path="Void"/>
@@ -7003,7 +7000,7 @@
    * 
    </haxe_doc>
 		</init>
-		<onDisabled public="1" line="149">
+		<onDisabled public="1" line="154">
 			<f a="e">
 				<c path="flash.events.Event"/>
 				<e path="Void"/>
@@ -7013,7 +7010,7 @@
 	 * 
 	 </haxe_doc>
 		</onDisabled>
-		<onEnabled public="1" line="161">
+		<onEnabled public="1" line="166">
 			<f a="e">
 				<c path="flash.events.Event"/>
 				<e path="Void"/>
@@ -7023,16 +7020,13 @@
 	 * 
 	 </haxe_doc>
 		</onEnabled>
-		<redraw public="1" line="174">
-			<f a="?color">
-				<t path="UInt"/>
-				<e path="Void"/>
-			</f>
+		<redraw public="1" line="179">
+			<f a=""><e path="Void"/></f>
 			<haxe_doc>
 	 *
 	 </haxe_doc>
 		</redraw>
-		<onRollOver public="1" line="208">
+		<onRollOver public="1" line="215">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -7042,7 +7036,7 @@
 	*
 	</haxe_doc>
 		</onRollOver>
-		<onRollOut public="1" line="223">
+		<onRollOut public="1" line="230">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -7052,7 +7046,7 @@
 	*
 	</haxe_doc>
 		</onRollOut>
-		<onMouseDown public="1" line="234">
+		<onMouseDown public="1" line="241">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>
@@ -7062,7 +7056,7 @@
 	*
 	</haxe_doc>
 		</onMouseDown>
-		<onMouseUp public="1" line="264">
+		<onMouseUp public="1" line="271">
 			<f a="e">
 				<c path="flash.events.MouseEvent"/>
 				<e path="Void"/>

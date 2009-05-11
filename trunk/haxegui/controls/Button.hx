@@ -258,9 +258,9 @@ class Button extends Component, implements Dynamic
 
 		var colorTrans: ColorTransform  = new ColorTransform();
 
-		var r = new Tween(0, 50, 350, colorTrans, "redOffset", Expo.easeOut );
-		var g = new Tween(0, 50, 350, colorTrans, "greenOffset", Expo.easeOut );
-		var b = new Tween(0, 50, 350, colorTrans, "blueOffset", Expo.easeOut );
+		var r = new Tween(0, 50, 275, colorTrans, "redOffset", Expo.easeOut );
+		var g = new Tween(0, 50, 275, colorTrans, "greenOffset", Expo.easeOut );
+		var b = new Tween(0, 50, 275, colorTrans, "blueOffset", Expo.easeOut );
 		//~ 
 		r.start();
 		g.start();
@@ -314,9 +314,9 @@ class Button extends Component, implements Dynamic
 		
 		var colorTrans: ColorTransform  = new ColorTransform();
 			
-		var r = new Tween(50, -50, 500, colorTrans, "redOffset", Linear.easeOut );
-		var g = new Tween(50, -50, 500, colorTrans, "greenOffset", Linear.easeOut );
-		var b = new Tween(50, -50, 500, colorTrans, "blueOffset", Linear.easeOut );
+		var r = new Tween(50, -50, 350, colorTrans, "redOffset", Linear.easeOut );
+		var g = new Tween(50, -50, 350, colorTrans, "greenOffset", Linear.easeOut );
+		var b = new Tween(50, -50, 350, colorTrans, "blueOffset", Linear.easeOut );
 		//~ 
 		r.start();
 		g.start();
@@ -353,18 +353,18 @@ class Button extends Component, implements Dynamic
 
 		var colorTrans: ColorTransform  = new ColorTransform();
 			
-		var r = new Tween(-50, 0, 150, colorTrans, "redOffset", Linear.easeNone );
-		var g = new Tween(-50, 0, 150, colorTrans, "greenOffset", Linear.easeNone );
-		var b = new Tween(-50, 0, 150, colorTrans, "blueOffset", Linear.easeNone );
+		var r = new Tween(-50, 0, 120, colorTrans, "redOffset", Linear.easeNone );
+		var g = new Tween(-50, 0, 120, colorTrans, "greenOffset", Linear.easeNone );
+		var b = new Tween(-50, 0, 120, colorTrans, "blueOffset", Linear.easeNone );
 
 		
 	if(hitTestObject( CursorManager.getInstance().getCursor() ))
 		{
 		//~ redraw(color | 0x4C4C4C );
 		
-		r = new Tween(-50, 50, 350, colorTrans, "redOffset", Linear.easeNone );
-		g = new Tween(-50, 50, 350, colorTrans, "greenOffset", Linear.easeNone );
-		b = new Tween(-50, 50, 350, colorTrans, "blueOffset", Linear.easeNone );
+		r = new Tween(-50, 50, 150, colorTrans, "redOffset", Linear.easeNone );
+		g = new Tween(-50, 50, 150, colorTrans, "greenOffset", Linear.easeNone );
+		b = new Tween(-50, 50, 150, colorTrans, "blueOffset", Linear.easeNone );
 
 		
 		CursorManager.getInstance().setCursor(Cursor.HAND);

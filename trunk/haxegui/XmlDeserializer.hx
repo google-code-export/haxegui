@@ -173,20 +173,18 @@ class XmlDeserializer extends Unserializer
 		interp.variables.set( "Math", Math );
 		interp.variables.set( "Type", Type );
 		interp.variables.set( "Reflect", Reflect );
+		interp.variables.set( "Timer", haxe.Timer );
 
 		interp.variables.set( "Sprite", Sprite );
 		interp.variables.set( "TextField", TextField );
 
 		interp.variables.set( "Event", Event );
 		interp.variables.set( "MouseEvent", flash.events.MouseEvent );
-		
-
+	
 		interp.variables.set( "StyleManager", StyleManager );
         interp.variables.set( "CursorManager", CursorManager );
         interp.variables.set( "Cursor", Cursor );
-        
 
-		
 		interp.variables.set( "print_r", haxegui.Utils.print_r );
 
 		var ret = interp.execute(program); 

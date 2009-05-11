@@ -86,7 +86,12 @@ class RadioButton extends Component, implements Dynamic
 			//~ box.height = ( Math.isNaN(initObj.height) ) ? 20 : initObj.height;
 			for(f in Reflect.fields(initObj))
 				if(Reflect.hasField(this, f))
-					Reflect.setField(this, f, Reflect.field(initObj, f));
+					if (f!="label" && f != "width" && f != "height")
+						Reflect.setField(this, f, Reflect.field(initObj, f));
+					
+			box.width = ( Math.isNaN(initObj.width) ) ? box.width : initObj.width;
+			box.height = ( Math.isNaN(initObj.height) ) ? box.height : initObj.height;					
+					
 		}
 
 
@@ -171,15 +176,16 @@ class RadioButton extends Component, implements Dynamic
 	/**
 	 *
 	 */
-	public  function redraw(?color:UInt) : Void {
+	public  function redraw() : Void {
 
-		if(color == 0 || Math.isNaN(color))
-			color = StyleManager.BACKGROUND;
+		//~ if(color == 0 || Math.isNaN(color))
+			//~ color = StyleManager.BACKGROUND;
 			
 				
 		if( disabled ) 
 			{
-			color = StyleManager.BACKGROUND - 0x141414;
+			//~ color = StyleManager.BACKGROUND - 0x141414;
+			//~ color -= 0x141414;
 			var fmt = StyleManager.getTextFormat();
 			fmt.color = color - 0x202020;
 			fmt.align = flash.text.TextFormatAlign.CENTER;
@@ -195,7 +201,8 @@ class RadioButton extends Component, implements Dynamic
 			
 		button.graphics.clear();
 		button.graphics.lineStyle (2, color - 0x202020);
-		button.graphics.beginFill (color);
+		//~ button.graphics.beginFill (color);
+		button.graphics.beginFill ( disabled ? color - 0x141414 : color );
 		button.graphics.drawCircle (10, 10, 10);
 		button.graphics.endFill ();
 
@@ -211,7 +218,7 @@ class RadioButton extends Component, implements Dynamic
 		//~ if(!Std.is(e.target,Sprite)) return;
 	
 		var color : UInt= checked ? color - 0x202020 : color;
-		redraw(color + 0x141414 );
+		//~ redraw(color + 0x141414 );
 		CursorManager.getInstance().setCursor(Cursor.HAND);
 
 	}
@@ -223,7 +230,7 @@ class RadioButton extends Component, implements Dynamic
 	public  function onRollOut(e:MouseEvent) : Void	
 	{
 		var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
-		redraw(color);
+		//~ redraw(color);
 		CursorManager.getInstance().setCursor(Cursor.ARROW);
 	}	
 	
@@ -239,7 +246,7 @@ class RadioButton extends Component, implements Dynamic
 		//~ if(!this.hasFocus())
 		FocusManager.getInstance().setFocus(this);
 
-		redraw(StyleManager.BACKGROUND - 0x141414);
+		//~ redraw(StyleManager.BACKGROUND - 0x141414);
 		
 		for(i in 0...parent.numChildren)
 			{
@@ -266,7 +273,7 @@ class RadioButton extends Component, implements Dynamic
 
 		//~ redraw(StyleManager.BACKGROUND);
 		var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
-		redraw(color);
+		//~ redraw(color);
 	}
 	
 }
