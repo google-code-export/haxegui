@@ -132,7 +132,7 @@ class Scrollbar extends haxegui.controls.Component
 		frame.y = 20;
 
 
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 8, 8, .75, BitmapFilterQuality.HIGH, true, false, false);
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, .75, BitmapFilterQuality.HIGH, true, false, false);
 		frame.filters = [shadow];
 
 		this.addChild(frame);
@@ -146,7 +146,7 @@ class Scrollbar extends haxegui.controls.Component
 
 		redrawHandle();
 
-		shadow = new DropShadowFilter (0, 0, StyleManager.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, 0.75, BitmapFilterQuality.LOW, false, false, false);
+		shadow = new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, 0.75, BitmapFilterQuality.LOW, false, false, false);
 		handle.filters = [shadow];
 
 		handle.addEventListener(MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
@@ -198,7 +198,7 @@ class Scrollbar extends haxegui.controls.Component
 		down.mouseEnabled = true;
 		down.y = box.height - 20;
 
-		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 4, 4, .75, BitmapFilterQuality.HIGH, true, false, false);
+		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, .75, BitmapFilterQuality.HIGH, true, false, false);
 		down.filters = [shadow];
 
 		this.addChild(down);

@@ -1,18 +1,15 @@
-// 
-// The MIT License
-// 
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+// Copyright (c) 2009 The haxegui developers
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -37,7 +34,7 @@ import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 
-
+import haxegui.StyleManager;
 import haxegui.controls.Component;
 import haxegui.controls.Scrollbar;
 
@@ -64,12 +61,12 @@ class Container extends Component, implements IContainer, implements Dynamic
 		this.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		return super.addChild(o);
 	}
-	
+
 
 	public function init(?initObj : Dynamic)
 	{
 
-		color = StyleManager.BACKGROUND;
+		color = DefaultStyle.BACKGROUND;
 		//~ color = 0xff00ff;
 
 		if(Reflect.isObject(initObj))
@@ -78,15 +75,15 @@ class Container extends Component, implements IContainer, implements Dynamic
 				if(Reflect.hasField(this, f))
 					if(f!="width" && f!="height")
 						Reflect.setField(this, f, Reflect.field(initObj, f));
-			
-			
+
+
 			//~ name = ( initObj.name == null) ? "container" : name;
 			box.width = ( Math.isNaN(initObj.width) ) ? box.width : initObj.width;
 			box.height = ( Math.isNaN(initObj.height) ) ? box.height : initObj.height;
 			//~ move(initObj.x, initObj.y);
 			//~ color = (initObj.color==null) ? color : initObj.color;
 
-		}		
+		}
 
 		this.buttonMode = false;
 		this.mouseEnabled = false;
@@ -98,20 +95,20 @@ class Container extends Component, implements IContainer, implements Dynamic
 		//~ this.graphics.endFill ();
 
 		// add the drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
 		this.filters = [shadow];
-		
+
 		//~ this.cacheAsBitmap = true;
-		
+
 		//~ if(this.parent!=null)
 		parent.addEventListener(ResizeEvent.RESIZE, onResize);
-		
+
 		//~ this.addEventListener(ResizeEvent.RESIZE, onResize);
 		//~ dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-		
+
 		redraw();
-		
+
 	}
 
 
@@ -135,7 +132,7 @@ class Container extends Component, implements IContainer, implements Dynamic
 
 		//~ if(!this.box.containsRect(this.getBounds(flash.Lib.current)))
 			//~ box.union(this.getBounds(flash.Lib.current));
-//~ 
+//~
 	//~ for(i in 0...numChildren-1)
 		//~ {
 			//~ box = box.union( getChildAt(i).getBounds(flash.Lib.current) );
@@ -144,9 +141,9 @@ class Container extends Component, implements IContainer, implements Dynamic
 		//~ }
 
 
-			
+
 		redraw(null);
-		
+
 		//
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
@@ -160,7 +157,7 @@ class Container extends Component, implements IContainer, implements Dynamic
 	*
 	*
 	*/
-	public function redraw(?e:Dynamic) 
+	public function redraw(?e:Dynamic)
 	{
 		this.graphics.clear();
 		//~ this.graphics.lineStyle (2, color - 0x141414, flash.display.LineScaleMode.NONE);

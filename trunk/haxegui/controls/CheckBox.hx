@@ -75,7 +75,7 @@ class CheckBox extends Component, implements Dynamic
 		//super.init(initObj);
 
 		box = new Rectangle(0,0,140,20);
-		color = StyleManager.BACKGROUND;
+		color = DefaultStyle.BACKGROUND;
 
 		if(Reflect.isObject(initObj))
 		{
@@ -100,8 +100,8 @@ class CheckBox extends Component, implements Dynamic
 		this.addChild(button);
 
 		// add the drop-shadow filter
-		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, true, false, false );
+		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, true, false, false );
 		this.filters = [shadow];
 
 
@@ -161,21 +161,21 @@ class CheckBox extends Component, implements Dynamic
 
 
 		//~ if(color==0 || Math.isNaN(color))
-			//~ color = StyleManager.BACKGROUND;
-				//~ color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
+			//~ color = DefaultStyle.BACKGROUND;
+				//~ color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 
 
 		if( disabled )
 			{
-			//~ color = StyleManager.BACKGROUND - 0x141414;
-			//~ color = StyleManager.BACKGROUND ;
+			//~ color = DefaultStyle.BACKGROUND - 0x141414;
+			//~ color = DefaultStyle.BACKGROUND ;
 			var fmt = StyleManager.getTextFormat();
 			fmt.color = color - 0x202020;
 			//~ fmt.align = flash.text.TextFormatAlign.CENTER;
 			label.tf.setTextFormat(fmt);
 
-			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
-			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
+			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
+			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 			this.filters = [shadow];
 			}
 
@@ -232,9 +232,9 @@ class CheckBox extends Component, implements Dynamic
 	public function onRollOver(e:MouseEvent) : Void
 	{
 		if(disabled) return;
-		//~ redraw(StyleManager.BACKGROUND + 0x323232 );
-//		redraw(StyleManager.BACKGROUND | 0x141414 );
-		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
+		//~ redraw(DefaultStyle.BACKGROUND + 0x323232 );
+//		redraw(DefaultStyle.BACKGROUND | 0x141414 );
+		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		//~ redraw();
 		//~ redraw(color + 0x141414 );
 		CursorManager.setCursor(Cursor.HAND);
@@ -247,7 +247,7 @@ class CheckBox extends Component, implements Dynamic
 	*/
 	public  function onRollOut(e:MouseEvent) : Void
 	{
-		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
+		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		//~ redraw(color);
 //		CursorManager.setCursor(Cursor.ARROW);
 	}
@@ -275,8 +275,8 @@ class CheckBox extends Component, implements Dynamic
 	public  function onMouseUp(e:MouseEvent) {
 		checked = !checked;
 
-		//~ redraw(StyleManager.BACKGROUND);
-		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
+		//~ redraw(DefaultStyle.BACKGROUND);
+		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 
 		redraw();
 	}

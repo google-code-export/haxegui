@@ -1,18 +1,15 @@
-// 
-// The MIT License
-// 
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+// Copyright (c) 2009 The haxegui developers
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -49,14 +46,15 @@ import haxegui.events.MenuEvent;
 import flash.ui.Keyboard;
 
 import haxegui.FocusManager;
+import haxegui.StyleManager;
 
 
 
 
 /**
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class Menubar extends haxegui.controls.Component, implements Dynamic
 {
@@ -88,9 +86,9 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 	box.height = (Math.isNaN (initObj.height)) ? box.height : initObj.height;
     //~ name = (initObj.name==null) ? name : initObj.name;
     }
-    
+
     color = (cast parent).color;
-    
+
 
     //this.name = "Menubar";
     buttonMode = false;
@@ -100,7 +98,7 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 
     _menu = 0;
     numMenus = 1+Math.round( Math.random() * 4 );
-    
+
       //~ this.graphics.lineStyle (2, color - 0x1A1A1A);
       //~ this.graphics.beginFill (color);
       //~ this.graphics.drawRect (0, 0, width, 24);
@@ -112,8 +110,8 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 	var menu = new Sprite ();
 	  menu.name = "Menu" + (i+1);
 	//menu.graphics.lineStyle(2, 0x5D5D5D);
-	
-	
+
+
        		  var colors = [ color - 0x141414, color | 0x323232 ];
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];
@@ -156,7 +154,7 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 	    tf.tabEnabled = false;
 	    tf.focusRect = false;
 	    tf.mouseEnabled = false;
-	    
+
 
 	    tf.setTextFormat (StyleManager.getTextFormat(8, 10, flash.text.TextFormatAlign.CENTER ));
 
@@ -171,14 +169,14 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 
 
     //parent.addChild(this);
-    //parent.addEventListener(Event.CHANGE, this.redraw);   
-    //getParent().addEventListener(Event.CHANGE, this.redraw);      
+    //parent.addEventListener(Event.CHANGE, this.redraw);
+    //getParent().addEventListener(Event.CHANGE, this.redraw);
     this.addEventListener (MouseEvent.ROLL_OUT, onMouseOut);
     //~ this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown);
     //PopupMenu.getInstance().addEventListener(Event.CLOSE, onFocusChanged);
     //~ addEventListener (ResizeEvent.RESIZE, this.redraw);
-    
-    
+
+
     //~ parent.addEventListener (ResizeEvent.RESIZE, this.redraw);
     parent.addEventListener (ResizeEvent.RESIZE, onResize);
 
@@ -186,9 +184,9 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 
 
     /**
-     * 
-     * 
-     * 
+     *
+     *
+     *
      */
     public function onResize(e:Dynamic)
     {
@@ -208,26 +206,26 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 	    scrollRect = b;
 
 
-	    
-	    
+
+
 	    }
-	
+
 	redraw();
-	
+
 	if(Std.is(e, ResizeEvent))
 	    e.updateAfterEvent();
     }
-    
+
 
   public function redraw (damage:Bool = true)
   {
-    
+
     //~ var width = parent.getChildByName ("frame").width;
     //~ var width = untyped parent.box.width;
 
     this.graphics.clear ();
     //~ this.graphics.lineStyle (2, color - 0x1A1A1A);
-    
+
        		  var colors = [ color - 0x141414, color | 0x323232 ];
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];
@@ -248,16 +246,16 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 
 
 /*
- * 
- * 
- * 
+ *
+ *
+ *
  */
   function onMouseOut (e:Event)
   {
 
     if (e.target == this)
       {
-	//      dispatchEvent(new Event("CLOSE_POPUP"));                
+	//      dispatchEvent(new Event("CLOSE_POPUP"));
 
 	//redraw();
       }
@@ -269,8 +267,8 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 	e.target.graphics.clear ();
 	//e.target.graphics.lineStyle(2, 0x5D5D5D);
 	//~ e.target.graphics.beginFill (color);
-	
-	
+
+
        		  var colors = [ color - 0x141414, color | 0x323232 ];
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];
@@ -286,9 +284,9 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 
 	var tf : TextField = cast e.target.getChildByName("tf");
 	var fmt = new TextFormat ();
-	fmt.color = StyleManager.LABEL_TEXT  ;
+	fmt.color = DefaultStyle.LABEL_TEXT  ;
 	tf.setTextFormat (fmt);
-	//dispatchEvent(new Event("CLOSE_POPUP"));              
+	//dispatchEvent(new Event("CLOSE_POPUP"));
 
       }
 
@@ -304,9 +302,9 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
     this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown);
 
     //~ if(FocusManager.getInstance().getFocus()!=this)
-    //~ if (Type.getClass (e.target.parent) == Sprite) 
+    //~ if (Type.getClass (e.target.parent) == Sprite)
     //if(this.getChildIndex(e.target.parent)==_menu)
-    //~ if (this.hasFocus())        
+    //~ if (this.hasFocus())
     //~ PopupMenu.getInstance ().dispatchEvent (new Event (MenuEvent.MENU_HIDE));
     //~ else
     //~ if(!this.hasFocus())
@@ -326,9 +324,9 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
   {
     //if(PopupMenu.getInstance().exists())
       if (this.getChildIndex (e.target) != _menu)
-	//~ if (this.hasFocus())    
+	//~ if (this.hasFocus())
 	{
-	  //dispatchEvent(new Event("CLOSE_POPUP"));                
+	  //dispatchEvent(new Event("CLOSE_POPUP"));
 	  _menu = this.getChildIndex (e.target);
 	  onChanged ();
 
@@ -365,14 +363,14 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
   public function onKeyDown (e:KeyboardEvent)
   {
     trace(e);
-    
+
     var popmenu:UInt;
 
-    
+
     var menu = cast (this.getChildAt (_menu), Sprite);
     menu.graphics.clear ();
     //~ menu.graphics.beginFill (color);
-    
+
        		  var colors = [ color | 0x323232, color - 0x4D4D4D ];
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];
@@ -434,9 +432,9 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 	//~ menu.graphics.drawRect (0, 0, 40, 20);
 	//~ menu.graphics.endFill ();
       //~ }
-    if( Math.isNaN(_menu) || _menu<0 || !this.contains(this.getChildAt(_menu))) 
+    if( Math.isNaN(_menu) || _menu<0 || !this.contains(this.getChildAt(_menu)))
 	return;
-    
+
 	var menu = cast(this.getChildAt(_menu), Sprite);
 	//~ var color = this.color | 0x323232;
 	menu.graphics.clear ();
@@ -458,14 +456,14 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 
 	var tf : TextField = cast menu.getChildByName("tf");
 	var fmt = new TextFormat ();
-	fmt.color = StyleManager.LABEL_TEXT ;
+	fmt.color = DefaultStyle.LABEL_TEXT ;
 	tf.setTextFormat (fmt);
-	
+
   }
 
 
   /**
-   * 
+   *
    */
   function openmenuByName (name:String)
   {
@@ -473,7 +471,7 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
   }
 
     /**
-     * 
+     *
      */
   function openMenuAt (i:UInt)
   {
