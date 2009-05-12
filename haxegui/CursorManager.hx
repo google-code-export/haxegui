@@ -171,9 +171,8 @@ class CursorManager extends EventDispatcher
 	*/
 	private function __setCursor(c:Cursor) : Cursor
 	{
-		var inst = getInstance();
 		var point : Point = new Point();
-		inst.cursor = c;
+		cursor = c;
 
 		if(_mc!=null) {
 			point  = new Point(_mc.x, _mc.y);
