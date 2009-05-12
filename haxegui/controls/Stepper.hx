@@ -17,9 +17,6 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
-
-
 package haxegui.controls;
 
 import flash.geom.Rectangle;
@@ -89,8 +86,8 @@ class Stepper extends Component, implements Dynamic
 		//super.init(initObj);
 
 		box = new Rectangle(0,0,40,20);
-		color = StyleManager.BACKGROUND;
-		//~ color = StyleManager.INPUT_BACK;
+		color = DefaultStyle.BACKGROUND;
+		//~ color = DefaultStyle.INPUT_BACK;
 
 		if(Reflect.isObject(initObj))
 		{
@@ -110,12 +107,12 @@ class Stepper extends Component, implements Dynamic
 	back = new Sprite();
 	back.graphics.lineStyle(2, color - 0x141414);
 	//~ back.graphics.beginFill(color);
-	back.graphics.beginFill(StyleManager.INPUT_BACK);
+	back.graphics.beginFill(DefaultStyle.INPUT_BACK);
 	//~ back.graphics.drawRoundRect(0,0,40,20,8,8);
 	back.graphics.drawRoundRectComplex (0, 0, box.width - 10, box.height, 4, 0, 4, 0 );
 	back.graphics.endFill();
 	this.addChild(back);
-	var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
+	var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 	back.filters = [shadow];
 
 	tf.name = "tf";
@@ -152,7 +149,7 @@ class Stepper extends Component, implements Dynamic
 	down.move( box.width - 10, 9 );
 
 	// add the drop-shadow filter
-	shadow = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
+	shadow = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
 
 	up.filters = [shadow];
 	down.filters = [shadow];
@@ -182,9 +179,9 @@ class Stepper extends Component, implements Dynamic
 	public function onRollOver(e:MouseEvent) : Void
 	{
 		if(disabled) return;
-		//~ redraw(StyleManager.BACKGROUND + 0x323232 );
-//		redraw(StyleManager.BACKGROUND | 0x141414 );
-		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
+		//~ redraw(DefaultStyle.BACKGROUND + 0x323232 );
+//		redraw(DefaultStyle.BACKGROUND | 0x141414 );
+		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		e.target.redraw(e.target.color | 0x202020 );
 		//~ redraw(color + 0x141414 );
 		CursorManager.setCursor(Cursor.HAND);
@@ -197,7 +194,7 @@ class Stepper extends Component, implements Dynamic
 	*/
 	public  function onRollOut(e:MouseEvent) : Void
 	{
-		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
+		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		e.target.redraw();
 //		CursorManager.setCursor(Cursor.ARROW);
 	}

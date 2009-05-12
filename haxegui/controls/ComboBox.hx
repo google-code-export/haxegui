@@ -71,7 +71,7 @@ class ComboBox extends Button, implements Dynamic
   public override function init(?initObj:Dynamic)
 	{
 		//~ super.init(initObj);
-		color = StyleManager.BACKGROUND;
+		color = DefaultStyle.BACKGROUND;
 				box = new Rectangle(0,0,140,20);
 
 	if(Reflect.isObject(initObj))
@@ -88,12 +88,12 @@ class ComboBox extends Button, implements Dynamic
 
 		back = new Sprite();
 		back.name = "back";
-		back.graphics.lineStyle (2, StyleManager.BACKGROUND - 0x202020);
-		back.graphics.beginFill (StyleManager.INPUT_BACK);
+		back.graphics.lineStyle (2, DefaultStyle.BACKGROUND - 0x202020);
+		back.graphics.beginFill (DefaultStyle.INPUT_BACK);
 		back.graphics.drawRoundRectComplex (0, 0, box.width - 20 , box.height, 4, 0, 4, 0 );
 		back.graphics.endFill ();
 		addChild(back);
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 		back.filters = [shadow];
 
 
@@ -121,7 +121,7 @@ class ComboBox extends Button, implements Dynamic
 		//~ dropButton.filters = null;
 		dropButton.redraw = redrawButton;
 
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 		dropButton.filters = [shadow];
 
 		//~ this.addEventListener (MouseEvent.ROLL_OUT, onRollOut);
@@ -160,7 +160,7 @@ class ComboBox extends Button, implements Dynamic
 
 		if( disabled )
 			{
-			color = StyleManager.BACKGROUND - 0x141414;
+			color = DefaultStyle.BACKGROUND - 0x141414;
 			//~ color = color - 0x141414;
 			this.graphics.lineStyle (2, color);
 
@@ -180,7 +180,7 @@ class ComboBox extends Button, implements Dynamic
 		dropButton.graphics.endFill ();
 
 		dropButton.graphics.lineStyle (1, color - 0x333333 );
-		//~ dropButton.graphics.beginFill( StyleManager.BACKGROUND - 0x141414 );
+		//~ dropButton.graphics.beginFill( DefaultStyle.BACKGROUND - 0x141414 );
 		dropButton.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
 		dropButton.graphics.moveTo(5,5);
 		dropButton.graphics.lineTo(15,5);
@@ -188,7 +188,7 @@ class ComboBox extends Button, implements Dynamic
 
 		dropButton.graphics.endFill ();
 
-			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
+			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 			dropButton.filters = [shadow];
 	}
 
@@ -199,30 +199,30 @@ class ComboBox extends Button, implements Dynamic
 	public override function redraw() : Void {
 
 		if(color==0 || Math.isNaN(color))
-			color = StyleManager.BACKGROUND;
+			color = DefaultStyle.BACKGROUND;
 
-		tf.setTextFormat( StyleManager.getTextFormat( 8, StyleManager.LABEL_TEXT ));
+		tf.setTextFormat( StyleManager.getTextFormat( 8, DefaultStyle.LABEL_TEXT ));
 
 		if( disabled )
 			{
 
 			dropButton.disabled = disabled;
 
-			//~ color = StyleManager.BACKGROUND - 0x141414;
-			color = StyleManager.BACKGROUND;
+			//~ color = DefaultStyle.BACKGROUND - 0x141414;
+			color = DefaultStyle.BACKGROUND;
 
 
-			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
+			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 			//~ this.filters = [shadow];
 
 
-			//~ tf.backgroundColor = StyleManager.BACKGROUND + 0x141414;
-			tf.setTextFormat( StyleManager.getTextFormat( 8, StyleManager.BACKGROUND - 0x141414 ));
+			//~ tf.backgroundColor = DefaultStyle.BACKGROUND + 0x141414;
+			tf.setTextFormat( StyleManager.getTextFormat( 8, DefaultStyle.BACKGROUND - 0x141414 ));
 			}
 
-		back.graphics.lineStyle (2, StyleManager.BACKGROUND - 0x202020);
+		back.graphics.lineStyle (2, DefaultStyle.BACKGROUND - 0x202020);
 		//~ back.graphics.beginFill (color);
-		back.graphics.beginFill ( disabled ? StyleManager.BACKGROUND : StyleManager.INPUT_BACK );
+		back.graphics.beginFill ( disabled ? DefaultStyle.BACKGROUND : DefaultStyle.INPUT_BACK );
 		back.graphics.drawRoundRectComplex (0, 0, box.width - 20 , box.height, 4, 0, 4, 0 );
 		back.graphics.endFill ();
 

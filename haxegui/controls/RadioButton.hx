@@ -16,6 +16,7 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 package haxegui.controls;
 
 import flash.geom.Rectangle;
@@ -72,7 +73,7 @@ class RadioButton extends Component, implements Dynamic
 		//super.init(initObj);
 
 		box = new Rectangle(0,0,140,20);
-		color = StyleManager.BACKGROUND;
+		color = DefaultStyle.BACKGROUND;
 
 		if(Reflect.isObject(initObj))
 		{
@@ -102,8 +103,8 @@ class RadioButton extends Component, implements Dynamic
 		this.addChild(button);
 
 		// drop-shadow filter
-		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
+		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 		this.filters = [shadow];
 
 
@@ -175,12 +176,12 @@ class RadioButton extends Component, implements Dynamic
 	public  function redraw() : Void {
 
 		//~ if(color == 0 || Math.isNaN(color))
-			//~ color = StyleManager.BACKGROUND;
+			//~ color = DefaultStyle.BACKGROUND;
 
 
 		if( disabled )
 			{
-			//~ color = StyleManager.BACKGROUND - 0x141414;
+			//~ color = DefaultStyle.BACKGROUND - 0x141414;
 			//~ color -= 0x141414;
 			var fmt = StyleManager.getTextFormat();
 			fmt.color = color - 0x202020;
@@ -188,8 +189,8 @@ class RadioButton extends Component, implements Dynamic
 			label.tf.setTextFormat(fmt);
 
 
-			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
-			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
+			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
+			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 			this.filters = [shadow];
 
 			}
@@ -225,7 +226,7 @@ class RadioButton extends Component, implements Dynamic
 	*/
 	public  function onRollOut(e:MouseEvent) : Void
 	{
-		var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
+		var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		//~ redraw(color);
 		CursorManager.setCursor(Cursor.ARROW);
 	}
@@ -242,7 +243,7 @@ class RadioButton extends Component, implements Dynamic
 		//~ if(!this.hasFocus())
 		FocusManager.getInstance().setFocus(this);
 
-		//~ redraw(StyleManager.BACKGROUND - 0x141414);
+		//~ redraw(DefaultStyle.BACKGROUND - 0x141414);
 
 		for(i in 0...parent.numChildren)
 			{
@@ -267,8 +268,8 @@ class RadioButton extends Component, implements Dynamic
 	public  function onMouseUp(e:MouseEvent) {
 		checked = !checked;
 
-		//~ redraw(StyleManager.BACKGROUND);
-		var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
+		//~ redraw(DefaultStyle.BACKGROUND);
+		var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		//~ redraw(color);
 	}
 

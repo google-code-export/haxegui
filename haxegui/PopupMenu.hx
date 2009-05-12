@@ -46,6 +46,7 @@ import flash.filters.BitmapFilterQuality;
 import haxegui.controls.Component;
 
 import haxegui.CursorManager;
+import haxegui.StyleManager;
 
 import feffects.Tween;
 import feffects.easing.Quint;
@@ -372,7 +373,7 @@ class PopupMenu extends Component
 
 	    var tf : TextField = cast item.getChildByName("tf");
 	    var fmt = new TextFormat ();
-	    fmt.color = StyleManager.LABEL_TEXT ;
+	    fmt.color = DefaultStyle.LABEL_TEXT ;
 	    tf.setTextFormat (fmt);
 
 	}

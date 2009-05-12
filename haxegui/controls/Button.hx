@@ -123,7 +123,7 @@ class Button extends Component, implements Dynamic
 	*/
 	public function init(?initObj:Dynamic)
 	{
-		color = StyleManager.BACKGROUND;
+		color = DefaultStyle.BACKGROUND;
 
 		label = new Label();
 		//~ label.init();
@@ -164,7 +164,7 @@ class Button extends Component, implements Dynamic
 			//~ box.height = 30;
 
 		// add the drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
 		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
 		this.filters = [shadow];
 		//~ this.filters = [shadow, bevel];
@@ -198,7 +198,7 @@ class Button extends Component, implements Dynamic
 	*/
 	public function onFocusChanged (e:FocusEvent)
 	{
-		//~ var color = this.hasFocus ()? StyleManager.BACKGROUND | 0x141414: StyleManager.BACKGROUND;
+		//~ var color = this.hasFocus ()? DefaultStyle.BACKGROUND | 0x141414: DefaultStyle.BACKGROUND;
 		redraw ();
 	}
 
@@ -209,14 +209,14 @@ class Button extends Component, implements Dynamic
 	public dynamic function redraw() : Void
 	{
 		//~ if(color == 0 || Math.isNaN(color))
-		//~ color = StyleManager.BACKGROUND;
+		//~ color = DefaultStyle.BACKGROUND;
 
 		this.graphics.clear();
 		this.graphics.lineStyle (2, color - 0x141414 );
 
 		if( disabled )
 		{
-			//~ color = StyleManager.BACKGROUND - 0x141414;
+			//~ color = DefaultStyle.BACKGROUND - 0x141414;
 			this.graphics.lineStyle (2, color);
 
 			fmt = StyleManager.getTextFormat();
@@ -224,7 +224,7 @@ class Button extends Component, implements Dynamic
 			fmt.align = flash.text.TextFormatAlign.CENTER;
 			label.tf.setTextFormat(fmt);
 
-			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
+			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 			//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x202020 ,1 ,0x000000, .15, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
 			//~ this.filters = [shadow, bevel];
 			this.filters = [shadow];

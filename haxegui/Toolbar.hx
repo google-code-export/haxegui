@@ -1,4 +1,21 @@
+// Copyright (c) 2009 The haxegui developers
 //
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+// the Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+// IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package haxegui;
 
@@ -47,27 +64,27 @@ class Toolbar extends Component, implements Dynamic
 
 	public var color : UInt;
 	public var handle : Sprite;
-	
+
   public function new (? parent : DisplayObjectContainer, ? name : String,
 		       ? x : Float, ? y : Float, ? width : Float, ? height : Float)
     {
 	super (parent, name, x, y);
-    }	
+    }
 
     /**
-    * 
+    *
     * Initialize a new window
-    * 
+    *
     * @param initObj Dynamic object containing attributes
-    * 
-    * 
+    *
+    *
     */
   public function init (? initObj : Dynamic)
   {
-    
+
 	box = new Rectangle(0,0,502,40);
-	color = StyleManager.BACKGROUND;
-	
+	color = DefaultStyle.BACKGROUND;
+
 	if (Reflect.isObject (initObj))
       {
 	for (f in Reflect.fields (initObj))
@@ -77,11 +94,11 @@ class Toolbar extends Component, implements Dynamic
 
 	box.width = (Math.isNaN (initObj.width)) ? box.width : initObj.width;
 	box.height = (Math.isNaN (initObj.height)) ? box.height : initObj.height;
-	
-	
+
+
       }
-  
-  
+
+
 	handle = new Sprite();
 	handle.name = "handle";
 	handle.graphics.lineStyle(2, color - 0x202020);
@@ -89,23 +106,23 @@ class Toolbar extends Component, implements Dynamic
 	handle.graphics.drawRoundRect(4, 8, 8, box.height - 16, 4, 4);
 	handle.graphics.endFill();
 	addChild(handle);
-	
+
     // inner-drop-shadow filter
-    var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5,4, 4, 0.5, BitmapFilterQuality.LOW,true,false,false);
+    var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4, 0.5, BitmapFilterQuality.LOW,true,false,false);
     this.filters = [shadow];
 
-  
+
     parent.addEventListener (ResizeEvent.RESIZE, onResize);
 
-  
+
 	redraw();
   }
-  
+
 
     /**
-     * 
-     * 
-     * 
+     *
+     *
+     *
      */
     public function onResize(e:Dynamic)
     {
@@ -120,37 +137,37 @@ class Toolbar extends Component, implements Dynamic
 
 	    box.width = b.width - x;
 	    //~ box.height -= y;
-	    
+
 	    //~ var _m = new Shape();
 	    //~ _m.graphics.beginFill(0xFF00FF);
 	    //~ _m.graphics.drawRect(0,0,box.width,box.height);
 	    //~ _m.graphics.endFill();
 	    //~ mask = _m;
-	    
+
 	    scrollRect = box.clone();
-	    
+
 	    }
-	
+
 	redraw();
-	
+
 	if(Std.is(e, ResizeEvent))
 	    e.updateAfterEvent();
     }
-    
-	
+
+
   /**
-   * 
-   * 
+   *
+   *
    */
   public function redraw (damage:Bool = true)
   {
-    
+
     //~ var width = parent.getChildByName ("frame").width;
     //~ var width = untyped parent.box.width;
 
     this.graphics.clear ();
     //~ this.graphics.lineStyle (2, color - 0x1A1A1A);
-    
+
 		  //~ var colors = [ color - 0x141414, color | 0x323232 ];
 		  var colors = [ color - 0x141414, color | 0x323232, color - 0x141414 ];
 		  var alphas = [ 100, 100, 100 ];
@@ -169,5 +186,5 @@ class Toolbar extends Component, implements Dynamic
 
   }
 
-  	
+
 }

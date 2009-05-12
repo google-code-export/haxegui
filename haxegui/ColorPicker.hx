@@ -63,7 +63,7 @@ import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 
-
+import haxegui.StyleManager;
 import haxegui.controls.Button;
 import haxegui.controls.Slider;
 import haxegui.controls.Stepper;
@@ -125,7 +125,7 @@ class ColorPicker extends Window
 		spec.graphics.endFill();
 		});
 
-	var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
+	var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
     spec.filters = [shadow];
 
 	spec.addEventListener(MouseEvent.MOUSE_DOWN, onMouseMoveImage);
@@ -141,7 +141,7 @@ class ColorPicker extends Window
 	colSprite.x = 180;
 	colSprite.y = 10;
 
-	var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
+	var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
     colSprite.filters = [shadow];
 
 	container.addChild(colSprite);

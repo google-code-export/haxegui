@@ -1,18 +1,15 @@
-// 
-// The MIT License
-// 
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+// Copyright (c) 2009 The haxegui developers
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -20,7 +17,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
- 
+
 import flash.Lib;
 
 import flash.system.Capabilities;
@@ -92,11 +89,11 @@ import feffects.easing.Quart;
 
 /*
  * Demo Application
- * 
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
+ *
  */
 class App extends Sprite, implements haxe.rtti.Infos
 {
@@ -105,16 +102,16 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 	public static function main ()
 	{
-	
+
 		// Set stage propeties
 		var stage = flash.Lib.current.stage;
 		stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
 		stage.align = flash.display.StageAlign.TOP_LEFT;
 		stage.stageFocusRect = true;
-		
+
 		// Assign a stage resize listener
 		stage.addEventListener(Event.RESIZE, onStageResize);
-		
+
 		// Setup mouse and cursor
 		MouseManager.getInstance().init();
 		CursorManager.getInstance().init();
@@ -123,14 +120,14 @@ class App extends Sprite, implements haxe.rtti.Infos
 		var desktop = new Sprite();
 		desktop.name = "desktop";
 		desktop.mouseEnabled = false;
-		
-		  var colors = [ StyleManager.BACKGROUND, StyleManager.BACKGROUND - 0x4D4D4D ];
+
+		  var colors = [ DefaultStyle.BACKGROUND, DefaultStyle.BACKGROUND - 0x4D4D4D ];
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];
 		  var matrix = new flash.geom.Matrix();
 		  matrix.createGradientBox(stage.stageWidth, stage.stageHeight, Math.PI/2, 0, 0);
 		  desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-//~ 
+//~
 		desktop.graphics.drawRect( 0, 0, flash.Lib.current.stage.stageWidth, flash.Lib.current.stage.stageHeight );
 		desktop.graphics.endFill();
 		flash.Lib.current.addChild(desktop);
@@ -138,7 +135,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 
 /*
- * 
+ *
  * CONSOLE!
  */
 
@@ -151,7 +148,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 
 		//~ trace("Application starting...");
-	
+
 		trace("<FONT SIZE='24' FACE='_mono'>Hello and welcome.</FONT>");
 		trace("<FONT SIZE='12' FACE='_mono'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+".</FONT>");
 
@@ -170,7 +167,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 			//
 			var window = WindowManager.getInstance().addWindow (flash.Lib.current);
 			window.init({name:"Widget Playground", x:120, y:10});
-			
+
 			//
 			var menubar =  new Menubar (window, "Menubar", 10, 20);
 			menubar.init();
@@ -180,7 +177,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 			toolbar.init();
 
 			//
-			for(i in 0...10) 
+			for(i in 0...10)
 			{
 			var btn = new Button(toolbar);
 			btn.init({height: 24, width: 44, label: ""+i });
@@ -202,12 +199,12 @@ class App extends Sprite, implements haxe.rtti.Infos
 			label.text = "This window, all it's controls and events are hard-coded with haxe, play around.";
 			label.init();
 			label.move(20,10);
-			
+
 			//
 			var btn = new Button(container);
 			btn.init({label: "Button1"});
 			btn.move(20, 40);
-			
+
 			//
 			btn = new Button(container);
 			btn.init({label: "Button2", color: 0x90EE90});
@@ -226,7 +223,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 			btn = new Button(container);
 			btn.init({label:"1", x:330, y: 40, width: 70, height: 70, color: 0xE86B26});
 			btn.label.x = btn.label.y = 4;
-			
+
 			btn.label.tf.multiline = true;
 			btn.label.tf.wordWrap = true;
 			btn.label.tf.width = 60;
@@ -235,7 +232,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 			btn.label.tf.text = "Button4 Multi line label colored";
 			btn.label.tf.setTextFormat(StyleManager.getTextFormat());
 
-	
+
 			//
 			btn = new Button(container);
 			btn.init({label: "Button5", x:20, y: 80, width: 70, disabled: true});
@@ -248,7 +245,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 			var chkbox = new CheckBox(container, "CheckBox1");
 			chkbox.init();
 			chkbox.move(20,120);
-			
+
 			//
 			chkbox = new CheckBox(container, "CheckBox2");
 			chkbox.init({checked: true});
@@ -268,7 +265,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 			cmbbox = new ComboBox(container, "ComboBox2");
 			cmbbox.init();
 			cmbbox.move(20,200);
-			
+
 			//
 			cmbbox = new ComboBox(container, "ComboBox2");
 			cmbbox.init({disabled:true});
@@ -285,15 +282,15 @@ class App extends Sprite, implements haxe.rtti.Infos
 				var slider = new Slider(container, "Slider"+i);
 				slider.init();
 				slider.move(200, 120+40*i);
-				
+
 				var stepper = new Stepper(container, "Stepper"+i);
 					stepper.init({step: i, max: 128});
 				//~ stepper.init();
 				stepper.move(360, 120+40*i);
-							
+
 				slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value = e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); });
 				stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = e.target.value;  });
-				
+
 			}
 
 			for(i in 1...4)
@@ -303,23 +300,23 @@ class App extends Sprite, implements haxe.rtti.Infos
 				slider.move(420+40*i, 270);
 				slider.rotation = -90;
 			}
-			
-			
+
+
 			var list = new UiList(container, "List1", 200, 280);
 			list.data = [ "A", "B", "C", "D" ];
 			list.init();
-			
+
 			var list = new UiList(container, "List2", 350, 280);
 			list.data = [ "1", "2", "3", "4" ];
 			list.init();
-			
+
 			var input = new Input(container, "Input1", 30, 400);
 			input.init();
-			
+
 			input = new Input(container, "Input2", 30, 440);
 			input.init();
-			
-			
+
+
 			window.dispatchEvent(new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
 
 
@@ -332,15 +329,15 @@ class App extends Sprite, implements haxe.rtti.Infos
 		//
 		//~ flash.Lib.current.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown);
 		//~ FocusManager.getInstance ().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
-		
 
- 
+
+
 /*
  * DEBUG
  *
 
 		trace("---------------------------------------------------------------------");
-		for(i in 0...flash.Lib.current.numChildren) 
+		for(i in 0...flash.Lib.current.numChildren)
 			{
 				trace("<FONT SIZE=\"14\" FACE=\"_mono\" >print_mc(<B>"+flash.Lib.current.getChildAt(i).name+"</B>):</FONT>");
 				var child : Dynamic = cast flash.Lib.current.getChildAt(i) ;
@@ -357,29 +354,29 @@ class App extends Sprite, implements haxe.rtti.Infos
 						//~ {}
 					//~ else
 						//~ {
-							//~ str += "\t" + j + " => ";							
+							//~ str += "\t" + j + " => ";
 							//~ str += field + "\n";
 						//~ }
 				//~ }
-				//~ trace(str);		
+				//~ trace(str);
 			}//endfor
 		trace("---------------------------------------------------------------------");
 */
 
 /*
  * rtti experiments....
- * 
+ *
 		var rtti : String = untyped App.__rtti;
 		var x = Xml.parse(rtti).firstElement();
         var infos = new haxe.rtti.XmlParser().processElement(x);
-        trace(Utils.print_r(infos));		
+        trace(Utils.print_r(infos));
 		trace(Utils.print_r(Type.enumConstructor(infos)));
-*/	
+*/
 
 
 	var colorpicker = new ColorPicker(100,100);
 	colorpicker.init();
-	
+
 
 
 	for( i in 0...flash.Lib.current.numChildren)
@@ -392,14 +389,14 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 
 
-		
+
 	}//main
 
 
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	public static function onMouseDown (e:MouseEvent)
 	{
 		var popup = PopupMenu.getInstance ();
@@ -415,7 +412,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 	public static function loadXML(e:Event) : Void
 	{
 		trace(e);
-		
+
 		var str = e.target.data;
 		//~ str = str.split('\n').join('');
 		//~ str = str.split('\t').join('');
@@ -424,7 +421,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 		//~ var xml = Xml.parse(e.target.data);
 
 		var xmlds : XmlDeserializer = new XmlDeserializer(xml);
-		
+
 		xmlds.deserialize();
 
 		tweenWindows();
@@ -432,8 +429,8 @@ class App extends Sprite, implements haxe.rtti.Infos
 	}//loadXML
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public static function tweenWindows()
 	{
@@ -445,12 +442,12 @@ class App extends Sprite, implements haxe.rtti.Infos
 			{
 			child.alpha = 0;
 			var t = new Tween( 0, 1, 500, child, "alpha", Linear.easeNone );
-			
+
 			haxe.Timer.delay( t.start, 350*flash.Lib.current.getChildIndex(child) );
 			haxe.Timer.delay( function(){trace("\""+child.name+"\" has done tweening.");}, 150 + 350*flash.Lib.current.getChildIndex(child) );
 
 			}
-		}	
+		}
 	}
 
 	/**
@@ -468,19 +465,19 @@ class App extends Sprite, implements haxe.rtti.Infos
 	*/
 	public static function onStageResize(e:Event)
 	{
-		
+
 		var stage = e.target;
 
 		var back = cast flash.Lib.current.getChildByName("desktop");
 		back.graphics.clear();
 		//~ back.graphics.beginFill(StyleManager.BACKGROUND,1);
-		  var colors = [ StyleManager.BACKGROUND, StyleManager.BACKGROUND - 0x4D4D4D ];
+		  var colors = [ DefaultStyle.BACKGROUND, DefaultStyle.BACKGROUND - 0x4D4D4D ];
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];
 		  var matrix = new flash.geom.Matrix();
 		  matrix.createGradientBox(stage.stageWidth, stage.stageHeight, Math.PI/2, 0, 0);
 		  back.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-		  
+
 		back.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
 		back.graphics.endFill();
 	}

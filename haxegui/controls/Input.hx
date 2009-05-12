@@ -1,18 +1,15 @@
-// 
-// The MIT License
-// 
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+// Copyright (c) 2009 The haxegui developers
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -43,17 +40,17 @@ class Input extends Component
 {
 
     public var tf : TextField;
-    
-    
+
+
 	public function new(?parent : DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 	    super(parent, name, x, y);
 	}
 
 	/**
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 */
 	public function init(?initObj:Dynamic) : Void
 	{
@@ -75,12 +72,12 @@ class Input extends Component
 	    mouseEnabled = true;
 	    tabEnabled = true;
 
-	    graphics.lineStyle (2, StyleManager.BACKGROUND - 0x202020);
-	    graphics.beginFill (StyleManager.INPUT_BACK);
+	    graphics.lineStyle (2, DefaultStyle.BACKGROUND - 0x202020);
+	    graphics.beginFill (DefaultStyle.INPUT_BACK);
 	    graphics.drawRoundRect(0, 0, box.width, box.height, 8, 8 );
 	    graphics.endFill ();
 
-	    var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
+	    var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 	    filters = [shadow];
 
 	    tf = new TextField();
@@ -92,10 +89,10 @@ class Input extends Component
 	    tf.height = box.height - 3;
 	    tf.x = tf.y = 4;
 	    tf.embedFonts = true;
-	    
+
 	    tf.setTextFormat(StyleManager.getTextFormat());
 	    addChild(tf);
-	    
+
 	}
 
 

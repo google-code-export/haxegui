@@ -1,5 +1,21 @@
+// Copyright (c) 2009 The haxegui developers
 //
-
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+// the Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+// IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import flash.events.Event;
 import flash.events.ProgressEvent;
@@ -26,7 +42,7 @@ class Loader extends Sprite
 	public static function main()
 	{
 
-		var stage = flash.Lib.current.stage;		
+		var stage = flash.Lib.current.stage;
 /*
         stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
         stage.align = flash.display.StageAlign.TOP_LEFT;
@@ -39,7 +55,7 @@ class Loader extends Sprite
         desktop.name = "desktop";
         desktop.mouseEnabled = false;
 
-          var colors = [ StyleManager.BACKGROUND, StyleManager.BACKGROUND - 0x4d4d4d ];
+          var colors = [ DefaultStyle.BACKGROUND, DefaultStyle.BACKGROUND - 0x4d4d4d ];
           var alphas = [ 100, 100 ];
           var ratios = [ 0, 0xFF ];
           var matrix = new flash.geom.Matrix();
@@ -52,8 +68,8 @@ class Loader extends Sprite
         flash.Lib.current.addChild(desktop);
 
 
-			
-			
+
+
             xmlLoader = new URLLoader();
             xmlLoader.addEventListener(Event.COMPLETE, onComplete);
             xmlLoader.load(new URLRequest("loader.xml"));
@@ -72,18 +88,18 @@ class Loader extends Sprite
 
 //loader.dataFormat = flash.net.URLLoaderDataFormat.BINARY;
 //loader.addEventListener(Event.COMPLETE, loadComplete);
- 
+
 loader = new flash.display.Loader();
 
 			var url = xml.firstElement().firstElement().get("src");
 			loader.load( new URLRequest(url) );
 
-loader.contentLoaderInfo.addEventListener(flash.events.Event.COMPLETE, onComplete);		
+loader.contentLoaderInfo.addEventListener(flash.events.Event.COMPLETE, onComplete);
 loader.contentLoaderInfo.addEventListener(flash.events.ProgressEvent.PROGRESS, loadProgress);
 /*
 				for(i in xml.firstElement().elements())
-				{					
-				var url = i.get("src");				
+				{
+				var url = i.get("src");
 				loader.load( new URLRequest(url) );
 				}
 */
@@ -106,7 +122,7 @@ public static function loadProgress(event:ProgressEvent):Void {
 	trace("Loading: "+percentLoaded+"%");
 }
 
-	public static function loadComplete(e:Event):Void 
+	public static function loadComplete(e:Event):Void
 	{
 		trace("Complete");
 

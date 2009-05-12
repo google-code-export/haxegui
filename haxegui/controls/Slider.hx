@@ -17,9 +17,6 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
-
-
 package haxegui.controls;
 
 import flash.geom.Rectangle;
@@ -72,7 +69,7 @@ class Slider extends Component, implements Dynamic
 		//super.init(initObj);
 
 		box = new Rectangle(0,0,140,20);
-		color = StyleManager.BACKGROUND;
+		color = DefaultStyle.BACKGROUND;
 
 		if(Reflect.isObject(initObj))
 		{
@@ -125,7 +122,7 @@ class Slider extends Component, implements Dynamic
 		//~ handle.move(0,-15);
 
 		// add the drop-shadow filters
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
 
 		//~ handle.filters = [shadow, bevel];
@@ -172,9 +169,9 @@ class Slider extends Component, implements Dynamic
 	public function onRollOver(e:MouseEvent) : Void
 	{
 		if(disabled) return;
-		//~ redraw(StyleManager.BACKGROUND + 0x323232 );
-//		redraw(StyleManager.BACKGROUND | 0x141414 );
-		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
+		//~ redraw(DefaultStyle.BACKGROUND + 0x323232 );
+//		redraw(DefaultStyle.BACKGROUND | 0x141414 );
+		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		//~ redraw(color | 0x202020 );
 		redraw(color | 0x4C4C4C );
 
@@ -189,7 +186,7 @@ class Slider extends Component, implements Dynamic
 	*/
 	public  function onRollOut(e:MouseEvent) : Void
 	{
-		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
+		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		redraw(color);
 //		CursorManager.setCursor(Cursor.ARROW);
 	}
