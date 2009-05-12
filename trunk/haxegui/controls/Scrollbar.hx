@@ -149,8 +149,8 @@ class Scrollbar extends haxegui.controls.Component
 		shadow = new DropShadowFilter (0, 0, StyleManager.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, 0.75, BitmapFilterQuality.LOW, false, false, false);
 		handle.filters = [shadow];
 
-		handle.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
-		handle.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+		handle.addEventListener(MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
+		handle.addEventListener(MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
 
 		this.addChild(handle);
 
@@ -203,19 +203,19 @@ class Scrollbar extends haxegui.controls.Component
 
 		this.addChild(down);
 
-		up.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
-		up.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
-		down.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
-		down.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+		up.addEventListener(MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
+		up.addEventListener(MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
+		down.addEventListener(MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
+		down.addEventListener(MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
 
-		this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-		this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-		this.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+		this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
+		this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
+		this.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 
 
 
 		//
-		parent.addEventListener(ResizeEvent.RESIZE, onResize);
+		parent.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
 
 	}//init
 
@@ -328,13 +328,12 @@ class Scrollbar extends haxegui.controls.Component
 		var y = handle.y + 50 * -e.delta;
 		if( y < 20 ) y = 20;
 		if( y > frame.height - handle.height + 20) y = frame.height - handle.height + 20;
-		//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
 		//~ var t = new Tween( handle.y, handle.y - 50, 500, handle, "y", Linear.easeNone );
 		var t = new Tween( handle.y, y, 1000, handle, "y", Expo.easeOut );
 		var scope = this;
 		t.setTweenHandlers( function ( e ) { scope.adjust(); } );
 		t.start();
-
 	}
 
 
@@ -359,15 +358,15 @@ class Scrollbar extends haxegui.controls.Component
 			else
 				e.target.startDrag(false,new Rectangle(0,up.height-2, 0, box.height - 2*down.height - handle.height + 4));
 
-			//~ e.target.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			flash.Lib.current.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			//~ e.target.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+			flash.Lib.current.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
 
 			CursorManager.setCursor (Cursor.DRAG);
 
 		case up:
 			var y = handle.y - 50;
 			if( y < 20 ) y = 20;
-			//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
 			//~ var t = new Tween( handle.y, handle.y - 50, 500, handle, "y", Linear.easeNone );
 			var t = new Tween( handle.y, y, 1000, handle, "y", Expo.easeOut );
 			var scope = this;
@@ -382,7 +381,7 @@ class Scrollbar extends haxegui.controls.Component
 			if( y > frame.height - handle.height + 20) y = frame.height - handle.height + 20;
 
 
-			//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
 			var t = new Tween( handle.y, y, 1000, handle, "y", Expo.easeOut );
 			var scope = this;
 			t.setTweenHandlers( function ( e ) { scope.adjust(e); } );
@@ -408,7 +407,7 @@ class Scrollbar extends haxegui.controls.Component
 			else
 				handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.height - 2*down.height - handle.height + 4));
 
-			flash.Lib.current.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			flash.Lib.current.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
 
 
 		}
