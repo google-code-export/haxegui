@@ -1,18 +1,15 @@
-// 
-// The MIT License
-// 
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+// Copyright (c) 2009 The haxegui developers
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -67,26 +64,26 @@ import feffects.easing.Quart;
 
 /**
  *
- * 
- * 
- * 
- */ 
+ *
+ *
+ *
+ */
 class PopupMenu extends Component
 {
 
   private var items : UInt;
   private var _item : UInt;
-  
+
   public var color : UInt;
 
   private static var _instance:PopupMenu = null;
 
 
-  private function new() 
+  private function new()
   {
       super();
   }
-  
+
   public static function getInstance ():PopupMenu
   {
     if (PopupMenu._instance == null)
@@ -97,22 +94,22 @@ class PopupMenu extends Component
   }
 
 
-  
+
 
 
   public function init (parent:DisplayObjectContainer, x:Float, y:Float) : Void
   {
-    
+
     close();
-    
-    
+
+
     parent.addChild (this);
 
     color = (cast parent).color;
 
     this.mouseEnabled = false;
     this.tabEnabled = false;
-    
+
     //~ this.alpha = 0;
     //~ Tweener.addTween(this, { alpha:1, time: .75, transition:"linear" });
 
@@ -120,7 +117,7 @@ class PopupMenu extends Component
     this.name = "PopupMenu";
 
     items = 1 + Math.round( Math.random()*19 );
-    
+
 
     for (i in 0...items)
       {
@@ -130,9 +127,9 @@ class PopupMenu extends Component
 	item.graphics.beginFill (color, .8);
 	item.graphics.drawRect (0, 0, 100, 20);
 	item.graphics.endFill ();
-		
+
 		var myPath = new Array<Dynamic>();
-		
+
 		myPath.push ({x:0, y: Math.exp(2)*2*i});
 		//~ myPath.push ({x:0});
 		//~ myPath.push ({x:2*i*Math.cos(i)});
@@ -140,20 +137,20 @@ class PopupMenu extends Component
 		//~ item.alpha = 0;
 		var p = new flash.geom.Point(x,y);
 		p = localToGlobal( p );
-		
+
 		//~ item.alpha = 0;
 		//~ item.x = 100 + (flash.Lib.current.stage.stageWidth - p.x);
 		//~ item.y = -p.y  - 20*i ;
 		item.y = 20*i ;
-	//~ Tweener.addTween( item, {   
+	//~ Tweener.addTween( item, {
 				//~ y: 20 * i,
 				//~ x: 0,
 				//~ alpha: 1,
 				//~ _bezier:myPath,
 				//~ time: .75+i/items,
-//~ 
+//~
 				//~ transition: "easeInOutBack",
-//~ 
+//~
 				//~ });
 
 	item.buttonMode = true;
@@ -169,7 +166,7 @@ class PopupMenu extends Component
 	tf.width = 40;
 	tf.height = 20;
 	tf.embedFonts = true;
-    
+
 	tf.mouseEnabled = false;
 
 	tf.setTextFormat (StyleManager.getTextFormat());
@@ -185,10 +182,10 @@ class PopupMenu extends Component
 
     var t = new Tween( 0, item.y, 150 + 150*i, item, "y", Back.easeInOut );
     var t2 = new Tween( 0, 1, 350, item, "alpha", Linear.easeNone );
-    
+
     item.y = 0 ;
     item.alpha = 0 ;
-    
+
     //~ haxe.Timer.delay( function(){t2.start();}, 150*(items-i) );
     haxe.Timer.delay( function(){t2.start();}, Std.int(4*Math.exp(2)*i ) );
     //~ haxe.Timer.delay( function(){t.start();}, 150*(items-i) );
@@ -196,25 +193,25 @@ class PopupMenu extends Component
 
 
       }
-    
+
     // position
     this.x = x + 10;
     this.y = y + 20;
 
 
-    
+
     //
     this.addEventListener (MouseEvent.ROLL_OUT, onRollOut);
     this.addEventListener (MouseEvent.MOUSE_OUT, onMouseOut);
     this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown);
-    
-    
+
+
     // shutdown event
     this.addEventListener (MenuEvent.MENU_HIDE, close);
 
     //
     dispatchEvent (new MenuEvent(MenuEvent.MENU_SHOW, false, false, parent, this ));
-    
+
   }
 
   public function draw() : Void {
@@ -237,11 +234,11 @@ class PopupMenu extends Component
     var af:Array < Dynamic > = new Array ();
     af.push (shadow);
     this.filters = af;
-    
-    
+
+
     //~ }
   }//draw
-  
+
   public function close (e:Event=null)
   {
 
@@ -252,25 +249,25 @@ class PopupMenu extends Component
     items = _item = 0;
     this.graphics.clear();
     this.filters = null;
-    
-    
-    if(this.hasEventListener(KeyboardEvent.KEY_DOWN))
-	this.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);    
 
-    // remove  
+
+    if(this.hasEventListener(KeyboardEvent.KEY_DOWN))
+	this.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+
+    // remove
     if (this.parent != null)
       if (this.parent.contains (this))
 	this.parent.removeChild (this);
-    
-    
+
+
   }
 
 
 
-  function onMouseOut (e:MouseEvent)  
+  function onMouseOut (e:MouseEvent)
   {
   }
-    
+
 
   function onRollOver (e:MouseEvent)
   {
@@ -289,27 +286,27 @@ class PopupMenu extends Component
 
 
 
-    
-    CursorManager.getInstance().setCursor( Cursor.HAND );
+
+    CursorManager.setCursor( Cursor.HAND );
   }
-  
-  
-  public function onRollOut (e:MouseEvent)  
+
+
+  public function onRollOut (e:MouseEvent)
   {
     var self = this;
     if(self==null || self.stage==null) return;
-    self.stage.addEventListener(MouseEvent.MOUSE_DOWN, 
+    self.stage.addEventListener(MouseEvent.MOUSE_DOWN,
 	function(e)
-	{ 
+	{
 	    //~ untyped self.stage.removeEventListenr(MouseEvent.MOUSE_DOWN);
 	    self.close();
 	});
-    
+
   }
-      
+
 
   /**
-   * 
+   *
    */
   public function onMouseDown(e:MouseEvent) {
 	//~ dispatchEvent(new MenuEvent(MenuEvent.ITEM_CLICK, false, false, this, e.target.parent));
@@ -317,8 +314,8 @@ class PopupMenu extends Component
         trace(Std.string(here)+Std.string(e));
 
     }
-  
-  
+
+
   public function onKeyDown (e:KeyboardEvent) {
       /*
     var item = cast (this.getChildAt (_item), Sprite);
@@ -338,17 +335,17 @@ class PopupMenu extends Component
       }
         */
   }//end onKeyDown
-  
+
     public function numItems() {
 	return items;
     }
-    
+
     public function nextItem() {
     _item++;
     if(_item>numChildren-1) _item=1;
     onChanged();
     }
-      
+
     public function prevItem() {
     _item--;
     if(_item<=0) _item=numChildren-1;
@@ -362,7 +359,7 @@ class PopupMenu extends Component
     public function onChanged() {
 	//trace(_item);
 	//for(i in 0...items) {
-	for(i in 0...numChildren) 
+	for(i in 0...numChildren)
 	{
 	    var item = cast(this.getChildAt(i), Sprite);
 	    //~ var color = (i==_item) ? color + 0x333333 : color;
@@ -372,20 +369,20 @@ class PopupMenu extends Component
 	    item.graphics.beginFill (color, .8);
 	    item.graphics.drawRect (0, 0, 100, 20);
 	    //item.graphics.endFill ();
-	    
+
 	    var tf : TextField = cast item.getChildByName("tf");
 	    var fmt = new TextFormat ();
 	    fmt.color = StyleManager.LABEL_TEXT ;
 	    tf.setTextFormat (fmt);
-	    
+
 	}
     var item = cast(this.getChildAt(_item), Sprite);
-    
-	//~ if(!Tweener.isTweening(item)) 
+
+	//~ if(!Tweener.isTweening(item))
 	    //~ Tweener.addTween( item, { x: 0,  alpha:1, _bezier:{ x: 8, alpha:.5}, time: .175, transition: "easeOutCubic" });
-	
-	
+
+
     }
-    
-    
+
+
 }

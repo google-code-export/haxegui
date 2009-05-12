@@ -1,18 +1,15 @@
-// 
-// The MIT License
-// 
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+// Copyright (c) 2009 The haxegui developers
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -47,10 +44,10 @@ import haxegui.CursorManager;
 import haxegui.StyleManager;
 
 /**
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
  */
 class ComboBox extends Button, implements Dynamic
 {
@@ -66,10 +63,10 @@ class ComboBox extends Button, implements Dynamic
 
 
   /**
-   * 
+   *
    * Initiate a new ComboBox
    * @param initObj
-   * 
+   *
    */
   public override function init(?initObj:Dynamic)
 	{
@@ -98,7 +95,7 @@ class ComboBox extends Button, implements Dynamic
 		addChild(back);
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 		back.filters = [shadow];
-		
+
 
 		tf = new TextField();
 		tf.name = "tf";
@@ -108,28 +105,28 @@ class ComboBox extends Button, implements Dynamic
 		//~ tf.border = true;
 		//~ tf.borderColor = color - 0x202020;
 		tf.embedFonts = true;
-		
+
 		tf.height = box.height - 4;
 		tf.x = tf.y = 4;
-		
+
 		tf.setTextFormat(StyleManager.getTextFormat());
 		this.addChild(tf);
 
 
 		dropButton = new Button(this, "button");
-		dropButton.init({x: box.width - 20, width: 20, height: 20});	
+		dropButton.init({x: box.width - 20, width: 20, height: 20});
 		//~ dropButton.label.text = ">";
 		//~ dropButton.label.setTextFormat(StyleManager.getTextFormat(flash.text.TextFormatAlign.CENTER));
 		dropButton.removeChild( dropButton.getChildByName("label") );
 		//~ dropButton.filters = null;
 		dropButton.redraw = redrawButton;
-		
+
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 		dropButton.filters = [shadow];
-			
+
 		//~ this.addEventListener (MouseEvent.ROLL_OUT, onRollOut);
 		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver);
-		
+
 		this.addEventListener (Event.ACTIVATE, onEnabled);
 		this.addEventListener (Event.DEACTIVATE, onDisabled);
 
@@ -140,7 +137,7 @@ class ComboBox extends Button, implements Dynamic
 	public function onEnabled(e:Event)
 	{
 	}
-	
+
 	public function onDisabled(e:Event)
 	{
 	}
@@ -156,20 +153,20 @@ class ComboBox extends Button, implements Dynamic
 		//~ if(color == 0 ) color = this.color;
 
 		dropButton.graphics.clear();
-		//~ dropButton.graphics.lineStyle (2, color - 0x191919 );		
-		dropButton.graphics.lineStyle (2, color - 0x333333 );		
+		//~ dropButton.graphics.lineStyle (2, color - 0x191919 );
+		dropButton.graphics.lineStyle (2, color - 0x333333 );
 
 		var colors = [ color | 0x323232, color - 0x141414 ];
-	
-		if( disabled ) 
+
+		if( disabled )
 			{
 			color = StyleManager.BACKGROUND - 0x141414;
 			//~ color = color - 0x141414;
-			this.graphics.lineStyle (2, color);		
-			
+			this.graphics.lineStyle (2, color);
+
 			}
-			
-   		  
+
+
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];
 		  var matrix = new flash.geom.Matrix();
@@ -177,20 +174,20 @@ class ComboBox extends Button, implements Dynamic
 		  dropButton.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
 
-		
+
 		//~ this.graphics.drawRoundRect (0, 0, box.width, box.height, 8, 8 );
 		dropButton.graphics.drawRoundRectComplex (0, 0, dropButton.box.width, dropButton.box.height, 0, 4, 0, 4 );
 		dropButton.graphics.endFill ();
-		
-		dropButton.graphics.lineStyle (1, color - 0x333333 );		
+
+		dropButton.graphics.lineStyle (1, color - 0x333333 );
 		//~ dropButton.graphics.beginFill( StyleManager.BACKGROUND - 0x141414 );
 		dropButton.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
 		dropButton.graphics.moveTo(5,5);
 		dropButton.graphics.lineTo(15,5);
 		dropButton.graphics.lineTo(10,15);
-		
+
 		dropButton.graphics.endFill ();
-		
+
 			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 			dropButton.filters = [shadow];
 	}
@@ -205,31 +202,31 @@ class ComboBox extends Button, implements Dynamic
 			color = StyleManager.BACKGROUND;
 
 		tf.setTextFormat( StyleManager.getTextFormat( 8, StyleManager.LABEL_TEXT ));
-			
-		if( disabled ) 
+
+		if( disabled )
 			{
-			
+
 			dropButton.disabled = disabled;
-			
+
 			//~ color = StyleManager.BACKGROUND - 0x141414;
 			color = StyleManager.BACKGROUND;
 
-			
+
 			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 			//~ this.filters = [shadow];
-			
-			
+
+
 			//~ tf.backgroundColor = StyleManager.BACKGROUND + 0x141414;
 			tf.setTextFormat( StyleManager.getTextFormat( 8, StyleManager.BACKGROUND - 0x141414 ));
 			}
-				
+
 		back.graphics.lineStyle (2, StyleManager.BACKGROUND - 0x202020);
 		//~ back.graphics.beginFill (color);
 		back.graphics.beginFill ( disabled ? StyleManager.BACKGROUND : StyleManager.INPUT_BACK );
 		back.graphics.drawRoundRectComplex (0, 0, box.width - 20 , box.height, 4, 0, 4, 0 );
 		back.graphics.endFill ();
 
-			
+
 		dropButton.redraw();
 		//~ dropButton.filters = null;
 
