@@ -1,24 +1,22 @@
-// 
-// The MIT License
-// 
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+// Copyright (c) 2009 The haxegui developers
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 
 
 package haxegui;
@@ -44,208 +42,211 @@ import flash.ui.Mouse;
 
 
 enum Cursor {
-    ARROW;
-    HAND;
-    HAND2;
-    DRAG;
-    IBEAM;
-    NE;
-    NW;
-    SIZE_ALL;
-    CROSSHAIR;
+	ARROW;
+	HAND;
+	HAND2;
+	DRAG;
+	IBEAM;
+	NE;
+	NW;
+	SIZE_ALL;
+	CROSSHAIR;
 }
 
 
 /**
- * 
- * Cursor Manager Class (Singleton)
- * 
- * 
- * 
- * 
- */
+*
+* Cursor Manager Class (Singleton)
+*
+*/
 class CursorManager extends EventDispatcher
 {
-  
-  private static var _instance : CursorManager = null;
-  
-  public var listeners:Array<ITraceListener>;
-  public var _cursor : Cursor;
-  public var _mc : MovieClip;
+
+	private static var _instance : CursorManager = null;
+
+	public static function getInstance ():CursorManager
+	{
+		if (CursorManager._instance == null)
+		{
+			CursorManager._instance = new CursorManager ();
+		}
+		return CursorManager._instance;
+	}
+
+	public static function setCursor(c:Cursor) : Void
+	{
+		getInstance().cursor = c;
+	}
+
+	///////////////////////////////////////////////////
+	////              Public                       ////
+	///////////////////////////////////////////////////
+	public var listeners:Array<ITraceListener>;
+	public var cursor(default,__setCursor) : Cursor;
+	public var visible(__getVisible,__setVisible) : Bool;
+	public var _mc(default,null) : MovieClip;
+
+	private function new ()
+	{
+		super ();
+	}
+
+	public override function toString () : String
+	{
+		return "CursorManager";
+	}
+
+	/**
+	*
+	*/
+	public function init() {
+		Mouse.hide();
+		cursor = Cursor.ARROW;
+	}
+
+	private function getCursor() : MovieClip
+	{
+		return _mc;
+	}
+
+	public function inject(x:Float, y:Float) {
+
+		_mc.x = x - 10;
+		_mc.y = y - 10;
+
+		switch(cursor)
+		{
+			case Cursor.ARROW:
+				_mc.x = x - 5;
+				_mc.y = y - 2;
+
+			case Cursor.HAND:
+				_mc.x = x - 14;
+				_mc.y = y - 2;
+
+			case Cursor.HAND2:
+				_mc.x = x - 14;
+				_mc.y = y - 2;
+
+			case Cursor.DRAG:
+				_mc.x = x - 14;
+				_mc.y = y - 2;
+
+			case Cursor.CROSSHAIR:
+				_mc.x = x - 23;
+				_mc.y = y - 17;
+		}
+
+		//~ flash.Lib.current.setChildIndex(_mc, flash.Lib.current.numChildren - 1 );
+		toTop();
+
+	}//inject
 
 
-  public static function getInstance ():CursorManager
-  {
-    if (CursorManager._instance == null)
-      {
-        CursorManager._instance = new CursorManager ();
-      }
-    return CursorManager._instance;
-  }
+	public function toTop() : Void
+	{
+		flash.Lib.current.setChildIndex(_mc, flash.Lib.current.numChildren - 1 );
+	}//toTop
 
 
+	public function hideCursor() : Void
+	{
+		_mc.visible = false;
+	}
 
-  private function new ()
-  {
-    super ();
-  }
+	public function showCursor() : Void
+	{
+		_mc.visible = true;
+	}
 
-  public override function toString () : String
-  {
-    return "CursorManager";
-  }
+	///////////////////////////////////////////////////
+	////             Privates                      ////
+	///////////////////////////////////////////////////
+	private function __getVisible() : Bool {
+		return  _mc.visible;
+	}
 
-/**
- * 
- * 
- * 
- */
-  public function init() {
+	/**
+	*
+	*/
+	private function __setCursor(c:Cursor) : Cursor
+	{
+		var inst = getInstance();
+		var point : Point = new Point();
+		inst.cursor = c;
 
-    Mouse.hide();
+		if(_mc!=null) {
+			point  = new Point(_mc.x, _mc.y);
+			flash.Lib.current.removeChild(_mc);
+		}
 
-    setCursor(Cursor.ARROW);
+		switch(c) {
+			case Cursor.ARROW:
+				_mc = img_arrow;
 
-   
-    }
-  
+			case Cursor.HAND:
+				_mc = img_hand;
 
-    public function getCursor() : MovieClip
-    {
-        return _mc;
-    }
-    
+			case Cursor.HAND2:
+				_mc = img_hand2;
 
-    public function inject(x:Float, y:Float) {
+			case Cursor.DRAG:
+				_mc = img_drag;
 
-        _mc.x = x - 10;
-        _mc.y = y - 10;
+			case Cursor.NE:
+				_mc = img_ne;
 
-        switch(_cursor)
-        {
-            case Cursor.ARROW:
-                _mc.x = x - 5;
-                _mc.y = y - 2;
+			case Cursor.NW:
+				_mc = img_nw;
 
-            case Cursor.HAND:
-                _mc.x = x - 14;
-                _mc.y = y - 2;
+			case Cursor.SIZE_ALL:
+				_mc = img_sizeall;
 
-            case Cursor.HAND2:
-                _mc.x = x - 14;
-                _mc.y = y - 2;
+			case Cursor.CROSSHAIR:
+				_mc = img_crosshair;
+		}
 
-            case Cursor.DRAG:
-                _mc.x = x - 14;
-                _mc.y = y - 2;
+		_mc.name = "Cursor";
+		_mc.mouseEnabled = false;
+		_mc.focusRect = false;
+		_mc.tabEnabled = false;
 
-            case Cursor.CROSSHAIR:
-                _mc.x = x - 23;
-                _mc.y = y - 17;
-        }
-        
-      //~ flash.Lib.current.setChildIndex(_mc, flash.Lib.current.numChildren - 1 );
-      toTop();
-      
-    }//inject
+		_mc.width = _mc.height = 48;
+		_mc.x = point.x;
+		_mc.y = point.y;
 
-    
-    public function toTop() : Void 
-    {
-      flash.Lib.current.setChildIndex(_mc, flash.Lib.current.numChildren - 1 );
-    }//toTop
+		var toColor = new flash.geom.ColorTransform(.8, 1, .9, 1, 0, 0, 0, 1);
+		var t = new flash.geom.Transform(_mc);
+		t.colorTransform = toColor;
 
+		flash.Lib.current.addChild(_mc);
 
+		//~ _mc.startDrag(true);
+		return c;
+	}
 
-    /**
-     * 
-     * 
-     * 
-     */
-    public function setCursor(c:Cursor) {
-  
-      var point : Point = new Point();
-      _cursor = c;
-      
-      if(_mc!=null) {
-        point  = new Point(_mc.x, _mc.y);
-        flash.Lib.current.removeChild(_mc);
-        }
-    
-      switch(c) {
-        case Cursor.ARROW:
-            _mc = load_arrow;
+	private function __setVisible(v:Bool) : Bool {
+		_mc.visible = v;
+		return v;
+	}
 
-        case Cursor.HAND:
-            _mc = load_hand;
+	//~ public function useDefault() {}
+	//~ public function useCustom() {}
 
-        case Cursor.HAND2:
-            _mc = load_hand2;
-
-        case Cursor.DRAG:
-            _mc = load_drag;
-
-        case Cursor.NE:
-            _mc = load_ne;
-
-        case Cursor.NW:
-            _mc = load_nw;
-
-        case Cursor.SIZE_ALL:
-            _mc = load_sizeall;
-            
-        case Cursor.CROSSHAIR:
-            _mc = load_crosshair;
-      }
-
-    _mc.name = "Cursor";
-    _mc.mouseEnabled = false;
-    _mc.focusRect = false;
-    _mc.tabEnabled = false;
-
-    _mc.width = _mc.height = 48;
-    _mc.x = point.x;
-    _mc.y = point.y;
-  
-    var toColor = new flash.geom.ColorTransform(.8, 1, .9, 1, 0, 0, 0, 1);
-    var t = new flash.geom.Transform(_mc);
-    t.colorTransform = toColor;
-    
-    flash.Lib.current.addChild(_mc);
-     
-    //~ _mc.startDrag(true);
-
- 
-    }
-    
-    public function hideCursor() : Void
-    {
-        _mc.visible = false;
-    }
-
-    public function showCursor() : Void
-    {
-        _mc.visible = true;
-    }
-    
-    public function visible() : Bool
-    {
-        return  _mc.visible;
-    }
-    
-    
-    //~ public function useDefault() {}
-    //~ public function useCustom() {}
-    
-  
-   static inline var load_arrow = flash.Lib.attach("Arrow");
-   static inline var load_hand = flash.Lib.attach("Hand");
-   static inline var load_hand2 = flash.Lib.attach("Hand2");
-   static inline var load_drag = flash.Lib.attach("Drag");
-   static inline var load_ne = flash.Lib.attach("AngleNE");
-   static inline var load_nw = flash.Lib.attach("AngleNW");
-   static inline var load_sizeall = flash.Lib.attach("SizeAll");
-   static inline var load_crosshair = flash.Lib.attach("Crosshair");
-
-
+	/** The default arrow cursor image **/
+	public static var img_arrow = flash.Lib.attach("Arrow");
+	/** The hand type cursor image **/
+	public static var img_hand = flash.Lib.attach("Hand");
+	/** The hand press/grab image **/
+	public static var img_hand2 = flash.Lib.attach("Hand2");
+	/** The drag cursor image **/
+	public static var img_drag = flash.Lib.attach("Drag");
+	/** The North East resizer image **/
+	public static var img_ne = flash.Lib.attach("AngleNE");
+	/** The North West resizer image **/
+	public static var img_nw = flash.Lib.attach("AngleNW");
+	/** **/
+	public static var img_sizeall = flash.Lib.attach("SizeAll");
+	/** The crosshair cursor image **/
+	public static var img_crosshair = flash.Lib.attach("Crosshair");
 }

@@ -291,7 +291,7 @@ class Scrollbar extends haxegui.controls.Component
 
 		updateColorTween( new Tween(0, 50, 350, Expo.easeOut ) );
 
-		CursorManager.getInstance().setCursor(Cursor.HAND);
+		CursorManager.setCursor(Cursor.HAND);
 		//~ Tweener.addTween(e.target, {_brightness:.5, time:.15, transition:"linear"});
 	}
 
@@ -362,7 +362,7 @@ class Scrollbar extends haxegui.controls.Component
 			//~ e.target.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			flash.Lib.current.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 
-			CursorManager.getInstance ().setCursor (Cursor.DRAG);
+			CursorManager.setCursor (Cursor.DRAG);
 
 		case up:
 			var y = handle.y - 50;
@@ -375,7 +375,7 @@ class Scrollbar extends haxegui.controls.Component
 			t.start();
 			//~ t.setTweenHandlers( function ( e ) scope.update( sprite, e ) );
 
-			CursorManager.getInstance ().setCursor (Cursor.HAND2);
+			CursorManager.setCursor (Cursor.HAND2);
 
 		case down:
 			var y = handle.y + 50;
@@ -388,10 +388,10 @@ class Scrollbar extends haxegui.controls.Component
 			t.setTweenHandlers( function ( e ) { scope.adjust(e); } );
 			t.start();
 
-			CursorManager.getInstance ().setCursor (Cursor.HAND2);
+			CursorManager.setCursor (Cursor.HAND2);
 
 		case frame:
-			CursorManager.getInstance ().setCursor (Cursor.HAND2);
+			CursorManager.setCursor (Cursor.HAND2);
 
 			var y = e.target.mouseY ;
 			if(y+handle.height+20 > frame.height ) y = frame.height - handle.height + 20;
@@ -401,7 +401,7 @@ class Scrollbar extends haxegui.controls.Component
 			t.setTweenHandlers( function ( e ) { scope.adjust(e); } );
 			t.start();
 
-			haxe.Timer.delay( function(){CursorManager.getInstance ().setCursor (Cursor.DRAG);}, 500 );
+			haxe.Timer.delay( function(){CursorManager.setCursor (Cursor.DRAG);}, 500 );
 
 			if(horizontal)
 				handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
@@ -444,11 +444,11 @@ class Scrollbar extends haxegui.controls.Component
 
 		var c = 0;
 
-		if(e.target.hitTestObject( CursorManager.getInstance().getCursor() ))
+		if(e.target.hitTestObject( CursorManager.getInstance()._mc ))
 		{
 			//~ redrawHandle(color | 0x4D4D4D);
 			c = 50;
-			CursorManager.getInstance().setCursor (Cursor.HAND);
+			CursorManager.setCursor (Cursor.HAND);
 		}
 
 		updateColorTween( new Tween(-25, c, 500, Expo.easeOut ) );

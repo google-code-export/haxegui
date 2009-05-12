@@ -1,18 +1,15 @@
-// 
-// The MIT License
-// 
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+// Copyright (c) 2009 The haxegui developers
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -51,18 +48,18 @@ import haxegui.StyleManager;
 
 class Stepper extends Component, implements Dynamic
 {
-	
+
   public var up : Button;
   public var down : Button;
   public var back : Sprite;
   public var tf : TextField;
-  
+
   public var value : Float;
   public var step : Float;
   public var min : Float;
   public var max : Float;
-  
-  
+
+
   var color : UInt;
 
   var timer : Timer;
@@ -82,10 +79,10 @@ class Stepper extends Component, implements Dynamic
 
 
   /**
-   * 
-   * 
-   * 
-   * 
+   *
+   *
+   *
+   *
    */
   public function init(?initObj:Dynamic)
     {
@@ -94,18 +91,18 @@ class Stepper extends Component, implements Dynamic
 		box = new Rectangle(0,0,40,20);
 		color = StyleManager.BACKGROUND;
 		//~ color = StyleManager.INPUT_BACK;
-		
+
 		if(Reflect.isObject(initObj))
 		{
 			for(f in Reflect.fields(initObj))
 				if(Reflect.hasField(this, f))
 					if(f!="width" && f!="height")
 						Reflect.setField(this, f, Reflect.field(initObj, f));
-					
+
 			box.width = ( Math.isNaN(initObj.width) ) ? box.width : initObj.width;
 			box.height = ( Math.isNaN(initObj.height) ) ? box.height : initObj.height;
-	    
-	    
+
+
 			//~ step = ( Math.isNaN(initObj.step) ) ? step : initObj.step;
 			//~ value = ( Math.isNaN(initObj.value) ) ? value : initObj.value;
 		}
@@ -120,7 +117,7 @@ class Stepper extends Component, implements Dynamic
 	this.addChild(back);
 	var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 	back.filters = [shadow];
-	
+
 	tf.name = "tf";
 	tf.type = flash.text.TextFieldType.INPUT;
 	tf.selectable = true;
@@ -134,21 +131,21 @@ class Stepper extends Component, implements Dynamic
 	tf.x = 4;
 	tf.y = 4;
 	tf.text = Std.string(value);
-	
+
 	tf.embedFonts = true;
 	//~ tf.setTextFormat(StyleManager.getTextFormat(12));
 	tf.setTextFormat(StyleManager.getTextFormat());
 
 	this.addChild(tf);
 
-	
-	
-	
+
+
+
 	up = new Button(this, "up");
 	up.init({width: 10, height: 10, color: this.color});
 	up.removeChild(up.label);
 	up.move( box.width - 10, -1 );
-	
+
 	down = new Button(this, "down");
 	down.init({width: 10, height: 10, color: this.color});
 	down.removeChild(down.label);
@@ -171,11 +168,11 @@ class Stepper extends Component, implements Dynamic
 		down.addEventListener (MouseEvent.MOUSE_UP, onMouseUp);
 		down.addEventListener (MouseEvent.ROLL_OVER, onRollOver);
 		down.addEventListener (MouseEvent.ROLL_OUT,  onRollOut);
-		
-		
+
+
 	this.addEventListener (Event.CHANGE, onChanged);
-		
-			
+
+
     }
 
 	/**
@@ -190,7 +187,7 @@ class Stepper extends Component, implements Dynamic
 		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
 		e.target.redraw(e.target.color | 0x202020 );
 		//~ redraw(color + 0x141414 );
-		CursorManager.getInstance().setCursor(Cursor.HAND);
+		CursorManager.setCursor(Cursor.HAND);
 
 	}
 
@@ -198,13 +195,13 @@ class Stepper extends Component, implements Dynamic
 	*
 	*
 	*/
-	public  function onRollOut(e:MouseEvent) : Void	
+	public  function onRollOut(e:MouseEvent) : Void
 	{
 		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
 		e.target.redraw();
-//		CursorManager.getInstance().setCursor(Cursor.ARROW);
-	}			
-	
+//		CursorManager.setCursor(Cursor.ARROW);
+	}
+
 
   /**
    *
@@ -213,7 +210,7 @@ class Stepper extends Component, implements Dynamic
   {
     if (!Std.is (e.target, flash.display.DisplayObject))
       return;
-            
+
     //~ FocusManager.getInstance().setFocus (this);
 	switch(e.target)
 	{
@@ -235,13 +232,13 @@ class Stepper extends Component, implements Dynamic
 
     e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
-    
+
     }
 
 
   function onEnterFrame(e:Event) : Void
   {
-	//~ trace(Timer.stamp() - delta);	
+	//~ trace(Timer.stamp() - delta);
         //~ delta = haxe.Timer.stamp();
 
 	switch(e.target)
@@ -258,11 +255,11 @@ class Stepper extends Component, implements Dynamic
 	}
 	dispatchEvent(new Event(Event.CHANGE));
 	//~ onChanged();
-    
-  }
-  
 
-	
+  }
+
+
+
   function onMouseUp (e:MouseEvent) : Void
   {
 
@@ -283,11 +280,11 @@ class Stepper extends Component, implements Dynamic
   public function onChanged(?e:Dynamic)
   {
 
-//~ 
-  //~ trace(e);  
+//~
+  //~ trace(e);
     this.tf.text = Std.string(value);
     //~ this.tf.setTextFormat(StyleManager.getTextFormat(12));
     this.tf.setTextFormat(StyleManager.getTextFormat());
   }
-  
+
 }

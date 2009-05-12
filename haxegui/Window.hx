@@ -1,18 +1,15 @@
-// 
-// The MIT License
-// 
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+// Copyright (c) 2009 The haxegui developers
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -74,9 +71,9 @@ enum WindowType
 }
 
 /**
- * 
+ *
  * Titlebar class
- * 
+ *
  * @author <gershon@goosemoose.com>
  * @version 0.1
  */
@@ -150,13 +147,13 @@ class Titlebar extends Sprite, implements Dynamic
 
 
   }
-  
 
-	
+
+
 
     /**
-     * 
-     * 
+     *
+     *
      */
   public function redraw (? color : Int, ? w : Float):Void
   {
@@ -170,10 +167,10 @@ class Titlebar extends Sprite, implements Dynamic
 
     interp.variables.set("Math",Math);
     interp.variables.set("this", this);
-    interp.variables.set("flash.geom.Matrix", flash.geom.Matrix); 
-    interp.variables.set("grad", flash.display.GradientType.LINEAR); 
-    interp.variables.set("w", w); 
-    interp.variables.set("color", color); 
+    interp.variables.set("flash.geom.Matrix", flash.geom.Matrix);
+    interp.variables.set("grad", flash.display.GradientType.LINEAR);
+    interp.variables.set("w", w);
+    interp.variables.set("color", color);
 
 
     var script = "
@@ -184,7 +181,7 @@ class Titlebar extends Sprite, implements Dynamic
 	var ratios = [ 0, 0xFF ];
 	var matrix = new flash.geom.Matrix();
 	matrix.createGradientBox(w, 32, Math.PI/2, 0, 0);
-	this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );    
+	this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
 	this.graphics.drawRoundRectComplex (0, 0, w, 32, 4, 4, 0, 0);
 	this.graphics.drawRect (10, 20, w - 20, 12);
 	this.graphics.endFill ();
@@ -192,21 +189,21 @@ class Titlebar extends Sprite, implements Dynamic
 
     var program = parser.parseString(script);
 
-    interp.execute(program) ; 
+    interp.execute(program) ;
 
 
 
 
     //~ this.graphics.clear ();
-    //~ 
+    //~
     		  //~ var colors = [ color | 0x323232, color - 0x4D4D4D ];
 		  //~ var alphas = [ 100, 0 ];
 		  //~ var ratios = [ 0, 0xFF ];
 		  //~ var matrix = new flash.geom.Matrix();
 		  //~ matrix.createGradientBox(w, 32, Math.PI/2, 0, 0);
 		  //~ this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-//~ 
-//~ 
+//~
+//~
     //~ this.graphics.drawRoundRectComplex (0, 0, w, 32, 4, 4, 0, 0);
     //~ this.graphics.drawRect (10, 20, w - 20, 12);
     //~ this.graphics.endFill ();
@@ -219,7 +216,7 @@ class Titlebar extends Sprite, implements Dynamic
 	var ratios = [ 0, 0xFF ];
 	var matrix = new flash.geom.Matrix();
 	matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
-	closeButton.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );    
+	closeButton.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
     closeButton.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
     closeButton.graphics.endFill ();
 
@@ -232,46 +229,46 @@ class Titlebar extends Sprite, implements Dynamic
 	var matrix = new flash.geom.Matrix();
 	matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
 
-	minimizeButton.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );    
+	minimizeButton.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
     minimizeButton.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
     minimizeButton.graphics.endFill ();
 
     title.setTextFormat (StyleManager.getTextFormat(8,StyleManager.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
 
-  }				
+  }
 
     public function onRollOver (e:MouseEvent)
     {
-		CursorManager.getInstance().setCursor(Cursor.HAND);
+		CursorManager.setCursor(Cursor.HAND);
     }
 
     public function onRollOut (e:MouseEvent)
     {
-		//~CursorManager.getInstance().setCursor(Cursor.HAND);
+		//~CursorManager.setCursor(Cursor.HAND);
     }
 
     public function onMouseUp (e:MouseEvent)
     {
-	
-    }				
+
+    }
 
 
 }
 
 /**
- * 
+ *
  * Window class
- * 
+ *
  * Dragable & Resizable  window.
- * 
- * 
+ *
+ *
  * @author <gershon@goosemoose.com>
  * @version 0.1
  */
 class Window extends Component, implements Dynamic
 {
-    
-  
+
+
   public var titlebar:Titlebar;
 
   public var frame:Sprite;
@@ -299,19 +296,19 @@ class Window extends Component, implements Dynamic
     }
 
 
-	
+
 
     /**
-    * 
+    *
     * Initialize a new window
-    * 
+    *
     * @param initObj Dynamic object containing attributes
-    * 
-    * 
+    *
+    *
     */
   public function init (? initObj : Dynamic)
   {
-    
+
     type = WindowType.NORMAL;
     sizeable = true ;
     box = new Rectangle (0, 0, 512, 512);
@@ -398,10 +395,10 @@ class Window extends Component, implements Dynamic
 
 
     /**
-     * 
-     * 
-     * 
-     * 
+     *
+     *
+     *
+     *
      */
     public function draw ()
     {
@@ -476,8 +473,8 @@ class Window extends Component, implements Dynamic
 
 
     /**
-     * 
-     * 
+     *
+     *
      */
     public function onRollOut (e:MouseEvent):Void
     {
@@ -492,21 +489,21 @@ class Window extends Component, implements Dynamic
 
 
     /**
-     * 
-     * 
+     *
+     *
      */
     public function onRollOver (e:MouseEvent)
     {
     //~ redraw (true, 0x595959, 0x737373);
 	//
-	CursorManager.getInstance ().setCursor (Cursor.HAND);
+	CursorManager.setCursor (Cursor.HAND);
     }
 
 
     /**
-     * 
-     * 
-     * 
+     *
+     *
+     *
      */
     public function onMouseMove (e:MouseEvent)
     {
@@ -559,8 +556,8 @@ class Window extends Component, implements Dynamic
 
     /**
      * Resize listener to position corners and redraw frame
-     * 
-     * 
+     *
+     *
      */
   public function onResize (e:ResizeEvent)
   {
@@ -591,7 +588,7 @@ class Window extends Component, implements Dynamic
     // raise window
     parent.setChildIndex (this, parent.numChildren - 1);
 
-	
+
     if (e.target == titlebar || e.target.name == "br"	|| e.target.name == "bl")
       {
 
@@ -601,8 +598,8 @@ class Window extends Component, implements Dynamic
 	//~ flash.Lib.current.stage.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
 	//~ this.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
 	//~ flash.Lib.current.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
-	
-	
+
+
 	// raise target
 	e.target.parent.setChildIndex (e.target, e.target.parent.numChildren - 1);
       }
@@ -610,11 +607,11 @@ class Window extends Component, implements Dynamic
     switch (e.target)
       {
       case titlebar:
-	CursorManager.getInstance ().setCursor (Cursor.SIZE_ALL);
+	CursorManager.setCursor (Cursor.SIZE_ALL);
       case bl:
-	CursorManager.getInstance ().setCursor (Cursor.NE);
+	CursorManager.setCursor (Cursor.NE);
       case br:
-	CursorManager.getInstance ().setCursor (Cursor.NW);
+	CursorManager.setCursor (Cursor.NW);
       }
 
 
@@ -622,9 +619,9 @@ class Window extends Component, implements Dynamic
 
 
   /**
-   * 
-   * 
-   * 
+   *
+   *
+   *
    */
   public function onMouseUp (e:MouseEvent):Void
   {
@@ -648,7 +645,7 @@ class Window extends Component, implements Dynamic
 
     /**
      * Redraw just frame
-     * 
+     *
      */
   public function redrawFrame (fill:UInt, color:UInt)
   {
@@ -730,6 +727,6 @@ class Window extends Component, implements Dynamic
     {
 	parent.setChildIndex (this, parent.numChildren - 1);
     }
-    
+
 
 }

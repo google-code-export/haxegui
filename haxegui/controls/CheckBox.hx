@@ -1,18 +1,15 @@
-// 
-// The MIT License
-// 
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+// Copyright (c) 2009 The haxegui developers
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -68,10 +65,10 @@ class CheckBox extends Component, implements Dynamic
 
 
   /**
-   * 
-   * 
-   * 
-   * 
+   *
+   *
+   *
+   *
    */
   public function init(?initObj:Dynamic)
 	{
@@ -79,7 +76,7 @@ class CheckBox extends Component, implements Dynamic
 
 		box = new Rectangle(0,0,140,20);
 		color = StyleManager.BACKGROUND;
-		
+
 		if(Reflect.isObject(initObj))
 		{
 			//~ name = (initObj.name == null) ? name : initObj.name;
@@ -101,7 +98,7 @@ class CheckBox extends Component, implements Dynamic
 		button.graphics.drawRoundRect (0, 0, 20, box.height, 8, 8 );
 		button.graphics.endFill ();
 		this.addChild(button);
-		
+
 		// add the drop-shadow filter
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, true, false, false );
@@ -123,7 +120,7 @@ class CheckBox extends Component, implements Dynamic
 
 		this.addEventListener (Event.ACTIVATE, onEnabled);
 		this.addEventListener (Event.DEACTIVATE, onDisabled);
-		
+
 		if(disabled)
 			dispatchEvent(new Event(Event.DEACTIVATE));
 
@@ -133,8 +130,8 @@ class CheckBox extends Component, implements Dynamic
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public function onDisabled(e:Event)
 	{
@@ -143,10 +140,10 @@ class CheckBox extends Component, implements Dynamic
 		//~ tabEnabled = false;
 		redraw();
 	}
-	
+
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public function onEnabled(e:Event)
 	{
@@ -158,17 +155,17 @@ class CheckBox extends Component, implements Dynamic
 
 	/**
 	 *
-	 * 
+	 *
 	 */
 	public function redraw() : Void {
 
-		
+
 		//~ if(color==0 || Math.isNaN(color))
 			//~ color = StyleManager.BACKGROUND;
 				//~ color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
-	
 
-		if( disabled ) 
+
+		if( disabled )
 			{
 			//~ color = StyleManager.BACKGROUND - 0x141414;
 			//~ color = StyleManager.BACKGROUND ;
@@ -176,13 +173,13 @@ class CheckBox extends Component, implements Dynamic
 			fmt.color = color - 0x202020;
 			//~ fmt.align = flash.text.TextFormatAlign.CENTER;
 			label.tf.setTextFormat(fmt);
-			
+
 			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 			this.filters = [shadow];
 			}
-				
-			
+
+
 		button.graphics.clear();
 		button.graphics.lineStyle (2, disabled ? color - 0x141414 : color - 0x282828 );
 
@@ -195,15 +192,15 @@ class CheckBox extends Component, implements Dynamic
 			var ratios = [ 0, 0xFF ];
 			var matrix = new flash.geom.Matrix();
 			matrix.createGradientBox(20, 20, Math.PI/2, 0, 0);
-			button.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );    
+			button.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 			button.graphics.drawRoundRect (0, 0, 20, box.height, 8, 8 );
-		
+
 
 		button.graphics.lineStyle (4, color - 0x282828);
 		button.graphics.moveTo (6, 6);
 		button.graphics.lineTo (14, 14);
 		button.graphics.moveTo (14, 6);
-		button.graphics.lineTo (6, 14);		
+		button.graphics.lineTo (6, 14);
 
 		}
 		else
@@ -215,16 +212,16 @@ class CheckBox extends Component, implements Dynamic
 			var ratios = [ 0, 0xFF ];
 			var matrix = new flash.geom.Matrix();
 			matrix.createGradientBox(20, 20, Math.PI/2, 0, 0);
-			button.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );    
-		
+			button.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+
 		//~ button.graphics.beginFill (color);
 		button.graphics.drawRoundRect (0, 0, 20, box.height, 8, 8 );
-		
+
 		}
 
 
 		button.graphics.endFill ();
-		
+
 
 	}
 
@@ -240,7 +237,7 @@ class CheckBox extends Component, implements Dynamic
 		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
 		//~ redraw();
 		//~ redraw(color + 0x141414 );
-		CursorManager.getInstance().setCursor(Cursor.HAND);
+		CursorManager.setCursor(Cursor.HAND);
 
 	}
 
@@ -248,27 +245,27 @@ class CheckBox extends Component, implements Dynamic
 	*
 	*
 	*/
-	public  function onRollOut(e:MouseEvent) : Void	
+	public  function onRollOut(e:MouseEvent) : Void
 	{
 		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
 		//~ redraw(color);
-//		CursorManager.getInstance().setCursor(Cursor.ARROW);
-	}	
-	
+//		CursorManager.setCursor(Cursor.ARROW);
+	}
+
 	/**
 	*
 	*
 	*/
-	public  function onMouseDown(e:MouseEvent) : Void	
+	public  function onMouseDown(e:MouseEvent) : Void
 	{
 		if(disabled) return;
-		
+
 		//~ trace(Std.string(here)+Std.string(e));
 		//~ if(!this.hasFocus())
 		FocusManager.getInstance().setFocus(this);
 
 		redraw();
-	
+
 	}
 
 	/**
@@ -280,8 +277,8 @@ class CheckBox extends Component, implements Dynamic
 
 		//~ redraw(StyleManager.BACKGROUND);
 		//~ var color = checked ? StyleManager.BACKGROUND - 0x202020 : StyleManager.BACKGROUND;
-		
+
 		redraw();
 	}
-	
+
 }

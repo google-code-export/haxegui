@@ -64,15 +64,41 @@ import feffects.easing.Quart;
 */
 class Button extends Component, implements Dynamic
 {
+	/** Sets whether mouse events in buttons use hand cursors **/
+	public static var useHandCursors(default,__setHandCursors) : Bool;
+	/** The cursor to use when the mouse is over buttons **/
+	public static var defaultCursorOver : Cursor;
+	/** The cursor to use when a button is pressed **/
+	public static var defaultCursorPress : Cursor;
+
+	static function __setHandCursors(v:Bool) : Bool
+	{
+		if(v == useHandCursors)
+			return v;
+		if(v) {
+			defaultCursorOver = Cursor.HAND;
+			defaultCursorPress = Cursor.HAND2;
+		} else {
+			defaultCursorOver = Cursor.ARROW;
+			defaultCursorPress = Cursor.ARROW;
+		}
+		return v;
+	}
+
+	static function __init__() {
+		useHandCursors = false;
+	}
+
 	/**
 	*  @see Label
 	*/
 	public var label :Label;
 	public var fmt : TextFormat;
-
 	public var color(default, default) : UInt;
-
-
+	/** The cursor to use when the mouse is over this button **/
+	public var cursorOver : Cursor;
+	/** The cursor to use when this button is pressed **/
+	public var cursorPress : Cursor;
 
 	/**
 	*
@@ -84,9 +110,9 @@ class Button extends Component, implements Dynamic
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super (parent, name, x, y);
-
+		cursorOver = defaultCursorOver;
+		cursorPress = defaultCursorPress;
 	}
-
 
 	/**
 	* Init Function
@@ -137,9 +163,6 @@ class Button extends Component, implements Dynamic
 		//~ if(Math.isNaN(box.height))
 			//~ box.height = 30;
 
-
-
-
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, StyleManager.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
 		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
@@ -153,11 +176,11 @@ class Button extends Component, implements Dynamic
 		this.addChild(label);
 
 		// Listeners
-		this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown);
-		this.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp);
-		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver);
-		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut);
-		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown);
+		this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
+		this.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
+		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
+		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
+		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
 
 
 		// register with focus manager
@@ -182,9 +205,7 @@ class Button extends Component, implements Dynamic
 
 	/**
 	*
-	* @param color
 	*/
-	//~ public dynamic function redraw(?color:UInt) : Void
 	public dynamic function redraw() : Void
 	{
 		//~ if(color == 0 || Math.isNaN(color))
@@ -225,20 +246,14 @@ class Button extends Component, implements Dynamic
 
 		this.graphics.drawRoundRect (0, 0, box.width, box.height, 8, 8 );
 		this.graphics.endFill ();
-
-
 	}
 
 	/** onRollOver Event **/
 	public function onRollOver(e:MouseEvent)
 	{
 		if(disabled) return;
-
 		updateColorTween( new Tween(0, 50, 275, Expo.easeOut ) );
-
-		//~ redraw(color | 0x4C4C4C );
-
-		CursorManager.getInstance().setCursor(Cursor.HAND);
+		CursorManager.setCursor(cursorOver);
 	}
 
 	/** onRollOut Event **/
@@ -248,7 +263,7 @@ class Button extends Component, implements Dynamic
 
 		updateColorTween( new Tween(e.buttonDown ? -50 : 50, 0, 350, Linear.easeOut ) );
 
-//		CursorManager.getInstance().setCursor(Cursor.ARROW);
+		CursorManager.setCursor(Cursor.ARROW);
 	}
 	/**
 	*
@@ -262,15 +277,12 @@ class Button extends Component, implements Dynamic
 		//~ if(!this.hasFocus())
 		//~ FocusManager.getInstance().setFocus(this);
 
-		//~ redraw(color - 0x141414);
-
 		updateColorTween( new Tween(50, -50, 350, Linear.easeOut) );
 
 		//~ var fmt = StyleManager.getTextFormat();
 		//~ fmt.align = flash.text.TextFormatAlign.CENTER;
 		//~ label.setTextFormat (fmt);
-		CursorManager.getInstance().setCursor(Cursor.HAND2);
-
+		CursorManager.setCursor(cursorPress);
 	}
 
 	/**
@@ -291,11 +303,9 @@ class Button extends Component, implements Dynamic
 		//~ fmt.size = 12;
 		//~ label.setTextFormat (fmt);
 
-		if(hitTestObject( CursorManager.getInstance().getCursor() ))
-			{
-			//~ redraw(color | 0x4C4C4C );
+		if(hitTestObject( CursorManager.getInstance()._mc )) {
 			updateColorTween( new Tween(-50, 50, 150, Linear.easeNone) );
-			CursorManager.getInstance().setCursor(Cursor.HAND);
+			CursorManager.setCursor(cursorOver);
 		}
 		else {
 			updateColorTween( new Tween(-50, 0, 120, Linear.easeNone) );
