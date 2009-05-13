@@ -23,8 +23,11 @@ import flash.display.DisplayObject;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
+import haxegui.CursorManager;
+
 import hscript.Expr;
 import hscript.Interp;
+
 
 typedef ScriptObject = {
 	var interp:Interp;
@@ -37,37 +40,44 @@ class StyleManager implements Dynamic
 	public var redrawTitleBar : ScriptObject;
 	public var redrawCloseButton : ScriptObject;
 	public var redrawMinimizeButton : ScriptObject;
+	public var buttonMouseDown : ScriptObject;
+	public var buttonMouseOver : ScriptObject;
+	public var buttonMouseOut : ScriptObject;
+	public var buttonMouseUp : ScriptObject;
 
 	public function new() {
 	}
 
 	public function init() {
-		setScript("redrawTitleBar", DefaultStyle.redrawTitleBar, commonInit, commonSetup);
-		setScript("redrawCloseButton", DefaultStyle.redrawCloseButton, commonInit, commonSetup);
-		setScript("redrawMinimizeButton", DefaultStyle.redrawMinimizeButton, commonInit, commonSetup);
+// 		setScript("redrawTitleBar", DefaultStyle.redrawTitleBar, commonInit, commonSetup);
+// 		setScript("redrawCloseButton", DefaultStyle.redrawCloseButton, commonInit, commonSetup);
+// 		setScript("redrawMinimizeButton", DefaultStyle.redrawMinimizeButton, commonInit, commonSetup);
+// 		setScript("buttonMouseDown", DefaultStyle.buttonMouseDown, commonInit, commonSetup);
+// 		setScript("buttonMouseOver", DefaultStyle.buttonMouseOver, commonInit, commonSetup);
+// 		setScript("buttonMouseOut", DefaultStyle.buttonMouseOut, commonInit, commonSetup);
 	}
 
-	function commonInit(interp:Interp) : Void {
+	public static function commonInit(interp:Interp) : Void {
 		StyleManager.setExports(interp);
 	}
 
-	function commonSetup(interp:Interp, obj:DisplayObject, opts:Dynamic) : Void {
+	public static function commonSetup(interp:Interp, obj:DisplayObject, opts:Dynamic) : Void {
 		for(f in Reflect.fields(opts))
 			interp.variables.set(f, Reflect.field(opts,f));
 	}
 
 
-	private static var _instance : StyleManager = null;
-
-	public static function getInstance ():StyleManager
-	{
-		if (StyleManager._instance == null)
-		{
-			StyleManager._instance = new StyleManager();
-			StyleManager._instance.init();
-		}
-		return StyleManager._instance;
-	}
+// 	private static var _instance : StyleManager;
+//
+// 	public static function getInstance ():StyleManager
+// 	{
+// 		if (StyleManager._instance == null)
+// 		{
+// 			StyleManager._instance = new StyleManager();
+// 			StyleManager._instance.init();
+// 		}
+// 		return StyleManager._instance;
+// 	}
 
 	public static function getTextFormat(?size:UInt, ?color:UInt, ?align:flash.text.TextFormatAlign) : TextFormat
 	{
@@ -101,6 +111,23 @@ class StyleManager implements Dynamic
 	**/
 	public static function setExports(interp:Interp) {
 		interp.variables.set("Math",Math);
+		interp.variables.set("feffects",
+			{
+				Tween : feffects.Tween,
+				easing : {
+					Back : feffects.easing.Back,
+					Bounce : feffects.easing.Bounce,
+					Circ : feffects.easing.Circ,
+					Cubic : feffects.easing.Cubic,
+					Sine : feffects.easing.Sine,
+					Elastic : feffects.easing.Elastic,
+					Expo : feffects.easing.Expo,
+					Linear : feffects.easing.Linear,
+					Quad : feffects.easing.Quad,
+					Quart : feffects.easing.Quart,
+					Quint : feffects.easing.Quint,
+				},
+			});
 		interp.variables.set("flash",
 			{
 				display : {
@@ -114,6 +141,18 @@ class StyleManager implements Dynamic
 				},
 			});
 		interp.variables.set("DefaultStyle", DefaultStyle);
+		interp.variables.set("CursorManager", CursorManager);
+		interp.variables.set("Cursor",{
+				ARROW : Cursor.ARROW,
+				HAND : Cursor.HAND,
+				HAND2 : Cursor.HAND2,
+				DRAG : Cursor.DRAG,
+				IBEAM : Cursor.IBEAM,
+				NE : Cursor.NE,
+				NW : Cursor.NW,
+				SIZE_ALL : Cursor.SIZE_ALL,
+				CROSSHAIR : Cursor.CROSSHAIR,
+			});
 	}
 
 	/**
@@ -127,34 +166,42 @@ class StyleManager implements Dynamic
 	* @throws String if action is invalid
 	**/
 	public static function setScript(
+				classType : Class<Dynamic>,
 				action:String,
 				code:String,
-				init:Interp->Void,
-				setup:Interp->DisplayObject->Dynamic->Void)
+				init:Interp->Void=null,
+				setup:Interp->DisplayObject->Dynamic->Void=null)
 	{
-		getActionField(action);
-
 		var parser = new hscript.Parser();
-		var program = parser.parseString(code);
+		var program = parser.parseString((code==null) ? "" : code);
 		var interp = new hscript.Interp();
 		if(init != null)
 			init(interp);
 		else
 			setExports(interp);
+		if(setup == null)
+			setup = commonSetup;
 
-		Reflect.setField(getInstance(), action, {
+		actions.set(getActionKey(classType,action),{
 				interp:interp,
 				program: program,
 				setup: setup,
 			});
+		return code;
 	}
 
-	public static function exec(action:String, obj:DisplayObject, options:Dynamic) {
-		doCall(getActionField(action), obj, options);
+	public static function exec(classType:Class<Dynamic>, action:String, obj:DisplayObject, options:Dynamic) {
+		try {
+			doCall(getActionField(classType, action), obj, options);
+		} catch(e:Dynamic) {
+			trace(getActionKey(classType, action) + " script error : " + e);
+		}
 	}
 
 	private static function doCall(so:ScriptObject,obj:DisplayObject,options:Dynamic) : Void
 	{
+		if(so == null)
+			return;
 		if(so.setup != null)
 			so.setup(so.interp,obj,options);
 		so.interp.variables.set("this",obj);
@@ -168,15 +215,28 @@ class StyleManager implements Dynamic
 	* @return Current value of the StyleManager instance field
 	* @throws String on error
 	**/
-	private static function getActionField(action:String) : Dynamic {
-		var inst = getInstance();
-		if(!Reflect.hasField(inst,action))
-			throw "No such action";
-		if(Reflect.isFunction(Reflect.field(inst,action)))
+	private static function getActionField(classType:Class<Dynamic>, action:String) : Dynamic {
+		var key = getActionKey(classType, action);
+		if(!actions.exists(key) || actions.get(key) == null)
 			throw "Not a valid action";
-		return(Reflect.field(inst,action));
+		return(actions.get(key));
 	}
 
+	private static function getActionKey(classType:Class<Dynamic>, action:String) : String
+	{
+		return Type.getClassName(classType) + "." + action;
+	}
+
+	static var actions : Hash<ScriptObject>;
+	static var initialized : Bool;
+	public static function initialize() {
+		if(initialized) return;
+		initialized = true;
+		actions = new Hash<ScriptObject>();
+	}
+	static function __init__() : Void {
+		initialize();
+	}
 }
 
 class DefaultStyle {
@@ -253,4 +313,31 @@ class DefaultStyle {
 // 				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
 // 				this.graphics.endFill();
 // 			";
+
+/*
+	public static var buttonMouseDown(__getButtonMouseDown,__setButtonMouseDown) : String;
+	static function __getButtonMouseDown() {
+		return (buttonMouseDown==null) ? haxegui.controls.Button.action_buttonMouseDown:buttonMouseDown;
+	}
+	static function __setButtonMouseDown(v:String) : String {
+		return buttonMouseDown = v;
+	}
+
+	public static var buttonMouseOver(__getButtonMouseOver,__setButtonMouseOver) : String;
+	static function __getButtonMouseOver() {
+		return (buttonMouseOver==null) ? haxegui.controls.Button.action_buttonMouseOver:buttonMouseOver;
+	}
+	static function __setButtonMouseOver(v:String) : String {
+		return buttonMouseOver = v;
+	}
+
+
+	public static var buttonMouseOut(__getButtonMouseOut,__setButtonMouseOut) : String;
+	static function __getButtonMouseOut() {
+		return (buttonMouseOut==null) ? haxegui.controls.Button.action_buttonMouseOut:buttonMouseOut;
+	}
+	static function __setButtonMouseOut(v:String) : String {
+		return buttonMouseOut = v;
+	}
+*/
 }
