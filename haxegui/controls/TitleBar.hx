@@ -245,6 +245,9 @@ class TitleBar extends Component, implements Dynamic
 		maximizeButton.moveTo(36,4);
 		maximizeButton.filters = [shadow];
 
+		closeButton.useHandCursors = minimizeButton.useHandCursors = maximizeButton.useHandCursors = true;
+
+		
 
 		//mc.x = box.width - 32;
 		title = new TextField ();

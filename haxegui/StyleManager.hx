@@ -75,7 +75,7 @@ class StyleManager implements Dynamic
 			doCall(inst, getInstanceActionObject(inst, action), options);
 		} catch(e:Dynamic) {
 			if(e != "No default action.") {
-				trace(inst.toString() + " " + action + " script error : " + e);
+				//~ trace(inst.toString() + " " + action + " script error : " + e);
 			}
 		}
 	}

@@ -59,6 +59,93 @@ enum ScrollbarType {
 }
 
 
+
+/**
+*
+* ScrollBarUpButton Class
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
+class ScrollBarUpButton extends AbstractButton
+{
+	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
+		super (parent, name, x, y);
+		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
+	}
+
+	static function __init__()
+	{
+		StyleManager.setDefaultScript(
+			ScrollBarUpButton,
+			"redraw",
+			"
+				var colors = [ this.color - 0x141414,  this.color | 0x323232 ];
+				var alphas = [ 100, 100 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(20, 20, Math.PI, 0, 0);
+				this.graphics.lineStyle (2, color - 0x141414, 1, LineScaleMode.NONE );
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawRect (0, 0, 20, 20 );
+				this.graphics.endFill ();
+			"
+		);
+	}
+	
+	public function onMouseClick(e:MouseEvent) : Void
+	{
+		trace("Up clicked on " + parent.toString());
+		//~ parent.dispatchEvent(new Event(Event.CHANGE));
+	}
+}
+
+
+
+/**
+*
+* ScrollBarDownButton Class
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
+class ScrollBarDownButton extends AbstractButton
+{
+	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
+		super (parent, name, x, y);
+		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
+	}
+
+	static function __init__()
+	{
+		StyleManager.setDefaultScript(
+			ScrollBarDownButton,
+			"redraw",
+			"
+				var colors = [ this.color - 0x141414,  this.color | 0x323232 ];
+				var alphas = [ 100, 100 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(20, 20, Math.PI, 0, 0);
+				this.graphics.lineStyle (2, color - 0x141414, 1, LineScaleMode.NONE );
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawRect (0, 0, 20, 20 );
+				this.graphics.endFill ();
+			"
+		);
+	}
+	
+	public function onMouseClick(e:MouseEvent) : Void
+	{
+		trace("Up clicked on " + parent.toString());
+		//~ parent.dispatchEvent(new Event(Event.CHANGE));
+	}
+}
+
+
+
 /**
 *
 * Scrollbar class
@@ -70,10 +157,10 @@ class Scrollbar extends haxegui.controls.Component
 {
 	var horizontal : Bool;
 
-	var frame : Sprite;
+	var frame : Component;
 	var handle : AbstractButton;
-	var up : Sprite;
-	var down : Sprite;
+	var up : ScrollBarUpButton;
+	var down : ScrollBarDownButton;
 
 	public var scrollee : Dynamic;
 	public var scroll : Float;
@@ -84,12 +171,6 @@ class Scrollbar extends haxegui.controls.Component
 		horizontal = horz;
 		if(horizontal)
 			rotation = -90;
-
-		frame = new Sprite();
-		handle = new AbstractButton(this, "handle", 0, 20);
-		up = new Sprite();
-		down = new Sprite();
-
 	}
 
 
@@ -104,6 +185,8 @@ class Scrollbar extends haxegui.controls.Component
 		//~ box = new Rectangle(0,0,20,90);
 		this.scrollee = Opts.classInstance(opts, "target", untyped [TextField, DisplayObject]);
 
+		frame = new Component(this, "frame", 0, 20);
+		frame.init({color: this.color});
 		//~ frame.mouseEnabled = false;
 		frame.buttonMode = false;
 		frame.focusRect = false;
@@ -114,36 +197,31 @@ class Scrollbar extends haxegui.controls.Component
 		frame.graphics.drawRect (0, 0, box.width, box.height - 40 );
 		frame.graphics.endFill ();
 
-		frame.name = "frame";
-		frame.y = 20;
-
-
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, .75, BitmapFilterQuality.HIGH, true, false, false);
 		frame.filters = [shadow];
 
-		this.addChild(frame);
-
 
 		
 		
-		
+		handle = new AbstractButton(this, "handle", 0, 20);
 		handle.init({color: this.color});
-		handle.action_redraw = 
-		"
-			this.graphics.clear();
-			this.graphics.lineStyle (2, this.color - 0x141414, 1, flash.display.LineScaleMode.NONE);
-			var colors = [ this.color - 0x141414, this.color | 0x323232 ];
-			/*if(horizontal)
-				colors = [ color | 0x323232, color - 0x141414 ];*/
-			var alphas = [ 100, 100 ];
-			var ratios = [ 0, 0xFF ];
-			var matrix = new flash.geom.Matrix();
-			matrix.createGradientBox(20, h, Math.PI, 0, 0);
-			this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-			this.graphics.drawRect (0, 0, 20, h );
-			this.graphics.endFill ();
-		";
-				
+		StyleManager.setInstanceScript(
+			handle,
+			"redraw",
+			"
+				this.graphics.clear();
+				this.graphics.lineStyle (2, this.color - 0x141414, 1, flash.display.LineScaleMode.NONE);
+				var colors = [ this.color - 0x141414, this.color | 0x323232 ];
+				/*if(horizontal)
+					colors = [ color | 0x323232, color - 0x141414 ];*/
+				var alphas = [ 100, 100 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(20, h, Math.PI, 0, 0);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawRect (0, 0, 20, h );
+				this.graphics.endFill ();
+			");
 		handle.redraw({h : 20, horizontal: this.horizontal });
 
 
@@ -154,58 +232,15 @@ class Scrollbar extends haxegui.controls.Component
 		handle.addEventListener(MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
 
 
+		up = new ScrollBarUpButton(this, "up" );
+		up.init({color: this.color});
 
-
-
-
-		up.buttonMode = true;
-		up.focusRect = true;
-		up.tabEnabled = true;
-		up.name = "up";
-		up.graphics.lineStyle (2, color - 0x141414, 1, LineScaleMode.NONE );
-
-		var colors = [ color - 0x141414, color | 0x323232 ];
-		if(horizontal)
-			colors = [ color | 0x323232, color - 0x141414 ];
-		var alphas = [ 100, 100 ];
-		var ratios = [ 0, 0xFF ];
-		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(20, 20, Math.PI, 0, 0);
-		up.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-		//~ up.graphics.beginFill (color);
-		up.graphics.drawRect (0, 0, 20, 20 );
-		up.graphics.endFill ();
-
-		//~ up = flash.Lib.attach("scrollbarButtonUp");
-		//~ up = new ScrollbarButtonUp();
-
-		up.y=0;
-
-		this.addChild(up);
-
-		down.buttonMode = true;
-		down.focusRect = true;
-		down.tabEnabled = true;
-		down.name = "down";
-		down.graphics.lineStyle (2, color - 0x141414, 1, LineScaleMode.NONE );
-		//~ down.graphics.beginFill (color);
-		down.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-		down.graphics.drawRect (0, 0, 20, 20 );
-		down.graphics.endFill ();
-
-
-
-		//~ down = flash.Lib.attach("scrollbarButtonDown");
-
-		down.name = "down";
-		down.mouseEnabled = true;
-		down.y = box.height - 20;
+		down = new ScrollBarDownButton(this, "down" );
+		down.move(0, box.height - 20);
 
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, .75, BitmapFilterQuality.HIGH, true, false, false);
 		down.filters = [shadow];
 
-		this.addChild(down);
 
 		up.addEventListener(MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
 		up.addEventListener(MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
@@ -216,6 +251,9 @@ class Scrollbar extends haxegui.controls.Component
 
 		//
 		parent.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
+		
+
+		
 
 	}//init
 
@@ -236,6 +274,9 @@ class Scrollbar extends haxegui.controls.Component
 		//~ box = pbox.clone() ;
 		//~ box.inflate(-10,-24);
 		//~ box.inflate(-10,-4);
+		up.redraw({color: this.color});
+		down.redraw({color: this.color});
+		handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
 
 		frame.graphics.clear();
 		frame.graphics.lineStyle (1, color - 0x141414);
@@ -265,7 +306,6 @@ class Scrollbar extends haxegui.controls.Component
 
 		frame.graphics.endFill ();
 
-		handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
 		//
 		//~ redrawHandle();
 

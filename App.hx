@@ -109,7 +109,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 		stage.stageFocusRect = true;
 
 		// Assign a stage resize listener
-		stage.addEventListener(Event.RESIZE, onStageResize);
+		stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
 
 		// Setup mouse and cursor
 		MouseManager.getInstance().init();
@@ -281,8 +281,8 @@ class App extends Sprite, implements haxe.rtti.Infos
 				//~ stepper.init();
 				stepper.move(360, 120+40*i);
 
-				slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value = e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); });
-				stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = e.target.value;  });
+				slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value = e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); }, false, 0, true);
+				stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = e.target.value;  }, false, 0, true);
 
 			}
 
@@ -317,7 +317,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 	// Load XML
 	/////////////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
-		loader.addEventListener(Event.COMPLETE, loadXML);
+		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
 		loader.load(new URLRequest("config.xml"));
 		//
 		//~ flash.Lib.current.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown);

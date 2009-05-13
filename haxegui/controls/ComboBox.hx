@@ -147,8 +147,8 @@ class ComboBox extends AbstractButton, implements Dynamic
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 		dropButton.filters = [shadow];
 
-		this.addEventListener (Event.ACTIVATE, onEnabled,false,0,true);
-		this.addEventListener (Event.DEACTIVATE, onDisabled,false,0,true);
+		this.addEventListener (Event.ACTIVATE, onEnabled, false, 0, true);
+		this.addEventListener (Event.DEACTIVATE, onDisabled, false, 0, true);
 	}
 
 	public function onEnabled(e:Event)

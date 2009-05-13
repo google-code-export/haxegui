@@ -425,7 +425,7 @@ This hscript does the following:
 				
 			
 			var tf = new flash.text.TextField();
-			tf.type = TextFieldType.DYNAMIC;
+			tf.type = flash.text.TextFieldType.DYNAMIC;
 			for(i in 1...101)
 			    tf.text += "  "+i+"\n";
 			tf.border = true;
