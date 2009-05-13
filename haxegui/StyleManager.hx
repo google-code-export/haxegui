@@ -36,6 +36,7 @@ typedef ScriptObject = {
 	var interp:Interp;
 	var program: Expr;
 	var setup : Interp->DisplayObject->Dynamic->Void;
+	var code : String;
 }
 
 class StyleManager implements Dynamic
@@ -119,7 +120,7 @@ class StyleManager implements Dynamic
 	* @return ScriptObject, either the instance one, or the default for the class
 	* @throws String on error
 	**/
-	private static function getInstanceActionObject(inst:Component, action:String) : ScriptObject
+	public static function getInstanceActionObject(inst:Component, action:String) : ScriptObject
 	{
 		if(instanceActions.exists(inst)) {
 			var so = instanceActions.get(inst).get(action);
@@ -184,6 +185,7 @@ class StyleManager implements Dynamic
 				interp:interp,
 				program: program,
 				setup: setup,
+				code: code,
 			});
 		return code;
 	}
@@ -196,6 +198,7 @@ class StyleManager implements Dynamic
 	* @param code The code to execute.
 	* @param init The initialization function for the interpreter, which is run once
 	* @param setup The function called each time a display object needs to run the script
+	* @return The code provided, for chaining in setters.
 	* @throws String if action is invalid
 	**/
 	public static function setInstanceScript(
@@ -203,7 +206,7 @@ class StyleManager implements Dynamic
 				action:String,
 				code:String,
 				init:Interp->Void=null,
-				setup:Interp->DisplayObject->Dynamic->Void=null)
+				setup:Interp->DisplayObject->Dynamic->Void=null) : String
 	{
 		if(!initialized) initialize();
 		var classType = Type.getClass(inst);
@@ -224,6 +227,7 @@ class StyleManager implements Dynamic
 				interp:interp,
 				program: program,
 				setup: setup,
+				code: code,
 			});
 		return code;
 	}
