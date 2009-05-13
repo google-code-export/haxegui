@@ -69,7 +69,7 @@ class Console extends Window, implements ITraceListener
 	var pwd : DisplayObjectContainer;
 
 	var container : Container;
-	var tf : TextField;
+	var output : TextField;
 	var input : TextField;
 	var vert : Scrollbar;
 
@@ -80,10 +80,10 @@ class Console extends Window, implements ITraceListener
 	public function new (?parent:DisplayObjectContainer, ?x:Float, ?y:Float)
 	{
 		super (parent, "Console", x, y);
-		tf = new TextField ();
+		output = new TextField();
 		input = new TextField();
 		vert = new Scrollbar(this, "vscrollbar");
-		container = new Container(this, "Container", 10, 44);
+		container = new Container(this, "Container", 10, 24);
 		parser = new hscript.Parser();
 		history = new Array<String>();
 
@@ -101,24 +101,25 @@ class Console extends Window, implements ITraceListener
 		box = new Rectangle (0, 0, 640, 240);
 
 		//
-		tf.name = "tf";
-		tf.htmlText = "";
-		tf.width = box.width - 40;
-		tf.height = box.height - 70;
-		//~ tf.background = true;
-		//~ tf.backgroundColor = 0x222222;
-		tf.border = true;
-		tf.wordWrap = true;
-		tf.multiline = true;
-		tf.autoSize = flash.text.TextFieldAutoSize.NONE;
-		tf.type = flash.text.TextFieldType.DYNAMIC;
-		tf.selectable = true;
-		tf.mouseEnabled = true;
-		tf.focusRect = true;
-		tf.tabEnabled = true;
+		output.name = "output";
+		output.htmlText = "";
+		output.width = box.width - 40;
+		output.height = box.height - 70;
+		//~ output.background = true;
+		//~ output.backgroundColor = 0x222222;
+		output.border = true;
+		output.wordWrap = true;
+		output.multiline = true;
+		output.autoSize = flash.text.TextFieldAutoSize.NONE;
+		output.type = flash.text.TextFieldType.DYNAMIC;
+		output.selectable = true;
+		output.mouseEnabled = true;
+		output.focusRect = true;
+		output.tabEnabled = true;
 
 		//
 		input.name = "input";
+		input.defaultTextFormat = StyleManager.getTextFormat(8, 0xFFFFFF);
 		input.type = flash.text.TextFieldType.INPUT;
 		input.background = true;
 		input.backgroundColor = 0x4D4D4D;
@@ -136,14 +137,15 @@ class Console extends Window, implements ITraceListener
 		vert.y = 44;
 		vert.color = color;
 		//~ vert.init(content);
-		vert.init({target : tf});
+		vert.init({target : output});
 
 		//
 		container.init({
 			color: Opts.optInt(opts,"bgcolor",0x222222),
 			alpha: Opts.optFloat(opts, "bgalpha", 0.85),
 		});
-		container.addChild(tf);
+
+		container.addChild(output);
 		container.addChild(input);
 
 		if(isSizeable())
@@ -178,9 +180,9 @@ class Console extends Window, implements ITraceListener
 
 		text += e ;
 
-		tf.htmlText += text;
-		tf.htmlText += "</FONT>";
-		tf.scrollV = tf.maxScrollV + 1;
+		output.htmlText += text;
+		output.htmlText += "</FONT>";
+		output.scrollV = output.maxScrollV + 1;
 	}
 
 	override public function onResize (e:ResizeEvent) : Void
@@ -190,8 +192,8 @@ class Console extends Window, implements ITraceListener
 		e.stopImmediatePropagation ();
 		//~ e.stopPropagation ();
 
-		tf.width = box.width - 32;
-		tf.height = box.height - 64;
+		output.width = box.width - 32;
+		output.height = box.height - 64;
 
 		input.width = box.width - 32;
 		input.y = box.height - 64;
@@ -260,7 +262,7 @@ class Console extends Window, implements ITraceListener
 
 	public function clear()
 	{
-		tf.text = "";
+		output.text = "";
 	}
 
 	function createInstance( s : String, a : Array<Dynamic> )
