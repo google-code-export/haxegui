@@ -45,20 +45,22 @@ TODO:
 			<haxegui:controls:CheckBox name="CheckBox1" x="30" y="90" />
 			<haxegui:controls:CheckBox name="CheckBox2" x="170" y="90" checked="true" />
 			<haxegui:controls:CheckBox name="CheckBox3" x="310" y="90" disabled="true"/>
+			
 			<haxegui:controls:ComboBox name="ComboBox1" x="30" y="130" />
 			<haxegui:controls:ComboBox name="ComboBox2" x="30" y="160" />
 			<haxegui:controls:ComboBox name="ComboBox3" x="30" y="190" disabled="true" />
+			
 			<haxegui:controls:Slider name="Slider1" x="200" y="130" />
-			<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="128"/>
 			<haxegui:controls:Slider name="Slider2" x="200" y="160" />
-			<haxegui:controls:Stepper name="Stepper2" x="360" y="160" step="5" max="128" />
 			<haxegui:controls:Slider name="Slider3" x="200" y="190" />
+			
+			<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="128"/>
+			<haxegui:controls:Stepper name="Stepper2" x="360" y="160" step="5" max="128" />
 			<haxegui:controls:Stepper name="Stepper3" x="360" y="190" step="10" max="128" />
 
 			<haxegui:controls:Input name="Input1" x="30" y="220" />
 			<haxegui:controls:Input name="Input2" x="30" y="250" />
 			<haxegui:controls:Input name="Input3" x="30" y="280" disabled="true"/>
-
 
 			<haxegui:controls:RadioButton name="RadioButton1" x="30" y="310" />
 			<haxegui:controls:RadioButton name="RadioButton2" x="30" y="340" />
@@ -98,7 +100,7 @@ This hscript does the following:
 		o = o.getChildByName("Container1");
 
 		var btn = o.getChildByName("colorButton");
-		btn.addEventListener(MouseEvent.MOUSE_UP,
+		btn.addEventListener(flash.events.MouseEvent.MOUSE_UP,
 		    function(e){
 		    if(btn.color == 0xB35959)
 				{ btn.color=0xA1F02A; btn.label.tf.text = "Green"; }
@@ -213,11 +215,11 @@ This hscript does the following:
 		}
 	    }
 
-	image.addEventListener(MouseEvent.MOUSE_OVER, onRollOver);
-	image.addEventListener(MouseEvent.MOUSE_OUT, onRollOut);
-	image.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-	image.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-	image.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+	image.addEventListener(flash.events.MouseEvent.MOUSE_OVER, onRollOver);
+	image.addEventListener(flash.events.MouseEvent.MOUSE_OUT, onRollOut);
+	image.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onMouseDown);
+	image.addEventListener(flash.events.MouseEvent.MOUSE_UP, onMouseUp);
+	image.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, onMouseMove);
 
 	trace("MouseEvent added to "+image);
     </script>
@@ -440,7 +442,7 @@ This hscript does the following:
 			tf.text += "\n/*\nvar window = new haxegui.Window(this.getChildByName(\"ScrollPane1\"));\nwindow.box.width = 160;\nwindow.box.height = 120;\nwindow.init();\n\nvar container = new haxegui.Container(window, \"Container\", 10, 20);\ncontainer.init();\n*/";
 			tf.background = true;
 			tf.backgroundColor = 0xFFFFFF;
-			tf.type = TextFieldType.INPUT;
+			tf.type = flash.text.TextFieldType.INPUT;
 			tf.multiline = true;
 			tf.x = 30;
 			tf.width = 800;
@@ -450,7 +452,7 @@ This hscript does the following:
 			function clear(e) { tf.text = ""; }
 
 			var clearbtn = toolbar.getChildByName("Clear");
-			clearbtn.addEventListener(MouseEvent.MOUSE_UP, clear);			
+			clearbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, clear);			
 
 			
 			function run(e)
@@ -478,7 +480,7 @@ This hscript does the following:
 
 			    
 			var runbtn = toolbar.getChildByName("Run");
-			runbtn.addEventListener(MouseEvent.MOUSE_UP, run);			
+			runbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, run);			
 			
 
 		    </script>
@@ -488,7 +490,36 @@ This hscript does the following:
     </haxegui:Window>
     
 
+    <haxegui:Window name="Tweening" x="120" y="140" width="400" height="300" sizeable="true" >
+	    <haxegui:ScrollPane name="ScrollPane1" x="10" y="20" >
+		<haxegui:Container name="Container1" width="400" height="300" color="0xffffff" >
+			<haxegui:controls:Component name="tweened" />
+		<script type="text/hscript">
+		    var window = root.getChildByName("Tweening");
+		    var scrollpane = window.getChildByName("ScrollPane1");
+		    var container = scrollpane.content.getChildByName("Container1");
+
+		    var tweened = container.getChildByName("tweened");
+
+		    tweened.graphics.lineStyle(2, 0);
+		    tweened.graphics.beginFill(0xff0000);
+		    tweened.graphics.drawCircle(20,20,20);
+		    tweened.graphics.endFill();
+		    
+		    tweened.move(180,130);
+		    
+		    var t = new Tween( 0, 400, 4000, tweened, "x", feffects.easing.Linear.easeNone );
+		    t.start();
+
+		    
+		</script>
+		</haxegui:Container>
+	    </haxegui:ScrollPane>
+    </haxegui:Window>
+
 <!--
+
+
     <haxegui:Window name="Introspector" x="200" y="40" width="720" height="300" sizeable="true" >
 	<haxegui:Menubar name="Menubar" width="512" x="10" y="20" />
 	    <haxegui:ScrollPane name="ScrollPane1" x="10" y="24" >

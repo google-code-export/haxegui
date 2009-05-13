@@ -38,6 +38,16 @@ import hscript.Expr;
 
 import haxegui.CursorManager;
 
+
+/**
+*
+* XmlDeserializer Class
+*
+* @version 0.1
+* @author <gershon@goosemoose.com>
+* @author Russell Weir'
+*
+*/
 class XmlDeserializer extends Unserializer
 {
 
@@ -152,30 +162,8 @@ class XmlDeserializer extends Unserializer
 
 		var interp = new hscript.Interp();
 
-		interp.variables.set( "root", flash.Lib.current );
-		//~ //interp.variables.set( "this", ? );
+		haxegui.utils.ScriptStandardLibrary.set(interp);
 
-		interp.variables.set( "new", createInstance );
-		interp.variables.set( "class", getClass );
-
-		interp.variables.set( "Std", Std );
-		interp.variables.set( "Math", Math );
-		interp.variables.set( "Type", Type );
-		interp.variables.set( "Reflect", Reflect );
-		interp.variables.set( "Timer", haxe.Timer );
-
-		interp.variables.set( "Sprite", Sprite );
-		interp.variables.set( "TextField", TextField );
-		interp.variables.set( "TextFieldType", flash.text.TextFieldType );
-
-		interp.variables.set( "Event", Event );
-		interp.variables.set( "MouseEvent", flash.events.MouseEvent );
-
-		interp.variables.set( "StyleManager", StyleManager );
-		interp.variables.set( "CursorManager", CursorManager );
-		interp.variables.set( "Cursor", Cursor );
-
-		interp.variables.set( "print_r", haxegui.Utils.print_r );
 
 		try {
 			var ret = interp.execute(program);

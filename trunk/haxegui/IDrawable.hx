@@ -5,9 +5,8 @@ package haxegui;
 interface IDrawable 
 {
   
-  public dynamic function draw (?e:Dynamic) : Void;
-    
-  public dynamic function redraw (?e:Dynamic) : Void;
+  public dynamic function draw (?opts:Dynamic) : Void;    
+  public dynamic function redraw (?opts:Dynamic) : Void;
 
 }
 
