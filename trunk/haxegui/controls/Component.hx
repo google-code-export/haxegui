@@ -101,6 +101,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		if(opts == null) opts = {};
 		name = Opts.optString(opts,"name",name);
 		disabled = Opts.optBool(opts,"disabled",false);
+		box.width = Opts.optFloat(opts,"width",box.width);
+		box.height = Opts.optFloat(opts,"height",box.height);
 	}
 
 	public function redraw(?opts:Dynamic) {

@@ -23,6 +23,7 @@ import flash.display.DisplayObjectContainer;
 import flash.events.MouseEvent;
 
 import haxegui.CursorManager;
+import haxegui.Opts;
 import haxegui.StyleManager;
 /**
 *

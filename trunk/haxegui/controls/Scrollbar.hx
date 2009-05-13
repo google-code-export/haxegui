@@ -19,31 +19,6 @@
 
 package haxegui.controls;
 
-
-import flash.geom.Rectangle;
-import flash.geom.Transform;
-import flash.geom.ColorTransform;
-
-import flash.display.LineScaleMode;
-import flash.display.DisplayObject;
-import flash.display.DisplayObjectContainer;
-import flash.display.Sprite;
-import flash.display.MovieClip;
-
-import flash.text.TextField;
-
-import flash.events.Event;
-import flash.events.MouseEvent;
-import haxegui.events.ResizeEvent;
-import haxegui.events.DragEvent;
-
-import haxegui.CursorManager;
-import haxegui.StyleManager;
-
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-
 import feffects.Tween;
 import feffects.easing.Quint;
 import feffects.easing.Sine;
@@ -57,8 +32,26 @@ import feffects.easing.Linear;
 import feffects.easing.Quad;
 import feffects.easing.Quart;
 
-//~ class ScrollbarButtonUp extends flash.display.MovieClip { public function new() { super(); } }
+import flash.display.LineScaleMode;
+import flash.display.DisplayObject;
+import flash.display.DisplayObjectContainer;
+import flash.display.Sprite;
+import flash.display.MovieClip;
+import flash.events.Event;
+import flash.events.MouseEvent;
+import flash.filters.DropShadowFilter;
+import flash.filters.BitmapFilter;
+import flash.filters.BitmapFilterQuality;
+import flash.geom.Rectangle;
+import flash.geom.Transform;
+import flash.geom.ColorTransform;
+import flash.text.TextField;
 
+import haxegui.CursorManager;
+import haxegui.Opts;
+import haxegui.StyleManager;
+import haxegui.events.ResizeEvent;
+import haxegui.events.DragEvent;
 
 enum ScrollbarType {
 	VERTICAL;
@@ -110,7 +103,7 @@ class Scrollbar extends haxegui.controls.Component
 	{
 		scroll = 0;
 		//~ box = new Rectangle(0,0,20,90);
-		this.scrollee = Opts.classInstance(opts, "target", [TextField, DisplayObject]);
+		this.scrollee = Opts.classInstance(opts, "target", untyped [TextField, DisplayObject]);
 
 		//~ frame.mouseEnabled = false;
 		frame.buttonMode = false;

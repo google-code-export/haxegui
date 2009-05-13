@@ -19,71 +19,44 @@
 
 package haxegui.controls;
 
-import flash.geom.Rectangle;
 import flash.display.DisplayObjectContainer;
-
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
+import flash.filters.DropShadowFilter;
+import flash.filters.BitmapFilter;
+import flash.filters.BitmapFilterQuality;
+import flash.filters.BevelFilter;
+import flash.geom.Rectangle;
 
+import haxegui.CursorManager;
+import haxegui.Opts;
+import haxegui.StyleManager;
+import haxegui.FocusManager;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
 
-
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.filters.BevelFilter;
-
-
-import haxegui.CursorManager;
-import haxegui.StyleManager;
-import haxegui.FocusManager;
-
 class Slider extends Component, implements Dynamic
 {
+	public var handle : Component;
+	public var color : UInt;
+	//~ public var value : Float;
+	public var max : Float;
 
-  public var handle : Component;
-  public var color : UInt;
-  //~ public var value : Float;
-  public var max : Float;
 
-
-  public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
 		max = 100;
 	}
 
-
-  /**
-   *
-   *
-   *
-   *
-   */
-  public function init(?initObj:Dynamic)
+	override public function init(opts:Dynamic=null)
 	{
-		//super.init(initObj);
-
 		box = new Rectangle(0,0,140,20);
 		color = DefaultStyle.BACKGROUND;
-
-		if(Reflect.isObject(initObj))
-		{
-			for(f in Reflect.fields(initObj))
-				if(Reflect.hasField(this, f))
-				    if (f != "width" && f != "height")
-					Reflect.setField(this, f, Reflect.field(initObj, f));
-			//~ name = (initObj.name == null) ? name : initObj.name;
-			//~ move(initObj.x, initObj.y);
-			box.width = ( Math.isNaN(initObj.width) ) ? box.width : initObj.width;
-			box.height = ( Math.isNaN(initObj.height) ) ? box.height : initObj.height;
-			disabled = (initObj.disabled==null) ? disabled : initObj.disabled;
-		}
-
+		super.init(opts);
 
 		this.graphics.clear();
 		this.graphics.lineStyle(4, color - 0x323232);
@@ -108,13 +81,13 @@ class Slider extends Component, implements Dynamic
 		//~ handle.move(0,4);
 		handle.graphics.lineStyle(2, color - 0x141414);
 
-       		  var colors = [ color | 0x323232, color - 0x141414 ];
-		  var alphas = [ 100, 100 ];
-		  var ratios = [ 0, 0xFF ];
-		  //~ var matrix = { a:200, b:0, c:0, d:0, e:200, f:0, g:200, h:200, i:1 };
-		  var matrix = new flash.geom.Matrix();
-		  matrix.createGradientBox(15, 20, Math.PI/2, 0, 0);
-		  handle.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+			var colors = [ color | 0x323232, color - 0x141414 ];
+		var alphas = [ 100, 100 ];
+		var ratios = [ 0, 0xFF ];
+		//~ var matrix = { a:200, b:0, c:0, d:0, e:200, f:0, g:200, h:200, i:1 };
+		var matrix = new flash.geom.Matrix();
+		matrix.createGradientBox(15, 20, Math.PI/2, 0, 0);
+		handle.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
 
 		//~ handle.graphics.beginFill(color);
@@ -130,35 +103,35 @@ class Slider extends Component, implements Dynamic
 
 
 
-		addEventListener (MouseEvent.MOUSE_WHEEL, onMouseWheel);
+		addEventListener (MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 
-		handle.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown);
-		handle.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp);
-		handle.addEventListener (MouseEvent.ROLL_OVER, onRollOver);
-		handle.addEventListener (MouseEvent.ROLL_OUT,  onRollOut);
+		handle.addEventListener (MouseEvent.MOUSE_DOWN, onHandleMouseDown, false, 0, true);
+		handle.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
+		handle.addEventListener (MouseEvent.ROLL_OVER, onHandleRollOver, false, 0, true);
+		handle.addEventListener (MouseEvent.ROLL_OUT,  onHandleRollOut, false, 0, true);
 
-		handle.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+		handle.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 
 
-		this.addEventListener (Event.CHANGE, onChanged);
+		this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 
 	}
 
 
 	public function onChanged(?e:Event)
 	{
-	    //~ trace(e);
-	    if(handle.x < 0) handle.x = 0;
-	    if(handle.x > (box.width - handle.width) ) handle.x = box.width - handle.width;
+		//~ trace(e);
+		if(handle.x < 0) handle.x = 0;
+		if(handle.x > (box.width - handle.width) ) handle.x = box.width - handle.width;
 
 	}
 
 
 	public function onMouseWheel(e:MouseEvent)
 	{
-	    //trace(e);
-	    handle.x += e.delta * 5;
-	    dispatchEvent(new Event(Event.CHANGE));
+		//trace(e);
+		handle.x += e.delta * 5;
+		dispatchEvent(new Event(Event.CHANGE));
 	}
 
 
@@ -166,7 +139,7 @@ class Slider extends Component, implements Dynamic
 	*
 	*
 	*/
-	public function onRollOver(e:MouseEvent) : Void
+	public function onHandleRollOver(e:MouseEvent) : Void
 	{
 		if(disabled) return;
 		//~ redraw(DefaultStyle.BACKGROUND + 0x323232 );
@@ -184,81 +157,68 @@ class Slider extends Component, implements Dynamic
 	*
 	*
 	*/
-	public  function onRollOut(e:MouseEvent) : Void
+	public function onHandleRollOut(e:MouseEvent) : Void
 	{
 		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		redraw(color);
 //		CursorManager.setCursor(Cursor.ARROW);
 	}
 
+	override public function redraw(opts:Dynamic=null)
+	{
+		color = Opts.optInt(opts,"color",this.color);
+		handle.graphics.clear();
+		handle.graphics.lineStyle(2, color - 0x141414);
 
-
-    public function redraw(color:UInt)
-    {
-	if(color==0) color = this.color;
-		    handle.graphics.clear();
-    		handle.graphics.lineStyle(2, color - 0x141414);
-
-       		  var colors = [ color | 0x323232, color - 0x141414 ];
-		  var alphas = [ 100, 100 ];
-		  var ratios = [ 0, 0xFF ];
-		  //~ var matrix = { a:200, b:0, c:0, d:0, e:200, f:0, g:200, h:200, i:1 };
-		  var matrix = new flash.geom.Matrix();
-		  matrix.createGradientBox(15, 20, Math.PI/2, 0, 0);
-		  handle.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+		var colors = [ color | 0x323232, color - 0x141414 ];
+		var alphas = [ 100, 100 ];
+		var ratios = [ 0, 0xFF ];
+		//~ var matrix = { a:200, b:0, c:0, d:0, e:200, f:0, g:200, h:200, i:1 };
+		var matrix = new flash.geom.Matrix();
+		matrix.createGradientBox(15, 20, Math.PI/2, 0, 0);
+		handle.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
 
 		//~ handle.graphics.beginFill(color);
 		handle.graphics.drawRoundRect(0,0,8,20,4,4);
 		handle.graphics.endFill();
-    }
-
-
-  /**
-   *
-   */
-  function onMouseDown (e:MouseEvent) : Void
-  {
-
-    CursorManager.setCursor (Cursor.DRAG);
-
-    redraw(color | 0x666666);
-
-
-    //
-    FocusManager.getInstance().setFocus (this);
-
-	handle.startDrag(false,new Rectangle(0,e.target.y, box.width - handle.width ,0));
-	//~ e.target.startDrag(false,new Rectangle(0,e.target.y, box.width - handle.width ,0));
-	//~ e.target.stage.startDrag(false,new Rectangle(0,e.target.y, box.width - handle.width ,0));
-
-	e.target.stage.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
-
 	}
 
-  public function onMouseMove (e:MouseEvent)
+	function onHandleMouseDown (e:MouseEvent) : Void
 	{
 
-	dispatchEvent(new Event(Event.CHANGE));
-	//~ onChanged();
-	e.updateAfterEvent();
+		CursorManager.setCursor (Cursor.DRAG);
+
+		redraw(color | 0x666666);
+
+
+		//
+		FocusManager.getInstance().setFocus (this);
+
+		handle.startDrag(false,new Rectangle(0,e.target.y, box.width - handle.width ,0));
+		//~ e.target.startDrag(false,new Rectangle(0,e.target.y, box.width - handle.width ,0));
+		//~ e.target.stage.startDrag(false,new Rectangle(0,e.target.y, box.width - handle.width ,0));
+
+		e.target.stage.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+
 	}
 
-  function onMouseUp (e:MouseEvent) : Void
-  {
-	if(hitTestObject( CursorManager.getInstance()._mc ))
-	    CursorManager.setCursor (Cursor.HAND);
-	//~ else
-	    //~ CursorManager.setCursor (Cursor.ARROW);
+	public function onMouseMove (e:MouseEvent)
+	{
+		dispatchEvent(new Event(Event.CHANGE));
+		//~ onChanged();
+		e.updateAfterEvent();
+	}
 
-	handle.stopDrag();
-	//~ e.target.stopDrag();
-	//~ e.target.stage.stopDrag();
-	e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
+	override public function onMouseUp (e:MouseEvent) : Void
+	{
+		if(hitTestObject( CursorManager.getInstance()._mc ))
+			CursorManager.setCursor (Cursor.ARROW);
 
-	redraw(color);
+		handle.stopDrag();
+		e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
 
-  }
-
+		redraw(color);
+	}
 
 }

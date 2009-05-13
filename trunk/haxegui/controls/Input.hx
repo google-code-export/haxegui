@@ -47,26 +47,10 @@ class Input extends Component
 	    super(parent, name, x, y);
 	}
 
-	/**
-	 *
-	 *
-	 *
-	 */
-	public function init(?initObj:Dynamic) : Void
+	override public function init(?opts:Dynamic) : Void
 	{
 	    box = new Rectangle(0, 0, 140, 20);
-		if(Reflect.isObject(initObj))
-		{
-			//~ trace(Std.string(initObj));
-		for (f in Reflect.fields (initObj))
-		  if (Reflect.hasField (this, f))
-		    if (f != "width" && f != "height")
-		      Reflect.setField (this, f, Reflect.field (initObj, f));
-
-		    box.width = ( Math.isNaN(initObj.width) ) ? box.width : initObj.width;
-		    box.height = ( Math.isNaN(initObj.height) ) ? box.height : initObj.height;
-
-		}
+		super.init(opts);
 
 	    //~ buttonMode = false;
 	    mouseEnabled = true;
@@ -94,8 +78,6 @@ class Input extends Component
 	    addChild(tf);
 
 	}
-
-
 
 }
 

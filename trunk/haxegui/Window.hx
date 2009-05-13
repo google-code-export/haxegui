@@ -480,7 +480,7 @@ class Window extends Component, implements Dynamic
 		redrawFrame (fill, color);
 
 		// titlebar
-		titlebar.redraw (fill, box.width+10);
+		titlebar.redraw ({fillColor: fill, width:box.width+10});
 
 		// corners
 		if (isSizeable ())

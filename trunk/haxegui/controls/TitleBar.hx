@@ -25,6 +25,7 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 
 import haxegui.CursorManager;
+import haxegui.Opts;
 import haxegui.StyleManager;
 
 /**
@@ -94,10 +95,8 @@ class TitleBar extends Component, implements Dynamic
 
 	override public function redraw(opts:Dynamic=null):Void
 	{
+		var w = Opts.optFloat(opts, "width", title.width);
 		title.x = Math.floor((w - title.width)/2);
-		//~ title.width = Math.floor(w - 85);
-		//~ title.y = 1;
-
 
 		if(closeButton != null)
 			closeButton.redraw(opts);

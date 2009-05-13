@@ -115,9 +115,15 @@ class AbstractButton extends Component
 	* @param opts Dynamic object
 	*
 	*/
-	public override function init(?opts:Dynamic)
+	override public function init(?opts:Dynamic)
 	{
+		box.width = Opts.optFloat(opts, "width", box.width);
+		box.height = Opts.optFloat(opts, "height", 30.);
+		color = Opts.optInt(opts, "color", DefaultStyle.BACKGROUND);
+		disabled = Opts.optBool(opts, "disabled", false);
+
 		super.init(opts);
+
 		action_mouseOver =
 			"
 				if(this.disabled) return;
@@ -149,12 +155,6 @@ class AbstractButton extends Component
 				}
 			";
 
-		box.width = Opts.optFloat(opts, "width", label.width);
-		box.height = Opts.optFloat(opts, "height", 30.);
-		color = Opts.optInt(opts, "color", DefaultStyle.BACKGROUND);
-		disabled = Opts.optBool(opts, "disabled", false);
-
-
 		buttonMode = true;
 		tabEnabled = true;
 		mouseEnabled = true;
@@ -176,10 +176,7 @@ class AbstractButton extends Component
 		redraw();
 	}
 
-	/**
-	*
-	*/
-	public function redraw() : Void
+	override public function redraw(opts:Dynamic=null) : Void
 	{
 		//~ if(color == 0 || Math.isNaN(color))
 		//~ color = DefaultStyle.BACKGROUND;
@@ -191,11 +188,6 @@ class AbstractButton extends Component
 		{
 			//~ color = DefaultStyle.BACKGROUND - 0x141414;
 			this.graphics.lineStyle (2, color);
-
-			fmt = StyleManager.getTextFormat();
-			fmt.color = color - 0x202020;
-			fmt.align = flash.text.TextFormatAlign.CENTER;
-			label.tf.setTextFormat(fmt);
 
 			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 			//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x202020 ,1 ,0x000000, .15, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );

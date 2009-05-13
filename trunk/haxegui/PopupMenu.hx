@@ -100,15 +100,19 @@ class PopupMenu extends Component
 
 	override public function init(opts:Dynamic=null) : Void
 	{
-
 		close();
+
+		if(Reflect.hasField(opts,"parent"))
+			untyped opts.parent.addChild(this);
 
 		color = (cast parent).color;
 
+		super.init(opts);
+
+		var px = Opts.optFloat(opts,"x",0);
+		var py = Opts.optFloat(opts,"y",0);
 		this.mouseEnabled = false;
 		this.tabEnabled = false;
-
-
 
 		items = 1 + Math.round( Math.random()*19 );
 
@@ -129,7 +133,7 @@ class PopupMenu extends Component
 			//~ myPath.push ({x:2*i*Math.cos(i)});
 			//~ myPath.push ({x:0});
 			//~ item.alpha = 0;
-			var p = new flash.geom.Point(x,y);
+			var p = new flash.geom.Point(px,py);
 			p = localToGlobal( p );
 
 			//~ item.alpha = 0;
@@ -189,8 +193,8 @@ class PopupMenu extends Component
 		}
 
 		// position
-		this.x = x + 10;
-		this.y = y + 20;
+		this.x = px + 10;
+		this.y = py + 20;
 
 
 		// shutdown event

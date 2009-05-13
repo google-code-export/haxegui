@@ -19,72 +19,91 @@
 
 package haxegui.controls;
 
-import flash.geom.Rectangle;
-
 import flash.display.Sprite;
 import flash.display.MovieClip;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
-import flash.text.TextField;
-import flash.text.TextFormat;
-
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-
-import haxegui.events.MoveEvent;
-
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
+import flash.geom.Rectangle;
+import flash.text.TextField;
+import flash.text.TextFormat;
 
+import haxegui.Opts;
 import haxegui.CursorManager;
 import haxegui.StyleManager;
+import haxegui.events.MoveEvent;
+
+
+class DropButton extends AbstractButton {
+	override public function redraw(opts:Dynamic=null) : Void
+	{
+		this.graphics.clear();
+		//~ this.graphics.lineStyle (2, color - 0x191919 );
+		this.graphics.lineStyle (2, color - 0x333333 );
+
+		var colors = [ color | 0x323232, color - 0x141414 ];
+
+		if( disabled ) {
+			color = DefaultStyle.BACKGROUND - 0x141414;
+			//~ color = color - 0x141414;
+			this.graphics.lineStyle (2, color);
+		}
+
+
+		var alphas = [ 100, 100 ];
+		var ratios = [ 0, 0xFF ];
+		var matrix = new flash.geom.Matrix();
+		matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
+		this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+
+
+
+		//~ this.graphics.drawRoundRect (0, 0, box.width, box.height, 8, 8 );
+		this.graphics.drawRoundRectComplex (0, 0, this.box.width, this.box.height, 0, 4, 0, 4 );
+		this.graphics.endFill ();
+
+		this.graphics.lineStyle (1, color - 0x333333 );
+		//~ this.graphics.beginFill( DefaultStyle.BACKGROUND - 0x141414 );
+		this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
+		this.graphics.moveTo(5,5);
+		this.graphics.lineTo(15,5);
+		this.graphics.lineTo(10,15);
+
+		this.graphics.endFill ();
+
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
+		this.filters = [shadow];
+	}
+}
 
 /**
- *
- *
- *
- *
- */
+*
+*
+*/
 class ComboBox extends Button, implements Dynamic
 {
-  public var back : Sprite;
-  public var dropButton : Button;
-  public var tf : TextField;
+	public var back : Sprite;
+	public var dropButton : DropButton;
+	public var tf : TextField;
 
-  public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
 	}
 
-
-
-  /**
-   *
-   * Initiate a new ComboBox
-   * @param initObj
-   *
-   */
-  public override function init(?initObj:Dynamic)
+	override public function init(?opts:Dynamic)
 	{
-		//~ super.init(initObj);
 		color = DefaultStyle.BACKGROUND;
-				box = new Rectangle(0,0,140,20);
+		box = new Rectangle(0,0,140,20);
+		super.init(opts);
 
-	if(Reflect.isObject(initObj))
-		{
-			this.name = (initObj.name == null) ? name : initObj.name;
-			move(initObj.x, initObj.y);
-			//~ box.width = initObj.width;
-			//~ box.height = initObj.height;
-			for(f in Reflect.fields(initObj))
-				if(Reflect.hasField(this, f))
-					Reflect.setField(this, f, Reflect.field(initObj, f));
-
-		}
+		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
 
 		back = new Sprite();
 		back.name = "back";
@@ -113,23 +132,18 @@ class ComboBox extends Button, implements Dynamic
 		this.addChild(tf);
 
 
-		dropButton = new Button(this, "button");
+		dropButton = new DropButton(this, "button");
 		dropButton.init({x: box.width - 20, width: 20, height: 20});
 		//~ dropButton.label.text = ">";
 		//~ dropButton.label.setTextFormat(StyleManager.getTextFormat(flash.text.TextFormatAlign.CENTER));
 		dropButton.removeChild( dropButton.getChildByName("label") );
 		//~ dropButton.filters = null;
-		dropButton.redraw = redrawButton;
 
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 		dropButton.filters = [shadow];
 
-		//~ this.addEventListener (MouseEvent.ROLL_OUT, onRollOut);
-		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver);
-
-		this.addEventListener (Event.ACTIVATE, onEnabled);
-		this.addEventListener (Event.DEACTIVATE, onDisabled);
-
+		this.addEventListener (Event.ACTIVATE, onEnabled,false,0,true);
+		this.addEventListener (Event.DEACTIVATE, onDisabled,false,0,true);
 
 		redraw();
 	}
@@ -142,83 +156,25 @@ class ComboBox extends Button, implements Dynamic
 	{
 	}
 
-
-	/**
-	*
-	*/
-	//~ public function redrawButton(?color:UInt) : Void
-	public function redrawButton() : Void
-	{
-
-		//~ if(color == 0 ) color = this.color;
-
-		dropButton.graphics.clear();
-		//~ dropButton.graphics.lineStyle (2, color - 0x191919 );
-		dropButton.graphics.lineStyle (2, color - 0x333333 );
-
-		var colors = [ color | 0x323232, color - 0x141414 ];
-
-		if( disabled )
-			{
-			color = DefaultStyle.BACKGROUND - 0x141414;
-			//~ color = color - 0x141414;
-			this.graphics.lineStyle (2, color);
-
-			}
-
-
-		  var alphas = [ 100, 100 ];
-		  var ratios = [ 0, 0xFF ];
-		  var matrix = new flash.geom.Matrix();
-		  matrix.createGradientBox(dropButton.box.width, dropButton.box.height, Math.PI/2, 0, 0);
-		  dropButton.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-
-
-		//~ this.graphics.drawRoundRect (0, 0, box.width, box.height, 8, 8 );
-		dropButton.graphics.drawRoundRectComplex (0, 0, dropButton.box.width, dropButton.box.height, 0, 4, 0, 4 );
-		dropButton.graphics.endFill ();
-
-		dropButton.graphics.lineStyle (1, color - 0x333333 );
-		//~ dropButton.graphics.beginFill( DefaultStyle.BACKGROUND - 0x141414 );
-		dropButton.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
-		dropButton.graphics.moveTo(5,5);
-		dropButton.graphics.lineTo(15,5);
-		dropButton.graphics.lineTo(10,15);
-
-		dropButton.graphics.endFill ();
-
-			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
-			dropButton.filters = [shadow];
-	}
-
-	/**
-	 *
-	 */
-	//~ public override function redraw(?color:UInt) : Void {
-	public override function redraw() : Void {
+	override public function redraw(opts:Dynamic=null) : Void {
 
 		if(color==0 || Math.isNaN(color))
 			color = DefaultStyle.BACKGROUND;
 
 		tf.setTextFormat( StyleManager.getTextFormat( 8, DefaultStyle.LABEL_TEXT ));
 
-		if( disabled )
-			{
-
+		if( disabled ) {
 			dropButton.disabled = disabled;
 
 			//~ color = DefaultStyle.BACKGROUND - 0x141414;
 			color = DefaultStyle.BACKGROUND;
 
-
 			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 			//~ this.filters = [shadow];
 
-
 			//~ tf.backgroundColor = DefaultStyle.BACKGROUND + 0x141414;
 			tf.setTextFormat( StyleManager.getTextFormat( 8, DefaultStyle.BACKGROUND - 0x141414 ));
-			}
+		}
 
 		back.graphics.lineStyle (2, DefaultStyle.BACKGROUND - 0x202020);
 		//~ back.graphics.beginFill (color);
@@ -229,7 +185,5 @@ class ComboBox extends Button, implements Dynamic
 
 		dropButton.redraw();
 		//~ dropButton.filters = null;
-
-
 	}
 }

@@ -19,29 +19,26 @@
 
 package haxegui.controls;
 
-import flash.geom.Rectangle;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
-
-import flash.text.TextField;
-
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-
-import haxegui.events.MoveEvent;
-import haxegui.events.ResizeEvent;
-import haxegui.events.DragEvent;
-
-import haxe.Timer;
-
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
+import flash.geom.Rectangle;
+import flash.text.TextField;
+
+import haxe.Timer;
 
 import haxegui.CursorManager;
+import haxegui.Opts;
 import haxegui.StyleManager;
+import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
+import haxegui.events.DragEvent;
 
 class Stepper extends Component, implements Dynamic
 {
