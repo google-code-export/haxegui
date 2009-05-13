@@ -164,7 +164,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	override public function toString() : String
 	{
-		return Type.getClassName(Type.getClass(this));
+		return this.name + "[" + Type.getClassName(Type.getClass(this)) + "]";
 	}
 
 	/** onRollOver Event **/

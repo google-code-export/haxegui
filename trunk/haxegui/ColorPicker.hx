@@ -101,7 +101,6 @@ class ColorPicker extends Window
 		var menubar = new Menubar (this, "Menubar", 10,20);
 		menubar.init ();
 
-
 		//
 		var container = new Container (this, "Container", 10, 44);
 		container.init({color: 0xE6D3CC});

@@ -92,6 +92,10 @@ class Window extends Component, implements Dynamic
 		super (parent, name, x, y);
 	}
 
+	public function getInnerRectangle() : Rectangle {
+		return new Rectangle();
+	}
+
 	override public function init(opts : Dynamic=null)
 	{
 		box = new Rectangle (0, 0, 512, 512);
@@ -99,6 +103,7 @@ class Window extends Component, implements Dynamic
 		text = "Window";
 
 		super.init(opts);
+
 		type = WindowType.NORMAL;
 		sizeable = Opts.optBool(opts, "sizeable", true);
 
@@ -149,7 +154,6 @@ class Window extends Component, implements Dynamic
 	*/
 	public function draw ()
 	{
-
 		// frame
 		frame = new Sprite ();
 		frame.name = "frame";
@@ -168,7 +172,9 @@ class Window extends Component, implements Dynamic
 		// corners
 		if (isSizeable ())
 		{
-			br = new Sprite ();
+			if(br != null && br.parent == this)
+				removeChild(br);
+			br = new Sprite();
 			br.name = "br";
 			br.graphics.beginFill (DefaultStyle.BACKGROUND + 0x202020, 0.5);
 			br.graphics.drawRoundRectComplex (0, 0, 32, 32, 0, 0, 0, 4);
@@ -190,6 +196,8 @@ class Window extends Component, implements Dynamic
 			this.addChild (br);
 
 			//
+			if(bl != null && bl.parent == this)
+				removeChild(bl);
 			bl = new Sprite ();
 			bl.name = "bl";
 			bl.graphics.beginFill (0x1A1A1A, 0.5);
@@ -229,8 +237,6 @@ class Window extends Component, implements Dynamic
 		//~CursorManager.getInstance ().setCursor (Cursor.ARROW);
 	}
 
-
-
 	/**
 	*
 	*
@@ -241,7 +247,6 @@ class Window extends Component, implements Dynamic
 		//
 		CursorManager.setCursor (Cursor.HAND);
 	}
-
 
 	/**
 	*
@@ -293,7 +298,6 @@ class Window extends Component, implements Dynamic
 			e.updateAfterEvent ();
 		}				//buttonDown
 	}				// onMouseMove
-
 
 	/**
 	* Resize listener to position corners and redraw frame
@@ -350,12 +354,6 @@ class Window extends Component, implements Dynamic
 		}
 	}
 
-
-	/**
-	*
-	*
-	*
-	*/
 	override public function onMouseUp (e:MouseEvent):Void
 	{
 		//~ if(!Std.is(e.target, Sprite)) return;
@@ -375,22 +373,22 @@ class Window extends Component, implements Dynamic
 		e.updateAfterEvent ();
 	}
 
-
 	/**
 	* Redraw just frame
 	*
 	*/
 	public function redrawFrame (fill:UInt, color:UInt)
 	{
-		frame.graphics.clear ();
-		frame.graphics.beginFill (fill, 0.5);
-		frame.graphics.lineStyle (2, color);
-		frame.graphics.drawRoundRect (0, 0, box.width + 10, box.height + 10, 8, 8);
-		frame.graphics.drawRect (10, 20, box.width - 10, box.height - 20);
+		frame.graphics.clear();
+		frame.graphics.beginFill(fill, 0.5);
+		frame.graphics.lineStyle(2, color);
+		frame.graphics.drawRoundRect(0, 0, box.width + 10, box.height + 10, 8, 8);
+		frame.graphics.drawRect(10, 20, box.width - 10, box.height - 20);
+
 		//~ frame.graphics.endFill ();
 		//~ frame.graphics.beginFill (0x8C8C8C, 0.5);
 		//~ frame.graphics.drawRect (10, 20, box.width - 20, box.height - 30);
-		frame.graphics.endFill ();
+		frame.graphics.endFill();
 	}
 
 
@@ -400,7 +398,6 @@ class Window extends Component, implements Dynamic
 	*/
 	override public function redraw (e:Dynamic=null):Void
 	{
-
 		var color:UInt = this.color - 0x141414;
 		var fill:UInt = this.color;
 		var damaged:Bool = true;
@@ -449,8 +446,6 @@ class Window extends Component, implements Dynamic
 		if (Std.is (e, ResizeEvent))
 			e.updateAfterEvent ();
 	}				//redraw
-
-
 
 	public function onRaise(e:Event)
 	{
