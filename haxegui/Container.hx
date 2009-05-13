@@ -63,27 +63,12 @@ class Container extends Component, implements IContainer, implements Dynamic
 	}
 
 
-	public function init(?initObj : Dynamic)
+	override public function init(opts : Dynamic=null)
 	{
-
-		color = DefaultStyle.BACKGROUND;
-		//~ color = 0xff00ff;
-
-		if(Reflect.isObject(initObj))
-		{
-			for(f in Reflect.fields(initObj))
-				if(Reflect.hasField(this, f))
-					if(f!="width" && f!="height")
-						Reflect.setField(this, f, Reflect.field(initObj, f));
-
-
-			//~ name = ( initObj.name == null) ? "container" : name;
-			box.width = ( Math.isNaN(initObj.width) ) ? box.width : initObj.width;
-			box.height = ( Math.isNaN(initObj.height) ) ? box.height : initObj.height;
-			//~ move(initObj.x, initObj.y);
-			//~ color = (initObj.color==null) ? color : initObj.color;
-
-		}
+		super.init(opts);
+		color = Opts.optInt(opts,"color", DefaultStyle.BACKGROUND);
+		box.width = Opts.optFloat(opts,"width",box.width);
+		box.height = Opts.optFloat(opts,"height",box.height);
 
 		this.buttonMode = false;
 		this.mouseEnabled = false;
@@ -101,10 +86,7 @@ class Container extends Component, implements IContainer, implements Dynamic
 		//~ this.cacheAsBitmap = true;
 
 		//~ if(this.parent!=null)
-		parent.addEventListener(ResizeEvent.RESIZE, onResize);
-
-		//~ this.addEventListener(ResizeEvent.RESIZE, onResize);
-		//~ dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
 		redraw();
@@ -116,31 +98,29 @@ class Container extends Component, implements IContainer, implements Dynamic
 	*
 	*
 	*/
-	public function onResize(e:Dynamic) {
+	public function onParentResize(e:Dynamic) {
 
-	if(Std.is(e, ResizeEvent))
-		if(Std.is(parent, Component))
-		{
-			box = untyped parent.box.clone();
-				box.width -= x;
-				box.height -= y;
-		}
+		if(Std.is(e, ResizeEvent))
+			if(Std.is(parent, Component))
+			{
+				box = untyped parent.box.clone();
+					box.width -= x;
+					box.height -= y;
+			}
 
-	if(Std.is(parent.parent, ScrollPane))
-		box = untyped parent.parent.box.clone();
-		//~ box.union(untyped parent.parent.box.clone());
+		if(Std.is(parent.parent, ScrollPane))
+			box = untyped parent.parent.box.clone();
+			//~ box.union(untyped parent.parent.box.clone());
 
-		//~ if(!this.box.containsRect(this.getBounds(flash.Lib.current)))
-			//~ box.union(this.getBounds(flash.Lib.current));
-//~
-	//~ for(i in 0...numChildren-1)
-		//~ {
-			//~ box = box.union( getChildAt(i).getBounds(flash.Lib.current) );
-			//~ box.width -= x;
-			//~ box.height -= y;
-		//~ }
-
-
+			//~ if(!this.box.containsRect(this.getBounds(flash.Lib.current)))
+				//~ box.union(this.getBounds(flash.Lib.current));
+	//~
+		//~ for(i in 0...numChildren-1)
+			//~ {
+				//~ box = box.union( getChildAt(i).getBounds(flash.Lib.current) );
+				//~ box.width -= x;
+				//~ box.height -= y;
+			//~ }
 
 		redraw(null);
 
@@ -153,23 +133,12 @@ class Container extends Component, implements IContainer, implements Dynamic
 	}
 
 
-	/**
-	*
-	*
-	*/
-	public function redraw(?e:Dynamic)
+	override public function redraw(e:Dynamic=null)
 	{
 		this.graphics.clear();
 		//~ this.graphics.lineStyle (2, color - 0x141414, flash.display.LineScaleMode.NONE);
 		this.graphics.beginFill (color);
 		this.graphics.drawRect (0, 0, box.width, box.height );
 		this.graphics.endFill ();
-
-
 	}
-
-
-
-
-
 }

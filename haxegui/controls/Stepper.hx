@@ -45,26 +45,23 @@ import haxegui.StyleManager;
 
 class Stepper extends Component, implements Dynamic
 {
+	public var up : Button;
+	public var down : Button;
+	public var back : Sprite;
+	public var tf : TextField;
 
-  public var up : Button;
-  public var down : Button;
-  public var back : Sprite;
-  public var tf : TextField;
-
-  public var value : Float;
-  public var step : Float;
-  public var min : Float;
-  public var max : Float;
-
-
-  var color : UInt;
-
-  var timer : Timer;
-  var delta : Float;
+	public var value : Float;
+	public var step : Float;
+	public var min : Float;
+	public var max : Float;
 
 
+	var color : UInt;
 
-  public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	var timer : Timer;
+	var delta : Float;
+
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
 		tf = new TextField();
@@ -75,108 +72,88 @@ class Stepper extends Component, implements Dynamic
 	}
 
 
-  /**
-   *
-   *
-   *
-   *
-   */
-  public function init(?initObj:Dynamic)
-    {
-		//super.init(initObj);
+	override public function init(opts:Dynamic=null)
+	{
+		super.init(opts);
 
 		box = new Rectangle(0,0,40,20);
 		color = DefaultStyle.BACKGROUND;
 		//~ color = DefaultStyle.INPUT_BACK;
 
-		if(Reflect.isObject(initObj))
-		{
-			for(f in Reflect.fields(initObj))
-				if(Reflect.hasField(this, f))
-					if(f!="width" && f!="height")
-						Reflect.setField(this, f, Reflect.field(initObj, f));
+		box.width = Opts.optFloat(opts,"width",box.width);
+		box.height = Opts.optFloat(opts,"height",box.height);
 
-			box.width = ( Math.isNaN(initObj.width) ) ? box.width : initObj.width;
-			box.height = ( Math.isNaN(initObj.height) ) ? box.height : initObj.height;
+		back = new Sprite();
+		back.graphics.lineStyle(2, color - 0x141414);
+		//~ back.graphics.beginFill(color);
+		back.graphics.beginFill(DefaultStyle.INPUT_BACK);
+		//~ back.graphics.drawRoundRect(0,0,40,20,8,8);
+		back.graphics.drawRoundRectComplex (0, 0, box.width - 10, box.height, 4, 0, 4, 0 );
+		back.graphics.endFill();
+		this.addChild(back);
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
+		back.filters = [shadow];
 
+		tf.name = "tf";
+		tf.type = flash.text.TextFieldType.INPUT;
+		tf.selectable = true;
+		//~ tf.background = true;
+		//~ tf.border = true;
+		//~ tf.borderColor = color - 0x141414;
+		tf.width = box.width - 10;
+		tf.height = 20;
+		//~ tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
+		//~ tf.y = .5*(box.height - tf.height);
+		tf.x = 4;
+		tf.y = 4;
+		tf.text = Std.string(value);
 
-			//~ step = ( Math.isNaN(initObj.step) ) ? step : initObj.step;
-			//~ value = ( Math.isNaN(initObj.value) ) ? value : initObj.value;
-		}
+		tf.embedFonts = true;
+		//~ tf.setTextFormat(StyleManager.getTextFormat(12));
+		tf.setTextFormat(StyleManager.getTextFormat());
 
-	back = new Sprite();
-	back.graphics.lineStyle(2, color - 0x141414);
-	//~ back.graphics.beginFill(color);
-	back.graphics.beginFill(DefaultStyle.INPUT_BACK);
-	//~ back.graphics.drawRoundRect(0,0,40,20,8,8);
-	back.graphics.drawRoundRectComplex (0, 0, box.width - 10, box.height, 4, 0, 4, 0 );
-	back.graphics.endFill();
-	this.addChild(back);
-	var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
-	back.filters = [shadow];
-
-	tf.name = "tf";
-	tf.type = flash.text.TextFieldType.INPUT;
-	tf.selectable = true;
-	//~ tf.background = true;
-	//~ tf.border = true;
-	//~ tf.borderColor = color - 0x141414;
-	tf.width = box.width - 10;
-	tf.height = 20;
-	//~ tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
-	//~ tf.y = .5*(box.height - tf.height);
-	tf.x = 4;
-	tf.y = 4;
-	tf.text = Std.string(value);
-
-	tf.embedFonts = true;
-	//~ tf.setTextFormat(StyleManager.getTextFormat(12));
-	tf.setTextFormat(StyleManager.getTextFormat());
-
-	this.addChild(tf);
+		this.addChild(tf);
 
 
 
 
-	up = new Button(this, "up");
-	up.init({width: 10, height: 10, color: this.color});
-	up.removeChild(up.label);
-	up.move( box.width - 10, -1 );
+		up = new Button(this, "up");
+		up.init({width: 10, height: 10, color: this.color});
+		up.removeChild(up.label);
+		up.move( box.width - 10, -1 );
 
-	down = new Button(this, "down");
-	down.init({width: 10, height: 10, color: this.color});
-	down.removeChild(down.label);
-	down.move( box.width - 10, 9 );
+		down = new Button(this, "down");
+		down.init({width: 10, height: 10, color: this.color});
+		down.removeChild(down.label);
+		down.move( box.width - 10, 9 );
 
-	// add the drop-shadow filter
-	shadow = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
+		// add the drop-shadow filter
+		shadow = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
 
-	up.filters = [shadow];
-	down.filters = [shadow];
-
-
-
-		up.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown);
-		up.addEventListener (MouseEvent.MOUSE_UP, onMouseUp);
-		up.addEventListener (MouseEvent.ROLL_OVER, onRollOver);
-		up.addEventListener (MouseEvent.ROLL_OUT,  onRollOut);
-
-		down.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown);
-		down.addEventListener (MouseEvent.MOUSE_UP, onMouseUp);
-		down.addEventListener (MouseEvent.ROLL_OVER, onRollOver);
-		down.addEventListener (MouseEvent.ROLL_OUT,  onRollOut);
+		up.filters = [shadow];
+		down.filters = [shadow];
 
 
-	this.addEventListener (Event.CHANGE, onChanged);
+
+		up.addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown, false, 0, true);
+		up.addEventListener (MouseEvent.MOUSE_UP, onBtnMouseUp, false, 0, true);
+		up.addEventListener (MouseEvent.ROLL_OVER, onBtnRollOver, false, 0, true);
+		up.addEventListener (MouseEvent.ROLL_OUT,  onBtnRollOut, false, 0, true);
+
+		down.addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown, false, 0, true);
+		down.addEventListener (MouseEvent.MOUSE_UP, onBtnMouseUp, false, 0, true);
+		down.addEventListener (MouseEvent.ROLL_OVER, onBtnRollOver, false, 0, true);
+		down.addEventListener (MouseEvent.ROLL_OUT,  onBtnRollOut, false, 0, true);
 
 
-    }
+		this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
+	}
 
 	/**
 	*
 	*
 	*/
-	public function onRollOver(e:MouseEvent) : Void
+	public function onBtnRollOver(e:MouseEvent) : Void
 	{
 		if(disabled) return;
 		//~ redraw(DefaultStyle.BACKGROUND + 0x323232 );
@@ -192,7 +169,7 @@ class Stepper extends Component, implements Dynamic
 	*
 	*
 	*/
-	public  function onRollOut(e:MouseEvent) : Void
+	public  function onBtnRollOut(e:MouseEvent) : Void
 	{
 		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		e.target.redraw();
@@ -200,88 +177,87 @@ class Stepper extends Component, implements Dynamic
 	}
 
 
-  /**
-   *
-   */
-  function onMouseDown (e:MouseEvent) : Void
-  {
-    if (!Std.is (e.target, flash.display.DisplayObject))
-      return;
-
-    //~ FocusManager.getInstance().setFocus (this);
-	switch(e.target)
+	/**
+	*
+	*/
+	function onBtnMouseDown (e:MouseEvent) : Void
 	{
-	    case up:
-	    value += step;
-	    if(value>max)
-		value = max;
+		if (!Std.is (e.target, flash.display.DisplayObject))
+		return;
 
-	    case down:
-	    value -= step;
-	    if(value<min)
-		value = min;
+		//~ FocusManager.getInstance().setFocus (this);
+		switch(e.target)
+		{
+			case up:
+			value += step;
+			if(value>max)
+			value = max;
+
+			case down:
+			value -= step;
+			if(value<min)
+			value = min;
+		}
+
+		dispatchEvent(new Event(Event.CHANGE));
+
+		//~ e.target.redraw(color - 0x202020);
+		e.target.redraw(e.target.color | 0x666666);
+
+		e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
+
 	}
 
-    dispatchEvent(new Event(Event.CHANGE));
 
-    //~ e.target.redraw(color - 0x202020);
-    e.target.redraw(e.target.color | 0x666666);
-
-    e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-
-
-    }
-
-
-  function onEnterFrame(e:Event) : Void
-  {
-	//~ trace(Timer.stamp() - delta);
-        //~ delta = haxe.Timer.stamp();
-
-	switch(e.target)
+	function onEnterFrame(e:Event) : Void
 	{
-	    case up:
-	    value += step;
-	    if(value>max)
-		value = max;
+		//~ trace(Timer.stamp() - delta);
+			//~ delta = haxe.Timer.stamp();
 
-	    case down:
-	    value -= step;
-	    if(value<min)
-		value = min;
+		switch(e.target)
+		{
+			case up:
+			value += step;
+			if(value>max)
+			value = max;
+
+			case down:
+			value -= step;
+			if(value<min)
+			value = min;
+		}
+		dispatchEvent(new Event(Event.CHANGE));
+		//~ onChanged();
+
 	}
-	dispatchEvent(new Event(Event.CHANGE));
-	//~ onChanged();
-
-  }
 
 
 
-  function onMouseUp (e:MouseEvent) : Void
-  {
+	function onBtnMouseUp (e:MouseEvent) : Void
+	{
 
 
-	e.target.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+		e.target.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 
-	e.target.redraw(color);
+		e.target.redraw(color);
 
-	//~ e.target.stopDrag();
-	//~ e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
-	//~ dispatchEvent(new Event(Event.CHANGE));
+		//~ e.target.stopDrag();
+		//~ e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
+		//~ dispatchEvent(new Event(Event.CHANGE));
 
-	//~ dispatchEvent(new Event(Event.CHANGE));
+		//~ dispatchEvent(new Event(Event.CHANGE));
 
-  }
+	}
 
 
-  public function onChanged(?e:Dynamic)
-  {
+	public function onChanged(?e:Dynamic)
+	{
 
-//~
-  //~ trace(e);
-    this.tf.text = Std.string(value);
-    //~ this.tf.setTextFormat(StyleManager.getTextFormat(12));
-    this.tf.setTextFormat(StyleManager.getTextFormat());
-  }
+	//~
+	//~ trace(e);
+		this.tf.text = Std.string(value);
+		//~ this.tf.setTextFormat(StyleManager.getTextFormat(12));
+		this.tf.setTextFormat(StyleManager.getTextFormat());
+	}
 
 }

@@ -63,29 +63,14 @@ class ScrollPane extends Component, implements Dynamic {
 	}
 
 
-	//~ public function init(?name, ?x:Float, ?y:Float) {
-	public function init(?initObj:Dynamic)
+	override public function init(?opts:Dynamic)
 	{
-
-
-
 		color = (cast parent).color;
 		//~ box = untyped parent.box.clone();
 
-		if(Reflect.isObject(initObj))
-		{
-			for(f in Reflect.fields(initObj))
-				if(Reflect.hasField(this, f))
-					if(f!="width" && f!="height")
-						Reflect.setField(this, f, Reflect.field(initObj, f));
-
-			box.width = ( Math.isNaN(initObj.width) ) ? box.width : initObj.width;
-			box.height = ( Math.isNaN(initObj.height) ) ? box.height : initObj.height;
-			//~ name = ( initObj.name == null) ? "container" : name;
-			//~ move(initObj.x, initObj.y);
-			//~ color = (initObj.color==null) ? color : initObj.color;
-			//~ trace(Std.string(initObj));
-		}
+		color = Opts.optInt(opts, "color", (cast parent).color);
+		box.width = Opts.optFloat(opts,"width",box.width);
+		box.height = Opts.optFloat(opts,"height",box.height);
 
 		content = new Sprite();
 		content.name = "content";
@@ -113,16 +98,16 @@ class ScrollPane extends Component, implements Dynamic {
 		cacheAsBitmap = true;
 		content.cacheAsBitmap = true;
 
-		parent.addEventListener(ResizeEvent.RESIZE, onResize);
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
-    	}
+    }
 
 	/**
 	 *
 	 *
 	 */
-	public function onResize(e:ResizeEvent)
+	public function onParentResize(e:ResizeEvent)
 	{
 		box = untyped parent.box.clone();
 

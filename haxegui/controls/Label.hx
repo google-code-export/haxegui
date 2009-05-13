@@ -1,18 +1,15 @@
-// 
-// The MIT License
-// 
-// Copyright (c) 2004 - 2006 Paul D Turner & The CEGUI Development Team
-// 
+// Copyright (c) 2009 The haxegui developers
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
 // the Software without restriction, including without limitation the rights to
 // use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 // the Software, and to permit persons to whom the Software is furnished to do so,
 // subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -37,24 +34,19 @@ import haxegui.StyleManager;
 
 class Label extends Component
 {
-	
+
 	public var tf : TextField;
 
-	
+
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		if(name==null) name="label";
 		super(parent, name, x, y);
 	}
-	
-	/**
-	 * 
-	 * 
-	 * 
-	 */
-	public function init(?initObj : Dynamic)
+
+	override public function init(opts : Dynamic=null)
 	{
-			
+		super.init(opts);
 		tf = new TextField();
 		tf.name = "tf";
 		tf.text = ( text==null ) ? name : text;
@@ -67,7 +59,7 @@ class Label extends Component
 		tf.selectable = false;
 
 		//~ tf.border = true;
-		
+
 		tf.mouseEnabled = false;
 		tf.tabEnabled = false;
 		tf.focusRect = false;
@@ -75,31 +67,21 @@ class Label extends Component
 		this.mouseEnabled = false;
 		this.tabEnabled = false;
 		this.focusRect = false;
-		
-		if(Reflect.isObject(initObj))
-		{
-			name = (initObj.name == null) ? name : initObj.name;
-			move(initObj.x, initObj.y);
-			//~ box.width = initObj.width;
-			//~ box.height = initObj.height;
-			for(f in Reflect.fields(initObj))
-				if(Reflect.hasField(this, f))
-					Reflect.setField(this, f, Reflect.field(initObj, f));
-					
-			tf.text = (initObj.innerData == null) ? text : initObj.innerData;
-		}
+
+		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
+		tf.text = optString(opts, "innerData", text);
 
 		tf.setTextFormat(StyleManager.getTextFormat());
 		this.addChild(tf);
 
 	}
-	
-	
+
+
 	public function setText(s:String)
 	{
 		tf.text = s;
 		tf.setTextFormat(StyleManager.getTextFormat());
 	}
-	
-	
+
+
 }
