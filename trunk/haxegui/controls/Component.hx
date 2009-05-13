@@ -218,40 +218,65 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	{
 	}
 
+	/** The script that redraws the Component **/
 	public var action_redraw(__getAction_redraw,__setAction_redraw) : String;
-	 function __getAction_redraw() { return action_redraw; }
-	 function __setAction_redraw(v:String) : String {
-		return action_redraw = StyleManager.setInstanceScript(this, "redraw", v);
-	}
+		function __getAction_redraw() {
+			return try StyleManager.getInstanceActionObject(this, "redraw").code
+			catch(e:Dynamic) null;
+		}
+		function __setAction_redraw(v:String) : String {
+			return StyleManager.setInstanceScript(this, "redraw", v);
+		}
+
+	/** The script that is executed when the mouse over event occurs. **/
 	public var action_mouseOver(__getAction_mouseOver,__setAction_mouseOver) : String;
-	 function __getAction_mouseOver() { return action_mouseOver; }
-	 function __setAction_mouseOver(v:String) : String {
-		return action_mouseOver = StyleManager.setInstanceScript(this, "mouseOver", v);
-	}
+		function __getAction_mouseOver() {
+			return try StyleManager.getInstanceActionObject(this, "mouseOver").code
+			catch(e:Dynamic) null;
+		}
+		function __setAction_mouseOver(v:String) : String {
+			return StyleManager.setInstanceScript(this, "mouseOver", v);
+		}
 
+	/** The script that is executed when the mouse out event occurs. **/
 	public var action_mouseOut(__getAction_mouseOut,__setAction_mouseOut) : String;
-	 function __getAction_mouseOut() { return action_mouseOut; }
-	 function __setAction_mouseOut(v:String) : String {
-		return action_mouseOut = StyleManager.setInstanceScript(this, "mouseOut", v);
-	}
+		function __getAction_mouseOut() {
+			return try StyleManager.getInstanceActionObject(this, "mouseOut").code
+			catch(e:Dynamic) null;
+		}
+		function __setAction_mouseOut(v:String) : String {
+			return StyleManager.setInstanceScript(this, "mouseOut", v);
+		}
 
+	/** The script that is executed when the mouse down event occurs. **/
 	public var action_mouseDown(__getAction_mouseDown,__setAction_mouseDown) : String;
-	 function __getAction_mouseDown() { return action_mouseDown; }
-	 function __setAction_mouseDown(v:String) : String {
-		return action_mouseDown = StyleManager.setInstanceScript(this, "mouseDown", v);
-	}
+		function __getAction_mouseDown() {
+			return try StyleManager.getInstanceActionObject(this, "mouseDown").code
+			catch(e:Dynamic) null;
+		}
+		function __setAction_mouseDown(v:String) : String {
+			return StyleManager.setInstanceScript(this, "mouseDown", v);
+		}
 
+	/** The script that is executed when the mouse up event occurs. **/
 	public var action_mouseUp(__getAction_mouseUp,__setAction_mouseUp) : String;
-	 function __getAction_mouseUp() { return action_mouseUp; }
-	 function __setAction_mouseUp(v:String) : String {
-		return action_mouseUp = StyleManager.setInstanceScript(this, "mouseUp", v);
-	}
+		function __getAction_mouseUp() {
+			return try StyleManager.getInstanceActionObject(this, "mouseUp").code
+			catch(e:Dynamic) null;
+		}
+		function __setAction_mouseUp(v:String) : String {
+			return StyleManager.setInstanceScript(this, "mouseUp", v);
+		}
 
+	/** The script that is executed when the Component is validated **/
 	public var action_validate(__getAction_validate,__setAction_validate) : String;
-	 function __getAction_validate() { return action_validate; }
-	 function __setAction_validate(v:String) : String {
-		return action_validate = StyleManager.setInstanceScript(this, "validate", v);
-	}
+		function __getAction_validate() {
+			return try StyleManager.getInstanceActionObject(this, "validate").code
+			catch(e:Dynamic) null;
+		}
+		function __setAction_validate(v:String) : String {
+			return StyleManager.setInstanceScript(this, "validate", v);
+		}
 
 	private function updateColorTween(t : Tween) {
 		var me = this;
