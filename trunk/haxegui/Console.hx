@@ -46,7 +46,6 @@ import flash.ui.Keyboard;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
-import haxegui.events.MenuEvent;
 
 import flash.ui.Mouse;
 
@@ -84,7 +83,7 @@ class Console extends Window, implements ITraceListener
 		output = new TextField();
 		input = new TextField();
 		vert = new Scrollbar(this, "vscrollbar");
-		container = new Container(this, "Container", 10, 24);
+		container = new Container(this, "Container", 10, 20);
 		parser = new hscript.Parser();
 		history = new Array<String>();
 
@@ -125,7 +124,6 @@ class Console extends Window, implements ITraceListener
 		input.border = true;
 		input.width = box.width - 40;
 		input.height = 20;
-		input.y = box.height - 70;
 		input.addEventListener (KeyboardEvent.KEY_DOWN, onInputKeyDown);
 
 		//~ container.box.width -= 20;
@@ -192,15 +190,15 @@ class Console extends Window, implements ITraceListener
 		//~ e.stopPropagation ();
 
 		output.width = box.width - 32;
-		output.height = box.height - 64;
+		output.height = box.height - 40;
 
 		input.width = box.width - 32;
-		input.y = box.height - 64;
+		input.y = box.height - 40;
 
 
-		//~ vert.x = box.width - 20;
+		vert.x = box.width - 20;
 		//~ vert.y = 44;
-		//~ vert.box.height = box.height - 44;
+		vert.box.height = box.height - 40;
 		//~ vert.box.width = box.width - 40;
 		vert.onResize(null);
 
