@@ -23,7 +23,8 @@ import flash.display.DisplayObjectContainer;
 import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFormat;
-
+import flash.filters.DropShadowFilter;
+import flash.filters.BitmapFilterQuality;
 import haxegui.CursorManager;
 import haxegui.Opts;
 import haxegui.StyleManager;
@@ -41,16 +42,9 @@ class CloseButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
+		this.addEventListener(MouseEvent.CLICK, onMouseClick, false, 0, true);
 	}
 
-	override public function redraw (opts:Dynamic = null):Void
-	{
-		StyleManager.exec(this,"redraw",
-			{
-				color: Opts.optInt(opts, "color", color),
-			});
-	}
 
 	public function onMouseClick(e:MouseEvent) : Void
 	{
@@ -66,15 +60,17 @@ class CloseButton extends AbstractButton
 			"
 				this.graphics.clear();
 				var grad = flash.display.GradientType.LINEAR;
-				var colors = [ color | 0x323232, color - 0x141414 ];
-				var alphas = [ 100, 0 ];
+				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
+				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
-				this.graphics.lineStyle (2, color - 0x141414);
+				this.graphics.lineStyle(2);
+				this.graphics.lineGradientStyle (grad, [ this.color, this.color - 0x202020 ], alphas, ratios, matrix);
 				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
 				this.graphics.endFill ();
+				this.graphics.lineStyle (2, Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)) );
 				this.graphics.moveTo(4,4);
 				this.graphics.lineTo(8,8);
 				this.graphics.moveTo(8,4);
@@ -109,26 +105,20 @@ class MinimizeButton extends AbstractButton
 			"
 				this.graphics.clear();
 				var grad = flash.display.GradientType.LINEAR;
-				var colors = [ color | 0x323232, color - 0x141414 ];
-				var alphas = [ 100, 0 ];
+				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
+				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
-				this.graphics.lineStyle (2, color - 0x141414);
+				this.graphics.lineStyle(2);
+				this.graphics.lineGradientStyle (grad, [ this.color, this.color - 0x202020 ], alphas, ratios, matrix);
 				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
 				this.graphics.endFill ();
-				this.graphics.moveTo(2,6);
-				this.graphics.lineTo(10,6);
+				this.graphics.lineStyle (2, Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)) );
+				this.graphics.moveTo(4,6);
+				this.graphics.lineTo(8,6);
 			";
-	}
-
-	override public function redraw (opts:Dynamic = null):Void
-	{
-		StyleManager.exec(this,"redraw",
-			{
-				color: Opts.optInt(opts, "color", color),
-			});
 	}
 
 
@@ -184,14 +174,17 @@ class TitleBar extends Component, implements Dynamic
 		//
 		//~ closeButton = new Component(this, "closeButton");
 		closeButton = new CloseButton(this, "closeButton");
-		closeButton.init({color: this.color});
+		closeButton.init({color: this.color });
 		closeButton.moveTo(4,4);
+		var shadow:DropShadowFilter = new DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
+		closeButton.filters = [shadow];
 
 		//
 		//~ minimizeButton = new MinimizeButton(this, "minimizeButton");
 		minimizeButton = new MinimizeButton(this, "minimizeButton");
-		minimizeButton.init({x:20, y:4});
+		minimizeButton.init({x:20, y:4, color: this.color });
 		minimizeButton.moveTo(20,4);
+		minimizeButton.filters = [shadow];
 
 		//mc.x = box.width - 32;
 		title = new TextField ();
@@ -224,7 +217,7 @@ class TitleBar extends Component, implements Dynamic
 	{
 		var w = Opts.optFloat(opts, "width", title.width);
 		title.x = Math.floor((w - title.width)/2);
-
+		
 		if(closeButton != null)
 			closeButton.redraw(opts);
 		if(minimizeButton != null)
@@ -235,7 +228,7 @@ class TitleBar extends Component, implements Dynamic
 		StyleManager.exec(this,"redraw",
 			{
 				width : w,
-				color: Opts.optInt(opts, "color", untyped parent.color),
+				color: Opts.optInt(opts, "color", color),
 			});
 
 	}
