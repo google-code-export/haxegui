@@ -59,18 +59,12 @@ class TitleBar extends Component, implements Dynamic
 				var alphas = [ 100, 0 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(w, 32, Math.PI/2, 0, 0);
+				matrix.createGradientBox(width, 32, Math.PI/2, 0, 0);
 				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
-				this.graphics.drawRoundRectComplex (0, 0, w, 32, 4, 4, 0, 0);
-				this.graphics.drawRect (10, 20, w - 20, 12);
+				this.graphics.drawRoundRectComplex (0, 0, width, 32, 4, 4, 0, 0);
+				this.graphics.drawRect (10, 20, width - 20, 12);
 				this.graphics.endFill ();
 			";
-
-		//
-		this.graphics.beginFill (0x1A1A1A, 0.5);
-		this.graphics.drawRoundRectComplex (0, 0, Opts.optFloat(opts,"w",100.), 32, 4, 4, 0, 0);
-		this.graphics.drawRect (10, 20, Opts.optFloat(opts,"w",100) - 20, 12);
-		this.graphics.endFill ();
 
 		//
 		//~ closeButton = new Component(this, "closeButton");
@@ -124,7 +118,7 @@ class TitleBar extends Component, implements Dynamic
 
 		StyleManager.exec(TitleBar,"redraw", this,
 			{
-				w : Opts.optInt(opts,"width",20),
+				width : w,
 				color: Opts.optInt(opts, "color", 0),
 			});
 
