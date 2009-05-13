@@ -41,7 +41,6 @@ import haxegui.events.DragEvent;
 class Slider extends Component, implements Dynamic
 {
 	public var handle : Component;
-	public var color : UInt;
 	//~ public var value : Float;
 	public var max : Float;
 
@@ -56,6 +55,7 @@ class Slider extends Component, implements Dynamic
 	{
 		box = new Rectangle(0,0,140,20);
 		color = DefaultStyle.BACKGROUND;
+
 		super.init(opts);
 
 		this.graphics.clear();

@@ -121,12 +121,12 @@ class App extends Sprite, implements haxe.rtti.Infos
 		desktop.name = "desktop";
 		desktop.mouseEnabled = false;
 
-		  var colors = [ DefaultStyle.BACKGROUND, DefaultStyle.BACKGROUND - 0x4D4D4D ];
-		  var alphas = [ 100, 100 ];
-		  var ratios = [ 0, 0xFF ];
-		  var matrix = new flash.geom.Matrix();
-		  matrix.createGradientBox(stage.stageWidth, stage.stageHeight, Math.PI/2, 0, 0);
-		  desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+		var colors = [ DefaultStyle.BACKGROUND, DefaultStyle.BACKGROUND - 0x4D4D4D ];
+		var alphas = [ 100, 100 ];
+		var ratios = [ 0, 0xFF ];
+		var matrix = new flash.geom.Matrix();
+		matrix.createGradientBox(stage.stageWidth, stage.stageHeight, Math.PI/2, 0, 0);
+		desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 //~
 		desktop.graphics.drawRect( 0, 0, flash.Lib.current.stage.stageWidth, flash.Lib.current.stage.stageHeight );
 		desktop.graphics.endFill();
@@ -142,7 +142,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 		// Console to show some debug
 		var console = new Console (flash.Lib.current, 0, 0);
-		console.init();
+		console.init({bgcolor:0x000000, bgalpha:0.95});
 		haxe.Log.clear();
 		setRedirection(console.log);
 

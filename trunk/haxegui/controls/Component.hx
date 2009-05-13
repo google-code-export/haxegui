@@ -44,6 +44,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Rectangular dimensions **/
 	public var box : Rectangle;
 
+	/** The color of this component, which has different meanings per component **/
+	public var color:Int;
+
 	/** Disabled \ Enabled **/
 	public var disabled(default, default) : Bool;
 
@@ -68,6 +71,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	public function new (parent:DisplayObjectContainer=null, name:String=null, ?x:Float, ?y:Float)
 	{
 		super ();
+		color = 0xF00FFF;
 
 		tabEnabled = mouseEnabled = buttonMode = true;
 
@@ -101,12 +105,15 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	public function init(opts:Dynamic=null) {
 		if(opts == null) opts = {};
-		name = Opts.optString(opts, "name", this.name);
-		disabled = Opts.optBool(opts, "disabled", false);
-		box.width = Opts.optFloat(opts, "width", box.width);
-		box.height = Opts.optFloat(opts, "height", box.height);
-
-		dirty = true;
+		this.name = Opts.optString(opts, "name", this.name);
+		this.disabled = Opts.optBool(opts, "disabled", false);
+		this.box.width = Opts.optFloat(opts, "width", this.box.width);
+		this.box.height = Opts.optFloat(opts, "height", this.box.height);
+		this.x = Opts.optFloat(opts, "x", this.x);
+		this.y = Opts.optFloat(opts, "y", this.y);
+		this.color = Opts.optInt(opts, "color", this.color);
+		this.alpha = Opts.optFloat(opts, "alpha", this.alpha);
+		this.dirty = true;
 	}
 
 	public function redraw(?opts:Dynamic) {
@@ -155,25 +162,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		return true;
 	}
 
-
-	private function updateColorTween(t : Tween) {
-		var me = this;
-		var colorTrans: ColorTransform  = new ColorTransform();
-
-		if(colorTween != null)
-			colorTween.stop();
-		colorTween = t;
-		colorTween.setTweenHandlers(
-				function(v) {
-					colorTrans.redOffset = v;
-					colorTrans.greenOffset = v;
-					colorTrans.blueOffset = v;
-					me.transform.colorTransform = colorTrans;
-				},
-				null);
-		colorTween.start();
+	override public function toString() : String
+	{
+		return Type.getClassName(Type.getClass(this));
 	}
-
 
 	/** onRollOver Event **/
 	public function onRollOver(e:MouseEvent)
@@ -236,4 +228,21 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		return action_mouseUp = StyleManager.setScript(Type.getClass(this), "mouseUp", v);
 	}
 
+	private function updateColorTween(t : Tween) {
+		var me = this;
+		var colorTrans: ColorTransform  = new ColorTransform();
+
+		if(colorTween != null)
+			colorTween.stop();
+		colorTween = t;
+		colorTween.setTweenHandlers(
+				function(v) {
+					colorTrans.redOffset = v;
+					colorTrans.greenOffset = v;
+					colorTrans.blueOffset = v;
+					me.transform.colorTransform = colorTrans;
+				},
+				null);
+		colorTween.start();
+	}
 }

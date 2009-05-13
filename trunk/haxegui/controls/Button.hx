@@ -83,7 +83,7 @@ class Button extends Component, implements Dynamic
 	*/
 	public var label :Label;
 	public var fmt : TextFormat;
-	public var color(default, default) : UInt;
+
 	/** The cursor to use when the mouse is over this button **/
 	public var cursorOver : Cursor;
 	/** The cursor to use when this button is pressed **/
@@ -106,7 +106,7 @@ class Button extends Component, implements Dynamic
 
 	override public function init(opts:Dynamic=null)
 	{
-		color = Opts.optInt(opts,"color", DefaultStyle.BACKGROUND);
+		color = DefaultStyle.BACKGROUND;
 		if(box.isEmpty())
 			box = new Rectangle(0,0,90,30);
 

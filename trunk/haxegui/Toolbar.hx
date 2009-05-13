@@ -62,7 +62,6 @@ import haxegui.StyleManager;
 class Toolbar extends Component, implements Dynamic
 {
 
-	public var color : UInt;
 	public var handle : Sprite;
 
 	public function new (? parent : DisplayObjectContainer, ? name : String,
@@ -73,9 +72,9 @@ class Toolbar extends Component, implements Dynamic
 
 	override public function init (? opts : Dynamic)
 	{
-
-		box = new Rectangle(0,0,502,40);
 		color = DefaultStyle.BACKGROUND;
+		box = new Rectangle(0,0,502,40);
+
 		super.init(opts);
 
 		handle = new Sprite();

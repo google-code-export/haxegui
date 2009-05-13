@@ -17,13 +17,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
-//TODO: frame rendering to hscript
-//TODO: corners to components
-
-
 package haxegui;
-
 
 import flash.geom.Rectangle;
 import flash.display.DisplayObject;
@@ -33,33 +27,27 @@ import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.display.LineScaleMode;
-
-import flash.text.TextField;
-import flash.text.TextFormat;
-
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
-import haxegui.events.MoveEvent;
-import haxegui.events.ResizeEvent;
-import haxegui.events.DragEvent;
-
-import flash.ui.Mouse;
-import flash.ui.Keyboard;
-
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 import flash.filters.BevelFilter;
+import flash.text.TextField;
+import flash.text.TextFormat;
+import flash.ui.Mouse;
+import flash.ui.Keyboard;
 
-import haxegui.WindowManager;
-import haxegui.MouseManager;
 import haxegui.CursorManager;
+import haxegui.MouseManager;
 import haxegui.StyleManager;
-
+import haxegui.WindowManager;
 import haxegui.controls.Component;
 import haxegui.controls.TitleBar;
+import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
+import haxegui.events.DragEvent;
 
 enum WindowType
 {
@@ -76,7 +64,10 @@ enum WindowType
 *
 *
 * @author <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
+* @todo frame rendering to hscript
+* @todo corners to components
 */
 class Window extends Component, implements Dynamic
 {
@@ -86,8 +77,6 @@ class Window extends Component, implements Dynamic
 	public var br:Sprite;
 	public var bl:Sprite;
 
-
-	public var color:UInt;
 	public var type:WindowType;
 
 	private var sizeable:Bool;
@@ -103,41 +92,15 @@ class Window extends Component, implements Dynamic
 		super (parent, name, x, y);
 	}
 
-	/**
-	*
-	* Initialize a new window
-	*
-	* @param opts Dynamic object containing attributes
-	*
-	*
-	*/
 	override public function init(opts : Dynamic=null)
 	{
-		super.init(opts);
-		type = WindowType.NORMAL;
-		sizeable = true ;
 		box = new Rectangle (0, 0, 512, 512);
 		color = DefaultStyle.BACKGROUND;
 		text = "Window";
 
-		if (Reflect.isObject (opts))
-		{
-			for (f in Reflect.fields (opts))
-			if (Reflect.hasField (this, f))
-				if (f != "width" && f != "height")
-				Reflect.setField (this, f, Reflect.field (opts, f));
-
-			//~ name = (opts.name == null) ? name : opts.name;
-			//~ move(opts.x, opts.y);
-			box.width = (Math.isNaN (opts.width)) ? box.width : opts.width;
-			box.height = (Math.isNaN (opts.height)) ? box.height : opts.height;
-			//~ color = (opts.color==null) ? color : opts.color;
-			//~ sizeable = ( opts.sizeable == null ) ? true : opts.sizeable;
-
-			//~ trace(Std.string(opts));
-		}
-
-
+		super.init(opts);
+		type = WindowType.NORMAL;
+		sizeable = Opts.optBool(opts, "sizeable", true);
 
 		this.buttonMode = false;
 		this.mouseEnabled = false;
@@ -162,11 +125,6 @@ class Window extends Component, implements Dynamic
 
 		// register with focus manager
 		FocusManager.getInstance ().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, redraw, false, 0, true);
-
-
-		// add to stage
-		//~ flash.Lib.current.addChild (this);
-		parent.addChild (this);
 
 
 		this.dispatchEvent (new ResizeEvent (ResizeEvent.RESIZE));
@@ -355,15 +313,11 @@ class Window extends Component, implements Dynamic
 		//~ e.updateAfterEvent();
 	}
 
-
-
-	/**
-	*
-	*/
 	override public function onMouseDown (e:MouseEvent):Void
 	{
+		trace("WindowManager.onMouseDown target : " + e.target);
 		if (!Std.is (e.target, Sprite))
-		return;
+			return;
 
 		//
 		FocusManager.getInstance ().setFocus (this);
@@ -372,7 +326,7 @@ class Window extends Component, implements Dynamic
 		parent.setChildIndex (this, parent.numChildren - 1);
 
 
-		if (e.target == titlebar || e.target.name == "br"	|| e.target.name == "bl")
+		if (e.target == titlebar || e.target.name == "br" || e.target.name == "bl")
 		{
 			e.target.dispatchEvent (new DragEvent (DragEvent.DRAG_START));
 			e.target.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
@@ -394,9 +348,7 @@ class Window extends Component, implements Dynamic
 		case br:
 			CursorManager.setCursor (Cursor.NW);
 		}
-
-
-	}				//onMouseDown
+	}
 
 
 	/**

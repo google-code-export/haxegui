@@ -38,20 +38,16 @@ import flash.filters.BevelFilter;
 import haxegui.StyleManager;
 
 class ScrollPane extends Component, implements Dynamic {
-
-	public var color : UInt;
-
 	public var content : Sprite;
 
 	public var vert : Scrollbar;
 	public var horz : Scrollbar;
 
 
-  public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
 		//~ this.name = (name==null) ? "scroll_pane" : name;
-
 	}
 
 
@@ -65,12 +61,11 @@ class ScrollPane extends Component, implements Dynamic {
 
 	override public function init(?opts:Dynamic)
 	{
-		color = (cast parent).color;
+		if(Std.is(parent, Component))
+			color = (cast parent).color;
 		//~ box = untyped parent.box.clone();
 
-		color = Opts.optInt(opts, "color", (cast parent).color);
-		box.width = Opts.optFloat(opts,"width",box.width);
-		box.height = Opts.optFloat(opts,"height",box.height);
+		super.init(opts);
 
 		content = new Sprite();
 		content.name = "content";
@@ -101,12 +96,12 @@ class ScrollPane extends Component, implements Dynamic {
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
-    }
+	}
 
 	/**
-	 *
-	 *
-	 */
+	*
+	*
+	*/
 	public function onParentResize(e:ResizeEvent)
 	{
 		box = untyped parent.box.clone();

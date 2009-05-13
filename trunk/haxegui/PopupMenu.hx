@@ -75,8 +75,6 @@ class PopupMenu extends Component
 	private var items : UInt;
 	private var _item : UInt;
 
-	public var color : UInt;
-
 	private static var _instance:PopupMenu = null;
 
 
@@ -105,7 +103,8 @@ class PopupMenu extends Component
 		if(Reflect.hasField(opts,"parent"))
 			untyped opts.parent.addChild(this);
 
-		color = (cast parent).color;
+		if(Std.is(parent, Component))
+			color = (cast parent).color;
 
 		super.init(opts);
 
@@ -353,7 +352,7 @@ class PopupMenu extends Component
 		{
 			var item = cast(this.getChildAt(i), Sprite);
 			//~ var color = (i==_item) ? color + 0x333333 : color;
-			var color = (i==_item) ? color | 0x202020 : color;
+			var color = (i==_item) ? this.color | 0x202020 : this.color;
 			item.graphics.clear ();
 			item.graphics.lineStyle(2, color - 0x323232);
 			item.graphics.beginFill (color, .8);
