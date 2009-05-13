@@ -158,7 +158,7 @@ class Console extends Window, implements ITraceListener
 	}
 
 /*
-* 
+*
 *
 */
 	public  function log( e : Dynamic, ?inf : haxe.PosInfos ) : Void
@@ -225,6 +225,7 @@ class Console extends Window, implements ITraceListener
 				input.text = "";
 
 				var interp = new hscript.Interp();
+				haxegui.utils.ScriptStandardLibrary.set(interp);
 				interp.variables.set( "this", this );
 				interp.variables.set( "pwd", this.pwd );
 				interp.variables.set( "root", flash.Lib.current );

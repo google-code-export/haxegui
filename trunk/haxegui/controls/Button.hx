@@ -110,6 +110,7 @@ class Button extends AbstractButton, implements Dynamic
 
 	public static function __init__()
 	{
+		StyleManager.initialize();
 		StyleManager.setDefaultScript(
 			Button,
 			"redraw",
