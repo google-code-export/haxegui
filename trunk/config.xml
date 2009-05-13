@@ -401,4 +401,92 @@ This hscript does the following:
     </script>
 -->
 
+  
+    
+    <!-- Transcriber -->
+    <haxegui:Window name="Transcriber" x="300" y="40" width="512" height="512" sizeable="true" >
+	<haxegui:Menubar name="Menubar" width="512" x="10" y="20" />
+	<haxegui:Toolbar name="Toolbar" width="512" x="10" y="44" >
+	    <haxegui:controls:Button name="Run" label="Run" x="30" y="4" />
+	    <haxegui:controls:Button name="Clear" label="Clear" x="130" y="4" />
+	</haxegui:Toolbar>
+
+	<haxegui:ScrollPane name="ScrollPane1" x="10" y="84" >
+
+    
+		    <script type="text/hscript">
+
+			var window = root.getChildByName("Transcriber");
+			var toolbar = window.getChildByName("Toolbar");
+			var scrollpane = window.getChildByName("ScrollPane1");
+
+				
+			
+			var tf = new flash.text.TextField();
+			tf.type = TextFieldType.DYNAMIC;
+			for(i in 1...101)
+			    tf.text += "  "+i+"\n";
+			tf.border = true;
+			tf.borderColor = 0x7F7F7F;
+			tf.background = true;
+			tf.backgroundColor = 0xBFBFBF;
+			tf.multiline = true;
+			tf.width = 30;
+			tf.height = 1000;
+			scrollpane.addChild(tf);
+			
+			tf = new flash.text.TextField();
+			tf.text = "var n = 6;\nvar factorial = 1;\nfor(i in factorial...n)\n\tfactorial *= i;\nn+\"! = \"+factorial;\n";
+			tf.text += "\n/*\nvar window = new haxegui.Window(this.getChildByName(\"ScrollPane1\"));\nwindow.box.width = 160;\nwindow.box.height = 120;\nwindow.init();\n\nvar container = new haxegui.Container(window, \"Container\", 10, 20);\ncontainer.init();\n*/";
+			tf.background = true;
+			tf.backgroundColor = 0xFFFFFF;
+			tf.type = TextFieldType.INPUT;
+			tf.multiline = true;
+			tf.x = 30;
+			tf.width = 800;
+			tf.height = 1000;
+			scrollpane.addChild(tf);
+
+			function clear(e) { tf.text = ""; }
+
+			var clearbtn = toolbar.getChildByName("Clear");
+			clearbtn.addEventListener(MouseEvent.MOUSE_UP, clear);			
+
+			
+			function run(e)
+			    {
+				var parser = new hscript.Parser();
+				var program = parser.parseString(tf.text);
+				var interp = new hscript.Interp();
+				
+				interp.variables.set( "root", root );
+				interp.variables.set( "this", window );
+				
+				interp.variables.set( "new", createInstance );
+				interp.variables.set( "class", getClass );
+				interp.variables.set( "Type", Type );
+
+				
+				trace(interp.execute(program)); 
+				
+				root.getChildByName("Console").onRaise(null);
+						
+			    }
+
+			    function createInstance(s,a) { return Type.createInstance( Type.resolveClass( s ), a ); }
+			    function getClass(s) { return Type.resolveClass( s ); }
+
+			    
+			var runbtn = toolbar.getChildByName("Run");
+			runbtn.addEventListener(MouseEvent.MOUSE_UP, run);			
+			
+
+		    </script>
+    
+
+	</haxegui:ScrollPane>
+    </haxegui:Window>
+    
+
+
 </haxegui:Layout>
