@@ -35,7 +35,7 @@ class Opts {
 		return v;
 	}
 
-	public static function classInstance(opts,Dynamic,field:String,classes:Array<Class<Dynamic>>)
+	public static function classInstance(opts:Dynamic,field:String,classes:Array<Class<Dynamic>>)
 	{
 		var v =  getField(opts,field);
 		if(v == null) throw "Missing " + field;

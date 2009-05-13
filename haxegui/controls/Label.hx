@@ -20,17 +20,15 @@
 package haxegui.controls;
 
 import flash.display.DisplayObjectContainer;
-
 import flash.text.TextField;
 import flash.text.TextFieldType;
 import flash.text.TextFieldAutoSize;
-
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
-import haxegui.controls.Component;
-
+import haxegui.Opts;
 import haxegui.StyleManager;
+import haxegui.controls.Component;
 
 class Label extends Component
 {
@@ -69,7 +67,7 @@ class Label extends Component
 		this.focusRect = false;
 
 		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
-		tf.text = optString(opts, "innerData", text);
+		tf.text = Opts.optString(opts, "innerData", text);
 
 		tf.setTextFormat(StyleManager.getTextFormat());
 		this.addChild(tf);

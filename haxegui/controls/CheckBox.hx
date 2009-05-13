@@ -50,45 +50,23 @@ import haxegui.FocusManager;
 
 class CheckBox extends Component, implements Dynamic
 {
+	public var checked(default, default) : Bool;
+	public var label : Label;
+	//~ public var button : Button;
+	public var button : Sprite;
+	public var color : UInt;
 
-  public var checked(default, default) : Bool;
-  public var label : Label;
-  //~ public var button : Button;
-  public var button : Sprite;
-  public var color : UInt;
 
-
-  public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
 	}
 
-
-  /**
-   *
-   *
-   *
-   *
-   */
-  public function init(?initObj:Dynamic)
+	override public function init(opts:Dynamic=null)
 	{
-		//super.init(initObj);
-
 		box = new Rectangle(0,0,140,20);
 		color = DefaultStyle.BACKGROUND;
-
-		if(Reflect.isObject(initObj))
-		{
-			//~ name = (initObj.name == null) ? name : initObj.name;
-			//~ move(initObj.x, initObj.y);
-			//~ box.width = ( Math.isNaN(initObj.width) ) ? 20 : initObj.width;
-			//~ box.height = ( Math.isNaN(initObj.height) ) ? 20 : initObj.height;
-			for(f in Reflect.fields(initObj))
-				if(Reflect.hasField(this, f))
-					Reflect.setField(this, f, Reflect.field(initObj, f));
-			//~ disabled = (initObj.disabled==null) ? disabled : initObj.disabled;
-		}
-
+		super.init(opts);
 
 		//~ this.graphics.clear();
 		button = new Sprite();
@@ -112,27 +90,23 @@ class CheckBox extends Component, implements Dynamic
 
 
 		// Listeners
-		button.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown);
-		button.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp);
-		button.addEventListener (MouseEvent.ROLL_OVER, onRollOver);
-		button.addEventListener (MouseEvent.ROLL_OUT,  onRollOut);
-		//~ this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown);
+		button.addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown,false,0,true);
+		button.addEventListener (MouseEvent.MOUSE_UP,   onBtnMouseUp,false,0,true);
+		button.addEventListener (MouseEvent.ROLL_OVER, onBtnRollOver,false,0,true);
+		button.addEventListener (MouseEvent.ROLL_OUT,  onBtnRollOut,false,0,true);
 
-		this.addEventListener (Event.ACTIVATE, onEnabled);
-		this.addEventListener (Event.DEACTIVATE, onDisabled);
+		this.addEventListener (Event.ACTIVATE, onEnabled,false,0,true);
+		this.addEventListener (Event.DEACTIVATE, onDisabled,false,0,true);
 
 		if(disabled)
 			dispatchEvent(new Event(Event.DEACTIVATE));
-
-
 		redraw();
-
 	}
 
 	/**
-	 *
-	 *
-	 */
+	*
+	*
+	*/
 	public function onDisabled(e:Event)
 	{
 		button.mouseEnabled = false;
@@ -142,9 +116,9 @@ class CheckBox extends Component, implements Dynamic
 	}
 
 	/**
-	 *
-	 *
-	 */
+	*
+	*
+	*/
 	public function onEnabled(e:Event)
 	{
 		button.mouseEnabled = true;
@@ -153,20 +127,9 @@ class CheckBox extends Component, implements Dynamic
 		redraw();
 	}
 
-	/**
-	 *
-	 *
-	 */
-	public function redraw() : Void {
-
-
-		//~ if(color==0 || Math.isNaN(color))
-			//~ color = DefaultStyle.BACKGROUND;
-				//~ color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
-
-
+	override public function redraw(opts:Dynamic=null) : Void {
 		if( disabled )
-			{
+		{
 			//~ color = DefaultStyle.BACKGROUND - 0x141414;
 			//~ color = DefaultStyle.BACKGROUND ;
 			var fmt = StyleManager.getTextFormat();
@@ -177,7 +140,7 @@ class CheckBox extends Component, implements Dynamic
 			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 			this.filters = [shadow];
-			}
+		}
 
 
 		button.graphics.clear();
@@ -196,17 +159,16 @@ class CheckBox extends Component, implements Dynamic
 			button.graphics.drawRoundRect (0, 0, 20, box.height, 8, 8 );
 
 
-		button.graphics.lineStyle (4, color - 0x282828);
-		button.graphics.moveTo (6, 6);
-		button.graphics.lineTo (14, 14);
-		button.graphics.moveTo (14, 6);
-		button.graphics.lineTo (6, 14);
+			button.graphics.lineStyle (4, color - 0x282828);
+			button.graphics.moveTo (6, 6);
+			button.graphics.lineTo (14, 14);
+			button.graphics.moveTo (14, 6);
+			button.graphics.lineTo (6, 14);
 
 		}
 		else
 		{
-		//~ button.graphics.lineStyle (2, color - 0x202020);
-
+			//~ button.graphics.lineStyle (2, color - 0x202020);
 			var colors = [ color - 0x141414, color | 0x323232 ];
 			var alphas = [ 100, 0 ];
 			var ratios = [ 0, 0xFF ];
@@ -214,22 +176,18 @@ class CheckBox extends Component, implements Dynamic
 			matrix.createGradientBox(20, 20, Math.PI/2, 0, 0);
 			button.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
-		//~ button.graphics.beginFill (color);
-		button.graphics.drawRoundRect (0, 0, 20, box.height, 8, 8 );
-
+			//~ button.graphics.beginFill (color);
+			button.graphics.drawRoundRect (0, 0, 20, box.height, 8, 8 );
 		}
 
-
 		button.graphics.endFill ();
-
-
 	}
 
 	/**
 	*
 	*
 	*/
-	public function onRollOver(e:MouseEvent) : Void
+	public function onBtnRollOver(e:MouseEvent) : Void
 	{
 		if(disabled) return;
 		//~ redraw(DefaultStyle.BACKGROUND + 0x323232 );
@@ -245,7 +203,7 @@ class CheckBox extends Component, implements Dynamic
 	*
 	*
 	*/
-	public  function onRollOut(e:MouseEvent) : Void
+	public  function onBtnRollOut(e:MouseEvent) : Void
 	{
 		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		//~ redraw(color);
@@ -256,7 +214,7 @@ class CheckBox extends Component, implements Dynamic
 	*
 	*
 	*/
-	public  function onMouseDown(e:MouseEvent) : Void
+	public  function onBtnMouseDown(e:MouseEvent) : Void
 	{
 		if(disabled) return;
 
@@ -272,7 +230,7 @@ class CheckBox extends Component, implements Dynamic
 	*
 	*
 	*/
-	public  function onMouseUp(e:MouseEvent) {
+	public  function onBtnMouseUp(e:MouseEvent) {
 		checked = !checked;
 
 		//~ redraw(DefaultStyle.BACKGROUND);

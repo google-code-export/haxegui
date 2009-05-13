@@ -43,7 +43,7 @@ class Image extends Component
 	{
 		var pictLdr:Loader = new Loader();
 		//var pictURLReq:URLRequest = new URLRequest("./assets/banners/banner$
-		var pictURLReq:URLRequest = new URLRequest(Opts.string(opts.src));
+		var pictURLReq:URLRequest = new URLRequest(Opts.string(opts,"src"));
 		pictLdr.load(pictURLReq);
 		pictLdr.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
 

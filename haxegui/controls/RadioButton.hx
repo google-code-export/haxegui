@@ -49,49 +49,25 @@ import haxegui.controls.Component;
 class RadioButton extends Component, implements Dynamic
 {
 
-  //~ public var group :
-  public var checked(default, default) : Bool;
-  public var label : Label;
-  public var color : UInt;
+	//~ public var group :
+	public var checked(default, default) : Bool;
+	public var label : Label;
+	public var color : UInt;
 
-  var button : Sprite;
+	var button : Sprite;
 
-  public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
 	}
 
 
-  /**
-   *
-   *
-   *
-   *
-   */
-  public function init(?initObj:Dynamic)
+	override public function init(?opts:Dynamic)
 	{
-		//super.init(initObj);
-
 		box = new Rectangle(0,0,140,20);
 		color = DefaultStyle.BACKGROUND;
 
-		if(Reflect.isObject(initObj))
-		{
-			//~ name = (initObj.name == null) ? name : initObj.name;
-			//~ move(initObj.x, initObj.y);
-			//~ box.width = ( Math.isNaN(initObj.width) ) ? 20 : initObj.width;
-			//~ box.height = ( Math.isNaN(initObj.height) ) ? 20 : initObj.height;
-			for(f in Reflect.fields(initObj))
-				if(Reflect.hasField(this, f))
-					if (f!="label" && f != "width" && f != "height")
-						Reflect.setField(this, f, Reflect.field(initObj, f));
-
-			box.width = ( Math.isNaN(initObj.width) ) ? box.width : initObj.width;
-			box.height = ( Math.isNaN(initObj.height) ) ? box.height : initObj.height;
-
-		}
-
-
+		super.init(opts);
 
 		button = new Sprite();
 		//~ button.name="button";
@@ -127,27 +103,23 @@ class RadioButton extends Component, implements Dynamic
 
 
 		// Listeners
-		button.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown);
-		button.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp);
-		button.addEventListener (MouseEvent.ROLL_OVER, onRollOver);
-		button.addEventListener (MouseEvent.ROLL_OUT,  onRollOut);
-		//~ this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown);
+		button.addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown,false,0,true);
+		button.addEventListener (MouseEvent.MOUSE_UP,   onBtnMouseUp,false,0,true);
+		button.addEventListener (MouseEvent.ROLL_OVER, onBtnRollOver,false,0,true);
+		button.addEventListener (MouseEvent.ROLL_OUT,  onBtnRollOut,false,0,true);
 
-		this.addEventListener (Event.ACTIVATE, onEnabled);
-		this.addEventListener (Event.DEACTIVATE, onDisabled);
+		this.addEventListener (Event.ACTIVATE, onEnabled,false,0,true);
+		this.addEventListener (Event.DEACTIVATE, onDisabled,false,0,true);
 
 		if(disabled)
 			dispatchEvent(new Event(Event.DEACTIVATE));
-
-
 		redraw();
-
 	}
 
 	/**
-	 *
-	 *
-	 */
+	*
+	*
+	*/
 	public function onDisabled(e:Event)
 	{
 		button.mouseEnabled = false;
@@ -157,9 +129,8 @@ class RadioButton extends Component, implements Dynamic
 	}
 
 	/**
-	 *
-	 *
-	 */
+	*
+	*/
 	public function onEnabled(e:Event)
 	{
 		button.mouseEnabled = true;
@@ -168,19 +139,8 @@ class RadioButton extends Component, implements Dynamic
 		redraw();
 	}
 
-
-
-	/**
-	 *
-	 */
-	public  function redraw() : Void {
-
-		//~ if(color == 0 || Math.isNaN(color))
-			//~ color = DefaultStyle.BACKGROUND;
-
-
-		if( disabled )
-			{
+	override public function redraw(opts:Dynamic=null) : Void {
+		if( disabled ) {
 			//~ color = DefaultStyle.BACKGROUND - 0x141414;
 			//~ color -= 0x141414;
 			var fmt = StyleManager.getTextFormat();
@@ -193,7 +153,7 @@ class RadioButton extends Component, implements Dynamic
 			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 			this.filters = [shadow];
 
-			}
+		}
 
 
 		button.graphics.clear();
@@ -202,14 +162,13 @@ class RadioButton extends Component, implements Dynamic
 		button.graphics.beginFill ( disabled ? color - 0x141414 : color );
 		button.graphics.drawCircle (10, 10, 10);
 		button.graphics.endFill ();
-
 	}
 
 	/**
 	*
 	*
 	*/
-	public function onRollOver(e:MouseEvent) : Void
+	public function onBtnRollOver(e:MouseEvent) : Void
 	{
 		//~ if(disabled) return;
 		//~ if(!Std.is(e.target,Sprite)) return;
@@ -224,7 +183,7 @@ class RadioButton extends Component, implements Dynamic
 	*
 	*
 	*/
-	public  function onRollOut(e:MouseEvent) : Void
+	public  function onBtnRollOut(e:MouseEvent) : Void
 	{
 		var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		//~ redraw(color);
@@ -235,7 +194,7 @@ class RadioButton extends Component, implements Dynamic
 	*
 	*
 	*/
-	public  function onMouseDown(e:MouseEvent) : Void
+	public  function onBtnMouseDown(e:MouseEvent) : Void
 	{
 		//~ if(disabled) return;
 
@@ -265,7 +224,7 @@ class RadioButton extends Component, implements Dynamic
 	*
 	*
 	*/
-	public  function onMouseUp(e:MouseEvent) {
+	public  function onBtnMouseUp(e:MouseEvent) {
 		checked = !checked;
 
 		//~ redraw(DefaultStyle.BACKGROUND);
