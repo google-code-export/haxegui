@@ -47,11 +47,11 @@ class TitleBar extends Component, implements Dynamic
 		super(parent, name, x, y);
 	}
 
-	public function init(?initObj:Dynamic) {
+	override public function init(?opts:Dynamic) {
 		//
 		this.graphics.beginFill (0x1A1A1A, 0.5);
-		this.graphics.drawRoundRectComplex (0, 0, initObj.w, 32, 4, 4, 0, 0);
-		this.graphics.drawRect (10, 20, initObj.w - 20, 12);
+		this.graphics.drawRoundRectComplex (0, 0, Opts.optFloat(opts,"w",100), 32, 4, 4, 0, 0);
+		this.graphics.drawRect (10, 20, Opts.optFloat(opts,"w",100) - 20, 12);
 		this.graphics.endFill ();
 
 
@@ -67,8 +67,8 @@ class TitleBar extends Component, implements Dynamic
 
 		//mc.x = box.width - 32;
 		title = new TextField ();
-		title.name = "title";
-		title.text = (initObj.title==null)?this.name:initObj.title;
+		title.name = Opts.optString(opts,"title","");
+		title.text = (opts.title==null)?this.name:opts.title;
 		title.border = false;
 		//~ title.textColor = 0x000000;
 		title.x = 40;
@@ -92,20 +92,15 @@ class TitleBar extends Component, implements Dynamic
 	}
 
 
-
-
-		/**
-		*
-		*
-		*/
-	public function redraw (? color : Int, ? w : Float):Void
+	override public function redraw(opts:Dynamic=null):Void
 	{
 		title.x = Math.floor((w - title.width)/2);
 		//~ title.width = Math.floor(w - 85);
 		//~ title.y = 1;
 
+
 		if(closeButton != null)
-			closeButton.redraw(color, w);
+			closeButton.redraw(opts);
 // 		StyleManager.exec("redrawTitleBar", this, {w:w, color:color});
 // 		StyleManager.exec("redrawCloseButton", closeButton, {color:color});
 // 		StyleManager.exec("redrawMinimizeButton", minimizeButton, {color:color});
@@ -114,19 +109,19 @@ class TitleBar extends Component, implements Dynamic
 
 	}
 
-	public function onRollOver (e:MouseEvent)
+	override public function onRollOver (e:MouseEvent)
 	{
 		CursorManager.setCursor(Cursor.HAND);
 	}
 
-	public function onRollOut (e:MouseEvent)
+	override public function onRollOut (e:MouseEvent)
 	{
-		//~CursorManager.setCursor(Cursor.HAND);
+		CursorManager.setCursor(Cursor.ARROW);
 	}
 
-	public function onMouseUp (e:MouseEvent)
+	override public function onMouseUp (e:MouseEvent)
 	{
-
+		CursorManager.setCursor(Cursor.ARROW);
 	}
 
 

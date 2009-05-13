@@ -17,6 +17,8 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+package haxegui;
+
 /**
 *
 * Options handler
@@ -26,6 +28,31 @@
 *
 */
 class Opts {
+	public static function string(opts:Dynamic,field:String) : String
+	{
+		var v = optString(opts, field, null);
+		if(v == null) throw "Missing " + field;
+		return v;
+	}
+
+	public static function classInstance(opts,Dynamic,field:String,classes:Array<Class<Dynamic>>)
+	{
+		var v =  getField(opts,field);
+		if(v == null) throw "Missing " + field;
+		if(classes == null || classes.length == 0)
+			return v;
+		var found = false;
+		for(ct in classes) {
+			if(Std.is(v, ct)) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			throw "Bad type for " + field;
+		return v;
+	}
+
 	public static function optBool(opts:Dynamic,field:String,defaultValue:Bool) : Bool
 	{
 		var v = getField(opts,field);
@@ -55,7 +82,8 @@ class Opts {
 	}
 
 	public static function getField(opts:Dynamic,field:String) : Dynamic {
-		if(opts == null || field == null || field == "") return null;
+		if(opts == null || field == null || field == "" || !Reflect.isObject(opts))
+			return null;
 		var idx = field.indexOf(".");
 		if(idx < 0) {
 			return Reflect.field(opts, field);

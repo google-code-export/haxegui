@@ -107,34 +107,34 @@ class Window extends Component, implements Dynamic
 	*
 	* Initialize a new window
 	*
-	* @param initObj Dynamic object containing attributes
+	* @param opts Dynamic object containing attributes
 	*
 	*
 	*/
-	public function init (? initObj : Dynamic)
+	override public function init(opts : Dynamic=null)
 	{
-
+		super.init(opts);
 		type = WindowType.NORMAL;
 		sizeable = true ;
 		box = new Rectangle (0, 0, 512, 512);
 		color = DefaultStyle.BACKGROUND;
 		text = "Window";
 
-		if (Reflect.isObject (initObj))
+		if (Reflect.isObject (opts))
 		{
-			for (f in Reflect.fields (initObj))
+			for (f in Reflect.fields (opts))
 			if (Reflect.hasField (this, f))
 				if (f != "width" && f != "height")
-				Reflect.setField (this, f, Reflect.field (initObj, f));
+				Reflect.setField (this, f, Reflect.field (opts, f));
 
-			//~ name = (initObj.name == null) ? name : initObj.name;
-			//~ move(initObj.x, initObj.y);
-			box.width = (Math.isNaN (initObj.width)) ? box.width : initObj.width;
-			box.height = (Math.isNaN (initObj.height)) ? box.height : initObj.height;
-			//~ color = (initObj.color==null) ? color : initObj.color;
-			//~ sizeable = ( initObj.sizeable == null ) ? true : initObj.sizeable;
+			//~ name = (opts.name == null) ? name : opts.name;
+			//~ move(opts.x, opts.y);
+			box.width = (Math.isNaN (opts.width)) ? box.width : opts.width;
+			box.height = (Math.isNaN (opts.height)) ? box.height : opts.height;
+			//~ color = (opts.color==null) ? color : opts.color;
+			//~ sizeable = ( opts.sizeable == null ) ? true : opts.sizeable;
 
-			//~ trace(Std.string(initObj));
+			//~ trace(Std.string(opts));
 		}
 
 
@@ -152,24 +152,16 @@ class Window extends Component, implements Dynamic
 		titlebar.init({w:this.width, title:this.name});
 		titlebar.redraw();
 
-		titlebar.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
-		titlebar.addEventListener (MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
 		titlebar.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
 		titlebar.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
 
 		// add mouse event listeners
 		//~ this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_DOWN, onRaise, false, 0, true);
-		this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
-		this.addEventListener (MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 
 
 		// register with focus manager
 		FocusManager.getInstance ().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, redraw, false, 0, true);
-
-		// register resize event
-		//~ this.addEventListener (ResizeEvent.RESIZE, redraw, false, 0, true);
-		this.addEventListener (ResizeEvent.RESIZE, onResize, false, 0, true);
 
 
 		// add to stage
@@ -274,7 +266,7 @@ class Window extends Component, implements Dynamic
 	*
 	*
 	*/
-	public function onRollOut (e:MouseEvent):Void
+	override public function onRollOut (e:MouseEvent):Void
 	{
 		if (this.hasFocus ())
 			redraw ( {damaged: true, fill: 0x4D4D4D, color:0xBFBFBF} );
@@ -290,7 +282,7 @@ class Window extends Component, implements Dynamic
 	*
 	*
 	*/
-	public function onRollOver (e:MouseEvent)
+	override public function onRollOver (e:MouseEvent)
 	{
 		//~ redraw (true, 0x595959, 0x737373);
 		//
@@ -355,7 +347,7 @@ class Window extends Component, implements Dynamic
 	*
 	*
 	*/
-	public function onResize (e:ResizeEvent)
+	override public function onResize (e:ResizeEvent)
 	{
 		//~ trace(e);
 		if (sizeable)
@@ -373,7 +365,7 @@ class Window extends Component, implements Dynamic
 	/**
 	*
 	*/
-	public function onMouseDown (e:MouseEvent):Void
+	override public function onMouseDown (e:MouseEvent):Void
 	{
 		if (!Std.is (e.target, Sprite))
 		return;
@@ -417,7 +409,7 @@ class Window extends Component, implements Dynamic
 	*
 	*
 	*/
-	public function onMouseUp (e:MouseEvent):Void
+	override public function onMouseUp (e:MouseEvent):Void
 	{
 		//~ if(!Std.is(e.target, Sprite)) return;
 
@@ -459,7 +451,7 @@ class Window extends Component, implements Dynamic
 	* Redraw entire window
 	*
 	*/
-	public function redraw (e:Dynamic):Void
+	override public function redraw (e:Dynamic=null):Void
 	{
 
 		var color:UInt = this.color - 0x141414;
@@ -467,13 +459,13 @@ class Window extends Component, implements Dynamic
 		var damaged:Bool = true;
 
 		if (e != null && Reflect.isObject (e))
-		if (!Std.is (e, ResizeEvent))
-		if (!Std.is (e, FocusEvent))
-		{
-			color = (e.color == null) ? color : e.color;
-			fill = (e.fill == null) ? fill : e.fill;
-			damaged = (e.damaged == null) ? damaged : e.damaged;
-		}
+			if (!Std.is (e, ResizeEvent))
+				if (!Std.is (e, FocusEvent))
+				{
+					color = Opts.optInt(e,"color",color);
+					fill = Opts.optInt(e, "fill", fill);
+					damaged = Opts.optBool(e, "damaged", damaged);
+				}
 
 		if (!damaged)
 			return;
@@ -508,8 +500,7 @@ class Window extends Component, implements Dynamic
 		}
 
 		if (Std.is (e, ResizeEvent))
-		e.updateAfterEvent ();
-
+			e.updateAfterEvent ();
 	}				//redraw
 
 

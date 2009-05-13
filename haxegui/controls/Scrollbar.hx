@@ -92,6 +92,8 @@ class Scrollbar extends haxegui.controls.Component
 	{
 		super(parent, name, x, y);
 		horizontal = horz;
+		if(horizontal)
+			rotation = -90;
 
 		frame = new Sprite();
 		handle = new Sprite();
@@ -102,18 +104,13 @@ class Scrollbar extends haxegui.controls.Component
 
 
 	/**
-	*
-	*
-	* @param scrolle Object to scroll, either a DisplayObject or TextField
-	*
+	* @param opts.target Object to scroll, either a DisplayObject or TextField
 	*/
-	public function init(?scrollee:Dynamic)
+	override public function init(opts:Dynamic=null)
 	{
 		scroll = 0;
 		//~ box = new Rectangle(0,0,20,90);
-		this.scrollee = scrollee;
-
-
+		this.scrollee = Opts.classInstance(opts, "target", [TextField, DisplayObject]);
 
 		//~ frame.mouseEnabled = false;
 		frame.buttonMode = false;
@@ -208,11 +205,7 @@ class Scrollbar extends haxegui.controls.Component
 		down.addEventListener(MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
 		down.addEventListener(MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
 
-		this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
-		this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 		this.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
-
-
 
 		//
 		parent.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
@@ -227,12 +220,11 @@ class Scrollbar extends haxegui.controls.Component
 	* @param
 	*
 	*/
-	public function onResize(e:Dynamic)
+	override public function onResize(e:ResizeEvent)
 	{
 
 		//~ if(box.isEmpty())
-		if(Std.is(e, ResizeEvent))
-			box = untyped parent.box.clone();
+		box = untyped parent.box.clone();
 		//~ var pbox = cast(parent, Component).box;
 		//~ box = pbox.clone() ;
 		//~ box.inflate(-10,-24);
@@ -274,16 +266,11 @@ class Scrollbar extends haxegui.controls.Component
 		//~ handle.y = (.5*bounds.height-40) * scroll ;
 		//~ scroll = (handle.y-20) / (frame.height - 40 + 2) ;
 
-		if(Std.is(e, ResizeEvent))
-			e.updateAfterEvent();
+		e.updateAfterEvent();
 
 	}
 
-	/**
-	*
-	*
-	*/
-	public function onRollOver(e:MouseEvent)  : Void
+	override public function onRollOver(e:MouseEvent)  : Void
 	{
 
 		//~ redrawHandle(color | 0x4D4D4D);
@@ -295,12 +282,7 @@ class Scrollbar extends haxegui.controls.Component
 		//~ Tweener.addTween(e.target, {_brightness:.5, time:.15, transition:"linear"});
 	}
 
-	/**
-	*
-	*
-	*
-	*/
-	public function onRollOut(e:MouseEvent)
+	override public function onRollOut(e:MouseEvent)
 	{
 		if(!e.buttonDown)
 		{
@@ -315,10 +297,6 @@ class Scrollbar extends haxegui.controls.Component
 			//~ Tweener.addTween(e.target, {_brightness:0, time:.35, transition:"linear"});
 	}
 
-	/**
-	*
-	*
-	*/
 	public function onMouseWheel(e:MouseEvent)
 	{
 
@@ -336,14 +314,7 @@ class Scrollbar extends haxegui.controls.Component
 		t.start();
 	}
 
-
-
-	/**
-	*
-	* @param
-	*
-	*/
-	public function onMouseDown(e:MouseEvent)
+	override public function onMouseDown(e:MouseEvent)
 	{
 		//~ redrawHandle(color | 0x4D4D4D);
 
@@ -438,7 +409,7 @@ class Scrollbar extends haxegui.controls.Component
 	}
 
 
-	public function onMouseUp(e:MouseEvent)
+	override public function onMouseUp(e:MouseEvent)
 	{
 
 		var c = 0;

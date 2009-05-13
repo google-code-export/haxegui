@@ -95,20 +95,17 @@ class ScrollPane extends Component, implements Dynamic {
 		content.cacheAsBitmap = true;
 		this.addChild(content);
 
-		vert = cast this.addChild(new Scrollbar());
+		vert = new Scrollbar(this, "vscrollbar", box.width - 20, 0, false);
 		vert.x = box.width - 20;
 		vert.y = 0;
 		vert.name = "vscrollbar";
 		vert.color = color;
-		vert.init(content);
+		vert.init({target: content});
 
-
-		horz = cast this.addChild(new Scrollbar(true));
-		horz.rotation = -90;
+		horz = new Scrollbar(this, "hscrollbar", null, null, true);
 		//~ horz.y = box.height + 36 ;
-		horz.name = "hscrollbar";
 		horz.color = color;
-		horz.init(content);
+		horz.init({target: content});
 
 		//~ vert.scrollee = content;
 		//~ horz.scrollee = content;
