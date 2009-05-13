@@ -73,9 +73,9 @@ class Window extends Component, implements Dynamic
 {
 	public var titlebar:TitleBar;
 
-	public var frame:Sprite;
-	public var br:Sprite;
-	public var bl:Sprite;
+	public var frame:Component;
+	public var br:Component;
+	public var bl:Component;
 
 	public var type:WindowType;
 
@@ -155,33 +155,44 @@ class Window extends Component, implements Dynamic
 	public function draw ()
 	{
 		// frame
-		frame = new Sprite ();
-		frame.name = "frame";
+		//~ frame = new Component (this, "frame", -10, -10);
+		frame = new Component (this, "frame", 0, 0);
+		frame.init({});
+
+		frame.action_redraw = 
+			"
+				this.graphics.clear();
+				this.graphics.beginFill(fill, 0.5);
+				this.graphics.lineStyle(2, color);
+				this.graphics.drawRoundRect(0, 0, box.width + 10, box.height + 10, 8, 8);
+				this.graphics.drawRect(10, 20, box.width - 10, box.height - 20);
+				this.graphics.endFill();
+			";
+		frame.redraw();
+		
 		frame.buttonMode = false;
 
 		var shadow:DropShadowFilter =
 		new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 8, 8, 0.85,
 					BitmapFilterQuality.HIGH, false, false, false);
 
-		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .5, 4, 4, 2, BitmapFilterQuality.HIGH , flash.filters.BitmapFilterType.INNER, false );
-		//~ frame.filters = [shadow, bevel];
 		frame.filters = [shadow];
 
-		this.addChild (frame);
 
 		// corners
 		if (isSizeable ())
 		{
 			if(br != null && br.parent == this)
 				removeChild(br);
-			br = new Sprite();
-			br.name = "br";
-			br.graphics.beginFill (DefaultStyle.BACKGROUND + 0x202020, 0.5);
-			br.graphics.drawRoundRectComplex (0, 0, 32, 32, 0, 0, 0, 4);
-			br.graphics.drawRect (0, 0, 22, 22);
-			br.graphics.endFill ();
-			br.x = box.width - 22;
-			br.y = box.height - 22;
+			br = new Component(this, "br");
+			br.action_redraw = "
+								this.graphics.beginFill (DefaultStyle.BACKGROUND + 0x202020, 0.5);
+								this.graphics.drawRoundRectComplex (0, 0, 32, 32, 0, 0, 0, 4);
+								this.graphics.drawRect (0, 0, 22, 22);
+								this.graphics.endFill ();
+								this.x = box.width - 22;
+								this.y = box.height - 22;
+								";
 
 			br.buttonMode = true;
 			br.focusRect = false;
@@ -193,13 +204,11 @@ class Window extends Component, implements Dynamic
 			br.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
 			br.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
 
-			this.addChild (br);
 
 			//
 			if(bl != null && bl.parent == this)
 				removeChild(bl);
-			bl = new Sprite ();
-			bl.name = "bl";
+			bl = new Component (this, "bl");
 			bl.graphics.beginFill (0x1A1A1A, 0.5);
 			bl.graphics.drawRoundRectComplex (0, 0, 32, 32, 0, 0, 4, 0);
 			bl.graphics.drawRect (10, 0, 22, 22);
@@ -330,7 +339,7 @@ class Window extends Component, implements Dynamic
 		parent.setChildIndex (this, parent.numChildren - 1);
 
 
-		if (e.target == titlebar || e.target.name == "br" || e.target.name == "bl")
+		if (e.target == titlebar || e.target == br || e.target == bl)
 		{
 			e.target.dispatchEvent (new DragEvent (DragEvent.DRAG_START));
 			e.target.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
@@ -373,23 +382,6 @@ class Window extends Component, implements Dynamic
 		e.updateAfterEvent ();
 	}
 
-	/**
-	* Redraw just frame
-	*
-	*/
-	public function redrawFrame (fill:UInt, color:UInt)
-	{
-		frame.graphics.clear();
-		frame.graphics.beginFill(fill, 0.5);
-		frame.graphics.lineStyle(2, color);
-		frame.graphics.drawRoundRect(0, 0, box.width + 10, box.height + 10, 8, 8);
-		frame.graphics.drawRect(10, 20, box.width - 10, box.height - 20);
-
-		//~ frame.graphics.endFill ();
-		//~ frame.graphics.beginFill (0x8C8C8C, 0.5);
-		//~ frame.graphics.drawRect (10, 20, box.width - 20, box.height - 30);
-		frame.graphics.endFill();
-	}
 
 
 	/**
@@ -421,7 +413,9 @@ class Window extends Component, implements Dynamic
 		}
 
 		// frame
-		redrawFrame (fill, color);
+		//~ redrawFrame (fill, color);
+		//~ frame.redraw();
+		
 
 		// titlebar
 		titlebar.redraw({fillColor: fill, width:box.width+10});
