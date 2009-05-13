@@ -106,6 +106,12 @@ class Button extends Component, implements Dynamic
 
 	override public function init(opts:Dynamic=null)
 	{
+		color = Opts.optInt(opts,"color", DefaultStyle.BACKGROUND);
+		if(box.isEmpty())
+			box = new Rectangle(0,0,90,30);
+
+		super.init(opts);
+
 		useHandCursors = false;
 		action_mouseOver =
 			"
@@ -138,17 +144,9 @@ class Button extends Component, implements Dynamic
 				}
 			";
 
-		color = DefaultStyle.BACKGROUND;
-
 		label = new Label();
 		label.init();
-
-		if(box.isEmpty())
-			box = new Rectangle(0,0,90,30);
-		box.width = Opts.optFloat(opts,"width",box.width);
-		box.height = Opts.optFloat(opts,"height",30);
 		label.text = Opts.optString(opts,"label",name);
-		color = Opts.optInt(opts,"color", DefaultStyle.BACKGROUND);
 
 		label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
 		this.addChild(label);
@@ -175,9 +173,6 @@ class Button extends Component, implements Dynamic
 		// register with focus manager
 		//~ FocusManager.getInstance().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
 
-		//~ if(color==null || Math.isNaN(color))
-
-		redraw();
 	}
 
 	/**

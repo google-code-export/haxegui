@@ -88,9 +88,6 @@ class Container extends Component, implements IContainer, implements Dynamic
 		//~ if(this.parent!=null)
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-
-		redraw();
-
 	}
 
 

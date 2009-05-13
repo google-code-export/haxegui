@@ -86,7 +86,7 @@ class DropButton extends AbstractButton {
 *
 *
 */
-class ComboBox extends Button, implements Dynamic
+class ComboBox extends AbstractButton, implements Dynamic
 {
 	public var back : Sprite;
 	public var dropButton : DropButton;
@@ -101,6 +101,7 @@ class ComboBox extends Button, implements Dynamic
 	{
 		color = DefaultStyle.BACKGROUND;
 		box = new Rectangle(0,0,140,20);
+
 		super.init(opts);
 
 		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
@@ -131,21 +132,14 @@ class ComboBox extends Button, implements Dynamic
 		tf.setTextFormat(StyleManager.getTextFormat());
 		this.addChild(tf);
 
-
 		dropButton = new DropButton(this, "button");
 		dropButton.init({x: box.width - 20, width: 20, height: 20});
-		//~ dropButton.label.text = ">";
-		//~ dropButton.label.setTextFormat(StyleManager.getTextFormat(flash.text.TextFormatAlign.CENTER));
-		dropButton.removeChild( dropButton.getChildByName("label") );
-		//~ dropButton.filters = null;
 
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 		dropButton.filters = [shadow];
 
 		this.addEventListener (Event.ACTIVATE, onEnabled,false,0,true);
 		this.addEventListener (Event.DEACTIVATE, onDisabled,false,0,true);
-
-		redraw();
 	}
 
 	public function onEnabled(e:Event)

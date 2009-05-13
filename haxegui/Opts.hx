@@ -19,6 +19,8 @@
 
 package haxegui;
 
+import Type;
+
 /**
 *
 * Options handler
@@ -57,14 +59,21 @@ class Opts {
 	{
 		var v = getField(opts,field);
 		if(v == null) return defaultValue;
-		return cast field;
+		return cast v;
 	}
 
 	public static function optFloat(opts:Dynamic,field:String,defaultValue:Float) : Float
 	{
-		var v = getField(opts,field);
+		var v : Dynamic = getField(opts,field);
+
 		if(v == null) return defaultValue;
-		return Std.parseFloat(field);
+
+		if(Type.typeof(v) == TFloat || Type.typeof(v) == TInt) return cast v;
+
+		v = Std.parseFloat(field);
+		if(v == null)
+			return defaultValue;
+		return v;
 	}
 
 	public static function optInt(opts:Dynamic,field:String,defaultValue:Null<Int>) : Null<Int>

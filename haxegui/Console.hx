@@ -87,13 +87,6 @@ class Console extends Window, implements ITraceListener
 	}//end new
 
 
-	/**
-	*
-	*
-	*
-	*
-	*/
-	//~ public override function init(?name:String, ?x:Float, ?y:Float, ?width:Float, ?height:Float, ?sizeable:Bool)
 	public override function init(?opts:Dynamic)
 	{
 

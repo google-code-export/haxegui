@@ -49,6 +49,8 @@ class CloseButton extends Component
 
 	override public function init(opts:Dynamic=null)
 	{
+		super.init(opts);
+
 		action_redraw =
 			"
 				this.graphics.clear();
@@ -103,6 +105,7 @@ class CloseButton extends Component
 		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
 		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
 		this.addEventListener (MouseEvent.CLICK, onMouseClick, false, 0, true);
+
 	}
 
 	/** onRollOver Event **/

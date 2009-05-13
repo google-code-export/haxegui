@@ -92,9 +92,6 @@ class Toolbar extends Component, implements Dynamic
 
 
 		parent.addEventListener (ResizeEvent.RESIZE, onParentResize);
-
-
-		redraw();
 	}
 
 
