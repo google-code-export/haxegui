@@ -117,6 +117,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	public function redraw(?opts:Dynamic) {
+		StyleManager.exec(Type.getClass(this),"redraw", this, opts);
 	}
 
 	/**
@@ -241,6 +242,12 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	 function __getAction_mouseUp() { return action_mouseUp; }
 	 function __setAction_mouseUp(v:String) : String {
 		return action_mouseUp = StyleManager.setScript(Type.getClass(this), "mouseUp", v);
+	}
+
+	public var action_validate(__getAction_validate,__setAction_validate) : String;
+	 function __getAction_validate() { return action_validate; }
+	 function __setAction_validate(v:String) : String {
+		return action_validate = StyleManager.setScript(Type.getClass(this), "validate", v);
 	}
 
 	private function updateColorTween(t : Tween) {
