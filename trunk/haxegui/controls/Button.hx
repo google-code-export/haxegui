@@ -65,15 +65,13 @@ class Button extends AbstractButton, implements Dynamic
 
 	override public function init(opts:Dynamic=null)
 	{
-		color = DefaultStyle.BACKGROUND;
-		if(box.isEmpty())
-			box = new Rectangle(0,0,90,30);
 
 		super.init(opts);
+		
 
 		label = new Label();
+		label.text = Opts.optString(opts, "label", name);
 		label.init();
-		label.text = Opts.optString(opts,"label",name);
 
 		label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
 		this.addChild(label);
@@ -86,6 +84,23 @@ class Button extends AbstractButton, implements Dynamic
 
 		// register with focus manager
 		//~ FocusManager.getInstance().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
+
+		action_redraw =
+			"
+			this.graphics.clear();
+			var colors = [ color | 0x323232, color - 0x141414 ];
+			var alphas = [ 100, 100 ];
+			var ratios = [ 0, 0xFF ];
+			var matrix = new flash.geom.Matrix();
+			matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
+            this.graphics.lineStyle(2);
+			this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
+			this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+			this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
+			this.graphics.endFill ();
+			";
+
+		redraw();
 
 	}
 
@@ -100,47 +115,13 @@ class Button extends AbstractButton, implements Dynamic
 		redraw ();
 	}
 
-
-	override public function redraw(opts:Dynamic=null) : Void
+	override public function redraw (opts:Dynamic = null):Void
 	{
-		//~ if(color == 0 || Math.isNaN(color))
-		//~ color = DefaultStyle.BACKGROUND;
-
-		this.graphics.clear();
-		this.graphics.lineStyle (2, color - 0x141414 );
-
-		if( disabled )
-		{
-			//~ color = DefaultStyle.BACKGROUND - 0x141414;
-			this.graphics.lineStyle (2, color);
-
-			fmt = StyleManager.getTextFormat();
-			fmt.color = color - 0x202020;
-			fmt.align = flash.text.TextFormatAlign.CENTER;
-			label.tf.setTextFormat(fmt);
-
-			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
-			//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x202020 ,1 ,0x000000, .15, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
-			//~ this.filters = [shadow, bevel];
-			this.filters = [shadow];
-		}
-
-
-		//~ this.graphics.beginFill (color);
-
-		//~ var colors = [ color | 0x1A1A1A, color - 0x1A1A1A ];
-		//~ var colors = [ color | 0x323232, color - 0x333333 ];
-		var colors = [ color | 0x323232, color - 0x141414 ];
-
-
-		var alphas = [ 100, 100 ];
-		var ratios = [ 0, 0xFF ];
-		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(box.width, box.height, Math.PI/2, 0, 0);
-		this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-		this.graphics.drawRoundRect (0, 0, box.width, box.height, 8, 8 );
-		this.graphics.endFill ();
+		StyleManager.exec(Button,"redraw", this,
+			{
+				color: Opts.optInt(opts, "color", color),
+			});
 	}
+	
 }
 
