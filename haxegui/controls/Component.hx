@@ -120,7 +120,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	//~ public function redraw(?opts:Dynamic) {}
 
 	public function redraw(?opts:Dynamic) {
-		StyleManager.exec(Type.getClass(this),"redraw", this, opts);
+		StyleManager.exec(this,"redraw", opts);
 	}
 
 	/**
@@ -189,25 +189,25 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** onRollOver Event **/
 	public function onRollOver(e:MouseEvent)
 	{
-		StyleManager.exec(Type.getClass(this),"mouseOver", this, {event : e});
+		StyleManager.exec(this,"mouseOver", {event : e});
 	}
 
 	/** onRollOut Event **/
 	public function onRollOut(e:MouseEvent) : Void
 	{
-		StyleManager.exec(Type.getClass(this),"mouseOut", this, {event : e});
+		StyleManager.exec(this,"mouseOut", {event : e});
 	}
 
 	public function onMouseDown(e:MouseEvent) : Void
 	{
-		StyleManager.exec(Type.getClass(this),"mouseDown", this, {event : e});
+		StyleManager.exec(this,"mouseDown", {event : e});
 	}
 
 	/**
 	*/
 	public function onMouseUp(e:MouseEvent) : Void
 	{
-		StyleManager.exec(Type.getClass(this),"mouseUp", this, {event : e});
+		StyleManager.exec(this,"mouseUp", {event : e});
 	}
 
 	public function onKeyDown(e:KeyboardEvent)
@@ -221,36 +221,36 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	public var action_redraw(__getAction_redraw,__setAction_redraw) : String;
 	 function __getAction_redraw() { return action_redraw; }
 	 function __setAction_redraw(v:String) : String {
-		return action_redraw = StyleManager.setScript(Type.getClass(this), "redraw", v);
+		return action_redraw = StyleManager.setInstanceScript(this, "redraw", v);
 	}
 	public var action_mouseOver(__getAction_mouseOver,__setAction_mouseOver) : String;
 	 function __getAction_mouseOver() { return action_mouseOver; }
 	 function __setAction_mouseOver(v:String) : String {
-		return action_mouseOver = StyleManager.setScript(Type.getClass(this), "mouseOver", v);
+		return action_mouseOver = StyleManager.setInstanceScript(this, "mouseOver", v);
 	}
 
 	public var action_mouseOut(__getAction_mouseOut,__setAction_mouseOut) : String;
 	 function __getAction_mouseOut() { return action_mouseOut; }
 	 function __setAction_mouseOut(v:String) : String {
-		return action_mouseOut = StyleManager.setScript(Type.getClass(this), "mouseOut", v);
+		return action_mouseOut = StyleManager.setInstanceScript(this, "mouseOut", v);
 	}
 
 	public var action_mouseDown(__getAction_mouseDown,__setAction_mouseDown) : String;
 	 function __getAction_mouseDown() { return action_mouseDown; }
 	 function __setAction_mouseDown(v:String) : String {
-		return action_mouseDown = StyleManager.setScript(Type.getClass(this), "mouseDown", v);
+		return action_mouseDown = StyleManager.setInstanceScript(this, "mouseDown", v);
 	}
 
 	public var action_mouseUp(__getAction_mouseUp,__setAction_mouseUp) : String;
 	 function __getAction_mouseUp() { return action_mouseUp; }
 	 function __setAction_mouseUp(v:String) : String {
-		return action_mouseUp = StyleManager.setScript(Type.getClass(this), "mouseUp", v);
+		return action_mouseUp = StyleManager.setInstanceScript(this, "mouseUp", v);
 	}
 
 	public var action_validate(__getAction_validate,__setAction_validate) : String;
 	 function __getAction_validate() { return action_validate; }
 	 function __setAction_validate(v:String) : String {
-		return action_validate = StyleManager.setScript(Type.getClass(this), "validate", v);
+		return action_validate = StyleManager.setInstanceScript(this, "validate", v);
 	}
 
 	private function updateColorTween(t : Tween) {

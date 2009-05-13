@@ -122,25 +122,46 @@ class AbstractButton extends Component
 
 		super.init(opts);
 
-		action_mouseOver =
+
+
+		buttonMode = true;
+		tabEnabled = true;
+		mouseEnabled = true;
+		focusRect = true;
+	}
+
+	static function __init__()
+	{
+		StyleManager.setDefaultScript(
+			AbstractButton,
+			"mouseOver",
 			"
 				if(this.disabled) return;
 				this.updateColorTween( new feffects.Tween(0, 50, 275, feffects.easing.Expo.easeOut ) );
 				CursorManager.setCursor(this.cursorOver);
-			";
-		action_mouseOut =
+			"
+		);
+		StyleManager.setDefaultScript(
+			AbstractButton,
+			"mouseOut",
 			"
 				if(this.disabled) return;
 				this.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 350, feffects.easing.Linear.easeOut ) );
 				CursorManager.setCursor(Cursor.ARROW);
-			";
-		action_mouseDown =
+			"
+		);
+		StyleManager.setDefaultScript(
+			AbstractButton,
+			"mouseDown",
 			"
 				if(this.disabled) return;
 				this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
 				CursorManager.setCursor(this.cursorPress);
-			";
-		action_mouseUp =
+   			"
+		);
+		StyleManager.setDefaultScript(
+			AbstractButton,
+			"mouseUp",
 			"
 				if(this.disabled) return;
 				this.redraw();
@@ -151,12 +172,8 @@ class AbstractButton extends Component
 				else {
 					this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
 				}
-			";
-
-		buttonMode = true;
-		tabEnabled = true;
-		mouseEnabled = true;
-		focusRect = true;
+   			"
+		);
 	}
 }
 
