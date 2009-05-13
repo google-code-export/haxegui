@@ -64,19 +64,6 @@ class CursorManager extends EventDispatcher
 
 	private static var _instance : CursorManager = null;
 
-	public static function getInstance ():CursorManager
-	{
-		if (CursorManager._instance == null)
-		{
-			CursorManager._instance = new CursorManager ();
-		}
-		return CursorManager._instance;
-	}
-
-	public static function setCursor(c:Cursor) : Void
-	{
-		getInstance().cursor = c;
-	}
 
 	///////////////////////////////////////////////////
 	////              Public                       ////
@@ -86,10 +73,23 @@ class CursorManager extends EventDispatcher
 	public var visible(__getVisible,__setVisible) : Bool;
 	public var _mc(default,null) : MovieClip;
 
+	/** Singleton private constructor **/
 	private function new ()
 	{
 		super ();
 	}
+
+	/** Singleton access **/
+	public static function getInstance ():CursorManager
+	{
+		if (CursorManager._instance == null)
+		{
+			CursorManager._instance = new CursorManager ();
+		}
+		return CursorManager._instance;
+	}
+
+
 
 	public override function toString () : String
 	{
@@ -104,6 +104,11 @@ class CursorManager extends EventDispatcher
 		cursor = Cursor.ARROW;
 	}
 
+	public static function setCursor(c:Cursor) : Void
+	{
+		getInstance().cursor = c;
+	}
+
 	private function getCursor() : MovieClip
 	{
 		return _mc;
@@ -111,33 +116,26 @@ class CursorManager extends EventDispatcher
 
 	public function inject(x:Float, y:Float) {
 
-		_mc.x = x - 10;
-		_mc.y = y - 10;
+		var p = new Point( x, y );
 
 		switch(cursor)
 		{
+			default:
+
 			case Cursor.ARROW:
-				_mc.x = x - 5;
-				_mc.y = y - 2;
+				p.offset(-5,-2);
 
-			case Cursor.HAND:
-				_mc.x = x - 14;
-				_mc.y = y - 2;
 
-			case Cursor.HAND2:
-				_mc.x = x - 14;
-				_mc.y = y - 2;
-
-			case Cursor.DRAG:
-				_mc.x = x - 14;
-				_mc.y = y - 2;
+			case Cursor.HAND, Cursor.HAND2, Cursor.DRAG:
+				p.offset(-14,-2);
 
 			case Cursor.CROSSHAIR:
-				_mc.x = x - 23;
-				_mc.y = y - 17;
+				p.offset(-23,-17);
 		}
 
-		//~ flash.Lib.current.setChildIndex(_mc, flash.Lib.current.numChildren - 1 );
+		_mc.x = p.x;
+		_mc.y = p.y;
+		
 		toTop();
 
 	}//inject
@@ -244,7 +242,7 @@ class CursorManager extends EventDispatcher
 	public static var img_ne = flash.Lib.attach("AngleNE");
 	/** The North West resizer image **/
 	public static var img_nw = flash.Lib.attach("AngleNW");
-	/** **/
+	/** The All Direction resizer image **/
 	public static var img_sizeall = flash.Lib.attach("SizeAll");
 	/** The crosshair cursor image **/
 	public static var img_crosshair = flash.Lib.attach("Crosshair");
