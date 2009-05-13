@@ -119,7 +119,6 @@ class AbstractButton extends Component
 		color = DefaultStyle.BACKGROUND;
 		if(box.isEmpty())
 			box = new Rectangle(0,0,90,30);
-		box.height = 30.;
 
 		super.init(opts);
 

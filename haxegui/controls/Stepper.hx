@@ -55,6 +55,9 @@ class Stepper extends Component, implements Dynamic
 	var timer : Timer;
 	var delta : Float;
 
+	var autoRepeat : Bool;
+	
+	
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
@@ -82,9 +85,7 @@ class Stepper extends Component, implements Dynamic
 
 		back = new Sprite();
 		back.graphics.lineStyle(2, color - 0x141414);
-		//~ back.graphics.beginFill(color);
 		back.graphics.beginFill(DefaultStyle.INPUT_BACK);
-		//~ back.graphics.drawRoundRect(0,0,40,20,8,8);
 		back.graphics.drawRoundRectComplex (0, 0, box.width - 10, box.height, 4, 0, 4, 0 );
 		back.graphics.endFill();
 		this.addChild(back);
@@ -94,19 +95,13 @@ class Stepper extends Component, implements Dynamic
 		tf.name = "tf";
 		tf.type = flash.text.TextFieldType.INPUT;
 		tf.selectable = true;
-		//~ tf.background = true;
-		//~ tf.border = true;
-		//~ tf.borderColor = color - 0x141414;
 		tf.width = box.width - 10;
 		tf.height = 20;
-		//~ tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
-		//~ tf.y = .5*(box.height - tf.height);
 		tf.x = 4;
 		tf.y = 4;
 		tf.text = Std.string(value);
 
 		tf.embedFonts = true;
-		//~ tf.setTextFormat(StyleManager.getTextFormat(12));
 		tf.setTextFormat(StyleManager.getTextFormat());
 
 		this.addChild(tf);
@@ -156,7 +151,7 @@ class Stepper extends Component, implements Dynamic
 		//~ redraw(DefaultStyle.BACKGROUND + 0x323232 );
 //		redraw(DefaultStyle.BACKGROUND | 0x141414 );
 		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
-		e.target.redraw(e.target.color | 0x202020 );
+		//~ e.target.redraw(e.target.color | 0x202020 );
 		//~ redraw(color + 0x141414 );
 		CursorManager.setCursor(Cursor.HAND);
 
@@ -169,7 +164,7 @@ class Stepper extends Component, implements Dynamic
 	public  function onBtnRollOut(e:MouseEvent) : Void
 	{
 		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
-		e.target.redraw();
+		//~ e.target.redraw();
 //		CursorManager.setCursor(Cursor.ARROW);
 	}
 
@@ -199,7 +194,7 @@ class Stepper extends Component, implements Dynamic
 		dispatchEvent(new Event(Event.CHANGE));
 
 		//~ e.target.redraw(color - 0x202020);
-		e.target.redraw(e.target.color | 0x666666);
+		//~ e.target.redraw(e.target.color | 0x666666);
 
 		e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
 
