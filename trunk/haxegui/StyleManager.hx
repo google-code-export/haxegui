@@ -22,8 +22,11 @@ package haxegui;
 import flash.display.DisplayObject;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
+import flash.utils.TypedDictionary;
 
 import haxegui.CursorManager;
+import haxegui.controls.Component;
+import haxegui.utils.ScriptStandardLibrary;
 
 import hscript.Expr;
 import hscript.Interp;
@@ -37,27 +40,94 @@ typedef ScriptObject = {
 
 class StyleManager implements Dynamic
 {
-	public static function commonInit(interp:Interp) : Void {
-		StyleManager.setExports(interp);
-	}
+	static var defaultActions : Hash<ScriptObject>;
+	static var instanceActions : TypedDictionary<Component,Hash<ScriptObject>>;
+	static var initialized : Bool;
 
 	public static function commonSetup(interp:Interp, obj:DisplayObject, opts:Dynamic) : Void {
 		for(f in Reflect.fields(opts))
 			interp.variables.set(f, Reflect.field(opts,f));
 	}
 
+	/**
+	* Inlined method for exec, for readability
+	*/
+	private static inline function doCall(inst:Component,so:ScriptObject,options:Dynamic) : Void
+	{
+		if(so != null) {
+			if(so.setup != null)
+				so.setup(so.interp,inst,options);
+			so.interp.variables.set("this",inst);
+			so.interp.execute( so.program );
+		}
+	}
 
-// 	private static var _instance : StyleManager;
-//
-// 	public static function getInstance ():StyleManager
-// 	{
-// 		if (StyleManager._instance == null)
-// 		{
-// 			StyleManager._instance = new StyleManager();
-// 			StyleManager._instance.init();
-// 		}
-// 		return StyleManager._instance;
-// 	}
+	/**
+	* Execute a script for a particular Component
+	*
+	* @param inst The component executing the script ("this")
+	* @param action An action type
+	* @param options Object with key->value mapping of vars to pass to script
+	**/
+	public static function exec(inst:Component, action:String, options:Dynamic) {
+		try {
+			doCall(inst, getInstanceActionObject(inst, action), options);
+		} catch(e:Dynamic) {
+			if(e != "No default action.") {
+				trace(inst.toString() + " " + action + " script error : " + e);
+			}
+		}
+	}
+
+	/**
+	* Returns the default ScriptObject for the classType, throwing an error
+	* if it does not exist.
+	*
+	* @param classType
+	* @param action StyleManager action var name
+	* @return ScriptObject which is the default for the Component type
+	* @throws String "No default action." if a default action does not exist
+	**/
+	private static function getDefaultActionObject(classType:Class<Dynamic>, action:String) : ScriptObject {
+		var key = getDefaultActionKey(classType, action);
+		if(!defaultActions.exists(key) || defaultActions.get(key) == null) {
+			var sc = Type.getSuperClass(classType);
+			if(sc == null || !Std.is(sc, Component))
+				throw "No default action.";
+			return getDefaultActionObject(sc, action);
+		}
+		return(defaultActions.get(key));
+	}
+
+	/**
+	* Returns the key for the default action for the given Component instance
+	*
+	* @return String key used to index the defaultActions Hash
+	**/
+	private static inline function getDefaultActionKey(classType:Class<Dynamic>, action:String) : String
+	{
+		return Type.getClassName(classType) + "." + action;
+	}
+
+	/**
+	* Finds the best script for a Component instance for a given action.
+	* If the instance has it's own script, that is returned, otherwise
+	* the default for the instance's class type is returned, if any.
+	*
+	* @param inst A Component
+	* @param action Action type
+	* @return ScriptObject, either the instance one, or the default for the class
+	* @throws String on error
+	**/
+	private static function getInstanceActionObject(inst:Component, action:String) : ScriptObject
+	{
+		if(instanceActions.exists(inst)) {
+			var so = instanceActions.get(inst).get(action);
+			if(so != null)
+				return so;
+		}
+		return getDefaultActionObject(Type.getClass(inst), action);
+	}
 
 	public static function getTextFormat(?size:UInt, ?color:UInt, ?align:flash.text.TextFormatAlign) : TextFormat
 	{
@@ -80,71 +150,42 @@ class StyleManager implements Dynamic
 		return fmt;
 	}
 
-
 	/**
-	* Sets all the exported library methods to the given interpreter.
-	* <ul>
-	* <li>Math
-	* <li>flash.display.GradientType
-	* <li>flash.geom.Matrix
-	* </ul>
+	* Sets the hscript for a particular event. All events are the same names as the
+	* public fields of the StyleManager instance.
+	*
+	* @param action An action name
+	* @param code The code to execute.
+	* @param init The initialization function for the interpreter, which is run once
+	* @param setup The function called each time a display object needs to run the script
+	* @throws String if action is invalid
 	**/
-	public static function setExports(interp:Interp) {
-		interp.variables.set("Math",Math);
-		interp.variables.set("feffects",
+	public static function setDefaultScript(
+				classType : Class<Dynamic>,
+				action:String,
+				code:String,
+				init:Interp->Void=null,
+				setup:Interp->DisplayObject->Dynamic->Void=null)
+	{
+		if(!initialized) initialize();
+		var parser = new hscript.Parser();
+		var program = parser.parseString((code==null) ? "" : code);
+		var interp = new hscript.Interp();
+		if(init != null)
+			init(interp);
+		else
+			ScriptStandardLibrary.set(interp);
+		if(setup == null)
+			setup = commonSetup;
+
+		defaultActions.set(
+			getDefaultActionKey(classType,action),
 			{
-				Tween : feffects.Tween,
-				easing : {
-					Back : feffects.easing.Back,
-					Bounce : feffects.easing.Bounce,
-					Circ : feffects.easing.Circ,
-					Cubic : feffects.easing.Cubic,
-					Sine : feffects.easing.Sine,
-					Elastic : feffects.easing.Elastic,
-					Expo : feffects.easing.Expo,
-					Linear : feffects.easing.Linear,
-					Quad : feffects.easing.Quad,
-					Quart : feffects.easing.Quart,
-					Quint : feffects.easing.Quint,
-				},
+				interp:interp,
+				program: program,
+				setup: setup,
 			});
-		interp.variables.set("flash",
-			{
-				display : {
-					GradientType : {
-						LINEAR: flash.display.GradientType.LINEAR,
-						RADIAL: flash.display.GradientType.RADIAL,
-					},
-					LineScaleMode : {
-						VERTICAL : flash.display.LineScaleMode.VERTICAL,
-						NORMAL : flash.display.LineScaleMode.NORMAL,
-						NONE : flash.display.LineScaleMode.NONE,
-						HORIZONTAL : flash.display.LineScaleMode.HORIZONTAL
-					}
-				},
-				geom : {
-					Point : flash.geom.Point,
-					Rectangle : flash.geom.Rectangle,
-					Matrix : flash.geom.Matrix,
-				},
-				text : {
-					TextField : flash.text.TextField,
-					TextFieldType : flash.text.TextFieldType,
-				}
-			});
-		interp.variables.set("DefaultStyle", DefaultStyle);
-		interp.variables.set("CursorManager", CursorManager);
-		interp.variables.set("Cursor",{
-				ARROW : Cursor.ARROW,
-				HAND : Cursor.HAND,
-				HAND2 : Cursor.HAND2,
-				DRAG : Cursor.DRAG,
-				IBEAM : Cursor.IBEAM,
-				NE : Cursor.NE,
-				NW : Cursor.NW,
-				SIZE_ALL : Cursor.SIZE_ALL,
-				CROSSHAIR : Cursor.CROSSHAIR,
-			});
+		return code;
 	}
 
 	/**
@@ -157,24 +198,29 @@ class StyleManager implements Dynamic
 	* @param setup The function called each time a display object needs to run the script
 	* @throws String if action is invalid
 	**/
-	public static function setScript(
-				classType : Class<Dynamic>,
+	public static function setInstanceScript(
+				inst : Component,
 				action:String,
 				code:String,
 				init:Interp->Void=null,
 				setup:Interp->DisplayObject->Dynamic->Void=null)
 	{
+		if(!initialized) initialize();
+		var classType = Type.getClass(inst);
 		var parser = new hscript.Parser();
 		var program = parser.parseString((code==null) ? "" : code);
 		var interp = new hscript.Interp();
 		if(init != null)
 			init(interp);
 		else
-			setExports(interp);
+			ScriptStandardLibrary.set(interp);
 		if(setup == null)
 			setup = commonSetup;
 
-		actions.set(getActionKey(classType,action),{
+		if(!instanceActions.exists(inst))
+			instanceActions.set(inst, new Hash<ScriptObject>());
+		instanceActions.get(inst).set(action,
+			{
 				interp:interp,
 				program: program,
 				setup: setup,
@@ -182,51 +228,14 @@ class StyleManager implements Dynamic
 		return code;
 	}
 
-	public static function exec(classType:Class<Dynamic>, action:String, obj:DisplayObject, options:Dynamic) {
-		try {
-			doCall(getActionField(classType, action), obj, options);
-		} catch(e:Dynamic) {
-			if(e != "Not a valid action")
-				trace(getActionKey(classType, action) + " script error : " + e);
-		}
-	}
-
-	private static function doCall(so:ScriptObject,obj:DisplayObject,options:Dynamic) : Void
-	{
-		if(so == null)
-			return;
-		if(so.setup != null)
-			so.setup(so.interp,obj,options);
-		so.interp.variables.set("this",obj);
-		so.interp.execute( so.program );
-	}
-
-	/**
-	* Checks if the named action is valid, throwing an error if not
-	*
-	* @param action StyleManager action var name
-	* @return Current value of the StyleManager instance field
-	* @throws String on error
-	**/
-	private static function getActionField(classType:Class<Dynamic>, action:String) : Dynamic {
-		var key = getActionKey(classType, action);
-		if(!actions.exists(key) || actions.get(key) == null)
-			throw "Not a valid action";
-		return(actions.get(key));
-	}
-
-	private static function getActionKey(classType:Class<Dynamic>, action:String) : String
-	{
-		return Type.getClassName(classType) + "." + action;
-	}
-
-	static var actions : Hash<ScriptObject>;
-	static var initialized : Bool;
-	public static function initialize() {
+	static function initialize() {
 		if(initialized) return;
 		initialized = true;
-		actions = new Hash<ScriptObject>();
+		defaultActions = new Hash<ScriptObject>();
+		// uses weak keys so when instance is gone, so is the script object.
+		instanceActions = new TypedDictionary<Component,Hash<ScriptObject>>(true);
 	}
+
 	static function __init__() : Void {
 		initialize();
 	}
@@ -241,5 +250,4 @@ class DefaultStyle {
 	public static var DROPSHADOW:UInt = 0x000000;
 	public static var PANEL:UInt = 0xF3F3F3;
 	public static var PROGRESS_BAR:UInt = 0xFFFFFF;
-
 }

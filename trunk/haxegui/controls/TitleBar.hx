@@ -44,10 +44,25 @@ class CloseButton extends AbstractButton
 		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
-	override public function init(opts:Dynamic=null)
+	override public function redraw (opts:Dynamic = null):Void
 	{
-		super.init(opts);
-		action_redraw =
+		StyleManager.exec(this,"redraw",
+			{
+				color: Opts.optInt(opts, "color", color),
+			});
+	}
+
+	public function onMouseClick(e:MouseEvent) : Void
+	{
+		trace("Close clicked on " + parent.parent.toString());
+		//~ parent.dispatchEvent(new Event(Event.CLOSE));
+	}
+
+	static function __init__()
+	{
+		StyleManager.setDefaultScript(
+			CloseButton,
+			"redraw",
 			"
 				this.graphics.clear();
 				var grad = flash.display.GradientType.LINEAR;
@@ -64,22 +79,8 @@ class CloseButton extends AbstractButton
 				this.graphics.lineTo(8,8);
 				this.graphics.moveTo(8,4);
 				this.graphics.lineTo(4,8);
-			";
-	}
-
-	override public function redraw (opts:Dynamic = null):Void
-	{
-		StyleManager.exec(CloseButton,"redraw", this,
-			{
-				color: Opts.optInt(opts, "color", color),
-			});
-	}
-	
-
-	public function onMouseClick(e:MouseEvent) : Void
-	{
-		trace("Close clicked on " + parent.parent.toString());
-		//~ parent.dispatchEvent(new Event(Event.CLOSE));
+			"
+		);
 	}
 }
 
@@ -124,12 +125,12 @@ class MinimizeButton extends AbstractButton
 
 	override public function redraw (opts:Dynamic = null):Void
 	{
-		StyleManager.exec(MinimizeButton,"redraw", this,
+		StyleManager.exec(this,"redraw",
 			{
 				color: Opts.optInt(opts, "color", color),
 			});
 	}
-	
+
 
 	public function onMouseClick(e:MouseEvent) : Void
 	{
@@ -231,7 +232,7 @@ class TitleBar extends Component, implements Dynamic
 
 		title.setTextFormat (StyleManager.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
 
-		StyleManager.exec(TitleBar,"redraw", this,
+		StyleManager.exec(this,"redraw",
 			{
 				width : w,
 				color: Opts.optInt(opts, "color", untyped parent.color),

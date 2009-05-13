@@ -67,9 +67,21 @@ class ScriptStandardLibrary
 						LINEAR: flash.display.GradientType.LINEAR,
 						RADIAL: flash.display.GradientType.RADIAL,
 					},
+					LineScaleMode : {
+						VERTICAL : flash.display.LineScaleMode.VERTICAL,
+						NORMAL : flash.display.LineScaleMode.NORMAL,
+						NONE : flash.display.LineScaleMode.NONE,
+						HORIZONTAL : flash.display.LineScaleMode.HORIZONTAL,
+					},
 				},
 				geom : {
 					Matrix : flash.geom.Matrix,
+					Point : flash.geom.Point,
+					Rectangle : flash.geom.Rectangle,
+				},
+				text : {
+					TextField : flash.text.TextField,
+					TextFieldType : flash.text.TextFieldType,
 				},
 			});
 		interp.variables.set("DefaultStyle", DefaultStyle);
