@@ -1,4 +1,5 @@
 -main Loader.hx
+-lib feffects
 -lib hscript
 -swf9 loader.swf
 -swf-version 9

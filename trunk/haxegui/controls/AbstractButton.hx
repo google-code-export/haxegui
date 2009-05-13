@@ -38,6 +38,7 @@ import flash.text.TextFormat;
 import haxegui.StyleManager;
 import haxegui.CursorManager;
 import haxegui.events.MoveEvent;
+import haxegui.Opts;
 
 import feffects.Tween;
 import feffects.easing.Quint;
@@ -56,14 +57,14 @@ import feffects.easing.Quart;
 
 /**
 *
-* Button Class
+* Abstract Button Class
 *
 * @version 0.1
 * @author <gershon@goosemoose.com>
 * @author Russell Weir'
 *
 */
-class Button extends Component, implements Dynamic
+class AbstractButton extends Component
 {
 	/** Sets whether mouse events in buttons use hand cursors **/
 	public static var useHandCursors(default,__setHandCursors) : Bool;
@@ -86,11 +87,6 @@ class Button extends Component, implements Dynamic
 		return v;
 	}
 
-	/**
-	*  @see Label
-	*/
-	public var label :Label;
-	public var fmt : TextFormat;
 	public var color(default, default) : UInt;
 	/** The cursor to use when the mouse is over this button **/
 	public var cursorOver : Cursor;
@@ -109,18 +105,19 @@ class Button extends Component, implements Dynamic
 		super (parent, name, x, y);
 		cursorOver = defaultCursorOver;
 		cursorPress = defaultCursorPress;
+		useHandCursors = false;
 	}
 
 	/**
 	* Init Function
 	*
 	*
-	* @param initObj Dynamic object
+	* @param opts Dynamic object
 	*
 	*/
-	public function init(?initObj:Dynamic)
+	public override function init(?opts:Dynamic)
 	{
-		useHandCursors = false;
+		super.init(opts);
 		action_mouseOver =
 			"
 				if(this.disabled) return;
@@ -152,30 +149,10 @@ class Button extends Component, implements Dynamic
 				}
 			";
 
-		color = DefaultStyle.BACKGROUND;
-
-		label = new Label();
-		//~ label.init();
-
-		if(Reflect.isObject(initObj))
-		{
-			for (f in Reflect.fields (initObj))
-				if (Reflect.hasField (this, f))
-					if (f!="label" && f != "width" && f != "height")
-						Reflect.setField (this, f, Reflect.field (initObj, f));
-			//~
-			//~ name = (initObj.name == null) ? name : initObj.name;
-			//~ name = (initObj.id == null) ? name : initObj.id;
-			label.text = (initObj.label == null) ? name : initObj.label;
-			//~ label.init({text:(initObj.label == null) ? name : initObj.label});
-
-			//~ move(initObj.x, initObj.y);
-			//~ box.width = ( Math.isNaN(initObj.width) ) ? 90 : initObj.width;
-			box.width = ( Math.isNaN(initObj.width) ) ? label.width : initObj.width;
-			box.height = ( Math.isNaN(initObj.height) ) ? 30 : initObj.height;
-			color = (initObj.color==null) ? color : initObj.color;
-			disabled = (initObj.disabled==null) ? disabled : initObj.disabled;
-		}
+		box.width = Opts.optFloat(opts, "width", label.width);
+		box.height = Opts.optFloat(opts, "height", 30.);
+		color = Opts.optInt(opts, "color", DefaultStyle.BACKGROUND);
+		disabled = Opts.optBool(opts, "disabled", false);
 
 
 		buttonMode = true;
@@ -185,12 +162,7 @@ class Button extends Component, implements Dynamic
 
 		if(box.isEmpty())
 			box = new Rectangle(0,0,90,30);
-		//~ else
-		//~ if(Math.isNaN(box.width))
-			//~ box.width = 90;
-		//~ else
-		//~ if(Math.isNaN(box.height))
-			//~ box.height = 30;
+
 
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
@@ -198,36 +170,16 @@ class Button extends Component, implements Dynamic
 		this.filters = [shadow];
 		//~ this.filters = [shadow, bevel];
 
-		label.init();
-		//~ label.init({text:name});
-		//~ label.move( .5*(this.width - label.width), .5*(this.height - label.height) );
-		label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
-		this.addChild(label);
-
 		// register with focus manager
 		//~ FocusManager.getInstance().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
-
-		//~ if(color==null || Math.isNaN(color))
 
 		redraw();
 	}
 
 	/**
 	*
-	* @param e
-	*
 	*/
-	public function onFocusChanged (e:FocusEvent)
-	{
-		//~ var color = this.hasFocus ()? DefaultStyle.BACKGROUND | 0x141414: DefaultStyle.BACKGROUND;
-		redraw ();
-	}
-
-
-	/**
-	*
-	*/
-	public dynamic function redraw() : Void
+	public function redraw() : Void
 	{
 		//~ if(color == 0 || Math.isNaN(color))
 		//~ color = DefaultStyle.BACKGROUND;

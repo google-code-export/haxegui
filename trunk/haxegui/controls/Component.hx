@@ -21,12 +21,15 @@ package haxegui.controls;
 
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
+import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
 import flash.geom.ColorTransform;
 import flash.geom.Rectangle;
 
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.FocusManager;
+import haxegui.StyleManager;
 
 import feffects.Tween;
 
@@ -81,6 +84,19 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 		//~ margin = new Rectangle();
 		//~ trace("New " + this);
+
+		// Listeners
+		this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
+		this.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
+		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
+		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
+		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
+	}
+
+	public function init(?opts:Dynamic) {
+	}
+
+	public function redraw(?opts:Dynamic) {
 	}
 
 	/**
@@ -143,6 +159,66 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 				},
 				null);
 		colorTween.start();
+	}
+
+
+	/** onRollOver Event **/
+	public function onRollOver(e:MouseEvent)
+	{
+		StyleManager.exec(Type.getClass(this),"mouseOver", this, {event : e});
+	}
+
+	/** onRollOut Event **/
+	public function onRollOut(e:MouseEvent) : Void
+	{
+		StyleManager.exec(Type.getClass(this),"mouseOut", this, {event : e});
+	}
+
+	public function onMouseDown(e:MouseEvent) : Void
+	{
+		StyleManager.exec(Type.getClass(this),"mouseDown", this, {event : e});
+	}
+
+	/**
+	*/
+	public function onMouseUp(e:MouseEvent) : Void
+	{
+		StyleManager.exec(Type.getClass(this),"mouseUp", this, {event : e});
+	}
+
+
+	public function onKeyDown(e:KeyboardEvent)
+	{
+	}
+
+
+	public var action_redraw(__getAction_redraw,__setAction_redraw) : String;
+	 function __getAction_redraw() { return action_redraw; }
+	 function __setAction_redraw(v:String) : String {
+		return action_redraw = StyleManager.setScript(Type.getClass(this), "redraw", v);
+	}
+	public var action_mouseOver(__getAction_mouseOver,__setAction_mouseOver) : String;
+	 function __getAction_mouseOver() { return action_mouseOver; }
+	 function __setAction_mouseOver(v:String) : String {
+		return action_mouseOver = StyleManager.setScript(Type.getClass(this), "mouseOver", v);
+	}
+
+	public var action_mouseOut(__getAction_mouseOut,__setAction_mouseOut) : String;
+	 function __getAction_mouseOut() { return action_mouseOut; }
+	 function __setAction_mouseOut(v:String) : String {
+		return action_mouseOut = StyleManager.setScript(Type.getClass(this), "mouseOut", v);
+	}
+
+	public var action_mouseDown(__getAction_mouseDown,__setAction_mouseDown) : String;
+	 function __getAction_mouseDown() { return action_mouseDown; }
+	 function __setAction_mouseDown(v:String) : String {
+		return action_mouseDown = StyleManager.setScript(Type.getClass(this), "mouseDown", v);
+	}
+
+	public var action_mouseUp(__getAction_mouseUp,__setAction_mouseUp) : String;
+	 function __getAction_mouseUp() { return action_mouseUp; }
+	 function __setAction_mouseUp(v:String) : String {
+		return action_mouseUp = StyleManager.setScript(Type.getClass(this), "mouseUp", v);
 	}
 
 }

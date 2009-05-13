@@ -59,124 +59,13 @@ import haxegui.CursorManager;
 import haxegui.StyleManager;
 
 import haxegui.controls.Component;
-
-
-
+import haxegui.controls.TitleBar;
 
 enum WindowType
 {
 	NORMAL;
 	MODAL;
 	ALWAYS_ON_TOP;
-}
-
-/**
-*
-* Titlebar class
-*
-* @author <gershon@goosemoose.com>
-* @version 0.1
-*/
-class Titlebar extends Sprite, implements Dynamic
-{
-
-	public var title : TextField;
-	public var closeButton : Component;
-	public var minimizeButton : Component;
-
-	public function new (? w : Float)
-	{
-		super ();
-
-		this.name = "titlebar";
-
-		//
-		this.graphics.beginFill (0x1A1A1A, 0.5);
-		this.graphics.drawRoundRectComplex (0, 0, w, 32, 4, 4, 0, 0);
-		this.graphics.drawRect (10, 20, w - 20, 12);
-		this.graphics.endFill ();
-
-
-		//
-		//~ closeButton = new Component(this, "closeButton");
-		closeButton = new Component (this, "closeButton");
-		closeButton.move(4,4);
-		closeButton.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
-		closeButton.addEventListener (MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
-		closeButton.addEventListener (MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
-
-		//
-		minimizeButton = new Component (this, "minimizeButton");
-		minimizeButton.move(20, 4);
-		minimizeButton.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
-		minimizeButton.addEventListener (MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
-		minimizeButton.addEventListener (MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
-
-		//mc.x = box.width - 32;
-		title = new TextField ();
-		title.name = "title";
-		title.text = this.name;
-		title.border = false;
-		//~ title.textColor = 0x000000;
-		title.x = 40;
-		title.y = 1;
-		//~ title.width = parent.width - 85;
-		title.autoSize = flash.text.TextFieldAutoSize.LEFT;
-		title.height = 18;
-		title.selectable = false;
-		title.mouseEnabled = false;
-		title.tabEnabled = false;
-		title.multiline = false;
-		title.embedFonts = true;
-
-		//~ title.antiAliasType = flash.text.AntiAliasType.NORMAL;
-		//~ title.sharpness = 100;
-		this.quality = flash.display.StageQuality.LOW;
-
-		title.setTextFormat (StyleManager.getTextFormat());
-
-		this.addChild (title);
-
-
-	}
-
-
-
-
-		/**
-		*
-		*
-		*/
-	public function redraw (? color : Int, ? w : Float):Void
-	{
-		title.x = Math.floor((w - title.width)/2);
-		//~ title.width = Math.floor(w - 85);
-		//~ title.y = 1;
-
-		StyleManager.exec("redrawTitleBar", this, {w:w, color:color});
-		StyleManager.exec("redrawCloseButton", closeButton, {color:color});
-		StyleManager.exec("redrawMinimizeButton", minimizeButton, {color:color});
-
-		title.setTextFormat (StyleManager.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
-
-	}
-
-	public function onRollOver (e:MouseEvent)
-	{
-		CursorManager.setCursor(Cursor.HAND);
-	}
-
-	public function onRollOut (e:MouseEvent)
-	{
-		//~CursorManager.setCursor(Cursor.HAND);
-	}
-
-	public function onMouseUp (e:MouseEvent)
-	{
-
-	}
-
-
 }
 
 /**
@@ -191,9 +80,7 @@ class Titlebar extends Sprite, implements Dynamic
 */
 class Window extends Component, implements Dynamic
 {
-
-
-	public var titlebar:Titlebar;
+	public var titlebar:TitleBar;
 
 	public var frame:Sprite;
 	public var br:Sprite;
@@ -215,9 +102,6 @@ class Window extends Component, implements Dynamic
 
 		super (parent, name, x, y);
 	}
-
-
-
 
 	/**
 	*
@@ -264,9 +148,9 @@ class Window extends Component, implements Dynamic
 		draw ();
 
 		// add a titlebar
-		titlebar = cast this.addChild (new Titlebar ());
-		titlebar.title.text = this.name;
-		titlebar.redraw ();
+		titlebar = new TitleBar(this, "titlebar");
+		titlebar.init({w:this.width, title:this.name});
+		titlebar.redraw();
 
 		titlebar.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
 		titlebar.addEventListener (MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
