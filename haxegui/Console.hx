@@ -68,6 +68,7 @@ class Console extends Window, implements ITraceListener
 	var history : Array<String>;
 	var pwd : DisplayObjectContainer;
 
+	var container : Container;
 	var tf : TextField;
 	var input : TextField;
 	var vert : Scrollbar;
@@ -78,38 +79,28 @@ class Console extends Window, implements ITraceListener
 	*/
 	public function new (?parent:DisplayObjectContainer, ?x:Float, ?y:Float)
 	{
-		super (parent, x, y);
-
+		super (parent, "Console", x, y);
 		tf = new TextField ();
 		input = new TextField();
 		vert = new Scrollbar(this, "vscrollbar");
+		container = new Container(this, "Container", 10, 44);
+		parser = new hscript.Parser();
+		history = new Array<String>();
 
-	}//end new
-
+		pwd = flash.Lib.current;
+	}
 
 	public override function init(?opts:Dynamic)
 	{
+// 		if(opts == null) opts = {};
 
-		//~ this.name =  ;
-		//~ super.init("Console", x, y, width, height, sizeable);
-		super.init({name:"Console", x:x, y:y, width:width, height:height, sizeable:true, color: 0x666666});
+// 		super.init({name:"Console", x:x, y:y, width:width, height:height, sizeable:true, color: 0x666666});
 
+		super.init(opts);
 
 		box = new Rectangle (0, 0, 640, 240);
 
 		//
-// 		var menubar = new Menubar (this, "Menubar", 10,20);
-// 		menubar.init ();
-
-
-		//
-		var container = new Container (this, "Container", 10, 44);
-		container.init({color: 0x222222, alpha: .8});
-
-
-
-		//
-		//~ tf = new TextField ();
 		tf.name = "tf";
 		tf.htmlText = "";
 		tf.width = box.width - 40;
@@ -121,28 +112,20 @@ class Console extends Window, implements ITraceListener
 		tf.multiline = true;
 		tf.autoSize = flash.text.TextFieldAutoSize.NONE;
 		tf.type = flash.text.TextFieldType.DYNAMIC;
-
 		tf.selectable = true;
 		tf.mouseEnabled = true;
 		tf.focusRect = true;
 		tf.tabEnabled = true;
 
-
-
-
 		//
-		//~ input = new TextField();
 		input.name = "input";
 		input.type = flash.text.TextFieldType.INPUT;
 		input.background = true;
 		input.backgroundColor = 0x4D4D4D;
 		input.border = true;
-
 		input.width = box.width - 40;
 		input.height = 20;
 		input.y = box.height - 70;
-
-
 		input.addEventListener (KeyboardEvent.KEY_DOWN, onInputKeyDown);
 
 
@@ -155,13 +138,13 @@ class Console extends Window, implements ITraceListener
 		//~ vert.init(content);
 		vert.init({target : tf});
 
-
-		container.addChild (tf);
+		//
+		container.init({
+			color: Opts.optInt(opts,"bgcolor",0x222222),
+			alpha: Opts.optFloat(opts, "bgalpha", 0.85),
+		});
+		container.addChild(tf);
 		container.addChild(input);
-
-
-		//~ redraw (null);
-		//~ menubar.redraw();
 
 		if(isSizeable())
 		{
@@ -170,12 +153,9 @@ class Console extends Window, implements ITraceListener
 			br.y = frame.height - 32;
 		}
 
-
 		parser = new hscript.Parser();
 		history = new Array<String>();
-		pwd = flash.Lib.current;
 
-		//~ redraw(null);
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 
@@ -186,10 +166,7 @@ class Console extends Window, implements ITraceListener
 	{
 		//~ var text:String =  "";
 		var text:String =  "<FONT FACE=\"MONO\" SIZE=\"10\" COLOR=\"#eeeeee\">";
-
-
 		text += DateTools.format (Date.now (), "%H:%M:%S") + "\t" ;
-
 
 		if(Std.is(e,Event))
 		{
@@ -197,21 +174,16 @@ class Console extends Window, implements ITraceListener
 			if(Reflect.hasField(e.target, "name"))
 				text += ":"+e.target.name;
 			text += "</B>\t" ;
-			}
-
+		}
 
 		text += e ;
 
 		tf.htmlText += text;
 		tf.htmlText += "</FONT>";
 		tf.scrollV = tf.maxScrollV + 1;
-
 	}
 
-	/*
-	*
-	*/
-	public override function onResize (e:ResizeEvent) : Void
+	override public function onResize (e:ResizeEvent) : Void
 	{
 		super.onResize(e);
 
@@ -231,14 +203,7 @@ class Console extends Window, implements ITraceListener
 		vert.box.width = box.width - 20;
 		vert.onResize(null);
 
-		if( this.getChildByName("Container")!=null )
-		{
-			var container = cast this.getChildByName("Container");
-			//~ container.box = box.clone();
-			//~ container.box -=
-			container.onResize(e);
-		}
-
+		container.onParentResize(e);
 
 // 		if( this.getChildByName("Menubar")!=null )
 // 		{
@@ -246,12 +211,8 @@ class Console extends Window, implements ITraceListener
 // 			menubar.onResize(e);
 // 		}
 
-		//~ dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-
+// 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
-
-
-
 
 	public function onInputKeyDown(e:KeyboardEvent) : Void
 	{
@@ -260,61 +221,47 @@ class Console extends Window, implements ITraceListener
 		{
 		case Keyboard.ENTER :
 			if(input.text=="")
-				//~ { tf.text += "\n"; return; }
-				{
-					trace("\n");
-					return;
-				}
-
-				//~
-			var program = parser.parseString(input.text);
-			history.push(input.text);
-			input.text = "";
-
-
-			var interp = new hscript.Interp();
-			interp.variables.set( "this", this );
-			interp.variables.set( "pwd", this.pwd );
-			interp.variables.set( "root", flash.Lib.current );
-			interp.variables.set( "Timer", Timer );
-			interp.variables.set( "Math", Math );
-
-			interp.variables.set( "clear", clear() );
-			interp.variables.set( "print_r", Utils.print_r );
-			interp.variables.set( "ls", Utils.print_r(pwd) );
-
-			interp.variables.set( "new", createInstance );
-			interp.variables.set( "class", getClass );
-
-			//~ var ret : Dynamic = interp.execute(program);
-				//~ trace( ret==null ? "\n" : ret );
-
-			try
 			{
-				trace(interp.execute(program));
-
+				trace("");
+				return;
 			}
-			catch(e:Dynamic)
-			{
+
+			try {
+				var program = parser.parseString(input.text);
+				history.push(input.text);
+				input.text = "";
+
+
+				var interp = new hscript.Interp();
+				interp.variables.set( "this", this );
+				interp.variables.set( "pwd", this.pwd );
+				interp.variables.set( "root", flash.Lib.current );
+				interp.variables.set( "Timer", Timer );
+				interp.variables.set( "Math", Math );
+
+				interp.variables.set( "clear", clear() );
+				interp.variables.set( "print_r", Utils.print_r );
+				interp.variables.set( "ls", Utils.print_r(pwd) );
+
+				interp.variables.set( "new", createInstance );
+				interp.variables.set( "class", getClass );
+
+				//~ var ret : Dynamic = interp.execute(program);
+					//~ trace( ret==null ? "\n" : ret );
+				trace(interp.execute(program));
+			} catch(e : Dynamic) {
 				trace("ERROR: " + e);
 			}
 
-		//~ default:
-
 		case Keyboard.UP :
 			input.text = history.pop();
-
-
 		}
-
 	}
 
 	public function clear()
 	{
 		tf.text = "";
 	}
-
-
 
 	function createInstance( s : String, a : Array<Dynamic> )
 	{

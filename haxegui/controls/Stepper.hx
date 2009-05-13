@@ -52,9 +52,6 @@ class Stepper extends Component, implements Dynamic
 	public var min : Float;
 	public var max : Float;
 
-
-	var color : UInt;
-
 	var timer : Timer;
 	var delta : Float;
 
@@ -71,10 +68,13 @@ class Stepper extends Component, implements Dynamic
 
 	override public function init(opts:Dynamic=null)
 	{
+		color = DefaultStyle.BACKGROUND;
+		box = new Rectangle(0,0,40,20);
+
 		super.init(opts);
 
-		box = new Rectangle(0,0,40,20);
-		color = DefaultStyle.BACKGROUND;
+
+
 		//~ color = DefaultStyle.INPUT_BACK;
 
 		box.width = Opts.optFloat(opts,"width",box.width);

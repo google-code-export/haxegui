@@ -38,22 +38,21 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.ui.Keyboard;
 
-import haxegui.events.ResizeEvent;
-import haxegui.events.MenuEvent;
 import haxegui.FocusManager;
 import haxegui.Opts;
 import haxegui.StyleManager;
-
+import haxegui.controls.Component;
+import haxegui.events.ResizeEvent;
+import haxegui.events.MenuEvent;
 
 /**
 *
 *
 *
 */
-class Menubar extends haxegui.controls.Component, implements Dynamic
+class Menubar extends Component, implements Dynamic
 {
 	public var numMenus : Int;
-	public var color : UInt;
 	private var _menu:Int;
 
 
@@ -66,9 +65,8 @@ class Menubar extends haxegui.controls.Component, implements Dynamic
 
 	override public function init(opts : Dynamic=null)
 	{
-		color = Opts.optInt(opts,"color", (cast parent).color);
-		box.width = Opts.optFloat(opts,"width",box.width);
-		box.height = Opts.optFloat(opts,"height",box.height);
+		if(Std.is(parent, Component))
+			color = (cast parent).color;
 
 		super.init(opts);
 

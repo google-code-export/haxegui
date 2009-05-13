@@ -52,8 +52,6 @@ class UiList extends Component
 
 	public var sortReverse : Bool;
 
-	var color : UInt;
-
 	var dragItem : Int;
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
@@ -69,9 +67,12 @@ class UiList extends Component
 
 	override public function init(opts : Dynamic=null)
 	{
-		color = (cast parent).color;
+		if(Std.is(parent, Component))
+			color = (cast parent).color;
 		box = new Rectangle(0,0, 140, 40);
+
 		super.init(opts);
+
 
 		if(opts == null) opts = {}
 		if(opts.innerData!=null)

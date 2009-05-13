@@ -46,7 +46,6 @@ class CheckBox extends Component, implements Dynamic
 	public var label : Label;
 	//~ public var button : Button;
 	public var button : Sprite;
-	public var color : UInt;
 
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)

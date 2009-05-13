@@ -42,11 +42,7 @@ import haxegui.controls.Scrollbar;
 class Container extends Component, implements IContainer, implements Dynamic
 //~ , implements IChildList
 {
-
-	public var color : UInt;
-
 	private var _clip : Bool;
-
 
 	public function new (?parent : flash.display.DisplayObjectContainer, ?name:String, ?x : Float, ?y: Float)
 	{
@@ -65,10 +61,9 @@ class Container extends Component, implements IContainer, implements Dynamic
 
 	override public function init(opts : Dynamic=null)
 	{
+		color = DefaultStyle.BACKGROUND;
+
 		super.init(opts);
-		color = Opts.optInt(opts,"color", DefaultStyle.BACKGROUND);
-		box.width = Opts.optFloat(opts,"width",box.width);
-		box.height = Opts.optFloat(opts,"height",box.height);
 
 		this.buttonMode = false;
 		this.mouseEnabled = false;
@@ -91,42 +86,36 @@ class Container extends Component, implements IContainer, implements Dynamic
 	}
 
 
-	/**
-	*
-	*
-	*/
-	public function onParentResize(e:Dynamic) {
+	public function onParentResize(e:ResizeEvent) {
 
-		if(Std.is(e, ResizeEvent))
-			if(Std.is(parent, Component))
-			{
-				box = untyped parent.box.clone();
-					box.width -= x;
-					box.height -= y;
-			}
+		if(Std.is(parent, Component))
+		{
+			box = untyped parent.box.clone();
+			box.width -= x;
+			box.height -= y;
+		}
 
-		if(Std.is(parent.parent, ScrollPane))
+		if(Std.is(parent.parent, ScrollPane)) {
 			box = untyped parent.parent.box.clone();
-			//~ box.union(untyped parent.parent.box.clone());
+		}
+		//~ box.union(untyped parent.parent.box.clone());
 
-			//~ if(!this.box.containsRect(this.getBounds(flash.Lib.current)))
-				//~ box.union(this.getBounds(flash.Lib.current));
-	//~
+		//~ if(!this.box.containsRect(this.getBounds(flash.Lib.current)))
+		//~ box.union(this.getBounds(flash.Lib.current));
 		//~ for(i in 0...numChildren-1)
-			//~ {
-				//~ box = box.union( getChildAt(i).getBounds(flash.Lib.current) );
-				//~ box.width -= x;
-				//~ box.height -= y;
-			//~ }
+		//~ {
+			//~ box = box.union( getChildAt(i).getBounds(flash.Lib.current) );
+			//~ box.width -= x;
+			//~ box.height -= y;
+		//~ }
 
 		redraw(null);
 
 		//
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
-		if(Std.is(e, ResizeEvent))
+		if(e != null)
 			e.updateAfterEvent();
-
 	}
 
 

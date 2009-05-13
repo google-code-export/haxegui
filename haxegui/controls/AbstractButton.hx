@@ -87,7 +87,6 @@ class AbstractButton extends Component
 		return v;
 	}
 
-	public var color(default, default) : UInt;
 	/** The cursor to use when the mouse is over this button **/
 	public var cursorOver : Cursor;
 	/** The cursor to use when this button is pressed **/
@@ -117,10 +116,8 @@ class AbstractButton extends Component
 	*/
 	override public function init(?opts:Dynamic)
 	{
-		box.width = Opts.optFloat(opts, "width", box.width);
-		box.height = Opts.optFloat(opts, "height", 30.);
-		color = Opts.optInt(opts, "color", DefaultStyle.BACKGROUND);
-		disabled = Opts.optBool(opts, "disabled", false);
+		box.height = 30.;
+		color = DefaultStyle.BACKGROUND;
 
 		super.init(opts);
 

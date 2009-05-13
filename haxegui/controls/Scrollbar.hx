@@ -68,9 +68,6 @@ enum ScrollbarType {
 */
 class Scrollbar extends haxegui.controls.Component
 {
-
-	public var color : UInt;
-
 	var horizontal : Bool;
 
 	var frame : Sprite;

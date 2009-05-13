@@ -68,19 +68,33 @@ class Opts {
 
 		if(v == null) return defaultValue;
 
-		if(Type.typeof(v) == TFloat || Type.typeof(v) == TInt) return cast v;
+		if(Std.is(v,Float) || Std.is(v, Int))
+			return v;
 
-		v = Std.parseFloat(field);
+		if(Std.is(v, String)) {
+			v = Std.parseFloat(v);
+			if(Math.isNaN(v))
+				return defaultValue;
+			return v;
+		}
 		if(v == null)
 			return defaultValue;
 		return v;
 	}
 
-	public static function optInt(opts:Dynamic,field:String,defaultValue:Null<Int>) : Null<Int>
+	public static function optInt(opts:Dynamic,field:String,defaultValue:Int) : Int
 	{
-		var v = getField(opts,field);
+		var v : Dynamic = getField(opts,field);
 		if(v == null) return defaultValue;
-		return Std.parseInt(field);
+		if(Std.is(v,Float) || Std.is(v, Int))
+			return Std.int(v);
+		if(Std.is(v, String)) {
+			v = Std.parseInt(v);
+			if(v == null)
+				return defaultValue;
+			return v;
+		}
+		return defaultValue;
 	}
 
 	public static function optString(opts:Dynamic,field:String,defaultValue:String) : String

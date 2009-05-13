@@ -47,7 +47,6 @@ class RadioButton extends Component, implements Dynamic
 	//~ public var group :
 	public var checked(default, default) : Bool;
 	public var label : Label;
-	public var color : UInt;
 
 	var button : Sprite;
 
