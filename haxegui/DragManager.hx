@@ -19,14 +19,12 @@
 
 package haxegui;
 
-import flash.geom.Rectangle;
-
 import flash.display.DisplayObject;
-
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
+import flash.geom.Rectangle;
 
 import haxegui.events.MoveEvent;
 import haxegui.events.DragEvent;
@@ -34,50 +32,46 @@ import haxegui.events.ResizeEvent;
 
 class DragManager extends EventDispatcher
 {
+	private static var _instance : DragManager = null;
+	public var listeners:Array<ITraceListener>;
 
-  private static var _instance : DragManager = null;
-  public var listeners:Array<ITraceListener>;
-
-
-
-  public static function getInstance ():DragManager
-  {
-	if (DragManager._instance == null)
-	  {
-		DragManager._instance = new DragManager ();
-	  }
-	return DragManager._instance;
-  }
+	public static function getInstance ():DragManager
+	{
+		if (DragManager._instance == null)
+		{
+			DragManager._instance = new DragManager ();
+		}
+		return DragManager._instance;
+	}
 
 
+	public function new ()
+	{
+		super ();
+	}
 
-  public function new ()
-  {
-	super ();
-  }
-
-  public override function toString () : String
-  {
-	return "DragManager";
-  }
+	public override function toString () : String
+	{
+		return "DragManager";
+	}
 
 
-   public function onStartDrag(e:DragEvent)
-   {
+	public function onStartDrag(e:DragEvent)
+	{
 		//~ trace(e);
-		    //~ e.stopImmediatePropagation();
+		//~ e.stopImmediatePropagation();
 
 		e.target.startDrag();
-   }
+	}
 
-   public function onStopDrag(e:DragEvent)
-   {
+	public function onStopDrag(e:DragEvent)
+	{
 		//~ trace(e);
-		    //~ e.stopImmediatePropagation();
+		//~ e.stopImmediatePropagation();
 
 		e.target.stopDrag();
 		//~ flash.Lib.current.removeEventListener(MouseEvent.MOUSE_MOVE, e.target, e.target.onMouseMove);
 		//~ e.target.removeEventListener(MouseEvent.MOUSE_MOVE, e.target, e.target.onMouseMove);
-   }
+	}
 
 }
