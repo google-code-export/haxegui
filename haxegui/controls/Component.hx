@@ -122,7 +122,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/**
 	* Move relative to current location.
 	**/
-	public function move (x : Float, y : Float) : Void
+	public function move(x : Float, y : Float) : Void
 	{
 		var event = new MoveEvent(MoveEvent.MOVE);
 		event.oldX = this.x;
@@ -130,6 +130,21 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.x += x;
 		this.y += y;
 		box.offset(x,y);
+		dispatchEvent(event);
+	}
+
+	/**
+	* Move to specific location.
+	**/
+	public function moveTo(x : Float, y : Float) : Void
+	{
+		var event = new MoveEvent(MoveEvent.MOVE);
+		event.oldX = this.x;
+		event.oldY = this.y;
+		this.x = x;
+		this.y = y;
+		box.x = x;
+		box.y = y;
 		dispatchEvent(event);
 	}
 

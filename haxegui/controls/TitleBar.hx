@@ -41,7 +41,7 @@ class TitleBar extends Component, implements Dynamic
 
 	public var title : TextField;
 	public var closeButton : CloseButton;
-	public var minimizeButton : Component;
+	public var minimizeButton : MinimizeButton;
 
 	public function new (parent:DisplayObjectContainer=null, name:String=null, x:Float=0.0, y:Float=0.0)
 	{
@@ -51,22 +51,37 @@ class TitleBar extends Component, implements Dynamic
 	override public function init(?opts:Dynamic) {
 		super.init(opts);
 
+		action_redraw =
+			"
+				this.graphics.clear();
+				var grad = flash.display.GradientType.LINEAR;
+				var colors = [ color | 0x323232, color - 0x141414 ];
+				var alphas = [ 100, 0 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(w, 32, Math.PI/2, 0, 0);
+				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
+				this.graphics.drawRoundRectComplex (0, 0, w, 32, 4, 4, 0, 0);
+				this.graphics.drawRect (10, 20, w - 20, 12);
+				this.graphics.endFill ();
+			";
+
 		//
 		this.graphics.beginFill (0x1A1A1A, 0.5);
 		this.graphics.drawRoundRectComplex (0, 0, Opts.optFloat(opts,"w",100.), 32, 4, 4, 0, 0);
 		this.graphics.drawRect (10, 20, Opts.optFloat(opts,"w",100) - 20, 12);
 		this.graphics.endFill ();
 
-
 		//
 		//~ closeButton = new Component(this, "closeButton");
 		closeButton = new CloseButton(this, "closeButton");
 		closeButton.init({});
-		closeButton.move(4,4);
+		closeButton.moveTo(4,4);
 
 		//
-		minimizeButton = new Component(this, "minimizeButton");
-		minimizeButton.move(20, 4);
+		minimizeButton = new MinimizeButton(this, "minimizeButton");
+		minimizeButton.init({x:20, y:4});
+		minimizeButton.moveTo(20,4);
 
 		//mc.x = box.width - 32;
 		title = new TextField ();
@@ -102,11 +117,16 @@ class TitleBar extends Component, implements Dynamic
 
 		if(closeButton != null)
 			closeButton.redraw(opts);
-// 		StyleManager.exec("redrawTitleBar", this, {w:w, color:color});
-// 		StyleManager.exec("redrawCloseButton", closeButton, {color:color});
-// 		StyleManager.exec("redrawMinimizeButton", minimizeButton, {color:color});
+		if(minimizeButton != null)
+			minimizeButton.redraw(opts);
 
 		title.setTextFormat (StyleManager.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
+
+		StyleManager.exec(TitleBar,"redraw", this,
+			{
+				w : Opts.optInt(opts,"w",20),
+				color: Opts.optInt(opts, "color", 0),
+			});
 
 	}
 

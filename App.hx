@@ -388,8 +388,11 @@ class App extends Sprite, implements haxe.rtti.Infos
 	}
 
 
-
-
+		var a = new Array<String>();
+		var keys : Iterator<String> = untyped StyleManager.actions.keys();
+		for(k in keys) a.push(k);
+		a.sort(function(a,b) { if(a==b) return 0; if(a < b) return -1; return 1;});
+		trace("Registered scripts: " + Std.string(a));
 	}//main
 
 
