@@ -132,6 +132,57 @@ class MinimizeButton extends AbstractButton
 
 
 
+/**
+*
+* MaximizeButton Class
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
+class MaximizeButton extends AbstractButton
+{
+	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
+		super (parent, name, x, y);
+		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
+	}
+
+	static function __init__()
+	{
+		StyleManager.setDefaultScript(
+			MaximizeButton,
+			"redraw",
+			"
+				this.graphics.clear();
+				var grad = flash.display.GradientType.LINEAR;
+				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
+				var alphas = [ 100, 100 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
+				this.graphics.lineStyle(2);
+				this.graphics.lineGradientStyle (grad, [ this.color, this.color - 0x202020 ], alphas, ratios, matrix);
+				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
+				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
+				this.graphics.endFill ();
+				this.graphics.lineStyle (2, Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)) );
+				this.graphics.moveTo(4,6);
+				this.graphics.lineTo(8,6);
+				this.graphics.moveTo(6,4);
+				this.graphics.lineTo(6,8);
+			"
+		);
+	}
+	
+	public function onMouseClick(e:MouseEvent) : Void
+	{
+		trace("Maximize clicked on " + parent.parent.toString());
+		//~ parent.dispatchEvent(new Event(Event.CLOSE));
+	}
+}
+
+
+
 
 /**
 *
@@ -147,6 +198,7 @@ class TitleBar extends Component, implements Dynamic
 	public var title : TextField;
 	public var closeButton : CloseButton;
 	public var minimizeButton : MinimizeButton;
+	public var maximizeButton : MaximizeButton;
 
 	public function new (parent:DisplayObjectContainer=null, name:String=null, x:Float=0.0, y:Float=0.0)
 	{
@@ -182,9 +234,17 @@ class TitleBar extends Component, implements Dynamic
 		//
 		//~ minimizeButton = new MinimizeButton(this, "minimizeButton");
 		minimizeButton = new MinimizeButton(this, "minimizeButton");
-		minimizeButton.init({x:20, y:4, color: this.color });
+		minimizeButton.init({color: this.color });
 		minimizeButton.moveTo(20,4);
 		minimizeButton.filters = [shadow];
+
+		//
+		//~ minimizeButton = new MinimizeButton(this, "minimizeButton");
+		maximizeButton = new MaximizeButton(this, "maximizeButton");
+		maximizeButton.init({color: this.color });
+		maximizeButton.moveTo(36,4);
+		maximizeButton.filters = [shadow];
+
 
 		//mc.x = box.width - 32;
 		title = new TextField ();
@@ -222,6 +282,8 @@ class TitleBar extends Component, implements Dynamic
 			closeButton.redraw(opts);
 		if(minimizeButton != null)
 			minimizeButton.redraw(opts);
+		if(minimizeButton != null)
+			maximizeButton.redraw(opts);
 
 		title.setTextFormat (StyleManager.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
 
