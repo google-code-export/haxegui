@@ -1,21 +1,21 @@
-//      FocusManager.hx
-//      
-//      Copyright 2009 gershon <gershon@yellow>
-//      
-//      This program is free software; you can redistribute it and/or modify
-//      it under the terms of the GNU General Public License as published by
-//      the Free Software Foundation; either version 2 of the License, or
-//      (at your option) any later version.
-//      
-//      This program is distributed in the hope that it will be useful,
-//      but WITHOUT ANY WARRANTY; without even the implied warranty of
-//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//      GNU General Public License for more details.
-//      
-//      You should have received a copy of the GNU General Public License
-//      along with this program; if not, write to the Free Software
-//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-//      MA 02110-1301, USA.
+// Copyright (c) 2009 The haxegui developers
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+// the Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+// IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 package haxegui;
@@ -35,17 +35,17 @@ import flash.events.FocusEvent;
 
 class FocusManager extends EventDispatcher, implements Dynamic
 {
-  
+
 
   private static var _instance:FocusManager = null;
-  
-  private static var _focus: DisplayObject; 
-  private static var _oldFocus: DisplayObject; 
-  
+
+  private static var _focus: DisplayObject;
+  private static var _oldFocus: DisplayObject;
+
   private static var _showFocus : Bool;
-  
-  
-  
+
+
+
   public static function getInstance ():FocusManager
   {
     if (FocusManager._instance == null)
@@ -78,22 +78,22 @@ class FocusManager extends EventDispatcher, implements Dynamic
         if(_focus!=null)
         //~ _focus.dispatchEvent (new FocusEvent (FocusEvent.FOCUS_OUT, false, true));
         _focus.dispatchEvent (new FocusEvent (FocusEvent.FOCUS_OUT));
-        
+
         _oldFocus = _focus;
         _focus = o;
-        
+
         //~ this.dispatchEvent (new FocusEvent (FocusEvent.MOUSE_FOCUS_CHANGE, false, false, cast(o,flash.display.InteractiveObject)));
         this.dispatchEvent (new FocusEvent (FocusEvent.MOUSE_FOCUS_CHANGE));
         this.dispatchEvent (new FocusEvent (FocusEvent.KEY_FOCUS_CHANGE));
-        
+
         _focus.addEventListener (FocusEvent.FOCUS_OUT, onFocusChanged);
         _focus.addEventListener (FocusEvent.FOCUS_IN, onFocusChanged);
         _focus.dispatchEvent (new FocusEvent (FocusEvent.FOCUS_IN, false, false));
-        
+
     }
   }
 
-    
+
 
 
   public function getFocus ():DisplayObject
@@ -105,15 +105,15 @@ class FocusManager extends EventDispatcher, implements Dynamic
     //~ trace(e.type+" "+e.target+"::"+e.target.name);
 /*
    if(e.type==FocusEvent.FOCUS_IN) {
-   
+
     var focusRect = new Sprite();
     focusRect.name = "_focusRect";
-    
-    var com = cast(_focus, Component);    
+
+    var com = cast(_focus, Component);
     var rect = com.box.clone();
     focusRect.graphics.lineStyle(2, 0xffff00, .5);
     focusRect.graphics.drawRect(-5, -5, rect.width+10, rect.height+10);
-    
+
     var obj = cast(_focus, DisplayObjectContainer);
     if(obj.numChildren>=1)
         obj.addChildAt(focusRect, obj.numChildren-1);
@@ -126,10 +126,10 @@ class FocusManager extends EventDispatcher, implements Dynamic
     if(obj.numChildren>=1)
     if(obj.getChildByName("_focusRect")!=null)
         obj.removeChild(obj.getChildByName("_focusRect"));
-    
+
     //~ dispatchEvent (new FocusEvent (FocusEvent.MOUSE_FOCUS_CHANGE));
     }
-*/   
+*/
   }//onFocusChanged
-  
+
 }//FocusManager
