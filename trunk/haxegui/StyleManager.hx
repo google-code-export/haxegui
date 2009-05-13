@@ -74,9 +74,9 @@ class StyleManager implements Dynamic
 		try {
 			doCall(inst, getInstanceActionObject(inst, action), options);
 		} catch(e:Dynamic) {
-// 			if(e != "No default action.") {
+			if(e != "No default action.") {
 				trace(inst.toString() + " " + action + " script error : " + e);
-// 			}
+			}
 		}
 	}
 
