@@ -39,16 +39,16 @@ import haxegui.FocusManager;
 import haxegui.Opts;
 import haxegui.StyleManager;
 import haxegui.controls.Component;
+import haxegui.controls.AbstractButton;
 import haxegui.events.MoveEvent;
 
-class RadioButton extends Component, implements Dynamic
+class RadioButton extends AbstractButton, implements Dynamic
 {
 
-	//~ public var group :
+	//~ public var group : Array<RadioButton>
 	public var checked(default, default) : Bool;
 	public var label : Label;
 
-	var button : Sprite;
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
@@ -63,14 +63,8 @@ class RadioButton extends Component, implements Dynamic
 
 		super.init(opts);
 
-		button = new Sprite();
-		//~ button.name="button";
-		button.name = this.name;
-		button.graphics.lineStyle (2, color - 0x202020);
-		button.graphics.beginFill (color);
-		button.graphics.drawCircle (10, 10, 10);
-		button.graphics.endFill ();
-		this.addChild(button);
+
+
 
 		// drop-shadow filter
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
@@ -97,16 +91,20 @@ class RadioButton extends Component, implements Dynamic
 
 
 		// Listeners
-		button.addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown,false,0,true);
-		button.addEventListener (MouseEvent.MOUSE_UP,   onBtnMouseUp,false,0,true);
-		button.addEventListener (MouseEvent.ROLL_OVER, onBtnRollOver,false,0,true);
-		button.addEventListener (MouseEvent.ROLL_OUT,  onBtnRollOut,false,0,true);
+		addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown,false,0,true);
+		addEventListener (MouseEvent.MOUSE_UP,   onBtnMouseUp,false,0,true);
+		addEventListener (MouseEvent.ROLL_OVER, onBtnRollOver,false,0,true);
+		addEventListener (MouseEvent.ROLL_OUT,  onBtnRollOut,false,0,true);
 
 		this.addEventListener (Event.ACTIVATE, onEnabled,false,0,true);
 		this.addEventListener (Event.DEACTIVATE, onDisabled,false,0,true);
 
 		if(disabled)
 			dispatchEvent(new Event(Event.DEACTIVATE));
+			
+			
+		redraw();
+
 	}
 
 	/**
@@ -115,8 +113,8 @@ class RadioButton extends Component, implements Dynamic
 	*/
 	public function onDisabled(e:Event)
 	{
-		button.mouseEnabled = false;
-		button.buttonMode = false;
+		mouseEnabled = false;
+		buttonMode = false;
 		//~ tabEnabled = false;
 		redraw();
 	}
@@ -126,36 +124,13 @@ class RadioButton extends Component, implements Dynamic
 	*/
 	public function onEnabled(e:Event)
 	{
-		button.mouseEnabled = true;
-		button.buttonMode = true;
+		mouseEnabled = true;
+		buttonMode = true;
 		//~ tabEnabled = false;
 		redraw();
 	}
 
-	override public function redraw(opts:Dynamic=null) : Void {
-		if( disabled ) {
-			//~ color = DefaultStyle.BACKGROUND - 0x141414;
-			//~ color -= 0x141414;
-			var fmt = StyleManager.getTextFormat();
-			fmt.color = color - 0x202020;
-			fmt.align = flash.text.TextFormatAlign.CENTER;
-			label.tf.setTextFormat(fmt);
 
-
-			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
-			var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
-			this.filters = [shadow];
-
-		}
-
-
-		button.graphics.clear();
-		button.graphics.lineStyle (2, color - 0x202020);
-		//~ button.graphics.beginFill (color);
-		button.graphics.beginFill ( disabled ? color - 0x141414 : color );
-		button.graphics.drawCircle (10, 10, 10);
-		button.graphics.endFill ();
-	}
 
 	/**
 	*
@@ -182,6 +157,16 @@ class RadioButton extends Component, implements Dynamic
 		//~ redraw(color);
 		CursorManager.setCursor(Cursor.ARROW);
 	}
+
+
+	override public function redraw (opts:Dynamic = null):Void
+	{
+		StyleManager.exec(this,"redraw",
+			{
+				color: Opts.optInt(opts, "color", color),
+			});
+	}
+
 
 	/**
 	*
@@ -225,4 +210,27 @@ class RadioButton extends Component, implements Dynamic
 		//~ redraw(color);
 	}
 
+
+	public static function __init__()
+	{
+		StyleManager.initialize();
+		StyleManager.setDefaultScript(
+			RadioButton,
+			"redraw",
+			"
+				this.graphics.clear();
+				var colors = [ color | 0x323232, color - 0x141414 ];
+				var alphas = [ 100, 100 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
+				this.graphics.lineStyle(2);
+				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawCircle (10, 10, 10);
+				this.graphics.endFill ();			"
+		);
+	}
+	
+	
 }
