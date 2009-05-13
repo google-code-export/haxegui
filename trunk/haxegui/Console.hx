@@ -1,3 +1,4 @@
+//
 // Copyright (c) 2009 The haxegui developers
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -93,9 +94,7 @@ class Console extends Window, implements ITraceListener
 	public override function init(?opts:Dynamic)
 	{
 // 		if(opts == null) opts = {};
-
 // 		super.init({name:"Console", x:x, y:y, width:width, height:height, sizeable:true, color: 0x666666});
-
 		super.init(opts);
 
 		box = new Rectangle (0, 0, 640, 240);
@@ -129,19 +128,18 @@ class Console extends Window, implements ITraceListener
 		input.y = box.height - 70;
 		input.addEventListener (KeyboardEvent.KEY_DOWN, onInputKeyDown);
 
-
 		//~ container.box.width -= 20;
 		//~ vert = new Scrollbar(container, "vscrollbar");
 		//~ vert = new Scrollbar(this, "vscrollbar");
 		//~ vert.x = box.width - 40;
-		vert.y = 44;
+		//~ vert.y = 44;
 		vert.color = color;
 		//~ vert.init(content);
 		vert.init({target : output});
 
 		//
 		container.init({
-			color: Opts.optInt(opts,"bgcolor",0x222222),
+			color: Opts.optInt(opts,"bgcolor", 0x222222),
 			alpha: Opts.optFloat(opts, "bgalpha", 0.85),
 		});
 
@@ -161,9 +159,10 @@ class Console extends Window, implements ITraceListener
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 
-	/*
-	*
-	*/
+/*
+* 
+*
+*/
 	public  function log( e : Dynamic, ?inf : haxe.PosInfos ) : Void
 	{
 		//~ var text:String =  "";
@@ -199,21 +198,15 @@ class Console extends Window, implements ITraceListener
 		input.y = box.height - 64;
 
 
-		vert.x = box.width - 20;
-		vert.y = 44;
-		vert.box.height = box.height - 44;
-		vert.box.width = box.width - 20;
+		//~ vert.x = box.width - 20;
+		//~ vert.y = 44;
+		//~ vert.box.height = box.height - 44;
+		//~ vert.box.width = box.width - 40;
 		vert.onResize(null);
 
 		container.onParentResize(e);
 
-// 		if( this.getChildByName("Menubar")!=null )
-// 		{
-// 			var menubar = untyped this.getChildByName("Menubar");
-// 			menubar.onResize(e);
-// 		}
 
-// 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 
 	public function onInputKeyDown(e:KeyboardEvent) : Void
@@ -232,7 +225,6 @@ class Console extends Window, implements ITraceListener
 				var program = parser.parseString(input.text);
 				history.push(input.text);
 				input.text = "";
-
 
 				var interp = new hscript.Interp();
 				interp.variables.set( "this", this );

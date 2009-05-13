@@ -69,6 +69,14 @@ class Container extends Component, implements IContainer, implements Dynamic
 		this.mouseEnabled = false;
 		this.tabEnabled = false;
 
+		action_redraw = 
+			"
+				this.graphics.clear();
+				this.graphics.beginFill (color);
+				this.graphics.drawRect (0, 0, this.box.width, this.box.height );
+				this.graphics.endFill ();
+			";
+	
 		//~ this.graphics.lineStyle (2, color - 0x141414, flash.display.LineScaleMode.NONE);
 		//~ this.graphics.beginFill (color - 0x0A0A0A);
 		//~ this.graphics.drawRect (0, 0, box.width, box.height );
@@ -118,13 +126,13 @@ class Container extends Component, implements IContainer, implements Dynamic
 			e.updateAfterEvent();
 	}
 
-
-	override public function redraw(e:Dynamic=null)
+	override public function redraw (opts:Dynamic = null):Void
 	{
-		this.graphics.clear();
-		//~ this.graphics.lineStyle (2, color - 0x141414, flash.display.LineScaleMode.NONE);
-		this.graphics.beginFill (color);
-		this.graphics.drawRect (0, 0, box.width, box.height );
-		this.graphics.endFill ();
+		StyleManager.exec(Container,"redraw", this,
+			{
+				color: Opts.optInt(opts, "color", color),
+			});
 	}
+	
+
 }

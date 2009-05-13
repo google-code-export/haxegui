@@ -70,7 +70,6 @@ import haxegui.controls.CheckBox;
 import haxegui.controls.ComboBox;
 import haxegui.controls.UiList;
 
-
 import feffects.Tween;
 import feffects.easing.Quint;
 import feffects.easing.Sine;
@@ -127,8 +126,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 		var matrix = new flash.geom.Matrix();
 		matrix.createGradientBox(stage.stageWidth, stage.stageHeight, Math.PI/2, 0, 0);
 		desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-//~
-		desktop.graphics.drawRect( 0, 0, flash.Lib.current.stage.stageWidth, flash.Lib.current.stage.stageHeight );
+		desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
 		desktop.graphics.endFill();
 		flash.Lib.current.addChild(desktop);
 
@@ -141,8 +139,8 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 
 		// Console to show some debug
-		var console = new Console (flash.Lib.current, 0, 0);
-		console.init({bgcolor:0x000000, bgalpha:0.95});
+		var console = new Console (flash.Lib.current, 100, 100);
+		console.init({color:0x2E2E2E});
 		haxe.Log.clear();
 		setRedirection(console.log);
 

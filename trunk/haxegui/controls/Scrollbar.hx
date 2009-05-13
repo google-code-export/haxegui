@@ -71,7 +71,7 @@ class Scrollbar extends haxegui.controls.Component
 	var horizontal : Bool;
 
 	var frame : Sprite;
-	var handle : Sprite;
+	var handle : AbstractButton;
 	var up : Sprite;
 	var down : Sprite;
 
@@ -86,7 +86,7 @@ class Scrollbar extends haxegui.controls.Component
 			rotation = -90;
 
 		frame = new Sprite();
-		handle = new Sprite();
+		handle = new AbstractButton(this, "handle", 0, 20);
 		up = new Sprite();
 		down = new Sprite();
 
@@ -114,10 +114,7 @@ class Scrollbar extends haxegui.controls.Component
 		frame.graphics.drawRect (0, 0, box.width, box.height - 40 );
 		frame.graphics.endFill ();
 
-		//~ var f = new ScrollbarFrame();
-		//~ frame = flash.Lib.attach("ScrollbarFrame");
 		frame.name = "frame";
-		//~ frame.height = box.height - 40;
 		frame.y = 20;
 
 
@@ -126,14 +123,29 @@ class Scrollbar extends haxegui.controls.Component
 
 		this.addChild(frame);
 
-		handle.buttonMode = true;
-		handle.focusRect = true;
-		handle.tabEnabled = true;
 
-		handle.name = "handle";
-		handle.y = 20;
+		
+		
+		
+		handle.init({color: this.color});
+		handle.action_redraw = 
+		"
+			this.graphics.clear();
+			this.graphics.lineStyle (2, this.color - 0x141414, 1, flash.display.LineScaleMode.NONE);
+			var colors = [ this.color - 0x141414, this.color | 0x323232 ];
+			/*if(horizontal)
+				colors = [ color | 0x323232, color - 0x141414 ];*/
+			var alphas = [ 100, 100 ];
+			var ratios = [ 0, 0xFF ];
+			var matrix = new flash.geom.Matrix();
+			matrix.createGradientBox(20, h, Math.PI, 0, 0);
+			this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+			this.graphics.drawRect (0, 0, 20, h );
+			this.graphics.endFill ();
+		";
+				
+		handle.redraw({h : 20, horizontal: this.horizontal });
 
-		redrawHandle();
 
 		shadow = new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, 0.75, BitmapFilterQuality.LOW, false, false, false);
 		handle.filters = [shadow];
@@ -141,7 +153,10 @@ class Scrollbar extends haxegui.controls.Component
 		handle.addEventListener(MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
 		handle.addEventListener(MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
 
-		this.addChild(handle);
+
+
+
+
 
 		up.buttonMode = true;
 		up.focusRect = true;
@@ -250,8 +265,9 @@ class Scrollbar extends haxegui.controls.Component
 
 		frame.graphics.endFill ();
 
+		handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
 		//
-		redrawHandle();
+		//~ redrawHandle();
 
 		//~ var transform = scrollee.transform;
 		//~ var bounds = transform.pixelBounds.clone();
@@ -263,32 +279,6 @@ class Scrollbar extends haxegui.controls.Component
 
 	}
 
-	override public function onRollOver(e:MouseEvent)  : Void
-	{
-
-		//~ redrawHandle(color | 0x4D4D4D);
-		if(e.buttonDown) return;
-
-		updateColorTween( new Tween(0, 50, 350, Expo.easeOut ) );
-
-		CursorManager.setCursor(Cursor.HAND);
-		//~ Tweener.addTween(e.target, {_brightness:.5, time:.15, transition:"linear"});
-	}
-
-	override public function onRollOut(e:MouseEvent)
-	{
-		if(!e.buttonDown)
-		{
-			updateColorTween( new Tween(0, 50, 350, Expo.easeOut ) );
-
-			if(e.target == handle)
-				redrawHandle();
-			flash.Lib.current.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			e.target.stopDrag();
-			//~ Tweener.addTween(e.target, {_brightness:0, time:.35, transition:"linear"});
-		}
-			//~ Tweener.addTween(e.target, {_brightness:0, time:.35, transition:"linear"});
-	}
 
 	public function onMouseWheel(e:MouseEvent)
 	{
@@ -311,7 +301,6 @@ class Scrollbar extends haxegui.controls.Component
 	{
 		//~ redrawHandle(color | 0x4D4D4D);
 
-		updateColorTween( new Tween(50, -25, 350, Expo.easeOut ) );
 
 		switch(e.target)
 		{
@@ -414,7 +403,6 @@ class Scrollbar extends haxegui.controls.Component
 			CursorManager.setCursor (Cursor.HAND);
 		}
 
-		updateColorTween( new Tween(-25, c, 500, Expo.easeOut ) );
 	}
 
 
@@ -492,33 +480,8 @@ class Scrollbar extends haxegui.controls.Component
 
 
 
-	/**
-	*
-	* @param color
-	*
-	*/
-	function redrawHandle(?color:UInt)
-	{
-		if(color == 0)
-			color = this.color;
-		//~ var h = 20 + .5*(frame.height - handle.height);
-		var h = 20 + .5*(frame.height - handle.height + 20);
 
-		handle.graphics.clear();
-		handle.graphics.lineStyle (2, color - 0x141414, 1, LineScaleMode.NONE);
 
-		var colors = [ color - 0x141414, color | 0x323232 ];
-		if(horizontal)
-			colors = [ color | 0x323232, color - 0x141414 ];
-		var alphas = [ 100, 100 ];
-		var ratios = [ 0, 0xFF ];
-		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(20, h, Math.PI, 0, 0);
-		handle.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
-		//~ handle.graphics.beginFill (color);
-		handle.graphics.drawRect (0, 0, 20, h );
-		handle.graphics.endFill ();
-	}
 
 }//Scrollbar

@@ -488,5 +488,13 @@ This hscript does the following:
     </haxegui:Window>
     
 
-
+<!--
+    <haxegui:Window name="Introspector" x="200" y="40" width="720" height="300" sizeable="true" >
+	<haxegui:Menubar name="Menubar" width="512" x="10" y="20" />
+	    <haxegui:ScrollPane name="ScrollPane1" x="10" y="24" >
+		<haxegui:Container name="Container1" width="512" height="512" >
+	    </haxegui:ScrollPane>
+    </haxegui:Window>
+-->    
+    
 </haxegui:Layout>

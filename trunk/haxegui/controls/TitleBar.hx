@@ -28,6 +28,120 @@ import haxegui.CursorManager;
 import haxegui.Opts;
 import haxegui.StyleManager;
 
+
+/**
+*
+* Close CloseButton Class
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
+class CloseButton extends AbstractButton
+{
+	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
+		super (parent, name, x, y);
+		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
+	}
+
+	override public function init(opts:Dynamic=null)
+	{
+		super.init(opts);
+		action_redraw =
+			"
+				this.graphics.clear();
+				var grad = flash.display.GradientType.LINEAR;
+				var colors = [ color | 0x323232, color - 0x141414 ];
+				var alphas = [ 100, 0 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
+				this.graphics.lineStyle (2, color - 0x141414);
+				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
+				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
+				this.graphics.endFill ();
+				this.graphics.moveTo(4,4);
+				this.graphics.lineTo(8,8);
+				this.graphics.moveTo(8,4);
+				this.graphics.lineTo(4,8);
+			";
+	}
+
+	override public function redraw (opts:Dynamic = null):Void
+	{
+		StyleManager.exec(CloseButton,"redraw", this,
+			{
+				color: Opts.optInt(opts, "color", color),
+			});
+	}
+	
+
+	public function onMouseClick(e:MouseEvent) : Void
+	{
+		trace("Close clicked on " + parent.parent.toString());
+		//~ parent.dispatchEvent(new Event(Event.CLOSE));
+	}
+}
+
+
+
+/**
+*
+* MinimizeButton Class
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
+class MinimizeButton extends AbstractButton
+{
+	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
+		super (parent, name, x, y);
+		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
+	}
+
+	override public function init(opts:Dynamic=null)
+	{
+		super.init(opts);
+
+		action_redraw =
+			"
+				this.graphics.clear();
+				var grad = flash.display.GradientType.LINEAR;
+				var colors = [ color | 0x323232, color - 0x141414 ];
+				var alphas = [ 100, 0 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
+				this.graphics.lineStyle (2, color - 0x141414);
+				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
+				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
+				this.graphics.endFill ();
+				this.graphics.moveTo(2,6);
+				this.graphics.lineTo(10,6);
+			";
+	}
+
+	override public function redraw (opts:Dynamic = null):Void
+	{
+		StyleManager.exec(MinimizeButton,"redraw", this,
+			{
+				color: Opts.optInt(opts, "color", color),
+			});
+	}
+	
+
+	public function onMouseClick(e:MouseEvent) : Void
+	{
+		trace("Minimized clicked on " + parent.parent.toString());
+		//~ parent.dispatchEvent(new Event(Event.CLOSE));
+	}
+}
+
+
+
+
+
 /**
 *
 * Titlebar class
@@ -69,10 +183,11 @@ class TitleBar extends Component, implements Dynamic
 		//
 		//~ closeButton = new Component(this, "closeButton");
 		closeButton = new CloseButton(this, "closeButton");
-		closeButton.init({});
+		closeButton.init({color: this.color});
 		closeButton.moveTo(4,4);
 
 		//
+		//~ minimizeButton = new MinimizeButton(this, "minimizeButton");
 		minimizeButton = new MinimizeButton(this, "minimizeButton");
 		minimizeButton.init({x:20, y:4});
 		minimizeButton.moveTo(20,4);
@@ -119,7 +234,7 @@ class TitleBar extends Component, implements Dynamic
 		StyleManager.exec(TitleBar,"redraw", this,
 			{
 				width : w,
-				color: Opts.optInt(opts, "color", 0),
+				color: Opts.optInt(opts, "color", untyped parent.color),
 			});
 
 	}

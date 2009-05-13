@@ -30,12 +30,76 @@ import flash.filters.BitmapFilterQuality;
 import flash.filters.BevelFilter;
 import flash.geom.Rectangle;
 import flash.text.TextField;
+import flash.text.TextFormat;
 
 import haxegui.DragManager;
 import haxegui.CursorManager;
 import haxegui.Opts;
 import haxegui.StyleManager;
 import haxegui.events.DragEvent;
+
+
+/**
+*
+* ListItem Class
+*
+* @version 0.1
+* @author <gershon@goosemoose.com>
+* @author Russell Weir'
+*
+*/
+class ListItem extends AbstractButton, implements Dynamic
+{
+	
+	public var tf : TextField;
+	public var fmt : TextFormat;
+
+	override public function init(opts:Dynamic=null)
+	{
+
+		super.init(opts);
+		
+
+		tf = new TextField();
+		tf.name = "tf";
+		//~ label.text = Opts.optString(opts, "label", name);
+		tf.text = name;
+		
+		//~ label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
+		this.addChild(tf);
+
+		// add the drop-shadow filter
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
+		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
+		this.filters = [shadow];
+		//~ this.filters = [shadow, bevel];
+
+		// register with focus manager
+		//~ FocusManager.getInstance().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
+
+		action_redraw =
+			"
+			this.graphics.clear();
+			var colors = [ color | 0x323232, color - 0x141414 ];
+			var alphas = [ 100, 100 ];
+			var ratios = [ 0, 0xFF ];
+			var matrix = new flash.geom.Matrix();
+			matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
+            this.graphics.lineStyle(2);
+			this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
+			this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+			this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
+			this.graphics.endFill ();
+			";
+
+		redraw();
+
+	}	
+	
+}
+
+
+
 
 /**
  *
@@ -115,13 +179,13 @@ class UiList extends Component
 	public function onItemRollOver(e:MouseEvent) : Void
 	{
 
-		e.target.graphics.clear();
-		e.target.graphics.lineStyle(2, color - 0x323232);
-		e.target.graphics.beginFill (color | 0x202020);
-		e.target.graphics.drawRect (0, 0, box.width, 20);
-		e.target.graphics.endFill ();
-
-	if(e.target==header) drawHeader(color | 0x202020);
+		//~ e.target.graphics.clear();
+		//~ e.target.graphics.lineStyle(2, color - 0x323232);
+		//~ e.target.graphics.beginFill (color | 0x202020);
+		//~ e.target.graphics.drawRect (0, 0, box.width, 20);
+		//~ e.target.graphics.endFill ();
+//~ 
+	//~ if(e.target==header) drawHeader(color | 0x202020);
 
 		CursorManager.setCursor(Cursor.HAND);
 
@@ -129,19 +193,17 @@ class UiList extends Component
 
 	public function onItemRollOut(e:MouseEvent) : Void
 	{
-		if(this.contains(e.target))
-		{
-				e.target.graphics.clear();
-				e.target.graphics.lineStyle(2, color - 0x323232);
-				//~ e.target.graphics.beginFill (color);
-				e.target.graphics.beginFill ( this.getChildIndex(e.target)==0 ? color | 0x323232 : color );
-				e.target.graphics.drawRect (0, 0, box.width, 20);
-				e.target.graphics.endFill ();
-		}
+		//~ if(this.contains(e.target))
+		//~ {
+				//~ e.target.graphics.clear();
+				//~ e.target.graphics.lineStyle(2, color - 0x323232);
+				//~ e.target.graphics.beginFill ( this.getChildIndex(e.target)==0 ? color | 0x323232 : color );
+				//~ e.target.graphics.drawRect (0, 0, box.width, 20);
+				//~ e.target.graphics.endFill ();
+		//~ }
+		//~ if(e.target==header) drawHeader();
 
-		if(e.target==header) drawHeader();
-
-		CursorManager.setCursor(Cursor.ARROW);
+		//~ CursorManager.setCursor(Cursor.ARROW);
 
 	}
 
@@ -212,7 +274,7 @@ class UiList extends Component
 
 		for (i in 0...data.length)
 		{
-			var item = new Sprite();
+			var item = new ListItem();
 			item.name = "item" + (i+1);
 			item.graphics.lineStyle(2, color - 0x323232);
 			item.graphics.beginFill (color);
