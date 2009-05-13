@@ -111,14 +111,8 @@ class Button extends Component, implements Dynamic
 		cursorPress = defaultCursorPress;
 	}
 
-	/**
-	* Init Function
-	*
-	*
-	* @param initObj Dynamic object
-	*
-	*/
-	public function init(?initObj:Dynamic)
+
+	override public function init(opts:Dynamic=null)
 	{
 		useHandCursors = false;
 		action_mouseOver =
@@ -155,36 +149,24 @@ class Button extends Component, implements Dynamic
 		color = DefaultStyle.BACKGROUND;
 
 		label = new Label();
-		//~ label.init();
+		label.init();
 
-		if(Reflect.isObject(initObj))
-		{
-			for (f in Reflect.fields (initObj))
-				if (Reflect.hasField (this, f))
-					if (f!="label" && f != "width" && f != "height")
-						Reflect.setField (this, f, Reflect.field (initObj, f));
-			//~
-			//~ name = (initObj.name == null) ? name : initObj.name;
-			//~ name = (initObj.id == null) ? name : initObj.id;
-			label.text = (initObj.label == null) ? name : initObj.label;
-			//~ label.init({text:(initObj.label == null) ? name : initObj.label});
+		if(box.isEmpty())
+			box = new Rectangle(0,0,90,30);
+		box.width = Opts.optFloat(opts,"width",box.width);
+		box.height = Opts.optFloat(opts,"height",30);
+		label.text = Opts.optString(opts,"label",name);
+		color = Opts.optInt(opts,"color", DefaultStyle.BACKGROUND);
 
-			//~ move(initObj.x, initObj.y);
-			//~ box.width = ( Math.isNaN(initObj.width) ) ? 90 : initObj.width;
-			box.width = ( Math.isNaN(initObj.width) ) ? label.width : initObj.width;
-			box.height = ( Math.isNaN(initObj.height) ) ? 30 : initObj.height;
-			color = (initObj.color==null) ? color : initObj.color;
-			disabled = (initObj.disabled==null) ? disabled : initObj.disabled;
-		}
-
+		label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
+		this.addChild(label);
 
 		buttonMode = true;
 		tabEnabled = true;
 		mouseEnabled = true;
 		focusRect = true;
 
-		if(box.isEmpty())
-			box = new Rectangle(0,0,90,30);
+
 		//~ else
 		//~ if(Math.isNaN(box.width))
 			//~ box.width = 90;
@@ -197,12 +179,6 @@ class Button extends Component, implements Dynamic
 		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
 		this.filters = [shadow];
 		//~ this.filters = [shadow, bevel];
-
-		label.init();
-		//~ label.init({text:name});
-		//~ label.move( .5*(this.width - label.width), .5*(this.height - label.height) );
-		label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
-		this.addChild(label);
 
 		// register with focus manager
 		//~ FocusManager.getInstance().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
@@ -224,10 +200,7 @@ class Button extends Component, implements Dynamic
 	}
 
 
-	/**
-	*
-	*/
-	public dynamic function redraw() : Void
+	override public function redraw(opts:Dynamic=null) : Void
 	{
 		//~ if(color == 0 || Math.isNaN(color))
 		//~ color = DefaultStyle.BACKGROUND;

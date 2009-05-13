@@ -29,6 +29,7 @@ import flash.geom.Rectangle;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.FocusManager;
+import haxegui.Opts;
 import haxegui.StyleManager;
 
 import feffects.Tween;
@@ -98,6 +99,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	public function init(opts:Dynamic=null) {
 		if(opts == null) opts = {};
+		name = Opts.optString(opts,"name",name);
+		disabled = Opts.optBool(opts,"disabled",false);
 	}
 
 	public function redraw(?opts:Dynamic) {
