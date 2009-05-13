@@ -124,7 +124,7 @@ class TitleBar extends Component, implements Dynamic
 
 		StyleManager.exec(TitleBar,"redraw", this,
 			{
-				w : Opts.optInt(opts,"w",20),
+				w : Opts.optInt(opts,"width",20),
 				color: Opts.optInt(opts, "color", 0),
 			});
 
