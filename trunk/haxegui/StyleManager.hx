@@ -74,9 +74,9 @@ class StyleManager implements Dynamic
 		try {
 			doCall(inst, getInstanceActionObject(inst, action), options);
 		} catch(e:Dynamic) {
-			if(e != "No default action.") {
+// 			if(e != "No default action.") {
 				trace(inst.toString() + " " + action + " script error : " + e);
-			}
+// 			}
 		}
 	}
 
@@ -93,7 +93,7 @@ class StyleManager implements Dynamic
 		var key = getDefaultActionKey(classType, action);
 		if(!defaultActions.exists(key) || defaultActions.get(key) == null) {
 			var sc = Type.getSuperClass(classType);
-			if(sc == null || !Std.is(sc, Component))
+			if(sc == null)
 				throw "No default action.";
 			return getDefaultActionObject(sc, action);
 		}
