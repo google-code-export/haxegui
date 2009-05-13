@@ -147,10 +147,6 @@ class Stats extends Window, implements Dynamic
         data2 =
         data3 = [new Point(240, 140), new Point(240, 140)];
 
-        timer = new haxe.Timer(interval);
-        timer.run = update;
-
-
 
         box = new Rectangle (0, 0, 400, 160);
 
@@ -171,10 +167,10 @@ class Stats extends Window, implements Dynamic
 
         grid.graphics.lineStyle(0,0,0);
         grid.graphics.beginFill( 0xE5E5E5 );
-        grid.graphics.drawRect(0,0,240+gridSpacing,140);
+        grid.graphics.drawRect(0,0,240+gridSpacing*4,140);
         grid.graphics.endFill();
 
-        for(i in 0...Std.int(240/(gridSpacing-2)))
+        for(i in 0...Std.int(240/(gridSpacing-4)))
         {
         grid.graphics.lineStyle(1,0xCCCCCC);
         grid.graphics.moveTo(gridSpacing*i,0);
@@ -233,6 +229,9 @@ class Stats extends Window, implements Dynamic
                 self.timer.run = self.update;
 
                 });
+
+        timer = new haxe.Timer(interval);
+        timer.run = update;
 
 
         if(isSizeable())
@@ -326,13 +325,13 @@ class Stats extends Window, implements Dynamic
         if(data2.length > 2) data.shift();
 
         //~ ploter.x -= gridSpacing*delta;
-        var p = new Tween(ploter.x, ploter.x-gridSpacing, interval, ploter, "x", Linear.easeNone );
+        var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, Std.int(delta*interval), ploter, "x", Linear.easeNone );
         p.start();
 
 
         //~ grid.x -= gridSpacing*delta;
-        var g = new Tween(0, -gridSpacing, interval, grid, "x", Linear.easeNone );
-        g.start();
+        //~ var g = new Tween(0, -gridSpacing, interval, grid, "x", Linear.easeNone );
+        //~ g.start();
 
         //~ if(grid.x<-gridSpacing) grid.x=0;
 
