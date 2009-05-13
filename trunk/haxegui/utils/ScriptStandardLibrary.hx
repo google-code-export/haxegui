@@ -49,7 +49,6 @@ class ScriptStandardLibrary
 		interp.variables.set( "Reflect", Reflect );
 		interp.variables.set( "Timer", haxe.Timer );
 
-		interp.variables.set("Math",Math);
 		interp.variables.set("feffects",
 			{
 				Tween : feffects.Tween,
