@@ -41,45 +41,53 @@ import haxegui.events.MoveEvent;
 
 
 class DropButton extends AbstractButton {
-	override public function redraw(opts:Dynamic=null) : Void
+	
+
+	override public function init(opts:Dynamic=null)
 	{
-		this.graphics.clear();
-		//~ this.graphics.lineStyle (2, color - 0x191919 );
-		this.graphics.lineStyle (2, color - 0x333333 );
 
-		var colors = [ color | 0x323232, color - 0x141414 ];
+		super.init(opts);
 
-		if( disabled ) {
-			color = DefaultStyle.BACKGROUND - 0x141414;
-			//~ color = color - 0x141414;
-			this.graphics.lineStyle (2, color);
-		}
-
-
-		var alphas = [ 100, 100 ];
-		var ratios = [ 0, 0xFF ];
-		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
-		this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-
-
-		//~ this.graphics.drawRoundRect (0, 0, box.width, box.height, 8, 8 );
-		this.graphics.drawRoundRectComplex (0, 0, this.box.width, this.box.height, 0, 4, 0, 4 );
-		this.graphics.endFill ();
-
-		this.graphics.lineStyle (1, color - 0x333333 );
-		//~ this.graphics.beginFill( DefaultStyle.BACKGROUND - 0x141414 );
-		this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
-		this.graphics.moveTo(5,5);
-		this.graphics.lineTo(15,5);
-		this.graphics.lineTo(10,15);
-
-		this.graphics.endFill ();
-
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
+		// add the drop-shadow filter
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
 		this.filters = [shadow];
+
+		redraw();
+
+	}	
+
+	public static function __init__()
+	{
+		StyleManager.setDefaultScript(
+			DropButton,
+			"redraw",
+			"
+				this.graphics.clear();
+				var colors = [ color | 0x323232, color - 0x141414 ];
+				var alphas = [ 100, 100 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawRoundRectComplex (0, 0, this.box.width, this.box.height, 0, 4, 0, 4 );
+				this.graphics.endFill ();
+				this.graphics.lineStyle (1, color - 0x333333 );
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
+				this.graphics.moveTo(5,5);
+				this.graphics.lineTo(15,5);
+				this.graphics.lineTo(10,15);
+				this.graphics.endFill ();
+			"
+		);
 	}
+
+	override public function redraw (opts:Dynamic = null):Void
+	{
+		StyleManager.exec(this,"redraw",
+			{
+				color: Opts.optInt(opts, "color", color),
+			});
+	}	
 }
 
 /**
