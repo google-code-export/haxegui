@@ -132,6 +132,7 @@ class AbstractButton extends Component
 
 	static function __init__()
 	{
+		untyped StyleManager.initialize();
 		StyleManager.setDefaultScript(
 			AbstractButton,
 			"mouseOver",

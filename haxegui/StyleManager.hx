@@ -232,7 +232,7 @@ class StyleManager implements Dynamic
 		return code;
 	}
 
-	static function initialize() {
+	public static function initialize() {
 		if(initialized) return;
 		initialized = true;
 		defaultActions = new Hash<ScriptObject>();

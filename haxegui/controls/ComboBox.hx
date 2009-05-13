@@ -41,7 +41,7 @@ import haxegui.events.MoveEvent;
 
 
 class DropButton extends AbstractButton {
-	
+
 
 	override public function init(opts:Dynamic=null)
 	{
@@ -54,10 +54,11 @@ class DropButton extends AbstractButton {
 
 		redraw();
 
-	}	
+	}
 
 	public static function __init__()
 	{
+		StyleManager.initialize();
 		StyleManager.setDefaultScript(
 			DropButton,
 			"redraw",
@@ -87,7 +88,7 @@ class DropButton extends AbstractButton {
 			{
 				color: Opts.optInt(opts, "color", color),
 			});
-	}	
+	}
 }
 
 /**

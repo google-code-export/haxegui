@@ -84,8 +84,12 @@ class ScriptStandardLibrary
 					TextFieldType : flash.text.TextFieldType,
 				},
 			});
-		interp.variables.set("DefaultStyle", DefaultStyle);
-		interp.variables.set("CursorManager", CursorManager);
+
+		/** haxegui exported with haxegui package stripped **/
+		interp.variables.set("ColorPicker", haxegui.ColorPicker);
+		interp.variables.set("Console", haxegui.Console);
+		interp.variables.set("Container", haxegui.Container);
+
 		interp.variables.set("Cursor",{
 				ARROW : Cursor.ARROW,
 				HAND : Cursor.HAND,
@@ -96,6 +100,40 @@ class ScriptStandardLibrary
 				NW : Cursor.NW,
 				SIZE_ALL : Cursor.SIZE_ALL,
 				CROSSHAIR : Cursor.CROSSHAIR,
+			});
+		interp.variables.set("CursorManager", CursorManager);
+		interp.variables.set("DefaultStyle", DefaultStyle);
+		interp.variables.set("DragManager", haxegui.DragManager);
+		interp.variables.set("FocusManager", haxegui.FocusManager);
+		interp.variables.set("Image", haxegui.Image);
+		interp.variables.set("Menubar", haxegui.Menubar);
+		interp.variables.set("MouseManager", haxegui.MouseManager);
+		interp.variables.set("Opts", haxegui.Opts);
+		interp.variables.set("PopupMenu", haxegui.PopupMenu);
+		interp.variables.set("ScrollPane", haxegui.ScrollPane);
+		interp.variables.set("Stats", haxegui.Stats);
+		interp.variables.set("StyleManager", StyleManager);
+		interp.variables.set("Toolbar", haxegui.Toolbar);
+		interp.variables.set("Utils", haxegui.Utils);
+		interp.variables.set("Window", haxegui.Window);
+		interp.variables.set("WindowManager", haxegui.WindowManager);
+		interp.variables.set("XmlDeserializer", haxegui.XmlDeserializer);
+
+		interp.variables.set("controls",
+			{
+				AbstractButton		: haxegui.controls.AbstractButton,
+// 				Button				: haxegui.controls.Button,
+				CheckBox			: haxegui.controls.CheckBox,
+// 				ComboBox			: haxegui.controls.ComboBox,
+				Component			: haxegui.controls.Component,
+				Input				: haxegui.controls.Input,
+				Label				: haxegui.controls.Label,
+				RadioButton			: haxegui.controls.RadioButton,
+				Scrollbar			: haxegui.controls.Scrollbar,
+				Slider				: haxegui.controls.Slider,
+				Stepper				: haxegui.controls.Stepper,
+				TitleBar			: haxegui.controls.TitleBar,
+				UiList				: haxegui.controls.UiList,
 			});
 	}
 
