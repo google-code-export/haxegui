@@ -42,6 +42,13 @@ class ScriptStandardLibrary
 	**/
 	public static function set(interp:Interp)
 	{
+		interp.variables.set( "root", flash.Lib.current );
+		interp.variables.set( "Std", Std );
+		interp.variables.set( "Math", Math );
+		interp.variables.set( "Type", Type );
+		interp.variables.set( "Reflect", Reflect );
+		interp.variables.set( "Timer", haxe.Timer );
+
 		interp.variables.set("Math",Math);
 		interp.variables.set("feffects",
 			{
@@ -83,6 +90,12 @@ class ScriptStandardLibrary
 					TextField : flash.text.TextField,
 					TextFieldType : flash.text.TextFieldType,
 				},
+				events :
+					{
+					Event : flash.events.Event,
+					MouseEvent : flash.events.MouseEvent,
+					KeyboardEvent : flash.events.KeyboardEvent
+					}
 			});
 
 		/** haxegui exported with haxegui package stripped **/

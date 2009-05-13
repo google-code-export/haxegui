@@ -117,7 +117,7 @@ class Window extends Component, implements Dynamic
 
 		// add a titlebar
 		titlebar = new TitleBar(this, "titlebar");
-		titlebar.init({w:this.width, title:this.name});
+		titlebar.init({w:this.width, title:this.name, color: this.color });
 		titlebar.redraw();
 
 		titlebar.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
@@ -161,8 +161,8 @@ class Window extends Component, implements Dynamic
 		frame.action_redraw = 
 			"
 				this.graphics.clear();
-				this.graphics.beginFill(fillColor, 0.5);
 				this.graphics.lineStyle(2, strokeColor, flash.display.LineScaleMode.NONE);
+				this.graphics.beginFill(fillColor, 0.5);
 				this.graphics.drawRoundRect(0, 0, box.width + 10, box.height + 10, 8, 8);
 				this.graphics.drawRect(10, 20, box.width - 10, box.height - 20);
 				this.graphics.endFill();
@@ -264,6 +264,7 @@ class Window extends Component, implements Dynamic
 	*/
 	public function onMouseMove (e:MouseEvent)
 	{
+		
 		//
 		CursorManager.getInstance ().inject (e.stageX, e.stageY);
 		e.stopImmediatePropagation ();
@@ -390,7 +391,7 @@ class Window extends Component, implements Dynamic
 	*/
 	override public function redraw (e:Dynamic=null):Void
 	{
-		var color:UInt = this.color - 0x141414;
+		var color:UInt = this.color - 0x282828;
 		var fill:UInt = this.color;
 		var damaged:Bool = true;
 

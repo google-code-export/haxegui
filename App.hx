@@ -139,23 +139,18 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 
 		// Console to show some debug
-		var console = new Console (flash.Lib.current, 100, 100);
+		var console = new Console (flash.Lib.current, 50, 50);
 		console.init({color:0x2E2E2E});
 		haxe.Log.clear();
 		setRedirection(console.log);
-
-
-		//~ trace("Application starting...");
 
 		trace("<FONT SIZE='24' FACE='_mono'>Hello and welcome.</FONT>");
 		trace("<FONT SIZE='12' FACE='_mono'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+".</FONT>");
 
 
-
 		// Statistics
 		var stats = new Stats (flash.Lib.current, 540, 80);
 		stats.init();
-		//~ haxe.Timer.delay( function(){ stats.init(); }, 1500 );
 
 
 
@@ -330,48 +325,6 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 
 
-/*
- * DEBUG
- *
-
-		trace("---------------------------------------------------------------------");
-		for(i in 0...flash.Lib.current.numChildren)
-			{
-				trace("<FONT SIZE=\"14\" FACE=\"_mono\" >print_mc(<B>"+flash.Lib.current.getChildAt(i).name+"</B>):</FONT>");
-				var child : Dynamic = cast flash.Lib.current.getChildAt(i) ;
-				//
-				if(!Std.is(child, flash.text.TextField))
-					trace(Utils.print_mc(child));
-
-				//~ // trace everything
-				//~ var str : String = "\n";
-				//~ var p = Type.getInstanceFields(Type.getClass(child));
-				//~ for(j in p) {
-					//~ var field = Reflect.field(child,j);
-					//~ if(Reflect.isFunction(field))
-						//~ {}
-					//~ else
-						//~ {
-							//~ str += "\t" + j + " => ";
-							//~ str += field + "\n";
-						//~ }
-				//~ }
-				//~ trace(str);
-			}//endfor
-		trace("---------------------------------------------------------------------");
-*/
-
-/*
- * rtti experiments....
- *
-		var rtti : String = untyped App.__rtti;
-		var x = Xml.parse(rtti).firstElement();
-        var infos = new haxe.rtti.XmlParser().processElement(x);
-        trace(Utils.print_r(infos));
-		trace(Utils.print_r(Type.enumConstructor(infos)));
-*/
-
-
 	var colorpicker = new ColorPicker(100,100);
 	colorpicker.init();
 
@@ -393,18 +346,6 @@ class App extends Sprite, implements haxe.rtti.Infos
 		trace("Registered scripts: " + Std.string(a));
 	}//main
 
-
-
-	/**
-	 *
-	 *
-	public static function onMouseDown (e:MouseEvent)
-	{
-		var popup = PopupMenu.getInstance ();
-		if(popup.numItems() > 0)
-		popup.dispatchEvent (new Event (MenuEvent.MENU_HIDE));
-	}
-	 */
 
 
 	/**
