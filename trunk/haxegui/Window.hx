@@ -266,7 +266,7 @@ class Window extends Component, implements Dynamic
 	{
 		
 		//
-		CursorManager.getInstance ().inject (e.stageX, e.stageY);
+		CursorManager.getInstance ().inject (e);
 		e.stopImmediatePropagation ();
 		//
 		var damaged:Bool = true;

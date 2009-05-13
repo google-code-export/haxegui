@@ -48,6 +48,7 @@ class ScriptStandardLibrary
 		interp.variables.set( "Type", Type );
 		interp.variables.set( "Reflect", Reflect );
 		interp.variables.set( "Timer", haxe.Timer );
+		interp.variables.set( "Xml", Xml );
 
 		interp.variables.set("feffects",
 			{
@@ -140,7 +141,7 @@ class ScriptStandardLibrary
 				Component			: haxegui.controls.Component,
 				Input				: haxegui.controls.Input,
 				Label				: haxegui.controls.Label,
-				RadioButton			: haxegui.controls.RadioButton,
+//				RadioButton			: haxegui.controls.RadioButton,
 				Scrollbar			: haxegui.controls.Scrollbar,
 				Slider				: haxegui.controls.Slider,
 				Stepper				: haxegui.controls.Stepper,

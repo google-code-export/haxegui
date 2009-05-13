@@ -212,9 +212,9 @@ class PopupMenu extends Component
 
 		item.buttonMode = true;
 
-		item.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver);
-		item.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut);
-		item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown);
+		item.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
+		item.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
+		item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
 
 		var tf = new TextField ();
 		tf.name = "tf";
@@ -223,15 +223,9 @@ class PopupMenu extends Component
 		tf.width = 40;
 		tf.height = 20;
 		tf.embedFonts = true;
-
 		tf.mouseEnabled = false;
-
 		tf.setTextFormat (StyleManager.getTextFormat());
-
 		item.addChild (tf);
-		//~ this.addChild (item);
-		//~ this.addChild (cast(item,Component));
-		//addChildAt(item, i-1);
 
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, 0x000000, 0.8,4, 4,0.65,BitmapFilterQuality.HIGH,false,false,false);
@@ -257,7 +251,7 @@ class PopupMenu extends Component
 
 
 		// shutdown event
-		this.addEventListener (MenuEvent.MENU_HIDE, close);
+		this.addEventListener (MenuEvent.MENU_HIDE, close, false, 0, true);
 
 		//
 		dispatchEvent (new MenuEvent(MenuEvent.MENU_SHOW, false, false, parent, this ));
@@ -350,7 +344,7 @@ class PopupMenu extends Component
 		{
 			//~ untyped self.stage.removeEventListenr(MouseEvent.MOUSE_DOWN);
 			self.close();
-		});
+		}, false, 0, true);
 
 	}
 

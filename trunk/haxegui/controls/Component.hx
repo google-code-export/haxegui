@@ -117,8 +117,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 
-	//~ public function redraw(?opts:Dynamic) {}
-
+	/**
+	* Excecute redrawing script
+	**/
 	public function redraw(?opts:Dynamic) {
 		StyleManager.exec(this,"redraw", opts);
 	}

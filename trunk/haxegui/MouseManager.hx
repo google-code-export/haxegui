@@ -84,15 +84,14 @@ class MouseManager extends EventDispatcher
 		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseEnter, false, 0, true);
 		stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseEnter, false, 0, true);
 		//~ stage.addEventListener(MouseEvent.MOUSE_UP, function(e){ CursorManager.getInstance().setCursor(Cursor.ARROW); });
-		stage.addEventListener(MouseEvent.MOUSE_OUT, function(e){ CursorManager.setCursor(Cursor.ARROW); }, false, 0, true);
+		//~ stage.addEventListener(MouseEvent.MOUSE_OUT, function(e){ CursorManager.setCursor(Cursor.ARROW); }, false, 0, true);
 		stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave, false, 0, true);
 	}
 
 	public inline function onMouseEnter(e:MouseEvent) : Void
 	{
 		CursorManager.getInstance().showCursor();
-		CursorManager.getInstance().inject( e.stageX, e.stageY );
-		e.updateAfterEvent();
+		CursorManager.getInstance().inject( e );
 	}
 
 	public inline function onMouseLeave(e:Event) : Void

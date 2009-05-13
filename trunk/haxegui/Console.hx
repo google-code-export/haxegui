@@ -196,7 +196,7 @@ class Console extends Window, implements ITraceListener
 		input.y = box.height - 40;
 
 
-		vert.x = box.width - 20;
+		//~ vert.x = box.width - 20;
 		//~ vert.y = 44;
 		vert.box.height = box.height - 40;
 		//~ vert.box.width = box.width - 40;
@@ -228,21 +228,16 @@ class Console extends Window, implements ITraceListener
 				haxegui.utils.ScriptStandardLibrary.set(interp);
 				interp.variables.set( "this", this );
 				interp.variables.set( "pwd", this.pwd );
-				interp.variables.set( "root", flash.Lib.current );
-				interp.variables.set( "Timer", Timer );
-				interp.variables.set( "Math", Math );
 
 				interp.variables.set( "clear", clear() );
 				interp.variables.set( "print_r", Utils.print_r );
 				interp.variables.set( "ls", Utils.print_r(pwd) );
 
-				interp.variables.set( "new", createInstance );
-				interp.variables.set( "class", getClass );
-
-				//~ var ret : Dynamic = interp.execute(program);
 					//~ trace( ret==null ? "\n" : ret );
 				trace(interp.execute(program));
-			} catch(e : Dynamic) {
+			} 
+			catch(e : Dynamic) 
+			{
 				trace("ERROR: " + e);
 			}
 
@@ -256,14 +251,5 @@ class Console extends Window, implements ITraceListener
 		output.text = "";
 	}
 
-	function createInstance( s : String, a : Array<Dynamic> )
-	{
-		return Type.createInstance( Type.resolveClass( s ), a );
-	}
-
-	function getClass( s : String )
-	{
-		return Type.resolveClass( s );
-	}
 
 }

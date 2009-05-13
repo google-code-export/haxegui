@@ -54,6 +54,8 @@ enum Cursor {
 }
 
 
+	
+
 /**
 *
 * Cursor Manager Class (Singleton)
@@ -114,29 +116,35 @@ class CursorManager extends EventDispatcher
 		return _mc;
 	}
 
-	public function inject(x:Float, y:Float) {
+	public function inject(e:MouseEvent) {
 
-		var p = new Point( x, y );
+		var p = new Point( e.stageX, e.stageY );
 
 		switch(cursor)
 		{
 			default:
-
+				p.offset(-10,-10);
+				
 			case Cursor.ARROW:
 				p.offset(-5,-2);
-
 
 			case Cursor.HAND, Cursor.HAND2, Cursor.DRAG:
 				p.offset(-14,-2);
 
 			case Cursor.CROSSHAIR:
 				p.offset(-23,-17);
+				
+			case Cursor.NE, Cursor.NW:
+				p.offset(-10,-10);
+
 		}
 
 		_mc.x = p.x;
 		_mc.y = p.y;
 		
 		toTop();
+
+		e.updateAfterEvent();
 
 	}//inject
 
@@ -209,8 +217,9 @@ class CursorManager extends EventDispatcher
 		_mc.tabEnabled = false;
 
 		_mc.width = _mc.height = 48;
-		_mc.x = point.x;
-		_mc.y = point.y;
+		//~ _mc.x = point.x;
+		//~ _mc.y = point.y;
+		//~ inject( new MouseEvent(MouseEvent.MOUSE_MOVE) );
 
 		var toColor = new flash.geom.ColorTransform(.8, 1, .9, 1, 0, 0, 0, 1);
 		var t = new flash.geom.Transform(_mc);
