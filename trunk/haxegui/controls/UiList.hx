@@ -80,14 +80,8 @@ class UiList extends Component
 			data = opts.data;
 
 		//
-		if(Opts.optBool(opts,"redraw",true))
-			redraw();
-
-		//
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 		this.filters = [shadow];
-
-
 	}
 
 	public function onItemMouseDown(e:MouseEvent) : Void

@@ -223,7 +223,7 @@ This hscript does the following:
     </script>
 
 
-
+	<!--
     <haxegui:Window name="Align Test Window" x="100" y="100" width="512" height="512" sizeable="false"  >
 		<haxegui:Container name="Container" x="10" y="20" >
 
@@ -399,6 +399,6 @@ This hscript does the following:
     trace(print_r(window));
 
     </script>
-
+-->
 
 </haxegui:Layout>

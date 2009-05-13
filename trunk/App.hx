@@ -141,7 +141,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 
 		// Console to show some debug
-		var console = new Console (flash.Lib.current, 150, 150);
+		var console = new Console (flash.Lib.current, 0, 0);
 		console.init();
 		haxe.Log.clear();
 		setRedirection(console.log);

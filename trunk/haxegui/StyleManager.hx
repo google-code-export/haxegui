@@ -194,7 +194,8 @@ class StyleManager implements Dynamic
 		try {
 			doCall(getActionField(classType, action), obj, options);
 		} catch(e:Dynamic) {
-			trace(getActionKey(classType, action) + " script error : " + e);
+			if(e != "Not a valid action")
+				trace(getActionKey(classType, action) + " script error : " + e);
 		}
 	}
 
