@@ -19,32 +19,27 @@
 
 package haxegui.controls;
 
-import flash.geom.Rectangle;
-
 import flash.display.Sprite;
 import flash.display.MovieClip;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
-import flash.text.TextField;
-import flash.text.TextFormat;
-
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-
-import haxegui.events.MoveEvent;
-
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
+import flash.geom.Rectangle;
+import flash.text.TextField;
+import flash.text.TextFormat;
 
 import haxegui.CursorManager;
-import haxegui.StyleManager;
 import haxegui.FocusManager;
-
+import haxegui.Opts;
+import haxegui.StyleManager;
 import haxegui.controls.Component;
+import haxegui.events.MoveEvent;
 
 class RadioButton extends Component, implements Dynamic
 {
@@ -113,7 +108,6 @@ class RadioButton extends Component, implements Dynamic
 
 		if(disabled)
 			dispatchEvent(new Event(Event.DEACTIVATE));
-		redraw();
 	}
 
 	/**

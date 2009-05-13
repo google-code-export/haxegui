@@ -101,6 +101,8 @@ class Scrollbar extends haxegui.controls.Component
 	*/
 	override public function init(opts:Dynamic=null)
 	{
+		super.init(opts);
+
 		scroll = 0;
 		//~ box = new Rectangle(0,0,20,90);
 		this.scrollee = Opts.classInstance(opts, "target", untyped [TextField, DisplayObject]);
@@ -259,7 +261,8 @@ class Scrollbar extends haxegui.controls.Component
 		//~ handle.y = (.5*bounds.height-40) * scroll ;
 		//~ scroll = (handle.y-20) / (frame.height - 40 + 2) ;
 
-		e.updateAfterEvent();
+		if(e != null)
+			e.updateAfterEvent();
 
 	}
 

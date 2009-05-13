@@ -170,11 +170,6 @@ class Window extends Component, implements Dynamic
 
 
 		this.dispatchEvent (new ResizeEvent (ResizeEvent.RESIZE));
-
-
-		redraw (null);
-
-		//~ return this;
 	}
 
 

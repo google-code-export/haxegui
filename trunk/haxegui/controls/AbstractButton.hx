@@ -172,8 +172,6 @@ class AbstractButton extends Component
 
 		// register with focus manager
 		//~ FocusManager.getInstance().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
-
-		redraw();
 	}
 
 	override public function redraw(opts:Dynamic=null) : Void

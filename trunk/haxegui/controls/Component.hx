@@ -47,6 +47,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Disabled \ Enabled **/
 	public var disabled(default, default) : Bool;
 
+	public var dirty(default,null) : Bool;
+
 	/** Does object validate ? **/
 	public var validate : Bool;
 
@@ -103,6 +105,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		disabled = Opts.optBool(opts,"disabled",false);
 		box.width = Opts.optFloat(opts,"width",box.width);
 		box.height = Opts.optFloat(opts,"height",box.height);
+
+		dirty = true;
 	}
 
 	public function redraw(?opts:Dynamic) {

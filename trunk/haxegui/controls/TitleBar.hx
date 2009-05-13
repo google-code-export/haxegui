@@ -49,9 +49,11 @@ class TitleBar extends Component, implements Dynamic
 	}
 
 	override public function init(?opts:Dynamic) {
+		super.init(opts);
+
 		//
 		this.graphics.beginFill (0x1A1A1A, 0.5);
-		this.graphics.drawRoundRectComplex (0, 0, Opts.optFloat(opts,"w",100), 32, 4, 4, 0, 0);
+		this.graphics.drawRoundRectComplex (0, 0, Opts.optFloat(opts,"w",100.), 32, 4, 4, 0, 0);
 		this.graphics.drawRect (10, 20, Opts.optFloat(opts,"w",100) - 20, 12);
 		this.graphics.endFill ();
 

@@ -19,28 +19,23 @@
 
 package haxegui.controls;
 
-import flash.geom.Rectangle;
-
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
-
-import flash.text.TextField;
-
 import flash.events.Event;
 import flash.events.MouseEvent;
-import haxegui.events.DragEvent;
-
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 import flash.filters.BevelFilter;
+import flash.geom.Rectangle;
+import flash.text.TextField;
 
-import haxegui.StyleManager;
-import haxegui.CursorManager;
 import haxegui.DragManager;
-
-
+import haxegui.CursorManager;
+import haxegui.Opts;
+import haxegui.StyleManager;
+import haxegui.events.DragEvent;
 
 /**
  *
@@ -78,14 +73,15 @@ class UiList extends Component
 		box = new Rectangle(0,0, 140, 40);
 		super.init(opts);
 
+		if(opts == null) opts = {}
 		if(opts.innerData!=null)
 			data = opts.innerData.split(",");
-
 		if(opts.data!=null)
 			data = opts.data;
 
 		//
-		redraw();
+		if(Opts.optBool(opts,"redraw",true))
+			redraw();
 
 		//
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
@@ -112,12 +108,12 @@ class UiList extends Component
 
 	public function onItemMouseUp(e:MouseEvent) : Void
 	{
-	e.target.dispatchEvent (new DragEvent (DragEvent.DRAG_COMPLETE));
-	e.target.x = 0;
-	//~ e.target.y = dragItem * 20;
-	//~ e.target.y = 20 + e.target.x % 20;
-	e.target.y = dragItem * 20;
-	setChildIndex(e.target, dragItem);
+		e.target.dispatchEvent (new DragEvent (DragEvent.DRAG_COMPLETE));
+		e.target.x = 0;
+		//~ e.target.y = dragItem * 20;
+		//~ e.target.y = 20 + e.target.x % 20;
+		e.target.y = dragItem * 20;
+		setChildIndex(e.target, dragItem);
 
 	}
 
@@ -138,17 +134,17 @@ class UiList extends Component
 
 	public function onItemRollOut(e:MouseEvent) : Void
 	{
-if(this.contains(e.target))
-{
-		e.target.graphics.clear();
-		e.target.graphics.lineStyle(2, color - 0x323232);
-		//~ e.target.graphics.beginFill (color);
-		e.target.graphics.beginFill ( this.getChildIndex(e.target)==0 ? color | 0x323232 : color );
-		e.target.graphics.drawRect (0, 0, box.width, 20);
-		e.target.graphics.endFill ();
-}
+		if(this.contains(e.target))
+		{
+				e.target.graphics.clear();
+				e.target.graphics.lineStyle(2, color - 0x323232);
+				//~ e.target.graphics.beginFill (color);
+				e.target.graphics.beginFill ( this.getChildIndex(e.target)==0 ? color | 0x323232 : color );
+				e.target.graphics.drawRect (0, 0, box.width, 20);
+				e.target.graphics.endFill ();
+		}
 
-if(e.target==header) drawHeader();
+		if(e.target==header) drawHeader();
 
 		CursorManager.setCursor(Cursor.ARROW);
 
