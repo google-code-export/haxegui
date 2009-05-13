@@ -37,12 +37,16 @@ class CloseButton extends Component
 		super (parent, name, x, y);
 	}
 
-	public function redraw (? color : Int, ? w : Float):Void
+	override public function redraw (opts:Dynamic = null):Void
 	{
-		StyleManager.exec(CloseButton,"redraw", this, {w:w, color:color});
+		StyleManager.exec(CloseButton,"redraw", this,
+			{
+				w : Opts.optInt(opts,"w",20),
+				color: Opts.optInt(opts, "color", 0),
+			});
 	}
 
-	public function init(?initObj:Dynamic)
+	override public function init(opts:Dynamic=null)
 	{
 		action_redraw =
 			"
@@ -101,25 +105,25 @@ class CloseButton extends Component
 	}
 
 	/** onRollOver Event **/
-	public function onRollOver(e:MouseEvent)
+	override public function onRollOver(e:MouseEvent)
 	{
 		StyleManager.exec(CloseButton,"mouseOver", this, {event : e});
 	}
 
 	/** onRollOut Event **/
-	public function onRollOut(e:MouseEvent) : Void
+	override public function onRollOut(e:MouseEvent) : Void
 	{
 		StyleManager.exec(CloseButton,"mouseOut", this, {event : e});
 	}
 
-	public function onMouseDown(e:MouseEvent) : Void
+	override public function onMouseDown(e:MouseEvent) : Void
 	{
 		StyleManager.exec(CloseButton,"mouseDown", this, {event : e});
 	}
 
 	/**
 	*/
-	public function onMouseUp(e:MouseEvent) : Void
+	override public function onMouseUp(e:MouseEvent) : Void
 	{
 		StyleManager.exec(CloseButton,"mouseUp", this, {event : e});
 	}

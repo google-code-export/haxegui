@@ -62,7 +62,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/**
 	*
 	**/
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	public function new (parent:DisplayObjectContainer=null, name:String=null, ?x:Float, ?y:Float)
 	{
 		super ();
 
@@ -70,6 +70,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 		if(name!=null)
 			this.name = name;
+		else
+			this.name = Type.getClassName(Type.getClass(this)).split(".").pop();
 
 
 		if(parent!=null)
@@ -91,9 +93,11 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
 		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
 		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
+		this.addEventListener (ResizeEvent.RESIZE, onResize, false, 0, true);
 	}
 
-	public function init(?opts:Dynamic) {
+	public function init(opts:Dynamic=null) {
+		if(opts == null) opts = {};
 	}
 
 	public function redraw(?opts:Dynamic) {
@@ -186,11 +190,13 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		StyleManager.exec(Type.getClass(this),"mouseUp", this, {event : e});
 	}
 
-
 	public function onKeyDown(e:KeyboardEvent)
 	{
 	}
 
+	public function onResize(e:ResizeEvent) : Void
+	{
+	}
 
 	public var action_redraw(__getAction_redraw,__setAction_redraw) : String;
 	 function __getAction_redraw() { return action_redraw; }
