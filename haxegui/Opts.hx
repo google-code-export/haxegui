@@ -87,7 +87,7 @@ class Opts {
 	{
 		var v = getField(opts,field);
 		if(v == null) return defaultValue;
-		return new String(field);
+		return Std.string(v);
 	}
 
 	public static function getField(opts:Dynamic,field:String) : Dynamic {

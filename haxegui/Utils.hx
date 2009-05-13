@@ -31,20 +31,18 @@ class Utils
 {
 
 	/**
-	 *
-	 *
-	 */
+	*
+	*
+	*/
 	public static function print_r(obj:Dynamic, ?indent:String="\t") : String
 	{
-
-	return Std.is(obj, DisplayObjectContainer) ? print_mc(obj, indent) : print_r(obj, indent);
-
+		return Std.is(obj, DisplayObjectContainer) ? print_mc(obj, indent) : print_a(obj, indent);
 	}
 
 	/**
-	 *
-	 *
-	 */
+	*
+	*
+	*/
 	public static function print_a(obj:Dynamic, ?indent:String="\t") : String
 	{
 		//
@@ -80,13 +78,10 @@ class Utils
 		return str;
 	}
 
-
-
-
 	/**
-	 *
-	 *
-	 */
+	*
+	*
+	*/
 	//~ public static function print_mc(obj:DisplayObjectContainer, ?indent:String="\t") : String
 	public static function print_mc(obj:DisplayObjectContainer, ?indent:String) : String
 	{

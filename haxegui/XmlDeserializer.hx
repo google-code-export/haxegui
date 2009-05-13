@@ -67,14 +67,14 @@ class XmlDeserializer extends Unserializer
 
 
 		if(Std.is(parent, List))
-			{
+		{
 			parent.add( node.firstChild().nodeValue );
 			//~ trace(parent);
 			return;
-			}
+		}
 
 		if(Std.is(parent, Array))
-			{
+		{
 
 			//~ parent[parent.length] = node.firstChild().nodeValue ;
 			parent.push( node.firstChild().nodeValue );
@@ -84,7 +84,7 @@ class XmlDeserializer extends Unserializer
 			//~ trace(node.parent.get("name"));
 
 			return;
-			}
+		}
 
 		//
 		var resolved = Type.resolveClass(name);
@@ -96,45 +96,38 @@ class XmlDeserializer extends Unserializer
 		var v : Dynamic = {};
 		var args : Dynamic = {};
 
-			//~ v = Type.createInstance( Type.resolveClass(name), [flash.Lib.current]);
-			v = Type.createInstance( resolved, [parent]);
+		//~ v = Type.createInstance( Type.resolveClass(name), [flash.Lib.current]);
+		v = Type.createInstance( resolved, [parent]);
 
-			for(attr in node.attributes())
-				{
-				var val = node.get(attr);
-				if(val.charAt(0) == "@")
-					Reflect.setField(args, attr, Reflect.field(flash.Lib.current, val.substr(1, val.length) ) );
-				else
-					Reflect.setField(args, attr, val );
+		for(attr in node.attributes())
+		{
+			var val = node.get(attr);
+			if(val.charAt(0) == "@")
+				Reflect.setField(args, attr, Reflect.field(flash.Lib.current, val.substr(1, val.length) ) );
+			else
+				Reflect.setField(args, attr, val );
+		}
+
+		if(node.firstChild()!=null) {
+			//~ if(node.firstChild().nodeType==Xml.PCData)
+			if(Std.string(node.firstChild().nodeValue).charAt(0)!="\n") {
+				if(Std.string(node.firstChild().nodeValue).charAt(0)!="\t") {
+					var str : String = node.firstChild().nodeValue;
+					str = str.split("\t").join("");
+					Reflect.setField(args, "innerData", str );
 				}
+			}
+		}
+		//~ trace(Std.string(node.firstChild().nodeType)+" "+Std.string(node.firstChild().nodeValue));
 
+		if(Reflect.hasField( v, "init") )
+			if(Reflect.isFunction( Reflect.field(v, "init") ))
+				Reflect.callMethod( v, v.init, [args] );
 
-
-
-
-
-				if(node.firstChild()!=null)
-					//~ if(node.firstChild().nodeType==Xml.PCData)
-					if(Std.string(node.firstChild().nodeValue).charAt(0)!="\n")
-					if(Std.string(node.firstChild().nodeValue).charAt(0)!="\t")
-					{
-						var str : String = node.firstChild().nodeValue;
-						str = str.split("\t").join("");
-						Reflect.setField(args, "innerData", str );
-					}
-						//~ trace(Std.string(node.firstChild().nodeType)+" "+Std.string(node.firstChild().nodeValue));
-
-			if(Reflect.hasField( v, "init") )
-				if(Reflect.isFunction( Reflect.field(v, "init") ))
-					Reflect.callMethod( v, v.init, [args] );
-
-
-
-
-			// recurse
-			if(node.elements().hasNext())
-				for(i in node.elements())
-					getNode(i, v);
+		// recurse
+		if(node.elements().hasNext())
+			for(i in node.elements())
+				getNode(i, v);
 
 		return v;
 
@@ -144,14 +137,14 @@ class XmlDeserializer extends Unserializer
 	public function getScript(node:Xml) : Dynamic
 	{
 
-		if(node.get("type")!="text/hscript")
+		if(node.get("type") != "text/hscript")
 			return new flash.Error("Not of type hscript");
 
 
 		var script : String = node.firstChild().nodeValue;
-			script = script.split("\n").join("");
-			script = script.split("\t").join("");
-			script = script.split(";").join("; ");
+		script = script.split("\n").join("");
+		script = script.split("\t").join("");
+		script = script.split(";").join("; ");
 		//~ trace(script);
 
 		var parser = new hscript.Parser();
@@ -161,7 +154,6 @@ class XmlDeserializer extends Unserializer
 
 		interp.variables.set( "root", flash.Lib.current );
 		//~ //interp.variables.set( "this", ? );
-
 
 		interp.variables.set( "new", createInstance );
 		interp.variables.set( "class", getClass );
@@ -179,13 +171,17 @@ class XmlDeserializer extends Unserializer
 		interp.variables.set( "MouseEvent", flash.events.MouseEvent );
 
 		interp.variables.set( "StyleManager", StyleManager );
-        interp.variables.set( "CursorManager", CursorManager );
-        interp.variables.set( "Cursor", Cursor );
+		interp.variables.set( "CursorManager", CursorManager );
+		interp.variables.set( "Cursor", Cursor );
 
 		interp.variables.set( "print_r", haxegui.Utils.print_r );
 
-		var ret = interp.execute(program);
-		trace(ret);
+		try {
+			var ret = interp.execute(program);
+			trace(ret);
+		} catch(e:Dynamic) {
+			trace("XmlDeserializer script error parsing "+node.nodeName+": "+e);
+		}
 
 
 		//~ return ret;
@@ -195,26 +191,21 @@ class XmlDeserializer extends Unserializer
 
 
 	/**
-	 *
-	 *
-	 *
-	 */
+	*
+	*/
 	public function deserialize()
 	{
-
 		for(i in  xml.firstElement().elements())
 			getNode(i);
-
-
 	}
 
 
 	/**
-	 *  10x to filt3rek:
-	 *
-	 *  http://filt3r.free.fr/index.php/2008/07/23/59-hscript
-	 *
-	 */
+	*  10x to filt3rek:
+	*
+	*  http://filt3r.free.fr/index.php/2008/07/23/59-hscript
+	*
+	*/
 	function createInstance( s : String, a : Array<Dynamic> )
 	{
 		return Type.createInstance( Type.resolveClass( s ), a );
@@ -225,7 +216,5 @@ class XmlDeserializer extends Unserializer
 		return Type.resolveClass( s );
 	}
 
-
-
-
 }
+

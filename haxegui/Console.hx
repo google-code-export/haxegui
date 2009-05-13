@@ -98,8 +98,8 @@ class Console extends Window, implements ITraceListener
 		box = new Rectangle (0, 0, 640, 240);
 
 		//
-		var menubar = new Menubar (this, "Menubar", 10,20);
-		menubar.init ();
+// 		var menubar = new Menubar (this, "Menubar", 10,20);
+// 		menubar.init ();
 
 
 		//
@@ -240,12 +240,11 @@ class Console extends Window, implements ITraceListener
 		}
 
 
-		if( this.getChildByName("Menubar")!=null )
-		{
-			var menubar = untyped this.getChildByName("Menubar");
-			menubar.onResize(e);
-			//~ menubar.dispatchEvent(e.clone());
-		}
+// 		if( this.getChildByName("Menubar")!=null )
+// 		{
+// 			var menubar = untyped this.getChildByName("Menubar");
+// 			menubar.onResize(e);
+// 		}
 
 		//~ dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
