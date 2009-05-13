@@ -32,10 +32,11 @@ import haxegui.StyleManager;
 * @version 0.1
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class CloseButton extends Component
+class CloseButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
+		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
 	override public function redraw (opts:Dynamic = null):Void
@@ -69,70 +70,17 @@ class CloseButton extends Component
 				this.graphics.moveTo(12,0);
 				this.graphics.lineTo(0,12);
 			";
-		action_mouseOver =
-			"
-				if(this.disabled) return;
-				this.updateColorTween( new feffects.Tween(0, 50, 275, feffects.easing.Expo.easeOut ) );
-				CursorManager.setCursor(Cursor.ARROW);
-			";
-		action_mouseOut =
-			"
-				if(this.disabled) return;
-				this.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 350, feffects.easing.Linear.easeOut ) );
-				CursorManager.setCursor(Cursor.ARROW);
-			";
-		action_mouseDown =
-			"
-				if(this.disabled) return;
-				this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
-				CursorManager.setCursor(Cursor.ARROW);
-			";
-		action_mouseUp =
-			"
-				if(this.disabled) return;
-				this.redraw();
-				if(this.hitTestObject( CursorManager.getInstance()._mc )) {
-					this.updateColorTween( new feffects.Tween(-50, 50, 150, feffects.easing.Linear.easeNone) );
-					CursorManager.setCursor(Cursor.ARROW);
-				}
-				else {
-					this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
-				}
-			";
-
-		this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
-		this.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
-		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
-		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
-		this.addEventListener (MouseEvent.CLICK, onMouseClick, false, 0, true);
-
-	}
-
-	/** onRollOver Event **/
-	override public function onRollOver(e:MouseEvent)
-	{
-		StyleManager.exec(CloseButton,"mouseOver", this, {event : e});
-	}
-
-	/** onRollOut Event **/
-	override public function onRollOut(e:MouseEvent) : Void
-	{
-		StyleManager.exec(CloseButton,"mouseOut", this, {event : e});
-	}
-
-	override public function onMouseDown(e:MouseEvent) : Void
-	{
-		StyleManager.exec(CloseButton,"mouseDown", this, {event : e});
 	}
 
 	/**
 	*/
-	override public function onMouseUp(e:MouseEvent) : Void
-	{
-		StyleManager.exec(CloseButton,"mouseUp", this, {event : e});
-	}
+// 	override public function onMouseUp(e:MouseEvent) : Void
+// 	{
+// 		StyleManager.exec(CloseButton,"mouseUp", this, {event : e});
+// 	}
 
 	public function onMouseClick(e:MouseEvent) : Void
 	{
+		trace("Close clicked on " + parent.parent.toString());
 	}
 }

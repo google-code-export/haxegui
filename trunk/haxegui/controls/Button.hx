@@ -55,54 +55,13 @@ import haxegui.events.MoveEvent;
 * @author Russell Weir'
 *
 */
-class Button extends Component, implements Dynamic
+class Button extends AbstractButton, implements Dynamic
 {
-	/** Sets whether mouse events in buttons use hand cursors **/
-	public static var useHandCursors(default,__setHandCursors) : Bool;
-	/** The cursor to use when the mouse is over buttons **/
-	public static var defaultCursorOver : Cursor;
-	/** The cursor to use when a button is pressed **/
-	public static var defaultCursorPress : Cursor;
-
-	static function __setHandCursors(v:Bool) : Bool
-	{
-		if(v == useHandCursors)
-			return v;
-		if(v) {
-			defaultCursorOver = Cursor.HAND;
-			defaultCursorPress = Cursor.HAND2;
-		} else {
-			defaultCursorOver = Cursor.ARROW;
-			defaultCursorPress = Cursor.ARROW;
-		}
-		return v;
-	}
-
 	/**
 	*  @see Label
 	*/
 	public var label :Label;
 	public var fmt : TextFormat;
-
-	/** The cursor to use when the mouse is over this button **/
-	public var cursorOver : Cursor;
-	/** The cursor to use when this button is pressed **/
-	public var cursorPress : Cursor;
-
-	/**
-	*
-	* @param parent  Parent object
-	* @param name    Name of new instance
-	* @param x       Horizontal location
-	* @param y       Vertical location
-	*/
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super (parent, name, x, y);
-		cursorOver = defaultCursorOver;
-		cursorPress = defaultCursorPress;
-	}
-
 
 	override public function init(opts:Dynamic=null)
 	{
@@ -112,57 +71,12 @@ class Button extends Component, implements Dynamic
 
 		super.init(opts);
 
-		useHandCursors = false;
-		action_mouseOver =
-			"
-				if(this.disabled) return;
-				this.updateColorTween( new feffects.Tween(0, 50, 275, feffects.easing.Expo.easeOut ) );
-				CursorManager.setCursor(this.cursorOver);
-			";
-		action_mouseOut =
-			"
-				if(this.disabled) return;
-				this.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 350, feffects.easing.Linear.easeOut ) );
-				CursorManager.setCursor(Cursor.ARROW);
-			";
-		action_mouseDown =
-			"
-				if(this.disabled) return;
-				this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
-				CursorManager.setCursor(this.cursorPress);
-			";
-		action_mouseUp =
-			"
-				if(this.disabled) return;
-				this.redraw();
-				if(this.hitTestObject( CursorManager.getInstance()._mc )) {
-					this.updateColorTween( new feffects.Tween(-50, 50, 150, feffects.easing.Linear.easeNone) );
-					CursorManager.setCursor(this.cursorOver);
-				}
-				else {
-					this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
-				}
-			";
-
 		label = new Label();
 		label.init();
 		label.text = Opts.optString(opts,"label",name);
 
 		label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
 		this.addChild(label);
-
-		buttonMode = true;
-		tabEnabled = true;
-		mouseEnabled = true;
-		focusRect = true;
-
-
-		//~ else
-		//~ if(Math.isNaN(box.width))
-			//~ box.width = 90;
-		//~ else
-		//~ if(Math.isNaN(box.height))
-			//~ box.height = 30;
 
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
