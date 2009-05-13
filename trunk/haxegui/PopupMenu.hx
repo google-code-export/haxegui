@@ -177,16 +177,16 @@ class PopupMenu extends Component
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, 0x000000, 0.8,4, 4,0.65,BitmapFilterQuality.HIGH,false,false,false);
 		item.filters = [shadow];
 
-		var t = new Tween( 0, item.y, 150 + 150*i, item, "y", Back.easeInOut );
+		//~ var t = new Tween( 0, item.y, 150 + 150*i, item, "y", Back.easeInOut );
 		var t2 = new Tween( 0, 1, 350, item, "alpha", Linear.easeNone );
 
-		item.y = 0 ;
+		//~ item.y = 0 ;
 		item.alpha = 0 ;
 
 		//~ haxe.Timer.delay( function(){t2.start();}, 150*(items-i) );
 		haxe.Timer.delay( function(){t2.start();}, Std.int(4*Math.exp(2)*i ) );
 		//~ haxe.Timer.delay( function(){t.start();}, 150*(items-i) );
-		t.start();
+		//~ t.start();
 
 
 		}
@@ -348,23 +348,23 @@ class PopupMenu extends Component
 	public function onChanged() {
 		//trace(_item);
 		//for(i in 0...items) {
-		for(i in 0...numChildren)
-		{
-			var item = cast(this.getChildAt(i), Sprite);
-			//~ var color = (i==_item) ? color + 0x333333 : color;
-			var color = (i==_item) ? this.color | 0x202020 : this.color;
-			item.graphics.clear ();
-			item.graphics.lineStyle(2, color - 0x323232);
-			item.graphics.beginFill (color, .8);
-			item.graphics.drawRect (0, 0, 100, 20);
-			//item.graphics.endFill ();
-
-			var tf : TextField = cast item.getChildByName("tf");
-			var fmt = new TextFormat ();
-			fmt.color = DefaultStyle.LABEL_TEXT ;
-			tf.setTextFormat (fmt);
-
-		}
+		//~ for(i in 0...numChildren)
+		//~ {
+			//~ var item = cast(this.getChildAt(i), Sprite);
+			//var color = (i==_item) ? color + 0x333333 : color;
+			//~ var color = (i==_item) ? this.color | 0x202020 : this.color;
+			//~ item.graphics.clear ();
+			//~ item.graphics.lineStyle(2, color - 0x323232);
+			//~ item.graphics.beginFill (color, .8);
+			//~ item.graphics.drawRect (0, 0, 100, 20);
+			//~ //item.graphics.endFill ();
+//~ 
+			//~ var tf : TextField = cast item.getChildByName("tf");
+			//~ var fmt = new TextFormat ();
+			//~ fmt.color = DefaultStyle.LABEL_TEXT ;
+			//~ tf.setTextFormat (fmt);
+//~ 
+		//~ }
 		var item = cast(this.getChildAt(_item), Sprite);
 
 		//~ if(!Tweener.isTweening(item))
