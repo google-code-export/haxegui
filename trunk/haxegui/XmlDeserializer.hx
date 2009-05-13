@@ -166,6 +166,7 @@ class XmlDeserializer extends Unserializer
 
 		interp.variables.set( "Sprite", Sprite );
 		interp.variables.set( "TextField", TextField );
+		interp.variables.set( "TextFieldType", flash.text.TextFieldType );
 
 		interp.variables.set( "Event", Event );
 		interp.variables.set( "MouseEvent", flash.events.MouseEvent );
