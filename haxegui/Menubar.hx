@@ -136,7 +136,7 @@ class Menubar extends Component, implements Dynamic
 			tf.mouseEnabled = false;
 
 
-			tf.setTextFormat (StyleManager.getTextFormat(8, 10, flash.text.TextFormatAlign.CENTER ));
+			tf.setTextFormat (DefaultStyle.getTextFormat(8, 10, flash.text.TextFormatAlign.CENTER ));
 
 
 			menu.addChild (tf);

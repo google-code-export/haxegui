@@ -215,7 +215,7 @@ class PopupMenu extends Component
 		tf.height = 20;
 		tf.embedFonts = true;
 		tf.mouseEnabled = false;
-		tf.setTextFormat (StyleManager.getTextFormat());
+		tf.setTextFormat (DefaultStyle.getTextFormat());
 		item.addChild (tf);
 
 		// add the drop-shadow filter

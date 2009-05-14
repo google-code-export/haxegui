@@ -74,7 +74,7 @@ class Input extends Component
 	    tf.x = tf.y = 4;
 	    tf.embedFonts = true;
 
-	    tf.setTextFormat(StyleManager.getTextFormat());
+	    tf.setTextFormat(DefaultStyle.getTextFormat());
 	    addChild(tf);
 
 	}

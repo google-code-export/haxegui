@@ -105,6 +105,7 @@ class Button extends AbstractButton, implements Dynamic
 		StyleManager.exec(this,"redraw",
 			{
 				color: Opts.optInt(opts, "color", color),
+				disabled: Opts.optBool(opts, "disabled", disabled),
 			});
 	}
 
@@ -117,6 +118,8 @@ class Button extends AbstractButton, implements Dynamic
 			"
 				this.graphics.clear();
 				var colors = [ color | 0x323232, color - 0x141414 ];
+				if(disabled)
+					colors = [ color - 0x141414, color | 0x323232 ];
 				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
@@ -126,6 +129,8 @@ class Button extends AbstractButton, implements Dynamic
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
 				this.graphics.endFill ();
+				
+				this.label.tf.setTextFormat( DefaultStyle.getTextFormat(8) );
 			"
 		);
 	}

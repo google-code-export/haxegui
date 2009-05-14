@@ -123,7 +123,7 @@ class CheckBox extends Component, implements Dynamic
 		{
 			//~ color = DefaultStyle.BACKGROUND - 0x141414;
 			//~ color = DefaultStyle.BACKGROUND ;
-			var fmt = StyleManager.getTextFormat();
+			var fmt = DefaultStyle.getTextFormat();
 			fmt.color = color - 0x202020;
 			//~ fmt.align = flash.text.TextFormatAlign.CENTER;
 			label.tf.setTextFormat(fmt);

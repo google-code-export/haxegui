@@ -163,7 +163,8 @@ class RadioButton extends AbstractButton, implements Dynamic
 	{
 		StyleManager.exec(this,"redraw",
 			{
-				color: Opts.optInt(opts, "color", color),
+				color: Opts.optInt(opts, "color", color)
+				//~ checked: Opts.optBool(opts, "checked", checked),
 			});
 	}
 
@@ -225,10 +226,14 @@ class RadioButton extends AbstractButton, implements Dynamic
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
 				this.graphics.lineStyle(2);
-				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
+				if(this.checked)
+					this.graphics.beginFill(0x00ff00);
+				else
+					this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawCircle (10, 10, 10);
-				this.graphics.endFill ();			"
+				this.graphics.endFill ();
+			"
 		);
 	}
 	

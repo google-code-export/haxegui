@@ -104,7 +104,8 @@ class AbstractButton extends Component
 		super (parent, name, x, y);
 		cursorOver = defaultCursorOver;
 		cursorPress = defaultCursorPress;
-		useHandCursors = false;
+		//~ useHandCursors = false;
+		useHandCursors = true;
 	}
 
 	/**
@@ -121,7 +122,6 @@ class AbstractButton extends Component
 			box = new Rectangle(0,0,90,30);
 
 		super.init(opts);
-
 
 
 		buttonMode = true;
@@ -165,7 +165,7 @@ class AbstractButton extends Component
 			"mouseUp",
 			"
 				if(this.disabled) return;
-				this.redraw();
+				//~ this.redraw();
 				if(this.hitTestObject( CursorManager.getInstance()._mc )) {
 					this.updateColorTween( new feffects.Tween(-50, 50, 150, feffects.easing.Linear.easeNone) );
 					CursorManager.setCursor(this.cursorOver);

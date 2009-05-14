@@ -100,7 +100,7 @@ class Stepper extends Component, implements Dynamic
 		tf.text = Std.string(value);
 
 		tf.embedFonts = true;
-		tf.setTextFormat(StyleManager.getTextFormat());
+		tf.setTextFormat(DefaultStyle.getTextFormat());
 
 		this.addChild(tf);
 
@@ -247,7 +247,7 @@ class Stepper extends Component, implements Dynamic
 	//~ trace(e);
 		this.tf.text = Std.string(value);
 		//~ this.tf.setTextFormat(StyleManager.getTextFormat(12));
-		this.tf.setTextFormat(StyleManager.getTextFormat());
+		this.tf.setTextFormat(DefaultStyle.getTextFormat());
 	}
 
 }

@@ -297,7 +297,7 @@ class ColorPicker extends Window
 	public function updateInput()
 	{
 		input.tf.text = "0x"+StringTools.hex(currentColor);
-		input.tf.setTextFormat( StyleManager.getTextFormat() );
+		input.tf.setTextFormat( DefaultStyle.getTextFormat() );
 	}
 
 }
