@@ -415,4 +415,9 @@ class Menubar extends Component, implements Dynamic
 
 	}
 
+	static function __init__() {
+		haxegui.Haxegui.register(Menubar,initialize);
+	}
+	static function initialize() {
+	}
 }//Menubar

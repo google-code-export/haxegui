@@ -101,6 +101,8 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 	public static function main ()
 	{
+		// Setup Haxegui
+		haxegui.Haxegui.init();
 
 		// Set stage propeties
 		var stage = flash.Lib.current.stage;
@@ -110,10 +112,6 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 		// Assign a stage resize listener
 		stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
-
-		// Setup mouse and cursor
-		MouseManager.getInstance().init();
-		CursorManager.getInstance().init();
 
 		// Desktop
 		var desktop = new Sprite();

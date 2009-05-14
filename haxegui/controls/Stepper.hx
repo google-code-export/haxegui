@@ -56,8 +56,8 @@ class Stepper extends Component, implements Dynamic
 	var delta : Float;
 
 	var autoRepeat : Bool;
-	
-	
+
+
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
@@ -250,4 +250,9 @@ class Stepper extends Component, implements Dynamic
 		this.tf.setTextFormat(DefaultStyle.getTextFormat());
 	}
 
+	static function __init__() {
+		haxegui.Haxegui.register(Stepper,initialize);
+	}
+	static function initialize() {
+	}
 }

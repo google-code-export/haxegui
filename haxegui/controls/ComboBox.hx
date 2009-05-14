@@ -49,13 +49,12 @@ import haxegui.events.MoveEvent;
 */
 class ComboBoxDropButton extends AbstractButton {
 
-
 	override public function init(opts:Dynamic=null)
 	{
 
 		super.init(opts);
 
-		
+
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
 		this.filters = [shadow];
@@ -64,16 +63,20 @@ class ComboBoxDropButton extends AbstractButton {
 
 	}
 
-	public static function __init__()
-	{
-
+	static var initialized : Bool;
+	static function __init__() {
+		initialize();
+	}
+	static function initialize() {
+		if(initialized) return;
+		initialized = true;
 
 		StyleManager.setDefaultScript(
 			ComboBoxDropButton,
 			"redraw",
 			"
 				this.graphics.clear();
-				var colors = [ color | 0x323232, color - 0x141414 ];
+				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
 				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
@@ -81,7 +84,7 @@ class ComboBoxDropButton extends AbstractButton {
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRectComplex (0, 0, this.box.width, this.box.height, 0, 4, 0, 4 );
 				this.graphics.endFill ();
-				this.graphics.lineStyle (1, color - 0x333333 );
+				this.graphics.lineStyle (1, this.color - 0x333333 );
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
 				this.graphics.moveTo(5,5);
 				this.graphics.lineTo(15,5);
@@ -90,18 +93,7 @@ class ComboBoxDropButton extends AbstractButton {
 			"
 		);
 	}
-
-	override public function redraw (opts:Dynamic = null):Void
-	{
-		StyleManager.exec(this,"redraw",
-			{
-				color: Opts.optInt(opts, "color", color),
-			});
-	}
 }
-
-
-
 
 
 /**
@@ -115,7 +107,7 @@ class ComboBoxDropButton extends AbstractButton {
 class ComboBox extends Component, implements Dynamic
 {
 	public var back : Sprite;
-	public var ComboBoxDropButton : ComboBoxDropButton;
+	public var dropButton : ComboBoxDropButton;
 	public var tf : TextField;
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
@@ -141,7 +133,8 @@ class ComboBox extends Component, implements Dynamic
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 		back.filters = [shadow];
 
-
+		if(tf != null && tf.parent == this)
+			removeChild(tf);
 		tf = new TextField();
 		tf.name = "tf";
 		tf.type = flash.text.TextFieldType.INPUT;
@@ -157,11 +150,13 @@ class ComboBox extends Component, implements Dynamic
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 		this.addChild(tf);
 
-		ComboBoxDropButton = new ComboBoxDropButton(this, "button");
-		ComboBoxDropButton.init({x: box.width - 20, width: 20, height: 20});
+		if(dropButton != null && dropButton.parent == this)
+			removeChild(dropButton);
+		dropButton = new ComboBoxDropButton(this, "button");
+		dropButton.init({x: box.width - 20, width: 20, height: 20});
 
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
-		ComboBoxDropButton.filters = [shadow];
+		dropButton.filters = [shadow];
 
 		this.addEventListener (Event.ACTIVATE, onEnabled, false, 0, true);
 		this.addEventListener (Event.DEACTIVATE, onDisabled, false, 0, true);
@@ -175,34 +170,39 @@ class ComboBox extends Component, implements Dynamic
 	{
 	}
 
-	override public function redraw(opts:Dynamic=null) : Void {
-
-		if(color==0 || Math.isNaN(color))
-			color = DefaultStyle.BACKGROUND;
-
-		tf.setTextFormat( DefaultStyle.getTextFormat( 8, DefaultStyle.LABEL_TEXT ));
-
-		if( disabled ) {
-			ComboBoxDropButton.disabled = disabled;
-
-			//~ color = DefaultStyle.BACKGROUND - 0x141414;
-			color = DefaultStyle.BACKGROUND;
-
-			//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
-			//~ this.filters = [shadow];
-
-			//~ tf.backgroundColor = DefaultStyle.BACKGROUND + 0x141414;
-			tf.setTextFormat( DefaultStyle.getTextFormat( 8, DefaultStyle.BACKGROUND - 0x141414 ));
-		}
-
-		back.graphics.lineStyle (2, DefaultStyle.BACKGROUND - 0x202020);
-		//~ back.graphics.beginFill (color);
-		back.graphics.beginFill ( disabled ? DefaultStyle.BACKGROUND : DefaultStyle.INPUT_BACK );
-		back.graphics.drawRoundRectComplex (0, 0, box.width - 20 , box.height, 4, 0, 4, 0 );
-		back.graphics.endFill ();
-
-
-		ComboBoxDropButton.redraw();
-		//~ ComboBoxDropButton.filters = null;
+	static function __init__() {
+		haxegui.Haxegui.register(ComboBox,initialize);
 	}
+	static function initialize() {
+		StyleManager.setDefaultScript(
+			ComboBox,
+			"redraw",
+			"
+				if(this.color==0 || Math.isNaN(this.color))
+					this.color = DefaultStyle.BACKGROUND;
+				var txt = this.tf;
+				if(txt != null)
+					txt.setTextFormat( DefaultStyle.getTextFormat( 8, DefaultStyle.LABEL_TEXT ));
+
+				if( this.disabled ) {
+					this.dropButton.disabled = this.disabled;
+					//~ this.color = DefaultStyle.BACKGROUND - 0x141414;
+					this.color = DefaultStyle.BACKGROUND;
+					//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
+					//~ this.filters = [shadow];
+					//~ this.tf.backgroundColor = DefaultStyle.BACKGROUND + 0x141414;
+					if(txt != null)
+						txt.setTextFormat( DefaultStyle.getTextFormat( 8, DefaultStyle.BACKGROUND - 0x141414 ));
+				}
+
+				this.back.graphics.lineStyle(2, DefaultStyle.BACKGROUND - 0x202020);
+				//~ back.graphics.beginFill (this.color);
+				this.back.graphics.beginFill( this.disabled ? DefaultStyle.BACKGROUND : DefaultStyle.INPUT_BACK );
+				this.back.graphics.drawRoundRectComplex(0, 0, this.box.width - 20 , this.box.height, 4, 0, 4, 0 );
+				this.back.graphics.endFill();
+				this.dropButton.redraw();
+			"
+		);
+	}
+
 }

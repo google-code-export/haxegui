@@ -19,48 +19,31 @@
 
 package haxegui;
 
-import flash.display.DisplayObject;
-import flash.display.DisplayObjectContainer;
+/**
+* Haxegui Class
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
+class Haxegui {
 
+	public static function init() {
+		for(o in initializers) {
+			trace("Initializing " + Type.getClassName(o.c));
+			o.f();
+		}
 
-import haxegui.controls.Component;
-
-import flash.display.Loader;
-import flash.net.URLRequest;
-import flash.events.Event;
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-
-class Image extends Component
-{
-
-	public function new(?parent : DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super(parent, name, x, y);
+		// Setup mouse and cursor
+		MouseManager.getInstance().init();
+		CursorManager.getInstance().init();
 	}
 
-	override public function init(opts:Dynamic=null) : Void
-	{
-		var pictLdr:Loader = new Loader();
-		//var pictURLReq:URLRequest = new URLRequest("./assets/banners/banner$
-		var pictURLReq:URLRequest = new URLRequest(Opts.string(opts,"src"));
-		pictLdr.load(pictURLReq);
-		pictLdr.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
+	private static var initializers : List<{c:Class<Dynamic>, f:Void->Void}>;
 
+	public static function register(c:Class<Dynamic>, f:Void->Void) : Void {
+		if(initializers == null)
+			initializers = new List();
+		initializers.add({c:c, f:f});
 	}
-
-	function onComplete(e:Event)
-	{
-	    var bmp:Bitmap = e.currentTarget.content ;
-	    addChild(bmp);
-	    dispatchEvent(e);
-	}
-
-	static function __init__() {
-		haxegui.Haxegui.register(Image,initialize);
-	}
-	static function initialize() {
-	}
-
 }
-

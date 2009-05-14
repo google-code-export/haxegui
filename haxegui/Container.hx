@@ -69,7 +69,7 @@ class Container extends Component, implements IContainer, implements Dynamic
 		this.mouseEnabled = false;
 		this.tabEnabled = false;
 
-	
+
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
 		this.filters = [shadow];
@@ -79,8 +79,8 @@ class Container extends Component, implements IContainer, implements Dynamic
 		//~ if(this.parent!=null)
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-		
-		
+
+
 	}
 
 
@@ -98,14 +98,14 @@ class Container extends Component, implements IContainer, implements Dynamic
 			box = untyped parent.parent.box.clone();
 		}
 
-	
+
 		//~ box.union(untyped parent.parent.box.clone());
 
 		//~ if(!this.box.containsRect(this.getBounds(flash.Lib.current)))
 		//~ box.union(this.getBounds(flash.Lib.current));
-		
+
 		//~ if(box.isEmpty())
-		//~ {		
+		//~ {
 			//~ for(i in 0...numChildren-1)
 				//~ box = box.union( getChildAt(i).getBounds(flash.Lib.current) );
 		//~ box.width -= x;
@@ -131,8 +131,10 @@ class Container extends Component, implements IContainer, implements Dynamic
 	}
 
 
-	public static function __init__()
-	{
+	static function __init__() {
+		haxegui.Haxegui.register(Container,initialize);
+	}
+	static function initialize() {
 		StyleManager.initialize();
 		StyleManager.setDefaultScript(
 			Container,

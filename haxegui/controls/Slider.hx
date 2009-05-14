@@ -221,4 +221,9 @@ class Slider extends Component, implements Dynamic
 		redraw(color);
 	}
 
+	static function __init__() {
+		haxegui.Haxegui.register(Slider,initialize);
+	}
+	static function initialize() {
+	}
 }

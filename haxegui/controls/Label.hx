@@ -81,5 +81,10 @@ class Label extends Component
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 	}
 
+	static function __init__() {
+		haxegui.Haxegui.register(Label,initialize);
+	}
+	static function initialize() {
+	}
 
 }
