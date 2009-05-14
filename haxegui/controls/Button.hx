@@ -51,8 +51,8 @@ import haxegui.events.MoveEvent;
 * Button Class
 *
 * @version 0.1
-* @author <gershon@goosemoose.com>
-* @author Russell Weir'
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
 *
 */
 class Button extends AbstractButton, implements Dynamic
@@ -65,28 +65,15 @@ class Button extends AbstractButton, implements Dynamic
 
 	override public function init(opts:Dynamic=null)
 	{
-
 		super.init(opts);
-
 
 		label = new Label();
 		label.text = Opts.optString(opts, "label", name);
 		label.init();
-
-		label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
 		this.addChild(label);
-
-		// add the drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
-		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
-		this.filters = [shadow];
-		//~ this.filters = [shadow, bevel];
 
 		// register with focus manager
 		//~ FocusManager.getInstance().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
-
-		redraw();
-
 	}
 
 	/**
@@ -100,39 +87,46 @@ class Button extends AbstractButton, implements Dynamic
 		redraw ();
 	}
 
-	override public function redraw (opts:Dynamic = null):Void
-	{
-		StyleManager.exec(this,"redraw",
-			{
-				color: Opts.optInt(opts, "color", color),
-				disabled: Opts.optBool(opts, "disabled", disabled),
-			});
-	}
-
 	static function __init__() {
 		haxegui.Haxegui.register(Button,initialize);
 	}
 	static function initialize() {
-		StyleManager.initialize();
 		StyleManager.setDefaultScript(
 			Button,
 			"redraw",
 			"
 				this.graphics.clear();
-				var colors = [ color | 0x323232, color - 0x141414 ];
-				if(disabled)
-					colors = [ color - 0x141414, color | 0x323232 ];
+				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
+				if(this.disabled)
+					colors = [ this.color - 0x141414, this.color | 0x323232 ];
 				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
 				this.graphics.lineStyle(2);
-				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
+				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ this.color, this.color - 0x202020 ], alphas, ratios, matrix);
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
 				this.graphics.endFill ();
 
 				this.label.tf.setTextFormat( DefaultStyle.getTextFormat(8) );
+
+				if(this.filters.length == 0) {
+					// add the drop-shadow filter
+					var shadow = new flash.filters.DropShadowFilter(
+							4, 45, DefaultStyle.DROPSHADOW,
+							0.5, 4, 4, 0.5,
+							flash.filters.BitmapFilterQuality.HIGH,
+							false, false, false );
+					//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
+					this.filters = [shadow];
+				}
+
+				if(this.label != null) {
+					this.label.moveTo(
+						Math.floor(.5*(this.box.width - this.label.width)),
+						 Math.floor(.5*(this.box.height - this.label.height)) );
+				}
 			"
 		);
 	}

@@ -60,8 +60,8 @@ import feffects.easing.Quart;
 * Abstract Button Class
 *
 * @version 0.1
-* @author <gershon@goosemoose.com>
-* @author Russell Weir'
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
 *
 */
 class AbstractButton extends Component

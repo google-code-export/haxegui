@@ -19,6 +19,8 @@
 
 package haxegui;
 
+import haxegui.controls.Component;
+
 /**
 * Haxegui Class
 *
@@ -27,6 +29,9 @@ package haxegui;
 * @author Russell Weir <damonsbane@gmail.com>
 */
 class Haxegui {
+
+	private static var initializers : List<{c:Class<Dynamic>, f:Void->Void}>;
+	private static var dirtyList : List<Component> = new List();
 
 	public static function init() {
 		for(o in initializers) {
@@ -37,13 +42,34 @@ class Haxegui {
 		// Setup mouse and cursor
 		MouseManager.getInstance().init();
 		CursorManager.getInstance().init();
+
+		var t = new haxe.Timer(300);
+		t.run = onInterval;
 	}
 
-	private static var initializers : List<{c:Class<Dynamic>, f:Void->Void}>;
+	private static function onInterval() {
+		for(c in dirtyList) {
+			if(c.dirty) {
+				c.redraw({});
+				c.dirty = false;
+			}
+			dirtyList.remove(c);
+		}
+	}
 
+	/**
+	* Component registration. Used during the boot process to register
+	* all components.
+	*/
 	public static function register(c:Class<Dynamic>, f:Void->Void) : Void {
 		if(initializers == null)
 			initializers = new List();
 		initializers.add({c:c, f:f});
 	}
+
+	public static function setDirty(c : Component) : Void {
+		dirtyList.add(c);
+	}
+
+
 }

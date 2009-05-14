@@ -31,6 +31,7 @@ import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
 
+import haxegui.controls.Component;
 
 
 class FocusManager extends EventDispatcher, implements Dynamic
@@ -73,6 +74,10 @@ class FocusManager extends EventDispatcher, implements Dynamic
 
   public function setFocus (o:DisplayObject)
   {
+	if(Std.is(o, Component)) {
+		if(! (cast o).focusable )
+			return;
+	}
     if( o!=null && _focus!=o )
     {
         if(_focus!=null)
