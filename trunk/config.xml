@@ -497,51 +497,89 @@ This hscript does the following:
   
 
 
-    <haxegui:Window name="PixelRuler" x="200" y="40" width="720" height="40" sizeable="true" color="0xFFDD00" >
-		<haxegui:Container name="Container1" x="10" y="20" width="710" height="30" color="0xFFDD00" />
+    <haxegui:Window name="PixelRuler" x="200" y="40" width="720" height="70" sizeable="true" color="0xFFDD00" >
+		<haxegui:Container name="Container1" x="10" y="20" width="710" height="60" color="0xFFDD00" />
    		    <script type="text/hscript">
 			var window = root.getChildByName("PixelRuler");
 			var container = window.getChildByName("Container1");
+
 			
 			StyleManager.initialize();
 			StyleManager.setInstanceScript(
 				container,
 				"redraw",
 				"
+					
 					this.graphics.clear();
-					this.graphics.beginFill (color);
+					this.graphics.beginFill (color, .75);
 					this.graphics.drawRect (0, 0, this.box.width, this.box.height );
 					this.graphics.endFill ();
-					for(i in 0...144)
+					for(i in 0...(.5*this.box.width))
 					{
 					    this.graphics.lineStyle(1,0x4E4300);
-					    this.graphics.moveTo(5*i, 12);
-					    this.graphics.lineTo(5*i, 20);
-					}
-					for(i in 0...72)
-					{
+					    this.graphics.moveTo(2*i, 0);
+					    this.graphics.lineTo(2*i, 10);
+
+					    this.graphics.moveTo(2*i, this.box.height - 10);
+					    this.graphics.lineTo(2*i, this.box.height);
+
 					    this.graphics.lineStyle(1,0x4E4300);
-					    this.graphics.moveTo(10*i, 8);
-					    this.graphics.lineTo(10*i, 20);
+					    this.graphics.moveTo(10*i, 0);
+					    this.graphics.lineTo(10*i, 15);
+
+					    this.graphics.moveTo(10*i, this.box.height - 15);
+					    this.graphics.lineTo(10*i, this.box.height);
+
+
+					    if(i%5==0 && (.1*this.box.width) > i )
+					    {
+						this.graphics.moveTo(10*i, 0 );
+						this.graphics.lineTo(10*i, 20 );
+						this.graphics.moveTo(10*i, this.box.height - 20);
+						this.graphics.lineTo(10*i, this.box.height);
+					    }
+   
 					}
-					for(i in 0...36)
-					{
-					    this.graphics.lineStyle(2,0x4E4300);
-					    this.graphics.moveTo(20*i, 2);
-					    this.graphics.lineTo(20*i, 20);
-					}
+					var b = this.box.clone();
+					b.x=0;
+					b.y=0;
+					this.scrollRect = b;
 
 				"
-			);
-			
+			    );
+
+					
 			container.redraw();
+			
+			var numbers = new flash.display.Sprite();
+			/*numbers.name = "numbers";*/
+			for(i in 1...(.1*container.box.width))
+			{
+			    var tf = new flash.text.TextField();
+			    tf.type = flash.text.TextFieldType.DYNAMIC;
+			    tf.text = Std.string(i*50);
+			    tf.x = i*50 - 10;
+			    tf.y = 15;
+			    tf.height = 20;
+			    tf.mouseEnabled = false;
+			    numbers.addChild(tf);
+			}
+			container.addChild(numbers);
+			container.addEventListener(events.ResizeEvent.RESIZE, 
+			    function(e)
+			    {
+				numbers.y = container.box.height*.5 - 25;
+				window.titlebar.title.text = "PixelRuler (" + container.box.width + "px)";
+				window.titlebar.title.setTextFormat( DefaultStyle.getTextFormat() );
+			    });
+
 		    </script>
     </haxegui:Window>    
     
     <!-- Transcriber -->
-    <haxegui:Window name="Transcriber" x="300" y="40" width="512" height="512" sizeable="true" >
-	<haxegui:Menubar name="Menubar" width="512" x="10" y="20" />
-	<haxegui:Toolbar name="Toolbar" width="512" x="10" y="44" >
+    <haxegui:Window name="Transcriber" x="300" y="40" width="500" height="400" sizeable="true" >
+	<haxegui:Menubar name="Menubar" width="400" x="10" y="20" />
+	<haxegui:Toolbar name="Toolbar" width="400" x="10" y="44" >
 	    <haxegui:controls:Button name="Run" label="Run" x="30" y="4" />
 	    <haxegui:controls:Button name="Clear" label="Clear" x="130" y="4" />
 	</haxegui:Toolbar>
@@ -551,6 +589,8 @@ This hscript does the following:
     
 		    <script type="text/hscript">
 
+			var highlight = new CodeHighlighter();
+			
 			var window = root.getChildByName("Transcriber");
 			var toolbar = window.getChildByName("Toolbar");
 			var scrollpane = window.getChildByName("ScrollPane1");
@@ -569,19 +609,49 @@ This hscript does the following:
 			tf.width = 30;
 			tf.height = 1000;
 			scrollpane.addChild(tf);
+
+
+			var str = "var n = 6;\nvar factorial = 1;\nfor(i in factorial...n)\n\tfactorial *= i;\nn+\"! = \"+factorial;\n";
+			str += "\n/*\nvar window = new haxegui.Window(this.getChildByName(\"ScrollPane1\"));\nwindow.box.width = 160;\nwindow.box.height = 120;\nwindow.init();\n\nvar container = new haxegui.Container(window, \"Container\", 10, 20);\ncontainer.init();\n*/";
 			
+			/*str = "&lt;h1&gt;This is a headline&lt;/h1&gt;";*/
+ 
+
+
 			tf = new flash.text.TextField();
-			tf.text = "var n = 6;\nvar factorial = 1;\nfor(i in factorial...n)\n\tfactorial *= i;\nn+\"! = \"+factorial;\n";
-			tf.text += "\n/*\nvar window = new haxegui.Window(this.getChildByName(\"ScrollPane1\"));\nwindow.box.width = 160;\nwindow.box.height = 120;\nwindow.init();\n\nvar container = new haxegui.Container(window, \"Container\", 10, 20);\ncontainer.init();\n*/";
+			tf.name = "HtmlTextArea";
+			tf.type = flash.text.TextFieldType.INPUT;
 			tf.background = true;
 			tf.backgroundColor = 0xFFFFFF;
-			tf.type = flash.text.TextFieldType.INPUT;
 			tf.multiline = true;
 			tf.x = 30;
 			tf.width = 800;
 			tf.height = 1000;
+			
+
+	var cssLoader = new flash.net.URLLoader();
+	var cssRequest = new flash.net.URLRequest("green.css");
+	var styles = new flash.text.StyleSheet();
+	
+	function cssLoadComplete(event)
+	    {
+		trace(event);
+		styles.parseCSS(cssLoader.data);
+		tf.styleSheet = styles;
+		tf.htmlText = CodeHighlighter.highlight( str, "haxe" );
+
+	    }
+
+	cssLoader.load(cssRequest);
+	cssLoader.addEventListener(flash.events.Event.COMPLETE, cssLoadComplete);
+	
+			
+
 			scrollpane.addChild(tf);
 
+
+
+			
 			function clear(e) { tf.text = ""; }
 
 			var clearbtn = toolbar.getChildByName("Clear");
