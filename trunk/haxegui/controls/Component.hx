@@ -48,9 +48,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	public var color:Int;
 
 	/** Disabled \ Enabled **/
-	public var disabled(default, default) : Bool;
+	public var disabled(__getDisabled, __setDisabled) : Bool;
 
-	public var dirty(default,null) : Bool;
+	public var dirty : Bool;
 
 	/** Does object validate ? **/
 	public var validate : Bool;
@@ -188,6 +188,28 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		return this.name + "[" + Type.getClassName(Type.getClass(this)) + "]";
 	}
 
+	public function updateColorTween(t : Tween) {
+		var me = this;
+		var colorTrans: ColorTransform  = new ColorTransform();
+
+		if(colorTween != null)
+			colorTween.stop();
+		colorTween = t;
+		colorTween.setTweenHandlers(
+				function(v) {
+					colorTrans.redOffset = v;
+					colorTrans.greenOffset = v;
+					colorTrans.blueOffset = v;
+					me.transform.colorTransform = colorTrans;
+				},
+				null);
+		colorTween.start();
+	}
+
+
+	//////////////////////////////////////////////////
+	////               Events                     ////
+	//////////////////////////////////////////////////
 	/** onRollOver Event **/
 	public function onRollOver(e:MouseEvent)
 	{
@@ -220,6 +242,11 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	{
 	}
 
+
+
+	//////////////////////////////////////////////////
+	////               Actions                    ////
+	//////////////////////////////////////////////////
 	/** The script that redraws the Component **/
 	public var action_redraw(__getAction_redraw,__setAction_redraw) : String;
 		function __getAction_redraw() {
@@ -280,21 +307,26 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 			return StyleManager.setInstanceScript(this, "validate", v);
 		}
 
-	private function updateColorTween(t : Tween) {
-		var me = this;
-		var colorTrans: ColorTransform  = new ColorTransform();
 
-		if(colorTween != null)
-			colorTween.stop();
-		colorTween = t;
-		colorTween.setTweenHandlers(
-				function(v) {
-					colorTrans.redOffset = v;
-					colorTrans.greenOffset = v;
-					colorTrans.blueOffset = v;
-					me.transform.colorTransform = colorTrans;
-				},
-				null);
-		colorTween.start();
+	//////////////////////////////////////////////////
+	////           Getters/Setters                ////
+	//////////////////////////////////////////////////
+
+	private function __getDisabled() : Bool {
+		return this.disabled;
 	}
+
+	private function __setDisabled(v:Bool) : Bool {
+		if(this.disabled == v) return v;
+		this.disabled = v;
+		this.dirty = true;
+		for(i in 0...numChildren) {
+			var c = getChildAt(i);
+			if(Std.is(c,Component))
+				(cast c).disabled = v;
+		}
+		return v;
+	}
+
+
 }
