@@ -159,5 +159,9 @@ class ScrollPane extends Component, implements Dynamic {
 
 	}//resize
 
-
+	static function __init__() {
+		haxegui.Haxegui.register(ScrollPane,initialize);
+	}
+	static function initialize() {
+	}
 }//scrollpane

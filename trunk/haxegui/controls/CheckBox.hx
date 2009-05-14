@@ -230,4 +230,9 @@ class CheckBox extends Component, implements Dynamic
 		redraw();
 	}
 
+	static function __init__() {
+		haxegui.Haxegui.register(CheckBox,initialize);
+	}
+	static function initialize() {
+	}
 }

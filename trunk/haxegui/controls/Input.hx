@@ -79,5 +79,11 @@ class Input extends Component
 
 	}
 
+	static function __init__() {
+		haxegui.Haxegui.register(Input,initialize);
+	}
+	static function initialize() {
+	}
+
 }
 

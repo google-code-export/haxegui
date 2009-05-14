@@ -109,8 +109,10 @@ class Button extends AbstractButton, implements Dynamic
 			});
 	}
 
-	public static function __init__()
-	{
+	static function __init__() {
+		haxegui.Haxegui.register(Button,initialize);
+	}
+	static function initialize() {
 		StyleManager.initialize();
 		StyleManager.setDefaultScript(
 			Button,
@@ -129,7 +131,7 @@ class Button extends AbstractButton, implements Dynamic
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
 				this.graphics.endFill ();
-				
+
 				this.label.tf.setTextFormat( DefaultStyle.getTextFormat(8) );
 			"
 		);

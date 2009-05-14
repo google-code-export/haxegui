@@ -74,7 +74,7 @@ import feffects.easing.Quart;
 */
 class PopupMenuItem extends AbstractButton, implements Dynamic
 {
-	
+
 	public var tf : TextField;
 	public var fmt : TextFormat;
 
@@ -82,13 +82,13 @@ class PopupMenuItem extends AbstractButton, implements Dynamic
 	{
 
 		super.init(opts);
-		
+
 
 		tf = new TextField();
 		tf.name = "tf";
 		//~ label.text = Opts.optString(opts, "label", name);
 		tf.text = name;
-		
+
 		//~ label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
 		this.addChild(tf);
 
@@ -118,8 +118,13 @@ class PopupMenuItem extends AbstractButton, implements Dynamic
 
 		redraw();
 
-	}	
-	
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(PopupMenuItem,initialize);
+	}
+	static function initialize() {
+	}
 }
 
 
@@ -326,7 +331,7 @@ class PopupMenu extends Component
 			self.close();
 		}, false, 0, true);
 
-		
+
 	}
 
 
@@ -393,14 +398,20 @@ class PopupMenu extends Component
 			//~ item.graphics.beginFill (color, .8);
 			//~ item.graphics.drawRect (0, 0, 100, 20);
 			//~ //item.graphics.endFill ();
-//~ 
+//~
 			//~ var tf : TextField = cast item.getChildByName("tf");
 			//~ var fmt = new TextFormat ();
 			//~ fmt.color = DefaultStyle.LABEL_TEXT ;
 			//~ tf.setTextFormat (fmt);
-//~ 
+//~
 		//~ }
 		var item = cast(this.getChildAt(_item), Sprite);
 
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(PopupMenu,initialize);
+	}
+	static function initialize() {
 	}
 }

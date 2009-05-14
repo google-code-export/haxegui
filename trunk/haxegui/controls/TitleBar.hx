@@ -45,16 +45,17 @@ class CloseButton extends AbstractButton
 		this.addEventListener(MouseEvent.CLICK, onMouseClick, false, 0, true);
 	}
 
-
 	public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Close clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
 	}
 
-	static function __init__()
-	{
-		
+	static function __init__() {
+		haxegui.Haxegui.register(CloseButton,initialize);
+	}
+	static function initialize() {
+
 		StyleManager.setDefaultScript(
 			CloseButton,
 			"redraw",
@@ -122,11 +123,16 @@ class MinimizeButton extends AbstractButton
 			";
 	}
 
-
 	public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Minimized clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(MinimizeButton,initialize);
+	}
+	static function initialize() {
 	}
 }
 
@@ -148,8 +154,16 @@ class MaximizeButton extends AbstractButton
 		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
-	static function __init__()
+	public function onMouseClick(e:MouseEvent) : Void
 	{
+		trace("Maximize clicked on " + parent.parent.toString());
+		//~ parent.dispatchEvent(new Event(Event.CLOSE));
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(MaximizeButton,initialize);
+	}
+	static function initialize() {
 		StyleManager.setDefaultScript(
 			MaximizeButton,
 			"redraw",
@@ -174,15 +188,7 @@ class MaximizeButton extends AbstractButton
 			"
 		);
 	}
-	
-	public function onMouseClick(e:MouseEvent) : Void
-	{
-		trace("Maximize clicked on " + parent.parent.toString());
-		//~ parent.dispatchEvent(new Event(Event.CLOSE));
-	}
 }
-
-
 
 
 /**
@@ -248,7 +254,7 @@ class TitleBar extends Component, implements Dynamic
 
 		closeButton.useHandCursors = minimizeButton.useHandCursors = maximizeButton.useHandCursors = true;
 
-		
+
 
 		//mc.x = box.width - 32;
 		title = new TextField ();
@@ -281,7 +287,7 @@ class TitleBar extends Component, implements Dynamic
 	{
 		var w = Opts.optFloat(opts, "width", title.width);
 		title.x = Math.floor((w - title.width)/2);
-		
+
 		if(closeButton != null)
 			closeButton.redraw(opts);
 		if(minimizeButton != null)
@@ -314,5 +320,10 @@ class TitleBar extends Component, implements Dynamic
 		CursorManager.setCursor(Cursor.ARROW);
 	}
 
+	static function __init__() {
+		haxegui.Haxegui.register(TitleBar,initialize);
+	}
+	static function initialize() {
+	}
 
 }

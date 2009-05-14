@@ -130,9 +130,10 @@ class AbstractButton extends Component
 		focusRect = true;
 	}
 
-	static function __init__()
-	{
-		untyped StyleManager.initialize();
+	static function __init__() {
+		haxegui.Haxegui.register(AbstractButton,initialize);
+	}
+	static function initialize() {
 		StyleManager.setDefaultScript(
 			AbstractButton,
 			"mouseOver",

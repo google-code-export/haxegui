@@ -101,8 +101,8 @@ class RadioButton extends AbstractButton, implements Dynamic
 
 		if(disabled)
 			dispatchEvent(new Event(Event.DEACTIVATE));
-			
-			
+
+
 		redraw();
 
 	}
@@ -212,8 +212,10 @@ class RadioButton extends AbstractButton, implements Dynamic
 	}
 
 
-	public static function __init__()
-	{
+	static function __init__() {
+		haxegui.Haxegui.register(RadioButton,initialize);
+	}
+	static function initialize() {
 		StyleManager.initialize();
 		StyleManager.setDefaultScript(
 			RadioButton,
@@ -236,6 +238,6 @@ class RadioButton extends AbstractButton, implements Dynamic
 			"
 		);
 	}
-	
-	
+
+
 }

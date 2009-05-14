@@ -75,8 +75,16 @@ class ScrollBarUpButton extends AbstractButton
 		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
-	static function __init__()
+	public function onMouseClick(e:MouseEvent) : Void
 	{
+		trace("Up clicked on " + parent.toString());
+		//~ parent.dispatchEvent(new Event(Event.CHANGE));
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(ScrollBarUpButton,initialize);
+	}
+	static function initialize() {
 		StyleManager.setDefaultScript(
 			ScrollBarUpButton,
 			"redraw",
@@ -86,18 +94,12 @@ class ScrollBarUpButton extends AbstractButton
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(20, 20, Math.PI, 0, 0);
-				this.graphics.lineStyle (2, color - 0x141414, 1, LineScaleMode.NONE );
+				this.graphics.lineStyle (2, color - 0x141414, 1, flash.display.LineScaleMode.NONE );
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 20, 20 );
 				this.graphics.endFill ();
 			"
 		);
-	}
-	
-	public function onMouseClick(e:MouseEvent) : Void
-	{
-		trace("Up clicked on " + parent.toString());
-		//~ parent.dispatchEvent(new Event(Event.CHANGE));
 	}
 }
 
@@ -118,8 +120,16 @@ class ScrollBarDownButton extends AbstractButton
 		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
-	static function __init__()
+	public function onMouseClick(e:MouseEvent) : Void
 	{
+		trace("Up clicked on " + parent.toString());
+		//~ parent.dispatchEvent(new Event(Event.CHANGE));
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(ScrollBarDownButton,initialize);
+	}
+	static function initialize() {
 		StyleManager.setDefaultScript(
 			ScrollBarDownButton,
 			"redraw",
@@ -129,21 +139,16 @@ class ScrollBarDownButton extends AbstractButton
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(20, 20, Math.PI, 0, 0);
-				this.graphics.lineStyle (2, color - 0x141414, 1, LineScaleMode.NONE );
+				this.graphics.lineStyle (2, color - 0x141414, 1, flash.display.LineScaleMode.NONE );
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 20, 20 );
 				this.graphics.endFill ();
 			"
 		);
 	}
-	
-	public function onMouseClick(e:MouseEvent) : Void
-	{
-		trace("Up clicked on " + parent.toString());
-		//~ parent.dispatchEvent(new Event(Event.CHANGE));
-	}
-}
 
+
+}
 
 
 /**
@@ -200,8 +205,8 @@ class Scrollbar extends haxegui.controls.Component
 		frame.filters = [shadow];
 
 
-		
-		
+
+
 		handle = new AbstractButton(this, "handle", 0, 20);
 		handle.init({color: this.color});
 		StyleManager.setInstanceScript(
@@ -250,9 +255,9 @@ class Scrollbar extends haxegui.controls.Component
 
 		//
 		parent.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
-		
 
-		
+
+
 
 	}//init
 
@@ -519,7 +524,11 @@ class Scrollbar extends haxegui.controls.Component
 
 
 
-
+	static function __init__() {
+		haxegui.Haxegui.register(Scrollbar,initialize);
+	}
+	static function initialize() {
+	}
 
 
 

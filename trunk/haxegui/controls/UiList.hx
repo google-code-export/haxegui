@@ -50,7 +50,7 @@ import haxegui.events.DragEvent;
 */
 class ListItem extends AbstractButton, implements Dynamic
 {
-	
+
 	public var tf : TextField;
 	public var fmt : TextFormat;
 
@@ -58,13 +58,13 @@ class ListItem extends AbstractButton, implements Dynamic
 	{
 
 		super.init(opts);
-		
+
 
 		tf = new TextField();
 		tf.name = "tf";
 		//~ label.text = Opts.optString(opts, "label", name);
 		tf.text = name;
-		
+
 		//~ label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
 		this.addChild(tf);
 
@@ -94,8 +94,13 @@ class ListItem extends AbstractButton, implements Dynamic
 
 		redraw();
 
-	}	
-	
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(ListItem,initialize);
+	}
+	static function initialize() {
+	}
 }
 
 
@@ -184,7 +189,7 @@ class UiList extends Component
 		//~ e.target.graphics.beginFill (color | 0x202020);
 		//~ e.target.graphics.drawRect (0, 0, box.width, 20);
 		//~ e.target.graphics.endFill ();
-//~ 
+//~
 	//~ if(e.target==header) drawHeader(color | 0x202020);
 
 		CursorManager.setCursor(Cursor.HAND);
@@ -348,6 +353,12 @@ class UiList extends Component
 			}
 		);
 		redraw();
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(UiList,initialize);
+	}
+	static function initialize() {
 	}
 
 }

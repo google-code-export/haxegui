@@ -158,7 +158,7 @@ class Window extends Component, implements Dynamic
 		frame = new Component (this, "frame");
 		frame.buttonMode = false;
 
-		frame.action_redraw = 
+		frame.action_redraw =
 			"
 				this.graphics.clear();
 				this.graphics.lineStyle(2, strokeColor, flash.display.LineScaleMode.NONE);
@@ -264,7 +264,7 @@ class Window extends Component, implements Dynamic
 	*/
 	public function onMouseMove (e:MouseEvent)
 	{
-		
+
 		//
 		CursorManager.getInstance ().inject (e);
 		e.stopImmediatePropagation ();
@@ -444,5 +444,11 @@ class Window extends Component, implements Dynamic
 	public function onRaise(e:Event)
 	{
 		parent.setChildIndex (this, parent.numChildren - 1);
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(Window,initialize);
+	}
+	static function initialize() {
 	}
 }

@@ -50,7 +50,7 @@ class ScriptStandardLibrary
 		interp.variables.set( "Timer", haxe.Timer );
 		interp.variables.set( "Xml", Xml );
 
-		
+
 		interp.variables.set("feffects",
 			{
 				Tween : feffects.Tween,
@@ -139,13 +139,13 @@ class ScriptStandardLibrary
 		interp.variables.set("controls",
 			{
 				AbstractButton		: haxegui.controls.AbstractButton,
-// 				Button				: haxegui.controls.Button,
+				Button				: haxegui.controls.Button,
 				CheckBox			: haxegui.controls.CheckBox,
-// 				ComboBox			: haxegui.controls.ComboBox,
+				ComboBox			: haxegui.controls.ComboBox,
 				Component			: haxegui.controls.Component,
 				Input				: haxegui.controls.Input,
 				Label				: haxegui.controls.Label,
-//				RadioButton			: haxegui.controls.RadioButton,
+				RadioButton			: haxegui.controls.RadioButton,
 				Scrollbar			: haxegui.controls.Scrollbar,
 				Slider				: haxegui.controls.Slider,
 				Stepper				: haxegui.controls.Stepper,

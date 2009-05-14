@@ -143,4 +143,9 @@ class Toolbar extends Component, implements Dynamic
 
 	}
 
+	static function __init__() {
+		haxegui.Haxegui.register(Toolbar,initialize);
+	}
+	static function initialize() {
+	}
 }
