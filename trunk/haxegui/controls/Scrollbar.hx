@@ -161,7 +161,6 @@ class Scrollbar extends haxegui.controls.Component
 	var handle : AbstractButton;
 	var up : ScrollBarUpButton;
 	var down : ScrollBarDownButton;
-
 	public var scrollee : Dynamic;
 	public var scroll : Float;
 

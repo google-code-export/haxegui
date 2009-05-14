@@ -198,9 +198,9 @@ class Console extends Window, implements ITraceListener
 
 		//~ vert.x = box.width - 20;
 		//~ vert.y = 44;
-		vert.box.height = box.height - 40;
+		//~ vert.box.height = box.height - 40;
 		//~ vert.box.width = box.width - 40;
-		vert.onResize(null);
+		//~ vert.onResize(null);
 
 		container.onParentResize(e);
 

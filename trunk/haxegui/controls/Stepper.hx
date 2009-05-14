@@ -76,12 +76,10 @@ class Stepper extends Component, implements Dynamic
 
 		super.init(opts);
 
-
-
-		//~ color = DefaultStyle.INPUT_BACK;
-
-		box.width = Opts.optFloat(opts,"width",box.width);
-		box.height = Opts.optFloat(opts,"height",box.height);
+		value = Opts.optFloat(opts,"value", value);
+		step = Opts.optFloat(opts,"step", step);
+		min = Opts.optFloat(opts,"min", min);
+		max = Opts.optFloat(opts,"max", max);
 
 		back = new Sprite();
 		back.graphics.lineStyle(2, color - 0x141414);

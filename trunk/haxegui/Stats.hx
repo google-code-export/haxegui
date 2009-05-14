@@ -140,7 +140,7 @@ class Stats extends Window, implements Dynamic
         maxFPS = Math.NEGATIVE_INFINITY;
         minFPS = Math.POSITIVE_INFINITY;
         avgFPS = [.0];
-        interval = 500;
+        interval = 1000;
         gridSpacing = 20;
 
         data =

@@ -189,7 +189,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 			//
 			var label = new Label(container);
-			label.text = "This window, all it's controls and events are hard-coded with haxe, play around.";
+			label.text = "This window, all it's controls and events are hard-coded haxegui, play around.";
 			label.init();
 			label.move(20,10);
 
