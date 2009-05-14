@@ -39,6 +39,17 @@ typedef ScriptObject = {
 	var code : String;
 }
 
+
+
+/**
+*
+* Button Class
+*
+* @version 0.1
+* @author <gershon@goosemoose.com>
+* @author Russell Weir'
+*
+*/
 class StyleManager implements Dynamic
 {
 	static var defaultActions : Hash<ScriptObject>;
@@ -130,26 +141,7 @@ class StyleManager implements Dynamic
 		return getDefaultActionObject(Type.getClass(inst), action);
 	}
 
-	public static function getTextFormat(?size:UInt, ?color:UInt, ?align:flash.text.TextFormatAlign) : TextFormat
-	{
-		var fmt = new TextFormat ();
-		//~ fmt.align = flash.text.TextFormatAlign.CENTER;
-		fmt.align = align;
-		//~ fmt.font = "FFF_FORWARD";
-		//~ fmt.font = "Impact";
-		//~ fmt.font = "FFF_Manager_Bold";
-		fmt.font = "FFF_Harmony";
-		//~ fmt.font = "FFF_Freedom_Trial";
-		//~ fmt.font = "FFF_Reaction_Trial";
-		//~ fmt.font = "Amiga_Forever_Pro2";
-		//~ fmt.font = "Silkscreen";
-		//~ fmt.font = "04b25";
-		//~ fmt.font = "Pixel_Classic";
-		fmt.size = ( size == 0 ) ? 8 : size;
-		fmt.align = ( align == null ) ? TextFormatAlign.LEFT : align;
-		fmt.color = ( color == 0 ) ? DefaultStyle.LABEL_TEXT : color ;
-		return fmt;
-	}
+
 
 	/**
 	* Sets the hscript for a particular event. All events are the same names as the
@@ -254,4 +246,25 @@ class DefaultStyle {
 	public static var DROPSHADOW:UInt = 0x000000;
 	public static var PANEL:UInt = 0xF3F3F3;
 	public static var PROGRESS_BAR:UInt = 0xFFFFFF;
+	
+	public static function getTextFormat(?size:Dynamic, ?color:UInt, ?align:flash.text.TextFormatAlign) : TextFormat
+	{
+		var fmt = new TextFormat ();
+		//~ fmt.align = flash.text.TextFormatAlign.CENTER;
+		fmt.align = align;
+		//~ fmt.font = "FFF_FORWARD";
+		//~ fmt.font = "Impact";
+		//~ fmt.font = "FFF_Manager_Bold";
+		fmt.font = "FFF_Harmony";
+		//~ fmt.font = "FFF_Freedom_Trial";
+		//~ fmt.font = "FFF_Reaction_Trial";
+		//~ fmt.font = "Amiga_Forever_Pro2";
+		//~ fmt.font = "Silkscreen";
+		//~ fmt.font = "04b25";
+		//~ fmt.font = "Pixel_Classic";
+		fmt.size = ( size == null || size == 0 || Math.isNaN(size) ) ? 8 : size;
+		fmt.align = ( align == null ) ? TextFormatAlign.LEFT : align;
+		fmt.color = ( color == 0 ) ? DefaultStyle.LABEL_TEXT : color ;
+		return fmt;
+	}	
 }

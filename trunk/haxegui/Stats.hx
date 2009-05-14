@@ -181,7 +181,7 @@ class Stats extends Window, implements Dynamic
         {
         grid.graphics.lineStyle(1,0xCCCCCC);
         grid.graphics.moveTo(0,gridSpacing*i);
-        grid.graphics.lineTo(250,gridSpacing*i);
+        grid.graphics.lineTo(240+4*gridSpacing,gridSpacing*i);
         }
 
 
@@ -232,7 +232,7 @@ class Stats extends Window, implements Dynamic
 
         timer = new haxe.Timer(interval);
         timer.run = update;
-
+        
 
         if(isSizeable())
         {
@@ -274,12 +274,15 @@ class Stats extends Window, implements Dynamic
         if(avgFPS.length > 10 ) avgFPS.shift();
 
 
-        list.data[0] = "FPS: \t\t\t" + Std.string(fps).substr(0,5);
-        list.data[1] = "minFPS: \t\t" + Std.string(minFPS).substr(0,5);
-        list.data[2] = "maxFPS: \t\t" + Std.string(maxFPS).substr(0,5);
-        list.data[3] = "avgFPS: \t\t" + Std.string(avg).substr(0,5);
-        list.data[4] = "Mem(MB): \t\t" + Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5);
-        list.data[5] = "Uptime: \t\t\t" + Std.string(haxe.Timer.stamp()).substr(0,5);
+        list.data = 
+        [
+            "FPS: \t\t\t" + Std.string(fps).substr(0,5),
+            "minFPS: \t\t" + Std.string(minFPS).substr(0,5),
+            "maxFPS: \t\t" + Std.string(maxFPS).substr(0,5),
+            "avgFPS: \t\t" + Std.string(avg).substr(0,5),
+            "Mem(MB): \t\t" + Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5),
+            "Uptime: \t\t\t" + Std.string(haxe.Timer.stamp()).substr(0,5)
+        ];
 
 
         list.redraw();
@@ -325,12 +328,14 @@ class Stats extends Window, implements Dynamic
         if(data2.length > 2) data.shift();
 
         //~ ploter.x -= gridSpacing*delta;
-        var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, Std.int(delta*interval), ploter, "x", Linear.easeNone );
+        //~ var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, Std.int(delta*interval), ploter, "x", Linear.easeNone );
+        var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, interval, ploter, "x", Linear.easeNone );
         p.start();
 
 
         //~ grid.x -= gridSpacing*delta;
         //~ var g = new Tween(0, -gridSpacing, interval, grid, "x", Linear.easeNone );
+        //~ var g = new Tween(0, -delta*gridSpacing, Std.int(delta*interval), grid, "x", Linear.easeNone );
         //~ g.start();
 
         //~ if(grid.x<-gridSpacing) grid.x=0;

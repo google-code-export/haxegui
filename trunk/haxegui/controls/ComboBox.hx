@@ -39,8 +39,15 @@ import haxegui.CursorManager;
 import haxegui.StyleManager;
 import haxegui.events.MoveEvent;
 
-
-class DropButton extends AbstractButton {
+/**
+*
+* ComboBoxDropButton Class
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
+class ComboBoxDropButton extends AbstractButton {
 
 
 	override public function init(opts:Dynamic=null)
@@ -48,6 +55,7 @@ class DropButton extends AbstractButton {
 
 		super.init(opts);
 
+		
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
 		this.filters = [shadow];
@@ -58,9 +66,10 @@ class DropButton extends AbstractButton {
 
 	public static function __init__()
 	{
-		StyleManager.initialize();
+
+
 		StyleManager.setDefaultScript(
-			DropButton,
+			ComboBoxDropButton,
 			"redraw",
 			"
 				this.graphics.clear();
@@ -91,14 +100,22 @@ class DropButton extends AbstractButton {
 	}
 }
 
+
+
+
+
 /**
 *
+* ComboBox Class
 *
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
 */
-class ComboBox extends AbstractButton, implements Dynamic
+class ComboBox extends Component, implements Dynamic
 {
 	public var back : Sprite;
-	public var dropButton : DropButton;
+	public var ComboBoxDropButton : ComboBoxDropButton;
 	public var tf : TextField;
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
@@ -113,7 +130,6 @@ class ComboBox extends AbstractButton, implements Dynamic
 
 		super.init(opts);
 
-		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
 
 		back = new Sprite();
 		back.name = "back";
@@ -138,14 +154,14 @@ class ComboBox extends AbstractButton, implements Dynamic
 		tf.height = box.height - 4;
 		tf.x = tf.y = 4;
 
-		tf.setTextFormat(StyleManager.getTextFormat());
+		tf.setTextFormat(DefaultStyle.getTextFormat());
 		this.addChild(tf);
 
-		dropButton = new DropButton(this, "button");
-		dropButton.init({x: box.width - 20, width: 20, height: 20});
+		ComboBoxDropButton = new ComboBoxDropButton(this, "button");
+		ComboBoxDropButton.init({x: box.width - 20, width: 20, height: 20});
 
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
-		dropButton.filters = [shadow];
+		ComboBoxDropButton.filters = [shadow];
 
 		this.addEventListener (Event.ACTIVATE, onEnabled, false, 0, true);
 		this.addEventListener (Event.DEACTIVATE, onDisabled, false, 0, true);
@@ -164,10 +180,10 @@ class ComboBox extends AbstractButton, implements Dynamic
 		if(color==0 || Math.isNaN(color))
 			color = DefaultStyle.BACKGROUND;
 
-		tf.setTextFormat( StyleManager.getTextFormat( 8, DefaultStyle.LABEL_TEXT ));
+		tf.setTextFormat( DefaultStyle.getTextFormat( 8, DefaultStyle.LABEL_TEXT ));
 
 		if( disabled ) {
-			dropButton.disabled = disabled;
+			ComboBoxDropButton.disabled = disabled;
 
 			//~ color = DefaultStyle.BACKGROUND - 0x141414;
 			color = DefaultStyle.BACKGROUND;
@@ -176,7 +192,7 @@ class ComboBox extends AbstractButton, implements Dynamic
 			//~ this.filters = [shadow];
 
 			//~ tf.backgroundColor = DefaultStyle.BACKGROUND + 0x141414;
-			tf.setTextFormat( StyleManager.getTextFormat( 8, DefaultStyle.BACKGROUND - 0x141414 ));
+			tf.setTextFormat( DefaultStyle.getTextFormat( 8, DefaultStyle.BACKGROUND - 0x141414 ));
 		}
 
 		back.graphics.lineStyle (2, DefaultStyle.BACKGROUND - 0x202020);
@@ -186,7 +202,7 @@ class ComboBox extends AbstractButton, implements Dynamic
 		back.graphics.endFill ();
 
 
-		dropButton.redraw();
-		//~ dropButton.filters = null;
+		ComboBoxDropButton.redraw();
+		//~ ComboBoxDropButton.filters = null;
 	}
 }

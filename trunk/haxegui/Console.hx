@@ -46,6 +46,7 @@ import flash.ui.Keyboard;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
+import haxegui.StyleManager;
 
 import flash.ui.Mouse;
 
@@ -117,7 +118,7 @@ class Console extends Window, implements ITraceListener
 
 		//
 		input.name = "input";
-		input.defaultTextFormat = StyleManager.getTextFormat(8, 0xFFFFFF);
+		input.defaultTextFormat = DefaultStyle.getTextFormat(8, 0xFFFFFF);
 		input.type = flash.text.TextFieldType.INPUT;
 		input.background = true;
 		input.backgroundColor = 0x4D4D4D;

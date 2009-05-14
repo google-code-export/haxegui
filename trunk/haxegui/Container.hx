@@ -69,19 +69,7 @@ class Container extends Component, implements IContainer, implements Dynamic
 		this.mouseEnabled = false;
 		this.tabEnabled = false;
 
-		action_redraw =
-			"
-				this.graphics.clear();
-				this.graphics.beginFill (color);
-				this.graphics.drawRect (0, 0, this.box.width, this.box.height );
-				this.graphics.endFill ();
-			";
-
-		//~ this.graphics.lineStyle (2, color - 0x141414, flash.display.LineScaleMode.NONE);
-		//~ this.graphics.beginFill (color - 0x0A0A0A);
-		//~ this.graphics.drawRect (0, 0, box.width, box.height );
-		//~ this.graphics.endFill ();
-
+	
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
 		this.filters = [shadow];
@@ -91,10 +79,13 @@ class Container extends Component, implements IContainer, implements Dynamic
 		//~ if(this.parent!=null)
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		
+		
 	}
 
 
 	public function onParentResize(e:ResizeEvent) {
+
 
 		if(Std.is(parent, Component))
 		{
@@ -106,16 +97,21 @@ class Container extends Component, implements IContainer, implements Dynamic
 		if(Std.is(parent.parent, ScrollPane)) {
 			box = untyped parent.parent.box.clone();
 		}
+
+	
 		//~ box.union(untyped parent.parent.box.clone());
 
 		//~ if(!this.box.containsRect(this.getBounds(flash.Lib.current)))
 		//~ box.union(this.getBounds(flash.Lib.current));
-		//~ for(i in 0...numChildren-1)
-		//~ {
-			//~ box = box.union( getChildAt(i).getBounds(flash.Lib.current) );
-			//~ box.width -= x;
-			//~ box.height -= y;
+		
+		//~ if(box.isEmpty())
+		//~ {		
+			//~ for(i in 0...numChildren-1)
+				//~ box = box.union( getChildAt(i).getBounds(flash.Lib.current) );
+		//~ box.width -= x;
+		//~ box.height -= y;
 		//~ }
+
 
 		redraw(null);
 
@@ -134,5 +130,20 @@ class Container extends Component, implements IContainer, implements Dynamic
 			});
 	}
 
+
+	public static function __init__()
+	{
+		StyleManager.initialize();
+		StyleManager.setDefaultScript(
+			Container,
+			"redraw",
+			"
+				this.graphics.clear();
+				this.graphics.beginFill (color);
+				this.graphics.drawRect (0, 0, this.box.width, this.box.height );
+				this.graphics.endFill ();
+			"
+		);
+	}
 
 }

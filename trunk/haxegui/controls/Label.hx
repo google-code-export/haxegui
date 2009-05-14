@@ -69,7 +69,7 @@ class Label extends Component
 		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
 		tf.text = Opts.optString(opts, "innerData", text);
 
-		tf.setTextFormat(StyleManager.getTextFormat());
+		tf.setTextFormat(DefaultStyle.getTextFormat());
 		this.addChild(tf);
 
 	}
@@ -78,7 +78,7 @@ class Label extends Component
 	public function setText(s:String)
 	{
 		tf.text = s;
-		tf.setTextFormat(StyleManager.getTextFormat());
+		tf.setTextFormat(DefaultStyle.getTextFormat());
 	}
 
 

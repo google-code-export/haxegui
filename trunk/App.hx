@@ -223,7 +223,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 			btn.label.tf.height = 60;
 			btn.label.x = btn.label.y = 10;
 			btn.label.tf.text = "Button4 Multi line label colored";
-			btn.label.tf.setTextFormat(StyleManager.getTextFormat());
+			btn.label.tf.setTextFormat(DefaultStyle.getTextFormat());
 
 
 			//
@@ -303,11 +303,14 @@ class App extends Sprite, implements haxe.rtti.Infos
 			list.data = [ "1", "2", "3", "4" ];
 			list.init();
 
-			var input = new Input(container, "Input1", 30, 400);
+			var input = new Input(container, "Input1", 200, 280);
 			input.init();
 
-			input = new Input(container, "Input2", 30, 440);
+			input = new Input(container, "Input2", 200, 310);
 			input.init();
+
+			input = new Input(container, "Input3", 200, 340);
+			input.init({disabled: true});
 
 
 			window.dispatchEvent(new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
@@ -386,8 +389,6 @@ class App extends Sprite, implements haxe.rtti.Infos
 			var t = new Tween( 0, 1, 500, child, "alpha", Linear.easeNone );
 
 			haxe.Timer.delay( t.start, 350*flash.Lib.current.getChildIndex(child) );
-			haxe.Timer.delay( function(){trace("\""+child.name+"\" has done tweening.");}, 150 + 350*flash.Lib.current.getChildIndex(child) );
-
 			}
 		}
 	}

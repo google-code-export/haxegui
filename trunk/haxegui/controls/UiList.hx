@@ -264,7 +264,7 @@ class UiList extends Component
 		tf.embedFonts = true;
 		tf.mouseEnabled = false;
 		//~ tf.setTextFormat (StyleManager.getTextFormat(8, StyleManager.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
-		tf.setTextFormat (StyleManager.getTextFormat());
+		tf.setTextFormat (DefaultStyle.getTextFormat());
 		header.addChild (tf);
 
 		header.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
@@ -316,7 +316,7 @@ class UiList extends Component
 
 			tf.mouseEnabled = false;
 
-			tf.setTextFormat (StyleManager.getTextFormat());
+			tf.setTextFormat (DefaultStyle.getTextFormat());
 
 			item.addChild (tf);
 			this.addChild (item);

@@ -54,6 +54,7 @@ class CloseButton extends AbstractButton
 
 	static function __init__()
 	{
+		
 		StyleManager.setDefaultScript(
 			CloseButton,
 			"redraw",
@@ -270,7 +271,7 @@ class TitleBar extends Component, implements Dynamic
 		//~ title.sharpness = 100;
 		this.quality = flash.display.StageQuality.LOW;
 
-		title.setTextFormat (StyleManager.getTextFormat());
+		title.setTextFormat (DefaultStyle.getTextFormat());
 
 		this.addChild (title);
 	}
@@ -288,7 +289,7 @@ class TitleBar extends Component, implements Dynamic
 		if(minimizeButton != null)
 			maximizeButton.redraw(opts);
 
-		title.setTextFormat (StyleManager.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
+		title.setTextFormat (DefaultStyle.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
 
 		StyleManager.exec(this,"redraw",
 			{
