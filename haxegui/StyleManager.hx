@@ -43,7 +43,7 @@ typedef ScriptObject = {
 
 /**
 *
-* Button Class
+* StyleManager handles running scripts for styling controls
 *
 * @version 0.1
 * @author <gershon@goosemoose.com>
@@ -86,7 +86,7 @@ class StyleManager implements Dynamic
 			doCall(inst, getInstanceActionObject(inst, action), options);
 		} catch(e:Dynamic) {
 			if(e != "No default action.") {
-				//~ trace(inst.toString() + " " + action + " script error : " + e);
+				trace(inst.toString() + " " + action + " script error : " + e);
 			}
 		}
 	}
@@ -246,7 +246,7 @@ class DefaultStyle {
 	public static var DROPSHADOW:UInt = 0x000000;
 	public static var PANEL:UInt = 0xF3F3F3;
 	public static var PROGRESS_BAR:UInt = 0xFFFFFF;
-	
+
 	public static function getTextFormat(?size:Dynamic, ?color:UInt, ?align:flash.text.TextFormatAlign) : TextFormat
 	{
 		var fmt = new TextFormat ();
@@ -266,5 +266,5 @@ class DefaultStyle {
 		fmt.align = ( align == null ) ? TextFormatAlign.LEFT : align;
 		fmt.color = ( color == 0 ) ? DefaultStyle.LABEL_TEXT : color ;
 		return fmt;
-	}	
+	}
 }
