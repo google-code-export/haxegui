@@ -73,7 +73,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		super ();
 		color = 0xF00FFF;
 
-		tabEnabled = mouseEnabled = buttonMode = true;
+		tabEnabled = mouseEnabled = true;
+		buttonMode = false;
 
 		if(name!=null)
 			this.name = name;
