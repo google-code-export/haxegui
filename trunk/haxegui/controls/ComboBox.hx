@@ -41,7 +41,10 @@ import haxegui.events.MoveEvent;
 
 /**
 *
-* ComboBoxDropButton Class
+* The pulldown button for a ComboBox.
+*
+* This is a child of the ComboBox, so any calculations regarding the
+* box should refer to parent.box
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
@@ -49,52 +52,82 @@ import haxegui.events.MoveEvent;
 */
 class ComboBoxDropButton extends AbstractButton {
 
-	override public function init(opts:Dynamic=null)
-	{
-
-		super.init(opts);
-
-
-		// add the drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
-		this.filters = [shadow];
-
-		redraw();
-
-	}
-
-	static var initialized : Bool;
 	static function __init__() {
-		initialize();
+		haxegui.Haxegui.register(ComboBoxDropButton,initialize);
 	}
 	static function initialize() {
-		if(initialized) return;
-		initialized = true;
-
 		StyleManager.setDefaultScript(
 			ComboBoxDropButton,
 			"redraw",
 			"
+				var h = this.parent.box.height;
+				var w = h;
 				this.graphics.clear();
 				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
 				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
+				matrix.createGradientBox(w, h, Math.PI/2, 0, 0);
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRoundRectComplex (0, 0, this.box.width, this.box.height, 0, 4, 0, 4 );
+				this.graphics.drawRoundRectComplex(0, 0, w, h, 0, 4, 0, 4 );
 				this.graphics.endFill ();
 				this.graphics.lineStyle (1, this.color - 0x333333 );
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
 				this.graphics.moveTo(5,5);
-				this.graphics.lineTo(15,5);
-				this.graphics.lineTo(10,15);
+				this.graphics.lineTo(w-5, 5);
+				this.graphics.lineTo(w/2, h-5);
 				this.graphics.endFill ();
+
+				if(this.filters == null || this.filters.length == 0) {
+					var shadow = new flash.filters.DropShadowFilter(
+							4, 45, DefaultStyle.DROPSHADOW,
+							0.5, 4, 4, 0.5,
+							flash.filters.BitmapFilterQuality.HIGH,
+							false, false, false );
+					this.filters = [shadow];
+				}
+				this.x = this.parent.box.width - w;
 			"
 		);
 	}
 }
 
+/**
+* The background of a ComboBox.
+*
+* This is a child of the ComboBox, so any calculations regarding the
+* box should refer to parent.box
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+**/
+class ComboBoxBackground extends Component
+{
+	static function __init__() {
+		haxegui.Haxegui.register(ComboBoxBackground,initialize);
+	}
+	static function initialize() {
+		StyleManager.setDefaultScript(
+			ComboBoxBackground,
+			"redraw",
+			"
+				var h = this.parent.box.height;
+				var w = this.parent.box.width;
+				this.graphics.lineStyle(2, DefaultStyle.BACKGROUND - 0x202020);
+				this.graphics.beginFill(this.disabled ? DefaultStyle.BACKGROUND : DefaultStyle.INPUT_BACK );
+				this.graphics.drawRoundRectComplex(0, 0, w - 20 , h, 4, 0, 4, 0 );
+				this.graphics.endFill();
+
+				var shadow = new flash.filters.DropShadowFilter (
+						4, 45, DefaultStyle.DROPSHADOW,
+						0.8, 4, 4, 0.65,
+						flash.filters.BitmapFilterQuality.HIGH,
+						true, false, false );
+				this.filters = [shadow];
+			"
+		);
+	}
+}
 
 /**
 *
@@ -106,7 +139,7 @@ class ComboBoxDropButton extends AbstractButton {
 */
 class ComboBox extends Component, implements Dynamic
 {
-	public var back : Sprite;
+	public var background : ComboBoxBackground;
 	public var dropButton : ComboBoxDropButton;
 	public var tf : TextField;
 
@@ -122,16 +155,10 @@ class ComboBox extends Component, implements Dynamic
 
 		super.init(opts);
 
-
-		back = new Sprite();
-		back.name = "back";
-		back.graphics.lineStyle (2, DefaultStyle.BACKGROUND - 0x202020);
-		back.graphics.beginFill (DefaultStyle.INPUT_BACK);
-		back.graphics.drawRoundRectComplex (0, 0, box.width - 20 , box.height, 4, 0, 4, 0 );
-		back.graphics.endFill ();
-		addChild(back);
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
-		back.filters = [shadow];
+		if(background != null && background.parent == this)
+			removeChild(background);
+		background = new ComboBoxBackground(this, "background");
+		background.init(opts);
 
 		if(tf != null && tf.parent == this)
 			removeChild(tf);
@@ -143,7 +170,6 @@ class ComboBox extends Component, implements Dynamic
 		//~ tf.border = true;
 		//~ tf.borderColor = color - 0x202020;
 		tf.embedFonts = true;
-
 		tf.height = box.height - 4;
 		tf.x = tf.y = 4;
 
@@ -153,13 +179,12 @@ class ComboBox extends Component, implements Dynamic
 		if(dropButton != null && dropButton.parent == this)
 			removeChild(dropButton);
 		dropButton = new ComboBoxDropButton(this, "button");
-		dropButton.init({x: box.width - 20, width: 20, height: 20});
+		dropButton.init(opts);
 
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
-		dropButton.filters = [shadow];
-
-		this.addEventListener (Event.ACTIVATE, onEnabled, false, 0, true);
-		this.addEventListener (Event.DEACTIVATE, onDisabled, false, 0, true);
+		if(!this.hasEventListener(Event.ACTIVATE))
+			this.addEventListener (Event.ACTIVATE, onEnabled, false, 0, true);
+		if(!this.hasEventListener(Event.DEACTIVATE))
+			this.addEventListener (Event.DEACTIVATE, onDisabled, false, 0, true);
 	}
 
 	public function onEnabled(e:Event)
@@ -185,7 +210,6 @@ class ComboBox extends Component, implements Dynamic
 					txt.setTextFormat( DefaultStyle.getTextFormat( 8, DefaultStyle.LABEL_TEXT ));
 
 				if( this.disabled ) {
-					this.dropButton.disabled = this.disabled;
 					//~ this.color = DefaultStyle.BACKGROUND - 0x141414;
 					this.color = DefaultStyle.BACKGROUND;
 					//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
@@ -195,11 +219,7 @@ class ComboBox extends Component, implements Dynamic
 						txt.setTextFormat( DefaultStyle.getTextFormat( 8, DefaultStyle.BACKGROUND - 0x141414 ));
 				}
 
-				this.back.graphics.lineStyle(2, DefaultStyle.BACKGROUND - 0x202020);
-				//~ back.graphics.beginFill (this.color);
-				this.back.graphics.beginFill( this.disabled ? DefaultStyle.BACKGROUND : DefaultStyle.INPUT_BACK );
-				this.back.graphics.drawRoundRectComplex(0, 0, this.box.width - 20 , this.box.height, 4, 0, 4, 0 );
-				this.back.graphics.endFill();
+				this.background.redraw();
 				this.dropButton.redraw();
 			"
 		);

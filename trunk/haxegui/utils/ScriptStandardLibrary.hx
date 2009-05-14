@@ -42,6 +42,7 @@ class ScriptStandardLibrary
 	**/
 	public static function set(interp:Interp)
 	{
+		interp.variables.set( "trace", haxe.Log.trace );
 		interp.variables.set( "root", flash.Lib.current );
 		interp.variables.set( "Std", Std );
 		interp.variables.set( "Math", Math );
@@ -81,6 +82,35 @@ class ScriptStandardLibrary
 						NONE : flash.display.LineScaleMode.NONE,
 						HORIZONTAL : flash.display.LineScaleMode.HORIZONTAL,
 					},
+				},
+				filters : {
+					BevelFilter : flash.filters.BevelFilter,
+					BitmapFilter : flash.filters.BitmapFilter,
+					BitmapFilterQuality : {
+						HIGH : flash.filters.BitmapFilterQuality.HIGH,
+						LOW : flash.filters.BitmapFilterQuality.LOW,
+						MEDIUM : flash.filters.BitmapFilterQuality.MEDIUM,
+					},
+					BitmapFilterType : {
+						OUTER : flash.filters.BitmapFilterType.OUTER,
+						INNER : flash.filters.BitmapFilterType.INNER,
+						FULL : flash.filters.BitmapFilterType.FULL,
+					},
+					BlurFilter : flash.filters.BlurFilter,
+					ColorMatrixFilter : flash.filters.ColorMatrixFilter,
+					ConvolutionFilter : flash.filters.ConvolutionFilter,
+					DisplacementMapFilter : flash.filters.DisplacementMapFilter,
+					DisplacementMapFilterMode : {
+						WRAP : flash.filters.DisplacementMapFilterMode.WRAP,
+						IGNORE : flash.filters.DisplacementMapFilterMode.IGNORE,
+						COLOR : flash.filters.DisplacementMapFilterMode.COLOR,
+						CLAMP : flash.filters.DisplacementMapFilterMode.CLAMP,
+					},
+					DropShadowFilter : flash.filters.DropShadowFilter,
+					GlowFilter : flash.filters.GlowFilter,
+					GradientBevelFilter : flash.filters.GradientBevelFilter,
+					GradientGlowFilter : flash.filters.GradientGlowFilter,
+// 					ShaderFilter : flash.filters.ShaderFilter,
 				},
 				geom : {
 					Matrix : flash.geom.Matrix,

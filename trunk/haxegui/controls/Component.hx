@@ -29,6 +29,7 @@ import flash.geom.Rectangle;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.FocusManager;
+import haxegui.Haxegui;
 import haxegui.Opts;
 import haxegui.StyleManager;
 
@@ -50,7 +51,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Disabled \ Enabled **/
 	public var disabled(__getDisabled, __setDisabled) : Bool;
 
-	public var dirty : Bool;
+	public var dirty(__getDirty,__setDirty) : Bool;
+
+	/** Whether the component can gain focus **/
+	public var focusable : Bool;
 
 	/** Does object validate ? **/
 	public var validate : Bool;
@@ -65,6 +69,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Current color tween in effect **/
 	private var colorTween : Tween;
 
+	/** The initial opts **/
+	private var initOpts : Dynamic;
+
 	/**
 	*
 	**/
@@ -75,6 +82,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 		tabEnabled = mouseEnabled = true;
 		buttonMode = false;
+		focusable = true;
 
 		if(name!=null)
 			this.name = name;
@@ -114,9 +122,29 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.y = Opts.optFloat(opts, "y", this.y);
 		this.color = Opts.optInt(opts, "color", this.color);
 		this.alpha = Opts.optFloat(opts, "alpha", this.alpha);
+		this.buttonMode = Opts.optBool(opts, "buttonMode", false);
+
+		this.initOpts = {};
+		for(f in Reflect.fields(opts)) {
+			Reflect.setField(initOpts, f, Reflect.field(opts,f));
+		}
 		this.dirty = true;
 	}
 
+	/**
+	* Destroy this component and all children
+	*/
+	public function destroy() {
+		for(i in 0...numChildren) {
+			var c = getChildAt(i);
+			if(Std.is(c,Component))
+				(cast c).destroy();
+		}
+		for(i in 0...numChildren)
+			removeChildAt(0);
+		if(this.parent != null)
+			this.parent.removeChild(this);
+	}
 
 	/**
 	* Excecute redrawing script
@@ -224,6 +252,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	public function onMouseDown(e:MouseEvent) : Void
 	{
+		FocusManager.getInstance().setFocus(this);
 		StyleManager.exec(this,"mouseDown", {event : e});
 	}
 
@@ -311,6 +340,18 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	//////////////////////////////////////////////////
 	////           Getters/Setters                ////
 	//////////////////////////////////////////////////
+
+	private function __getDirty() : Bool {
+		return this.dirty;
+	}
+
+	private function __setDirty(v:Bool) : Bool {
+		if(this.dirty == v) return v;
+		this.dirty = v;
+		if(v)
+			Haxegui.setDirty(this);
+		return v;
+	}
 
 	private function __getDisabled() : Bool {
 		return this.disabled;

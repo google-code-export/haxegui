@@ -55,6 +55,11 @@ class Opts {
 		return v;
 	}
 
+	public static function hasOpt(opts:Dynamic, field:String) : Bool
+	{
+		return (getField(opts, field) != null);
+	}
+
 	public static function optBool(opts:Dynamic,field:String,defaultValue:Bool) : Bool
 	{
 		var v = getField(opts,field);
