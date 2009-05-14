@@ -203,13 +203,11 @@ class ColorPicker extends Window
 		//~ e.stopPropagation ();
 
 
-		if( this.getChildByName("Container")!=null )
-		{
-		var container = cast this.getChildByName("Container");
-		//~ container.box = box.clone();
-		//~ container.box -=
-		container.onResize(e);
-		}
+		//~ if( this.getChildByName("Container")!=null )
+		//~ {
+		//~ var container = cast this.getChildByName("Container");
+		//~ container.onResize(e);
+		//~ }
 
 
 		if( this.getChildByName("Menubar")!=null )

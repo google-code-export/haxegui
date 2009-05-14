@@ -108,7 +108,7 @@ This hscript does the following:
 				{ btn.color=0xB35959; btn.label.tf.text = "Red"; }
 		    btn.redraw();
 		    btn.label.tf.setTextFormat(StyleManager.getTextFormat());
-		    } );
+		    }, false, 0, true );
 
 		var list = o.getChildByName("List1");
 		list.data.push("Milk");
@@ -136,8 +136,8 @@ This hscript does the following:
 		    }
 
 
-		    slider.addEventListener( Event.CHANGE, adjustStepper );
-		    stepper.addEventListener( Event.CHANGE, adjustSlider );
+		    slider.addEventListener( flash.events.Event.CHANGE, adjustStepper, false, 0, true );
+		    stepper.addEventListener( flash.events.Event.CHANGE, adjustSlider, false, 0, true );
 
 		}
 
@@ -199,7 +199,6 @@ This hscript does the following:
 	    {
 		if (e.buttonDown)
 		{
-		/*trace(Std.string(e));*/
 		var vert = scrollpane.vert.handle;
 		vert.y -= (e.localY - y) / 50*Math.exp(1);
 		scrollpane.vert.adjust();
@@ -297,8 +296,8 @@ This hscript does the following:
 			</script>
 
 
-
-    <haxegui:Window name="Step Sequencer" x="100" y="40" width="512" height="512" sizeable="true" color="0x666666">
+-->
+    <haxegui:Window name="Step Sequencer" x="100" y="40" width="460" height="400" sizeable="true" color="0x666666">
 	<haxegui:Menubar name="menubar" width="512" x="10" y="20" />
 	<haxegui:ScrollPane name="ScrollPane1" x="10" y="44" >
 		<haxegui:Container name="Container1" width="512" height="512" color="0x666666" >
@@ -308,100 +307,114 @@ This hscript does the following:
 		<haxegui:controls:Stepper name="Stepper1" x="170" y="28" value="120" step="1" min="1" max="300" color="0x666666"/>
 		<haxegui:controls:Stepper name="Stepper2" x="250" y="28" disabled="true" min="1" max="16" color="0x666666"/>
 
+		<script type="text/hscript">
+
+		    var window = root.getChildByName("Step Sequencer");
+		    var scrollpane = window.getChildByName("ScrollPane1");
+		    var container = scrollpane.content.getChildByName("Container1");
+
+
+		    var BPM_TO_MS = 60*250;
+
+		    var start = container.getChildByName("Start");
+		    var stop = container.getChildByName("Stop");
+
+		    var step1 = container.getChildByName("Stepper1");
+		    var step2 = container.getChildByName("Stepper2");
+
+
+		    for(i in 1...16)
+			{
+			    var radio = new haxegui.controls.RadioButton(container, "RadioButton"+i, 24*i, 70);
+			    radio.init();
+			    radio.color =  0x666666;
+			    radio.removeChild(radio.label);
+			    radio.redraw();
+			}
+
+
+
+		    function update()
+			{
+			    step2.value ++ ;
+			    if(step2.value > 15) step2.value = 1;
+			    step2.onChanged();
+			    
+			    var rb = container.getChildByName("RadioButton"+step2.value);
+			    rb.color = 0xff0000;
+			    rb.redraw();
+			    rb.color =  0x666666;
+			    Timer.delay( rb.redraw, BPM_TO_MS / step1.value );
+
+		
+			    for(i in 0...9)
+			    {
+			    var chkbox = container.getChildByName("CheckBox_"+i+"_"+step2.value);
+			    if(chkbox!=null) 
+				{
+				var s = container.getChildByName("tick"+i);
+				s.graphics.lineStyle(2, 0x4D4D4D);
+				s.graphics.beginFill(chkbox.checked ? 0x7DFF00 : 0x666666 );
+				s.graphics.drawRect(0,0,10,20);
+				s.graphics.endFill();
+				}
+			    }
+
+
+			}
+
+		    var t = new haxe.Timer( BPM_TO_MS / step1.value );
+		    t.run = update;
+		    t.stop();
+		    
+		    step1.addEventListener( flash.events.Event.CHANGE,
+			function(e)
+			{
+			    step2.value = 1;
+			    for(i in 1...16)
+			    {
+				var rb = container.getChildByName("RadioButton"+i);
+				rb.color = 0x666666;
+				rb.redraw();
+				rb.on = false;
+			    }
+			    t.stop();
+			    t = new haxe.Timer( BPM_TO_MS / step1.value );
+			    t.run = update;
+			},
+			false, 0, true );
+
+		    
+		    start.addEventListener( flash.events.MouseEvent.MOUSE_UP, function(e){ t.stop(); t = new haxe.Timer( BPM_TO_MS / step1.value ); t.run = update; });
+		    stop.addEventListener ( flash.events.MouseEvent.MOUSE_UP, function(e){ t.stop(); });
+
+		    for(i in 0...9)
+		    {
+			for(j in 1...16)
+			{
+			    var chkbox = new haxegui.controls.CheckBox(container, "CheckBox_"+i+"_"+j, 24*j, 100 + 24*i);
+			    chkbox.init();
+			    chkbox.removeChild(chkbox.label);
+			    chkbox.color = (j==1 || j%5==0) ? 0x999999 : 0x666666;
+			    chkbox.redraw();
+			}
+			var s = new flash.display.Sprite();
+			s.name = "tick" + i;
+			s.graphics.lineStyle(2, 0x4D4D4D);
+			s.graphics.beginFill(0x666666);
+			s.graphics.drawRect(0,0,10,20);
+			s.graphics.endFill();
+			s.x = 400;
+			s.y = 100+ 24*i;
+			container.addChild(s);
+		    }
+
+		</script>
 		</haxegui:Container>
 	</haxegui:ScrollPane>
     </haxegui:Window>
 
-    <script type="text/hscript">
 
-	var window = root.getChildByName("Step Sequencer");
-	var scrollpane = window.getChildByName("ScrollPane1");
-	var container = scrollpane.content.getChildByName("Container1");
-
-	/*
-	var checkbox = new haxegui.controls.CheckBox(container, "CheckBox", 20, 60);
-	checkbox.init();
-	*/
-
-	var BPM_TO_MS = 60*1000;
-
-	var start = container.getChildByName("Start");
-	var stop = container.getChildByName("Stop");
-
-	var step1 = container.getChildByName("Stepper1");
-	var step2 = container.getChildByName("Stepper2");
-
-
-
-	for(i in 1...16)
-	    {
-		var radio = new haxegui.controls.RadioButton(container, "RadioButton"+i, -10+30*i, 70);
-		radio.init();
-		radio.color =  0x666666;
-		radio.removeChild(radio.label);
-		radio.redraw();
-	    }
-
-	function changeColor(rb)
-	    {
-		rb.on = true;
-		rb.color = 0xff0000;
-		rb.redraw();
-	    }
-
-
-	function update()
-	    {
-		step2.value ++ ;
-		if(step2.value > step2.max - 1) step2.value = step2.min;
-		step2.onChanged();
-
-		var rb = container.getChildByName("RadioButton"+step2.value);
-		changeColor(rb);
-		rb.color =  0x666666;
-		Timer.delay( rb.redraw, BPM_TO_MS / step1.value );
-	    }
-
-	var t = new haxe.Timer( BPM_TO_MS / step1.value );
-	t.run = update;
-
-	step1.addEventListener( Event.CHANGE,
-	    function(e)
-	    {
-		step2.value = 1;
-		for(i in 1...16)
-		{
-		    var rb = container.getChildByName("RadioButton"+i);
-		    rb.color = 0x666666;
-		    rb.redraw();
-		    rb.on = false;
-		}
-		t.stop();
-		t = new haxe.Timer( BPM_TO_MS / step1.value );
-		t.run = update;
-	    } );
-
-
-	start.addEventListener(MouseEvent.MOUSE_UP, function(e){ t.stop(); t = new haxe.Timer( BPM_TO_MS / step1.value ); t.run = update; });
-	stop.addEventListener( MouseEvent.MOUSE_UP, function(e){ t.stop(); });
-
-
-	for(i in 0...9)
-	    for(j in 1...16)
-	    {
-		var chkbox = new haxegui.controls.CheckBox(container, "CheckBox"+i+j, -10+30*j, 100 + 30*i);
-		chkbox.init();
-		chkbox.removeChild(chkbox.label);
-		/*chkbox.box.height = 30;*/
-		/*if(j==1 || j%5==0) chkbox.color -= 0x191919;*/
-		chkbox.color = (j==1 || j%5==0) ? 0x999999 : 0x666666;
-		chkbox.redraw();
-	    }
-
-    trace(print_r(window));
-
-    </script>
--->
 
   
     
@@ -452,7 +465,7 @@ This hscript does the following:
 			function clear(e) { tf.text = ""; }
 
 			var clearbtn = toolbar.getChildByName("Clear");
-			clearbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, clear);			
+			clearbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, clear, false, 0, true);			
 
 			
 			function run(e)
@@ -461,26 +474,23 @@ This hscript does the following:
 				var program = parser.parseString(tf.text);
 				var interp = new hscript.Interp();
 				
-				interp.variables.set( "root", root );
 				interp.variables.set( "this", window );
+				haxegui.utils.ScriptStandardLibrary.set(interp);
 				
-				interp.variables.set( "new", createInstance );
-				interp.variables.set( "class", getClass );
-				interp.variables.set( "Type", Type );
 
-				
 				trace(interp.execute(program)); 
 				
 				root.getChildByName("Console").onRaise(null);
 						
 			    }
 
+			    /*
 			    function createInstance(s,a) { return Type.createInstance( Type.resolveClass( s ), a ); }
 			    function getClass(s) { return Type.resolveClass( s ); }
-
+			    */
 			    
 			var runbtn = toolbar.getChildByName("Run");
-			runbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, run);			
+			runbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, run, false, 0, true);			
 			
 
 		    </script>
@@ -494,25 +504,69 @@ This hscript does the following:
 	    <haxegui:ScrollPane name="ScrollPane1" x="10" y="20" >
 		<haxegui:Container name="Container1" width="400" height="300" color="0xffffff" >
 			<haxegui:controls:Component name="tweened" />
-		<script type="text/hscript">
-		    var window = root.getChildByName("Tweening");
-		    var scrollpane = window.getChildByName("ScrollPane1");
-		    var container = scrollpane.content.getChildByName("Container1");
+			<haxegui:controls:Component name="framed" />
+			
+			<script type="text/hscript">
+			
+			    var window = root.getChildByName("Tweening");
+			    var scrollpane = window.getChildByName("ScrollPane1");
+			    var container = scrollpane.content.getChildByName("Container1");
 
-		    var tweened = container.getChildByName("tweened");
+			    
+			    var tweened = container.getChildByName("tweened");
 
-		    tweened.graphics.lineStyle(2, 0);
-		    tweened.graphics.beginFill(0xff0000);
-		    tweened.graphics.drawCircle(20,20,20);
-		    tweened.graphics.endFill();
-		    
-		    tweened.move(180,130);
-		    
-		    var t = new Tween( 0, 400, 4000, tweened, "x", feffects.easing.Linear.easeNone );
-		    t.start();
+			    tweened.graphics.lineStyle(2, 0);
+			    tweened.graphics.beginFill(0xff0000);
+			    tweened.graphics.drawCircle(20,20,20);
+			    tweened.graphics.endFill();
+			    
+			    tweened.move(180,130);
+			    
+			    var timer = new haxe.Timer(2000);
+			    timer.run = function() 
+			    { 
+			    var t = new feffects.Tween( tweened.x, Std.random(container.box.width - 40), 2000, tweened, "x", feffects.easing.Linear.easeInOut );
+			    var t2 = new feffects.Tween( tweened.y, Std.random(container.box.height - 40), 2000, tweened, "y", feffects.easing.Linear.easeInOut );
+			    t.start(); 
+			    t2.start(); 
+			    }
+			    
 
-		    
-		</script>
+
+			    var framed = container.getChildByName("framed");
+			    
+			    framed.graphics.lineStyle(2, 0);
+			    framed.graphics.beginFill(0xffff00);
+			    framed.graphics.drawCircle(20,20,20);
+			    framed.graphics.endFill();
+			    framed.move(20,20);
+			    framed.vx = 1;
+			    framed.vy = 1;
+			    framed.addEventListener(flash.events.Event.ENTER_FRAME,
+			    function(e)
+				{
+
+				    if( 0 > framed.x || framed.x > container.box.width - 40 ) 
+					{ 
+					    framed.vx *= -1; 
+					    framed.x += framed.vx;
+					}
+
+				    if( 0 > framed.y || framed.y > container.box.height - 40  ) 
+					{ 
+					    framed.vy *= -1; 
+					    framed.y += framed.vy;
+					}
+				    
+				    
+				    framed.x += framed.vx;
+				    framed.y += framed.vy;
+				},
+				false, 0, true );
+				
+			    trace("Added onEnterFrame to " + framed);
+			    
+			</script>
 		</haxegui:Container>
 	    </haxegui:ScrollPane>
     </haxegui:Window>

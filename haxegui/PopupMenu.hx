@@ -199,16 +199,7 @@ class PopupMenu extends Component
 			//~ item.x = 100 + (flash.Lib.current.stage.stageWidth - p.x);
 			//~ item.y = -p.y  - 20*i ;
 			item.y = 20*i ;
-		//~ Tweener.addTween( item, {
-					//~ y: 20 * i,
-					//~ x: 0,
-					//~ alpha: 1,
-					//~ _bezier:myPath,
-					//~ time: .75+i/items,
-	//~
-					//~ transition: "easeInOutBack",
-	//~
-					//~ });
+
 
 		item.buttonMode = true;
 
@@ -260,7 +251,6 @@ class PopupMenu extends Component
 
 	public function draw() : Void {
 		if(numChildren>2)
-		//~ if(!Tweener.isTweening(this.getChildAt(numChildren-2))){
 		this.graphics.lineStyle (2, 0x1A1A1A, 0.9);
 		//this.graphics.beginFill (0x595959, .8);
 		//this.graphics.drawRect (0, 0, 100, 20 * (items - 1));
@@ -318,18 +308,6 @@ class PopupMenu extends Component
 		if(!this.contains(e.target)) return;
 		_item = this.getChildIndex(e.target);
 		onChanged();
-		/*
-		e.target.graphics.clear ();
-		//e.target.graphics.lineStyle(2, 0x5D5D5D);
-		e.target.graphics.beginFill (0xf5f5f5);
-		e.target.graphics.drawRect (0, 0, 100, 20);
-		e.target.graphics.endFill ();
-		*/
-		//~ if(!Tweener.isTweening(e.target))
-		//~ Tweener.addTween( e.target, { x: 0, _bezier:{ x: -10 }, time: .75, transition: "easeOutElastic" });
-
-
-
 
 		CursorManager.setCursor( Cursor.HAND );
 	}
@@ -337,6 +315,8 @@ class PopupMenu extends Component
 
 	public function onItemRollOut (e:MouseEvent)
 	{
+
+
 		var self = this;
 		if(self==null || self.stage==null) return;
 		self.stage.addEventListener(MouseEvent.MOUSE_DOWN,
@@ -346,6 +326,7 @@ class PopupMenu extends Component
 			self.close();
 		}, false, 0, true);
 
+		
 	}
 
 
@@ -421,7 +402,5 @@ class PopupMenu extends Component
 		//~ }
 		var item = cast(this.getChildAt(_item), Sprite);
 
-		//~ if(!Tweener.isTweening(item))
-			//~ Tweener.addTween( item, { x: 0,  alpha:1, _bezier:{ x: 8, alpha:.5}, time: .175, transition: "easeOutCubic" });
 	}
 }

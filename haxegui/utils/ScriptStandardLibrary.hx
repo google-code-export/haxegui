@@ -50,6 +50,7 @@ class ScriptStandardLibrary
 		interp.variables.set( "Timer", haxe.Timer );
 		interp.variables.set( "Xml", Xml );
 
+		
 		interp.variables.set("feffects",
 			{
 				Tween : feffects.Tween,
