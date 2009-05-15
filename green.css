@@ -1,0 +1,47 @@
+.code {
+    background-color:#F0FFEA;
+    border:1px dashed #20A000;
+    color:#000000;
+    margin:10px 15px 15px 15px;
+    padding:6px 6px 6px 6px;
+}
+
+.code .code-line-numbers {
+    color:#809080;
+    border-right:1px dotted #809080;
+    float:left;
+    text-align:right;
+    width:2em;
+    padding-right:3px;
+    margin-right:12px;
+}
+
+.code .code-code {
+}
+
+.code .code-keyword {
+    font-weight: bold;
+    color: #000000;
+}
+
+.code .code-type {
+    font-weight: bold;
+    color: #106020;
+}
+
+.code .code-variable {
+    color: #004050;
+}
+
+.code .code-number {
+    color: #F08000;
+}
+
+.code .code-comment {
+    color: #208000;
+}
+
+.code .code-string {
+    color: #F00000;
+}
+
