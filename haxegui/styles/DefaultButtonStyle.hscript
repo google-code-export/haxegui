@@ -1,22 +1,31 @@
 this.graphics.clear ();
 
-var colors = this.disabled ? colors =
-  [this.color - 0x141414, this.color] :[this.color | 0x323232,
-					this.color - 0x141414];
-var alphas =[100, 100];
-var ratios =[0, 0xFF];
+function toHex(value)
+{
+    return ( value << 16 | value << 8 | value );
+}
+
+var highlight = Math.max(0, Math.min(0xFFFFFF, this.color | toHex(50) ));
+var mid = Math.max(0, Math.min(0xFFFFFF, this.color - toHex(10) ));
+
+var colors = this.disabled ? 
+  [this.color, highlight, mid, this.color] :
+  [this.color, highlight, mid, this.color];
+var alphas =[100, 100, 100, 100];
+var ratios =[0, 0x70, 0xD0, 0xFF];
 var matrix = new flash.geom.Matrix ();
 
 matrix.createGradientBox (this.box.width, this.box.height, Math.PI / 2, 0, 0);
 
-this.graphics.lineStyle (1,
+/*
+this.graphics.lineStyle (1, this.color - toHex(20), 1, true,
 			 flash.display.LineScaleMode.NONE,
 			 flash.display.CapsStyle.ROUND,
 			 flash.display.JointStyle.ROUND);
-
 this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR,
-				 [this.color, this.color - 0x202020], alphas,
+				 [this.color - toHex(20), this.color - toHex(40)], alphas,
 				 ratios, matrix);
+*/				 
 this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, colors,
 				 alphas, ratios, matrix);
 this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8);

@@ -54,12 +54,13 @@ enum Cursor {
 }
 
 
-	
-
 /**
 *
 * Cursor Manager Class (Singleton)
-*
+* 
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
 */
 class CursorManager extends EventDispatcher
 {

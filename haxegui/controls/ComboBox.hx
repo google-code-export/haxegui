@@ -60,44 +60,7 @@ class ComboBoxDropButton extends AbstractButton {
 		StyleManager.setDefaultScript(
 			ComboBoxDropButton,
 			"redraw",
-			"
-				var h = this.parent.box.height;
-				var w = h;
-				this.graphics.clear();
-				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(w, h, Math.PI/2, 0, 0);
-				this.graphics.lineStyle (1,
-					Math.max(0, Math.min(0xFFFFFF, DefaultStyle.BACKGROUND - 0x282828)),
-					1, true, 
-					flash.display.LineScaleMode.NONE,
-					flash.display.CapsStyle.ROUND,
-					flash.display.JointStyle.ROUND
-					);
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRoundRectComplex(0, 0, w, h, 0, 4, 0, 4 );
-				this.graphics.endFill ();
-				this.graphics.lineStyle (1, this.color - 0x333333 );
-				colors = [ this.color - 0x141414,  this.color - 0x333333 ];
-				matrix.createGradientBox(w/2, h/2, Math.PI/2, 7.5, 7.5);
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
-				this.graphics.moveTo(7.5,7.5);
-				this.graphics.lineTo(w-7.5, 7.5);
-				this.graphics.lineTo(w/2, h-7.5);
-				this.graphics.endFill ();
-
-				if(this.filters == null || this.filters.length == 0) {
-					var shadow = new flash.filters.DropShadowFilter(
-							2, 45, DefaultStyle.DROPSHADOW,
-							0.5, 4, 4, 0.5,
-							flash.filters.BitmapFilterQuality.HIGH,
-							false, false, false );
-					this.filters = [shadow];
-				}
-				this.x = this.parent.box.width - w;
-			"
+			haxe.Resource.getString("DefaultComboBoxDropButton")
 		);
 	}
 }
@@ -129,37 +92,7 @@ class ComboBoxBackground extends Component
 		StyleManager.setDefaultScript(
 			ComboBoxBackground,
 			"redraw",
-			"
-				var h = this.parent.box.height;
-				//~ var d = this.parent.dropButton.box.width;
-				var d = 20;
-				var w = this.parent.box.width - d - 1;
-				
-				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(w, h*2, Math.PI/2, 0, 0);
-				this.graphics.lineStyle (1,
-					Math.max(0, Math.min(0xFFFFFF, DefaultStyle.BACKGROUND - 0x282828)),
-					1, true, 
-					flash.display.LineScaleMode.NONE,
-					flash.display.CapsStyle.ROUND,
-					flash.display.JointStyle.ROUND
-					);
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
-				this.graphics.drawRoundRectComplex(0, 0, w, h, 4, 0, 4, 0 );
-				this.graphics.endFill();
-
-				if(this.filters == null || this.filters.length == 0) {
-					var shadow = new flash.filters.DropShadowFilter(
-							2, 45, DefaultStyle.DROPSHADOW,
-							0.5, 4, 4, 0.5,
-							flash.filters.BitmapFilterQuality.HIGH,
-							false, false, false );
-					this.filters = [shadow];
-				}
-			"
+			haxe.Resource.getString("DefaultComboBoxBackground")
 		);
 	}
 }
@@ -203,8 +136,8 @@ class ComboBox extends Component, implements Dynamic
 			if(input != null && input.parent == this)
 				removeChild(input);
 			input = new Input(this, "input");
-			input.init(opts);
-			input.redraw(opts);
+			input.init({text: this.name });
+			input.redraw();
 		}
 		else
 		{
@@ -214,11 +147,8 @@ class ComboBox extends Component, implements Dynamic
 			background.init(opts);
 		}
 
-		background.init(opts);
-
-
-
 		dropButton.init(opts);
+
 	}
 
 	static function __init__() {
@@ -232,21 +162,17 @@ class ComboBox extends Component, implements Dynamic
 				if(this.color==0 || Math.isNaN(this.color))
 					this.color = DefaultStyle.BACKGROUND;
 
-				//~ if( this.disabled ) {
-					//~ this.color = DefaultStyle.BACKGROUND;
-					//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
-					//~ this.filters = [shadow];
-					//~ this.input.backgroundColor = DefaultStyle.BACKGROUND + 0x141414;
-				//~ }
-
-
 				if(this.input != null)
+					{
+					this.input.redraw();
 					this.input.tf.setTextFormat( DefaultStyle.getTextFormat( 8, this.disabled ? DefaultStyle.BACKGROUND - 0x141414 : DefaultStyle.INPUT_TEXT ));
+					}
 
 				if(this.background!=null)
 					this.background.redraw();
 				
 				this.dropButton.redraw();
+				this.setChildIndex(this.dropButton, this.numChildren - 1);
 			"
 		);
 	}

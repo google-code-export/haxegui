@@ -319,8 +319,8 @@ class Window extends Component, implements Dynamic
 
 	override public function onMouseDown (e:MouseEvent):Void
 	{
-		trace("WindowManager.onMouseDown target : " + e.target);
-		if (!Std.is (e.target, Sprite))
+		//~ trace("WindowManager.onMouseDown target : " + e.target);
+		if (!this.contains(e.target))
 			return;
 
 		//

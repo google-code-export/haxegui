@@ -75,7 +75,6 @@ class Button extends AbstractButton, implements Dynamic
 
 	}
 
-
 	public function onFocusChanged (e:FocusEvent)
 	{
 		//~ redraw ();

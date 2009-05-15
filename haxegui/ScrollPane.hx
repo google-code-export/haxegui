@@ -149,7 +149,7 @@ class ScrollPane extends Component, implements Dynamic {
 
 
 		// add the drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8,0.5,BitmapFilterQuality.HIGH,true,false,false);
 		this.filters = [shadow];
 
 		content.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));

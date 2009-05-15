@@ -20,32 +20,18 @@
 package haxegui.controls;
 
 import feffects.Tween;
-import feffects.easing.Quint;
-import feffects.easing.Sine;
-import feffects.easing.Back;
-import feffects.easing.Bounce;
-import feffects.easing.Circ;
-import feffects.easing.Cubic;
-import feffects.easing.Elastic;
-import feffects.easing.Expo;
-import feffects.easing.Linear;
-import feffects.easing.Quad;
-import feffects.easing.Quart;
 
-import flash.display.LineScaleMode;
+import flash.geom.Rectangle;
+import flash.geom.Transform;
+import flash.text.TextField;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
-import flash.display.MovieClip;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
-import flash.geom.Rectangle;
-import flash.geom.Transform;
-import flash.geom.ColorTransform;
-import flash.text.TextField;
 
 import haxegui.CursorManager;
 import haxegui.Opts;
@@ -132,15 +118,17 @@ class ScrollBarDownButton extends AbstractButton
 */
 class Scrollbar extends haxegui.controls.Component
 {
-	var horizontal : Bool;
-
+	
 	var frame : Component;
 	var handle : AbstractButton;
 	var up : ScrollBarUpButton;
 	var down : ScrollBarDownButton;
 	public var scrollee : Dynamic;
 	public var scroll : Float;
-
+	var horizontal : Bool;
+	
+	private var handleMotionTween : Tween;
+	
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float, ?horz : Bool)
 	{
 		super(parent, name, x, y);
@@ -188,7 +176,6 @@ class Scrollbar extends haxegui.controls.Component
 			);
 		handle.redraw({h : 20, horizontal: this.horizontal });
 
-
 		shadow = new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, 0.75, BitmapFilterQuality.LOW, false, false, false);
 		handle.filters = [shadow];
 
@@ -206,7 +193,7 @@ class Scrollbar extends haxegui.controls.Component
 		down.redraw({color: this.color});
 
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, .75, BitmapFilterQuality.HIGH, true, false, false);
-		down.filters = [shadow];
+		//~ down.filters = [shadow];
 
 
 		up.addEventListener(MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
@@ -240,7 +227,8 @@ class Scrollbar extends haxegui.controls.Component
 
 		//~ up.redraw({color: this.color});
 		//~ down.redraw({color: this.color});
-		handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
+		//~ handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
+		handle.redraw({h : 40, color: this.color, horizontal: this.horizontal });
 
 		dirty = true;
 
@@ -291,10 +279,14 @@ class Scrollbar extends haxegui.controls.Component
 		if( y > frame.height - handle.height + 20) y = frame.height - handle.height + 20;
 		//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
 		//~ var t = new Tween( handle.y, handle.y - 50, 500, handle, "y", Linear.easeNone );
-		var t = new Tween( handle.y, y, 1000, handle, "y", Expo.easeOut );
+		
+		if(handleMotionTween!=null)
+			handleMotionTween.stop();
+			
+		handleMotionTween = new Tween( handle.y, y, 1000, handle, "y", feffects.easing.Expo.easeOut );
 		var scope = this;
-		t.setTweenHandlers( function ( e ) { scope.adjust(); } );
-		t.start();
+		handleMotionTween.setTweenHandlers( function ( e ) { scope.adjust(); } );
+		handleMotionTween.start();
 	}
 
 	override public function onMouseDown(e:MouseEvent)
@@ -321,10 +313,13 @@ class Scrollbar extends haxegui.controls.Component
 				if( y < 20 ) y = 20;
 				//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
 				//~ var t = new Tween( handle.y, handle.y - 50, 500, handle, "y", Linear.easeNone );
-				var t = new Tween( handle.y, y, 1000, handle, "y", Expo.easeOut );
+				if(handleMotionTween!=null)
+					handleMotionTween.stop();
+
+				handleMotionTween = new Tween( handle.y, y, 1500, handle, "y", feffects.easing.Expo.easeOut );
 				var scope = this;
-				t.setTweenHandlers( function ( e ) { scope.adjust(); } );
-				t.start();
+				handleMotionTween.setTweenHandlers( function ( e ) { scope.adjust(); } );
+				handleMotionTween.start();
 				//~ t.setTweenHandlers( function ( e ) scope.update( sprite, e ) );
 
 				CursorManager.setCursor (Cursor.HAND2);
@@ -335,10 +330,14 @@ class Scrollbar extends haxegui.controls.Component
 
 
 				//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-				var t = new Tween( handle.y, y, 1000, handle, "y", Expo.easeOut );
+				if(handleMotionTween!=null)
+					handleMotionTween.stop();
+
+									
+				handleMotionTween = new Tween( handle.y, y, 1500, handle, "y", feffects.easing.Expo.easeOut );
 				var scope = this;
-				t.setTweenHandlers( function ( e ) { scope.adjust(e); } );
-				t.start();
+				handleMotionTween.setTweenHandlers( function ( e ) { scope.adjust(e); } );
+				handleMotionTween.start();
 
 				CursorManager.setCursor (Cursor.HAND2);
 
@@ -348,10 +347,14 @@ class Scrollbar extends haxegui.controls.Component
 				var y = e.target.mouseY ;
 				if(y+handle.height+20 > frame.height ) y = frame.height - handle.height + 20;
 
-				var t = new Tween( handle.y, y, 500, handle, "y", Back.easeInOut );
+				if(handleMotionTween!=null)
+					handleMotionTween.stop();
+
+						
+				handleMotionTween = new Tween( handle.y, y, 500, handle, "y", feffects.easing.Back.easeInOut );
 				var scope = this;
-				t.setTweenHandlers( function ( e ) { scope.adjust(e); } );
-				t.start();
+				handleMotionTween.setTweenHandlers( function ( e ) { scope.adjust(e); } );
+				handleMotionTween.start();
 
 				haxe.Timer.delay( function(){CursorManager.setCursor (Cursor.DRAG);}, 500 );
 
@@ -470,9 +473,6 @@ class Scrollbar extends haxegui.controls.Component
 			scrollee.scrollRect = rect;
 			//~ trace(Std.int(scrollee.scrollRect.y)+"/"+(bounds.height)+" "+Std.int(100*scroll)+"% "+rect);
 		}
-
-	//~ if(Std.is(e, Event))
-		//~ e.updateAfterEvent();
 
 	}//adjust
 
