@@ -33,6 +33,15 @@ import haxegui.events.MoveEvent;
 import haxegui.events.DragEvent;
 import haxegui.events.ResizeEvent;
 
+
+
+/**
+* Haxegui Class
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
 class WindowManager extends EventDispatcher
 {
 
@@ -79,8 +88,8 @@ class WindowManager extends EventDispatcher
     var window =  new Window(parent);
     windows.set(numWindows, window);
 
-    window.addEventListener( ResizeEvent.RESIZE, proxy );
-    window.addEventListener( MoveEvent.MOVE, proxy );
+    //~ window.addEventListener( ResizeEvent.RESIZE, proxy );
+    //~ window.addEventListener( MoveEvent.MOVE, proxy );
     //~ window.addEventListener( DragEvent.DRAG_START, proxy );
     //~ window.addEventListener( DragEvent.DRAG_COMPLETE, proxy );
 
@@ -89,13 +98,12 @@ class WindowManager extends EventDispatcher
     return window;
   }
 
-
-  public function proxy(e:Dynamic) {
-      //~ dispatchEvent(e);
-    		for(i in 0...listeners.length) {
-                var listener = listeners[i];
-				Reflect.callMethod(listener, listener.log, [e]);
-                }
-    }
+//~ 
+  //~ public function proxy(e:Dynamic) {
+    		//~ for(i in 0...listeners.length) {
+                //~ var listener = listeners[i];
+				//~ Reflect.callMethod(listener, listener.log, [e]);
+                //~ }
+    //~ }
 
 }

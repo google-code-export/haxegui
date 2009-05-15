@@ -45,6 +45,7 @@ class ScriptStandardLibrary
 		interp.variables.set( "trace", haxe.Log.trace );
 		interp.variables.set( "root", flash.Lib.current );
 		interp.variables.set( "Std", Std );
+		interp.variables.set( "String", String );
 		interp.variables.set( "Math", Math );
 		interp.variables.set( "Type", Type );
 		interp.variables.set( "Reflect", Reflect );
@@ -82,6 +83,17 @@ class ScriptStandardLibrary
 						NONE : flash.display.LineScaleMode.NONE,
 						HORIZONTAL : flash.display.LineScaleMode.HORIZONTAL,
 					},
+					JointStyle : {
+						ROUND : flash.display.JointStyle.ROUND,
+						MITER : flash.display.JointStyle.MITER,
+						BEVEL : flash.display.JointStyle.BEVEL
+					},
+					CapsStyle : {
+					SQUARE : flash.display.CapsStyle.SQUARE,
+					ROUND : flash.display.CapsStyle.ROUND,
+					NONE : flash.display.CapsStyle.NONE
+					}
+					
 				},
 				filters : {
 					BevelFilter : flash.filters.BevelFilter,
@@ -138,6 +150,9 @@ class ScriptStandardLibrary
 			});
 
 
+		interp.variables.set("Keyboard", flash.ui.Keyboard);
+		
+		
 		interp.variables.set("CodeHighlighter", CodeHighlighter);
 
 

@@ -99,22 +99,9 @@ class Container extends Component, implements IContainer, implements Dynamic
 		}
 
 
-		//~ box.union(untyped parent.parent.box.clone());
 
-		//~ if(!this.box.containsRect(this.getBounds(flash.Lib.current)))
-		//~ box.union(this.getBounds(flash.Lib.current));
-
-		//~ if(box.isEmpty())
-		//~ {
-			//~ for(i in 0...numChildren-1)
-				//~ box = box.union( getChildAt(i).getBounds(flash.Lib.current) );
-		//~ box.width -= x;
-		//~ box.height -= y;
-		//~ }
-
-
-		//~ redraw(null);
-		dirty = true;
+		redraw(null);
+		//~ dirty = true;
 
 		//
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));

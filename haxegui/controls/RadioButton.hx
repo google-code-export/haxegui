@@ -202,8 +202,7 @@ class RadioButton extends AbstractButton, implements Dynamic
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
-				this.graphics.lineStyle(2);
-
+				this.graphics.lineStyle(1);
 				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawCircle (10, 10, 10);
@@ -212,8 +211,8 @@ class RadioButton extends AbstractButton, implements Dynamic
 				if(this.selected)
 				{
 					matrix.createGradientBox(5, 5, Math.PI/2, 0, 0);
-					this.graphics.lineStyle (2, Math.max(0, Math.min(0xFFFFFF, this.color - 0x3D3D3D)) );
-					this.graphics.beginFill ( Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)) );
+					this.graphics.lineStyle (1, Math.max(0, Math.min(0xFFFFFF, this.color - 0x3D3D3D)) );
+					this.graphics.beginGradientFill( flash.display.GradientType.RADIAL, colors, alphas, ratios, matrix );
 					this.graphics.drawCircle (10, 10, 6);
 					this.graphics.endFill ();
 				}

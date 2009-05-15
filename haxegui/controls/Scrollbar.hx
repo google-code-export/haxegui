@@ -90,8 +90,13 @@ class ScrollBarUpButton extends AbstractButton
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(20, 20, Math.PI, 0, 0);
-				this.graphics.lineStyle (1, this.color - 0x141414, 1, flash.display.LineScaleMode.NONE );
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.lineStyle (1,
+					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
+					1, true, 
+					flash.display.LineScaleMode.NONE,
+					flash.display.CapsStyle.ROUND,
+					flash.display.JointStyle.ROUND
+					);				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 20, 20 );
 				this.graphics.endFill ();
 
@@ -141,8 +146,13 @@ class ScrollBarDownButton extends AbstractButton
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(20, 20, Math.PI, 0, 0);
-				this.graphics.lineStyle (1, this.color - 0x141414, 1, flash.display.LineScaleMode.NONE );
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.lineStyle (1,
+					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
+					1, true, 
+					flash.display.LineScaleMode.NONE,
+					flash.display.CapsStyle.ROUND,
+					flash.display.JointStyle.ROUND
+					);				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 20, 20 );
 				this.graphics.endFill ();
 
@@ -208,7 +218,7 @@ class Scrollbar extends haxegui.controls.Component
 		frame.focusRect = false;
 		frame.tabEnabled = false;
 
-		frame.graphics.lineStyle (1, color - 0x141414);
+
 		frame.graphics.beginFill (color - 0x0A0A0A);
 		frame.graphics.drawRect (0, 0, box.width, box.height - 40 );
 		frame.graphics.endFill ();
@@ -226,7 +236,7 @@ class Scrollbar extends haxegui.controls.Component
 			"redraw",
 			"
 				this.graphics.clear();
-				this.graphics.lineStyle (2, this.color - 0x141414, 1, flash.display.LineScaleMode.NONE);
+
 				var colors = [ this.color - 0x141414, this.color | 0x323232 ];
 				/*if(horizontal)
 					colors = [ color | 0x323232, color - 0x141414 ];*/
@@ -234,6 +244,13 @@ class Scrollbar extends haxegui.controls.Component
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(20, h, Math.PI, 0, 0);
+				this.graphics.lineStyle (1,
+					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
+					1, true, 
+					flash.display.LineScaleMode.NONE,
+					flash.display.CapsStyle.ROUND,
+					flash.display.JointStyle.ROUND
+					);				
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 20, h );
 				this.graphics.endFill ();
@@ -298,7 +315,7 @@ class Scrollbar extends haxegui.controls.Component
 
 
 		frame.graphics.clear();
-		frame.graphics.lineStyle (1, color - 0x141414);
+
 		frame.graphics.beginFill (color - 0x0A0A0A);
 
 		if(horizontal)

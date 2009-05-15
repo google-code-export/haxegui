@@ -91,9 +91,6 @@ This hscript does the following:
 ]]>
 <script type="text/hscript">
 
-		trace("Parsing hscript.");
-
-
 		var o = root.getChildByName("Xml hScript Widgets Window");
 		o = o.getChildByName("ScrollPane1");
 		o = o.getChildByName("content");
@@ -140,9 +137,6 @@ This hscript does the following:
 		    stepper.addEventListener( flash.events.Event.CHANGE, adjustSlider);
 
 		}
-
-
-		trace("Success.");
 
 		</script>
 
@@ -489,6 +483,16 @@ This hscript does the following:
 				window.clear = true;	
 			}
 			
+			
+			function keyHandler(e)
+			{
+			    /*if(e.keyCode == Keyboard.NUMPAD_ENTER) parse(); */
+			    input.tf.text += String.fromCharCode( e.charCode );
+			    input.tf.setTextFormat( fmt );
+			}
+			
+			window.addEventListener(flash.events.KeyboardEvent.KEY_DOWN, keyHandler);
+
 			
 		    </script>
 

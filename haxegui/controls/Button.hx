@@ -76,11 +76,7 @@ class Button extends AbstractButton, implements Dynamic
 		//~ FocusManager.getInstance().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
 	}
 
-	/**
-	*
-	* @param e
-	*
-	*/
+
 	public function onFocusChanged (e:FocusEvent)
 	{
 		//~ var color = this.hasFocus ()? DefaultStyle.BACKGROUND | 0x141414: DefaultStyle.BACKGROUND;
@@ -98,24 +94,33 @@ class Button extends AbstractButton, implements Dynamic
 				this.graphics.clear();
 				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
 				if(this.disabled)
-					colors = [ this.color - 0x141414, this.color | 0x323232 ];
+					colors = [ this.color - 0x141414, this.color ];
 				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
-				this.graphics.lineStyle(2);
+				
+				this.graphics.lineStyle (1,
+					flash.display.LineScaleMode.NONE,
+					flash.display.CapsStyle.ROUND,
+					flash.display.JointStyle.ROUND
+					);				
 				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ this.color, this.color - 0x202020 ], alphas, ratios, matrix);
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
+				this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 12, 12 );
 				this.graphics.endFill ();
 
-				this.label.tf.setTextFormat( DefaultStyle.getTextFormat(8) );
+				var fmt = DefaultStyle.getTextFormat(8, DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.LEFT);
+				if(this.disabled) fmt.color = this.color - 0x202020;
+				this.label.tf.setTextFormat( fmt );
 
 				if(this.filters.length == 0) {
 					// add the drop-shadow filter
 					var shadow = new flash.filters.DropShadowFilter(
-							4, 45, DefaultStyle.DROPSHADOW,
-							0.5, 4, 4, 0.5,
+							this.disabled ? 2 : 4, 45,
+							DefaultStyle.DROPSHADOW,
+							this.disabled ? 0.2 : 0.5,
+							4, 4, 0.5,
 							flash.filters.BitmapFilterQuality.HIGH,
 							false, false, false );
 					//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );

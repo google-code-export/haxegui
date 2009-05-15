@@ -44,11 +44,13 @@ class CloseButton extends AbstractButton
 		super (parent, name, x, y);
 	}
 
+
 	override public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Close clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
 	}
+
 
 	static function __init__() {
 		haxegui.Haxegui.register(CloseButton,initialize);
@@ -66,8 +68,13 @@ class CloseButton extends AbstractButton
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
-				this.graphics.lineStyle(2);
-				this.graphics.lineGradientStyle (grad, [ this.color, this.color - 0x202020 ], alphas, ratios, matrix);
+				this.graphics.lineStyle (1,
+					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
+					2, true, 
+					flash.display.LineScaleMode.NONE,
+					flash.display.CapsStyle.ROUND,
+					flash.display.JointStyle.ROUND
+					);
 				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
 				this.graphics.endFill ();
@@ -110,8 +117,13 @@ class MinimizeButton extends AbstractButton
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
-				this.graphics.lineStyle(2);
-				this.graphics.lineGradientStyle (grad, [ this.color, this.color - 0x202020 ], alphas, ratios, matrix);
+				this.graphics.lineStyle (1,
+					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
+					2, true, 
+					flash.display.LineScaleMode.NONE,
+					flash.display.CapsStyle.ROUND,
+					flash.display.JointStyle.ROUND
+					);
 				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
 				this.graphics.endFill ();
@@ -121,11 +133,13 @@ class MinimizeButton extends AbstractButton
 			";
 	}
 
+
 	override public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Minimized clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
 	}
+
 
 	static function __init__() {
 		haxegui.Haxegui.register(MinimizeButton,initialize);
@@ -151,11 +165,15 @@ class MaximizeButton extends AbstractButton
 		super (parent, name, x, y);
 	}
 
+
+
 	override public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Maximize clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
 	}
+
+
 
 	static function __init__() {
 		haxegui.Haxegui.register(MaximizeButton,initialize);
@@ -172,8 +190,13 @@ class MaximizeButton extends AbstractButton
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
-				this.graphics.lineStyle(2);
-				this.graphics.lineGradientStyle (grad, [ this.color, this.color - 0x202020 ], alphas, ratios, matrix);
+				this.graphics.lineStyle (1,
+					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
+					2, true, 
+					flash.display.LineScaleMode.NONE,
+					flash.display.CapsStyle.ROUND,
+					flash.display.JointStyle.ROUND
+					);
 				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
 				this.graphics.endFill ();

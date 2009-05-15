@@ -42,8 +42,8 @@ import haxegui.events.DragEvent;
 
 class Stepper extends Component, implements Dynamic
 {
-	public var up : Button;
-	public var down : Button;
+	public var up : AbstractButton;
+	public var down : AbstractButton;
 	public var back : Sprite;
 	public var tf : TextField;
 
@@ -82,7 +82,7 @@ class Stepper extends Component, implements Dynamic
 		max = Opts.optFloat(opts,"max", max);
 
 		back = new Sprite();
-		back.graphics.lineStyle(2, color - 0x141414);
+		back.graphics.lineStyle(1, color - 0x141414);
 		back.graphics.beginFill(DefaultStyle.INPUT_BACK);
 		back.graphics.drawRoundRectComplex (0, 0, box.width - 10, box.height, 4, 0, 4, 0 );
 		back.graphics.endFill();
@@ -105,15 +105,35 @@ class Stepper extends Component, implements Dynamic
 		this.addChild(tf);
 
 
-
-
 		up = new Button(this, "up");
-		up.init({width: 10, height: 10, color: this.color});
+
+		up.action_redraw =
+			"
+				this.graphics.clear();
+				this.graphics.lineStyle(1, this.color - 0x323232 );
+				this.graphics.beginFill(this.color);
+				this.graphics.drawRoundRectComplex(0, 0, 10, 10, 0, 4, 0, 0);
+				this.graphics.endFill();
+			";
+
+		up.init({color: this.color});
 		up.removeChild(up.label);
 		up.move( box.width - 10, -1 );
 
+
+
 		down = new Button(this, "down");
-		down.init({width: 10, height: 10, color: this.color});
+
+		down.action_redraw =
+			"
+				this.graphics.clear();
+				this.graphics.lineStyle(1, this.color - 0x323232 );
+				this.graphics.beginFill(this.color);
+				this.graphics.drawRoundRectComplex(0, 0, 10, 10, 0, 0, 0, 4);
+				this.graphics.endFill();
+			";
+					
+		down.init({color: this.color});
 		down.removeChild(down.label);
 		down.move( box.width - 10, 9 );
 
@@ -243,8 +263,7 @@ class Stepper extends Component, implements Dynamic
 	public function onChanged(?e:Dynamic)
 	{
 
-	//~
-	//~ trace(e);
+
 		this.tf.text = Std.string(value);
 		//~ this.tf.setTextFormat(StyleManager.getTextFormat(12));
 		this.tf.setTextFormat(DefaultStyle.getTextFormat());

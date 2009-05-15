@@ -40,47 +40,39 @@ import haxegui.Opts;
 import haxegui.StyleManager;
 import haxegui.events.MoveEvent;
 
+
 /**
 * CheckBox class
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class CheckBox extends Component, implements Dynamic
+class CheckBox extends AbstractButton, implements Dynamic
 {
 	public var checked(__getChecked,__setChecked) : Bool;
 	public var label : Label;
-	public var button : Sprite;
 
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
-		button = new Sprite();
-		label = new Label();
+		label = new Label(this, "label", 24, 2);
 
 		super(parent, name, x, y);
 	}
 
 	override public function init(opts:Dynamic=null)
 	{
-		box = new Rectangle(0,0,140,20);
+		box = new Rectangle(0, 0, 140, 20);
 		color = DefaultStyle.BACKGROUND;
 
 		super.init(opts);
 
-		//~ this.graphics.clear();
-		button.name = "button";
-		button.graphics.lineStyle (2, color - 0x141414);
-		button.graphics.beginFill (color);
-		button.graphics.drawRoundRect (0, 0, 20, box.height, 8, 8 );
-		button.graphics.endFill ();
-		this.addChild(button);
-
+		label.text = Opts.optString(opts, "label", name);
 		label.init({text: name});
-		label.move(24, 2);
-		this.addChild(label);
 
 	}
+
+
 
 	override public function onMouseClick(e:MouseEvent) {
 		if(disabled) return;
@@ -105,12 +97,12 @@ class CheckBox extends Component, implements Dynamic
 	override private function __setDisabled(v:Bool) : Bool {
 		super.__setDisabled(v);
 		if(this.disabled) {
-			button.mouseEnabled = false;
-			button.buttonMode = false;
+			mouseEnabled = false;
+			buttonMode = false;
 		}
 		else {
-			button.mouseEnabled = Opts.optBool(initOpts,"mouseEnabled",true);
-			button.buttonMode = Opts.optBool(initOpts,"buttonMode",true);
+			mouseEnabled = Opts.optBool(initOpts,"mouseEnabled",true);
+			buttonMode = Opts.optBool(initOpts,"buttonMode",true);
 		}
 		return v;
 	}
@@ -127,7 +119,7 @@ class CheckBox extends Component, implements Dynamic
 			CheckBox,
 			"redraw",
 			"
-				this.button.graphics.clear();
+				this.graphics.clear();
 
      			this.filters = [];
 				if( this.disabled )
@@ -143,17 +135,15 @@ class CheckBox extends Component, implements Dynamic
 							true, false, false );
 					this.filters = [shadow];
 				}
-// 				else {
-// 					var shadow:DropShadowFilter = new flash.filters.DropShadowFilter (
-// 							4, 45, DefaultStyle.DROPSHADOW,
-// 							0.5, 4, 4, 0.5,
-// 							flash.filters.BitmapFilterQuality.HIGH,
-// 							true, false, false );
-// 					this.filters.push(shadow);
-// 				}
 
-				this.button.graphics.lineStyle (2, this.disabled ? this.color - 0x141414 : this.color - 0x282828 );
 
+				this.graphics.lineStyle (1,
+					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
+					2, true, 
+					flash.display.LineScaleMode.NONE,
+					flash.display.CapsStyle.ROUND,
+					flash.display.JointStyle.ROUND
+					);
 				if(this.checked)
 				{
 					var colors = [ this.color | 0x323232, this.color - 0x141414 ];
@@ -161,14 +151,14 @@ class CheckBox extends Component, implements Dynamic
 					var ratios = [ 0, 0xFF ];
 					var matrix = new flash.geom.Matrix();
 					matrix.createGradientBox(20, 20, Math.PI/2, 0, 0);
-					this.button.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-					this.button.graphics.drawRoundRect (0, 0, 20, this.box.height, 8, 8 );
+					this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+					this.graphics.drawRoundRect (0, 0, 20, this.box.height, 8, 8 );
 
-					this.button.graphics.lineStyle (4, this.color - 0x282828);
-					this.button.graphics.moveTo (6, 6);
-					this.button.graphics.lineTo (14, 14);
-					this.button.graphics.moveTo (14, 6);
-					this.button.graphics.lineTo (6, 14);
+					this.graphics.lineStyle (4, this.color - 0x282828);
+					this.graphics.moveTo (6, 6);
+					this.graphics.lineTo (14, 14);
+					this.graphics.moveTo (14, 6);
+					this.graphics.lineTo (6, 14);
 
 				}
 				else
@@ -178,12 +168,12 @@ class CheckBox extends Component, implements Dynamic
 					var ratios = [ 0, 0xFF ];
 					var matrix = new flash.geom.Matrix();
 					matrix.createGradientBox(20, 20, Math.PI/2, 0, 0);
-					this.button.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+					this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
-					this.button.graphics.drawRoundRect (0, 0, 20, this.box.height, 8, 8 );
+					this.graphics.drawRoundRect (0, 0, 20, this.box.height, 8, 8 );
 				}
 
-				this.button.graphics.endFill();
+				this.graphics.endFill();
 			"
 		);
 

@@ -20,17 +20,9 @@
 
 package haxegui;
 
-import Type;
-
 import flash.geom.Rectangle;
-
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-import flash.display.MovieClip;
-import flash.display.Graphics;
-import flash.display.Shape;
-import flash.display.Sprite;
-import flash.display.LineScaleMode;
 
 import flash.text.TextField;
 import flash.text.TextFormat;
@@ -42,20 +34,14 @@ import flash.events.FocusEvent;
 import flash.events.EventDispatcher;
 
 import flash.ui.Keyboard;
+import flash.ui.Mouse;
 
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 import haxegui.StyleManager;
 
-import flash.ui.Mouse;
-
-import flash.Error;
-import haxe.Timer;
-//~ import flash.utils.Timer;
-
 import haxegui.controls.Scrollbar;
-
 
 /**
 *
@@ -130,8 +116,8 @@ class Console extends Window, implements ITraceListener
 		//~ container.box.width -= 20;
 		//~ vert = new Scrollbar(container, "vscrollbar");
 		//~ vert = new Scrollbar(this, "vscrollbar");
-		//~ vert.x = box.width - 40;
-		//~ vert.y = 44;
+		vert.x = box.width - 20;
+		vert.y = 44;
 		vert.color = color;
 		//~ vert.init(content);
 		vert.init({target : output});
@@ -197,7 +183,7 @@ class Console extends Window, implements ITraceListener
 		input.y = box.height - 40;
 
 
-		//~ vert.x = box.width - 20;
+		vert.x = box.width - 20;
 		//~ vert.y = 44;
 		//~ vert.box.height = box.height - 40;
 		//~ vert.box.width = box.width - 40;
