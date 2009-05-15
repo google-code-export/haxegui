@@ -47,7 +47,13 @@ import haxegui.controls.Component;
 import haxegui.events.ResizeEvent;
 import haxegui.events.MenuEvent;
 
-
+/**
+* MenuBarItem Class
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
 class MenuBarItem extends AbstractButton
 {
 
@@ -132,6 +138,23 @@ class MenuBarItem extends AbstractButton
 					this.graphics.endFill();					
 				"
 			);
+			
+			StyleManager.setDefaultScript(
+				MenuBarItem,
+				"mouseDown",
+				"
+					this.graphics.clear();
+
+					var colors = [ this.color, Math.min(0xFFFFFF, this.color - 0x282828) ];
+					var alphas = [ 100, 100 ];
+					var ratios = [ 0, 0xFF ];
+					var matrix = new flash.geom.Matrix();
+					matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
+					this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+					this.graphics.drawRect (0, 0, 40, 24);
+					this.graphics.endFill();					
+				"
+			);			
 
 	}
 }
@@ -140,9 +163,11 @@ class MenuBarItem extends AbstractButton
 
 
 /**
+* Menubar Class
 *
-*
-*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
 */
 class Menubar extends Component
 {
@@ -182,7 +207,9 @@ class Menubar extends Component
 		{
 			var menu = new MenuBarItem(this, "Menu"+(i+1), 40*i, 0);
 			menu.init({color: this.color});
+			
 			menu.redraw({color: this.color});
+			
 			menu.addEventListener (MouseEvent.ROLL_OVER, onMenuRollOver, false, 0, true);
 			menu.addEventListener (MouseEvent.ROLL_OUT, onMenuMouseOut, false, 0, true);
 			menu.addEventListener (MouseEvent.MOUSE_MOVE, onMenuMouseMove, false, 0, true);
@@ -271,16 +298,16 @@ class Menubar extends Component
 	function onMenuMouseMove (e:MouseEvent)
 	{
 		//if(PopupMenu.getInstance().exists())
-		if (this.getChildIndex (e.target) != _menu)
+		//~ if (this.getChildIndex (e.target) != _menu)
 		//~ if (this.hasFocus())
-		{
+		//~ {
 			//dispatchEvent(new Event("CLOSE_POPUP"));
-			_menu = this.getChildIndex (e.target);
+			//~ _menu = this.getChildIndex (e.target);
 			//~ onChanged();
 
 			//~ openmenuByName (e.target.parent.name);
-			openMenuAt( _menu );
-		}
+			//~ openMenuAt( _menu );
+		//~ }
 	}
 
 	function onMenuRollOver (e:MouseEvent)
