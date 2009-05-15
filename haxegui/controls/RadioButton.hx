@@ -71,24 +71,8 @@ class RadioButton extends AbstractButton, implements Dynamic
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 		//~ this.filters = [shadow];
 
-
-		label = new Label();
-		label.text = name;
-		label.init({text: name});
-		label.move(24, 2);
-		//~ label.name = "label";
-		//~ label.text = name;
-		//~ label.selectable = false;
-		//~ label.multiline = false;
-		//~ label.embedFonts = true;
-		//~ label.width = box.width - 40;
-		//~ label.height = box.height - 6;
-		//~ label.x = 40;
-		//~ label.y = 6;
-
-		//~ label.setTextFormat (StyleManager.getTextFormat(10));
-		this.addChild(label);
-
+		label = new Label(this, "label", 24, 2);
+		label.init({innerData: name});
 
 		// Listeners
 		addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown,false,0,true);

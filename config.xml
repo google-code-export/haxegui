@@ -590,69 +590,49 @@ This hscript does the following:
 
 	<haxegui:ScrollPane name="ScrollPane1" x="10" y="84" >
 
-    
+
 		    <script type="text/hscript">
 
-			var highlight = new CodeHighlighter();
 			
 			var window = root.getChildByName("Transcriber");
 			var toolbar = window.getChildByName("Toolbar");
 			var scrollpane = window.getChildByName("ScrollPane1");
 
-				
-			
 			var tf = new flash.text.TextField();
-			tf.type = flash.text.TextFieldType.DYNAMIC;
-			for(i in 1...101)
-			    tf.text += "  "+i+"\n";
-			tf.border = true;
-			tf.borderColor = 0x7F7F7F;
-			tf.background = true;
-			tf.backgroundColor = 0xBFBFBF;
-			tf.multiline = true;
-			tf.width = 30;
-			tf.height = 1000;
-			scrollpane.addChild(tf);
-
-
-			var str = "var n = 6;\nvar factorial = 1;\nfor(i in factorial...n)\n\tfactorial *= i;\nn+\"! = \"+factorial;\n";
-			str += "\n/*\nvar window = new haxegui.Window(this.getChildByName(\"ScrollPane1\"));\nwindow.box.width = 160;\nwindow.box.height = 120;\nwindow.init();\n\nvar container = new haxegui.Container(window, \"Container\", 10, 20);\ncontainer.init();\n*/";
-			
-			/*str = "&lt;h1&gt;This is a headline&lt;/h1&gt;";*/
- 
-
-
-			tf = new flash.text.TextField();
 			tf.name = "HtmlTextArea";
 			tf.type = flash.text.TextFieldType.INPUT;
+			tf.multiline = true;
+			tf.wordWrap = true;
 			tf.background = true;
 			tf.backgroundColor = 0xFFFFFF;
-			tf.multiline = true;
-			tf.x = 30;
 			tf.width = 800;
 			tf.height = 1000;
-			
+			tf.mouseEnabled = true;
+			tf.tabEnabled = true;
 
+			
+			
+			var str = "var n = 6;\nvar factorial = 1;\nfor(i in factorial...n)\n\tfactorial *= i;\nn+\"! = \"+factorial;\n" ;
+			str += "\n/*\nvar window = new haxegui.Window(this.getChildByName(\"ScrollPane1\"));\nwindow.box.width = 160;\nwindow.box.height = 120;\nwindow.init();\n\nvar container = new haxegui.Container(window, \"Container\", 10, 20);\ncontainer.init();\n*/";
+	/*
 	var cssLoader = new flash.net.URLLoader();
 	var cssRequest = new flash.net.URLRequest("green.css");
-	var styles = new flash.text.StyleSheet();
-	
-	function cssLoadComplete(event)
+	function cssLoadComplete(e)
 	    {
-		trace(event);
-		styles.parseCSS(cssLoader.data);
-		tf.styleSheet = styles;
-		tf.htmlText = CodeHighlighter.highlight( str, "haxe" );
-
+		trace(e);
+		styles.parseCSS(e.target.data);
 	    }
-
-	cssLoader.load(cssRequest);
 	cssLoader.addEventListener(flash.events.Event.COMPLETE, cssLoadComplete);
-	
+	cssLoader.load(cssRequest);
+	*/
 			
+		var styles = new flash.text.StyleSheet();
+		styles.parseCSS(".code-line-numbers {    color:#809080;    border-right:1px dotted #809080;    float:left;    text-align:right;    width:2em;    padding-right:3px;    margin-right:12px;}.code-code {}.code-keyword {    font-weight: bold;    color: #000000;}.code-type {    font-weight: bold;    color: #106020;}.code-variable {    color: #004050;}.code-number {    color: #F08000;}.code-comment {    color: #208000;}.code-string {    color: #F00000;}");
+		tf.styleSheet = styles;
+		tf.htmlText = CodeHighlighter.highlight( str, "haxe") ;
+		
 
-			scrollpane.addChild(tf);
-
+		scrollpane.addChild(tf);
 
 
 			
@@ -684,7 +664,6 @@ This hscript does the following:
 
 		    </script>
     
-
 	</haxegui:ScrollPane>
     </haxegui:Window>
     

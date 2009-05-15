@@ -243,17 +243,17 @@ class App extends Sprite, implements haxe.rtti.Infos
 			//
 			var cmbbox = new ComboBox(container, "ComboBox1");
 			cmbbox.init();
-			cmbbox.move(20,160);
+			cmbbox.move(20,150);
 
 			//
 			cmbbox = new ComboBox(container, "ComboBox2");
 			cmbbox.init({editable: false});
-			cmbbox.move(20,200);
+			cmbbox.move(20,180);
 
 			//
 			cmbbox = new ComboBox(container, "ComboBox2");
 			cmbbox.init({disabled:true});
-			cmbbox.move(20,240);
+			cmbbox.move(20,210);
 
 
 			//
@@ -261,16 +261,16 @@ class App extends Sprite, implements haxe.rtti.Infos
 			{
 				var radio = new RadioButton(container, "RadioButton"+i);
 				radio.init({disabled: i==3, selected: i==1 });
-				radio.move(20,240+40*i);
+				radio.move(20,210+30*i);
 
 				var slider = new Slider(container, "Slider"+i);
 				slider.init();
-				slider.move(200, 120+40*i);
+				slider.move(200, 120+30*i);
 
 				var stepper = new Stepper(container, "Stepper"+i);
 					stepper.init({step: i, max: 128});
 				//~ stepper.init();
-				stepper.move(360, 120+40*i);
+				stepper.move(360, 120+30*i);
 
 				slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value = e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); }, false, 0, true);
 				stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = e.target.value;  }, false, 0, true);
@@ -285,23 +285,22 @@ class App extends Sprite, implements haxe.rtti.Infos
 				slider.rotation = -90;
 			}
 
+			var input = new Input(container, "Input1", 200, 240);
+			input.init();
 
-			var list = new UiList(container, "List1", 200, 280);
+			input = new Input(container, "Input2", 200, 270);
+			input.init();
+
+			input = new Input(container, "Input3", 200, 300);
+			input.init({disabled: true});
+
+			var list = new UiList(container, "List1", 400, 280);
 			list.data = [ "A", "B", "C", "D" ];
 			list.init();
 
-			var list = new UiList(container, "List2", 350, 280);
+			var list = new UiList(container, "List2", 550, 280);
 			list.data = [ "1", "2", "3", "4" ];
 			list.init();
-
-			var input = new Input(container, "Input1", 200, 280);
-			input.init();
-
-			input = new Input(container, "Input2", 200, 310);
-			input.init();
-
-			input = new Input(container, "Input3", 200, 340);
-			input.init({disabled: true});
 
 
 			window.dispatchEvent(new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
@@ -312,20 +311,20 @@ class App extends Sprite, implements haxe.rtti.Infos
 	/////////////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
-		loader.load(new URLRequest("config.xml"));
+		//~ loader.load(new URLRequest("config.xml"));
 
 
 	var colorpicker = new ColorPicker(100,100);
 	colorpicker.init();
 
 
-
-	for( i in 0...flash.Lib.current.numChildren)
-	{
-		var child = flash.Lib.current.getChildAt(i);
-		if(Std.is(child, haxegui.Window))
-				child.alpha = 0;
-	}
+//~ 
+	//~ for( i in 0...flash.Lib.current.numChildren)
+	//~ {
+		//~ var child = flash.Lib.current.getChildAt(i);
+		//~ if(Std.is(child, haxegui.Window))
+				//~ child.alpha = 0;
+	//~ }
 
 
 		var a = new Array<String>();
@@ -355,7 +354,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 		xmlds.deserialize();
 
-		tweenWindows();
+		//~ tweenWindows();
 
 	}//loadXML
 
