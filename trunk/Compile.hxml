@@ -10,16 +10,31 @@
 -main App.hx
 -cp ./
 -cp ./controls
+
 #-lib TweenerHX
 -lib feffects
 -lib hscript
+
 -swf-lib assets.swf
+
+# Button Style
 -resource haxegui/styles/DefaultButtonStyle.hscript@DefaultButtonStyle
+
+# Window Style
+-resource haxegui/styles/DefaultWindowFrameStyle.hscript@DefaultWindowFrameStyle
+
+# Titlebar Style
 -resource haxegui/styles/DefaultTitleBarCloseButtonStyle.hscript@DefaultTitleBarCloseButtonStyle
 -resource haxegui/styles/DefaultTitleBarMinimizeButtonStyle.hscript@DefaultTitleBarMinimizeButtonStyle
 -resource haxegui/styles/DefaultTitleBarMaximizeButtonStyle.hscript@DefaultTitleBarMaximizeButtonStyle
--resource haxegui/styles/DefaultWindowFrameStyle.hscript@DefaultWindowFrameStyle
 -resource haxegui/styles/DefaultTitleBarStyle.hscript@DefaultTitleBarStyle
+
+# Scrollbar Style
+-resource haxegui/styles/DefaultScrollbarUpButtonStyle.hscript@DefaultScrollbarUpButtonStyle
+-resource haxegui/styles/DefaultScrollbarDownButtonStyle.hscript@DefaultScrollbarDownButtonStyle
+-resource haxegui/styles/DefaultScrollbarHandleStyle.hscript@DefaultScrollbarHandleStyle
+
+
 -swf9 main.swf
 -swf-version 9
 -swf-header 960:600:300:3C3C3C
