@@ -32,8 +32,11 @@
 	-resource haxegui/styles/DefaultComboBoxDropButton.hscript@DefaultComboBoxDropButton
 	-resource haxegui/styles/DefaultComboBoxBackground.hscript@DefaultComboBoxBackground
 
-	# Input
+	# Input Style
 	-resource haxegui/styles/DefaultInputStyle.hscript@DefaultInputStyle
+	
+	# ListItem Style
+	-resource haxegui/styles/DefaultListItemStyle.hscript@DefaultListItemStyle
 
 	# Window Style
 	-resource haxegui/styles/DefaultWindowFrameStyle.hscript@DefaultWindowFrameStyle

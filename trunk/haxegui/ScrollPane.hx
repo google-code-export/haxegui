@@ -113,15 +113,6 @@ class ScrollPane extends Component, implements Dynamic {
 		if(vert.visible) box.width -= 20;
 
 
-				//~ var transform = content.transform;
-				//~ var bounds = transform.pixelBounds.clone();
-
-				//~ horz.visible = bounds.width > box.width ;
-				//~ vert.visible = bounds.height > box.height ;
-
-
-
-
 				this.graphics.clear();
 				if(horz.visible || vert.visible)
 				{
@@ -130,23 +121,10 @@ class ScrollPane extends Component, implements Dynamic {
 					this.graphics.endFill();
 				}
 
-
-
-		//~ if(content.scrollRect==null || content.scrollRect.isEmpty())
-			//~ content.scrollRect = new Rectangle();
-
-		//~ content.scrollRect = new Rectangle(0,0,box.width,box.height);
-
 		var r = box.clone();
 		r.x = content.scrollRect.x;
 		r.y = content.scrollRect.y;
 		content.scrollRect = r.clone();
-
-		//~ content.scrollRect = box.clone();
-		//~ content.scrollRect.width  = box.width;
-		//~ content.scrollRect.height  = box.height;
-		//~ content.scrollRect = getRect(this);
-
 
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8,0.5,BitmapFilterQuality.HIGH,true,false,false);
@@ -164,4 +142,4 @@ class ScrollPane extends Component, implements Dynamic {
 	}
 	static function initialize() {
 	}
-}//scrollpane
+}

@@ -140,7 +140,7 @@ class Stats extends Window, implements Dynamic
         maxFPS = Math.NEGATIVE_INFINITY;
         minFPS = Math.POSITIVE_INFINITY;
         avgFPS = [.0];
-        interval = 1000;
+        interval = 1500;
         gridSpacing = 20;
 
         data =
@@ -289,16 +289,19 @@ class Stats extends Window, implements Dynamic
 
 
         var item = cast list.getChildAt(1);
+        item.redraw();
 		item.graphics.beginFill (0xFF9300);
 		item.graphics.drawRect (0, 0, Std.int(fps), 20);
 		item.graphics.endFill ();
 
         item = cast list.getChildAt(4);
+        item.redraw();
 		item.graphics.beginFill (0x9ADF00);
 		item.graphics.drawRect (0, 0, Std.int(avg), 20);
 		item.graphics.endFill ();
 
         item = cast list.getChildAt(5);
+        item.redraw();
 		item.graphics.beginFill (0xFF00A8);
 		item.graphics.drawRect (0, 0, Std.int(flash.system.System.totalMemory/Math.pow(10,6)), 20);
 		item.graphics.endFill ();

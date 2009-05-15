@@ -1,0 +1,15 @@
+this.graphics.clear();
+
+this.graphics.lineStyle (1,
+	Math.max(0, Math.min(0xFFFFFF, DefaultStyle.BACKGROUND - 0x282828)),
+	1, true, 
+	flash.display.LineScaleMode.NONE,
+	flash.display.CapsStyle.ROUND,
+	flash.display.JointStyle.ROUND
+	);
+	
+this.graphics.beginFill (this.color);
+this.graphics.drawRect (0, 0, this.box.width, 20);
+this.graphics.endFill ();
+
+this.tf.setTextFormat( DefaultStyle.getTextFormat() );

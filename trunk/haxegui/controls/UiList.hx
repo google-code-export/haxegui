@@ -59,48 +59,39 @@ class ListItem extends AbstractButton, implements Dynamic
 
 		super.init(opts);
 
-
 		tf = new TextField();
 		tf.name = "tf";
-		//~ label.text = Opts.optString(opts, "label", name);
-		tf.text = name;
+		tf.text = Opts.optString(opts, "text", tf.text);
+		tf.selectable = false;
+		tf.x = 4;
+		tf.width = box.width - 4;
+		tf.height = 20;
+		tf.embedFonts = true;
+
+		tf.mouseEnabled = false;
+
+		tf.setTextFormat (DefaultStyle.getTextFormat());
 
 		//~ label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
 		this.addChild(tf);
 
 		// add the drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
-		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
-		this.filters = [shadow];
-		//~ this.filters = [shadow, bevel];
-
-		// register with focus manager
-		//~ FocusManager.getInstance().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
-
-		action_redraw =
-			"
-			this.graphics.clear();
-			var colors = [ color | 0x323232, color - 0x141414 ];
-			var alphas = [ 100, 100 ];
-			var ratios = [ 0, 0xFF ];
-			var matrix = new flash.geom.Matrix();
-			matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
-            this.graphics.lineStyle(2);
-			this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
-			this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-			this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
-			this.graphics.endFill ();
-			";
-
-		redraw();
+		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, true, false, false );
+		//~ this.filters = [shadow];
 
 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(ListItem,initialize);
 	}
+
 	static function initialize() {
-	}
+		StyleManager.setDefaultScript(
+			ListItem,
+			"redraw",
+			haxe.Resource.getString("DefaultListItemStyle")
+		);
+	}	
 }
 
 
@@ -116,11 +107,9 @@ class UiList extends Component
 {
 
 	public var header : Sprite;
-	//~ public var data : Array<Dynamic>;
 	public var data : Dynamic;
 
 	public var sortReverse : Bool;
-
 	var dragItem : Int;
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
@@ -149,6 +138,36 @@ class UiList extends Component
 		if(opts.data!=null)
 			data = opts.data;
 
+
+		for (i in 1...data.length+1)
+		{
+			var item = new ListItem(this, "item" + i, 0, 20*i );
+
+
+			var str : String = "";
+			if(Std.is(data, Array))
+				try
+				{
+					str = data[i-1];
+				}
+				catch(e:flash.Error)
+				{
+					//~ tf.text = Std.string(new flash.Error());
+					str = Std.string(e);
+				}
+
+			item.init({text: str, width: this.box.width, color: DefaultStyle.INPUT_BACK});
+
+			item.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
+			item.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
+			item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
+			item.addEventListener (MouseEvent.MOUSE_UP, onItemMouseUp, false, 0, true);
+
+			item.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
+			item.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
+
+		}
+
 		//
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 		this.filters = [shadow];
@@ -156,16 +175,6 @@ class UiList extends Component
 
 	public function onItemMouseDown(e:MouseEvent) : Void
 	{
-		dragItem = getChildIndex(e.target);
-		setChildIndex(e.target, numChildren-1);
-		e.target.dispatchEvent (new DragEvent (DragEvent.DRAG_START));
-
-		e.target.graphics.clear();
-		e.target.graphics.lineStyle(2, color - 0x323232);
-		e.target.graphics.beginFill (color);
-		//~ e.target.graphics.beginFill ( getChildIndex(e.target)==0 ? color | 0x323232 : color );
-		e.target.graphics.drawRect (0, 0, box.width, 20);
-		e.target.graphics.endFill ();
 
 	shrink();
 	}
@@ -183,33 +192,11 @@ class UiList extends Component
 
 	public function onItemRollOver(e:MouseEvent) : Void
 	{
-
-		//~ e.target.graphics.clear();
-		//~ e.target.graphics.lineStyle(2, color - 0x323232);
-		//~ e.target.graphics.beginFill (color | 0x202020);
-		//~ e.target.graphics.drawRect (0, 0, box.width, 20);
-		//~ e.target.graphics.endFill ();
-//~
-	//~ if(e.target==header) drawHeader(color | 0x202020);
-
 		CursorManager.setCursor(Cursor.HAND);
-
 	}
 
 	public function onItemRollOut(e:MouseEvent) : Void
 	{
-		//~ if(this.contains(e.target))
-		//~ {
-				//~ e.target.graphics.clear();
-				//~ e.target.graphics.lineStyle(2, color - 0x323232);
-				//~ e.target.graphics.beginFill ( this.getChildIndex(e.target)==0 ? color | 0x323232 : color );
-				//~ e.target.graphics.drawRect (0, 0, box.width, 20);
-				//~ e.target.graphics.endFill ();
-		//~ }
-		//~ if(e.target==header) drawHeader();
-
-		//~ CursorManager.setCursor(Cursor.ARROW);
-
 	}
 
 
@@ -235,7 +222,7 @@ class UiList extends Component
 		if(color == 0) color = this.color;
 
 		header.graphics.clear();
-		header.graphics.lineStyle(2, color - 0x323232);
+		header.graphics.lineStyle(1, color - 0x323232);
 		header.graphics.beginFill (color | 0x323232);
 		header.graphics.drawRect (0, 0, box.width, 20);
 		header.graphics.endFill ();
@@ -250,11 +237,6 @@ class UiList extends Component
 	override public function redraw(opts:Dynamic=null)
 	{
 		drawHeader();
-
-
-		var i = numChildren;
-			while(i-- > 1)
-				removeChildAt(i);
 
 
 		var tf = new TextField ();
@@ -277,56 +259,11 @@ class UiList extends Component
 		header.addEventListener (MouseEvent.MOUSE_DOWN, onHeaderMouseDown, false, 0, true);
 		header.addEventListener (MouseEvent.MOUSE_UP, onHeaderMouseUp, false, 0, true);
 
-		for (i in 0...data.length)
-		{
-			var item = new ListItem();
-			item.name = "item" + (i+1);
-			item.graphics.lineStyle(2, color - 0x323232);
-			item.graphics.beginFill (color);
-			item.graphics.drawRect (0, 0, box.width, 20);
-			item.graphics.endFill ();
+		//~ for(i in 0...numChildren-1)
+			//~ if( Std.is( this.getChildAt(i), ListItem ))
+				//~ untyped this.getChildAt(i).dirty = true;
+				//~ untyped this.getChildAt(i).redraw();
 
-			item.y = 20*(i+1) ;
-
-			item.buttonMode = true;
-
-			item.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
-			item.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
-			item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
-			item.addEventListener (MouseEvent.MOUSE_UP, onItemMouseUp, false, 0, true);
-
-			item.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
-			item.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
-
-
-			var tf = new TextField ();
-			tf.name = "tf";
-
-			if(Std.is(data, Array))
-				try
-				{
-					tf.text = data[i];
-				}
-				catch(e:flash.Error)
-				{
-					//~ tf.text = Std.string(new flash.Error());
-					tf.text = Std.string(e);
-				}
-
-			tf.selectable = false;
-			tf.x = 4;
-			tf.width = box.width - 4;
-			tf.height = 20;
-			tf.embedFonts = true;
-
-			tf.mouseEnabled = false;
-
-			tf.setTextFormat (DefaultStyle.getTextFormat());
-
-			item.addChild (tf);
-			this.addChild (item);
-
-		}
 	}
 
 
