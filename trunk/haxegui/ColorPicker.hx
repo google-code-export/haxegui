@@ -103,7 +103,7 @@ class ColorPicker extends Window
 
 		//
 		var container = new Container (this, "Container", 10, 44);
-		container.init({color: 0xE6D3CC});
+		container.init({width: 390, height: 236, color: 0xE6D3CC});
 
 		var spec = new Image(container, "Spectrum", 10, 10);
 		spec.init({src: "haxegui/assets/spectrum.png"});
