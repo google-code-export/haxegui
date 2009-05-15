@@ -129,13 +129,6 @@ class App extends Sprite, implements haxe.rtti.Infos
 		flash.Lib.current.addChild(desktop);
 
 
-
-/*
- *
- * CONSOLE!
- */
-
-
 		// Console to show some debug
 		var console = new Console (flash.Lib.current, 50, 50);
 		console.init({color:0x2E2E2E});
@@ -254,7 +247,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 			//
 			cmbbox = new ComboBox(container, "ComboBox2");
-			cmbbox.init();
+			cmbbox.init({editable: false});
 			cmbbox.move(20,200);
 
 			//
@@ -320,10 +313,6 @@ class App extends Sprite, implements haxe.rtti.Infos
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
 		loader.load(new URLRequest("config.xml"));
-		//
-		//~ flash.Lib.current.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown);
-		//~ FocusManager.getInstance ().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
-
 
 
 	var colorpicker = new ColorPicker(100,100);
@@ -335,7 +324,6 @@ class App extends Sprite, implements haxe.rtti.Infos
 	{
 		var child = flash.Lib.current.getChildAt(i);
 		if(Std.is(child, haxegui.Window))
-			if(child.name!="Console")
 				child.alpha = 0;
 	}
 
@@ -381,7 +369,6 @@ class App extends Sprite, implements haxe.rtti.Infos
 		{
 			var child = flash.Lib.current.getChildAt(i);
 			if(Std.is(child, haxegui.Window))
-			if(child.name!="Console")
 			{
 			child.alpha = 0;
 			var t = new Tween( 0, 1, 500, child, "alpha", Linear.easeNone );
@@ -411,7 +398,6 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 		var back = cast flash.Lib.current.getChildByName("desktop");
 		back.graphics.clear();
-		//~ back.graphics.beginFill(StyleManager.BACKGROUND,1);
 		  var colors = [ DefaultStyle.BACKGROUND, DefaultStyle.BACKGROUND - 0x4D4D4D ];
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];

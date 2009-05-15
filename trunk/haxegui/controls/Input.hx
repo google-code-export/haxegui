@@ -49,17 +49,13 @@ class Input extends Component
 
 	override public function init(?opts:Dynamic) : Void
 	{
-	    box = new Rectangle(0, 0, 140, 20);
-		super.init(opts);
+	    this.box = new Rectangle(0, 0, 140, 20);
+	    
+	    super.init(opts);
 
 	    //~ buttonMode = false;
 	    mouseEnabled = true;
 	    tabEnabled = true;
-
-	    graphics.lineStyle (2, DefaultStyle.BACKGROUND - 0x202020);
-	    graphics.beginFill (DefaultStyle.INPUT_BACK);
-	    graphics.drawRoundRect(0, 0, box.width, box.height, 8, 8 );
-	    graphics.endFill ();
 
 	    var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 	    filters = [shadow];
@@ -82,8 +78,25 @@ class Input extends Component
 	static function __init__() {
 		haxegui.Haxegui.register(Input,initialize);
 	}
+	
 	static function initialize() {
+		StyleManager.setDefaultScript(
+			Input,
+			"redraw",
+			"
+			this.graphics.clear();
+			this.graphics.lineStyle (1,
+			    Math.max(0, Math.min(0xFFFFFF, DefaultStyle.BACKGROUND - 0x282828)),
+			    1, true, 
+			    flash.display.LineScaleMode.NONE,
+			    flash.display.CapsStyle.ROUND,
+			    flash.display.JointStyle.ROUND
+			    );
+			this.graphics.beginFill (DefaultStyle.INPUT_BACK);
+			this.graphics.drawRoundRect(0, 0, this.box.width, this.box.height, 8, 8 );
+			this.graphics.endFill ();
+			"
+		);
 	}
-
 }
 

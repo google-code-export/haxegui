@@ -135,7 +135,7 @@ class PopupMenuItem extends AbstractButton, implements Dynamic
 *
 *
 */
-class PopupMenu extends Component
+class PopupMenu extends AbstractButton
 {
 
 	private var items : UInt;

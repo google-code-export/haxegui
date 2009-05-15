@@ -89,8 +89,7 @@ class MenuBarItem extends AbstractButton
 				"redraw",
 				"
 					this.graphics.clear();
-
-					var colors = [ color - 0x141414, color | 0x323232 ];
+					var colors = [ this.color - 0x141414, color | 0x323232 ];
 					var alphas = [ 100, 100 ];
 					var ratios = [ 0, 0xFF ];
 					var matrix = new flash.geom.Matrix();
@@ -100,6 +99,40 @@ class MenuBarItem extends AbstractButton
 					this.graphics.endFill();					
 				"
 			);
+
+			StyleManager.setDefaultScript(
+				MenuBarItem,
+				"mouseOut",
+				"
+					this.graphics.clear();
+					var colors = [ this.color - 0x141414, color | 0x323232 ];
+					var alphas = [ 100, 100 ];
+					var ratios = [ 0, 0xFF ];
+					var matrix = new flash.geom.Matrix();
+					matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
+					this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+					this.graphics.drawRect (0, 0, 40, 24);
+					this.graphics.endFill();					
+				"
+			);
+			
+			StyleManager.setDefaultScript(
+				MenuBarItem,
+				"mouseOver",
+				"
+					this.graphics.clear();
+
+					var colors = [ this.color, 0xFFFFFF ];
+					var alphas = [ 100, 100 ];
+					var ratios = [ 0, 0xFF ];
+					var matrix = new flash.geom.Matrix();
+					matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
+					this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+					this.graphics.drawRect (0, 0, 40, 24);
+					this.graphics.endFill();					
+				"
+			);
+
 	}
 }
 
@@ -147,8 +180,9 @@ class Menubar extends Component
 	
 		for (i in 0...numMenus)
 		{
-			var menu = new MenuBarItem(this, "Menu"+(i+1), Std.int(40 * i), 0);
-
+			var menu = new MenuBarItem(this, "Menu"+(i+1), 40*i, 0);
+			menu.init({color: this.color});
+			menu.redraw({color: this.color});
 			menu.addEventListener (MouseEvent.ROLL_OVER, onMenuRollOver, false, 0, true);
 			menu.addEventListener (MouseEvent.ROLL_OUT, onMenuMouseOut, false, 0, true);
 			menu.addEventListener (MouseEvent.MOUSE_MOVE, onMenuMouseMove, false, 0, true);
@@ -184,10 +218,7 @@ class Menubar extends Component
 			var matrix = new flash.geom.Matrix();
 			matrix.createGradientBox(box.width, 24, Math.PI/2, 0, 0);
 			this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-			/*this.graphics.drawRect (0, 0, this.box.width, this.box.height);*/
-			
-			this.graphics.drawRect (0, 0,500,24);
-			
+			this.graphics.drawRect (0, 0, this.box.width, this.box.height);	
 			this.graphics.endFill();
 			"
 		);
