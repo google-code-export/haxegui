@@ -20,37 +20,37 @@
 ### Default Styles ###
 
 	# Button Style
-	-resource haxegui/styles/DefaultButtonStyle.hscript@DefaultButtonStyle
+	-resource haxegui/styles/ButtonStyle.hscript@DefaultButtonStyle
 
 	# CheckBox Style
-	-resource haxegui/styles/DefaultCheckBoxStyle.hscript@DefaultCheckBoxStyle
+	-resource haxegui/styles/CheckBoxStyle.hscript@DefaultCheckBoxStyle
 
 	# RadioButton Style
-	-resource haxegui/styles/DefaultRadioButtonStyle.hscript@DefaultRadioButtonStyle
+	-resource haxegui/styles/RadioButtonStyle.hscript@DefaultRadioButtonStyle
 	
 	# ComboBox Style
-	-resource haxegui/styles/DefaultComboBoxDropButton.hscript@DefaultComboBoxDropButton
-	-resource haxegui/styles/DefaultComboBoxBackground.hscript@DefaultComboBoxBackground
+	-resource haxegui/styles/ComboBoxDropButton.hscript@DefaultComboBoxDropButton
+	-resource haxegui/styles/ComboBoxBackground.hscript@DefaultComboBoxBackground
 
 	# Input Style
-	-resource haxegui/styles/DefaultInputStyle.hscript@DefaultInputStyle
+	-resource haxegui/styles/InputStyle.hscript@DefaultInputStyle
 	
 	# ListItem Style
-	-resource haxegui/styles/DefaultListItemStyle.hscript@DefaultListItemStyle
+	-resource haxegui/styles/ListItemStyle.hscript@DefaultListItemStyle
 
 	# Window Style
-	-resource haxegui/styles/DefaultWindowFrameStyle.hscript@DefaultWindowFrameStyle
+	-resource haxegui/styles/WindowFrameStyle.hscript@DefaultWindowFrameStyle
 
 	# Titlebar Style
-	-resource haxegui/styles/DefaultTitleBarCloseButtonStyle.hscript@DefaultTitleBarCloseButtonStyle
-	-resource haxegui/styles/DefaultTitleBarMinimizeButtonStyle.hscript@DefaultTitleBarMinimizeButtonStyle
-	-resource haxegui/styles/DefaultTitleBarMaximizeButtonStyle.hscript@DefaultTitleBarMaximizeButtonStyle
-	-resource haxegui/styles/DefaultTitleBarStyle.hscript@DefaultTitleBarStyle
+	-resource haxegui/styles/TitleBarCloseButtonStyle.hscript@DefaultTitleBarCloseButtonStyle
+	-resource haxegui/styles/TitleBarMinimizeButtonStyle.hscript@DefaultTitleBarMinimizeButtonStyle
+	-resource haxegui/styles/TitleBarMaximizeButtonStyle.hscript@DefaultTitleBarMaximizeButtonStyle
+	-resource haxegui/styles/TitleBarStyle.hscript@DefaultTitleBarStyle
 
 	# Scrollbar Style
-	-resource haxegui/styles/DefaultScrollbarUpButtonStyle.hscript@DefaultScrollbarUpButtonStyle
-	-resource haxegui/styles/DefaultScrollbarDownButtonStyle.hscript@DefaultScrollbarDownButtonStyle
-	-resource haxegui/styles/DefaultScrollbarHandleStyle.hscript@DefaultScrollbarHandleStyle
+	-resource haxegui/styles/ScrollbarUpButtonStyle.hscript@DefaultScrollbarUpButtonStyle
+	-resource haxegui/styles/ScrollbarDownButtonStyle.hscript@DefaultScrollbarDownButtonStyle
+	-resource haxegui/styles/ScrollbarHandleStyle.hscript@DefaultScrollbarHandleStyle
 
 ### Output ###
 

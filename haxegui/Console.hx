@@ -117,7 +117,7 @@ class Console extends Window, implements ITraceListener
 		//~ vert = new Scrollbar(container, "vscrollbar");
 		//~ vert = new Scrollbar(this, "vscrollbar");
 		vert.x = box.width - 20;
-		vert.y = 44;
+		vert.y = 40;
 		vert.color = color;
 		//~ vert.init(content);
 		vert.init({target : output});
@@ -176,15 +176,15 @@ class Console extends Window, implements ITraceListener
 		e.stopImmediatePropagation ();
 		//~ e.stopPropagation ();
 
-		output.width = box.width - 32;
+		output.width = box.width - 30;
 		output.height = box.height - 40;
 
-		input.width = box.width - 32;
+		input.width = box.width - 30;
 		input.y = box.height - 40;
 
 
 		vert.x = box.width - 20;
-		//~ vert.y = 44;
+		//~ vert.y = 40;
 		//~ vert.box.height = box.height - 40;
 		//~ vert.box.width = box.width - 40;
 		//~ vert.onResize(null);
