@@ -62,16 +62,18 @@ class StyleManager implements Dynamic
 	}
 
 	/**
-	* Inlined method for exec, for readability
+	* Inlined method for exec, for readability. Returns result of executed code
 	*/
-	private static inline function doCall(inst:Component,so:ScriptObject,options:Dynamic) : Void
+	private static inline function doCall(inst:Component,so:ScriptObject,options:Dynamic) : Dynamic
 	{
+		var rv = null;
 		if(so != null) {
 			if(so.setup != null)
 				so.setup(so.interp,inst,options);
 			so.interp.variables.set("this",inst);
-			so.interp.execute( so.program );
+			rv = so.interp.execute( so.program );
 		}
+		return rv;
 	}
 
 	/**
@@ -81,14 +83,15 @@ class StyleManager implements Dynamic
 	* @param action An action type
 	* @param options Object with key->value mapping of vars to pass to script
 	**/
-	public static function exec(inst:Component, action:String, options:Dynamic) {
+	public static function exec(inst:Component, action:String, options:Dynamic) : Dynamic {
 		try {
-			doCall(inst, getInstanceActionObject(inst, action), options);
+			return doCall(inst, getInstanceActionObject(inst, action), options);
 		} catch(e:Dynamic) {
 			if(e != "No default action.") {
 				trace(inst.toString() + " " + action + " script error : " + e);
 			}
 		}
+		return null;
 	}
 
 	/**
