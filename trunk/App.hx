@@ -58,6 +58,7 @@ import haxegui.Menubar;
 import haxegui.Stats;
 import haxegui.Toolbar;
 import haxegui.ColorPicker;
+import haxegui.Utils;
 
 
 import haxegui.controls.Button;
@@ -71,19 +72,6 @@ import haxegui.controls.ComboBox;
 import haxegui.controls.UiList;
 
 import feffects.Tween;
-import feffects.easing.Quint;
-import feffects.easing.Sine;
-import feffects.easing.Back;
-import feffects.easing.Bounce;
-import feffects.easing.Circ;
-import feffects.easing.Cubic;
-import feffects.easing.Elastic;
-import feffects.easing.Expo;
-import feffects.easing.Linear;
-import feffects.easing.Quad;
-import feffects.easing.Quart;
-
-
 
 
 /*
@@ -140,8 +128,12 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 
 		// Statistics
-		var stats = new Stats (flash.Lib.current, 540, 80);
-		stats.init();
+		//~ var stats = new Stats (flash.Lib.current, 540, 80);
+		//~ stats.init();
+
+		// Color Picker
+		//~ var colorpicker = new ColorPicker(100,100);
+		//~ colorpicker.init();
 
 
 
@@ -306,32 +298,24 @@ class App extends Sprite, implements haxe.rtti.Infos
 			window.dispatchEvent(new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
 
 
-	/////////////////////////////////////////////////////////////////////////////////
-	// Load XML
-	/////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////
+		// Load XML
+		/////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
 		//~ loader.load(new URLRequest("config.xml"));
 
 
-	var colorpicker = new ColorPicker(100,100);
-	colorpicker.init();
-
-
-//~ 
-	//~ for( i in 0...flash.Lib.current.numChildren)
-	//~ {
-		//~ var child = flash.Lib.current.getChildAt(i);
-		//~ if(Std.is(child, haxegui.Window))
-				//~ child.alpha = 0;
-	//~ }
-
 
 		var a = new Array<String>();
 		var keys : Iterator<String> = untyped StyleManager.defaultActions.keys();
-		for(k in keys) a.push(k);
+		for(k in keys) 
+			a.push( k.split('.').slice(-2,-1).join('.') + "." + k.split('.').pop() );
 		a.sort(function(a,b) { if(a==b) return 0; if(a < b) return -1; return 1;});
-		trace("Registered scripts: " + Std.string(a));
+		//~ trace("Registered scripts: " + Std.string(a));
+		trace("Registered scripts: " + Utils.print_r(a));
+		
+		
 	}//main
 
 
@@ -354,28 +338,9 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 		xmlds.deserialize();
 
-		//~ tweenWindows();
 
 	}//loadXML
 
-	/**
-	 *
-	 *
-	 */
-	public static function tweenWindows()
-	{
-		for( i in 0...flash.Lib.current.numChildren)
-		{
-			var child = flash.Lib.current.getChildAt(i);
-			if(Std.is(child, haxegui.Window))
-			{
-			child.alpha = 0;
-			var t = new Tween( 0, 1, 500, child, "alpha", Linear.easeNone );
-
-			haxe.Timer.delay( t.start, 350*flash.Lib.current.getChildIndex(child) );
-			}
-		}
-	}
 
 	/**
 	*

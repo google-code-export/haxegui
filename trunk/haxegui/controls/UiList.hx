@@ -121,6 +121,7 @@ class UiList extends Component
 		this.addChild(header);
 
 
+
 	}
 
 	override public function init(opts : Dynamic=null)
@@ -232,6 +233,8 @@ class UiList extends Component
 		header.graphics.lineTo(box.width - 10, 8 +(sortReverse ? 5 : 0) );
 		header.graphics.lineTo(box.width - 15, sortReverse ? 8 : 13);
 		header.graphics.endFill ();
+		
+	
 	}
 
 	override public function redraw(opts:Dynamic=null)

@@ -47,12 +47,9 @@ class Utils
 	{
 		//
 		var type = obj.constructor;
-		//~ var type = Type.typeof(obj.constructor);
-		//~ var str : String = Std.string(obj) + " " + type;
 		var str : String = "\n"+indent + type;
 
 		// Make sure its an object, and not a of class String
-		//~ if(!Reflect.isObject(obj) || Std.is(type, TClass(String)) )
 		if(!Reflect.isObject(obj) || Std.is(obj, String) )
 			return Std.string(obj) + " " + type;
 
@@ -95,9 +92,6 @@ class Utils
 			if(Std.is(child, DisplayObjectContainer))
 			{
 				str += indent + "[" + child.name  + "]" + " => " + child;
-				//~ str += print_mc(cast child, indent+indent);
-				//~ str += indent + print_r(cast child, indent+indent);
-				//~ str += indent + print_r(cast child, indent+indent);
 				str += indent + print_r(cast child, indent);
 			}
 			else

@@ -262,7 +262,7 @@ class Stepper extends Component, implements Dynamic
 
 	public function onChanged(?e:Dynamic)
 	{
-
+		dirty = true;
 
 		this.tf.text = Std.string(value);
 		//~ this.tf.setTextFormat(StyleManager.getTextFormat(12));
