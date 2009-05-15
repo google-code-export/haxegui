@@ -109,7 +109,7 @@ class PopupMenuItem extends AbstractButton, implements Dynamic
 			var ratios = [ 0, 0xFF ];
 			var matrix = new flash.geom.Matrix();
 			matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
-            this.graphics.lineStyle(2);
+            this.graphics.lineStyle(1);
 			this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
 			this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 			this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
@@ -185,7 +185,7 @@ class PopupMenu extends AbstractButton
 		for (i in 0...items)
 		{
 		var item = new PopupMenuItem(this, "Item" + (i+1) );
-		item.graphics.lineStyle(2, color - 0x323232);
+		item.graphics.lineStyle(1, color - 0x323232);
 		item.graphics.beginFill (color, .8);
 		item.graphics.drawRect (0, 0, 100, 20);
 		item.graphics.endFill ();
@@ -256,7 +256,7 @@ class PopupMenu extends AbstractButton
 
 	public function draw() : Void {
 		if(numChildren>2)
-		this.graphics.lineStyle (2, 0x1A1A1A, 0.9);
+		this.graphics.lineStyle (1, 0x1A1A1A, 0.9);
 		//this.graphics.beginFill (0x595959, .8);
 		//this.graphics.drawRect (0, 0, 100, 20 * (items - 1));
 		this.graphics.drawRect (0, 0, 100, 20 * (numChildren - 1));
