@@ -121,15 +121,25 @@ class ScriptStandardLibrary
 					TextField : flash.text.TextField,
 					TextFieldType : flash.text.TextFieldType,
 					TextFormat : flash.text.TextFormat,
-					TextFormatAlign : flash.text.TextFormatAlign
+					TextFormatAlign : flash.text.TextFormatAlign,
+					StyleSheet : flash.text.StyleSheet
 				},
 				events :
 					{
 					Event : flash.events.Event,
 					MouseEvent : flash.events.MouseEvent,
 					KeyboardEvent : flash.events.KeyboardEvent
+					},
+				net :
+					{
+					URLLoader	: flash.net.URLLoader,
+					URLRequest	: flash.net.URLRequest
 					}
 			});
+
+
+		interp.variables.set("CodeHighlighter", CodeHighlighter);
+
 
 		/** haxegui exported with haxegui package stripped **/
 		interp.variables.set("ColorPicker", haxegui.ColorPicker);
@@ -165,6 +175,14 @@ class ScriptStandardLibrary
 		interp.variables.set("WindowManager", haxegui.WindowManager);
 		interp.variables.set("XmlDeserializer", haxegui.XmlDeserializer);
 		interp.variables.set("ScriptStandardLibrary", haxegui.utils.ScriptStandardLibrary);
+
+		interp.variables.set("events",
+			{
+				ResizeEvent			: haxegui.events.ResizeEvent,
+				MoveEvent			: haxegui.events.MoveEvent,
+				MenuEvent			: haxegui.events.MenuEvent	
+			}
+			);
 
 		interp.variables.set("controls",
 			{

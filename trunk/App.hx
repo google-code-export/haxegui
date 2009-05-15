@@ -267,7 +267,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 			for(i in 1...4)
 			{
 				var radio = new RadioButton(container, "RadioButton"+i);
-				radio.init({disabled: (i==3) });
+				radio.init({disabled: i==3, selected: i==1 });
 				radio.move(20,240+40*i);
 
 				var slider = new Slider(container, "Slider"+i);

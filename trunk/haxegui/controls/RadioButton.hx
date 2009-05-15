@@ -46,7 +46,7 @@ class RadioButton extends AbstractButton, implements Dynamic
 {
 
 	//~ public var group : Array<RadioButton>
-	public var checked(default, default) : Bool;
+	public var selected(default, default) : Bool;
 	public var label : Label;
 
 
@@ -63,7 +63,7 @@ class RadioButton extends AbstractButton, implements Dynamic
 
 		super.init(opts);
 
-
+		selected = Opts.optBool(opts, "selected", selected);
 
 
 		// drop-shadow filter
@@ -93,8 +93,8 @@ class RadioButton extends AbstractButton, implements Dynamic
 		// Listeners
 		addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown,false,0,true);
 		addEventListener (MouseEvent.MOUSE_UP,   onBtnMouseUp,false,0,true);
-		addEventListener (MouseEvent.ROLL_OVER, onBtnRollOver,false,0,true);
-		addEventListener (MouseEvent.ROLL_OUT,  onBtnRollOut,false,0,true);
+		//~ addEventListener (MouseEvent.ROLL_OVER, onBtnRollOver,false,0,true);
+		//~ addEventListener (MouseEvent.ROLL_OUT,  onBtnRollOut,false,0,true);
 
 		this.addEventListener (Event.ACTIVATE, onEnabled,false,0,true);
 		this.addEventListener (Event.DEACTIVATE, onDisabled,false,0,true);
@@ -132,39 +132,13 @@ class RadioButton extends AbstractButton, implements Dynamic
 
 
 
-	/**
-	*
-	*
-	*/
-	public function onBtnRollOver(e:MouseEvent) : Void
-	{
-		//~ if(disabled) return;
-		//~ if(!Std.is(e.target,Sprite)) return;
-
-		var color : UInt= checked ? color - 0x202020 : color;
-		//~ redraw(color + 0x141414 );
-		CursorManager.setCursor(Cursor.HAND);
-
-	}
-
-	/**
-	*
-	*
-	*/
-	public  function onBtnRollOut(e:MouseEvent) : Void
-	{
-		var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
-		//~ redraw(color);
-		CursorManager.setCursor(Cursor.ARROW);
-	}
-
 
 	override public function redraw (opts:Dynamic = null):Void
 	{
 		StyleManager.exec(this,"redraw",
 			{
-				color: Opts.optInt(opts, "color", color)
-				//~ checked: Opts.optBool(opts, "checked", checked),
+				color: Opts.optInt(opts, "color", color),
+				selected: Opts.optBool(opts, "selected", selected),
 			});
 	}
 
@@ -188,11 +162,12 @@ class RadioButton extends AbstractButton, implements Dynamic
 				var child = parent.getChildAt(i);
 				if(Std.is(child, RadioButton))
 					if(child!=this)
+					//~ if(child!=this && untyped !child.disabled)
 						{
 						//~ trace(child);
 						untyped
 							{
-							child.checked = false;
+							child.selected = false;
 							child.redraw();
 							}
 						}
@@ -204,10 +179,10 @@ class RadioButton extends AbstractButton, implements Dynamic
 	*
 	*/
 	public  function onBtnMouseUp(e:MouseEvent) {
-		checked = !checked;
+		this.selected = !this.selected;
 
 		//~ redraw(DefaultStyle.BACKGROUND);
-		var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
+		var color = selected ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
 		//~ redraw(color);
 	}
 
@@ -228,13 +203,21 @@ class RadioButton extends AbstractButton, implements Dynamic
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
 				this.graphics.lineStyle(2);
-				if(this.checked)
-					this.graphics.beginFill(0x00ff00);
-				else
-					this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
+
+				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawCircle (10, 10, 10);
 				this.graphics.endFill ();
+
+				if(this.selected)
+				{
+					matrix.createGradientBox(5, 5, Math.PI/2, 0, 0);
+					this.graphics.lineStyle (2, Math.max(0, Math.min(0xFFFFFF, this.color - 0x3D3D3D)) );
+					this.graphics.beginFill ( Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)) );
+					this.graphics.drawCircle (10, 10, 6);
+					this.graphics.endFill ();
+				}
+				
 			"
 		);
 	}

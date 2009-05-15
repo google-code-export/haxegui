@@ -30,8 +30,12 @@ import haxegui.controls.Component;
 */
 class Haxegui {
 
+	
 	private static var initializers : List<{c:Class<Dynamic>, f:Void->Void}>;
 	private static var dirtyList : List<Component> = new List();
+
+	/** Public **/
+
 
 	public static function init() {
 		for(o in initializers) {

@@ -238,9 +238,11 @@ class Scrollbar extends haxegui.controls.Component
 
 		up = new ScrollBarUpButton(this, "up" );
 		up.init({color: this.color});
+		up.redraw({color: this.color});
 
 		down = new ScrollBarDownButton(this, "down" );
 		down.move(0, box.height - 20);
+		down.redraw({color: this.color});
 
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, .75, BitmapFilterQuality.HIGH, true, false, false);
 		down.filters = [shadow];
@@ -274,14 +276,14 @@ class Scrollbar extends haxegui.controls.Component
 
 		//~ if(box.isEmpty())
 		box = untyped parent.box.clone();
-		//~ var pbox = cast(parent, Component).box;
-		//~ box = pbox.clone() ;
-		//~ box.inflate(-10,-24);
-		//~ box.inflate(-10,-4);
-		up.redraw({color: this.color});
-		down.redraw({color: this.color});
-		handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
 
+		//~ up.redraw({color: this.color});
+		//~ down.redraw({color: this.color});
+		//~ handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
+
+		dirty = true;
+		
+		
 		frame.graphics.clear();
 		frame.graphics.lineStyle (1, color - 0x141414);
 		frame.graphics.beginFill (color - 0x0A0A0A);
@@ -310,13 +312,6 @@ class Scrollbar extends haxegui.controls.Component
 
 		frame.graphics.endFill ();
 
-		//
-		//~ redrawHandle();
-
-		//~ var transform = scrollee.transform;
-		//~ var bounds = transform.pixelBounds.clone();
-		//~ handle.y = (.5*bounds.height-40) * scroll ;
-		//~ scroll = (handle.y-20) / (frame.height - 40 + 2) ;
 
 		if(e != null)
 			e.updateAfterEvent();
@@ -347,67 +342,65 @@ class Scrollbar extends haxegui.controls.Component
 
 
 		switch(e.target)
-		{
-		case handle:
-			//~ redrawHandle( color | 0x666666);
-			if(horizontal)
-				e.target.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
-			else
-				e.target.startDrag(false,new Rectangle(0,up.height-2, 0, box.height - 2*down.height - handle.height + 4));
+			{
+			case handle:
+				//~ redrawHandle( color | 0x666666);
+				if(horizontal)
+					e.target.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
+				else
+					e.target.startDrag(false,new Rectangle(0,up.height-2, 0, box.height - 2*down.height - handle.height + 4));
 
-			//~ e.target.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
-			flash.Lib.current.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+				//~ e.target.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+				flash.Lib.current.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
 
-			CursorManager.setCursor (Cursor.DRAG);
+				CursorManager.setCursor (Cursor.DRAG);
 
-		case up:
-			var y = handle.y - 50;
-			if( y < 20 ) y = 20;
-			//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-			//~ var t = new Tween( handle.y, handle.y - 50, 500, handle, "y", Linear.easeNone );
-			var t = new Tween( handle.y, y, 1000, handle, "y", Expo.easeOut );
-			var scope = this;
-			t.setTweenHandlers( function ( e ) { scope.adjust(); } );
-			t.start();
-			//~ t.setTweenHandlers( function ( e ) scope.update( sprite, e ) );
+			case up:
+				var y = handle.y - 50;
+				if( y < 20 ) y = 20;
+				//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
+				//~ var t = new Tween( handle.y, handle.y - 50, 500, handle, "y", Linear.easeNone );
+				var t = new Tween( handle.y, y, 1000, handle, "y", Expo.easeOut );
+				var scope = this;
+				t.setTweenHandlers( function ( e ) { scope.adjust(); } );
+				t.start();
+				//~ t.setTweenHandlers( function ( e ) scope.update( sprite, e ) );
 
-			CursorManager.setCursor (Cursor.HAND2);
+				CursorManager.setCursor (Cursor.HAND2);
 
-		case down:
-			var y = handle.y + 50;
-			if( y > frame.height - handle.height + 20) y = frame.height - handle.height + 20;
-
-
-			//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-			var t = new Tween( handle.y, y, 1000, handle, "y", Expo.easeOut );
-			var scope = this;
-			t.setTweenHandlers( function ( e ) { scope.adjust(e); } );
-			t.start();
-
-			CursorManager.setCursor (Cursor.HAND2);
-
-		case frame:
-			CursorManager.setCursor (Cursor.HAND2);
-
-			var y = e.target.mouseY ;
-			if(y+handle.height+20 > frame.height ) y = frame.height - handle.height + 20;
-
-			var t = new Tween( handle.y, y, 500, handle, "y", Back.easeInOut );
-			var scope = this;
-			t.setTweenHandlers( function ( e ) { scope.adjust(e); } );
-			t.start();
-
-			haxe.Timer.delay( function(){CursorManager.setCursor (Cursor.DRAG);}, 500 );
-
-			if(horizontal)
-				handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
-			else
-				handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.height - 2*down.height - handle.height + 4));
-
-			flash.Lib.current.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+			case down:
+				var y = handle.y + 50;
+				if( y > frame.height - handle.height + 20) y = frame.height - handle.height + 20;
 
 
-		}
+				//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
+				var t = new Tween( handle.y, y, 1000, handle, "y", Expo.easeOut );
+				var scope = this;
+				t.setTweenHandlers( function ( e ) { scope.adjust(e); } );
+				t.start();
+
+				CursorManager.setCursor (Cursor.HAND2);
+
+			case frame:
+				CursorManager.setCursor (Cursor.HAND2);
+
+				var y = e.target.mouseY ;
+				if(y+handle.height+20 > frame.height ) y = frame.height - handle.height + 20;
+
+				var t = new Tween( handle.y, y, 500, handle, "y", Back.easeInOut );
+				var scope = this;
+				t.setTweenHandlers( function ( e ) { scope.adjust(e); } );
+				t.start();
+
+				haxe.Timer.delay( function(){CursorManager.setCursor (Cursor.DRAG);}, 500 );
+
+				if(horizontal)
+					handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
+				else
+					handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.height - 2*down.height - handle.height + 4));
+
+				flash.Lib.current.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+			}
 		adjust();
 		//~ e.stopImmediatePropagation ();
 		e.updateAfterEvent ();
