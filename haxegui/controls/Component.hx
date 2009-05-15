@@ -22,6 +22,7 @@ package haxegui.controls;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.events.Event;
+import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.ColorTransform;
@@ -113,6 +114,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
 		this.addEventListener (ResizeEvent.RESIZE, onResize, false, 0, true);
 		this.addEventListener (Event.ADDED, onAdded, false, 0, true );
+		this.addEventListener (FocusEvent.KEY_FOCUS_CHANGE, __focusHandler, false, 0, true);
+		this.addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, __focusHandler, false, 0, true);
+		this.addEventListener (FocusEvent.FOCUS_IN, onFocusIn, false, 0, true);
+		this.addEventListener (FocusEvent.FOCUS_OUT, onFocusOut, false, 0, true);
 	}
 
 	public function init(opts:Dynamic=null) {
@@ -245,10 +250,105 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	public function onAdded(e:Event) {
 	}
 
+	private function __focusHandler(e:FocusEvent) {
+		var c : Component;
+		// relatedObject is one gaining focus
+		// target is object losing focus
+		// currentTarget == this
+		trace("------" + Std.string(this) + " __focusHandler");
+		trace("__focusHandler " + (if(e.currentTarget != this) " ******* " + Std.string(e.currentTarget) else "") + " :  from " + Std.string(e.target) + " to " + Std.string(e.relatedObject));
+		var o = e.target;
+
+		// first event is fired to the target about to lose focus
+		if(e.currentTarget == e.target && Std.is(e.currentTarget,Component)) {
+			c = cast e.currentTarget;
+			// see if current object will relinquish focus to gainer.
+			if(!c.onLosingFocus(e.relatedObject)) {
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				c.stage.focus = c;
+				return;
+			}
+		}
+
+		// check if the object gaining focus rejects
+		if(Std.is(e.relatedObject, Component)) {
+			var c : Component = cast e.relatedObject;
+			if(!c.onGainingFocus(e.relatedObject)) {
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				c.stage.focus = c;
+				return;
+			}
+		}
+	}
+
 	/** Placeholder **/
 	public function onClick(e:MouseEvent) {
 		trace("Do not use onClick, use onMouseClick");
 		onMouseClick(e);
+	}
+
+	/**
+	* When a component is gaining focus, this event occurs twice.
+	*
+	* The first time, [focusFrom] is set to the object losing focus.
+	*
+	* The second time, [focusFrom == this] which shows that all parents
+	* have been notified of the focus change.
+	**/
+	public function onFocusIn(e:FocusEvent) {
+		// -- Fired twice: first time --
+		// related == object losing focus
+		// target == object gaining focus
+		// currentTarget == this
+		// -- second time --
+		// related == null
+		// target == currentTarget == this
+// 		trace("++++ " + Std.string(this) + " onFocusIn");
+// 		trace("onFocusIn relatedObject: " + Std.string(e.relatedObject));
+// 		trace("onFocusIn currentTarget: " + Std.string(e.currentTarget));
+// 		trace("onFocusIn target: " + Std.string(e.target));
+
+		StyleManager.exec(this, "focusIn", {focusFrom : e.target});
+	}
+
+	/**
+	* When a component is losing focus, this event occurs
+	*
+	* [focusTo] is set to the object gaining focus.
+	*
+	**/
+	private function onFocusOut(e:FocusEvent) : Void {
+// 		trace("++++ " + Std.string(this) + " onFocusOut");
+// 		trace("onFocusOut relatedObject: " + Std.string(e.relatedObject));
+// 		trace("onFocusOut currentTarget: " + Std.string(e.currentTarget));
+// 		trace("onFocusOut target: " + Std.string(e.target));
+		// -- Fired twice : a real mess... we just need one
+		if(e.relatedObject != null)
+			StyleManager.exec(this, "focusOut", {focusTo : e.relatedObject});
+	}
+
+	/**
+	* If the component will not take focus, return false from this handler
+	* which will cancel the focus transfer.
+	**/
+	public function onGainingFocus(from : flash.display.InteractiveObject) : Bool {
+		var rv : Dynamic = StyleManager.exec(this,"gainingFocus", {focusFrom : from});
+		if(rv == null)
+			return true;
+		return cast rv;
+	}
+	/**
+	* Dispatched to this object when it is about to lose focus
+	*
+	* @return true to allow change, false to prevent focus change
+	**/
+	public function onLosingFocus(losingTo : flash.display.InteractiveObject) : Bool {
+		var rv : Dynamic = StyleManager.exec(this,"losingFocus", {focusTo : losingTo});
+		if(rv == null)
+			return true;
+		return cast rv;
 	}
 
 	/** onRollOver Event **/
@@ -364,6 +464,56 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		function __setAction_validate(v:String) : String {
 			return StyleManager.setInstanceScript(this, "validate", v);
 		}
+
+	//////////////////////////////////////////////////
+	////            Focus Actions                 ////
+	//////////////////////////////////////////////////
+	/** The script that is executed when the Component is gaining focus, which must return false to cancel the action, or true to approve. It is passed the one var [focusFrom] **/
+	public var action_gainingFocus(__getAction_gainingFocus,__setAction_gainingFocus) : String;
+		function __getAction_gainingFocus() {
+			return try StyleManager.getInstanceActionObject(this, "gainingFocus").code
+			catch(e:Dynamic) null;
+		}
+		function __setAction_gainingFocus(v:String) : String {
+			return StyleManager.setInstanceScript(this, "gainingFocus", v);
+		}
+
+	/** The script that is executed when the Component is losingFocus, which must return false to cancel the action, or true to approve. It is passed the one var [focusTo] **/
+	public var action_losingFocus(__getAction_losingFocus,__setAction_losingFocus) : String;
+		function __getAction_losingFocus() {
+			return try StyleManager.getInstanceActionObject(this, "losingFocus").code
+			catch(e:Dynamic) null;
+		}
+		function __setAction_losingFocus(v:String) : String {
+			return StyleManager.setInstanceScript(this, "losingFocus", v);
+		}
+
+	/**
+	* When a component is gaining focus, this script executes twice.
+	*
+	* The first time, [focusFrom] is set to the object losing focus.
+	*
+	* The second time, [focusFrom == this] which shows that all parents
+	* have been notified of the focus change.
+	**/
+	public var action_focusIn(__getAction_focusIn,__setAction_focusIn) : String;
+		function __getAction_focusIn() {
+			return try StyleManager.getInstanceActionObject(this, "focusIn").code
+			catch(e:Dynamic) null;
+		}
+		function __setAction_focusIn(v:String) : String {
+			return StyleManager.setInstanceScript(this, "focusIn", v);
+		}
+
+	public var action_focusOut(__getAction_focusOut,__setAction_focusOut) : String;
+		function __getAction_focusOut() {
+			return try StyleManager.getInstanceActionObject(this, "focusOut").code
+			catch(e:Dynamic) null;
+		}
+		function __setAction_focusOut(v:String) : String {
+			return StyleManager.setInstanceScript(this, "focusOut", v);
+		}
+
 
 
 	//////////////////////////////////////////////////
