@@ -21,6 +21,7 @@ package haxegui.controls;
 
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.ColorTransform;
@@ -104,12 +105,14 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		//~ trace("New " + this);
 
 		// Listeners
+		this.addEventListener (MouseEvent.CLICK, onMouseClick, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
 		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
 		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
 		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
 		this.addEventListener (ResizeEvent.RESIZE, onResize, false, 0, true);
+		this.addEventListener (Event.ADDED, onAdded, false, 0, true );
 	}
 
 	public function init(opts:Dynamic=null) {
@@ -238,6 +241,16 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	//////////////////////////////////////////////////
 	////               Events                     ////
 	//////////////////////////////////////////////////
+	/** Triggered by addChild() or addChildAt() **/
+	public function onAdded(e:Event) {
+	}
+
+	/** Placeholder **/
+	public function onClick(e:MouseEvent) {
+		trace("Do not use onClick, use onMouseClick");
+		onMouseClick(e);
+	}
+
 	/** onRollOver Event **/
 	public function onRollOver(e:MouseEvent)
 	{
@@ -248,6 +261,12 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	public function onRollOut(e:MouseEvent) : Void
 	{
 		StyleManager.exec(this,"mouseOut", {event : e});
+	}
+
+	/** Mouse click **/
+	public function onMouseClick(e:MouseEvent) : Void
+	{
+		StyleManager.exec(this,"mouseClick", {event : e});
 	}
 
 	public function onMouseDown(e:MouseEvent) : Void
@@ -284,6 +303,16 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		}
 		function __setAction_redraw(v:String) : String {
 			return StyleManager.setInstanceScript(this, "redraw", v);
+		}
+
+	/** The script that is executed when the mouse click event occurs. **/
+	public var action_mouseClick(__getAction_mouseClick,__setAction_mouseClick) : String;
+		function __getAction_mouseClick() {
+			return try StyleManager.getInstanceActionObject(this, "mouseClick").code
+			catch(e:Dynamic) null;
+		}
+		function __setAction_mouseClick(v:String) : String {
+			return StyleManager.setInstanceScript(this, "mouseClick", v);
 		}
 
 	/** The script that is executed when the mouse over event occurs. **/
@@ -368,6 +397,5 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		}
 		return v;
 	}
-
 
 }

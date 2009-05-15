@@ -145,6 +145,9 @@ class ComboBox extends Component, implements Dynamic
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
+		background = new ComboBoxBackground(this, "background");
+		dropButton = new ComboBoxDropButton(this, "button");
+
 		super(parent, name, x, y);
 	}
 
@@ -155,13 +158,8 @@ class ComboBox extends Component, implements Dynamic
 
 		super.init(opts);
 
-		if(background != null && background.parent == this)
-			removeChild(background);
-		background = new ComboBoxBackground(this, "background");
 		background.init(opts);
 
-		if(tf != null && tf.parent == this)
-			removeChild(tf);
 		tf = new TextField();
 		tf.name = "tf";
 		tf.type = flash.text.TextFieldType.INPUT;
@@ -172,27 +170,10 @@ class ComboBox extends Component, implements Dynamic
 		tf.embedFonts = true;
 		tf.height = box.height - 4;
 		tf.x = tf.y = 4;
-
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 		this.addChild(tf);
 
-		if(dropButton != null && dropButton.parent == this)
-			removeChild(dropButton);
-		dropButton = new ComboBoxDropButton(this, "button");
 		dropButton.init(opts);
-
-		if(!this.hasEventListener(Event.ACTIVATE))
-			this.addEventListener (Event.ACTIVATE, onEnabled, false, 0, true);
-		if(!this.hasEventListener(Event.DEACTIVATE))
-			this.addEventListener (Event.DEACTIVATE, onDisabled, false, 0, true);
-	}
-
-	public function onEnabled(e:Event)
-	{
-	}
-
-	public function onDisabled(e:Event)
-	{
 	}
 
 	static function __init__() {
@@ -218,9 +199,6 @@ class ComboBox extends Component, implements Dynamic
 					if(txt != null)
 						txt.setTextFormat( DefaultStyle.getTextFormat( 8, DefaultStyle.BACKGROUND - 0x141414 ));
 				}
-
-				this.background.redraw();
-				this.dropButton.redraw();
 			"
 		);
 	}
