@@ -17,23 +17,39 @@
 
 -swf-lib assets.swf
 
-# Button Style
--resource haxegui/styles/DefaultButtonStyle.hscript@DefaultButtonStyle
+### Default Styles ###
 
-# Window Style
--resource haxegui/styles/DefaultWindowFrameStyle.hscript@DefaultWindowFrameStyle
+	# Button Style
+	-resource haxegui/styles/DefaultButtonStyle.hscript@DefaultButtonStyle
 
-# Titlebar Style
--resource haxegui/styles/DefaultTitleBarCloseButtonStyle.hscript@DefaultTitleBarCloseButtonStyle
--resource haxegui/styles/DefaultTitleBarMinimizeButtonStyle.hscript@DefaultTitleBarMinimizeButtonStyle
--resource haxegui/styles/DefaultTitleBarMaximizeButtonStyle.hscript@DefaultTitleBarMaximizeButtonStyle
--resource haxegui/styles/DefaultTitleBarStyle.hscript@DefaultTitleBarStyle
+	# CheckBox Style
+	-resource haxegui/styles/DefaultCheckBoxStyle.hscript@DefaultCheckBoxStyle
 
-# Scrollbar Style
--resource haxegui/styles/DefaultScrollbarUpButtonStyle.hscript@DefaultScrollbarUpButtonStyle
--resource haxegui/styles/DefaultScrollbarDownButtonStyle.hscript@DefaultScrollbarDownButtonStyle
--resource haxegui/styles/DefaultScrollbarHandleStyle.hscript@DefaultScrollbarHandleStyle
+	# RadioButton Style
+	-resource haxegui/styles/DefaultRadioButtonStyle.hscript@DefaultRadioButtonStyle
+	
+	# ComboBox Style
+	-resource haxegui/styles/DefaultComboBoxDropButton.hscript@DefaultComboBoxDropButton
+	-resource haxegui/styles/DefaultComboBoxBackground.hscript@DefaultComboBoxBackground
 
+	# Input
+	-resource haxegui/styles/DefaultInputStyle.hscript@DefaultInputStyle
+
+	# Window Style
+	-resource haxegui/styles/DefaultWindowFrameStyle.hscript@DefaultWindowFrameStyle
+
+	# Titlebar Style
+	-resource haxegui/styles/DefaultTitleBarCloseButtonStyle.hscript@DefaultTitleBarCloseButtonStyle
+	-resource haxegui/styles/DefaultTitleBarMinimizeButtonStyle.hscript@DefaultTitleBarMinimizeButtonStyle
+	-resource haxegui/styles/DefaultTitleBarMaximizeButtonStyle.hscript@DefaultTitleBarMaximizeButtonStyle
+	-resource haxegui/styles/DefaultTitleBarStyle.hscript@DefaultTitleBarStyle
+
+	# Scrollbar Style
+	-resource haxegui/styles/DefaultScrollbarUpButtonStyle.hscript@DefaultScrollbarUpButtonStyle
+	-resource haxegui/styles/DefaultScrollbarDownButtonStyle.hscript@DefaultScrollbarDownButtonStyle
+	-resource haxegui/styles/DefaultScrollbarHandleStyle.hscript@DefaultScrollbarHandleStyle
+
+### Output ###
 
 -swf9 main.swf
 -swf-version 9

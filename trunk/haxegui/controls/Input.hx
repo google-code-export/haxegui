@@ -83,19 +83,7 @@ class Input extends Component
 		StyleManager.setDefaultScript(
 			Input,
 			"redraw",
-			"
-			this.graphics.clear();
-			this.graphics.lineStyle (1,
-			    Math.max(0, Math.min(0xFFFFFF, DefaultStyle.BACKGROUND - 0x282828)),
-			    1, true, 
-			    flash.display.LineScaleMode.NONE,
-			    flash.display.CapsStyle.ROUND,
-			    flash.display.JointStyle.ROUND
-			    );
-			this.graphics.beginFill (DefaultStyle.INPUT_BACK);
-			this.graphics.drawRoundRect(0, 0, this.box.width, this.box.height, 8, 8 );
-			this.graphics.endFill ();
-			"
+			haxe.Resource.getString("DefaultInputStyle")
 		);
 	}
 }
