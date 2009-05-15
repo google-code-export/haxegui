@@ -44,46 +44,19 @@ class CloseButton extends AbstractButton
 		super (parent, name, x, y);
 	}
 
-
-	override public function onMouseClick(e:MouseEvent) : Void
-	{
+	override public function onMouseClick(e:MouseEvent) : Void	{
 		trace("Close clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
 	}
-
 
 	static function __init__() {
 		haxegui.Haxegui.register(CloseButton,initialize);
 	}
 	static function initialize() {
-
 		StyleManager.setDefaultScript(
 			CloseButton,
 			"redraw",
-			"
-				this.graphics.clear();
-				var grad = flash.display.GradientType.LINEAR;
-				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
-				this.graphics.lineStyle (1,
-					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
-					2, true, 
-					flash.display.LineScaleMode.NONE,
-					flash.display.CapsStyle.ROUND,
-					flash.display.JointStyle.ROUND
-					);
-				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
-				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
-				this.graphics.endFill ();
-				this.graphics.lineStyle (2, Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)) );
-				this.graphics.moveTo(4,4);
-				this.graphics.lineTo(8,8);
-				this.graphics.moveTo(8,4);
-				this.graphics.lineTo(4,8);
-			"
+			haxe.Resource.getString("DefaultTitleBarCloseButtonStyle")
 		);
 	}
 }
@@ -104,35 +77,6 @@ class MinimizeButton extends AbstractButton
 		super (parent, name, x, y);
 	}
 
-	override public function init(opts:Dynamic=null)
-	{
-		super.init(opts);
-
-		action_redraw =
-			"
-				this.graphics.clear();
-				var grad = flash.display.GradientType.LINEAR;
-				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
-				this.graphics.lineStyle (1,
-					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
-					2, true, 
-					flash.display.LineScaleMode.NONE,
-					flash.display.CapsStyle.ROUND,
-					flash.display.JointStyle.ROUND
-					);
-				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
-				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
-				this.graphics.endFill ();
-				this.graphics.lineStyle (2, Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)) );
-				this.graphics.moveTo(4,6);
-				this.graphics.lineTo(8,6);
-			";
-	}
-
 
 	override public function onMouseClick(e:MouseEvent) : Void
 	{
@@ -140,12 +84,18 @@ class MinimizeButton extends AbstractButton
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
 	}
 
-
 	static function __init__() {
 		haxegui.Haxegui.register(MinimizeButton,initialize);
 	}
+
 	static function initialize() {
+		StyleManager.setDefaultScript(
+			MinimizeButton,
+			"redraw",
+			haxe.Resource.getString("DefaultTitleBarMinimizeButtonStyle")
+		);
 	}
+
 }
 
 
@@ -165,47 +115,21 @@ class MaximizeButton extends AbstractButton
 		super (parent, name, x, y);
 	}
 
-
-
 	override public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Maximize clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
 	}
 
-
-
 	static function __init__() {
 		haxegui.Haxegui.register(MaximizeButton,initialize);
 	}
+
 	static function initialize() {
 		StyleManager.setDefaultScript(
 			MaximizeButton,
 			"redraw",
-			"
-				this.graphics.clear();
-				var grad = flash.display.GradientType.LINEAR;
-				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(12, 12, Math.PI/2, 0, 0);
-				this.graphics.lineStyle (1,
-					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
-					2, true, 
-					flash.display.LineScaleMode.NONE,
-					flash.display.CapsStyle.ROUND,
-					flash.display.JointStyle.ROUND
-					);
-				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
-				this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
-				this.graphics.endFill ();
-				this.graphics.lineStyle (2, Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)) );
-				this.graphics.moveTo(4,6);
-				this.graphics.lineTo(8,6);
-				this.graphics.moveTo(6,4);
-				this.graphics.lineTo(6,8);
-			"
+			haxe.Resource.getString("DefaultTitleBarMaximizeButtonStyle")
 		);
 	}
 }
@@ -235,20 +159,7 @@ class TitleBar extends Component, implements Dynamic
 	override public function init(?opts:Dynamic) {
 		super.init(opts);
 
-		action_redraw =
-			"
-				this.graphics.clear();
-				var grad = flash.display.GradientType.LINEAR;
-				var colors = [ color | 0x323232, color - 0x141414 ];
-				var alphas = [ 100, 0 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(width, 32, Math.PI/2, 0, 0);
-				this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
-				this.graphics.drawRoundRectComplex (0, 0, width, 32, 4, 4, 0, 0);
-				this.graphics.drawRect (10, 20, width - 20, 12);
-				this.graphics.endFill ();
-			";
+		action_redraw = haxe.Resource.getString("DefaultTitleBarStyle");
 
 		//
 		//~ closeButton = new Component(this, "closeButton");

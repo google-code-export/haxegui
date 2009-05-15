@@ -74,8 +74,8 @@ class Window extends Component, implements Dynamic
 	public var titlebar : TitleBar;
 
 	public var frame : Component;
-	public var br:Sprite;
-	public var bl:Sprite;
+	public var br : Sprite;
+	public var bl : Sprite;
 
 	public var type:WindowType;
 
@@ -158,30 +158,14 @@ class Window extends Component, implements Dynamic
 		frame = new Component (this, "frame");
 		frame.buttonMode = false;
 
-		frame.action_redraw =
-			"
-				this.graphics.clear();
-				this.graphics.lineStyle (1,
-					Math.max(0, Math.min(0xFFFFFF, this.parent.color - 0x282828)),
-					2, true, 
-					flash.display.LineScaleMode.NONE,
-					flash.display.CapsStyle.ROUND,
-					flash.display.JointStyle.ROUND
-					);
-				this.graphics.beginFill(fillColor, 0.5);
-				this.graphics.drawRoundRect(0, 0, box.width + 10, box.height + 10, 8, 8);
-				this.graphics.drawRect(10, 20, box.width - 10, box.height - 20);
-				this.graphics.endFill();
-			";
+		frame.action_redraw = haxe.Resource.getString("DefaultWindowFrameStyle");
 
 
-		var shadow:DropShadowFilter =
-		new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 8, 8, 0.85,
-					BitmapFilterQuality.HIGH, false, false, false);
+		var shadow =
+		  new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 8, 8, 0.85,
+					flash.filters.BitmapFilterQuality.HIGH, false, false, false);
 
-		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .5, 4, 4, 2, BitmapFilterQuality.HIGH , flash.filters.BitmapFilterType.INNER, false );
-		//~ frame.filters = [shadow, bevel];
-		frame.filters = [shadow];
+		frame.filters =[shadow];
 
 
 		// corners
