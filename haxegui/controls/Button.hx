@@ -78,8 +78,8 @@ class Button extends AbstractButton, implements Dynamic
 
 	public function onFocusChanged (e:FocusEvent)
 	{
-		//~ var color = this.hasFocus ()? DefaultStyle.BACKGROUND | 0x141414: DefaultStyle.BACKGROUND;
-		redraw ();
+		//~ redraw ();
+		//dirty = true;
 	}
 
 	static function __init__() {

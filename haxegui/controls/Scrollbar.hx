@@ -84,32 +84,7 @@ class ScrollBarUpButton extends AbstractButton
 		StyleManager.setDefaultScript(
 			ScrollBarUpButton,
 			"redraw",
-			"
-				var colors = [ this.color - 0x141414,  this.color | 0x323232 ];
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(20, 20, Math.PI, 0, 0);
-				this.graphics.lineStyle (1,
-					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
-					1, true, 
-					flash.display.LineScaleMode.NONE,
-					flash.display.CapsStyle.ROUND,
-					flash.display.JointStyle.ROUND
-					);				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRect (0, 0, 20, 20 );
-				this.graphics.endFill ();
-
-				var colors = [ this.color - 0x141414,  this.color - 0x333333 ];
-				matrix.createGradientBox(10, 110, Math.PI, 5, 5);
-				this.graphics.lineStyle (1, this.color - 0x333333 );
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
-				this.graphics.moveTo( 7.5, 12.5);
-				this.graphics.lineTo(  10,  7.5);
-				this.graphics.lineTo(12.5, 12.5);
-				this.graphics.endFill ();
-								
-			"
+			haxe.Resource.getString("DefaultScrollbarUpButtonStyle")
 		);
 	}
 }
@@ -140,32 +115,7 @@ class ScrollBarDownButton extends AbstractButton
 		StyleManager.setDefaultScript(
 			ScrollBarDownButton,
 			"redraw",
-			"
-				var colors = [ this.color - 0x141414,  this.color | 0x323232 ];
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(20, 20, Math.PI, 0, 0);
-				this.graphics.lineStyle (1,
-					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
-					1, true, 
-					flash.display.LineScaleMode.NONE,
-					flash.display.CapsStyle.ROUND,
-					flash.display.JointStyle.ROUND
-					);				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRect (0, 0, 20, 20 );
-				this.graphics.endFill ();
-
-				var colors = [ this.color - 0x141414,  this.color - 0x333333 ];
-				matrix.createGradientBox(10, 110, Math.PI, 5, 5);
-				this.graphics.lineStyle (1, this.color - 0x333333 );
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
-				this.graphics.moveTo(7.5,7.5);
-				this.graphics.lineTo(10, 12.5);
-				this.graphics.lineTo(12.5, 7.5);
-				this.graphics.endFill ();
-				
-			"
+			haxe.Resource.getString("DefaultScrollbarDownButtonStyle")
 		);
 	}
 
@@ -234,27 +184,8 @@ class Scrollbar extends haxegui.controls.Component
 		StyleManager.setInstanceScript(
 			handle,
 			"redraw",
-			"
-				this.graphics.clear();
-
-				var colors = [ this.color - 0x141414, this.color | 0x323232 ];
-				/*if(horizontal)
-					colors = [ color | 0x323232, color - 0x141414 ];*/
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(20, h, Math.PI, 0, 0);
-				this.graphics.lineStyle (1,
-					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
-					1, true, 
-					flash.display.LineScaleMode.NONE,
-					flash.display.CapsStyle.ROUND,
-					flash.display.JointStyle.ROUND
-					);				
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRect (0, 0, 20, h );
-				this.graphics.endFill ();
-			");
+			haxe.Resource.getString("DefaultScrollbarHandleStyle")
+			);
 		handle.redraw({h : 20, horizontal: this.horizontal });
 
 
