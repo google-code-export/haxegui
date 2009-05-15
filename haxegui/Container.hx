@@ -113,7 +113,8 @@ class Container extends Component, implements IContainer, implements Dynamic
 		//~ }
 
 
-		redraw(null);
+		//~ redraw(null);
+		dirty = true;
 
 		//
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));

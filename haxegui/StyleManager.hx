@@ -250,7 +250,6 @@ class DefaultStyle {
 	public static function getTextFormat(?size:Dynamic, ?color:UInt, ?align:flash.text.TextFormatAlign) : TextFormat
 	{
 		var fmt = new TextFormat ();
-		//~ fmt.align = flash.text.TextFormatAlign.CENTER;
 		fmt.align = align;
 		//~ fmt.font = "FFF_FORWARD";
 		//~ fmt.font = "Impact";
