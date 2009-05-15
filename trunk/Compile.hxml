@@ -14,6 +14,12 @@
 -lib feffects
 -lib hscript
 -swf-lib assets.swf
+-resource haxegui/styles/DefaultButtonStyle.hscript@DefaultButtonStyle
+-resource haxegui/styles/DefaultTitleBarCloseButtonStyle.hscript@DefaultTitleBarCloseButtonStyle
+-resource haxegui/styles/DefaultTitleBarMinimizeButtonStyle.hscript@DefaultTitleBarMinimizeButtonStyle
+-resource haxegui/styles/DefaultTitleBarMaximizeButtonStyle.hscript@DefaultTitleBarMaximizeButtonStyle
+-resource haxegui/styles/DefaultWindowFrameStyle.hscript@DefaultWindowFrameStyle
+-resource haxegui/styles/DefaultTitleBarStyle.hscript@DefaultTitleBarStyle
 -swf9 main.swf
 -swf-version 9
 -swf-header 960:600:300:3C3C3C
