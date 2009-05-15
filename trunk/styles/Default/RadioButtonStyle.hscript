@@ -1,0 +1,50 @@
+this.graphics.clear();
+
+var colors = [ color | 0x323232, color - 0x141414 ];
+var alphas = [ 100, 100 ];
+var ratios = [ 0, 0xFF ];
+var matrix = new flash.geom.Matrix();
+
+if(this.selected)
+{
+	matrix.createGradientBox(20, 20, 0, 0, 0);
+	ratios = [ 0x66, 0xFF ];
+	colors = [ color - 0x333333, color ];
+
+	this.graphics.lineStyle (1, this.color - 0x141414, 1, true,
+			 flash.display.LineScaleMode.NONE,
+			 flash.display.CapsStyle.ROUND,
+			 flash.display.JointStyle.ROUND);
+	this.graphics.beginGradientFill( flash.display.GradientType.RADIAL, colors, alphas, ratios, matrix );
+	this.graphics.drawCircle (10, 10, 8);
+	this.graphics.endFill ();
+
+	/*
+	 * matrix.createGradientBox(10, 10, -Math.PI/2, 5, 5);
+	colors = [ color - 0x141414, 0x000000 ];
+	this.graphics.beginGradientFill( flash.display.GradientType.RADIAL, colors, alphas, ratios, matrix );
+	*/
+	this.graphics.lineStyle(0,0,0);
+	this.graphics.beginFill(0);
+	this.graphics.drawCircle (10, 10, 4);
+	this.graphics.endFill ();
+
+	var shadow = new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
+	this.filters = [shadow];
+
+}
+else
+{
+	matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
+
+	this.graphics.lineStyle(1);
+	this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
+	this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+	this.graphics.drawCircle (10, 10, 8);
+	this.graphics.endFill ();
+
+
+	var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false );
+	this.filters = [shadow];
+
+}
