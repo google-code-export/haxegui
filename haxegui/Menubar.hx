@@ -38,6 +38,8 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.ui.Keyboard;
 
+import haxegui.controls.AbstractButton;
+import haxegui.controls.Label;
 import haxegui.FocusManager;
 import haxegui.Opts;
 import haxegui.StyleManager;
@@ -45,12 +47,71 @@ import haxegui.controls.Component;
 import haxegui.events.ResizeEvent;
 import haxegui.events.MenuEvent;
 
+
+class MenuBarItem extends AbstractButton
+{
+
+	public var tf : TextField;
+
+	override public function init(opts:Dynamic=null)
+	{
+		super.init(opts);
+
+		var tf = new TextField();
+		var tf = new TextField();
+		tf.name = "tf";
+		tf.text = this.name;
+		tf.selectable = false;
+		tf.mouseEnabled = false;
+		tf.width = 38;
+		tf.height = 18;
+		tf.x = 2;
+		tf.y = 4;
+		tf.embedFonts = true;
+
+		tf.tabEnabled = false;
+		tf.focusRect = false;
+		tf.mouseEnabled = false;
+
+
+		tf.setTextFormat (DefaultStyle.getTextFormat(8, 10, flash.text.TextFormatAlign.CENTER ));
+		this.addChild (tf);
+
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(MenuBarItem,initialize);
+	}
+	
+	static function initialize() {
+			StyleManager.setDefaultScript(
+				MenuBarItem,
+				"redraw",
+				"
+					this.graphics.clear();
+
+					var colors = [ color - 0x141414, color | 0x323232 ];
+					var alphas = [ 100, 100 ];
+					var ratios = [ 0, 0xFF ];
+					var matrix = new flash.geom.Matrix();
+					matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
+					this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+					this.graphics.drawRect (0, 0, 40, 24);
+					this.graphics.endFill();					
+				"
+			);
+	}
+}
+
+
+
+
 /**
 *
 *
 *
 */
-class Menubar extends Component, implements Dynamic
+class Menubar extends Component
 {
 	public var numMenus : Int;
 	private var _menu:Int;
@@ -66,9 +127,13 @@ class Menubar extends Component, implements Dynamic
 	override public function init(opts : Dynamic=null)
 	{
 		if(Std.is(parent, Component))
-			color = (cast parent).color;
-
+			color = untyped parent.color;
+		
+		box = new Rectangle(0,0, untyped parent.box.width, 24);
+		
 		super.init(opts);
+
+		redraw({box: this.box});
 
 		//this.name = "Menubar";
 		buttonMode = false;
@@ -79,38 +144,10 @@ class Menubar extends Component, implements Dynamic
 		_menu = 0;
 		numMenus = 1+Math.round( Math.random() * 4 );
 
-		//~ this.graphics.lineStyle (2, color - 0x1A1A1A);
-		//~ this.graphics.beginFill (color);
-		//~ this.graphics.drawRect (0, 0, width, 24);
-		//~ this.graphics.endFill();
-
-
+	
 		for (i in 0...numMenus)
 		{
-			var menu = new Sprite();
-			menu.name = "Menu" + (i+1);
-			//menu.graphics.lineStyle(2, 0x5D5D5D);
-
-
-			var colors = [ color - 0x141414, color | 0x323232 ];
-			var alphas = [ 100, 100 ];
-			var ratios = [ 0, 0xFF ];
-			//~ var matrix = { a:200, b:0, c:0, d:0, e:200, f:0, g:200, h:200, i:1 };
-			var matrix = new flash.geom.Matrix();
-			matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
-			menu.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-
-			//~ menu.graphics.beginFill (color);
-			menu.graphics.drawRect (0, 0, 40, 24);
-			menu.graphics.endFill();
-			//~ menu.y = 20;
-			menu.x = Std.int(40 * i);
-
-			menu.buttonMode = true;
-			menu.tabEnabled = true;
-			menu.focusRect = true;
-			menu.mouseEnabled = true;
+			var menu = new MenuBarItem(this, "Menu"+(i+1), Std.int(40 * i), 0);
 
 			menu.addEventListener (MouseEvent.ROLL_OVER, onMenuRollOver, false, 0, true);
 			menu.addEventListener (MouseEvent.ROLL_OUT, onMenuMouseOut, false, 0, true);
@@ -119,150 +156,84 @@ class Menubar extends Component, implements Dynamic
 			menu.addEventListener (MouseEvent.MOUSE_UP, onMenuMouseUp, false, 0, true);
 
 
-
-			var tf = new TextField();
-			tf.name = "tf";
-			tf.text = menu.name;
-			tf.selectable = false;
-			tf.mouseEnabled = false;
-			tf.width = 38;
-			tf.height = 18;
-			tf.x = 2;
-			tf.y = 4;
-			tf.embedFonts = true;
-
-			tf.tabEnabled = false;
-			tf.focusRect = false;
-			tf.mouseEnabled = false;
-
-
-			tf.setTextFormat (DefaultStyle.getTextFormat(8, 10, flash.text.TextFormatAlign.CENTER ));
-
-
-			menu.addChild (tf);
-			this.addChild (menu);
 		}
 
 		// inner-drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, 0x000000, 0.5,4, 4,0.75,BitmapFilterQuality.LOW,true,false,false);
 		this.filters = [shadow];
 
-
-		//parent.addChild(this);
-		//parent.addEventListener(Event.CHANGE, this.redraw);
-		//getParent().addEventListener(Event.CHANGE, this.redraw);
-		//~ this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown);
-		//PopupMenu.getInstance().addEventListener(Event.CLOSE, onFocusChanged);
-		//~ addEventListener (ResizeEvent.RESIZE, this.redraw);
-
-
-		//~ parent.addEventListener (ResizeEvent.RESIZE, this.redraw);
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 
 	}
 
+
+
+	static function __init__() {
+		haxegui.Haxegui.register(Menubar,initialize);
+	}
+	
+	static function initialize() {
+		StyleManager.setDefaultScript(
+			Menubar,
+			"redraw",
+			"
+			this.graphics.clear();
+			var colors = [ this.color - 0x141414, this.color | 0x323232 ];
+			var alphas = [ 100, 100 ];
+			var ratios = [ 0, 0xFF ];
+			var matrix = new flash.geom.Matrix();
+			matrix.createGradientBox(box.width, 24, Math.PI/2, 0, 0);
+			this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+			/*this.graphics.drawRect (0, 0, this.box.width, this.box.height);*/
+			
+			this.graphics.drawRect (0, 0,500,24);
+			
+			this.graphics.endFill();
+			"
+		);
+	}
+	
+	
 
 	/**
 	*
 	*/
 	public function onParentResize(e:ResizeEvent)
 	{
-		box = untyped parent.box.clone();
-		//~ if(!Math.isNaN(e.oldWidth))
-		//~ box.width = e.oldWidth;
+		this.box = untyped parent.box.clone();
 
-		box.width -= x;
-		box.height -= y;
+		this.box.width -= x;
+		this.box.height -= y;
 
 		var b = box.clone();
 		b.height = box.height;
 		b.x=b.y=0;
-		scrollRect = b;
+		this.scrollRect = b;
 
-		redraw();
-
+		dirty = true;
+		
 		e.updateAfterEvent();
 	}
 
 
-	override public function redraw(opts:Dynamic=null)
-	{
-
-		//~ var width = parent.getChildByName ("frame").width;
-		//~ var width = untyped parent.box.width;
-
-		this.graphics.clear();
-		//~ this.graphics.lineStyle (2, color - 0x1A1A1A);
-
-		var colors = [ color - 0x141414, color | 0x323232 ];
-		var alphas = [ 100, 100 ];
-		var ratios = [ 0, 0xFF ];
-		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(box.width, 24, Math.PI/2, 0, 0);
-		this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-
-		//~ this.graphics.beginFill (color);
-		//~ this.graphics.drawRect (0, 0, width, 24);
-		this.graphics.drawRect (0, 0, box.width, 24);
-		this.graphics.endFill();
-
-	}
 
 
 	function onMenuMouseOut (e:Event)
 	{
-		e.target.graphics.clear();
-		//e.target.graphics.lineStyle(2, 0x5D5D5D);
-		//~ e.target.graphics.beginFill (color);
 
-
-		var colors = [ color - 0x141414, color | 0x323232 ];
-		var alphas = [ 100, 100 ];
-		var ratios = [ 0, 0xFF ];
-		//~ var matrix = { a:200, b:0, c:0, d:0, e:200, f:0, g:200, h:200, i:1 };
-		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
-		e.target.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-
-		e.target.graphics.drawRect (0, 0, 40, 24);
-		e.target.graphics.endFill();
-
-
-		var tf : TextField = cast e.target.getChildByName("tf");
-		var fmt = new TextFormat();
-		fmt.color = DefaultStyle.LABEL_TEXT  ;
-		tf.setTextFormat (fmt);
-		//dispatchEvent(new Event("CLOSE_POPUP"));
 	}
 
 	function onMenuMouseUp (e:MouseEvent)
 	{
-		//~ PopupMenu.getInstance().dispatchEvent (new Event (MenuEvent.MENU_HIDE));
 	}
 
 	function onMenuMouseDown (e:MouseEvent)
 	{
 
 		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
-
-		//~ if(FocusManager.getInstance().getFocus()!=this)
-		//~ if (Type.getClass (e.target.parent) == Sprite)
-		//if(this.getChildIndex(e.target.parent)==_menu)
-		//~ if (this.hasFocus())
-		//~ PopupMenu.getInstance().dispatchEvent (new Event (MenuEvent.MENU_HIDE));
-		//~ else
-		//~ if(!this.hasFocus())
-		//~ FocusManager.getInstance().setFocus(this);
-		//~ FocusManager.getInstance().setFocus(e.target.parent);
-		//~ PopupMenu.getInstance().dispatchEvent (new Event (MenuEvent.MENU_HIDE));
-
-
-		onChanged();
+		//~ onChanged();
 		_menu = this.getChildIndex (e.target);
 		openMenuAt (_menu);
-		//~ openmenuByName (e.target.parent.name);
 	}//onMouseDown
 
 
@@ -274,7 +245,7 @@ class Menubar extends Component, implements Dynamic
 		{
 			//dispatchEvent(new Event("CLOSE_POPUP"));
 			_menu = this.getChildIndex (e.target);
-			onChanged();
+			//~ onChanged();
 
 			//~ openmenuByName (e.target.parent.name);
 			openMenuAt( _menu );
@@ -285,113 +256,19 @@ class Menubar extends Component, implements Dynamic
 	{
 		var oldmenu = _menu;
 		_menu = this.getChildIndex (e.target);
-		onChanged (oldmenu);
+		//~ onChanged (oldmenu);
 	}
 
 	function onPopupClosed (e:Event)
 	{
 		_menu = -1;
-		onChanged();
+		//~ onChanged();
 	}
 
 	override public function onKeyDown (e:KeyboardEvent)
 	{
-		trace(e);
-
-		var popmenu:UInt;
-
-		var menu = cast (this.getChildAt (_menu), Sprite);
-		menu.graphics.clear();
-		//~ menu.graphics.beginFill (color);
-
-				var colors = [ color | 0x323232, color - 0x4D4D4D ];
-			var alphas = [ 100, 100 ];
-			var ratios = [ 0, 0xFF ];
-			//~ var matrix = { a:200, b:0, c:0, d:0, e:200, f:0, g:200, h:200, i:1 };
-			var matrix = new flash.geom.Matrix();
-			matrix.createGradientBox(40, 24, Math.PI/2, 0, 20);
-			menu.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-
-		menu.graphics.drawRect (0, 0, 40, 20);
-		menu.graphics.endFill();
-
-		switch (e.keyCode)
-		{
-		case Keyboard.LEFT:
-			if (_menu > 0)
-				_menu--;
-			else
-				_menu = this.numChildren - 1;
-		case Keyboard.RIGHT:
-			if (_menu < this.numChildren - 1)
-				_menu++;
-			else
-				_menu = 0;
-		}
-
-		menu = cast (this.getChildAt (_menu), Sprite);
-
-		if (e.keyCode == Keyboard.LEFT || e.keyCode == Keyboard.RIGHT)
-		{
-			var popup = PopupMenu.getInstance();
-			popup.init ({parent:this.parent, x:menu.x, y:menu.y + 20});
-		}
-
-		if (e.keyCode == Keyboard.DOWN)
-			PopupMenu.getInstance().nextmenu();
-
-		if (e.keyCode == Keyboard.UP)
-			PopupMenu.getInstance().prevmenu();
-
-		menu.graphics.clear();
-		menu.graphics.beginFill(color);
-		menu.graphics.drawRect(0, 0, 40, 20);
-		menu.graphics.endFill();
 	}
 
-
-	public function onChanged (?oldmenu:Int)
-	{
-
-		//~ for (i in 0...numChildren)
-		//~ if(Std.is(this.getChildAt(i), Sprite))
-		//~ {
-		//~ var menu = cast(this.getChildAt(i), Sprite);
-		//~ var color = (i == _menu) ? 0xf5f5f5 : 0x595959;
-		//~ menu.graphics.clear();
-		//~ menu.graphics.beginFill (color);
-		//~ menu.graphics.drawRect (0, 0, 40, 20);
-		//~ menu.graphics.endFill();
-		//~ }
-		if( Math.isNaN(_menu) || _menu<0 || !this.contains(this.getChildAt(_menu)))
-		return;
-
-		var menu = cast(this.getChildAt(_menu), Sprite);
-		//~ var color = this.color | 0x323232;
-		menu.graphics.clear();
-
-				//~ var colors = [ color | 0x323232, color - 0x141414 ];
-				var colors = [ color, 0xFFFFFF ];
-			var alphas = [ 100, 100 ];
-			var ratios = [ 0, 0xFF ];
-			//~ var matrix = { a:200, b:0, c:0, d:0, e:200, f:0, g:200, h:200, i:1 };
-			var matrix = new flash.geom.Matrix();
-			matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
-			menu.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-
-
-		//~ menu.graphics.beginFill (color);
-		menu.graphics.drawRect (0, 0, 40, 24);
-		menu.graphics.endFill();
-
-		var tf : TextField = cast menu.getChildByName("tf");
-		var fmt = new TextFormat();
-		fmt.color = DefaultStyle.LABEL_TEXT ;
-		tf.setTextFormat (fmt);
-
-	}
 
 
 	/**
@@ -415,9 +292,5 @@ class Menubar extends Component, implements Dynamic
 
 	}
 
-	static function __init__() {
-		haxegui.Haxegui.register(Menubar,initialize);
-	}
-	static function initialize() {
-	}
+	
 }//Menubar
