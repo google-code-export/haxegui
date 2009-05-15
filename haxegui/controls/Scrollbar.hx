@@ -72,13 +72,10 @@ class ScrollBarUpButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
+		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
-	override public function onMouseClick(e:MouseEvent) : Void
-	{
-		trace("Up clicked on " + parent.toString());
-		//~ parent.dispatchEvent(new Event(Event.CHANGE));
-	}
+
 
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBarUpButton,initialize);
@@ -93,10 +90,20 @@ class ScrollBarUpButton extends AbstractButton
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(20, 20, Math.PI, 0, 0);
-				this.graphics.lineStyle (2, color - 0x141414, 1, flash.display.LineScaleMode.NONE );
+				this.graphics.lineStyle (1, this.color - 0x141414, 1, flash.display.LineScaleMode.NONE );
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 20, 20 );
 				this.graphics.endFill ();
+
+				var colors = [ this.color - 0x141414,  this.color - 0x333333 ];
+				matrix.createGradientBox(10, 110, Math.PI, 5, 5);
+				this.graphics.lineStyle (1, this.color - 0x333333 );
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
+				this.graphics.moveTo( 7.5, 12.5);
+				this.graphics.lineTo(  10,  7.5);
+				this.graphics.lineTo(12.5, 12.5);
+				this.graphics.endFill ();
+								
 			"
 		);
 	}
@@ -116,13 +123,10 @@ class ScrollBarDownButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
+		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
-	override public function onMouseClick(e:MouseEvent) : Void
-	{
-		trace("Up clicked on " + parent.toString());
-		//~ parent.dispatchEvent(new Event(Event.CHANGE));
-	}
+
 
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBarDownButton,initialize);
@@ -137,10 +141,20 @@ class ScrollBarDownButton extends AbstractButton
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(20, 20, Math.PI, 0, 0);
-				this.graphics.lineStyle (2, color - 0x141414, 1, flash.display.LineScaleMode.NONE );
+				this.graphics.lineStyle (1, this.color - 0x141414, 1, flash.display.LineScaleMode.NONE );
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 20, 20 );
 				this.graphics.endFill ();
+
+				var colors = [ this.color - 0x141414,  this.color - 0x333333 ];
+				matrix.createGradientBox(10, 110, Math.PI, 5, 5);
+				this.graphics.lineStyle (1, this.color - 0x333333 );
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
+				this.graphics.moveTo(7.5,7.5);
+				this.graphics.lineTo(10, 12.5);
+				this.graphics.lineTo(12.5, 7.5);
+				this.graphics.endFill ();
+				
 			"
 		);
 	}
@@ -239,6 +253,7 @@ class Scrollbar extends haxegui.controls.Component
 		up.redraw({color: this.color});
 
 		down = new ScrollBarDownButton(this, "down" );
+		down.init({color: this.color});
 		down.move(0, box.height - 20);
 		down.redraw({color: this.color});
 
@@ -277,7 +292,7 @@ class Scrollbar extends haxegui.controls.Component
 
 		//~ up.redraw({color: this.color});
 		//~ down.redraw({color: this.color});
-		//~ handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
+		handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
 
 		dirty = true;
 
