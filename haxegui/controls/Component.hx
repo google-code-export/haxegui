@@ -255,8 +255,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		// relatedObject is one gaining focus
 		// target is object losing focus
 		// currentTarget == this
-		trace("------" + Std.string(this) + " __focusHandler");
-		trace("__focusHandler " + (if(e.currentTarget != this) " ******* " + Std.string(e.currentTarget) else "") + " :  from " + Std.string(e.target) + " to " + Std.string(e.relatedObject));
+// 		trace("------" + Std.string(this) + " __focusHandler");
+// 		trace("__focusHandler " + (if(e.currentTarget != this) " ******* " + Std.string(e.currentTarget) else "") + " :  from " + Std.string(e.target) + " to " + Std.string(e.relatedObject));
 		var o = e.target;
 
 		// first event is fired to the target about to lose focus
