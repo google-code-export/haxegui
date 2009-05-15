@@ -72,10 +72,9 @@ class ScrollBarUpButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
-	public function onMouseClick(e:MouseEvent) : Void
+	override public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Up clicked on " + parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CHANGE));
@@ -117,10 +116,9 @@ class ScrollBarDownButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
-	public function onMouseClick(e:MouseEvent) : Void
+	override public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Up clicked on " + parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CHANGE));
@@ -282,8 +280,8 @@ class Scrollbar extends haxegui.controls.Component
 		//~ handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
 
 		dirty = true;
-		
-		
+
+
 		frame.graphics.clear();
 		frame.graphics.lineStyle (1, color - 0x141414);
 		frame.graphics.beginFill (color - 0x0A0A0A);

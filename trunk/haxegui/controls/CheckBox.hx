@@ -59,9 +59,6 @@ class CheckBox extends Component, implements Dynamic
 		label = new Label();
 
 		super(parent, name, x, y);
-
-		// Listeners
-		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
 	override public function init(opts:Dynamic=null)
@@ -85,7 +82,7 @@ class CheckBox extends Component, implements Dynamic
 
 	}
 
-	public function onMouseClick(e:MouseEvent) {
+	override public function onMouseClick(e:MouseEvent) {
 		if(disabled) return;
 		checked = !checked;
 	}

@@ -42,10 +42,9 @@ class CloseButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		this.addEventListener(MouseEvent.CLICK, onMouseClick, false, 0, true);
 	}
 
-	public function onMouseClick(e:MouseEvent) : Void
+	override public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Close clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
@@ -96,7 +95,6 @@ class MinimizeButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
 	override public function init(opts:Dynamic=null)
@@ -123,7 +121,7 @@ class MinimizeButton extends AbstractButton
 			";
 	}
 
-	public function onMouseClick(e:MouseEvent) : Void
+	override public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Minimized clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
@@ -151,10 +149,9 @@ class MaximizeButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
-	public function onMouseClick(e:MouseEvent) : Void
+	override public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Maximize clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
