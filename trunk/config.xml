@@ -144,7 +144,7 @@ This hscript does the following:
 
     <haxegui:Window name="Draggable Image Window" x="200" y="30" width="320" height="240" sizeable="true" color="0xC5A466" >
 		<haxegui:ScrollPane name="ScrollPane1" x="10" y="20" height="220">
-			<haxegui:Image name="Image" src="haxegui/assets/118980243_2491ef8407_o.jpg" x="0" y="0" />
+			<haxegui:Image name="Image" src="assets/118980243_2491ef8407_o.jpg" x="0" y="0" />
 		</haxegui:ScrollPane>
 		<haxegui:controls:Label name="Label" x="20" y="30" ></haxegui:controls:Label>
     </haxegui:Window>

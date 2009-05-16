@@ -118,34 +118,16 @@ class Toolbar extends Component, implements Dynamic
 		e.updateAfterEvent();
 	}
 
-
-	override public function redraw(opts:Dynamic=null)
-	{
-		//~ var width = parent.getChildByName ("frame").width;
-		//~ var width = untyped parent.box.width;
-
-		this.graphics.clear ();
-		//~ this.graphics.lineStyle (2, color - 0x1A1A1A);
-
-		//~ var colors = [ color - 0x141414, color | 0x323232 ];
-		var colors = [ color - 0x141414, color | 0x323232, color - 0x141414 ];
-		var alphas = [ 100, 100, 100 ];
-		var ratios = [ 0, 0x80, 0xFF ];
-		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(box.width, box.height, Math.PI/2, 0, 0);
-		this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-
-		//~ this.graphics.beginFill (color);
-		//~ this.graphics.drawRect (0, 0, width, 24);
-		this.graphics.drawRect (0, 0, box.width, box.height);
-		this.graphics.endFill ();
-
-	}
-
 	static function __init__() {
 		haxegui.Haxegui.register(Toolbar,initialize);
 	}
+
 	static function initialize() {
+		StyleManager.setDefaultScript(
+			Toolbar,
+			"redraw",
+			haxe.Resource.getString("DefaultToolbarStyle")
+		);
 	}
+	
 }

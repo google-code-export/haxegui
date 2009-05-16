@@ -95,7 +95,7 @@ class MenuBarItem extends AbstractButton
 				"redraw",
 				"
 					this.graphics.clear();
-					var colors = [ this.color - 0x141414, color | 0x323232 ];
+					var colors = [ this.color - 0x141414, this.color | 0x323232 ];
 					var alphas = [ 100, 100 ];
 					var ratios = [ 0, 0xFF ];
 					var matrix = new flash.geom.Matrix();
@@ -111,7 +111,7 @@ class MenuBarItem extends AbstractButton
 				"mouseOut",
 				"
 					this.graphics.clear();
-					var colors = [ this.color - 0x141414, color | 0x323232 ];
+					var colors = [ this.color - 0x141414, this.color | 0x323232 ];
 					var alphas = [ 100, 100 ];
 					var ratios = [ 0, 0xFF ];
 					var matrix = new flash.geom.Matrix();

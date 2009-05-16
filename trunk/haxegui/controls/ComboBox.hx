@@ -165,7 +165,7 @@ class ComboBox extends Component, implements Dynamic
 				if(this.input != null)
 					{
 					this.input.redraw();
-					this.input.tf.setTextFormat( DefaultStyle.getTextFormat( 8, this.disabled ? DefaultStyle.BACKGROUND - 0x141414 : DefaultStyle.INPUT_TEXT ));
+					//~ this.input.tf.setTextFormat( DefaultStyle.getTextFormat( 8, this.disabled ? DefaultStyle.BACKGROUND - 0x141414 : DefaultStyle.INPUT_TEXT ));
 					}
 
 				if(this.background!=null)

@@ -70,6 +70,7 @@ import haxegui.controls.RadioButton;
 import haxegui.controls.CheckBox;
 import haxegui.controls.ComboBox;
 import haxegui.controls.UiList;
+import haxegui.controls.Expander;
 
 import feffects.Tween;
 
@@ -163,11 +164,11 @@ class App extends Sprite, implements haxe.rtti.Infos
 
 
 			//
-			var scrollPane = new ScrollPane(window, "ScrollPane", 10, 84);
-			scrollPane.init();
+			var scrollpane = new ScrollPane(window, "scrollpane", 10, 84);
+			scrollpane.init();
 
 			//
-			var container = new Container (scrollPane, "Container");
+			var container = new Container (scrollpane, "Container");
 			container.init();
 
 			//
@@ -243,7 +244,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 			cmbbox.move(20,180);
 
 			//
-			cmbbox = new ComboBox(container, "ComboBox2");
+			cmbbox = new ComboBox(container, "ComboBox3");
 			cmbbox.init({disabled:true});
 			cmbbox.move(20,210);
 
@@ -294,8 +295,34 @@ class App extends Sprite, implements haxe.rtti.Infos
 			list.data = [ "1", "2", "3", "4" ];
 			list.init();
 
+		
+			//
+			var expand = new Expander(container, "Expander1", 550, 40);
+			expand.init({ width: 200, height: 140 });
 
-			window.dispatchEvent(new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
+			//
+			var scrollpane2 = new ScrollPane(expand, "ScrollPane2", 0, 20);
+			scrollpane2.init();
+			
+			list = new UiList(scrollpane2, "List3", 0, -20);
+			list.removeChild( list.header );
+			for(i in 1...11) list.data.push("List Item "+i);
+			list.init({width: 300});
+
+
+			//
+			window = WindowManager.getInstance().addWindow (scrollpane.content);
+			window.init({name:"Nested Window", x:20, y:340, width: 200, height: 160, color: 0xA5DE33 });
+
+			//
+			container = new Container (window, "Container");
+			container.init({ x: 10, y: 20, width: 190, height: 150, color: 0xA5DE33 });
+			
+
+
+
+			//~ window.dispatchEvent(new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
+
 
 
 		/////////////////////////////////////////////////////////////////////////

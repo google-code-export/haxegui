@@ -94,36 +94,23 @@ class PopupMenuItem extends AbstractButton, implements Dynamic
 
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
-		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
 		this.filters = [shadow];
-		//~ this.filters = [shadow, bevel];
 
 		// register with focus manager
 		//~ FocusManager.getInstance().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
-
-		action_redraw =
-			"
-			this.graphics.clear();
-			var colors = [ color | 0x323232, color - 0x141414 ];
-			var alphas = [ 100, 100 ];
-			var ratios = [ 0, 0xFF ];
-			var matrix = new flash.geom.Matrix();
-			matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
-            this.graphics.lineStyle(1);
-			this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ color, color - 0x202020 ], alphas, ratios, matrix);
-			this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-			this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
-			this.graphics.endFill ();
-			";
-
-		redraw();
 
 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(PopupMenuItem,initialize);
 	}
+	
 	static function initialize() {
+		StyleManager.setDefaultScript(
+			PopupMenuItem,
+			"redraw",
+			haxe.Resource.getString("DefaultPopupMenuItemStyle")
+		);
 	}
 }
 
@@ -182,46 +169,14 @@ class PopupMenu extends AbstractButton
 		items = 1 + Math.round( Math.random()*19 );
 
 
-		for (i in 0...items)
+		for (i in 1...items)
 		{
-		var item = new PopupMenuItem(this, "Item" + (i+1) );
-		item.graphics.lineStyle(1, color - 0x323232);
-		item.graphics.beginFill (color, .8);
-		item.graphics.drawRect (0, 0, 100, 20);
-		item.graphics.endFill ();
+		var item = new PopupMenuItem(this, "Item" + i, 0, 20*(i-1) );
 
-			var myPath = new Array<Dynamic>();
-
-			myPath.push ({x:0, y: Math.exp(2)*2*i});
-			//~ myPath.push ({x:0});
-			//~ myPath.push ({x:2*i*Math.cos(i)});
-			//~ myPath.push ({x:0});
-			//~ item.alpha = 0;
-			var p = new flash.geom.Point(px,py);
-			p = localToGlobal( p );
-
-			//~ item.alpha = 0;
-			//~ item.x = 100 + (flash.Lib.current.stage.stageWidth - p.x);
-			//~ item.y = -p.y  - 20*i ;
-			item.y = 20*i ;
-
-
-		item.buttonMode = true;
 
 		item.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
 		item.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
 		item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
-
-		var tf = new TextField ();
-		tf.name = "tf";
-		tf.text = item.name;
-		tf.selectable = false;
-		tf.width = 40;
-		tf.height = 20;
-		tf.embedFonts = true;
-		tf.mouseEnabled = false;
-		tf.setTextFormat (DefaultStyle.getTextFormat());
-		item.addChild (tf);
 
 		// add the drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, 0x000000, 0.8,4, 4,0.65,BitmapFilterQuality.HIGH,false,false,false);
@@ -310,7 +265,7 @@ class PopupMenu extends AbstractButton
 
 	function onItemRollOver (e:MouseEvent)
 	{
-		if(!this.contains(e.target)) return;
+		if(!this.contains(e.target) || e.target == this ) return;
 		_item = this.getChildIndex(e.target);
 		onChanged();
 
@@ -321,6 +276,7 @@ class PopupMenu extends AbstractButton
 	public function onItemRollOut (e:MouseEvent)
 	{
 
+		if(!this.contains(e.target) || e.target == this ) return;
 
 		var self = this;
 		if(self==null || self.stage==null) return;

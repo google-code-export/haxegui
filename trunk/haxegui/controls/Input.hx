@@ -64,6 +64,8 @@ class Input extends Component
 	    tf.name = "tf";
 	    tf.type = flash.text.TextFieldType.INPUT;
 	    tf.text = name;
+	    tf.text = Opts.optString(opts, "text", tf.text);
+
 	    tf.background = false;
 	    tf.border = false;
 	    tf.height = box.height - 3;
