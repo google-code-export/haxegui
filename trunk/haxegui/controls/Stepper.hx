@@ -82,9 +82,12 @@ class Stepper extends Component, implements Dynamic
 		max = Opts.optFloat(opts,"max", max);
 
 		back = new Sprite();
-		back.graphics.lineStyle(1, color - 0x141414);
+		back.graphics.lineStyle (1, this.color - 0x141414, 1, true,
+								 flash.display.LineScaleMode.NONE,
+								 flash.display.CapsStyle.ROUND,
+								 flash.display.JointStyle.ROUND);
 		back.graphics.beginFill(DefaultStyle.INPUT_BACK);
-		back.graphics.drawRoundRectComplex (0, 0, box.width - 10, box.height, 4, 0, 4, 0 );
+		back.graphics.drawRoundRect(0, -1, box.width, box.height, 8, 8);
 		back.graphics.endFill();
 		this.addChild(back);
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
@@ -110,7 +113,6 @@ class Stepper extends Component, implements Dynamic
 		up.action_redraw =
 			"
 				this.graphics.clear();
-				this.graphics.lineStyle(1, this.color - 0x323232 );
 				this.graphics.beginFill(this.color);
 				this.graphics.drawRoundRectComplex(0, 0, 10, 10, 0, 4, 0, 0);
 				this.graphics.endFill();
@@ -127,7 +129,6 @@ class Stepper extends Component, implements Dynamic
 		down.action_redraw =
 			"
 				this.graphics.clear();
-				this.graphics.lineStyle(1, this.color - 0x323232 );
 				this.graphics.beginFill(this.color);
 				this.graphics.drawRoundRectComplex(0, 0, 10, 10, 0, 0, 0, 4);
 				this.graphics.endFill();
@@ -138,7 +139,7 @@ class Stepper extends Component, implements Dynamic
 		down.move( box.width - 10, 9 );
 
 		// add the drop-shadow filter
-		shadow = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
+		shadow = new DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
 
 		up.filters = [shadow];
 		down.filters = [shadow];

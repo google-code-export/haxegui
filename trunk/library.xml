@@ -34,6 +34,6 @@
 			<textfield id="warning" width="200" height="50" size="10" font="_mono" color="#ffffff" text="Please do not run this file directly."/>
 
 		</library>
-		<place id="warning" name="output" depth="10"/>
+		<place id="warning" name="warning" x="400" y="200" depth="10"/>
 	</frame>
 </movie>

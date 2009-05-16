@@ -35,6 +35,10 @@
 	# Input Style
 	-resource assets/styles/Default/InputStyle.hscript@DefaultInputStyle
 	
+	# Slider Style
+	-resource assets/styles/Default/SliderStyle.hscript@DefaultSliderStyle
+	-resource assets/styles/Default/SliderHandleStyle.hscript@DefaultSliderHandleStyle
+	
 	# ListItem Style
 	-resource assets/styles/Default/ListItemStyle.hscript@DefaultListItemStyle
 

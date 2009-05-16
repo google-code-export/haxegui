@@ -40,7 +40,7 @@ import haxegui.events.DragEvent;
 
 class Slider extends Component, implements Dynamic
 {
-	public var handle : Component;
+	public var handle : AbstractButton;
 	//~ public var value : Float;
 	public var max : Float;
 
@@ -58,42 +58,15 @@ class Slider extends Component, implements Dynamic
 
 		super.init(opts);
 
-		this.graphics.clear();
-		this.graphics.lineStyle(4, color - 0x323232);
-		this.graphics.moveTo(0, box.height/2);
-		this.graphics.lineTo(box.width, box.height/2);
+		redraw();
 
-		this.graphics.lineStyle(1, color - 0x323232);
-		var s = box.width/20;
-		for(i in 1...20)
-		{
-		this.graphics.moveTo(i*s, 4);
-		this.graphics.lineTo(i*s, box.height-4);
-		}
+		handle = new AbstractButton(this, "handle", 0, 0);
 
-		this.graphics.lineStyle(0,0,0);
-		this.graphics.beginFill(0,0);
-		this.graphics.drawRect(0,0,box.width,box.height);
-		this.graphics.endFill();
+		handle.action_redraw = haxe.Resource.getString("DefaultSliderHandleStyle");
 
 
-		handle = new Component(this, "handle");
-		//~ handle.move(0,4);
-		handle.graphics.lineStyle(2, color - 0x141414);
-
-			var colors = [ color | 0x323232, color - 0x141414 ];
-		var alphas = [ 100, 100 ];
-		var ratios = [ 0, 0xFF ];
-		//~ var matrix = { a:200, b:0, c:0, d:0, e:200, f:0, g:200, h:200, i:1 };
-		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(15, 20, Math.PI/2, 0, 0);
-		handle.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-
-		//~ handle.graphics.beginFill(color);
-		handle.graphics.drawRoundRect(0,0,8,20,4,4);
-		//~ handle.move(0,-15);
-
+		handle.init({color: this.color});
+		
 		// add the drop-shadow filters
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
@@ -164,25 +137,7 @@ class Slider extends Component, implements Dynamic
 //		CursorManager.setCursor(Cursor.ARROW);
 	}
 
-	override public function redraw(opts:Dynamic=null)
-	{
-		color = Opts.optInt(opts,"color",this.color);
-		handle.graphics.clear();
-		handle.graphics.lineStyle(2, color - 0x141414);
 
-		var colors = [ color | 0x323232, color - 0x141414 ];
-		var alphas = [ 100, 100 ];
-		var ratios = [ 0, 0xFF ];
-		//~ var matrix = { a:200, b:0, c:0, d:0, e:200, f:0, g:200, h:200, i:1 };
-		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(15, 20, Math.PI/2, 0, 0);
-		handle.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-
-
-		//~ handle.graphics.beginFill(color);
-		handle.graphics.drawRoundRect(0,0,8,20,4,4);
-		handle.graphics.endFill();
-	}
 
 	function onHandleMouseDown (e:MouseEvent) : Void
 	{
@@ -224,6 +179,12 @@ class Slider extends Component, implements Dynamic
 	static function __init__() {
 		haxegui.Haxegui.register(Slider,initialize);
 	}
+
 	static function initialize() {
+		StyleManager.setDefaultScript(
+			Slider,
+			"redraw",
+			haxe.Resource.getString("DefaultSliderStyle")
+		);
 	}
 }
