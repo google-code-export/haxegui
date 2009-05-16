@@ -28,7 +28,7 @@ import flash.events.Event;
 import flash.events.TextEvent;
 
 import haxegui.controls.Component;
-
+import haxegui.Opts;
 import haxegui.StyleManager;
 
 
@@ -86,5 +86,19 @@ class Input extends Component
 			haxe.Resource.getString("DefaultInputStyle")
 		);
 	}
+	
+	override private function __setDisabled(v:Bool) : Bool {
+		super.__setDisabled(v);
+		if(this.disabled) {
+			mouseEnabled = false;
+			buttonMode = false;
+		}
+		else {
+			mouseEnabled = Opts.optBool(initOpts,"mouseEnabled",true);
+			buttonMode = Opts.optBool(initOpts,"buttonMode",true);
+		}
+		return v;
+	}
+	
 }
 

@@ -79,7 +79,7 @@ class Toolbar extends Component, implements Dynamic
 
 		handle = new Sprite();
 		handle.name = "handle";
-		handle.graphics.lineStyle(2, color - 0x202020);
+		handle.graphics.lineStyle(1, color - 0x202020);
 		handle.graphics.beginFill(color, .5);
 		handle.graphics.drawRoundRect(4, 8, 8, box.height - 16, 4, 4);
 		handle.graphics.endFill();

@@ -272,9 +272,9 @@ class App extends Sprite, implements haxe.rtti.Infos
 			for(i in 1...4)
 			{
 				var slider = new Slider(container, "Slider"+(4+i));
-				slider.init();
-				slider.move(420+40*i, 270);
-				slider.rotation = -90;
+				slider.init({width: 200});
+				slider.move(400+40*i, 40);
+				slider.rotation = 90;
 			}
 
 			var input = new Input(container, "Input1", 200, 240);
