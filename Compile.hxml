@@ -49,6 +49,9 @@
 	-resource assets/styles/Default/TitleBarMaximizeButtonStyle.hscript@DefaultTitleBarMaximizeButtonStyle
 	-resource assets/styles/Default/TitleBarStyle.hscript@DefaultTitleBarStyle
 
+	# Tabs Style
+	-resource assets/styles/Default/TabStyle.hscript@DefaultTabStyle
+
 	# Scrollbar Style
 	-resource assets/styles/Default/ScrollbarUpButtonStyle.hscript@DefaultScrollbarUpButtonStyle
 	-resource assets/styles/Default/ScrollbarDownButtonStyle.hscript@DefaultScrollbarDownButtonStyle

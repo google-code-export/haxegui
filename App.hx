@@ -54,6 +54,7 @@ import haxegui.XmlDeserializer;
 import haxegui.Console;
 import haxegui.Container;
 import haxegui.ScrollPane;
+import haxegui.TabNavigator;
 import haxegui.Menubar;
 import haxegui.Stats;
 import haxegui.Toolbar;
@@ -308,7 +309,9 @@ class App extends Sprite, implements haxe.rtti.Infos
 			list.removeChild( list.header );
 			for(i in 1...11) list.data.push("List Item "+i);
 			list.init({width: 300});
-
+	
+			var tabnav = new TabNavigator(scrollpane, "TabNavigator1", 770, 40);
+			tabnav.init();
 
 			//
 			window = WindowManager.getInstance().addWindow (scrollpane.content);
