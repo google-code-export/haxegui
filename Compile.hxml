@@ -4,7 +4,6 @@
 -swf9 loader.swf
 -swf-version 9
 -swf-header 960:600:300:3C3C3C
--debug
 
 --next
 -main App.hx
@@ -55,6 +54,15 @@
 	-resource assets/styles/Default/ScrollbarUpButtonStyle.hscript@DefaultScrollbarUpButtonStyle
 	-resource assets/styles/Default/ScrollbarDownButtonStyle.hscript@DefaultScrollbarDownButtonStyle
 	-resource assets/styles/Default/ScrollbarHandleStyle.hscript@DefaultScrollbarHandleStyle
+	
+	# PopupMenu Style
+	-resource assets/styles/Default/PopupMenuItemStyle.hscript@DefaultPopupMenuItemStyle
+	
+	# Toolbar Style
+	-resource assets/styles/Default/ToolbarStyle.hscript@DefaultToolbarStyle
+
+	# Expander Style
+	-resource assets/styles/Default/ExpanderStyle.hscript@DefaultExpanderStyle
 
 ### Output ###
 
