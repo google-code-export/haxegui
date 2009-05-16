@@ -284,7 +284,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	/** Placeholder **/
-	public function onClick(e:MouseEvent) {
+	private function onClick(e:MouseEvent) {
 		trace("Do not use onClick, use onMouseClick");
 		onMouseClick(e);
 	}
@@ -339,6 +339,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 			return true;
 		return cast rv;
 	}
+
 	/**
 	* Dispatched to this object when it is about to lose focus
 	*
