@@ -131,6 +131,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.color = Opts.optInt(opts, "color", this.color);
 		this.alpha = Opts.optFloat(opts, "alpha", this.alpha);
 		this.buttonMode = Opts.optBool(opts, "buttonMode", false);
+		this.visible = Opts.optBool(opts, "visible", true);
 
 		this.initOpts = {};
 		for(f in Reflect.fields(opts)) {

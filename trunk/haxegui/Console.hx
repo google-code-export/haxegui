@@ -67,14 +67,6 @@ class Console extends Window, implements ITraceListener
 	public function new (?parent:DisplayObjectContainer, ?x:Float, ?y:Float)
 	{
 		super (parent, "Console", x, y);
-		output = new TextField();
-		input = new TextField();
-		vert = new Scrollbar(this, "vscrollbar");
-		container = new Container(this, "Container", 10, 20);
-		parser = new hscript.Parser();
-		history = new Array<String>();
-
-		pwd = flash.Lib.current;
 	}
 
 	public override function init(?opts:Dynamic)
@@ -85,7 +77,20 @@ class Console extends Window, implements ITraceListener
 
 		box = new Rectangle (0, 0, 640, 240);
 
+		input = new TextField();
+		
+		container = new Container(this, "Container", 10, 20);
+		container.init();
+		
+		vert = new Scrollbar(container, "vscrollbar");
+		parser = new hscript.Parser();
+		history = new Array<String>();
+
+		pwd = flash.Lib.current;
+
+
 		//
+		output = new TextField();
 		output.name = "output";
 		output.htmlText = "";
 		output.width = box.width - 40;
@@ -116,9 +121,9 @@ class Console extends Window, implements ITraceListener
 		//~ container.box.width -= 20;
 		//~ vert = new Scrollbar(container, "vscrollbar");
 		//~ vert = new Scrollbar(this, "vscrollbar");
-		vert.x = box.width - 20;
-		vert.y = 40;
-		vert.color = color;
+		//~ vert.x = box.width - 20;
+		//~ vert.y = 20;
+		//~ vert.color = color;
 		//~ vert.init(content);
 		vert.init({target : output});
 
@@ -185,7 +190,7 @@ class Console extends Window, implements ITraceListener
 
 		vert.x = box.width - 20;
 		//~ vert.y = 40;
-		//~ vert.box.height = box.height - 40;
+		vert.box.height = box.height - 20;
 		//~ vert.box.width = box.width - 40;
 		//~ vert.onResize(null);
 

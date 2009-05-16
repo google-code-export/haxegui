@@ -30,6 +30,7 @@ import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.display.MovieClip;
 import flash.display.Loader;
+import flash.display.LoaderInfo;
 
 import flash.display.Bitmap;
 
@@ -37,6 +38,7 @@ import flash.events.EventDispatcher;
 import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.MouseEvent;
+import flash.events.KeyboardEvent;
 
 import haxegui.events.MenuEvent;
 
@@ -76,15 +78,8 @@ import haxegui.controls.Expander;
 import feffects.Tween;
 
 
-/*
- * Demo Application
- *
- *
- *
- *
- *
- */
-class App extends Sprite, implements haxe.rtti.Infos
+
+class Main extends Sprite, implements haxe.rtti.Infos
 {
 
 	static var log : haxe.Log;
@@ -119,14 +114,17 @@ class App extends Sprite, implements haxe.rtti.Infos
 		flash.Lib.current.addChild(desktop);
 
 
+
 		// Console to show some debug
 		var console = new Console (flash.Lib.current, 50, 50);
-		console.init({color:0x2E2E2E});
+		console.init({color:0x2E2E2E, visible: false });
 		haxe.Log.clear();
 		setRedirection(console.log);
 
 		trace("<FONT SIZE='24' FACE='_mono'>Hello and welcome.</FONT>");
 		trace("<FONT SIZE='12' FACE='_mono'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+".</FONT>");
+
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e){ if(e.charCode=="`".code) console.visible = !console.visible; });
 
 
 		// Statistics
@@ -138,7 +136,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 		//~ colorpicker.init();
 
 
-
+/*
 		/////////////////////////////////////////////////////////////////////////////
 		// Widget Playground
 		/////////////////////////////////////////////////////////////////////////////
@@ -323,7 +321,7 @@ class App extends Sprite, implements haxe.rtti.Infos
 			
 
 
-
+*/
 			//~ window.dispatchEvent(new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
 
 
@@ -335,6 +333,16 @@ class App extends Sprite, implements haxe.rtti.Infos
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
 		//~ loader.load(new URLRequest("config.xml"));
 
+try {
+    var l = flash.Lib.current.loaderInfo.parameters;
+	trace(Utils.print_r(l));
+	loader.load(new URLRequest(Reflect.field(l, "layout")));
+    //~ for (f in Reflect.fields(l)) {
+        //~ trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
+    //~ }
+} catch (e:Dynamic) {
+    trace(e);
+}
 
 
 		var a = new Array<String>();
@@ -403,4 +411,4 @@ class App extends Sprite, implements haxe.rtti.Infos
 		back.graphics.endFill();
 	}
 
-}//App
+}//Main

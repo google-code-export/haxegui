@@ -79,22 +79,20 @@ class WindowManager extends EventDispatcher
   }
 
 
-  public function addWindow(?parent:Dynamic) {
-    numWindows++;
+  public static function addWindow(?parent:Dynamic) {
+    getInstance().numWindows++;
 
     if(parent==null)
         parent = flash.Lib.current;
 
     var window =  new Window(parent);
-    windows.set(numWindows, window);
+    getInstance().windows.set(getInstance().numWindows, window);
 
     //~ window.addEventListener( ResizeEvent.RESIZE, proxy );
     //~ window.addEventListener( MoveEvent.MOVE, proxy );
     //~ window.addEventListener( DragEvent.DRAG_START, proxy );
     //~ window.addEventListener( DragEvent.DRAG_COMPLETE, proxy );
-
-
-
+    
     return window;
   }
 
