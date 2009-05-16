@@ -103,7 +103,8 @@ class Slider extends Component, implements Dynamic
 	public function onMouseWheel(e:MouseEvent)
 	{
 		//trace(e);
-		handle.x += e.delta * 5;
+		//~ handle.x += e.delta * 5;
+		handle.x += e.delta * 5 * ((rotation > 0) ? -1 : 1);
 		dispatchEvent(new Event(Event.CHANGE));
 	}
 

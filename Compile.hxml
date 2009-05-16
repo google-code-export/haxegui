@@ -8,8 +8,7 @@
 --next
 -main App.hx
 -cp ./
--cp ./controls
-
+-cp ./haxegui
 #-lib TweenerHX
 -lib feffects
 -lib hscript

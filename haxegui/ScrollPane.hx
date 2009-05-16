@@ -64,6 +64,7 @@ class ScrollPane extends Component, implements Dynamic {
 		if(Std.is(parent, Component))
 			color = (cast parent).color;
 		//~ box = untyped parent.box.clone();
+		box = new Rectangle(0, 0, 140, 100);
 
 		super.init(opts);
 
@@ -75,8 +76,8 @@ class ScrollPane extends Component, implements Dynamic {
 		content.cacheAsBitmap = true;
 		this.addChild(content);
 
-		vert = new Scrollbar(this, "vscrollbar", box.width - 20, 0, false);
-		vert.x = box.width - 20;
+		vert = new Scrollbar(this, "vscrollbar", this.box.width - 20, 0, false);
+		vert.x = this.box.width - 20;
 		vert.y = 0;
 		vert.name = "vscrollbar";
 		vert.color = color;
