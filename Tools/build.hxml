@@ -1,0 +1,5 @@
+-main StyleCompiler
+-neko stylecompiler.n
+-cmd nekotools boot stylecompiler.n
+#-cmd wine nekotools boot stylecompiler.n
+-cmd rm stylecompiler.n
