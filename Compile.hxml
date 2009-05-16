@@ -6,7 +6,7 @@
 -swf-header 960:600:300:3C3C3C
 
 --next
--main App.hx
+-main Main.hx
 -cp ./
 -cp ./haxegui
 #-lib TweenerHX
