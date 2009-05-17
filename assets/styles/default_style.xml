@@ -84,6 +84,22 @@
 		</events>
 	</haxegui:TabNavigator>
 
+	<haxegui:Window>
+		<events>
+			<script type="text/hscript" action="losingFocus">
+			<![CDATA[
+				if(this.isModal()) return false;
+				return true;
+			]]>
+			</script>
+			<script type="text/hscript" action="focusIn">
+			<![CDATA[
+				WindowManager.toFront(this);
+			]]>
+			</script>
+		</events>
+	</haxegui:Window>
+
 	<haxegui:WindowFrame>
 		<events>
 			<script type="text/hscript" action="redraw">
@@ -594,11 +610,6 @@
 			</script>
 		</events>
 	</haxegui:controls:ComboBoxBackground>
-
-	<haxegui:controls:WindowFrame>
-		<events>
-		</events>
-	</haxegui:controls:WindowFrame>
 
 	<haxegui:controls:ScrollBarHandle>
 		<events>
