@@ -98,7 +98,7 @@ class ColorPicker extends Window
 		box = new Rectangle (0, 0, 400, 280);
 
 		//
-		var menubar = new Menubar (this, "Menubar", 10,20);
+		var menubar = new MenuBar (this, "MenuBar", 10,20);
 		menubar.init ();
 
 		//
@@ -210,9 +210,9 @@ class ColorPicker extends Window
 		//~ }
 
 
-		if( this.getChildByName("Menubar")!=null )
+		if( this.getChildByName("MenuBar")!=null )
 		{
-		var menubar = untyped this.getChildByName("Menubar");
+		var menubar = untyped this.getChildByName("MenuBar");
 		menubar.onResize(e);
 		//~ menubar.dispatchEvent(e.clone());
 		}

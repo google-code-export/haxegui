@@ -82,16 +82,8 @@ class ListItem extends AbstractButton, implements Dynamic
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(ListItem,initialize);
+		haxegui.Haxegui.register(ListItem);
 	}
-
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			ListItem,
-			"redraw",
-			haxe.Resource.getString("DefaultListItemStyle")
-		);
-	}	
 }
 
 
@@ -233,8 +225,8 @@ class UiList extends Component
 		header.graphics.lineTo(box.width - 10, 8 +(sortReverse ? 5 : 0) );
 		header.graphics.lineTo(box.width - 15, sortReverse ? 8 : 13);
 		header.graphics.endFill ();
-		
-	
+
+
 	}
 
 	override public function redraw(opts:Dynamic=null)
@@ -296,9 +288,7 @@ class UiList extends Component
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(UiList,initialize);
-	}
-	static function initialize() {
+		haxegui.Haxegui.register(UiList);
 	}
 
 }

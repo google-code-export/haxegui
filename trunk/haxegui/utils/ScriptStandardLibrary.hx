@@ -180,14 +180,14 @@ class ScriptStandardLibrary
 		interp.variables.set("DragManager", haxegui.DragManager);
 		interp.variables.set("FocusManager", haxegui.FocusManager);
 		interp.variables.set("Image", haxegui.Image);
-		interp.variables.set("Menubar", haxegui.Menubar);
+		interp.variables.set("MenuBar", haxegui.MenuBar);
 		interp.variables.set("MouseManager", haxegui.MouseManager);
 		interp.variables.set("Opts", haxegui.Opts);
 		interp.variables.set("PopupMenu", haxegui.PopupMenu);
 		interp.variables.set("ScrollPane", haxegui.ScrollPane);
 		interp.variables.set("Stats", haxegui.Stats);
 		interp.variables.set("StyleManager", StyleManager);
-		interp.variables.set("Toolbar", haxegui.Toolbar);
+		interp.variables.set("ToolBar", haxegui.ToolBar);
 		interp.variables.set("Utils", haxegui.Utils);
 		interp.variables.set("Window", haxegui.Window);
 		interp.variables.set("WindowManager", haxegui.WindowManager);
@@ -212,7 +212,7 @@ class ScriptStandardLibrary
 				Input				: haxegui.controls.Input,
 				Label				: haxegui.controls.Label,
 				RadioButton			: haxegui.controls.RadioButton,
-				Scrollbar			: haxegui.controls.Scrollbar,
+				ScrollBar			: haxegui.controls.ScrollBar,
 				Slider				: haxegui.controls.Slider,
 				Stepper				: haxegui.controls.Stepper,
 				TitleBar			: haxegui.controls.TitleBar,

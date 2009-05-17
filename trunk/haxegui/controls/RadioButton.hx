@@ -37,6 +37,7 @@ import flash.text.TextFormat;
 import haxegui.CursorManager;
 import haxegui.FocusManager;
 import haxegui.Opts;
+import haxegui.ScriptManager;
 import haxegui.StyleManager;
 import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
@@ -44,7 +45,6 @@ import haxegui.events.MoveEvent;
 
 class RadioButton extends AbstractButton, implements Dynamic
 {
-
 	//~ public var group : Array<RadioButton>
 	public var selected(default, default) : Bool;
 	public var label : Label;
@@ -114,18 +114,14 @@ class RadioButton extends AbstractButton, implements Dynamic
 		redraw();
 	}
 
-
-
-
 	override public function redraw (opts:Dynamic = null):Void
 	{
-		StyleManager.exec(this,"redraw",
+		ScriptManager.exec(this,"redraw",
 			{
 				color: Opts.optInt(opts, "color", color),
 				selected: Opts.optBool(opts, "selected", selected),
 			});
 	}
-
 
 	/**
 	*
@@ -170,18 +166,7 @@ class RadioButton extends AbstractButton, implements Dynamic
 		//~ redraw(color);
 	}
 
-
 	static function __init__() {
-		haxegui.Haxegui.register(RadioButton,initialize);
+		haxegui.Haxegui.register(RadioButton);
 	}
-	static function initialize() {
-		StyleManager.initialize();
-		StyleManager.setDefaultScript(
-			RadioButton,
-			"redraw",
-			haxe.Resource.getString("DefaultRadioButtonStyle")
-		);
-	}
-
-
 }

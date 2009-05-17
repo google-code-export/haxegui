@@ -47,6 +47,7 @@ import flash.net.URLRequest;
 
 import haxegui.WindowManager;
 import haxegui.StyleManager;
+import haxegui.ScriptManager;
 import haxegui.FocusManager;
 import haxegui.LayoutManager;
 import haxegui.CursorManager;
@@ -58,9 +59,9 @@ import haxegui.Console;
 import haxegui.Container;
 import haxegui.ScrollPane;
 import haxegui.TabNavigator;
-import haxegui.Menubar;
+import haxegui.MenuBar;
 import haxegui.Stats;
-import haxegui.Toolbar;
+import haxegui.ToolBar;
 import haxegui.ColorPicker;
 import haxegui.Utils;
 
@@ -146,11 +147,11 @@ class Main extends Sprite, implements haxe.rtti.Infos
 			window.init({name:"Widget Playground", x:120, y:10});
 
 			//
-			var menubar =  new Menubar (window, "Menubar", 10, 20);
+			var menubar =  new MenuBar (window, "MenuBar", 10, 20);
 			menubar.init();
 
 			//
-			var toolbar =  new Toolbar (window, "Toolbar", 10, 44);
+			var toolbar =  new ToolBar (window, "ToolBar", 10, 44);
 			toolbar.init();
 
 			//
@@ -345,7 +346,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 
 		var a = new Array<String>();
-		var keys : Iterator<String> = untyped StyleManager.defaultActions.keys();
+		var keys : Iterator<String> = untyped ScriptManager.defaultActions.keys();
 		for(k in keys)
 			a.push( k.split('.').slice(-2,-1).join('.') + "." + k.split('.').pop() );
 		a.sort(function(a,b) { if(a==b) return 0; if(a < b) return -1; return 1;});

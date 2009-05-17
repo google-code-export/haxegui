@@ -41,7 +41,8 @@ class Haxegui {
 	public static function init() {
 		for(o in initializers) {
 			trace("Initializing " + Type.getClassName(o.c));
-			o.f();
+			if(o.f != null)
+				o.f();
 		}
 
 		// Setup mouse and cursor
@@ -52,8 +53,6 @@ class Haxegui {
 		trace("loading style");
 		StyleManager.loadStyles(Xml.parse(haxe.Resource.getString("default_style")));
 		StyleManager.setStyle("default");
-
-
 		trace("complete");
 
 		var t = new haxe.Timer(300);
@@ -73,13 +72,21 @@ class Haxegui {
 	/**
 	* Component registration. Used during the boot process to register
 	* all components.
+	*
+	* @param c Component class
+	* @param f Initialization function called when Haxegui is initialized
 	*/
-	public static function register(c:Class<Dynamic>, f:Void->Void) : Void {
+	public static function register(c:Class<Dynamic>, f:Void->Void=null) : Void {
 		if(initializers == null)
 			initializers = new List();
 		initializers.add({c:c, f:f});
 	}
 
+	/**
+	* Mark a component for redrawing
+	*
+	* @param c Component
+	**/
 	public static function setDirty(c : Component) : Void {
 		dirtyList.add(c);
 	}

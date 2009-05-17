@@ -22,19 +22,19 @@ package haxegui.controls;
 import flash.geom.Rectangle;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-import flash.text.TextField;
-import flash.text.TextFormat;
 import flash.events.Event;
 import flash.events.TextEvent;
-
-import haxegui.controls.Component;
-import haxegui.Opts;
-import haxegui.StyleManager;
-
-
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
+import flash.text.TextField;
+import flash.text.TextFormat;
+
+import haxegui.Opts;
+import haxegui.StyleManager;
+import haxegui.controls.Component;
+
+
 
 class Input extends Component
 {
@@ -50,7 +50,7 @@ class Input extends Component
 	override public function init(?opts:Dynamic) : Void
 	{
 	    this.box = new Rectangle(0, 0, 140, 20);
-	    
+
 	    super.init(opts);
 
 	    //~ buttonMode = false;
@@ -77,18 +77,6 @@ class Input extends Component
 
 	}
 
-	static function __init__() {
-		haxegui.Haxegui.register(Input,initialize);
-	}
-	
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			Input,
-			"redraw",
-			haxe.Resource.getString("DefaultInputStyle")
-		);
-	}
-	
 	override private function __setDisabled(v:Bool) : Bool {
 		super.__setDisabled(v);
 		if(this.disabled) {
@@ -101,6 +89,10 @@ class Input extends Component
 		}
 		return v;
 	}
-	
+
+	static function __init__() {
+		haxegui.Haxegui.register(Input);
+	}
+
 }
 

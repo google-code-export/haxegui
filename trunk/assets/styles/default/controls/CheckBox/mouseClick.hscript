@@ -1,0 +1,2 @@
+if(this.disabled) return;
+this.checked = !this.checked;

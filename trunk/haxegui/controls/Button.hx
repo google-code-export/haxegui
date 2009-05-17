@@ -53,7 +53,6 @@ import haxegui.events.MoveEvent;
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
-*
 */
 class Button extends AbstractButton, implements Dynamic
 {
@@ -71,25 +70,10 @@ class Button extends AbstractButton, implements Dynamic
 		label.text = Opts.optString(opts, "label", name);
 		label.init();
 		this.addChild(label);
-
-
-	}
-
-	public function onFocusChanged (e:FocusEvent)
-	{
-		//~ redraw ();
-		//dirty = true;
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(Button,initialize);
-	}
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			Button,
-			"redraw",
-			haxe.Resource.getString("DefaultButtonStyle")
-		);
+		haxegui.Haxegui.register(Button);
 	}
 }
 

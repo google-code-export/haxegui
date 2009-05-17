@@ -34,9 +34,9 @@ import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 
+import haxegui.ScriptManager;
 import haxegui.StyleManager;
 import haxegui.controls.Component;
-import haxegui.controls.Scrollbar;
 
 
 class Container extends Component, implements IContainer, implements Dynamic
@@ -112,7 +112,7 @@ class Container extends Component, implements IContainer, implements Dynamic
 
 	override public function redraw (opts:Dynamic = null):Void
 	{
-		StyleManager.exec(this,"redraw",
+		ScriptManager.exec(this,"redraw",
 			{
 				color: Opts.optInt(opts, "color", color),
 			});
@@ -120,20 +120,6 @@ class Container extends Component, implements IContainer, implements Dynamic
 
 
 	static function __init__() {
-		haxegui.Haxegui.register(Container,initialize);
+		haxegui.Haxegui.register(Container);
 	}
-	static function initialize() {
-		StyleManager.initialize();
-		StyleManager.setDefaultScript(
-			Container,
-			"redraw",
-			"
-				this.graphics.clear();
-				this.graphics.beginFill (color);
-				this.graphics.drawRect (0, 0, this.box.width, this.box.height );
-				this.graphics.endFill ();
-			"
-		);
-	}
-
 }

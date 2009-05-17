@@ -47,7 +47,7 @@ TODO:
 				}
 			</script>
 		</events>
-		<haxegui:Menubar name="menubar" width="512" x="10" y="20">
+		<haxegui:MenuBar name="menubar" width="512" x="10" y="20">
 			<haxegui:Menu type="Object" name="menu1">
 				<Item type="String">a</Item>
 				<Item type="String">b</Item>
@@ -58,7 +58,7 @@ TODO:
 				<Item type="String">b2</Item>
 				<Item type="String">c2</Item>
 			</haxegui:Menu>
-		</haxegui:Menubar>
+		</haxegui:MenuBar>
 		<haxegui:ScrollPane name="ScrollPane1" x="10" y="44" >
 			<haxegui:Container name="Container1" width="512" height="512" >
 				<haxegui:controls:Label x="30" y="8" >This window and it's content are dynamically generated from xml,
@@ -281,7 +281,7 @@ This hscript does the following:
 
 -->
     <haxegui:Window name="Step Sequencer" x="100" y="40" width="460" height="400" sizeable="true" color="0x666666">
-	<haxegui:Menubar name="menubar" width="512" x="10" y="20" />
+	<haxegui:MenuBar name="menubar" width="512" x="10" y="20" />
 	<haxegui:ScrollPane name="ScrollPane1" x="10" y="44" >
 		<haxegui:Container name="Container1" width="512" height="512" color="0x666666" >
 
@@ -573,18 +573,18 @@ This hscript does the following:
 
     <!-- Transcriber -->
     <haxegui:Window name="Transcriber" x="300" y="40" width="500" height="400" sizeable="true" >
-	<haxegui:Menubar name="Menubar" width="400" x="10" y="20" />
-	<haxegui:Toolbar name="Toolbar" width="400" x="10" y="44" >
+	<haxegui:MenuBar name="MenuBar" width="400" x="10" y="20" />
+	<haxegui:ToolBar name="ToolBar" width="400" x="10" y="44" >
 	    <haxegui:controls:Button name="Run" label="Run" x="30" y="4" />
 	    <haxegui:controls:Button name="Clear" label="Clear" x="130" y="4" />
-	</haxegui:Toolbar>
+	</haxegui:ToolBar>
 
 	<haxegui:ScrollPane name="ScrollPane1" x="10" y="84" >
 		    <script type="text/hscript">
 
 
 			var window = root.getChildByName("Transcriber");
-			var toolbar = window.getChildByName("Toolbar");
+			var toolbar = window.getChildByName("ToolBar");
 			var scrollpane = window.getChildByName("ScrollPane1");
 
 			var tf = new flash.text.TextField();
@@ -732,7 +732,7 @@ This hscript does the following:
 
 
     <haxegui:Window name="Introspector" x="200" y="40" width="720" height="300" sizeable="true" >
-	<haxegui:Menubar name="Menubar" width="512" x="10" y="20" />
+	<haxegui:MenuBar name="MenuBar" width="512" x="10" y="20" />
 	    <haxegui:ScrollPane name="ScrollPane1" x="10" y="24" >
 		<haxegui:Container name="Container1" width="512" height="512" >
 	    </haxegui:ScrollPane>

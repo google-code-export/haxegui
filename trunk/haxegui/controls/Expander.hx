@@ -63,13 +63,13 @@ class Expander extends AbstractButton, implements Dynamic
 		box = new Rectangle(0, 0, 15, 15);
 		color = 0;
 		expanded = true;
-		
+
 		expanded = Opts.optBool(opts, "expanded", expanded);
-		
+
 		label = new Label(this, "label", 20, 0);
 		//~ label.text = Opts.optString(opts, "label", name);
 		label.init({innerData: name});
-		
+
 
 		super.init(opts);
 
@@ -121,31 +121,7 @@ class Expander extends AbstractButton, implements Dynamic
 	////           Initialization                 ////
 	//////////////////////////////////////////////////
 	static function __init__() {
-		haxegui.Haxegui.register(Expander,initialize);
+		haxegui.Haxegui.register(Expander);
 	}
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			Expander,
-			"redraw",
-			haxe.Resource.getString("DefaultExpanderStyle")
-		);
 
-		StyleManager.setDefaultScript(
-			Expander,
-			"mouseOver",
-			"
-				if(!this.disabled) {
-					CursorManager.setCursor(Cursor.HAND);
-				}
-			"
-		);
-
-		StyleManager.setDefaultScript(
-			Expander,
-			"mouseOut",
-			"
-				CursorManager.setCursor(Cursor.ARROW);
-			"
-		);
-	}
 }

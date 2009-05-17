@@ -59,7 +59,7 @@ import haxegui.CursorManager;
 import haxegui.StyleManager;
 
 
-class Toolbar extends Component, implements Dynamic
+class ToolBar extends Component, implements Dynamic
 {
 
 	public var handle : Sprite;
@@ -119,15 +119,6 @@ class Toolbar extends Component, implements Dynamic
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(Toolbar,initialize);
+		haxegui.Haxegui.register(ToolBar);
 	}
-
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			Toolbar,
-			"redraw",
-			haxe.Resource.getString("DefaultToolbarStyle")
-		);
-	}
-	
 }
