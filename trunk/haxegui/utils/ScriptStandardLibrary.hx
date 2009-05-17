@@ -191,7 +191,7 @@ class ScriptStandardLibrary
 		interp.variables.set("Utils", haxegui.Utils);
 		interp.variables.set("Window", haxegui.Window);
 		interp.variables.set("WindowManager", haxegui.WindowManager);
-		interp.variables.set("XmlDeserializer", haxegui.XmlDeserializer);
+		interp.variables.set("XmlParser", haxegui.XmlParser);
 		interp.variables.set("ScriptStandardLibrary", haxegui.utils.ScriptStandardLibrary);
 
 		interp.variables.set("events",

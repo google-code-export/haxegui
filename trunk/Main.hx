@@ -54,7 +54,6 @@ import haxegui.CursorManager;
 import haxegui.MouseManager;
 import haxegui.PopupMenu;
 
-import haxegui.XmlDeserializer;
 import haxegui.Console;
 import haxegui.Container;
 import haxegui.ScrollPane;
@@ -365,7 +364,6 @@ class Main extends Sprite, implements haxe.rtti.Infos
 	{
 		trace(here.methodName);
 		var str = e.target.data;
-// 		haxegui.XmlParser.parse(str);
 		LayoutManager.loadLayouts(Xml.parse(str));
 		for(k in LayoutManager.layouts.keys())
 			trace("Loaded layout : " + k);
