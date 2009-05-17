@@ -1,0 +1,22 @@
+this.graphics.clear();
+
+if(this.expanded)
+{
+
+	this.graphics.lineStyle(1);
+	this.graphics.beginFill( this.color );
+	this.graphics.moveTo(0,0);
+	this.graphics.lineTo(15, 0);
+	this.graphics.lineTo(7.5, 15);
+	this.graphics.endFill();
+
+}
+else
+{
+	this.graphics.lineStyle(1);
+	this.graphics.beginFill( this.color );
+	this.graphics.moveTo(0, 15);
+	this.graphics.lineTo(15, 7.5);
+	this.graphics.lineTo(0,0);
+	this.graphics.endFill();
+}
