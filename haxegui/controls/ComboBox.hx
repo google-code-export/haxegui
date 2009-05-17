@@ -51,17 +51,7 @@ import haxegui.events.MoveEvent;
 class ComboBoxDropButton extends AbstractButton {
 
 	static function __init__() {
-		haxegui.Haxegui.register(ComboBoxDropButton,initialize);
-	}
-	
-
-
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			ComboBoxDropButton,
-			"redraw",
-			haxe.Resource.getString("DefaultComboBoxDropButton")
-		);
+		haxegui.Haxegui.register(ComboBoxDropButton);
 	}
 }
 
@@ -77,23 +67,15 @@ class ComboBoxDropButton extends AbstractButton {
 class ComboBoxBackground extends Component
 {
 	static function __init__() {
-		haxegui.Haxegui.register(ComboBoxBackground,initialize);
+		haxegui.Haxegui.register(ComboBoxBackground);
 	}
-	
+
 	override public function init(opts:Dynamic=null)
 	{
 		color = DefaultStyle.BACKGROUND;
 
 		super.init(opts);
-	
-	}
-		
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			ComboBoxBackground,
-			"redraw",
-			haxe.Resource.getString("DefaultComboBoxBackground")
-		);
+
 	}
 }
 
@@ -112,7 +94,7 @@ class ComboBox extends Component, implements Dynamic
 	public var input : Input;
 
 	private var editable : Bool;
-	
+
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		background = new ComboBoxBackground(this, "background");
@@ -130,7 +112,7 @@ class ComboBox extends Component, implements Dynamic
 		super.init(opts);
 
 		editable = Opts.optBool(opts, "editable", editable);
-		
+
 		if(editable)
 		{
 			if(input != null && input.parent == this)
@@ -152,29 +134,6 @@ class ComboBox extends Component, implements Dynamic
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(ComboBox,initialize);
+		haxegui.Haxegui.register(ComboBox);
 	}
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			ComboBox,
-			"redraw",
-			"
-				if(this.color==0 || Math.isNaN(this.color))
-					this.color = DefaultStyle.BACKGROUND;
-
-				if(this.input != null)
-					{
-					this.input.redraw();
-					//~ this.input.tf.setTextFormat( DefaultStyle.getTextFormat( 8, this.disabled ? DefaultStyle.BACKGROUND - 0x141414 : DefaultStyle.INPUT_TEXT ));
-					}
-
-				if(this.background!=null)
-					this.background.redraw();
-				
-				this.dropButton.redraw();
-				this.setChildIndex(this.dropButton, this.numChildren - 1);
-			"
-		);
-	}
-
 }

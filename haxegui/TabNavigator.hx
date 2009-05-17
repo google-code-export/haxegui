@@ -84,7 +84,7 @@ class Tab extends AbstractButton
 		//~ redraw();
 		(cast this.parent).activeTab = this.parent.getChildIndex(this);
 		parent.dispatchEvent(new Event(Event.CHANGE));
-		
+
 	}
 
 
@@ -110,15 +110,8 @@ class Tab extends AbstractButton
 	////           Initialization                 ////
 	//////////////////////////////////////////////////
 	static function __init__() {
-		haxegui.Haxegui.register(Tab,initialize);
+		haxegui.Haxegui.register(Tab);
 	}
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			Tab,
-			"redraw",
-			haxe.Resource.getString("DefaultTabStyle")
-		);
-	}	
 }
 
 
@@ -136,7 +129,7 @@ class Tab extends AbstractButton
 */
 class TabNavigator extends Component
 {
-	
+
 	//~ public var tabs : Array<Tab> ;
 	//~ public var numTabs : Int;
 	public var activeTab : Int;
@@ -181,7 +174,7 @@ class TabNavigator extends Component
 
 
 		addEventListener(Event.CHANGE, onChanged, false, 0, true);
-		
+
 		//~ if(this.parent!=null)
 		//~ parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		//~ parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
@@ -201,26 +194,10 @@ class TabNavigator extends Component
 				child.redraw();
 				}
 			}
-			
+
 	}
-	
 
 	static function __init__() {
-		haxegui.Haxegui.register(TabNavigator,initialize);
+		haxegui.Haxegui.register(TabNavigator);
 	}
-	
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			TabNavigator,
-			"redraw",
-			"
-				this.graphics.clear();
-				this.graphics.lineStyle(1, this.color - 0x141414 );
-				this.graphics.beginFill( this.color );
-				this.graphics.drawRect( 0, 24, this.box.width, this.box.height );
-				this.graphics.endFill();
-			"
-		);
-	}
-
 }

@@ -103,6 +103,10 @@ class XmlParser {
 	function parseNode(node:Xml, ?parent:Dynamic) : Void {
 		var className = node.nodeName.split(":").join(".");
 
+		// ignore <events> children, processed below.
+		if(className == "events")
+			return;
+
 		if(!isStyle) {
 			if(Std.is(parent, List))
 			{
@@ -176,7 +180,7 @@ class XmlParser {
 			if(comp != null && comp.hasAction("onLoaded")) {
 				trace("Executing onLoaded method for component "+ comp.name);
 				try {
-					StyleManager.exec(comp, "onLoaded", {});
+					ScriptManager.exec(comp, "onLoaded", {});
 				} catch(e:Dynamic) {
 					trace("Error executing onLoaded method for component "+ comp.name);
 				}
@@ -216,9 +220,9 @@ class XmlParser {
 		}
 
 		if(isStyle)
-			StyleManager.setDefaultScript(resolvedClass,action,code);
+			ScriptManager.setDefaultScript(resolvedClass,action,code);
 		else
-			StyleManager.setInstanceScript(inst,action,code);
+			ScriptManager.setInstanceScript(inst,action,code);
 	}
 
 }

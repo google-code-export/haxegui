@@ -31,8 +31,8 @@ import flash.geom.Rectangle;
 
 import haxegui.CursorManager;
 import haxegui.Opts;
-import haxegui.StyleManager;
 import haxegui.FocusManager;
+import haxegui.StyleManager;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
@@ -66,7 +66,7 @@ class Slider extends Component, implements Dynamic
 
 
 		handle.init({color: this.color});
-		
+
 		// add the drop-shadow filters
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
 		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
@@ -178,14 +178,7 @@ class Slider extends Component, implements Dynamic
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(Slider,initialize);
+		haxegui.Haxegui.register(Slider);
 	}
 
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			Slider,
-			"redraw",
-			haxe.Resource.getString("DefaultSliderStyle")
-		);
-	}
 }

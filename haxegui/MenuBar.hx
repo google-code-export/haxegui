@@ -86,76 +86,7 @@ class MenuBarItem extends AbstractButton
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(MenuBarItem,initialize);
-	}
-	
-	static function initialize() {
-			StyleManager.setDefaultScript(
-				MenuBarItem,
-				"redraw",
-				"
-					this.graphics.clear();
-					var colors = [ this.color - 0x141414, this.color | 0x323232 ];
-					var alphas = [ 100, 100 ];
-					var ratios = [ 0, 0xFF ];
-					var matrix = new flash.geom.Matrix();
-					matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
-					this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-					this.graphics.drawRect (0, 0, 40, 24);
-					this.graphics.endFill();					
-				"
-			);
-
-			StyleManager.setDefaultScript(
-				MenuBarItem,
-				"mouseOut",
-				"
-					this.graphics.clear();
-					var colors = [ this.color - 0x141414, this.color | 0x323232 ];
-					var alphas = [ 100, 100 ];
-					var ratios = [ 0, 0xFF ];
-					var matrix = new flash.geom.Matrix();
-					matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
-					this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-					this.graphics.drawRect (0, 0, 40, 24);
-					this.graphics.endFill();					
-				"
-			);
-			
-			StyleManager.setDefaultScript(
-				MenuBarItem,
-				"mouseOver",
-				"
-					this.graphics.clear();
-
-					var colors = [ this.color, 0xFFFFFF ];
-					var alphas = [ 100, 100 ];
-					var ratios = [ 0, 0xFF ];
-					var matrix = new flash.geom.Matrix();
-					matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
-					this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-					this.graphics.drawRect (0, 0, 40, 24);
-					this.graphics.endFill();					
-				"
-			);
-			
-			StyleManager.setDefaultScript(
-				MenuBarItem,
-				"mouseDown",
-				"
-					this.graphics.clear();
-
-					var colors = [ this.color, Math.min(0xFFFFFF, this.color - 0x282828) ];
-					var alphas = [ 100, 100 ];
-					var ratios = [ 0, 0xFF ];
-					var matrix = new flash.geom.Matrix();
-					matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
-					this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-					this.graphics.drawRect (0, 0, 40, 24);
-					this.graphics.endFill();					
-				"
-			);			
-
+		haxegui.Haxegui.register(MenuBarItem);
 	}
 }
 
@@ -163,13 +94,13 @@ class MenuBarItem extends AbstractButton
 
 
 /**
-* Menubar Class
+* MenuBar Class
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class Menubar extends Component
+class MenuBar extends Component
 {
 	public var numMenus : Int;
 	private var _menu:Int;
@@ -186,14 +117,14 @@ class Menubar extends Component
 	{
 		if(Std.is(parent, Component))
 			color = untyped parent.color;
-		
+
 		box = new Rectangle(0,0, untyped parent.box.width, 24);
-		
+
 		super.init(opts);
 
 		redraw({box: this.box});
 
-		//this.name = "Menubar";
+		//this.name = "MenuBar";
 		buttonMode = false;
 		tabEnabled = false;
 		focusRect = false;
@@ -202,14 +133,14 @@ class Menubar extends Component
 		_menu = 0;
 		numMenus = 1+Math.round( Math.random() * 4 );
 
-	
+
 		for (i in 0...numMenus)
 		{
 			var menu = new MenuBarItem(this, "Menu"+(i+1), 40*i, 0);
 			menu.init({color: this.color});
-			
+
 			menu.redraw({color: this.color});
-			
+
 			menu.addEventListener (MouseEvent.ROLL_OVER, onMenuRollOver, false, 0, true);
 			menu.addEventListener (MouseEvent.ROLL_OUT, onMenuMouseOut, false, 0, true);
 			menu.addEventListener (MouseEvent.MOUSE_MOVE, onMenuMouseMove, false, 0, true);
@@ -227,32 +158,6 @@ class Menubar extends Component
 
 	}
 
-
-
-	static function __init__() {
-		haxegui.Haxegui.register(Menubar,initialize);
-	}
-	
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			Menubar,
-			"redraw",
-			"
-			this.graphics.clear();
-			var colors = [ this.color - 0x141414, this.color | 0x323232 ];
-			var alphas = [ 100, 100 ];
-			var ratios = [ 0, 0xFF ];
-			var matrix = new flash.geom.Matrix();
-			matrix.createGradientBox(box.width, 24, Math.PI/2, 0, 0);
-			this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-			this.graphics.drawRect (0, 0, this.box.width, this.box.height);	
-			this.graphics.endFill();
-			"
-		);
-	}
-	
-	
-
 	/**
 	*
 	*/
@@ -269,7 +174,7 @@ class Menubar extends Component
 		this.scrollRect = b;
 
 		dirty = true;
-		
+
 		e.updateAfterEvent();
 	}
 
@@ -350,5 +255,8 @@ class Menubar extends Component
 
 	}
 
-	
-}//Menubar
+	static function __init__() {
+		haxegui.Haxegui.register(MenuBar);
+	}
+
+}//MenuBar

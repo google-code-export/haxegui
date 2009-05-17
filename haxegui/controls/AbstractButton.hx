@@ -131,51 +131,7 @@ class AbstractButton extends Component
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(AbstractButton,initialize);
-	}
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			AbstractButton,
-			"mouseOver",
-			"
-				if(this.disabled) return;
-				this.updateColorTween( new feffects.Tween(0, 50, 275, feffects.easing.Expo.easeOut ) );
-				CursorManager.setCursor(this.cursorOver);
-			"
-		);
-		StyleManager.setDefaultScript(
-			AbstractButton,
-			"mouseOut",
-			"
-				if(this.disabled) return;
-				this.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 350, feffects.easing.Linear.easeOut ) );
-				CursorManager.setCursor(Cursor.ARROW);
-			"
-		);
-		StyleManager.setDefaultScript(
-			AbstractButton,
-			"mouseDown",
-			"
-				if(this.disabled) return;
-				this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
-				CursorManager.setCursor(this.cursorPress);
-   			"
-		);
-		StyleManager.setDefaultScript(
-			AbstractButton,
-			"mouseUp",
-			"
-				if(this.disabled) return;
-				//~ this.redraw();
-				if(this.hitTestObject( CursorManager.getInstance()._mc )) {
-					this.updateColorTween( new feffects.Tween(-50, 50, 150, feffects.easing.Linear.easeNone) );
-					CursorManager.setCursor(this.cursorOver);
-				}
-				else {
-					this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
-				}
-   			"
-		);
+		haxegui.Haxegui.register(AbstractButton);
 	}
 }
 

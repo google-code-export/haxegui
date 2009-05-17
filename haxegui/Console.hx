@@ -41,7 +41,7 @@ import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 import haxegui.StyleManager;
 
-import haxegui.controls.Scrollbar;
+import haxegui.controls.ScrollBar;
 
 /**
 *
@@ -58,7 +58,7 @@ class Console extends Window, implements ITraceListener
 	var container : Container;
 	var output : TextField;
 	var input : TextField;
-	var vert : Scrollbar;
+	var vert : ScrollBar;
 
 
 	/**
@@ -78,10 +78,10 @@ class Console extends Window, implements ITraceListener
 		box = new Rectangle (0, 0, 640, 240);
 
 		input = new TextField();
-		
+
 		container = new Container(this, "Container", 10, 20);
 		container.init();
-		
+
 		parser = new hscript.Parser();
 		history = new Array<String>();
 
@@ -118,13 +118,13 @@ class Console extends Window, implements ITraceListener
 		input.addEventListener (KeyboardEvent.KEY_DOWN, onInputKeyDown);
 
 		//~ container.box.width -= 20;
-		//~ vert = new Scrollbar(container, "vscrollbar");
-		//~ vert = new Scrollbar(this, "vscrollbar");
+		//~ vert = new ScrollBar(container, "vscrollbar");
+		//~ vert = new ScrollBar(this, "vscrollbar");
 		//~ vert.x = box.width - 20;
 		//~ vert.y = 20;
 		//~ vert.color = color;
 		//~ vert.init(content);
-		vert = new Scrollbar(container, "vscrollbar");
+		vert = new ScrollBar(container, "vscrollbar");
 		vert.init({target : output, color: this.color});
 
 		//
@@ -180,7 +180,7 @@ class Console extends Window, implements ITraceListener
 
 		e.stopImmediatePropagation ();
 		//~ e.stopPropagation ();
-		
+
 		if(output!=null)
 		{
 			output.width = box.width - 30;
@@ -200,7 +200,7 @@ class Console extends Window, implements ITraceListener
 		//~ vert.box.width = box.width - 40;
 		//~ vert.onResize(null);
 		}
-		
+
 		container.onParentResize(e);
 		}
 
@@ -234,8 +234,8 @@ class Console extends Window, implements ITraceListener
 
 					//~ trace( ret==null ? "\n" : ret );
 				trace(interp.execute(program));
-			} 
-			catch(e : Dynamic) 
+			}
+			catch(e : Dynamic)
 			{
 				trace("ERROR: " + e);
 			}

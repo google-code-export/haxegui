@@ -39,7 +39,7 @@ import haxegui.StyleManager;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
-enum ScrollbarType {
+enum ScrollBarType {
 	VERTICAL;
 	HORIZONTAL;
 }
@@ -61,17 +61,8 @@ class ScrollBarUpButton extends AbstractButton
 		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
-
-
 	static function __init__() {
-		haxegui.Haxegui.register(ScrollBarUpButton,initialize);
-	}
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			ScrollBarUpButton,
-			"redraw",
-			haxe.Resource.getString("DefaultScrollbarUpButtonStyle")
-		);
+		haxegui.Haxegui.register(ScrollBarUpButton);
 	}
 }
 
@@ -92,43 +83,52 @@ class ScrollBarDownButton extends AbstractButton
 		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
-
-
 	static function __init__() {
-		haxegui.Haxegui.register(ScrollBarDownButton,initialize);
+		haxegui.Haxegui.register(ScrollBarDownButton);
 	}
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			ScrollBarDownButton,
-			"redraw",
-			haxe.Resource.getString("DefaultScrollbarDownButtonStyle")
-		);
-	}
-
-
 }
-
 
 /**
 *
-* Scrollbar class
+* ScrollBarHandle Class
 *
-* @author <gershon@goosemoose.com>
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
+class ScrollBarHandle extends AbstractButton
+{
+	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
+		super (parent, name, x, y);
+		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(ScrollBarHandle);
+	}
+}
+
+/**
+*
+* ScrollBar class
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class Scrollbar extends haxegui.controls.Component
+class ScrollBar extends haxegui.controls.Component
 {
-	
+
 	var frame : Component;
-	var handle : AbstractButton;
+	var handle : ScrollBarHandle;
 	var up : ScrollBarUpButton;
 	var down : ScrollBarDownButton;
 	public var scrollee : Dynamic;
 	public var scroll : Float;
 	var horizontal : Bool;
-	
+
 	private var handleMotionTween : Tween;
-	
+
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float, ?horz : Bool)
 	{
 		super(parent, name, x, y);
@@ -165,15 +165,8 @@ class Scrollbar extends haxegui.controls.Component
 		frame.filters = [shadow];
 
 
-
-
-		handle = new AbstractButton(this, "handle", 0, 20);
+		handle = new ScrollBarHandle(this, "handle", 0, 20);
 		handle.init({color: this.color});
-		StyleManager.setInstanceScript(
-			handle,
-			"redraw",
-			haxe.Resource.getString("DefaultScrollbarHandleStyle")
-			);
 		handle.redraw({h : 20, horizontal: this.horizontal });
 
 		shadow = new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, 0.75, BitmapFilterQuality.LOW, false, false, false);
@@ -279,10 +272,10 @@ class Scrollbar extends haxegui.controls.Component
 		if( y > frame.height - handle.height + 20) y = frame.height - handle.height + 20;
 		//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
 		//~ var t = new Tween( handle.y, handle.y - 50, 500, handle, "y", Linear.easeNone );
-		
+
 		if(handleMotionTween!=null)
 			handleMotionTween.stop();
-			
+
 		handleMotionTween = new Tween( handle.y, y, 1000, handle, "y", feffects.easing.Expo.easeOut );
 		var scope = this;
 		handleMotionTween.setTweenHandlers( function ( e ) { scope.adjust(); } );
@@ -333,7 +326,7 @@ class Scrollbar extends haxegui.controls.Component
 				if(handleMotionTween!=null)
 					handleMotionTween.stop();
 
-									
+
 				handleMotionTween = new Tween( handle.y, y, 1500, handle, "y", feffects.easing.Expo.easeOut );
 				var scope = this;
 				handleMotionTween.setTweenHandlers( function ( e ) { scope.adjust(e); } );
@@ -350,7 +343,7 @@ class Scrollbar extends haxegui.controls.Component
 				if(handleMotionTween!=null)
 					handleMotionTween.stop();
 
-						
+
 				handleMotionTween = new Tween( handle.y, y, 500, handle, "y", feffects.easing.Back.easeInOut );
 				var scope = this;
 				handleMotionTween.setTweenHandlers( function ( e ) { scope.adjust(e); } );
@@ -479,11 +472,11 @@ class Scrollbar extends haxegui.controls.Component
 
 
 	static function __init__() {
-		haxegui.Haxegui.register(Scrollbar,initialize);
+		haxegui.Haxegui.register(ScrollBar,initialize);
 	}
 	static function initialize() {
 	}
 
 
 
-}//Scrollbar
+}//ScrollBar

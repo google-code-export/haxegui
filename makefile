@@ -6,7 +6,7 @@ all: compile
 
 compile:
 	swfmill  -v simple library.xml $(TARGET)
-	haxe Compile.hxml 
+	haxe Compile.hxml
 
 
 run:
@@ -16,3 +16,5 @@ run:
 runWin32:
 	wine FlashPlayer.exe main.swf
 
+style:
+	cd assets/styles && stylecompiler default

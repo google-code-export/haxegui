@@ -20,7 +20,7 @@
 package haxegui;
 
 import haxegui.controls.Component;
-import haxegui.controls.Scrollbar;
+import haxegui.controls.ScrollBar;
 
 import flash.geom.Rectangle;
 
@@ -40,8 +40,8 @@ import haxegui.StyleManager;
 class ScrollPane extends Component, implements Dynamic {
 	public var content : Sprite;
 
-	public var vert : Scrollbar;
-	public var horz : Scrollbar;
+	public var vert : ScrollBar;
+	public var horz : ScrollBar;
 
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
@@ -76,14 +76,14 @@ class ScrollPane extends Component, implements Dynamic {
 		content.cacheAsBitmap = true;
 		this.addChild(content);
 
-		vert = new Scrollbar(this, "vscrollbar", this.box.width - 20, 0, false);
+		vert = new ScrollBar(this, "vscrollbar", this.box.width - 20, 0, false);
 		vert.x = this.box.width - 20;
 		vert.y = 0;
 		vert.name = "vscrollbar";
 		vert.color = color;
 		vert.init({target: content});
 
-		horz = new Scrollbar(this, "hscrollbar", null, null, true);
+		horz = new ScrollBar(this, "hscrollbar", null, null, true);
 		//~ horz.y = box.height + 36 ;
 		horz.color = color;
 		horz.init({target: content});

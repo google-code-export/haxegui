@@ -72,12 +72,10 @@ class CheckBox extends AbstractButton, implements Dynamic
 
 	}
 
-
-
-	override public function onMouseClick(e:MouseEvent) {
-		if(disabled) return;
-		checked = !checked;
-	}
+// 	override public function onMouseClick(e:MouseEvent) {
+// 		if(disabled) return;
+// 		checked = !checked;
+// 	}
 
 
 	//////////////////////////////////////////////////
@@ -112,31 +110,6 @@ class CheckBox extends AbstractButton, implements Dynamic
 	////           Initialization                 ////
 	//////////////////////////////////////////////////
 	static function __init__() {
-		haxegui.Haxegui.register(CheckBox,initialize);
-	}
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			CheckBox,
-			"redraw",
-			haxe.Resource.getString("DefaultCheckBoxStyle")
-		);
-
-		StyleManager.setDefaultScript(
-			CheckBox,
-			"mouseOver",
-			"
-				if(!this.disabled) {
-					CursorManager.setCursor(Cursor.HAND);
-				}
-			"
-		);
-
-		StyleManager.setDefaultScript(
-			CheckBox,
-			"mouseOut",
-			"
-				CursorManager.setCursor(Cursor.ARROW);
-			"
-		);
+		haxegui.Haxegui.register(CheckBox);
 	}
 }

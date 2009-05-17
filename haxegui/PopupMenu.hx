@@ -102,16 +102,9 @@ class PopupMenuItem extends AbstractButton, implements Dynamic
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(PopupMenuItem,initialize);
+		haxegui.Haxegui.register(PopupMenuItem);
 	}
-	
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			PopupMenuItem,
-			"redraw",
-			haxe.Resource.getString("DefaultPopupMenuItemStyle")
-		);
-	}
+
 }
 
 
@@ -366,8 +359,7 @@ class PopupMenu extends AbstractButton
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(PopupMenu,initialize);
+		haxegui.Haxegui.register(PopupMenu);
 	}
-	static function initialize() {
-	}
+
 }

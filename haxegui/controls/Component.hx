@@ -33,7 +33,7 @@ import haxegui.events.ResizeEvent;
 import haxegui.FocusManager;
 import haxegui.Haxegui;
 import haxegui.Opts;
-import haxegui.StyleManager;
+import haxegui.ScriptManager;
 
 import feffects.Tween;
 
@@ -155,16 +155,38 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 			this.parent.removeChild(this);
 	}
 
+	/**
+	* Returns true if this component has an action
+	* registered for the action type [name]. If this instance
+	* does not have an override, the default from the style is
+	* checked.
+	*
+	* @param name Action name
+	* @return Bool true if an action exists
+	**/
 	public function hasAction(name:String) {
-		var c = try StyleManager.getInstanceActionObject(this, name) catch(e:Dynamic) null;
+		var c = try ScriptManager.getInstanceActionObject(this, name) catch(e:Dynamic) null;
 		return (c != null);
+	}
+
+	/**
+	* Returns true if this component has an action registered
+	* for the action type [name]. Only returns true if the
+	* script is only for this instance.
+	*
+	* @param name Action name
+	* @return Bool true if an action exists
+	**/
+	public function hasOwnAction(name:String) {
+		return (ScriptManager.getInstanceOwnActionObject(this,name) != null);
 	}
 
 	/**
 	* Excecute redrawing script
 	**/
-	public function redraw(?opts:Dynamic) {
-		StyleManager.exec(this,"redraw", opts);
+	public function redraw(opts:Dynamic=null) {
+// 		trace(this.name + " redraw");
+		ScriptManager.exec(this,"redraw", opts);
 	}
 
 	/**
@@ -316,7 +338,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 // 		trace("onFocusIn currentTarget: " + Std.string(e.currentTarget));
 // 		trace("onFocusIn target: " + Std.string(e.target));
 
-		StyleManager.exec(this, "focusIn", {focusFrom : e.target});
+		ScriptManager.exec(this, "focusIn", {focusFrom : e.target});
 	}
 
 	/**
@@ -332,7 +354,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 // 		trace("onFocusOut target: " + Std.string(e.target));
 		// -- Fired twice : a real mess... we just need one
 		if(e.relatedObject != null)
-			StyleManager.exec(this, "focusOut", {focusTo : e.relatedObject});
+			ScriptManager.exec(this, "focusOut", {focusTo : e.relatedObject});
 	}
 
 	/**
@@ -340,7 +362,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* which will cancel the focus transfer.
 	**/
 	public function onGainingFocus(from : flash.display.InteractiveObject) : Bool {
-		var rv : Dynamic = StyleManager.exec(this,"gainingFocus", {focusFrom : from});
+		var rv : Dynamic = ScriptManager.exec(this,"gainingFocus", {focusFrom : from});
 		if(rv == null)
 			return true;
 		return cast rv;
@@ -352,7 +374,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* @return true to allow change, false to prevent focus change
 	**/
 	public function onLosingFocus(losingTo : flash.display.InteractiveObject) : Bool {
-		var rv : Dynamic = StyleManager.exec(this,"losingFocus", {focusTo : losingTo});
+		var rv : Dynamic = ScriptManager.exec(this,"losingFocus", {focusTo : losingTo});
 		if(rv == null)
 			return true;
 		return cast rv;
@@ -361,32 +383,33 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** onRollOver Event **/
 	public function onRollOver(e:MouseEvent)
 	{
-		StyleManager.exec(this,"mouseOver", {event : e});
+		ScriptManager.exec(this,"mouseOver", {event : e});
 	}
 
 	/** onRollOut Event **/
 	public function onRollOut(e:MouseEvent) : Void
 	{
-		StyleManager.exec(this,"mouseOut", {event : e});
+		ScriptManager.exec(this,"mouseOut", {event : e});
 	}
 
 	/** Mouse click **/
 	public function onMouseClick(e:MouseEvent) : Void
 	{
-		StyleManager.exec(this,"mouseClick", {event : e});
+		trace("onMouseClick " + this.name + " " + hasOwnAction("mouseClick"));
+		ScriptManager.exec(this,"mouseClick", {event : e});
 	}
 
 	public function onMouseDown(e:MouseEvent) : Void
 	{
 		FocusManager.getInstance().setFocus(this);
-		StyleManager.exec(this,"mouseDown", {event : e});
+		ScriptManager.exec(this,"mouseDown", {event : e});
 	}
 
 	/**
 	*/
 	public function onMouseUp(e:MouseEvent) : Void
 	{
-		StyleManager.exec(this,"mouseUp", {event : e});
+		ScriptManager.exec(this,"mouseUp", {event : e});
 	}
 
 	public function onKeyDown(e:KeyboardEvent)
@@ -405,71 +428,71 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** The script that redraws the Component **/
 	public var action_redraw(__getAction_redraw,__setAction_redraw) : String;
 		function __getAction_redraw() {
-			return try StyleManager.getInstanceActionObject(this, "redraw").code
+			return try ScriptManager.getInstanceActionObject(this, "redraw").code
 			catch(e:Dynamic) null;
 		}
 		function __setAction_redraw(v:String) : String {
-			return StyleManager.setInstanceScript(this, "redraw", v);
+			return ScriptManager.setInstanceScript(this, "redraw", v);
 		}
 
 	/** The script that is executed when the mouse click event occurs. **/
 	public var action_mouseClick(__getAction_mouseClick,__setAction_mouseClick) : String;
 		function __getAction_mouseClick() {
-			return try StyleManager.getInstanceActionObject(this, "mouseClick").code
+			return try ScriptManager.getInstanceActionObject(this, "mouseClick").code
 			catch(e:Dynamic) null;
 		}
 		function __setAction_mouseClick(v:String) : String {
-			return StyleManager.setInstanceScript(this, "mouseClick", v);
+			return ScriptManager.setInstanceScript(this, "mouseClick", v);
 		}
 
 	/** The script that is executed when the mouse over event occurs. **/
 	public var action_mouseOver(__getAction_mouseOver,__setAction_mouseOver) : String;
 		function __getAction_mouseOver() {
-			return try StyleManager.getInstanceActionObject(this, "mouseOver").code
+			return try ScriptManager.getInstanceActionObject(this, "mouseOver").code
 			catch(e:Dynamic) null;
 		}
 		function __setAction_mouseOver(v:String) : String {
-			return StyleManager.setInstanceScript(this, "mouseOver", v);
+			return ScriptManager.setInstanceScript(this, "mouseOver", v);
 		}
 
 	/** The script that is executed when the mouse out event occurs. **/
 	public var action_mouseOut(__getAction_mouseOut,__setAction_mouseOut) : String;
 		function __getAction_mouseOut() {
-			return try StyleManager.getInstanceActionObject(this, "mouseOut").code
+			return try ScriptManager.getInstanceActionObject(this, "mouseOut").code
 			catch(e:Dynamic) null;
 		}
 		function __setAction_mouseOut(v:String) : String {
-			return StyleManager.setInstanceScript(this, "mouseOut", v);
+			return ScriptManager.setInstanceScript(this, "mouseOut", v);
 		}
 
 	/** The script that is executed when the mouse down event occurs. **/
 	public var action_mouseDown(__getAction_mouseDown,__setAction_mouseDown) : String;
 		function __getAction_mouseDown() {
-			return try StyleManager.getInstanceActionObject(this, "mouseDown").code
+			return try ScriptManager.getInstanceActionObject(this, "mouseDown").code
 			catch(e:Dynamic) null;
 		}
 		function __setAction_mouseDown(v:String) : String {
-			return StyleManager.setInstanceScript(this, "mouseDown", v);
+			return ScriptManager.setInstanceScript(this, "mouseDown", v);
 		}
 
 	/** The script that is executed when the mouse up event occurs. **/
 	public var action_mouseUp(__getAction_mouseUp,__setAction_mouseUp) : String;
 		function __getAction_mouseUp() {
-			return try StyleManager.getInstanceActionObject(this, "mouseUp").code
+			return try ScriptManager.getInstanceActionObject(this, "mouseUp").code
 			catch(e:Dynamic) null;
 		}
 		function __setAction_mouseUp(v:String) : String {
-			return StyleManager.setInstanceScript(this, "mouseUp", v);
+			return ScriptManager.setInstanceScript(this, "mouseUp", v);
 		}
 
 	/** The script that is executed when the Component is validated **/
 	public var action_validate(__getAction_validate,__setAction_validate) : String;
 		function __getAction_validate() {
-			return try StyleManager.getInstanceActionObject(this, "validate").code
+			return try ScriptManager.getInstanceActionObject(this, "validate").code
 			catch(e:Dynamic) null;
 		}
 		function __setAction_validate(v:String) : String {
-			return StyleManager.setInstanceScript(this, "validate", v);
+			return ScriptManager.setInstanceScript(this, "validate", v);
 		}
 
 	//////////////////////////////////////////////////
@@ -478,21 +501,21 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** The script that is executed when the Component is gaining focus, which must return false to cancel the action, or true to approve. It is passed the one var [focusFrom] **/
 	public var action_gainingFocus(__getAction_gainingFocus,__setAction_gainingFocus) : String;
 		function __getAction_gainingFocus() {
-			return try StyleManager.getInstanceActionObject(this, "gainingFocus").code
+			return try ScriptManager.getInstanceActionObject(this, "gainingFocus").code
 			catch(e:Dynamic) null;
 		}
 		function __setAction_gainingFocus(v:String) : String {
-			return StyleManager.setInstanceScript(this, "gainingFocus", v);
+			return ScriptManager.setInstanceScript(this, "gainingFocus", v);
 		}
 
 	/** The script that is executed when the Component is losingFocus, which must return false to cancel the action, or true to approve. It is passed the one var [focusTo] **/
 	public var action_losingFocus(__getAction_losingFocus,__setAction_losingFocus) : String;
 		function __getAction_losingFocus() {
-			return try StyleManager.getInstanceActionObject(this, "losingFocus").code
+			return try ScriptManager.getInstanceActionObject(this, "losingFocus").code
 			catch(e:Dynamic) null;
 		}
 		function __setAction_losingFocus(v:String) : String {
-			return StyleManager.setInstanceScript(this, "losingFocus", v);
+			return ScriptManager.setInstanceScript(this, "losingFocus", v);
 		}
 
 	/**
@@ -505,20 +528,20 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	**/
 	public var action_focusIn(__getAction_focusIn,__setAction_focusIn) : String;
 		function __getAction_focusIn() {
-			return try StyleManager.getInstanceActionObject(this, "focusIn").code
+			return try ScriptManager.getInstanceActionObject(this, "focusIn").code
 			catch(e:Dynamic) null;
 		}
 		function __setAction_focusIn(v:String) : String {
-			return StyleManager.setInstanceScript(this, "focusIn", v);
+			return ScriptManager.setInstanceScript(this, "focusIn", v);
 		}
 
 	public var action_focusOut(__getAction_focusOut,__setAction_focusOut) : String;
 		function __getAction_focusOut() {
-			return try StyleManager.getInstanceActionObject(this, "focusOut").code
+			return try ScriptManager.getInstanceActionObject(this, "focusOut").code
 			catch(e:Dynamic) null;
 		}
 		function __setAction_focusOut(v:String) : String {
-			return StyleManager.setInstanceScript(this, "focusOut", v);
+			return ScriptManager.setInstanceScript(this, "focusOut", v);
 		}
 
 

@@ -27,6 +27,7 @@ import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilterQuality;
 import haxegui.CursorManager;
 import haxegui.Opts;
+import haxegui.ScriptManager;
 import haxegui.StyleManager;
 
 
@@ -50,14 +51,7 @@ class CloseButton extends AbstractButton
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(CloseButton,initialize);
-	}
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			CloseButton,
-			"redraw",
-			haxe.Resource.getString("DefaultTitleBarCloseButtonStyle")
-		);
+		haxegui.Haxegui.register(CloseButton);
 	}
 }
 
@@ -85,17 +79,8 @@ class MinimizeButton extends AbstractButton
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(MinimizeButton,initialize);
+		haxegui.Haxegui.register(MinimizeButton);
 	}
-
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			MinimizeButton,
-			"redraw",
-			haxe.Resource.getString("DefaultTitleBarMinimizeButtonStyle")
-		);
-	}
-
 }
 
 
@@ -122,15 +107,7 @@ class MaximizeButton extends AbstractButton
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(MaximizeButton,initialize);
-	}
-
-	static function initialize() {
-		StyleManager.setDefaultScript(
-			MaximizeButton,
-			"redraw",
-			haxe.Resource.getString("DefaultTitleBarMaximizeButtonStyle")
-		);
+		haxegui.Haxegui.register(MaximizeButton);
 	}
 }
 
@@ -228,7 +205,7 @@ class TitleBar extends Component, implements Dynamic
 
 		title.setTextFormat (DefaultStyle.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
 
-		StyleManager.exec(this,"redraw",
+		ScriptManager.exec(this,"redraw",
 			{
 				width : w,
 				color: Opts.optInt(opts, "color", color),
@@ -252,9 +229,7 @@ class TitleBar extends Component, implements Dynamic
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(TitleBar,initialize);
-	}
-	static function initialize() {
+		haxegui.Haxegui.register(TitleBar);
 	}
 
 }
