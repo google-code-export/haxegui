@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<haxegui:Layout name="DemoLayout">
-<![CDATA[
-TODO:
-* Menu and items
-* Radio groups
-* HScript scope's
-]]>
+<haxegui:Layout name="Example2">
 
     <String name="hello">Hello World</String>/>
     <Float name="aNumber">3.45</Float>
@@ -140,5 +134,166 @@ This hscript does the following:
 
 		</script>
 
+
+
+	<!--
+    <haxegui:Window name="Align Test Window" x="100" y="100" width="512" height="512" sizeable="false"  >
+		<haxegui:Container name="Container" x="10" y="20" >
+
+			<haxegui:controls:RadioButton name="Top" x="230" y="10" />
+			<haxegui:controls:Stepper name="topMargin" x="230" y="50" />
+
+			<haxegui:controls:RadioButton name="Left" x="10" y="210" />
+			<haxegui:controls:Stepper name="leftMargin" x="10" y="250" />
+
+			<haxegui:controls:RadioButton name="Right" x="430" y="210" />
+			<haxegui:controls:Stepper name="rightMargin" x="430" y="250" />
+
+			<haxegui:controls:RadioButton name="Bottom" x="230" y="410" />
+			<haxegui:controls:Stepper name="bottomMargin" x="230" y="450" />
+
+		    <haxegui:controls:Component name="outer" >
+			<haxegui:controls:Component name="inner" />
+		    </haxegui:controls:Component>
+
+		</haxegui:Container>
+	</haxegui:Window>
+
+
+
+			<script type="text/hscript">
+
+			var win = root.getChildByName("Align Test Window");
+			var c = win.getChildByName("Container");
+
+			var o = c.getChildAt(c.numChildren-1);
+			o.graphics.lineStyle(2, StyleManager.BACKGROUND - 0x141414 );
+			o.graphics.beginFill(0xffffff);
+			o.graphics.drawRect(0,0,300,300);
+			o.graphics.endFill();
+			o.move( (win.width - 300 ) / 2 - 10, (win.height - 300 ) / 2 - 20);
+
+
+			o = o.getChildAt(0);
+			o.graphics.lineStyle(2,0);
+			o.graphics.beginFill(0xff0000);
+			o.graphics.drawRect(0,0,100,100);
+			o.graphics.endFill();
+			o.move(100,100);
+
+
+			function align(e)
+			{
+			trace(e.target.name);
+				if(e.target.name=="Left")
+				    o.x = 0;
+
+				if(e.target.name=="Right")
+				    o.x = o.parent.width - o.width;
+
+				if(e.target.name=="Top")
+				    o.y = 0;
+
+				if(e.target.name=="Bottom")
+				    o.y = o.parent.height - o.height;
+
+			}
+
+			c.getChildByName("Left").addEventListener(MouseEvent.MOUSE_DOWN, align);
+			c.getChildByName("Right").addEventListener(MouseEvent.MOUSE_DOWN, align);
+			c.getChildByName("Top").addEventListener(MouseEvent.MOUSE_DOWN, align);
+			c.getChildByName("Bottom").addEventListener(MouseEvent.MOUSE_DOWN, align);
+
+
+			</script>
+
+
+-->
+
+
+
+
+<!--
+    <haxegui:Window name="Tweening" x="120" y="140" width="400" height="300" sizeable="true" >
+	    <haxegui:ScrollPane name="ScrollPane1" x="10" y="20" >
+		<haxegui:Container name="Container1" width="400" height="300" color="0xffffff" >
+			<haxegui:controls:Component name="tweened" />
+			<haxegui:controls:Component name="framed" />
+			
+			<script type="text/hscript">
+			
+			    var window = root.getChildByName("Tweening");
+			    var scrollpane = window.getChildByName("ScrollPane1");
+			    var container = scrollpane.content.getChildByName("Container1");
+
+			    
+			    var tweened = container.getChildByName("tweened");
+
+			    tweened.graphics.lineStyle(2, 0);
+			    tweened.graphics.beginFill(0xff0000);
+			    tweened.graphics.drawCircle(20,20,20);
+			    tweened.graphics.endFill();
+			    
+			    tweened.move(180,130);
+			    
+			    var timer = new haxe.Timer(2000);
+			    timer.run = function() 
+			    { 
+			    var t = new feffects.Tween( tweened.x, Std.random(container.box.width - 40), 2000, tweened, "x", feffects.easing.Linear.easeInOut );
+			    var t2 = new feffects.Tween( tweened.y, Std.random(container.box.height - 40), 2000, tweened, "y", feffects.easing.Linear.easeInOut );
+			    t.start(); 
+			    t2.start(); 
+			    }
+			    
+
+
+			    var framed = container.getChildByName("framed");
+			    
+			    framed.graphics.lineStyle(2, 0);
+			    framed.graphics.beginFill(0xffff00);
+			    framed.graphics.drawCircle(20,20,20);
+			    framed.graphics.endFill();
+			    framed.move(20,20);
+			    framed.vx = 1;
+			    framed.vy = 1;
+			    framed.addEventListener(flash.events.Event.ENTER_FRAME,
+			    function(e)
+				{
+
+				    if( 0 > framed.x || framed.x > container.box.width - 40 ) 
+					{ 
+					    framed.vx *= -1; 
+					    framed.x += framed.vx;
+					}
+
+				    if( 0 > framed.y || framed.y > container.box.height - 40  ) 
+					{ 
+					    framed.vy *= -1; 
+					    framed.y += framed.vy;
+					}
+				    
+				    
+				    framed.x += framed.vx;
+				    framed.y += framed.vy;
+				}
+				);
+				
+			    trace("Added onEnterFrame to " + framed);
+			    
+			</script>
+		</haxegui:Container>
+	    </haxegui:ScrollPane>
+    </haxegui:Window>
+
+
+
+
+    <haxegui:Window name="Introspector" x="200" y="40" width="720" height="300" sizeable="true" >
+	<haxegui:Menubar name="Menubar" width="512" x="10" y="20" />
+	    <haxegui:ScrollPane name="ScrollPane1" x="10" y="24" >
+		<haxegui:Container name="Container1" width="512" height="512" >
+	    </haxegui:ScrollPane>
+    </haxegui:Window>
+-->    
     
 </haxegui:Layout>

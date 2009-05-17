@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<haxegui:Layout name="Example3">
+
+
+    <haxegui:Window name="Draggable Image Window" x="200" y="30" width="320" height="240" sizeable="true" color="0xC5A466" >
+		<haxegui:ScrollPane name="ScrollPane1" x="10" y="20" height="220">
+			<haxegui:Image name="Image" src="assets/118980243_2491ef8407_o.jpg" x="0" y="0" />
+		</haxegui:ScrollPane>
+		<haxegui:controls:Label name="Label" x="20" y="30" ></haxegui:controls:Label>
+    </haxegui:Window>
+
+<![CDATA[
+This hscript does the following:
+* Make image draggable & Send changes to scrollbars.
+]]>
+    <script type="text/hscript">
+
+	var window = root.getChildByName("Draggable Image Window");
+	var scrollpane = window.getChildByName("ScrollPane1");
+	var label = window.getChildByName("Label");
+	var image = scrollpane.content.getChildByName("Image");
+
+
+	var x=0;
+	var y=0;
+
+	function onRollOver(e)
+	    {
+	    CursorManager.setCursor (Cursor.HAND);
+	    }
+
+
+	function onMouseDown(e)
+	    {
+	    x = e.localX;
+	    y = e.localY;
+
+	    CursorManager.setCursor (Cursor.DRAG);
+	    }
+
+	function onMouseUp(e)
+	    {
+	    CursorManager.setCursor (Cursor.ARROW);
+	    label.getChildByName("tf").text = "";
+
+	    }
+
+	function onMouseMove(e)
+	    {
+		if (e.buttonDown)
+		{
+		var vert = scrollpane.vert.handle;
+		vert.y -= (e.localY - y) / 50*Math.exp(1);
+		scrollpane.vert.adjust();
+
+		var horz = scrollpane.horz.handle;
+		horz.y -= (e.localX - x) / 50*Math.exp(1);
+		scrollpane.horz.adjust();
+
+		label.getChildByName("tf").text = Std.string(scrollpane.content.scrollRect) ;
+		label.getChildByName("tf").setTextFormat(DefaultStyle.getTextFormat());
+
+
+		}
+	    }
+
+	image.addEventListener(flash.events.MouseEvent.MOUSE_OVER, onRollOver);
+	image.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onMouseDown);
+	image.addEventListener(flash.events.MouseEvent.MOUSE_UP, onMouseUp);
+	image.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, onMouseMove);
+
+	trace("MouseEvent added to "+image);
+    </script>
+    
+    
+</haxegui:Layout>
