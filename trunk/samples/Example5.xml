@@ -6,26 +6,26 @@
 
 		<haxegui:controls:Input name="Input" x="10" y="16" width="150" />
 	    
-		<haxegui:controls:Button name="7" label="7" x="10" y="50" width="30" />
-		<haxegui:controls:Button name="8" label="8" x="48" y="50" width="30" />
-		<haxegui:controls:Button name="9" label="9" x="86" y="50" width="30" />
+		<haxegui:controls:Button name="seven" label="7" x="10" y="50" width="30" />
+		<haxegui:controls:Button name="eight" label="8" x="48" y="50" width="30" />
+		<haxegui:controls:Button name="nine" label="9" x="86" y="50" width="30" />
 
-		<haxegui:controls:Button name="4" label="4" x="10" y="88" width="30" />
-		<haxegui:controls:Button name="5" label="5" x="48" y="88" width="30" />
-		<haxegui:controls:Button name="6" label="6" x="86" y="88" width="30" />
+		<haxegui:controls:Button name="four" label="4" x="10" y="88" width="30" />
+		<haxegui:controls:Button name="five" label="5" x="48" y="88" width="30" />
+		<haxegui:controls:Button name="six" label="6" x="86" y="88" width="30" />
 
-		<haxegui:controls:Button name="1" label="1" x="10" y="126" width="30" />
-		<haxegui:controls:Button name="2" label="2" x="48" y="126" width="30" />
-		<haxegui:controls:Button name="3" label="3" x="86" y="126" width="30" />
+		<haxegui:controls:Button name="one" label="1" x="10" y="126" width="30" />
+		<haxegui:controls:Button name="two" label="2" x="48" y="126" width="30" />
+		<haxegui:controls:Button name="three" label="3" x="86" y="126" width="30" />
 
-		<haxegui:controls:Button name="0" label="0" x="10" y="164" width="30" />
-		<haxegui:controls:Button name="." label="." x="48" y="164" width="30" />
-		<haxegui:controls:Button name="=" label="=" x="86" y="164" width="30" />
+		<haxegui:controls:Button name="zero" label="0" x="10" y="164" width="30" />
+		<haxegui:controls:Button name="dot" label="." x="48" y="164" width="30" />
+		<haxegui:controls:Button name="equals" label="=" x="86" y="164" width="30" />
 
-		<haxegui:controls:Button name="*" label="*" x="126" y="50" width="30" />
-		<haxegui:controls:Button name="/" label="/" x="126" y="88" width="30" />
-		<haxegui:controls:Button name="+" label="+" x="126" y="126" width="30" />
-		<haxegui:controls:Button name="-" label="-" x="126" y="164" width="30" />
+		<haxegui:controls:Button name="multiply" label="*" x="126" y="50" width="30" />
+		<haxegui:controls:Button name="divide" label="/" x="126" y="88" width="30" />
+		<haxegui:controls:Button name="add" label="+" x="126" y="126" width="30" />
+		<haxegui:controls:Button name="subtract" label="-" x="126" y="164" width="30" />
 	    
    		    <script type="text/hscript">
 		    	
@@ -43,7 +43,7 @@
 			
 			function clickHandler(e)
 			{
-			    if(e.target.name=="=")
+			    if(e.target.name=="equals")
 				parse();
 			    else
 			    {

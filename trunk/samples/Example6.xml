@@ -47,40 +47,40 @@
 	cssLoader.load(cssRequest);
 	*/
 			
-		var styles = new flash.text.StyleSheet();
-		styles.parseCSS(".code-line-numbers {    color:#809080;    border-right:1px dotted #809080;    float:left;    text-align:right;    width:2em;    padding-right:3px;    margin-right:12px;}.code-code {}.code-keyword {    font-weight: bold;    color: #000000;}.code-type {    font-weight: bold;    color: #106020;}.code-variable {    color: #004050;}.code-number {    color: #F08000;}.code-comment {    color: #208000;}.code-string {    color: #F00000;}");
-		tf.styleSheet = styles;
-		tf.htmlText = CodeHighlighter.highlight( str, "haxe") ;
-		
-
-		scrollpane.addChild(tf);
-
-
+			var styles = new flash.text.StyleSheet();
+			styles.parseCSS(".code-line-numbers {    color:#809080;    border-right:1px dotted #809080;    float:left;    text-align:right;    width:2em;    padding-right:3px;    margin-right:12px;}.code-code {}.code-keyword {    font-weight: bold;    color: #000000;}.code-type {    font-weight: bold;    color: #106020;}.code-variable {    color: #004050;}.code-number {    color: #F08000;}.code-comment {    color: #208000;}.code-string {    color: #F00000;}");
+			tf.styleSheet = styles;
+			tf.htmlText = CodeHighlighter.highlight( str, "haxe") ;
 			
-			function clear(e) { tf.text = ""; }
 
-			var clearbtn = toolbar.getChildByName("Clear");
-			clearbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, clear);			
+			scrollpane.addChild(tf);
 
-			
-			function run(e)
-			    {
-				var parser = new hscript.Parser();
-				var program = parser.parseString(tf.text);
-				var interp = new hscript.Interp();
+
 				
-				interp.variables.set( "this", window );
-				ScriptStandardLibrary.set(interp);
+				function clear(e) { tf.text = ""; }
 
-				trace(interp.execute(program)); 
+				var clearbtn = toolbar.getChildByName("Clear");
+				clearbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, clear);			
+
 				
-				root.getChildByName("Console").onRaise(null);
-						
-			    }
+				function run(e)
+					{
+					var parser = new hscript.Parser();
+					var program = parser.parseString(tf.text);
+					var interp = new hscript.Interp();
+					
+					interp.variables.set( "this", window );
+					ScriptStandardLibrary.set(interp);
 
-			    
-			var runbtn = toolbar.getChildByName("Run");
-			runbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, run);			
+					trace(interp.execute(program)); 
+					
+					root.getChildByName("Console").onRaise(null);
+							
+					}
+
+					
+				var runbtn = toolbar.getChildByName("Run");
+				runbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, run);			
 			
 
 		    </script>

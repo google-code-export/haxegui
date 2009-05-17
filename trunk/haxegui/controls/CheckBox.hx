@@ -42,7 +42,8 @@ import haxegui.events.MoveEvent;
 
 
 /**
-* CheckBox class
+* <p>An on \ off CheckBox, with composited Label. use the member variable <i>checked</i>
+* to get it's state.</p>
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
