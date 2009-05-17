@@ -155,6 +155,11 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 			this.parent.removeChild(this);
 	}
 
+	public function hasAction(name:String) {
+		var c = try StyleManager.getInstanceActionObject(this, name) catch(e:Dynamic) null;
+		return (c != null);
+	}
+
 	/**
 	* Excecute redrawing script
 	**/

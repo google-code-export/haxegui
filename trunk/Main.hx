@@ -48,6 +48,7 @@ import flash.net.URLRequest;
 import haxegui.WindowManager;
 import haxegui.StyleManager;
 import haxegui.FocusManager;
+import haxegui.LayoutManager;
 import haxegui.CursorManager;
 import haxegui.MouseManager;
 import haxegui.PopupMenu;
@@ -294,7 +295,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 			list.data = [ "1", "2", "3", "4" ];
 			list.init();
 
-		
+
 			//
 			var expand = new Expander(container, "Expander1", 550, 40);
 			expand.init({ width: 200, height: 140 });
@@ -302,12 +303,12 @@ class Main extends Sprite, implements haxe.rtti.Infos
 			//
 			var scrollpane2 = new ScrollPane(expand, "ScrollPane2", 0, 20);
 			scrollpane2.init();
-			
+
 			list = new UiList(scrollpane2, "List3", 0, -20);
 			list.removeChild( list.header );
 			for(i in 1...11) list.data.push("List Item "+i);
 			list.init({width: 300});
-	
+
 			var tabnav = new TabNavigator(scrollpane, "TabNavigator1", 770, 40);
 			tabnav.init();
 
@@ -318,66 +319,57 @@ class Main extends Sprite, implements haxe.rtti.Infos
 			//
 			container = new Container (window, "Container");
 			container.init({ x: 10, y: 20, width: 190, height: 150, color: 0xA5DE33 });
-			
+
 
 
 */
 			//~ window.dispatchEvent(new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
-
-
 
 		/////////////////////////////////////////////////////////////////////////
 		// Load XML
 		/////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
-		//~ loader.load(new URLRequest("config.xml"));
+		loader.load(new URLRequest("./config.xml"));
 
-try {
-    var l = flash.Lib.current.loaderInfo.parameters;
-	trace(Utils.print_r(l));
-	loader.load(new URLRequest(Reflect.field(l, "layout")));
-    //~ for (f in Reflect.fields(l)) {
-        //~ trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
-    //~ }
-} catch (e:Dynamic) {
-    trace(e);
-}
+// try {
+//     var l = flash.Lib.current.loaderInfo.parameters;
+// 	trace(here.methodName + " " + Utils.print_r(l));
+// 	loader.load(new URLRequest(Reflect.field(l, "layout")));
+//     //~ for (f in Reflect.fields(l)) {
+//         //~ trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
+//     //~ }
+// } catch (e:Dynamic) {
+//     trace(here.methodName + " " + e);
+// }
 
 
 		var a = new Array<String>();
 		var keys : Iterator<String> = untyped StyleManager.defaultActions.keys();
-		for(k in keys) 
+		for(k in keys)
 			a.push( k.split('.').slice(-2,-1).join('.') + "." + k.split('.').pop() );
 		a.sort(function(a,b) { if(a==b) return 0; if(a < b) return -1; return 1;});
 		//~ trace("Registered scripts: " + Std.string(a));
 		trace("Registered scripts: " + Utils.print_r(a));
-		
-		
+
+
 	}//main
 
 
 
 	/**
-	*
+	* Loads the layout
 	*/
-	public static function loadXML(e:Event) : Void
+	static function loadXML(e:Event) : Void
 	{
-		trace(e);
-
+		trace(here.methodName);
 		var str = e.target.data;
-		//~ str = str.split('\n').join('');
-		//~ str = str.split('\t').join('');
-		var xml = Xml.parse(str);
-
-		//~ var xml = Xml.parse(e.target.data);
-
-		var xmlds : XmlDeserializer = new XmlDeserializer(xml);
-
-		xmlds.deserialize();
-
-
-	}//loadXML
+// 		haxegui.XmlParser.parse(str);
+		LayoutManager.loadLayouts(Xml.parse(str));
+		for(k in LayoutManager.layouts.keys())
+			trace("Loaded layout : " + k);
+		LayoutManager.setLayout("DemoLayout");
+	}
 
 
 	/**
