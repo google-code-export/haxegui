@@ -56,14 +56,14 @@ import feffects.easing.Quart;
 
 
 /**
-*
-* Abstract Button Class
-*
-* @version 0.1
-* @author Omer Goshen <gershon@goosemoose.com>
-* @author Russell Weir <damonsbane@gmail.com>
-*
-*/
+ *
+ * A chromeless button, containing default actions for mouse events.
+ *
+ * @version 0.1
+ * @author Omer Goshen <gershon@goosemoose.com>
+ * @author Russell Weir <damonsbane@gmail.com>
+ *
+ */
 class AbstractButton extends Component
 {
 	/** Sets whether mouse events in buttons use hand cursors **/

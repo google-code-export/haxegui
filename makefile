@@ -18,3 +18,4 @@ runWin32:
 
 style:
 	cd assets/styles && stylecompiler default
+

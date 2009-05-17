@@ -113,7 +113,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
 		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
 		this.addEventListener (ResizeEvent.RESIZE, onResize, false, 0, true);
-		this.addEventListener (Event.ADDED, onAdded, false, 0, true );
+		this.addEventListener (Event.ADDED, onAdded, false, 0, true);
 		this.addEventListener (FocusEvent.KEY_FOCUS_CHANGE, __focusHandler, false, 0, true);
 		this.addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, __focusHandler, false, 0, true);
 		this.addEventListener (FocusEvent.FOCUS_IN, onFocusIn, false, 0, true);

@@ -49,6 +49,8 @@ import haxegui.events.MoveEvent;
 /**
 *
 * Button Class
+* 
+* A chromed button.
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
