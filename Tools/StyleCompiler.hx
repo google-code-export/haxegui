@@ -80,7 +80,7 @@ class StyleCompiler {
 				error("Specify a correct input directory");
 		var styleName : String = indir.split("/").slice(-1)[0];
 
-		var outputFile = cwd + "/" + styleName + ".xml";
+		var outputFile = cwd + "/" + styleName + "_style.xml";
 		var fp = File.write(outputFile, false);
 
 		write = fp.writeString;
@@ -202,10 +202,12 @@ class StyleCompiler {
 			return;
 		// write script
 		write("\t\t\t<script type=\"text/hscript\" action=\""+d.filename+"\">\n");
+		write("\t\t\t<![CDATA[\n");
 		for(line in lines) {
 			line = StringTools.rtrim(line);
 			write("\t\t\t\t" + line + "\n");
 		}
+		write("\t\t\t]]>\n");
 		write("\t\t\t</script>\n");
 	}
 
