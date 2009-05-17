@@ -58,11 +58,14 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Whether the component can gain focus **/
 	public var focusable : Bool;
 
-	/** Does object validate ? **/
-	public var validate : Bool;
+	/** Unique component id number **/
+	public var id(default,null) : Int;
 
 	/** Text for tooltip **/
 	public var text : String;
+
+	/** Does object validate ? **/
+	public var validate : Bool;
 
 //~ public var margin : Rectangle;
 //~ public var padding : Array<Float>;
@@ -74,12 +77,16 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** The initial opts **/
 	private var initOpts : Dynamic;
 
+	/** The static component id counter **/
+	private static var nextId : Int = 0;
 	/**
 	*
 	**/
 	public function new (parent:DisplayObjectContainer=null, name:String=null, ?x:Float, ?y:Float)
 	{
 		super ();
+		this.id = Component.nextId++;
+
 		color = 0xF00FFF;
 
 		tabEnabled = mouseEnabled = true;
