@@ -19,6 +19,10 @@
 
 package haxegui;
 
+import flash.events.Event;
+import flash.net.URLLoader;
+import flash.net.URLRequest;
+
 /**
 * LayoutManager handles loading layouts from XML files, and setting a layout.
 *
@@ -30,6 +34,21 @@ class LayoutManager
 {
 	public static var layouts : Hash<Xml> = new Hash<Xml>();
 
+	/**
+	* Convenience method for loading a style from a url.
+	*
+	* @param url Path to layout file
+	* @param cb Function callback which gets a true (success) or false (fail)
+	**/
+	public static function fetchLayout(url : String, cb:Bool->Void=null) {
+		var loader:URLLoader = new URLLoader();
+		loader.addEventListener(Event.COMPLETE, callback(onXmlLoaded,cb), false, 0, true);
+		loader.load(new URLRequest("./config.xml"));
+	}
+
+	/**
+	* Load all layouts in an XML document.
+	**/
 	public static function loadLayouts(xml:Xml) {
 		for(elem in xml.elements()) {
 			if(!XmlParser.isLayoutNode(elem))
@@ -41,11 +60,30 @@ class LayoutManager
 		}
 	}
 
+	/**
+	* Set the current layout.
+	**/
 	public static function setLayout(name:String) {
 		if(!layouts.exists(name)) {
 			throw("Layout '"+name+"' does not exist");
 			return;
 		}
 		XmlParser.apply(layouts.get(name));
+	}
+
+	/** fetchLayout handler **/
+	private static function onXmlLoaded(cb:Bool->Void, e:Event) : Void
+	{
+		trace(here.methodName);
+		var rv = true;
+		try {
+			var str = e.target.data;
+			LayoutManager.loadLayouts(Xml.parse(str));
+			for(k in LayoutManager.layouts.keys())
+				trace("Loaded layout : " + k);
+		} catch(e:Dynamic) {
+			rv = false;
+		}
+		if(cb != null) cb(rv);
 	}
 }
