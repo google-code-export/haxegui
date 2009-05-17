@@ -82,7 +82,6 @@ class Console extends Window, implements ITraceListener
 		container = new Container(this, "Container", 10, 20);
 		container.init();
 		
-		vert = new Scrollbar(container, "vscrollbar");
 		parser = new hscript.Parser();
 		history = new Array<String>();
 
@@ -125,7 +124,8 @@ class Console extends Window, implements ITraceListener
 		//~ vert.y = 20;
 		//~ vert.color = color;
 		//~ vert.init(content);
-		vert.init({target : output});
+		vert = new Scrollbar(container, "vscrollbar");
+		vert.init({target : output, color: this.color});
 
 		//
 		container.init({
@@ -180,22 +180,29 @@ class Console extends Window, implements ITraceListener
 
 		e.stopImmediatePropagation ();
 		//~ e.stopPropagation ();
+		
+		if(output!=null)
+		{
+			output.width = box.width - 30;
+			output.height = box.height - 40;
+		}
 
-		output.width = box.width - 30;
-		output.height = box.height - 40;
-
+		if(input!=null)
+		{
 		input.width = box.width - 30;
 		input.y = box.height - 40;
 
-
-		vert.x = box.width - 20;
+		if(vert!=null)
+		{
+		//~ vert.x = box.width - 20;
 		//~ vert.y = 40;
 		vert.box.height = box.height - 20;
 		//~ vert.box.width = box.width - 40;
 		//~ vert.onResize(null);
-
+		}
+		
 		container.onParentResize(e);
-
+		}
 
 	}
 
