@@ -37,10 +37,17 @@ import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
+class SliderHandle extends AbstractButton
+{
+
+	static function __init__() {
+		haxegui.Haxegui.register(SliderHandle);
+	}
+}
 
 class Slider extends Component, implements Dynamic
 {
-	public var handle : AbstractButton;
+	public var handle : SliderHandle;
 	//~ public var value : Float;
 	public var max : Float;
 
@@ -60,11 +67,7 @@ class Slider extends Component, implements Dynamic
 
 		redraw();
 
-		handle = new AbstractButton(this, "handle", 0, 0);
-
-		handle.action_redraw = haxe.Resource.getString("DefaultSliderHandleStyle");
-
-
+		handle = new SliderHandle(this, "handle", 0, 0);
 		handle.init({color: this.color});
 
 		// add the drop-shadow filters

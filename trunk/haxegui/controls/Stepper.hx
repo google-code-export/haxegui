@@ -110,13 +110,13 @@ class Stepper extends Component, implements Dynamic
 
 		up = new Button(this, "up");
 
-		up.action_redraw =
+		up.setAction("redraw",
 			"
 				this.graphics.clear();
 				this.graphics.beginFill(this.color);
 				this.graphics.drawRoundRectComplex(0, 0, 10, 10, 0, 4, 0, 0);
 				this.graphics.endFill();
-			";
+			");
 
 		up.init({color: this.color});
 		up.removeChild(up.label);
@@ -126,14 +126,14 @@ class Stepper extends Component, implements Dynamic
 
 		down = new Button(this, "down");
 
-		down.action_redraw =
+		down.setAction("redraw",
 			"
 				this.graphics.clear();
 				this.graphics.beginFill(this.color);
 				this.graphics.drawRoundRectComplex(0, 0, 10, 10, 0, 0, 0, 4);
 				this.graphics.endFill();
-			";
-					
+			");
+
 		down.init({color: this.color});
 		down.removeChild(down.label);
 		down.move( box.width - 10, 9 );

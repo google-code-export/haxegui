@@ -156,6 +156,29 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	/**
+	* Returns the code associated with the specified action. If this instance
+	* does not have a script, the default from the style is returned.
+	*
+	* @param action Action name
+	* @return String code
+	**/
+	public function getAction(action:String) : String {
+		return try ScriptManager.getInstanceActionObject(this, name).code
+		catch(e:Dynamic) null;
+	}
+
+	/**
+	* Returns the code associated with this instance for the specified action.
+	*
+	* @param action Action name
+	* @return String code
+	**/
+	public function getOwnAction(action:String) : String {
+		return try ScriptManager.getInstanceOwnActionObject(this, name).code
+		catch(e:Dynamic) null;
+	}
+
+	/**
 	* Returns true if this component has an action
 	* registered for the action type [name]. If this instance
 	* does not have an override, the default from the style is
@@ -245,6 +268,16 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	public function isValid() : Bool
 	{
 		return true;
+	}
+
+	/**
+	* Sets the action code for the specified action name for this component.
+	*
+	* @param action Action name
+	* @param code Action code
+	**/
+	public function setAction(action:String, code:String) : Void {
+		ScriptManager.setInstanceScript(this, name, code);
 	}
 
 	override public function toString() : String
@@ -425,125 +458,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	//////////////////////////////////////////////////
 	////               Actions                    ////
 	//////////////////////////////////////////////////
-	/** The script that redraws the Component **/
-	public var action_redraw(__getAction_redraw,__setAction_redraw) : String;
-		function __getAction_redraw() {
-			return try ScriptManager.getInstanceActionObject(this, "redraw").code
-			catch(e:Dynamic) null;
-		}
-		function __setAction_redraw(v:String) : String {
-			return ScriptManager.setInstanceScript(this, "redraw", v);
-		}
-
-	/** The script that is executed when the mouse click event occurs. **/
-	public var action_mouseClick(__getAction_mouseClick,__setAction_mouseClick) : String;
-		function __getAction_mouseClick() {
-			return try ScriptManager.getInstanceActionObject(this, "mouseClick").code
-			catch(e:Dynamic) null;
-		}
-		function __setAction_mouseClick(v:String) : String {
-			return ScriptManager.setInstanceScript(this, "mouseClick", v);
-		}
-
-	/** The script that is executed when the mouse over event occurs. **/
-	public var action_mouseOver(__getAction_mouseOver,__setAction_mouseOver) : String;
-		function __getAction_mouseOver() {
-			return try ScriptManager.getInstanceActionObject(this, "mouseOver").code
-			catch(e:Dynamic) null;
-		}
-		function __setAction_mouseOver(v:String) : String {
-			return ScriptManager.setInstanceScript(this, "mouseOver", v);
-		}
-
-	/** The script that is executed when the mouse out event occurs. **/
-	public var action_mouseOut(__getAction_mouseOut,__setAction_mouseOut) : String;
-		function __getAction_mouseOut() {
-			return try ScriptManager.getInstanceActionObject(this, "mouseOut").code
-			catch(e:Dynamic) null;
-		}
-		function __setAction_mouseOut(v:String) : String {
-			return ScriptManager.setInstanceScript(this, "mouseOut", v);
-		}
-
-	/** The script that is executed when the mouse down event occurs. **/
-	public var action_mouseDown(__getAction_mouseDown,__setAction_mouseDown) : String;
-		function __getAction_mouseDown() {
-			return try ScriptManager.getInstanceActionObject(this, "mouseDown").code
-			catch(e:Dynamic) null;
-		}
-		function __setAction_mouseDown(v:String) : String {
-			return ScriptManager.setInstanceScript(this, "mouseDown", v);
-		}
-
-	/** The script that is executed when the mouse up event occurs. **/
-	public var action_mouseUp(__getAction_mouseUp,__setAction_mouseUp) : String;
-		function __getAction_mouseUp() {
-			return try ScriptManager.getInstanceActionObject(this, "mouseUp").code
-			catch(e:Dynamic) null;
-		}
-		function __setAction_mouseUp(v:String) : String {
-			return ScriptManager.setInstanceScript(this, "mouseUp", v);
-		}
-
-	/** The script that is executed when the Component is validated **/
-	public var action_validate(__getAction_validate,__setAction_validate) : String;
-		function __getAction_validate() {
-			return try ScriptManager.getInstanceActionObject(this, "validate").code
-			catch(e:Dynamic) null;
-		}
-		function __setAction_validate(v:String) : String {
-			return ScriptManager.setInstanceScript(this, "validate", v);
-		}
-
-	//////////////////////////////////////////////////
-	////            Focus Actions                 ////
-	//////////////////////////////////////////////////
-	/** The script that is executed when the Component is gaining focus, which must return false to cancel the action, or true to approve. It is passed the one var [focusFrom] **/
-	public var action_gainingFocus(__getAction_gainingFocus,__setAction_gainingFocus) : String;
-		function __getAction_gainingFocus() {
-			return try ScriptManager.getInstanceActionObject(this, "gainingFocus").code
-			catch(e:Dynamic) null;
-		}
-		function __setAction_gainingFocus(v:String) : String {
-			return ScriptManager.setInstanceScript(this, "gainingFocus", v);
-		}
-
-	/** The script that is executed when the Component is losingFocus, which must return false to cancel the action, or true to approve. It is passed the one var [focusTo] **/
-	public var action_losingFocus(__getAction_losingFocus,__setAction_losingFocus) : String;
-		function __getAction_losingFocus() {
-			return try ScriptManager.getInstanceActionObject(this, "losingFocus").code
-			catch(e:Dynamic) null;
-		}
-		function __setAction_losingFocus(v:String) : String {
-			return ScriptManager.setInstanceScript(this, "losingFocus", v);
-		}
-
-	/**
-	* When a component is gaining focus, this script executes twice.
-	*
-	* The first time, [focusFrom] is set to the object losing focus.
-	*
-	* The second time, [focusFrom == this] which shows that all parents
-	* have been notified of the focus change.
-	**/
-	public var action_focusIn(__getAction_focusIn,__setAction_focusIn) : String;
-		function __getAction_focusIn() {
-			return try ScriptManager.getInstanceActionObject(this, "focusIn").code
-			catch(e:Dynamic) null;
-		}
-		function __setAction_focusIn(v:String) : String {
-			return ScriptManager.setInstanceScript(this, "focusIn", v);
-		}
-
-	public var action_focusOut(__getAction_focusOut,__setAction_focusOut) : String;
-		function __getAction_focusOut() {
-			return try ScriptManager.getInstanceActionObject(this, "focusOut").code
-			catch(e:Dynamic) null;
-		}
-		function __setAction_focusOut(v:String) : String {
-			return ScriptManager.setInstanceScript(this, "focusOut", v);
-		}
-
+	// redraw, mouseClick, mouseOver, mouseOut
+	// mouseDown, mouseUp, validate, gainingFocus
+	// losingFocus, focusIn, focusOut
 
 
 	//////////////////////////////////////////////////

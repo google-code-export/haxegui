@@ -136,8 +136,6 @@ class TitleBar extends Component, implements Dynamic
 	override public function init(?opts:Dynamic) {
 		super.init(opts);
 
-		action_redraw = haxe.Resource.getString("DefaultTitleBarStyle");
-
 		//
 		//~ closeButton = new Component(this, "closeButton");
 		closeButton = new CloseButton(this, "closeButton");

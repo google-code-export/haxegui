@@ -56,6 +56,13 @@ enum WindowType
 	ALWAYS_ON_TOP;
 }
 
+class WindowFrame extends Component
+{
+	static function __init__() {
+		haxegui.Haxegui.register(WindowFrame);
+	}
+}
+
 /**
 *
 * Window class
@@ -73,7 +80,7 @@ class Window extends Component, implements Dynamic
 {
 	public var titlebar : TitleBar;
 
-	public var frame : Component;
+	public var frame : WindowFrame;
 	public var br : Sprite;
 	public var bl : Sprite;
 
@@ -155,11 +162,8 @@ class Window extends Component, implements Dynamic
 	public function draw ()
 	{
 		// frame
-		frame = new Component (this, "frame");
+		frame = new WindowFrame(this, "frame");
 		frame.buttonMode = false;
-
-		frame.action_redraw = haxe.Resource.getString("DefaultWindowFrameStyle");
-
 
 		var shadow =
 		  new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 8, 8, 0.85,
