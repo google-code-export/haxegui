@@ -17,57 +17,6 @@
 
 -resource assets/styles/default_style.xml@default_style
 
-### Default Styles ###
-
-	# Button Style
-	-resource assets/styles/Default/ButtonStyle.hscript@DefaultButtonStyle
-
-	# CheckBox Style
-	-resource assets/styles/Default/CheckBoxStyle.hscript@DefaultCheckBoxStyle
-
-	# RadioButton Style
-	-resource assets/styles/Default/RadioButtonStyle.hscript@DefaultRadioButtonStyle
-	
-	# ComboBox Style
-	-resource assets/styles/Default/ComboBoxDropButton.hscript@DefaultComboBoxDropButton
-	-resource assets/styles/Default/ComboBoxBackground.hscript@DefaultComboBoxBackground
-
-	# Input Style
-	-resource assets/styles/Default/InputStyle.hscript@DefaultInputStyle
-	
-	# Slider Style
-	-resource assets/styles/Default/SliderStyle.hscript@DefaultSliderStyle
-	-resource assets/styles/Default/SliderHandleStyle.hscript@DefaultSliderHandleStyle
-	
-	# ListItem Style
-	-resource assets/styles/Default/ListItemStyle.hscript@DefaultListItemStyle
-
-	# Window Style
-	-resource assets/styles/Default/WindowFrameStyle.hscript@DefaultWindowFrameStyle
-
-	# Titlebar Style
-	-resource assets/styles/Default/TitleBarCloseButtonStyle.hscript@DefaultTitleBarCloseButtonStyle
-	-resource assets/styles/Default/TitleBarMinimizeButtonStyle.hscript@DefaultTitleBarMinimizeButtonStyle
-	-resource assets/styles/Default/TitleBarMaximizeButtonStyle.hscript@DefaultTitleBarMaximizeButtonStyle
-	-resource assets/styles/Default/TitleBarStyle.hscript@DefaultTitleBarStyle
-
-	# Tabs Style
-	-resource assets/styles/Default/TabStyle.hscript@DefaultTabStyle
-
-	# Scrollbar Style
-	-resource assets/styles/Default/ScrollbarUpButtonStyle.hscript@DefaultScrollbarUpButtonStyle
-	-resource assets/styles/Default/ScrollbarDownButtonStyle.hscript@DefaultScrollbarDownButtonStyle
-	-resource assets/styles/Default/ScrollbarHandleStyle.hscript@DefaultScrollbarHandleStyle
-	
-	# PopupMenu Style
-	-resource assets/styles/Default/PopupMenuItemStyle.hscript@DefaultPopupMenuItemStyle
-	
-	# Toolbar Style
-	-resource assets/styles/Default/ToolbarStyle.hscript@DefaultToolbarStyle
-
-	# Expander Style
-	-resource assets/styles/Default/ExpanderStyle.hscript@DefaultExpanderStyle
-
 ### Output ###
 
 -swf9 main.swf
@@ -77,3 +26,5 @@
 --flash-strict
 -debug
 -xml output.xml
+
+# var win=root.getChildByName("Console"); trace(win.getAction("redraw")); var bar=win.getChildByName("titlebar"); trace(bar.getAction("redraw"));

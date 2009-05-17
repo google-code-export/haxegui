@@ -92,11 +92,15 @@ class WindowManager extends EventDispatcher
     //~ window.addEventListener( MoveEvent.MOVE, proxy );
     //~ window.addEventListener( DragEvent.DRAG_START, proxy );
     //~ window.addEventListener( DragEvent.DRAG_COMPLETE, proxy );
-    
+
     return window;
   }
 
-//~ 
+	public static function toFront(wnd:Window) {
+		if(wnd.parent == null) return;
+		wnd.parent.addChild(wnd);
+	}
+//~
   //~ public function proxy(e:Dynamic) {
     		//~ for(i in 0...listeners.length) {
                 //~ var listener = listeners[i];
