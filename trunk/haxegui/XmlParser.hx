@@ -221,8 +221,11 @@ class XmlParser {
 
 		if(isStyle)
 			ScriptManager.setDefaultScript(resolvedClass,action,code);
-		else
-			ScriptManager.setInstanceScript(inst,action,code);
+		else {
+			inst.setAction(action,code);
+			if(!inst.hasOwnAction(action))
+				throw "instance name " + inst.name + " has no " + action;
+		}
 	}
 
 }

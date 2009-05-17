@@ -163,8 +163,13 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* @return String code
 	**/
 	public function getAction(action:String) : String {
-		return try ScriptManager.getInstanceActionObject(this, name).code
-		catch(e:Dynamic) null;
+		try {
+			return ScriptManager.getInstanceActionObject(this, action).code;
+		}
+		catch(e:Dynamic) {
+			trace(e);
+			return null;
+		}
 	}
 
 	/**
@@ -174,34 +179,34 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* @return String code
 	**/
 	public function getOwnAction(action:String) : String {
-		return try ScriptManager.getInstanceOwnActionObject(this, name).code
+		return try ScriptManager.getInstanceOwnActionObject(this, action).code
 		catch(e:Dynamic) null;
 	}
 
 	/**
 	* Returns true if this component has an action
-	* registered for the action type [name]. If this instance
+	* registered for the action type [action]. If this instance
 	* does not have an override, the default from the style is
 	* checked.
 	*
-	* @param name Action name
+	* @param action Action name
 	* @return Bool true if an action exists
 	**/
-	public function hasAction(name:String) {
-		var c = try ScriptManager.getInstanceActionObject(this, name) catch(e:Dynamic) null;
+	public function hasAction(action:String) {
+		var c = try ScriptManager.getInstanceActionObject(this, action) catch(e:Dynamic) null;
 		return (c != null);
 	}
 
 	/**
 	* Returns true if this component has an action registered
-	* for the action type [name]. Only returns true if the
+	* for the action type [action]. Only returns true if the
 	* script is only for this instance.
 	*
-	* @param name Action name
+	* @param action Action name
 	* @return Bool true if an action exists
 	**/
-	public function hasOwnAction(name:String) {
-		return (ScriptManager.getInstanceOwnActionObject(this,name) != null);
+	public function hasOwnAction(action:String) {
+		return (ScriptManager.getInstanceOwnActionObject(this,action) != null);
 	}
 
 	/**
@@ -277,7 +282,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* @param code Action code
 	**/
 	public function setAction(action:String, code:String) : Void {
-		ScriptManager.setInstanceScript(this, name, code);
+		ScriptManager.setInstanceScript(this, action, code);
 	}
 
 	override public function toString() : String
@@ -366,10 +371,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		// -- second time --
 		// related == null
 		// target == currentTarget == this
-// 		trace("++++ " + Std.string(this) + " onFocusIn");
-// 		trace("onFocusIn relatedObject: " + Std.string(e.relatedObject));
-// 		trace("onFocusIn currentTarget: " + Std.string(e.currentTarget));
-// 		trace("onFocusIn target: " + Std.string(e.target));
+		trace("++++ " + Std.string(this) + " onFocusIn");
+		trace("onFocusIn relatedObject: " + Std.string(e.relatedObject));
+		trace("onFocusIn currentTarget: " + Std.string(e.currentTarget));
+		trace("onFocusIn target: " + Std.string(e.target));
 
 		ScriptManager.exec(this, "focusIn", {focusFrom : e.target});
 	}

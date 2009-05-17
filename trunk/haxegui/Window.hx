@@ -227,6 +227,16 @@ class Window extends Component, implements Dynamic
 	}
 
 	/**
+	* Returns true if the window is modal
+	**/
+	public function isModal() : Bool {
+		return switch(type) {
+		case MODAL: true;
+		default : false;
+		}
+	}
+
+	/**
 	*
 	*
 	*/
@@ -328,10 +338,10 @@ class Window extends Component, implements Dynamic
 			return;
 
 		//
-		FocusManager.getInstance ().setFocus (this);
+// 		FocusManager.getInstance ().setFocus (this);
 
 		// raise window
-		parent.setChildIndex (this, parent.numChildren - 1);
+// 		parent.setChildIndex (this, parent.numChildren - 1);
 
 
 		if (e.target == titlebar || e.target == br || e.target == bl)
@@ -344,7 +354,7 @@ class Window extends Component, implements Dynamic
 
 
 			// raise target
-			e.target.parent.setChildIndex (e.target, e.target.parent.numChildren - 1);
+// 			e.target.parent.setChildIndex (e.target, e.target.parent.numChildren - 1);
 		}
 
 		switch (e.target)
@@ -437,7 +447,7 @@ class Window extends Component, implements Dynamic
 
 	public function onRaise(e:Event)
 	{
-		parent.setChildIndex (this, parent.numChildren - 1);
+// 		parent.setChildIndex (this, parent.numChildren - 1);
 	}
 
 	static function __init__() {
