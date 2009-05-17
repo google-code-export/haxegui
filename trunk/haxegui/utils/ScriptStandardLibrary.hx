@@ -19,6 +19,8 @@
 
 package haxegui.utils;
 
+import flash.ui.Keyboard;
+
 import hscript.Interp;
 
 import haxegui.CursorManager;
@@ -93,7 +95,7 @@ class ScriptStandardLibrary
 					ROUND : flash.display.CapsStyle.ROUND,
 					NONE : flash.display.CapsStyle.NONE
 					}
-					
+
 				},
 				filters : {
 					BevelFilter : flash.filters.BevelFilter,
@@ -136,23 +138,24 @@ class ScriptStandardLibrary
 					TextFormatAlign : flash.text.TextFormatAlign,
 					StyleSheet : flash.text.StyleSheet
 				},
-				events :
-					{
+				events : {
 					Event : flash.events.Event,
 					MouseEvent : flash.events.MouseEvent,
 					KeyboardEvent : flash.events.KeyboardEvent
-					},
-				net :
-					{
+				},
+				net : {
 					URLLoader	: flash.net.URLLoader,
 					URLRequest	: flash.net.URLRequest
-					}
+				},
+				ui : {
+					Keyboard : keyboard(),
+				},
 			});
 
 
-		interp.variables.set("Keyboard", flash.ui.Keyboard);
-		
-		
+		interp.variables.set("Keyboard", keyboard());
+
+
 		interp.variables.set("CodeHighlighter", CodeHighlighter);
 
 
@@ -195,7 +198,7 @@ class ScriptStandardLibrary
 			{
 				ResizeEvent			: haxegui.events.ResizeEvent,
 				MoveEvent			: haxegui.events.MoveEvent,
-				MenuEvent			: haxegui.events.MenuEvent	
+				MenuEvent			: haxegui.events.MenuEvent
 			}
 			);
 
@@ -217,4 +220,63 @@ class ScriptStandardLibrary
 			});
 	}
 
+	//grep -e "static var" /usr/share/haxe/std/flash9/ui/Keyboard.hx | awk '{print "\t\t\t",$3," : Keyboard.",$3,","}' >> haxegui/utils/ScriptStandardLibrary.hx
+	private static function keyboard() : Dynamic {
+		return {
+			BACKSPACE  : Keyboard.BACKSPACE,
+			CAPS_LOCK  : Keyboard.CAPS_LOCK,
+			CONTROL  : Keyboard.CONTROL,
+			DELETE  : Keyboard.DELETE,
+			DOWN  : Keyboard.DOWN,
+			END  : Keyboard.END,
+			ENTER  : Keyboard.ENTER,
+			ESCAPE  : Keyboard.ESCAPE,
+			F1  : Keyboard.F1,
+			F10  : Keyboard.F10,
+			F11  : Keyboard.F11,
+			F12  : Keyboard.F12,
+			F13  : Keyboard.F13,
+			F14  : Keyboard.F14,
+			F15  : Keyboard.F15,
+			F2  : Keyboard.F2,
+			F3  : Keyboard.F3,
+			F4  : Keyboard.F4,
+			F5  : Keyboard.F5,
+			F6  : Keyboard.F6,
+			F7  : Keyboard.F7,
+			F8  : Keyboard.F8,
+			F9  : Keyboard.F9,
+			HOME  : Keyboard.HOME,
+			INSERT  : Keyboard.INSERT,
+			LEFT  : Keyboard.LEFT,
+			NUMPAD_0  : Keyboard.NUMPAD_0,
+			NUMPAD_1  : Keyboard.NUMPAD_1,
+			NUMPAD_2  : Keyboard.NUMPAD_2,
+			NUMPAD_3  : Keyboard.NUMPAD_3,
+			NUMPAD_4  : Keyboard.NUMPAD_4,
+			NUMPAD_5  : Keyboard.NUMPAD_5,
+			NUMPAD_6  : Keyboard.NUMPAD_6,
+			NUMPAD_7  : Keyboard.NUMPAD_7,
+			NUMPAD_8  : Keyboard.NUMPAD_8,
+			NUMPAD_9  : Keyboard.NUMPAD_9,
+			NUMPAD_ADD  : Keyboard.NUMPAD_ADD,
+			NUMPAD_DECIMAL  : Keyboard.NUMPAD_DECIMAL,
+			NUMPAD_DIVIDE  : Keyboard.NUMPAD_DIVIDE,
+			NUMPAD_ENTER  : Keyboard.NUMPAD_ENTER,
+			NUMPAD_MULTIPLY  : Keyboard.NUMPAD_MULTIPLY,
+			NUMPAD_SUBTRACT  : Keyboard.NUMPAD_SUBTRACT,
+			PAGE_DOWN  : Keyboard.PAGE_DOWN,
+			PAGE_UP  : Keyboard.PAGE_UP,
+			RIGHT  : Keyboard.RIGHT,
+			SHIFT  : Keyboard.SHIFT,
+			SPACE  : Keyboard.SPACE,
+			TAB  : Keyboard.TAB,
+			UP  : Keyboard.UP,
+			capsLock : Keyboard.capsLock,
+			numLock : Keyboard.numLock,
+			isAccessible : Keyboard.isAccessible,
+		};
+	}
 }
+
+
