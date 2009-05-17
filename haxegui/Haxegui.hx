@@ -19,6 +19,7 @@
 
 package haxegui;
 
+import haxegui.StyleManager;
 import haxegui.controls.Component;
 
 /**
@@ -30,7 +31,7 @@ import haxegui.controls.Component;
 */
 class Haxegui {
 
-	
+
 	private static var initializers : List<{c:Class<Dynamic>, f:Void->Void}>;
 	private static var dirtyList : List<Component> = new List();
 
@@ -46,6 +47,14 @@ class Haxegui {
 		// Setup mouse and cursor
 		MouseManager.getInstance().init();
 		CursorManager.getInstance().init();
+
+		// load the default style
+		trace("loading style");
+		StyleManager.loadStyles(Xml.parse(haxe.Resource.getString("default_style")));
+		StyleManager.setStyle("default");
+
+
+		trace("complete");
 
 		var t = new haxe.Timer(300);
 		t.run = onInterval;

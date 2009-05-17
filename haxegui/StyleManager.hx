@@ -52,6 +52,7 @@ typedef ScriptObject = {
 */
 class StyleManager implements Dynamic
 {
+	public static var styles : Hash<Xml>;
 	static var defaultActions : Hash<ScriptObject>;
 	static var instanceActions : TypedDictionary<Component,Hash<ScriptObject>>;
 	static var initialized : Bool;
@@ -227,12 +228,40 @@ class StyleManager implements Dynamic
 		return code;
 	}
 
+	/**
+	* Loads all styles from the given Xml file.
+	**/
+	public static function loadStyles(xml:Xml) {
+		for(elem in xml.elements()) {
+			if(!XmlParser.isStyleNode(elem))
+				continue;
+			var name = XmlParser.getStyleName(elem);
+			if(name == null)
+				continue;
+			styles.set(name, elem);
+		}
+	}
+
 	public static function initialize() {
 		if(initialized) return;
 		initialized = true;
+		styles = new Hash<Xml>();
 		defaultActions = new Hash<ScriptObject>();
 		// uses weak keys so when instance is gone, so is the script object.
 		instanceActions = new TypedDictionary<Component,Hash<ScriptObject>>(true);
+	}
+
+	/**
+	* Set the style to a loaded style by name. The style must have been
+	* loaded with loadStyles, or compiled in as [default]. If the style
+	* does not exist, then no change will occur.
+	*
+	* @param name Name of style
+	**/
+	public static function setStyle(name : String) : Void {
+		if(!styles.exists(name))
+			return;
+		XmlParser.apply(styles.get(name));
 	}
 
 	static function __init__() : Void {
