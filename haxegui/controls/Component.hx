@@ -151,10 +151,13 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* Destroy this component and all children
 	*/
 	public function destroy() {
+		var idx : Int = 0;
 		for(i in 0...numChildren) {
-			var c = getChildAt(i);
+			var c = getChildAt(idx);
 			if(Std.is(c,Component))
 				(cast c).destroy();
+			else
+				idx++;
 		}
 		for(i in 0...numChildren)
 			removeChildAt(0);

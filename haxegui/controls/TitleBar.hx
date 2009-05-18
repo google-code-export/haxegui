@@ -45,10 +45,10 @@ class CloseButton extends AbstractButton
 		super (parent, name, x, y);
 	}
 
-	override public function onMouseClick(e:MouseEvent) : Void	{
-		trace("Close clicked on " + parent.parent.toString());
-		//~ parent.dispatchEvent(new Event(Event.CLOSE));
-	}
+// 	override public function onMouseClick(e:MouseEvent) : Void	{
+// 		trace("Close clicked on " + parent.parent.toString());
+// 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
+// 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(CloseButton);
