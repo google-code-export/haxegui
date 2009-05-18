@@ -86,7 +86,9 @@ class Window extends Component, implements Dynamic
 
 	public var type:WindowType;
 
+	private var lazyResize:Bool;
 	private var sizeable:Bool;
+	
 	//~ private var _mask:Sprite;
 
 	public function new (? parent : DisplayObjectContainer, ? name : String,
@@ -113,6 +115,7 @@ class Window extends Component, implements Dynamic
 
 		type = WindowType.NORMAL;
 		sizeable = Opts.optBool(opts, "sizeable", true);
+		lazyResize = Opts.optBool(opts, "lazyResize", false);
 
 		this.buttonMode = false;
 		this.mouseEnabled = false;
@@ -270,8 +273,8 @@ class Window extends Component, implements Dynamic
 	{
 
 		//
-		CursorManager.getInstance ().inject (e);
-		e.stopImmediatePropagation ();
+		//~ CursorManager.getInstance ().inject (e);
+		//~ e.stopImmediatePropagation ();
 		//
 		var damaged:Bool = true;
 		if (e.buttonDown)
@@ -310,8 +313,8 @@ class Window extends Component, implements Dynamic
 			}
 
 			e.updateAfterEvent ();
-		}				//buttonDown
-	}				// onMouseMove
+		}//buttonDown
+	}// onMouseMove
 
 	/**
 	* Resize listener to position corners and redraw frame
@@ -321,13 +324,17 @@ class Window extends Component, implements Dynamic
 	override public function onResize (e:ResizeEvent)
 	{
 		//~ trace(e);
-		if (sizeable)
+		if (isSizeable())
 		{
 			bl.y = box.height - 22;
 			br.y = box.height - 22;
 			br.x = box.width - 22;
 		}
-		redraw (null);
+		
+		if(lazyResize)
+			dirty = true ;
+		else
+			redraw();
 		//~ e.updateAfterEvent();
 	}
 
@@ -337,24 +344,19 @@ class Window extends Component, implements Dynamic
 		if (!this.contains(e.target))
 			return;
 
-		//
-// 		FocusManager.getInstance ().setFocus (this);
-
-		// raise window
-// 		parent.setChildIndex (this, parent.numChildren - 1);
-
 
 		if (e.target == titlebar || e.target == br || e.target == bl)
+		//~ if (e.target == titlebar || isSizeable() && (e.target == br || e.target == bl) ) 
 		{
+			// raise target
+ 			e.target.parent.setChildIndex (e.target, e.target.parent.numChildren - 1);
+
 			e.target.dispatchEvent (new DragEvent (DragEvent.DRAG_START));
 			e.target.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
 			//~ flash.Lib.current.stage.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
 			//~ this.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
 			//~ flash.Lib.current.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
 
-
-			// raise target
-// 			e.target.parent.setChildIndex (e.target, e.target.parent.numChildren - 1);
 		}
 
 		switch (e.target)

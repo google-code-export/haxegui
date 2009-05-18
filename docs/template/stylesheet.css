@@ -359,6 +359,23 @@ a.showHideLink {
 }
 
 
+
+.example-code {
+	padding: 1em;
+	margin: 0 0 0.75em 0;
+	color: black;
+	background: white;
+	border: 1px solid gray;
+}
+
+
+.example-code pre {
+	padding: 1em;
+	margin-bottom: 10x;
+	border: 1px dashed #9E7416;
+	background: lightyellow;
+}
+
 .example-embed {
 	height: 400px;
 	border: 1px solid gray;

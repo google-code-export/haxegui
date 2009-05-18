@@ -330,18 +330,18 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		/////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
-		loader.load(new URLRequest("./config.xml"));
+		//~ loader.load(new URLRequest("./config.xml"));
 
-// try {
-//     var l = flash.Lib.current.loaderInfo.parameters;
-// 	trace(here.methodName + " " + Utils.print_r(l));
-// 	loader.load(new URLRequest(Reflect.field(l, "layout")));
-//     //~ for (f in Reflect.fields(l)) {
-//         //~ trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
-//     //~ }
-// } catch (e:Dynamic) {
-//     trace(here.methodName + " " + e);
-// }
+ try {
+     var l = flash.Lib.current.loaderInfo.parameters;
+ 	trace(here.methodName + " " + Utils.print_r(l));
+ 	loader.load(new URLRequest(Reflect.field(l, "layout")));
+     //~ for (f in Reflect.fields(l)) {
+         //~ trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
+     //~ }
+ } catch (e:Dynamic) {
+     trace(here.methodName + " " + e);
+ }
 
 
 		var a = new Array<String>();
@@ -349,8 +349,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		for(k in keys)
 			a.push( k.split('.').slice(-2,-1).join('.') + "." + k.split('.').pop() );
 		a.sort(function(a,b) { if(a==b) return 0; if(a < b) return -1; return 1;});
-		//~ trace("Registered scripts: " + Std.string(a));
-		trace("Registered scripts: " + Utils.print_r(a));
+		trace("Registered scripts: " + Std.string(a));
+		//~ trace("Registered scripts: " + Utils.print_r(a));
 
 
 	}//main
@@ -367,7 +367,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		LayoutManager.loadLayouts(Xml.parse(str));
 		for(k in LayoutManager.layouts.keys())
 			trace("Loaded layout : " + k);
-		LayoutManager.setLayout("DemoLayout");
+		//~ LayoutManager.setLayout("DemoLayout");
+		LayoutManager.setLayout(Xml.parse(str).firstElement().get("name"));
 	}
 
 
