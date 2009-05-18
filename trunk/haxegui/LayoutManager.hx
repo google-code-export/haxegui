@@ -43,7 +43,7 @@ class LayoutManager
 	public static function fetchLayout(url : String, cb:Bool->Void=null) {
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, callback(onXmlLoaded,cb), false, 0, true);
-		loader.load(new URLRequest("./config.xml"));
+		loader.load(new URLRequest(url));
 	}
 
 	/**
@@ -77,10 +77,11 @@ class LayoutManager
 		trace(here.methodName);
 		var rv = true;
 		try {
-			var str = e.target.data;
+			var str : String = e.target.data;
 			LayoutManager.loadLayouts(Xml.parse(str));
+			trace("Current layouts:");
 			for(k in LayoutManager.layouts.keys())
-				trace("Loaded layout : " + k);
+				trace(" : " + k);
 		} catch(e:Dynamic) {
 			rv = false;
 		}

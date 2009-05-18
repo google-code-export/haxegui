@@ -852,6 +852,12 @@
 				this.graphics.lineTo (4, 8);
 			]]>
 			</script>
+			<script type="text/hscript" action="mouseClick">
+			<![CDATA[
+				trace(this.parent.parent.name);
+				this.parent.parent.destroy();
+			]]>
+			</script>
 		</events>
 	</haxegui:controls:CloseButton>
 
