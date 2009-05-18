@@ -75,7 +75,7 @@ TODO:
 								this.label.tf.text = "Red";
 							}
 							this.dirty = true;
-							//this.redraw();
+							this.redraw();
 							this.label.tf.setTextFormat(DefaultStyle.getTextFormat());
 						]]></script>
 					</events>

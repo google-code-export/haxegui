@@ -2,7 +2,8 @@
 <haxegui:Layout name="Example4">
 
     <haxegui:Window name="Step Sequencer" x="100" y="40" width="460" height="400" sizeable="true" color="0x666666">
-	<haxegui:Menubar name="menubar" width="512" x="10" y="20" />
+
+	<haxegui:MenuBar name="menubar" width="512" x="10" y="20" />
 	<haxegui:ScrollPane name="ScrollPane1" x="10" y="44" >
 		<haxegui:Container name="Container1" width="512" height="512" color="0x666666" >
 
@@ -11,6 +12,12 @@
 		<haxegui:controls:Stepper name="Stepper1" x="170" y="28" value="120" step="1" min="1" max="300" color="0x666666"/>
 		<haxegui:controls:Stepper name="Stepper2" x="250" y="28" disabled="true" min="1" max="16" color="0x666666"/>
 
+		<events>
+			<script type="text/hscript" action="onLoaded">
+			trace("Window loaded" + Std.string(here));
+			</script>
+		</events>
+		<!--
 		<script type="text/hscript">
 
 		    var window = root.getChildByName("Step Sequencer");
@@ -113,6 +120,7 @@
 		    }
 
 		</script>
+		-->
 		</haxegui:Container>
 	</haxegui:ScrollPane>
     </haxegui:Window>

@@ -497,7 +497,8 @@ This hscript does the following:
 
     <haxegui:Window name="PixelRuler" x="200" y="40" width="720" height="70" sizeable="true" color="0xFFDD00" >
 		<events>
-			<script type="text/hscript" action="redraw"><![CDATA[
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
 				var container = this.getChildByName("Container1");
 				if(container == null) return;
 				container.redraw();
