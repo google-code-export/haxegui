@@ -29,7 +29,6 @@ import flash.events.MouseEvent;
 
 import haxegui.events.ResizeEvent;
 
-
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
@@ -98,7 +97,15 @@ class Container extends Component, implements IContainer, implements Dynamic
 			box = untyped parent.parent.box.clone();
 		}
 
-
+		
+		for(i in 0...numChildren)
+			if(Std.is( getChildAt(i), haxegui.controls.ScrollBar ))
+			{
+				this.box.width -= 20;
+			}
+			
+			
+			
 
 		redraw(null);
 		//~ dirty = true;
