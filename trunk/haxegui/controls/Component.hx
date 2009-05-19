@@ -416,7 +416,6 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		//var o = e.target;
 		
 		var comp : Component = asComponent(e.currentTarget);
-		trace(Std.string(comp));
 		// first event is fired to the target about to lose focus
 		if(e.currentTarget == e.target && comp != null) {
 			// see if current object will relinquish focus to gainer.
@@ -430,7 +429,6 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		}
 
 		comp = asComponent(e.relatedObject);
-		trace(Std.string(comp));
 		// check if the object gaining focus rejects
 		if(comp != null) {
 			if(!comp.onGainingFocus(cast asComponentIfIs(e.relatedObject))) {
@@ -531,12 +529,15 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Mouse click **/
 	public function onMouseClick(e:MouseEvent) : Void
 	{
-		trace("onMouseClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseClick"));
+		if(e.target == this)
+			trace("onMouseClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseClick"));
 		ScriptManager.exec(this,"mouseClick", {event : e});
 	}
 
 	public function onMouseDown(e:MouseEvent) : Void
 	{
+		if(e.target == this)
+			trace("onMouseDown " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDown"));
 		FocusManager.getInstance().setFocus(this);
 		ScriptManager.exec(this,"mouseDown", {event : e});
 	}
@@ -610,6 +611,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		return v;
 	}
 	
+	//////////////////////////////////////////////////
+	////               Privates                   ////
+	//////////////////////////////////////////////////
 	/** add the focus events to any child that is not a Component **/
 	private function addDisplayObjectEvents(o : DisplayObject) {
 		if(!Std.is(o, Component)) {
@@ -629,6 +633,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 			o.removeEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
 		}
 	}
+	
 	//////////////////////////////////////////////////
 	////               Statics                    ////
 	//////////////////////////////////////////////////
