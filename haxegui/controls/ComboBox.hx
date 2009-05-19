@@ -87,7 +87,7 @@ class ComboBoxBackground extends Component
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ComboBox extends Component, implements Dynamic
+class ComboBox extends Component
 {
 	public var background : ComboBoxBackground;
 	public var dropButton : ComboBoxDropButton;

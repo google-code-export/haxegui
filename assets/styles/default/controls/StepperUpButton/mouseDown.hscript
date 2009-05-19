@@ -1,0 +1,4 @@
+if(!this.disabled && this.autoRepeat) {
+	this.parent.value += this.parent.step;
+	this.startIntervalDelayed(this.repeatsPerSecond, this.repeatWaitTime);
+}

@@ -48,7 +48,7 @@ import haxegui.events.MoveEvent;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class CheckBox extends AbstractButton, implements Dynamic
+class CheckBox extends AbstractButton
 {
 	public var checked(__getChecked,__setChecked) : Bool;
 	public var label : Label;

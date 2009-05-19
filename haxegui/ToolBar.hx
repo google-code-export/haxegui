@@ -59,7 +59,7 @@ import haxegui.CursorManager;
 import haxegui.StyleManager;
 
 
-class ToolBar extends Component, implements Dynamic
+class ToolBar extends Component
 {
 
 	public var handle : Sprite;

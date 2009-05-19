@@ -72,7 +72,7 @@ import feffects.easing.Quart;
 * @author Russell Weir'
 *
 */
-class PopupMenuItem extends AbstractButton, implements Dynamic
+class PopupMenuItem extends AbstractButton
 {
 
 	public var tf : TextField;

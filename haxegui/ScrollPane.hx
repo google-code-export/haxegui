@@ -37,7 +37,8 @@ import flash.filters.BevelFilter;
 
 import haxegui.StyleManager;
 
-class ScrollPane extends Component, implements Dynamic {
+class ScrollPane extends Component
+{
 	public var content : Sprite;
 
 	public var vert : ScrollBar;

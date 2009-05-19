@@ -91,6 +91,12 @@ class AbstractButton extends Component
 	public var cursorOver : Cursor;
 	/** The cursor to use when this button is pressed **/
 	public var cursorPress : Cursor;
+	/** Whether the button will repeat actions when held, default false **/
+	public var autoRepeat : Bool;
+	/** number of [interval] actions per second on auto repeat **/
+	public var repeatsPerSecond : Float;
+	/** Seconds before auto repeat starts **/
+	public var repeatWaitTime : Float;
 
 	/**
 	*
@@ -106,28 +112,18 @@ class AbstractButton extends Component
 		cursorPress = defaultCursorPress;
 		//~ useHandCursors = false;
 		useHandCursors = true;
-	}
-
-	/**
-	* Init Function
-	*
-	*
-	* @param opts Dynamic object
-	*
-	*/
-	override public function init(?opts:Dynamic)
-	{
 		color = DefaultStyle.BACKGROUND;
-		if(box.isEmpty())
-			box = new Rectangle(0,0,90,30);
-
-		super.init(opts);
-
-
 		buttonMode = true;
 		tabEnabled = true;
 		mouseEnabled = true;
 		focusRect = true;
+	}
+
+	override public function init(?opts:Dynamic)
+	{
+		if(box.isEmpty())
+			box = new Rectangle(0,0,90,30);
+		super.init(opts);
 	}
 
 	static function __init__() {

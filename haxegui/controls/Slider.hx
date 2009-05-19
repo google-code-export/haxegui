@@ -45,7 +45,7 @@ class SliderHandle extends AbstractButton
 	}
 }
 
-class Slider extends Component, implements Dynamic
+class Slider extends Component
 {
 	public var handle : SliderHandle;
 	//~ public var value : Float;

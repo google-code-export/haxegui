@@ -34,7 +34,7 @@ import flash.events.FocusEvent;
 import haxegui.controls.Component;
 
 
-class FocusManager extends EventDispatcher, implements Dynamic
+class FocusManager extends EventDispatcher
 {
 
 

@@ -76,7 +76,7 @@ class WindowFrame extends Component
 * @todo frame rendering to hscript
 * @todo corners to components
 */
-class Window extends Component, implements Dynamic
+class Window extends Component
 {
 	public var titlebar : TitleBar;
 

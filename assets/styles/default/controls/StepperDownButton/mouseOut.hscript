@@ -1,0 +1,2 @@
+CursorManager.setCursor(Cursor.ARROW);
+this.stopInterval();

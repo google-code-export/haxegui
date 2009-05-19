@@ -37,6 +37,18 @@ class Opts {
 		return v;
 	}
 
+	/**
+	* Clones a set of options, returning a new options object
+	**/
+	public static function clone(opts:Dynamic) : Dynamic
+	{
+		var rv : Dynamic = {};
+		for(f in Reflect.fields(opts)) {
+			Reflect.setField(rv, f, Reflect.field(opts,f));
+		}
+		return rv;
+	}
+	
 	public static function classInstance(opts:Dynamic,field:String,classes:Array<Class<Dynamic>>)
 	{
 		var v =  getField(opts,field);
@@ -117,5 +129,18 @@ class Opts {
 			return Reflect.field(opts, field);
 		}
 		return getField(Reflect.field(opts, field.substr(0,idx)), field.substr(idx+1));
+	}
+	
+	/**
+	* Takes the input opts and removes all the fields specified.
+	* 
+	* @param opts Input opts to be modified
+	* @param fields list of field names to remove
+	**/
+	public static function removeFields(opts:Dynamic, fields:Array<String>) : Void
+	{
+		for(f in fields) {
+			Reflect.deleteField(opts, f);
+		}
 	}
 }

@@ -58,7 +58,6 @@ class ScrollBarUpButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
 	static function __init__() {
@@ -80,7 +79,6 @@ class ScrollBarDownButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
 	static function __init__() {
@@ -100,7 +98,6 @@ class ScrollBarHandle extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		this.addEventListener(MouseEvent.CLICK,onMouseClick,false,0,true);
 	}
 
 	static function __init__() {
@@ -172,8 +169,6 @@ class ScrollBar extends haxegui.controls.Component
 		shadow = new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, 0.75, BitmapFilterQuality.LOW, false, false, false);
 		handle.filters = [shadow];
 
-		handle.addEventListener(MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
-		handle.addEventListener(MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
 
 
 		up = new ScrollBarUpButton(this, "up" );
@@ -188,11 +183,6 @@ class ScrollBar extends haxegui.controls.Component
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, .75, BitmapFilterQuality.HIGH, true, false, false);
 		//~ down.filters = [shadow];
 
-
-		up.addEventListener(MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
-		up.addEventListener(MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
-		down.addEventListener(MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
-		down.addEventListener(MouseEvent.ROLL_OUT, onRollOut, false, 0, true);
 
 		this.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 
@@ -370,7 +360,7 @@ class ScrollBar extends haxegui.controls.Component
 	* @param
 	*
 	*/
-	public function onEnterFrame(e:Event)
+	public function onScrollBarEnterFrame(e:Event)
 	{
 		switch(e.target)
 		{

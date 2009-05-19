@@ -47,7 +47,7 @@ typedef ScriptObject = {
 * @author Russell Weir <damonsbane@gmail.com>
 * @author Omer Goshen <gershon@goosemoose.com>
 */
-class ScriptManager implements Dynamic
+class ScriptManager
 {
 	static var defaultActions : Hash<ScriptObject>;
 	static var instanceActions : TypedDictionary<Component,Hash<ScriptObject>>;

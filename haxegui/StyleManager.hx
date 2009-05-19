@@ -40,7 +40,7 @@ import hscript.Interp;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class StyleManager implements Dynamic
+class StyleManager
 {
 	public static var styles : Hash<Xml> = new Hash<Xml>();
 

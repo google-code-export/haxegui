@@ -43,7 +43,7 @@ import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
 import haxegui.events.MoveEvent;
 
-class RadioButton extends AbstractButton, implements Dynamic
+class RadioButton extends AbstractButton
 {
 	//~ public var group : Array<RadioButton>
 	public var selected(default, default) : Bool;
