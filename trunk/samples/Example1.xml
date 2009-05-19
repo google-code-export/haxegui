@@ -107,7 +107,13 @@ TODO:
 				<haxegui:controls:RadioButton name="RadioButton4" x="30" y="400" selected="true" disabled="true" />
 
 				<haxegui:controls:UiList name="List1" x="210" y="250" >
-					<list>Apples,Bananas,Oranges</list>
+					<haxegui:DataSource>
+						<List>
+							<String>Apples</String>
+							<String>Bananas</String>
+							<String>Oranges</String>
+						</List>
+					</haxegui:DataSource>
 					<events>
 						<script type="text/hscript" action="onLoaded"><![CDATA[
 							this.data.push("Milk");
