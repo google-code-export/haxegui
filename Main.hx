@@ -83,10 +83,16 @@ import feffects.Tween;
 class Main extends Sprite, implements haxe.rtti.Infos
 {
 
-	static var log : haxe.Log;
+// 	static var log : haxe.Log;
 
 	public static function main ()
 	{
+		var bootupMessages = new Array<{v:Dynamic, inf:haxe.PosInfos}>();
+		var bootupHandler = function(v : Dynamic, ?inf:haxe.PosInfos) {
+			bootupMessages.push({v:v, inf:inf});
+		}
+		setRedirection(bootupHandler);
+
 		// Setup Haxegui
 		haxegui.Haxegui.init();
 
@@ -122,8 +128,16 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		haxe.Log.clear();
 		setRedirection(console.log);
 
-		trace("<FONT SIZE='24' FACE='_mono'>Hello and welcome.</FONT>");
-		trace("<FONT SIZE='12' FACE='_mono'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+".</FONT>");
+		log = function(v:Dynamic) {
+			console.log(v, null);
+		}
+
+		log("*** Bootup messages:");
+		for(e in bootupMessages)
+			console.log(e.v, e.inf);
+
+		log("<FONT SIZE='24' FACE='_mono'>Hello and welcome.</FONT>");
+		log("<FONT SIZE='12' FACE='_mono'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+".</FONT>");
 
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e){ if(e.charCode=="`".code) console.visible = !console.visible; });
 
@@ -349,7 +363,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		for(k in keys)
 			a.push( k.split('.').slice(-2,-1).join('.') + "." + k.split('.').pop() );
 		a.sort(function(a,b) { if(a==b) return 0; if(a < b) return -1; return 1;});
-		trace("Registered scripts: " + Std.string(a));
+		log("Registered scripts: " + Std.string(a));
 		//~ trace("Registered scripts: " + Utils.print_r(a));
 
 
@@ -403,4 +417,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		back.graphics.endFill();
 	}
 
+	public static dynamic function log(v:Dynamic) {
+		trace(v, null);
+	}
 }//Main

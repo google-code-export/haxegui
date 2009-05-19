@@ -159,6 +159,10 @@ class Console extends Window, implements ITraceListener
 		var text:String =  "<FONT FACE=\"MONO\" SIZE=\"10\" COLOR=\"#eeeeee\">";
 		text += DateTools.format (Date.now (), "%H:%M:%S") + "\t" ;
 
+		if(inf != null) {
+			text += inf.fileName + ":" + inf.lineNumber + " : ";
+		}
+
 		if(Std.is(e,Event))
 		{
 			text += "<B>"+e.target;
