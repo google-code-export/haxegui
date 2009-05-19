@@ -40,60 +40,71 @@ import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
-class Stepper extends Component, implements Dynamic
+class StepperUpButton extends AbstractButton
 {
-	public var up : AbstractButton;
-	public var down : AbstractButton;
-	public var back : Sprite;
+	static function __init__() {
+		haxegui.Haxegui.register(StepperUpButton);
+	}
+}
+
+class StepperDownButton extends AbstractButton
+{
+	static function __init__() {
+		haxegui.Haxegui.register(StepperDownButton);
+	}
+}
+
+class Stepper extends Component
+{
+	public var up : StepperUpButton;
+	public var down : StepperDownButton;
+	public var background : Sprite;
 	public var tf : TextField;
 
-	public var value : Float;
+	public var value(__getValue,__setValue) : Float;
 	public var step : Float;
 	public var min : Float;
 	public var max : Float;
-
-	var timer : Timer;
-	var delta : Float;
-
-	var autoRepeat : Bool;
 
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
-		tf = new TextField();
+
 		value = 0;
 		step = 1;
 		min = 0;
 		max = 100;
+		color = DefaultStyle.BACKGROUND;
+		box = new Rectangle(0,0,40,20);
+
+		tf = new TextField();
+		tf.name = "tf";
+		background = new Sprite();
+		background.name = "background";
+		this.addChild(background);
+		this.addChild(tf);
+
+		up = new StepperUpButton(this, "up");
+		down = new StepperDownButton(this, "down");
+
+		this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 	}
 
 
 	override public function init(opts:Dynamic=null)
 	{
-		color = DefaultStyle.BACKGROUND;
-		box = new Rectangle(0,0,40,20);
+		var aOpts = Opts.clone(opts);
+		value = Opts.optFloat(aOpts,"value", value);
+		step = Opts.optFloat(aOpts,"step", step);
+		min = Opts.optFloat(aOpts,"min", min);
+		max = Opts.optFloat(aOpts,"max", max);
+		Opts.removeFields(aOpts, ["value","step","min","max"]);
 
-		super.init(opts);
+		super.init(aOpts);
+		// since we removed fields, reset the initOpts
+		this.initOpts = Opts.clone(opts);
 
-		value = Opts.optFloat(opts,"value", value);
-		step = Opts.optFloat(opts,"step", step);
-		min = Opts.optFloat(opts,"min", min);
-		max = Opts.optFloat(opts,"max", max);
-
-		back = new Sprite();
-		back.graphics.lineStyle (1, this.color - 0x141414, 1, true,
-								 flash.display.LineScaleMode.NONE,
-								 flash.display.CapsStyle.ROUND,
-								 flash.display.JointStyle.ROUND);
-		back.graphics.beginFill(DefaultStyle.INPUT_BACK);
-		back.graphics.drawRoundRect(0, -1, box.width, box.height, 8, 8);
-		back.graphics.endFill();
-		this.addChild(back);
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
-		back.filters = [shadow];
-
-		tf.name = "tf";
 		tf.type = flash.text.TextFieldType.INPUT;
 		tf.selectable = true;
 		tf.width = box.width - 10;
@@ -101,165 +112,12 @@ class Stepper extends Component, implements Dynamic
 		tf.x = 4;
 		tf.y = 4;
 		tf.text = Std.string(value);
-
 		tf.embedFonts = true;
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 
-		this.addChild(tf);
-
-
-		up = new Button(this, "up");
-
-		up.setAction("redraw",
-			"
-				this.graphics.clear();
-				this.graphics.beginFill(this.color);
-				this.graphics.drawRoundRectComplex(0, 0, 10, 10, 0, 4, 0, 0);
-				this.graphics.endFill();
-			");
-
 		up.init({color: this.color});
-		up.removeChild(up.label);
-		up.move( box.width - 10, -1 );
-
-
-
-		down = new Button(this, "down");
-
-		down.setAction("redraw",
-			"
-				this.graphics.clear();
-				this.graphics.beginFill(this.color);
-				this.graphics.drawRoundRectComplex(0, 0, 10, 10, 0, 0, 0, 4);
-				this.graphics.endFill();
-			");
-
 		down.init({color: this.color});
-		down.removeChild(down.label);
-		down.move( box.width - 10, 9 );
-
-		// add the drop-shadow filter
-		shadow = new DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
-
-		up.filters = [shadow];
-		down.filters = [shadow];
-
-
-
-		up.addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown, false, 0, true);
-		up.addEventListener (MouseEvent.MOUSE_UP, onBtnMouseUp, false, 0, true);
-		up.addEventListener (MouseEvent.ROLL_OVER, onBtnRollOver, false, 0, true);
-		up.addEventListener (MouseEvent.ROLL_OUT,  onBtnRollOut, false, 0, true);
-
-		down.addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown, false, 0, true);
-		down.addEventListener (MouseEvent.MOUSE_UP, onBtnMouseUp, false, 0, true);
-		down.addEventListener (MouseEvent.ROLL_OVER, onBtnRollOver, false, 0, true);
-		down.addEventListener (MouseEvent.ROLL_OUT,  onBtnRollOut, false, 0, true);
-
-
-		this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 	}
-
-	/**
-	*
-	*
-	*/
-	public function onBtnRollOver(e:MouseEvent) : Void
-	{
-		if(disabled) return;
-		//~ redraw(DefaultStyle.BACKGROUND + 0x323232 );
-//		redraw(DefaultStyle.BACKGROUND | 0x141414 );
-		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
-		//~ e.target.redraw(e.target.color | 0x202020 );
-		//~ redraw(color + 0x141414 );
-		CursorManager.setCursor(Cursor.HAND);
-
-	}
-
-	/**
-	*
-	*
-	*/
-	public  function onBtnRollOut(e:MouseEvent) : Void
-	{
-		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
-		//~ e.target.redraw();
-//		CursorManager.setCursor(Cursor.ARROW);
-	}
-
-
-	/**
-	*
-	*/
-	function onBtnMouseDown (e:MouseEvent) : Void
-	{
-		if (!Std.is (e.target, flash.display.DisplayObject))
-		return;
-
-		//~ FocusManager.getInstance().setFocus (this);
-		switch(e.target)
-		{
-			case up:
-			value += step;
-			if(value>max)
-			value = max;
-
-			case down:
-			value -= step;
-			if(value<min)
-			value = min;
-		}
-
-		dispatchEvent(new Event(Event.CHANGE));
-
-		//~ e.target.redraw(color - 0x202020);
-		//~ e.target.redraw(e.target.color | 0x666666);
-
-		e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-
-	}
-
-
-	function onEnterFrame(e:Event) : Void
-	{
-		//~ trace(Timer.stamp() - delta);
-			//~ delta = haxe.Timer.stamp();
-
-		switch(e.target)
-		{
-			case up:
-			value += step;
-			if(value>max)
-			value = max;
-
-			case down:
-			value -= step;
-			if(value<min)
-			value = min;
-		}
-		dispatchEvent(new Event(Event.CHANGE));
-		//~ onChanged();
-
-	}
-
-
-
-	function onBtnMouseUp (e:MouseEvent) : Void
-	{
-
-
-		e.target.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-
-		e.target.redraw(color);
-
-		//~ e.target.stopDrag();
-		//~ e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
-		//~ dispatchEvent(new Event(Event.CHANGE));
-
-		//~ dispatchEvent(new Event(Event.CHANGE));
-
-	}
-
 
 	public function onChanged(?e:Dynamic)
 	{
@@ -270,9 +128,24 @@ class Stepper extends Component, implements Dynamic
 		this.tf.setTextFormat(DefaultStyle.getTextFormat());
 	}
 
+	private function __getValue() : Float {
+		return this.value;
+	}
+
+	private function __setValue(v:Float) : Float {
+		if(this.value == v)
+			return v;
+		this.value = v;
+		if(this.value > max)
+			this.value = max;
+		if(this.value < min)
+			this.value = min;
+		dispatchEvent(new Event(Event.CHANGE));
+		return v;
+	}
+
 	static function __init__() {
-		haxegui.Haxegui.register(Stepper,initialize);
+		haxegui.Haxegui.register(Stepper);
 	}
-	static function initialize() {
-	}
+
 }

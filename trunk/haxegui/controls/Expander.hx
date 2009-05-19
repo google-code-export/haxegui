@@ -47,7 +47,7 @@ import haxegui.events.MoveEvent;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class Expander extends AbstractButton, implements Dynamic
+class Expander extends AbstractButton
 {
 	public var expanded(__getExpanded,__setExpanded) : Bool;
 	public var label : Label;

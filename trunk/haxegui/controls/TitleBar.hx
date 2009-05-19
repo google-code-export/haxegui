@@ -120,7 +120,7 @@ class MaximizeButton extends AbstractButton
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class TitleBar extends Component, implements Dynamic
+class TitleBar extends Component
 {
 
 	public var title : TextField;
@@ -158,10 +158,6 @@ class TitleBar extends Component, implements Dynamic
 		maximizeButton.moveTo(36,4);
 		maximizeButton.filters = [shadow];
 
-		closeButton.useHandCursors = minimizeButton.useHandCursors = maximizeButton.useHandCursors = true;
-
-
-
 		//mc.x = box.width - 32;
 		title = new TextField ();
 		title.name = Opts.optString(opts,"title","");
@@ -181,7 +177,7 @@ class TitleBar extends Component, implements Dynamic
 
 		//~ title.antiAliasType = flash.text.AntiAliasType.NORMAL;
 		//~ title.sharpness = 100;
-		this.quality = flash.display.StageQuality.LOW;
+		//~ this.quality = flash.display.StageQuality.LOW;
 
 		title.setTextFormat (DefaultStyle.getTextFormat());
 

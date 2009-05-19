@@ -38,7 +38,7 @@ import haxegui.StyleManager;
 import haxegui.controls.Component;
 
 
-class Container extends Component, implements IContainer, implements Dynamic
+class Container extends Component, implements IContainer
 //~ , implements IChildList
 {
 	private var _clip : Bool;
@@ -46,6 +46,10 @@ class Container extends Component, implements IContainer, implements Dynamic
 	public function new (?parent : flash.display.DisplayObjectContainer, ?name:String, ?x : Float, ?y: Float)
 	{
 		super (parent, name, x, y);
+		this.color = DefaultStyle.BACKGROUND;
+		this.buttonMode = false;
+		this.mouseEnabled = false;
+		this.tabEnabled = false;
 	}
 
 	public override function addChild(o : DisplayObject) : DisplayObject
@@ -60,32 +64,15 @@ class Container extends Component, implements IContainer, implements Dynamic
 
 	override public function init(opts : Dynamic=null)
 	{
-		color = DefaultStyle.BACKGROUND;
-
 		super.init(opts);
-
-		this.buttonMode = false;
-		this.mouseEnabled = false;
-		this.tabEnabled = false;
-
-
-		// add the drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
-		this.filters = [shadow];
-
-		//~ this.cacheAsBitmap = true;
 
 		//~ if(this.parent!=null)
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-
-
 	}
 
 
 	public function onParentResize(e:ResizeEvent) {
-
-
 		if(Std.is(parent, Component))
 		{
 			box = untyped parent.box.clone();
@@ -97,34 +84,20 @@ class Container extends Component, implements IContainer, implements Dynamic
 			box = untyped parent.parent.box.clone();
 		}
 
-		
 		for(i in 0...numChildren)
 			if(Std.is( getChildAt(i), haxegui.controls.ScrollBar ))
 			{
 				this.box.width -= 20;
 			}
-			
-			
-			
 
 		redraw(null);
 		//~ dirty = true;
-
 		//
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
 		if(e != null)
 			e.updateAfterEvent();
 	}
-
-	override public function redraw (opts:Dynamic = null):Void
-	{
-		ScriptManager.exec(this,"redraw",
-			{
-				color: Opts.optInt(opts, "color", color),
-			});
-	}
-
 
 	static function __init__() {
 		haxegui.Haxegui.register(Container);

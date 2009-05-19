@@ -48,7 +48,7 @@ import haxegui.events.DragEvent;
 * @author Russell Weir'
 *
 */
-class ListItem extends AbstractButton, implements Dynamic
+class ListItem extends AbstractButton
 {
 
 	public var tf : TextField;

@@ -85,7 +85,7 @@ import feffects.easing.Quart;
  *
  *
  */
-class Stats extends Window, implements Dynamic
+class Stats extends Window
 {
 
   var list : UiList;
@@ -232,7 +232,7 @@ class Stats extends Window, implements Dynamic
 
         timer = new haxe.Timer(interval);
         timer.run = update;
-        
+
 
         if(isSizeable())
         {
@@ -241,7 +241,7 @@ class Stats extends Window, implements Dynamic
           br.y = frame.height - 32;
         }
 
-          this.addEventListener (Event.ENTER_FRAME, onEnterFrame);
+          this.addEventListener (Event.ENTER_FRAME, onStatsEnterFrame);
 
 
         //~ redraw(null);
@@ -274,7 +274,7 @@ class Stats extends Window, implements Dynamic
         if(avgFPS.length > 10 ) avgFPS.shift();
 
 
-        list.data = 
+        list.data =
         [
             "FPS: \t\t\t" + Std.string(fps).substr(0,5),
             "minFPS: \t\t" + Std.string(minFPS).substr(0,5),
@@ -353,7 +353,7 @@ class Stats extends Window, implements Dynamic
     }
 
 
-  public function onEnterFrame(e:Event) : Void
+  public function onStatsEnterFrame(e:Event) : Void
   {
 
     frameCounter++;

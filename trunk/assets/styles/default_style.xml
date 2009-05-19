@@ -62,7 +62,7 @@
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.graphics.clear();
-				this.graphics.beginFill(color);
+				this.graphics.beginFill(this.color);
 				this.graphics.drawRect(0, 0, this.box.width, this.box.height );
 				this.graphics.endFill();
 			]]>
@@ -305,6 +305,56 @@
 			</script>
 		</events>
 	</haxegui:controls:ScrollBarUpButton>
+
+	<haxegui:controls:StepperDownButton>
+		<events>
+			<script type="text/hscript" action="mouseDown">
+			<![CDATA[
+				if(!this.disabled && this.autoRepeat) {
+					this.parent.value -= this.parent.step;
+					this.startIntervalDelayed(this.repeatsPerSecond, this.repeatWaitTime);
+				}
+			]]>
+			</script>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.graphics.clear();
+				this.graphics.beginFill(this.color);
+				this.graphics.drawRoundRectComplex(0, 0, 10, 10, 0, 0, 0, 4);
+				this.graphics.endFill();
+				this.moveTo( parent.box.width - 10, 9 );
+				var shadow = new flash.filters.DropShadowFilter(
+					2, 45, DefaultStyle.DROPSHADOW,
+					0.5, 4, 4, 0.5,
+					flash.filters.BitmapFilterQuality.HIGH,
+					false, false, false );
+				this.filters = [shadow];
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseOver">
+			<![CDATA[
+				if(disabled) return;
+				CursorManager.setCursor(Cursor.HAND);
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseOut">
+			<![CDATA[
+				CursorManager.setCursor(Cursor.ARROW);
+				this.stopInterval();
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseUp">
+			<![CDATA[
+				this.stopInterval();
+			]]>
+			</script>
+			<script type="text/hscript" action="interval">
+			<![CDATA[
+				this.parent.value -= this.parent.step;
+			]]>
+			</script>
+		</events>
+	</haxegui:controls:StepperDownButton>
 
 	<haxegui:controls:SliderHandle>
 		<events>
@@ -611,6 +661,56 @@
 		</events>
 	</haxegui:controls:ComboBoxBackground>
 
+	<haxegui:controls:StepperUpButton>
+		<events>
+			<script type="text/hscript" action="mouseDown">
+			<![CDATA[
+				if(!this.disabled && this.autoRepeat) {
+					this.parent.value += this.parent.step;
+					this.startIntervalDelayed(this.repeatsPerSecond, this.repeatWaitTime);
+				}
+			]]>
+			</script>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.graphics.clear();
+				this.graphics.beginFill(this.color);
+				this.graphics.drawRoundRectComplex(0, 0, 10, 10, 0, 4, 0, 0);
+				this.graphics.endFill();
+				this.moveTo( parent.box.width - 10, -1 );
+				var shadow = new flash.filters.DropShadowFilter(
+					2, 45, DefaultStyle.DROPSHADOW,
+					0.5, 4, 4, 0.5,
+					flash.filters.BitmapFilterQuality.HIGH,
+					false, false, false );
+				this.filters = [shadow];
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseOver">
+			<![CDATA[
+				if(disabled) return;
+				CursorManager.setCursor(Cursor.HAND);
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseOut">
+			<![CDATA[
+				CursorManager.setCursor(Cursor.ARROW);
+				this.stopInterval();
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseUp">
+			<![CDATA[
+				this.stopInterval();
+			]]>
+			</script>
+			<script type="text/hscript" action="interval">
+			<![CDATA[
+				this.parent.value += this.parent.step;
+			]]>
+			</script>
+		</events>
+	</haxegui:controls:StepperUpButton>
+
 	<haxegui:controls:ScrollBarHandle>
 		<events>
 			<script type="text/hscript" action="redraw">
@@ -772,6 +872,29 @@
 		</events>
 	</haxegui:controls:ListItem>
 
+	<haxegui:controls:Stepper>
+		<events>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.background.graphics.lineStyle (1, this.color - 0x141414, 1, true,
+											flash.display.LineScaleMode.NONE,
+											flash.display.CapsStyle.ROUND,
+											flash.display.JointStyle.ROUND);
+				this.background.graphics.beginFill(DefaultStyle.INPUT_BACK);
+				this.background.graphics.drawRoundRect(0, -1, this.box.width, this.box.height, 8, 8);
+				this.background.graphics.endFill();
+				
+				var shadow = new flash.filters.DropShadowFilter(
+					4, 45, DefaultStyle.DROPSHADOW,
+					0.8, 4, 4, 0.65,
+					flash.filters.BitmapFilterQuality.HIGH,
+					true, false, false );
+				this.filters = [shadow];
+			]]>
+			</script>
+		</events>
+	</haxegui:controls:Stepper>
+
 	<haxegui:controls:ComboBoxDropButton>
 		<events>
 			<script type="text/hscript" action="redraw">
@@ -854,7 +977,6 @@
 			</script>
 			<script type="text/hscript" action="mouseClick">
 			<![CDATA[
-				trace(this.parent.parent.name);
 				this.parent.parent.destroy();
 			]]>
 			</script>

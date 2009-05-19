@@ -41,9 +41,11 @@ import feffects.Tween;
 /**
 * Component Class
 **/
-class Component extends Sprite, implements haxegui.IMovable, implements haxegui.IToolTip, implements Dynamic
+class Component extends Sprite, implements haxegui.IMovable, implements haxegui.IToolTip
 {
-
+	/** The static component id counter **/
+	private static var nextId : Int = 0;
+	
 	/** Rectangular dimensions **/
 	public var box : Rectangle;
 
@@ -77,8 +79,12 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** The initial opts **/
 	private var initOpts : Dynamic;
 
-	/** The static component id counter **/
-	private static var nextId : Int = 0;
+	/** Number of interval calls per second **/	
+	private var intervalUpdatesPerSec : Float;
+	
+	/** Last timestamp when an interval occured **/
+	private var lastInterval : Float;
+	
 	/**
 	*
 	**/
@@ -140,10 +146,21 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.buttonMode = Opts.optBool(opts, "buttonMode", false);
 		this.visible = Opts.optBool(opts, "visible", true);
 
-		this.initOpts = {};
-		for(f in Reflect.fields(opts)) {
-			Reflect.setField(initOpts, f, Reflect.field(opts,f));
+		var aOps = Opts.clone(opts);
+		Opts.removeFields(aOps, ["name","disabled","width","height","x","y","color","alpha","buttonMode","visible"]);
+		/*
+		for(f in Reflect.fields(aOps)) {
+			if(Reflect.hasField(this, f)) {
+				try {
+					Reflect.setField(this, f, Reflect.field(aOps, f));
+				} catch(e:Dynamic) {
+					trace("Error on field " + f + " (type " + Std.string(Type.typeof(Reflect.field(aOps, f))) + "): " + e);
+				}
+			}
 		}
+		*/
+
+		this.initOpts = Opts.clone(opts);
 		this.dirty = true;
 	}
 
@@ -206,7 +223,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		var c = try ScriptManager.getInstanceActionObject(this, action) catch(e:Dynamic) null;
 		return (c != null);
 	}
-
+	
 	/**
 	* Returns true if this component has an action registered
 	* for the action type [action]. Only returns true if the
@@ -220,13 +237,23 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	/**
-	* Excecute redrawing script
+	* @todo complete focus, recurse, that is check all children's children too..
 	**/
-	public function redraw(opts:Dynamic=null) {
-// 		trace(this.name + " redraw");
-		ScriptManager.exec(this,"redraw", opts);
+	public function hasFocus ():Bool
+	{
+		return if(FocusManager.getInstance().getFocus() == this) true else false;
 	}
-
+	
+	/** Returns whether object validates **/
+	public function isValid() : Bool
+	{
+		if(!hasAction("validate"))
+			return true;
+		var rv = ScriptManager.exec(this, "validate", {});
+		if(rv == null) return true;
+		return cast rv;
+	}
+	
 	/**
 	* Move relative to current location.
 	**/
@@ -257,6 +284,14 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	/**
+	* Excecute redrawing script
+	**/
+	public function redraw(opts:Dynamic=null) {
+// 		trace(this.name + " redraw");
+		ScriptManager.exec(this,"redraw", opts);
+	}
+	
+	/**
 	*
 	**/
 	public function setBox(b:Rectangle) : Rectangle
@@ -270,21 +305,6 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		return box;
 	}
 
-	//TODO: recurse, that is check all children's children too..
-	public function hasFocus ():Bool
-	{
-		if (FocusManager.getInstance ().getFocus () == this )
-		return true;
-		else
-		return false;
-	}
-
-	/** Returns whether object validates **/
-	public function isValid() : Bool
-	{
-		return true;
-	}
-
 	/**
 	* Sets the action code for the specified action name for this component.
 	*
@@ -293,6 +313,38 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	**/
 	public function setAction(action:String, code:String) : Void {
 		ScriptManager.setInstanceScript(this, action, code);
+	}
+
+	/**
+	* Starts an interval timer, which calls the "interval" action.
+	*
+	* @param updatesPerSecond Number of times per second the interval action will be called
+	**/
+	public function startInterval(updatesPerSecond : Float) : Void {
+		stopInterval();
+		startIntervalDelayed(updatesPerSecond, 0.0);
+	}
+	
+	/**
+	* Starts an interval timer, which calls the "interval" action, after waiting [wait] seconds
+	*
+	* @param updatesPerSecond Number of times per second the interval action will be called
+	* @param wait Number of seconds to wait before the first update.
+	**/
+	public function startIntervalDelayed(updatesPerSecond : Float, wait : Float) : Void {
+		stopInterval();
+		if(updatesPerSecond < 1) return;
+		if(Math.isNaN(wait)) wait = 0.0;
+		lastInterval = haxe.Timer.stamp() + wait;
+		intervalUpdatesPerSec = updatesPerSecond;
+		this.addEventListener(flash.events.Event.ENTER_FRAME, onEnterFrame);	
+	}
+	
+	/**
+	* Stop the current interval timer
+	**/
+	public function stopInterval() : Void {
+		this.removeEventListener(flash.events.Event.ENTER_FRAME, onEnterFrame);
 	}
 
 	override public function toString() : String
@@ -468,6 +520,17 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	{
 	}
 
+	private function onEnterFrame(e:Event) : Void
+	{
+		var now = haxe.Timer.stamp();
+		var stepsF : Float  = (now - lastInterval) * intervalUpdatesPerSec;
+		var steps : Int = Math.floor( stepsF );
+		lastInterval += steps / intervalUpdatesPerSec;
+		
+		for(x in 0...steps) {
+			ScriptManager.exec(this,"interval",{event:e});
+		}
+	}
 
 
 	//////////////////////////////////////////////////
@@ -476,6 +539,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	// redraw, mouseClick, mouseOver, mouseOut
 	// mouseDown, mouseUp, validate, gainingFocus
 	// losingFocus, focusIn, focusOut
+	// interval
 
 
 	//////////////////////////////////////////////////
