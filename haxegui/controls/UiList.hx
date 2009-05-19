@@ -74,11 +74,6 @@ class ListItem extends AbstractButton
 
 		//~ label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
 		this.addChild(tf);
-
-		// add the drop-shadow filter
-		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, true, false, false );
-		//~ this.filters = [shadow];
-
 	}
 
 	static function __init__() {
@@ -97,7 +92,6 @@ class ListItem extends AbstractButton
  */
 class UiList extends Component
 {
-
 	public var header : Component;
 	public var data : Dynamic;
 
@@ -121,39 +115,43 @@ class UiList extends Component
 
 
 		if(opts == null) opts = {}
-		if(opts.innerData!=null)
+		if(opts.innerData!=null) {
 			data = opts.innerData.split(",");
-		if(opts.data!=null)
+		}
+		if(opts.data!=null) {
 			data = opts.data;
+		}
 
+		var idx : Int = 0;
+		var me = this;
+		var _addItem = function(d:Dynamic) {
+			idx++;
+			var item = new ListItem(me, "item" + idx, 0, 20*idx );
+			var str : String = (Std.is(d, String)) ? d : Std.string(d);
+			item.init({text: str, width: me.box.width, color: DefaultStyle.INPUT_BACK});
 
-		for (i in 1...data.length+1)
-		{
-			var item = new ListItem(this, "item" + i, 0, 20*i );
+			item.addEventListener(MouseEvent.CLICK, me.onItemMouseClick, false, 0, true);
 
+			item.addEventListener(DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
+			item.addEventListener(DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
+		}
 
-			var str : String = "";
-			if(Std.is(data, Array))
-				try
-				{
-					str = data[i-1];
-				}
-				catch(e:flash.Error)
-				{
-					//~ tf.text = Std.string(new flash.Error());
-					str = Std.string(e);
-				}
-
-			item.init({text: str, width: this.box.width, color: DefaultStyle.INPUT_BACK});
-
-			item.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
-			item.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
-			item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
-			item.addEventListener (MouseEvent.MOUSE_UP, onItemMouseUp, false, 0, true);
-
-			item.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
-			item.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
-
+		if(Std.is(data, Array)) {
+			var c : Array<Dynamic> = cast data;
+			for(i in c)
+				_addItem(i);
+		}
+		else if(Std.is(data,List)) {
+			var od = data;
+			data = new Array<Dynamic>();
+			var c : List<Dynamic> = cast od;
+			for(i in c) {
+				data.push(i);
+				_addItem(i);
+			}
+		}
+		else {
+			_addItem(Std.string(data));
 		}
 
 		//
@@ -161,13 +159,12 @@ class UiList extends Component
 		this.filters = [shadow];
 	}
 
-	public function onItemMouseDown(e:MouseEvent) : Void
+	public function onItemMouseClick(e:MouseEvent) : Void
 	{
-
-	shrink();
+		shrink();
 	}
 
-	public function onItemMouseUp(e:MouseEvent) : Void
+	public function onItemDragComplete(e:MouseEvent) : Void
 	{
 		e.target.dispatchEvent (new DragEvent (DragEvent.DRAG_COMPLETE));
 		e.target.x = 0;
@@ -178,30 +175,15 @@ class UiList extends Component
 
 	}
 
-	public function onItemRollOver(e:MouseEvent) : Void
-	{
-		CursorManager.setCursor(Cursor.HAND);
-	}
-
-	public function onItemRollOut(e:MouseEvent) : Void
-	{
-	}
-
-
 	public function shrink()
 	{
-
 		for(i in 1...numChildren-1)
 		{
-
 			{
 				var item = getChildAt(i);
 				//~ if(item.y>20) item.y -= 20;
-
 			}
-
 		}
-
 	}
 
 	public function drawHeader(?color:UInt)
@@ -244,10 +226,10 @@ class UiList extends Component
 		tf.setTextFormat (DefaultStyle.getTextFormat());
 		header.addChild (tf);
 
-		header.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
-		header.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
-		header.addEventListener (MouseEvent.MOUSE_DOWN, onHeaderMouseDown, false, 0, true);
-		header.addEventListener (MouseEvent.MOUSE_UP, onHeaderMouseUp, false, 0, true);
+// 		header.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
+// 		header.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
+		header.addEventListener (MouseEvent.CLICK, onHeaderMouseClick, false, 0, true);
+// 		header.addEventListener (MouseEvent.MOUSE_UP, onHeaderMouseUp, false, 0, true);
 
 		//~ for(i in 0...numChildren-1)
 			//~ if( Std.is( this.getChildAt(i), ListItem ))
@@ -256,27 +238,22 @@ class UiList extends Component
 
 	}
 
-
-
-	public function onHeaderMouseDown(e:MouseEvent)
+	public function onHeaderMouseClick(e:MouseEvent)
 	{
-
-
-		sortReverse = ! sortReverse;
-
+		sortReverse = !sortReverse;
 		//~ trace(data);
 		drawHeader();
-
-
-	}
-
-	public function onHeaderMouseUp(e:MouseEvent)
-	{
 		data.sort(
-			function(x,y)
-			{
-				//~ return if( x.charAt(0) == y.charAt(0) ) 0 else if( x.charAt(0) > y.charAt(0) ) 1 else -1;
-				return ( x.charAt(0) == y.charAt(0) ) ? 0 : ( x.charAt(0) > y.charAt(0) ) ? 1 : -1;
+			if(!sortReverse) {
+				function(x,y)
+				{
+					return ( x == y ) ? 0 : ( x > y ) ? 1 : -1;
+				}
+			} else {
+				function(x,y)
+				{
+					return ( x == y ) ? 0 : ( x > y ) ? -1 : 1;
+				}
 			}
 		);
 		redraw();
