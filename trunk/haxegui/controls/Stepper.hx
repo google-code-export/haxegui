@@ -58,7 +58,7 @@ class Stepper extends Component
 {
 	public var up : StepperUpButton;
 	public var down : StepperDownButton;
-	public var background : Sprite;
+	public var background : Component;
 	public var tf : TextField;
 
 	public var value(__getValue,__setValue) : Float;
@@ -80,9 +80,7 @@ class Stepper extends Component
 
 		tf = new TextField();
 		tf.name = "tf";
-		background = new Sprite();
-		background.name = "background";
-		this.addChild(background);
+		background = new Component(this, "background");
 		this.addChild(tf);
 
 		up = new StepperUpButton(this, "up");

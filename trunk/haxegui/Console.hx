@@ -79,7 +79,7 @@ class Console extends Window, implements ITraceListener
 
 		input = new TextField();
 
-		container = new Container(this, "Container", 10, 20);
+		container = new Container(this, "Console Container", 10, 20);
 		container.init();
 
 		parser = new hscript.Parser();

@@ -98,7 +98,7 @@ class ListItem extends AbstractButton
 class UiList extends Component
 {
 
-	public var header : Sprite;
+	public var header : Component;
 	public var data : Dynamic;
 
 	public var sortReverse : Bool;
@@ -108,12 +108,7 @@ class UiList extends Component
 	{
 		super (parent, name, x, y);
 		data = [];
-		header = new Sprite();
-		header.name = "header";
-		this.addChild(header);
-
-
-
+		header = new Component(this, "header");
 	}
 
 	override public function init(opts : Dynamic=null)
