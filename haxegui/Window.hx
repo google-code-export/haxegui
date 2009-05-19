@@ -81,14 +81,14 @@ class Window extends Component
 	public var titlebar : TitleBar;
 
 	public var frame : WindowFrame;
-	public var br : Sprite;
-	public var bl : Sprite;
+	public var br : Component;
+	public var bl : Component;
 
 	public var type:WindowType;
 
 	private var lazyResize:Bool;
 	private var sizeable:Bool;
-	
+
 	//~ private var _mask:Sprite;
 
 	public function new (? parent : DisplayObjectContainer, ? name : String,
@@ -180,8 +180,7 @@ class Window extends Component
 		{
 			if(br != null && br.parent == this)
 				removeChild(br);
-			br = new Sprite();
-			br.name = "br";
+			br = new Component(this, "br");
 			br.graphics.beginFill (DefaultStyle.BACKGROUND + 0x202020, 0.5);
 			br.graphics.drawRoundRectComplex (0, 0, 32, 32, 0, 0, 0, 4);
 			br.graphics.drawRect (0, 0, 22, 22);
@@ -199,12 +198,10 @@ class Window extends Component
 			br.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
 			br.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
 
-			this.addChild (br);
-
 			//
 			if(bl != null && bl.parent == this)
 				removeChild(bl);
-			bl = new Sprite ();
+			bl = new Component();
 			bl.name = "bl";
 			bl.graphics.beginFill (0x1A1A1A, 0.5);
 			bl.graphics.drawRoundRectComplex (0, 0, 32, 32, 0, 0, 4, 0);
@@ -223,8 +220,6 @@ class Window extends Component
 					DragManager.getInstance ().onStartDrag, false, 0, true);
 			bl.addEventListener (DragEvent.DRAG_COMPLETE,
 					DragManager.getInstance ().onStopDrag, false, 0, true);
-
-			this.addChild (bl);
 
 		}
 	}
@@ -330,7 +325,7 @@ class Window extends Component
 			br.y = box.height - 22;
 			br.x = box.width - 22;
 		}
-		
+
 		if(lazyResize)
 			dirty = true ;
 		else
@@ -346,7 +341,7 @@ class Window extends Component
 
 
 		if (e.target == titlebar || e.target == br || e.target == bl)
-		//~ if (e.target == titlebar || isSizeable() && (e.target == br || e.target == bl) ) 
+		//~ if (e.target == titlebar || isSizeable() && (e.target == br || e.target == bl) )
 		{
 			// raise target
  			e.target.parent.setChildIndex (e.target, e.target.parent.numChildren - 1);

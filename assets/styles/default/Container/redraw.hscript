@@ -4,4 +4,3 @@ this.graphics.drawRect(0, 0, this.box.width, this.box.height );
 this.graphics.endFill();
 //var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
 //this.filters = [shadow];
-trace(this.alpha);

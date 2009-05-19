@@ -64,6 +64,7 @@ import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 
 import haxegui.StyleManager;
+import haxegui.controls.Component;
 import haxegui.controls.Button;
 import haxegui.controls.Slider;
 import haxegui.controls.Stepper;
@@ -77,10 +78,9 @@ import haxegui.controls.Input;
 */
 class ColorPicker extends Window
 {
-	var colSprite : Sprite;
+	var colSprite : Component;
 	var currentColor : UInt;
 	var input : Input;
-
 
 	/**
 	*
@@ -126,7 +126,7 @@ class ColorPicker extends Window
 		spec.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMoveImage);
 
 
-		colSprite =  new Sprite();
+		colSprite = new Component(this, "colors");
 		colSprite.graphics.lineStyle(2, color - 0x141414);
 		colSprite.graphics.beginFill(0);
 		colSprite.graphics.drawRect(0,0,40,30);
@@ -151,8 +151,6 @@ class ColorPicker extends Window
 		//
 		for(i in 1...4)
 		{
-
-
 			var slider = new Slider(container, "Slider"+i);
 			slider.init({width: 128, color: 0xE6D3CC});
 			slider.move(180, 10+40*i);

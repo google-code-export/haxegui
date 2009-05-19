@@ -19,6 +19,7 @@
 
 package haxegui.controls;
 
+import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -34,6 +35,7 @@ import haxegui.FocusManager;
 import haxegui.Haxegui;
 import haxegui.Opts;
 import haxegui.ScriptManager;
+import haxegui.Window;
 
 import feffects.Tween;
 
@@ -164,6 +166,20 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.dirty = true;
 	}
 
+/*
+	override public function addChild(o : DisplayObject) : DisplayObject 
+	{
+		addDisplayObjectEvents(o);
+		return super.addChild(o);
+	}
+	
+	override public function addChildAt(o : DisplayObject, index:Int) : DisplayObject 
+	{
+		addDisplayObjectEvents(o);
+		return super.addChildAt(o, index);
+	}
+*/
+
 	/**
 	* Destroy this component and all children
 	*/
@@ -242,6 +258,19 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	public function hasFocus ():Bool
 	{
 		return if(FocusManager.getInstance().getFocus() == this) true else false;
+	}
+	
+	/**
+	* Returns the window this component is contained in, if any
+	*
+	* @return Parent window or null
+	**/
+	public function getParentWindow() : Window
+	{
+		var p = this.parent;
+		while(p != null && !Std.is(p,Window))
+			p = p.parent;
+		return cast p;
 	}
 	
 	/** Returns whether object validates **/
@@ -379,36 +408,42 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	private function __focusHandler(e:FocusEvent) {
-		var c : Component;
 		// relatedObject is one gaining focus
 		// target is object losing focus
 		// currentTarget == this
-// 		trace("------" + Std.string(this) + " __focusHandler");
-// 		trace("__focusHandler " + (if(e.currentTarget != this) " ******* " + Std.string(e.currentTarget) else "") + " :  from " + Std.string(e.target) + " to " + Std.string(e.relatedObject));
-		var o = e.target;
-
+ 		//trace("------" + Std.string(this) + " __focusHandler");
+ 		//trace("__focusHandler " + (if(e.currentTarget != this) " ******* " + Std.string(e.currentTarget) else "") + " :  from " + Std.string(e.target) + " to " + Std.string(e.relatedObject));
+		//var o = e.target;
+		
+		var comp : Component = asComponent(e.currentTarget);
+		trace(Std.string(comp));
 		// first event is fired to the target about to lose focus
-		if(e.currentTarget == e.target && Std.is(e.currentTarget,Component)) {
-			c = cast e.currentTarget;
+		if(e.currentTarget == e.target && comp != null) {
 			// see if current object will relinquish focus to gainer.
-			if(!c.onLosingFocus(e.relatedObject)) {
+			if(!comp.onLosingFocus(cast asComponentIfIs(e.relatedObject))) {
 				e.preventDefault();
 				e.stopImmediatePropagation();
-				c.stage.focus = c;
+				comp.stage.focus = comp;
+				trace("Losing focus prevented");
 				return;
 			}
 		}
 
+		comp = asComponent(e.relatedObject);
+		trace(Std.string(comp));
 		// check if the object gaining focus rejects
-		if(Std.is(e.relatedObject, Component)) {
-			var c : Component = cast e.relatedObject;
-			if(!c.onGainingFocus(e.relatedObject)) {
+		if(comp != null) {
+			if(!comp.onGainingFocus(cast asComponentIfIs(e.relatedObject))) {
 				e.preventDefault();
 				e.stopImmediatePropagation();
-				c.stage.focus = c;
+				comp.stage.focus = comp;
+				trace("Gain of focus denied");
 				return;
 			}
 		}
+		
+		// if we are the last Component in the chain, simulate the focusOut and focusIn 
+		//ar p = 
 	}
 
 	/** Placeholder **/
@@ -433,10 +468,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		// -- second time --
 		// related == null
 		// target == currentTarget == this
-		trace("++++ " + Std.string(this) + " onFocusIn");
-		trace("onFocusIn relatedObject: " + Std.string(e.relatedObject));
-		trace("onFocusIn currentTarget: " + Std.string(e.currentTarget));
-		trace("onFocusIn target: " + Std.string(e.target));
+		//trace("++++ " + Std.string(this) + " onFocusIn");
+		//trace("onFocusIn relatedObject: " + Std.string(e.relatedObject));
+		//trace("onFocusIn currentTarget: " + Std.string(e.currentTarget));
+		//trace("onFocusIn target: " + Std.string(e.target));
 
 		ScriptManager.exec(this, "focusIn", {focusFrom : e.target});
 	}
@@ -448,10 +483,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	*
 	**/
 	private function onFocusOut(e:FocusEvent) : Void {
-// 		trace("++++ " + Std.string(this) + " onFocusOut");
-// 		trace("onFocusOut relatedObject: " + Std.string(e.relatedObject));
-// 		trace("onFocusOut currentTarget: " + Std.string(e.currentTarget));
-// 		trace("onFocusOut target: " + Std.string(e.target));
+ 		//trace("++++ " + Std.string(this) + " onFocusOut");
+ 		//trace("onFocusOut relatedObject: " + Std.string(e.relatedObject));
+ 		//trace("onFocusOut currentTarget: " + Std.string(e.currentTarget));
+ 		//trace("onFocusOut target: " + Std.string(e.target));
 		// -- Fired twice : a real mess... we just need one
 		if(e.relatedObject != null)
 			ScriptManager.exec(this, "focusOut", {focusTo : e.relatedObject});
@@ -463,9 +498,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	**/
 	public function onGainingFocus(from : flash.display.InteractiveObject) : Bool {
 		var rv : Dynamic = ScriptManager.exec(this,"gainingFocus", {focusFrom : from});
-		if(rv == null)
+		//trace(here.methodName + " " + rv);
+		if(rv == null || rv == true)
 			return true;
-		return cast rv;
+		return false;
 	}
 
 	/**
@@ -495,7 +531,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Mouse click **/
 	public function onMouseClick(e:MouseEvent) : Void
 	{
-		trace("onMouseClick " + this.name + " " + hasOwnAction("mouseClick"));
+		trace("onMouseClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseClick"));
 		ScriptManager.exec(this,"mouseClick", {event : e});
 	}
 
@@ -573,5 +609,82 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		}
 		return v;
 	}
+	
+	/** add the focus events to any child that is not a Component **/
+	private function addDisplayObjectEvents(o : DisplayObject) {
+		if(!Std.is(o, Component)) {
+			removeDisplayObjectEvents(o);			
+			o.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, __focusHandler, false, 0, true);
+			o.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, __focusHandler, false, 0, true);
+			//o.addEventListener(FocusEvent.FOCUS_IN, onFocusIn, false, 0, true);
+			//o.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut, false, 0, true);
+		}
+	}
+	
+	private function removeDisplayObjectEvents(o : DisplayObject) {
+		if(!Std.is(o, Component)) {
+			o.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE, __focusHandler);
+			o.removeEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, __focusHandler);
+			o.removeEventListener(FocusEvent.FOCUS_IN, onFocusIn);
+			o.removeEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
+		}
+	}
+	//////////////////////////////////////////////////
+	////               Statics                    ////
+	//////////////////////////////////////////////////
+	/**
+	* Return the Component the DisplayObject belongs to. If the [obj] DisplayObject
+	* is a Component, then it will be returned. Useful for finding what Component
+	* a Sprite belongs to.
+	*
+	* @param obj DisplayObject or Component
+	* @return Component, or null if is not a Component and does not belong to a Component.
+	**/
+	public static function asComponent( obj : DisplayObject ) : Component {
+		if(Std.is(obj, Component))
+			return cast obj;
+		if(obj == null) return null;
+		var p = obj.parent;
+		while(p != null && !Std.is(p,Component)) {
+			p = p.parent;
+		}
+		if(p == null)
+			return null;
+		return cast p;
+	}
 
+	/**
+	* Return the Component the DisplayObject belongs to. If the [obj] DisplayObject
+	* is a Component, then it will be returned. Useful for finding what Component
+	* a Sprite belongs to.
+	*
+	* @param obj DisplayObject or Component
+	* @return Component, or [obj] if is not a Component and does not belong to a Component.
+	**/	
+	public static function asComponentIfIs( obj : DisplayObject ) : DisplayObject {
+		if(Std.is(obj, Component))
+			return obj;
+		if(obj == null) return null;
+		var p = obj.parent;
+		while(p != null && !Std.is(p,Component)) {
+			p = p.parent;
+		}
+		if(p == null)
+			return obj;
+		return p;
+	}
+	
+	/**
+	* Find the containing Component for any DisplayObject, if any.
+	*
+	* @param obj Any display object
+	* @return Parent Component, or null
+	**/
+	public static function getParentComponent(obj : DisplayObject) : Component {
+		var p = obj.parent;
+		while(p != null && !Std.is(p, Component))
+			p = p.parent;
+		if(p == null) return null;
+		return cast p;
+	}
 }

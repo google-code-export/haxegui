@@ -66,14 +66,18 @@ class ComboBoxDropButton extends AbstractButton {
 **/
 class ComboBoxBackground extends Component
 {
+	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	{
+		super(parent, name, x, y);
+		color = DefaultStyle.BACKGROUND;
+	}
+
 	static function __init__() {
 		haxegui.Haxegui.register(ComboBoxBackground);
 	}
 
 	override public function init(opts:Dynamic=null)
 	{
-		color = DefaultStyle.BACKGROUND;
-
 		super.init(opts);
 
 	}
@@ -95,7 +99,7 @@ class ComboBox extends Component
 
 	private var editable : Bool;
 
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		background = new ComboBoxBackground(this, "background");
 		dropButton = new ComboBoxDropButton(this, "button");
@@ -116,7 +120,7 @@ class ComboBox extends Component
 		if(editable)
 		{
 			if(input != null && input.parent == this)
-				removeChild(input);
+				input.destroy();
 			input = new Input(this, "input");
 			input.init({text: this.name });
 			input.redraw();
@@ -124,13 +128,12 @@ class ComboBox extends Component
 		else
 		{
 			if(background != null && background.parent == this)
-				removeChild(background);
+				background.destroy();
 			background = new ComboBoxBackground(this, "background");
 			background.init(opts);
 		}
 
 		dropButton.init(opts);
-
 	}
 
 	static function __init__() {

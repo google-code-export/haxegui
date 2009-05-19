@@ -62,7 +62,7 @@ import haxegui.StyleManager;
 class ToolBar extends Component
 {
 
-	public var handle : Sprite;
+	public var handle : Component;
 
 	public function new (? parent : DisplayObjectContainer, ? name : String,
 			? x : Float, ? y : Float, ? width : Float, ? height : Float)
@@ -77,13 +77,11 @@ class ToolBar extends Component
 
 		super.init(opts);
 
-		handle = new Sprite();
-		handle.name = "handle";
+		handle = new Component(this, "handle");
 		handle.graphics.lineStyle(1, color - 0x202020);
 		handle.graphics.beginFill(color, .5);
 		handle.graphics.drawRoundRect(4, 8, 8, box.height - 16, 4, 4);
 		handle.graphics.endFill();
-		addChild(handle);
 
 		// inner-drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4, 0.5, BitmapFilterQuality.LOW,true,false,false);

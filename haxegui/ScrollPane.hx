@@ -39,7 +39,7 @@ import haxegui.StyleManager;
 
 class ScrollPane extends Component
 {
-	public var content : Sprite;
+	public var content : Component;
 
 	public var vert : ScrollBar;
 	public var horz : ScrollBar;
@@ -49,6 +49,10 @@ class ScrollPane extends Component
 	{
 		super(parent, name, x, y);
 		//~ this.name = (name==null) ? "scroll_pane" : name;
+
+		content = new Component(this, "content");
+		vert = new ScrollBar(this, "vscrollbar", this.box.width - 20, 0, false);
+		horz = new ScrollBar(this, "hscrollbar", null, null, true);
 	}
 
 
@@ -69,22 +73,18 @@ class ScrollPane extends Component
 
 		super.init(opts);
 
-		content = new Sprite();
-		content.name = "content";
 		//~ content.scrollRect = new Rectangle(0,0,box.width,box.height);
 		content.scrollRect = new Rectangle(0,0, flash.Lib.current.stage.stageWidth, flash.Lib.current.stage.stageHeight);
 		//~ content.scrollRect = new Rectangle();
 		content.cacheAsBitmap = true;
-		this.addChild(content);
 
-		vert = new ScrollBar(this, "vscrollbar", this.box.width - 20, 0, false);
 		vert.x = this.box.width - 20;
 		vert.y = 0;
 		vert.name = "vscrollbar";
 		vert.color = color;
 		vert.init({target: content});
 
-		horz = new ScrollBar(this, "hscrollbar", null, null, true);
+
 		//~ horz.y = box.height + 36 ;
 		horz.color = color;
 		horz.init({target: content});

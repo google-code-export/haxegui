@@ -330,18 +330,18 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		/////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
-		//~ loader.load(new URLRequest("./config.xml"));
+		loader.load(new URLRequest("samples/Example1.xml"));
 
- try {
-     var l = flash.Lib.current.loaderInfo.parameters;
- 	trace(here.methodName + " " + Utils.print_r(l));
- 	loader.load(new URLRequest(Reflect.field(l, "layout")));
-     //~ for (f in Reflect.fields(l)) {
-         //~ trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
-     //~ }
- } catch (e:Dynamic) {
-     trace(here.methodName + " " + e);
- }
+//  try {
+//      var l = flash.Lib.current.loaderInfo.parameters;
+//  	trace(here.methodName + " " + Utils.print_r(l));
+//  	loader.load(new URLRequest(Reflect.field(l, "layout")));
+//      //~ for (f in Reflect.fields(l)) {
+//          //~ trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
+//      //~ }
+//  } catch (e:Dynamic) {
+//      trace(here.methodName + " " + e);
+//  }
 
 
 		var a = new Array<String>();
