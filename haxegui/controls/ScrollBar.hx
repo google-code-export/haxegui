@@ -288,38 +288,6 @@ class ScrollBar extends Component
 
 				CursorManager.setCursor (Cursor.DRAG);
 
-			case up:
-				var y = handle.y - 50;
-				if( y < 20 ) y = 20;
-				//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-				//~ var t = new Tween( handle.y, handle.y - 50, 500, handle, "y", Linear.easeNone );
-				if(handleMotionTween!=null)
-					handleMotionTween.stop();
-
-				handleMotionTween = new Tween( handle.y, y, 1500, handle, "y", feffects.easing.Expo.easeOut );
-				var scope = this;
-				handleMotionTween.setTweenHandlers( function ( e ) { scope.adjust(); } );
-				handleMotionTween.start();
-				//~ t.setTweenHandlers( function ( e ) scope.update( sprite, e ) );
-
-				CursorManager.setCursor (Cursor.HAND2);
-
-			case down:
-				var y = handle.y + 50;
-				if( y > frame.height - handle.height + 20) y = frame.height - handle.height + 20;
-
-
-				//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-				if(handleMotionTween!=null)
-					handleMotionTween.stop();
-
-
-				handleMotionTween = new Tween( handle.y, y, 1500, handle, "y", feffects.easing.Expo.easeOut );
-				var scope = this;
-				handleMotionTween.setTweenHandlers( function ( e ) { scope.adjust(e); } );
-				handleMotionTween.start();
-
-				CursorManager.setCursor (Cursor.HAND2);
 
 			case frame:
 				CursorManager.setCursor (Cursor.HAND2);
