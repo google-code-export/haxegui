@@ -27,8 +27,8 @@ import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
 import haxegui.Opts;
-import haxegui.StyleManager;
-import haxegui.controls.Component;
+import haxegui.managers.StyleManager;
+import haxegui.Component;
 
 class Label extends Component
 {

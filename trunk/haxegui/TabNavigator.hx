@@ -35,8 +35,8 @@ import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 
-import haxegui.StyleManager;
-import haxegui.controls.Component;
+import haxegui.managers.StyleManager;
+import haxegui.Component;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Label;
 

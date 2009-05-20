@@ -31,8 +31,8 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 
 import haxegui.Opts;
-import haxegui.StyleManager;
-import haxegui.controls.Component;
+import haxegui.managers.StyleManager;
+import haxegui.Component;
 
 
 

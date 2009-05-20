@@ -34,15 +34,16 @@ import flash.geom.Rectangle;
 import flash.text.TextField;
 import flash.text.TextFormat;
 
-import haxegui.CursorManager;
-import haxegui.FocusManager;
+import haxegui.managers.CursorManager;
+import haxegui.managers.FocusManager;
 import haxegui.Opts;
-import haxegui.StyleManager;
+import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 
 
 /**
-* Expander class
+* Expander class, may be expanded or collapsed by the user to reveal or hide child
+* widgets.
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>

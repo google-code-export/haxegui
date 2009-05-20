@@ -23,8 +23,8 @@ import flash.ui.Keyboard;
 
 import hscript.Interp;
 
-import haxegui.CursorManager;
-import haxegui.StyleManager;
+import haxegui.managers.CursorManager;
+import haxegui.managers.StyleManager;
 
 /**
 * Functions for setting up a scripting environment with standard libraries.
@@ -161,6 +161,7 @@ class ScriptStandardLibrary
 
 		/** haxegui exported with haxegui package stripped **/
 		interp.variables.set("ColorPicker", haxegui.ColorPicker);
+		interp.variables.set("Component", haxegui.Component);
 		interp.variables.set("Console", haxegui.Console);
 		interp.variables.set("Container", haxegui.Container);
 
@@ -170,19 +171,21 @@ class ScriptStandardLibrary
 				HAND2 : Cursor.HAND2,
 				DRAG : Cursor.DRAG,
 				IBEAM : Cursor.IBEAM,
-				NE : Cursor.NE,
-				NW : Cursor.NW,
 				SIZE_ALL : Cursor.SIZE_ALL,
+				NESW : Cursor.NESW,
+				NS : Cursor.NS,
+				NWSE : Cursor.NWSE,
+				WE : Cursor.WE,
 				CROSSHAIR : Cursor.CROSSHAIR,
 			});
 		interp.variables.set("CursorManager", CursorManager);
 		interp.variables.set("DefaultStyle", DefaultStyle);
-		interp.variables.set("DragManager", haxegui.DragManager);
-		interp.variables.set("FocusManager", haxegui.FocusManager);
+		interp.variables.set("DragManager", haxegui.managers.DragManager);
+		interp.variables.set("FocusManager", haxegui.managers.FocusManager);
 		interp.variables.set("Image", haxegui.Image);
-		interp.variables.set("LayoutManager", haxegui.LayoutManager);
+		interp.variables.set("LayoutManager", haxegui.managers.LayoutManager);
 		interp.variables.set("MenuBar", haxegui.MenuBar);
-		interp.variables.set("MouseManager", haxegui.MouseManager);
+		interp.variables.set("MouseManager", haxegui.managers.MouseManager);
 		interp.variables.set("Opts", haxegui.Opts);
 		interp.variables.set("PopupMenu", haxegui.PopupMenu);
 		interp.variables.set("ScrollPane", haxegui.ScrollPane);
@@ -191,9 +194,10 @@ class ScriptStandardLibrary
 		interp.variables.set("ToolBar", haxegui.ToolBar);
 		interp.variables.set("Utils", haxegui.Utils);
 		interp.variables.set("Window", haxegui.Window);
-		interp.variables.set("WindowManager", haxegui.WindowManager);
+		interp.variables.set("WindowManager", haxegui.managers.WindowManager);
 		interp.variables.set("XmlParser", haxegui.XmlParser);
 		interp.variables.set("ScriptStandardLibrary", haxegui.utils.ScriptStandardLibrary);
+		interp.variables.set("TitleBar", haxegui.windowClasses.TitleBar);
 
 		interp.variables.set("events",
 			{
@@ -209,14 +213,12 @@ class ScriptStandardLibrary
 				Button				: haxegui.controls.Button,
 				CheckBox			: haxegui.controls.CheckBox,
 				ComboBox			: haxegui.controls.ComboBox,
-				Component			: haxegui.controls.Component,
 				Input				: haxegui.controls.Input,
 				Label				: haxegui.controls.Label,
 				RadioButton			: haxegui.controls.RadioButton,
 				ScrollBar			: haxegui.controls.ScrollBar,
 				Slider				: haxegui.controls.Slider,
 				Stepper				: haxegui.controls.Stepper,
-				TitleBar			: haxegui.controls.TitleBar,
 				UiList				: haxegui.controls.UiList,
 			});
 	}

@@ -35,11 +35,11 @@ import flash.geom.Rectangle;
 // import flash.text.TextField;
 import flash.text.TextFormat;
 
-import haxegui.StyleManager;
-import haxegui.CursorManager;
+import haxegui.managers.StyleManager;
+import haxegui.managers.CursorManager;
 import haxegui.events.MoveEvent;
 import haxegui.Opts;
-
+import haxegui.Component;
 import feffects.Tween;
 import feffects.easing.Quint;
 import feffects.easing.Sine;

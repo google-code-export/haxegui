@@ -28,11 +28,11 @@ import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 import flash.filters.BevelFilter;
 import flash.geom.Rectangle;
-
-import haxegui.CursorManager;
+import haxegui.Component;
+import haxegui.managers.CursorManager;
 import haxegui.Opts;
-import haxegui.FocusManager;
-import haxegui.StyleManager;
+import haxegui.managers.FocusManager;
+import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;

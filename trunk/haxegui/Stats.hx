@@ -59,8 +59,7 @@ import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 import flash.filters.BevelFilter;
 
-import haxegui.StyleManager;
-import haxegui.controls.Component;
+import haxegui.managers.StyleManager;
 import haxegui.controls.Label;
 import haxegui.controls.Stepper;
 import haxegui.controls.UiList;
@@ -78,268 +77,293 @@ import feffects.easing.Expo;
 import feffects.easing.Linear;
 import feffects.easing.Quad;
 import feffects.easing.Quart;
+import haxegui.Window;
 
 
 
 /**
-*
-*
-*
-*/
+ *
+ *
+ *
+ */
 class Stats extends Window
 {
 
-	var list : UiList;
+  var list : UiList;
 
-	var gridSpacing : UInt;
-	var graph : Component;
-	var grid : Component;
-	var ploter : Component;
+  var gridSpacing : UInt;
+  var graph : Sprite;
+  var grid : Sprite;
+  var ploter : Sprite;
 
 
-	var data : Array<Point>;
-	var data2 : Array<Point>;
-	var data3 : Array<Point>;
+  var data : Array<Point>;
+  var data2 : Array<Point>;
+  var data3 : Array<Point>;
 
-	public var interval : Int;
+  public var interval : Int;
 
-	var avgFPS : Array<Float>;
+  var avgFPS : Array<Float>;
 
-	var frameCounter : Int;
-	var timer : Timer;
-	var last : Float;
-	var delta : Float;
+  var frameCounter : Int;
+  var timer : Timer;
+  var last : Float;
+  var delta : Float;
 
-	var maxFPS : Float;
-	var minFPS : Float;
+  var maxFPS : Float;
+  var minFPS : Float;
+
 
 
 	/**
-	*
-	*/
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super (parent, name, x, y);
-	}
+	 *
+	 */
+  public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+  {
+    super (parent, name, x, y);
+  }//end new
 
 
-	public override function init(?initObj:Dynamic)
-	{
+    /**
+     *
+     *
+     *
+     *
+     *
+     */
+    public override function init(?initObj:Dynamic)
+    {
 
-		super.init({name:"Stats", x:x, y:y, width:width, height:height, sizeable: false, color: 0x2A7ACD});
+        super.init({name:"Stats", x:x, y:y, width:width, height:height, sizeable: false, color: 0x2A7ACD});
 
-		frameCounter = 0;
-		delta = 0;
-		maxFPS = Math.NEGATIVE_INFINITY;
-		minFPS = Math.POSITIVE_INFINITY;
-		avgFPS = [.0];
-		interval = 1500;
-		gridSpacing = 20;
+        frameCounter = 0;
+        delta = 0;
+        maxFPS = Math.NEGATIVE_INFINITY;
+        minFPS = Math.POSITIVE_INFINITY;
+        avgFPS = [.0];
+        interval = 1500;
+        gridSpacing = 20;
 
-		data =
-		data2 =
-		data3 = [new Point(240, 140), new Point(240, 140)];
-
-
-		box = new Rectangle (0, 0, 400, 160);
-
-		//
-		var container = new Container (this, "container", 10, 20);
-		//~ container.init({color: 0x222222, alpha: .5});
-		container.init({color: 0x2A7ACD});
-
-
-		list = new UiList(container, "List");
-		list.data=["FPS:", "minFPS:", "maxFPS:", "avgFPS:", "Mem:", "Uptime:"];
-		list.init({color: 0xE5E5E5, width: 140});
+        data =
+        data2 =
+        data3 = [new Point(240, 140), new Point(240, 140)];
 
 
-		graph = new Component(this, "graph");
-		grid = new Component(this, "grid");
+        box = new Rectangle (0, 0, 400, 160);
+
+        //
+        var container = new Container (this, "container", 10, 20);
+        //~ container.init({color: 0x222222, alpha: .5});
+        container.init({color: 0x2A7ACD});
 
 
-		grid.graphics.lineStyle(0,0,0);
-		grid.graphics.beginFill( 0xE5E5E5 );
-		grid.graphics.drawRect(0,0,240+gridSpacing*4,140);
-		grid.graphics.endFill();
+        list = new UiList(container, "List");
+        list.data=["FPS:", "minFPS:", "maxFPS:", "avgFPS:", "Mem:", "Uptime:"];
+        list.init({color: 0xE5E5E5, width: 140});
 
-		for(i in 0...Std.int(240/(gridSpacing-4)))
-		{
-			grid.graphics.lineStyle(1,0xCCCCCC);
-			grid.graphics.moveTo(gridSpacing*i,0);
-			grid.graphics.lineTo(gridSpacing*i,140);
-		}
 
-		for(i in 0...Std.int(140/gridSpacing))
-		{
-			grid.graphics.lineStyle(1,0xCCCCCC);
-			grid.graphics.moveTo(0,gridSpacing*i);
-			grid.graphics.lineTo(240+4*gridSpacing,gridSpacing*i);
-		}
+        graph = new Sprite();
+        grid = new Sprite();
 
-		ploter = new Component();
-		graph.addChild(grid);
-		graph.addChild(ploter);
+
+        grid.graphics.lineStyle(0,0,0);
+        grid.graphics.beginFill( 0xE5E5E5 );
+        grid.graphics.drawRect(0,0,240+gridSpacing*4,140);
+        grid.graphics.endFill();
+
+        for(i in 0...Std.int(240/(gridSpacing-4)))
+        {
+        grid.graphics.lineStyle(1,0xCCCCCC);
+        grid.graphics.moveTo(gridSpacing*i,0);
+        grid.graphics.lineTo(gridSpacing*i,140);
+        }
+
+        for(i in 0...Std.int(140/gridSpacing))
+        {
+        grid.graphics.lineStyle(1,0xCCCCCC);
+        grid.graphics.moveTo(0,gridSpacing*i);
+        grid.graphics.lineTo(240+4*gridSpacing,gridSpacing*i);
+        }
+
+
+
+
+        ploter = new Sprite();
+        graph.addChild(grid);
+        graph.addChild(ploter);
 
 		//
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 		graph.filters = [shadow];
-		graph.x = 150;
-		graph.scrollRect = new Rectangle(0,0,240,140);
+        graph.x = 150;
+        graph.scrollRect = new Rectangle(0,0,240,140);
 
-		container.addChild(graph);
+        container.addChild(graph);
 
 
-		var label = new Label(container, "Label", 160, 14);
-		label.text = "Update Interval: ";
-		label.init();
+        var label = new Label(container, "Label", 160, 14);
+        label.text = "Update Interval: ";
+        label.init();
 
-		var stepper = new Stepper(container, "Stepper", 250, 10);
-		stepper.init({value: interval, step: 5, min: 20, max: 5000, color: 0x2A7ACD});
-		var self = this;
+        var stepper = new Stepper(container, "Stepper", 250, 10);
+        stepper.init({value: interval, step: 5, min: 20, max: 5000, color: 0x2A7ACD});
+        var self = this;
 		stepper.addEventListener(Event.CHANGE,
-			function(e:Event) {
-				self.frameCounter = 0;
-				self.delta = 0;
-				self.maxFPS = Math.NEGATIVE_INFINITY;
-				self.minFPS = Math.POSITIVE_INFINITY;
-				self.avgFPS = [.0];
-				self.interval = e.target.value;
+            function(e:Event) {
+                self.frameCounter = 0;
+                self.delta = 0;
+                self.maxFPS = Math.NEGATIVE_INFINITY;
+                self.minFPS = Math.POSITIVE_INFINITY;
+                self.avgFPS = [.0];
+                self.interval = e.target.value;
 
-				self.list.data=["FPS:", "minFPS:", "maxFPS:", "avgFPS:", "Mem:", "Uptime:"];
-				self.list.redraw();
-				self.ploter.graphics.clear();
-				self.ploter.x = 0;
+                self.list.data=["FPS:", "minFPS:", "maxFPS:", "avgFPS:", "Mem:", "Uptime:"];
+                self.list.redraw();
+                self.ploter.graphics.clear();
+                self.ploter.x = 0;
 
-				self.data = [new Point(240, 140), new Point(240, 140)];
-				self.data2 = [new Point(240, 140), new Point(240, 140)];
-				self.data3 = [new Point(240, 140), new Point(240, 140)];
-				self.timer.stop();
-				self.timer = new haxe.Timer(self.interval);
-				self.timer.run = self.update;
+                self.data = [new Point(240, 140), new Point(240, 140)];
+                self.data2 = [new Point(240, 140), new Point(240, 140)];
+                self.data3 = [new Point(240, 140), new Point(240, 140)];
+                self.timer.stop();
+                self.timer = new haxe.Timer(self.interval);
+                self.timer.run = self.update;
 
-				});
+                });
 
-		timer = new haxe.Timer(interval);
-		timer.run = update;
-
-
-		if(isSizeable())
-		{
-		bl.y = frame.height - 32;
-		br.x = frame.width - 32;
-		br.y = frame.height - 32;
-		}
-
-		this.addEventListener (Event.ENTER_FRAME, onStatsEnterFrame);
+        timer = new haxe.Timer(interval);
+        timer.run = update;
 
 
-		//~ redraw(null);
-		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-	}
-
-	/**
-	*
-	*
-	*/
-	public function update() {
-
-		//~ stats.text = "FPS: " + Std.string(frameCounter*100*(haxe.Timer.stamp() - delta)).substr(0,5);
-		//~ var fps = frameCounter/(haxe.Timer.stamp() - delta);
-		var delta = haxe.Timer.stamp() - last;
-		if(delta<=0) return;
-		var fps = frameCounter/delta ;
 
 
-		if(fps > maxFPS) maxFPS = fps;
-		if(fps < minFPS) minFPS = fps;
 
-		avgFPS.push(fps);
-		var avg : Float = 0;
-		for(i in avgFPS)
-			avg += i;
-		avg /= avgFPS.length;
-		if(avgFPS.length > 10 ) avgFPS.shift();
+          this.addEventListener (Event.ENTER_FRAME, onStatsEnterFrame);
 
 
-		list.data =
-		[
-			"FPS: \t\t\t" + Std.string(fps).substr(0,5),
-			"minFPS: \t\t" + Std.string(minFPS).substr(0,5),
-			"maxFPS: \t\t" + Std.string(maxFPS).substr(0,5),
-			"avgFPS: \t\t" + Std.string(avg).substr(0,5),
-			"Mem(MB): \t\t" + Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5),
-			"Uptime: \t\t\t" + Std.string(haxe.Timer.stamp()).substr(0,5)
-		];
+        //~ redraw(null);
+        dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
 
-		list.redraw();
+    }
+
+    /**
+     *
+     *
+     */
+    public function update() {
+
+        //~ stats.text = "FPS: " + Std.string(frameCounter*100*(haxe.Timer.stamp() - delta)).substr(0,5);
+        //~ var fps = frameCounter/(haxe.Timer.stamp() - delta);
+        var delta = haxe.Timer.stamp() - last;
+        if(delta<=0) return;
+        var fps = frameCounter/delta ;
 
 
-		var item = cast list.getChildAt(1);
-		item.redraw();
+        if(fps > maxFPS) maxFPS = fps;
+        if(fps < minFPS) minFPS = fps;
+
+        avgFPS.push(fps);
+        var avg : Float = 0;
+        for(i in avgFPS)
+            avg += i;
+        avg /= avgFPS.length;
+        if(avgFPS.length > 10 ) avgFPS.shift();
+
+
+        list.data =
+        [
+            "FPS: \t\t\t" + Std.string(fps).substr(0,5),
+            "minFPS: \t\t" + Std.string(minFPS).substr(0,5),
+            "maxFPS: \t\t" + Std.string(maxFPS).substr(0,5),
+            "avgFPS: \t\t" + Std.string(avg).substr(0,5),
+            "Mem(MB): \t\t" + Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5),
+            "Uptime: \t\t\t" + Std.string(haxe.Timer.stamp()).substr(0,5)
+        ];
+
+
+        list.redraw();
+
+
+        var item = cast list.getChildAt(1);
+        item.redraw();
 		item.graphics.beginFill (0xFF9300);
 		item.graphics.drawRect (0, 0, Std.int(fps), 20);
 		item.graphics.endFill ();
 
-		item = cast list.getChildAt(4);
-		item.redraw();
+        item = cast list.getChildAt(4);
+        item.redraw();
 		item.graphics.beginFill (0x9ADF00);
 		item.graphics.drawRect (0, 0, Std.int(avg), 20);
 		item.graphics.endFill ();
 
-		item = cast list.getChildAt(5);
-		item.redraw();
+        item = cast list.getChildAt(5);
+        item.redraw();
 		item.graphics.beginFill (0xFF00A8);
 		item.graphics.drawRect (0, 0, Std.int(flash.system.System.totalMemory/Math.pow(10,6)), 20);
 		item.graphics.endFill ();
 
 
-		//~ ploter.graphics.clear();
+        //~ ploter.graphics.clear();
 
-		data.push( new Point( 240-ploter.x, 140 - fps ) );
-		data2.push( new Point( 240-ploter.x, 140 - flash.system.System.totalMemory/Math.pow(10,6) ) );
-		data3.push( new Point( 240-ploter.x, 140 - avg ) );
+        data.push( new Point( 240-ploter.x, 140 - fps ) );
+        data2.push( new Point( 240-ploter.x, 140 - flash.system.System.totalMemory/Math.pow(10,6) ) );
+        data3.push( new Point( 240-ploter.x, 140 - avg ) );
 
-		ploter.graphics.lineStyle(2,0xFF9300);
-		ploter.graphics.moveTo( data[data.length-2].x+gridSpacing, data[data.length-2].y );
-		ploter.graphics.lineTo( data[data.length-1].x+gridSpacing, data[data.length-1].y );
+        ploter.graphics.lineStyle(2,0xFF9300);
+        ploter.graphics.moveTo( data[data.length-2].x+gridSpacing, data[data.length-2].y );
+        ploter.graphics.lineTo( data[data.length-1].x+gridSpacing, data[data.length-1].y );
 
-		ploter.graphics.lineStyle(2,0xFF00A8);
-		ploter.graphics.moveTo( data2[data2.length-2].x+gridSpacing, data2[data2.length-2].y );
-		ploter.graphics.lineTo( data2[data2.length-1].x+gridSpacing, data2[data2.length-1].y );
+        ploter.graphics.lineStyle(2,0xFF00A8);
+        ploter.graphics.moveTo( data2[data2.length-2].x+gridSpacing, data2[data2.length-2].y );
+        ploter.graphics.lineTo( data2[data2.length-1].x+gridSpacing, data2[data2.length-1].y );
 
-		ploter.graphics.lineStyle(2,0x9ADF00);
-		ploter.graphics.moveTo( data3[data3.length-2].x+gridSpacing, data3[data3.length-2].y );
-		ploter.graphics.lineTo( data3[data3.length-1].x+gridSpacing, data3[data3.length-1].y );
-
-
-
-		if(data.length > 2) data.shift();
-		if(data2.length > 2) data.shift();
-
-		//~ ploter.x -= gridSpacing*delta;
-		//~ var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, Std.int(delta*interval), ploter, "x", Linear.easeNone );
-		var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, interval, ploter, "x", Linear.easeNone );
-		p.start();
+        ploter.graphics.lineStyle(2,0x9ADF00);
+        ploter.graphics.moveTo( data3[data3.length-2].x+gridSpacing, data3[data3.length-2].y );
+        ploter.graphics.lineTo( data3[data3.length-1].x+gridSpacing, data3[data3.length-1].y );
 
 
-		//~ grid.x -= gridSpacing*delta;
-		//~ var g = new Tween(0, -gridSpacing, interval, grid, "x", Linear.easeNone );
-		//~ var g = new Tween(0, -delta*gridSpacing, Std.int(delta*interval), grid, "x", Linear.easeNone );
-		//~ g.start();
 
-		//~ if(grid.x<-gridSpacing) grid.x=0;
+        if(data.length > 2) data.shift();
+        if(data2.length > 2) data.shift();
 
-		frameCounter = 0;
-		last = haxe.Timer.stamp();
+        //~ ploter.x -= gridSpacing*delta;
+        //~ var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, Std.int(delta*interval), ploter, "x", Linear.easeNone );
+        var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, interval, ploter, "x", Linear.easeNone );
+        p.start();
 
-		//~ stats.setTextFormat( StyleManager.getTextFormat(8, 0xffffff) );
-	}
 
-	public function onStatsEnterFrame(e:Event) : Void
-	{
-		frameCounter++;
-	}
+        //~ grid.x -= gridSpacing*delta;
+        //~ var g = new Tween(0, -gridSpacing, interval, grid, "x", Linear.easeNone );
+        //~ var g = new Tween(0, -delta*gridSpacing, Std.int(delta*interval), grid, "x", Linear.easeNone );
+        //~ g.start();
+
+        //~ if(grid.x<-gridSpacing) grid.x=0;
+
+        frameCounter = 0;
+        last = haxe.Timer.stamp();
+
+
+
+        //~ stats.setTextFormat( StyleManager.getTextFormat(8, 0xffffff) );
+
+    }
+
+
+  public function onStatsEnterFrame(e:Event) : Void
+  {
+
+    frameCounter++;
+  }
+
+
+
+
+
+
+
+
+
+
 
 }

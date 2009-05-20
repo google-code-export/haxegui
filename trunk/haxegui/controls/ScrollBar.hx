@@ -32,10 +32,10 @@ import flash.events.MouseEvent;
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
-
-import haxegui.CursorManager;
+import haxegui.Component;
+import haxegui.managers.CursorManager;
 import haxegui.Opts;
-import haxegui.StyleManager;
+import haxegui.managers.StyleManager;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
@@ -113,7 +113,7 @@ class ScrollBarHandle extends AbstractButton
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class ScrollBar extends haxegui.controls.Component
+class ScrollBar extends Component
 {
 
 	var frame : Component;
@@ -211,7 +211,7 @@ class ScrollBar extends haxegui.controls.Component
 		//~ up.redraw({color: this.color});
 		//~ down.redraw({color: this.color});
 		//~ handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
-		handle.redraw({h : 40, color: this.color, horizontal: this.horizontal });
+		//handle.redraw({h : 40, color: this.color, horizontal: this.horizontal });
 
 		dirty = true;
 
@@ -254,7 +254,6 @@ class ScrollBar extends haxegui.controls.Component
 	public function onMouseWheel(e:MouseEvent)
 	{
 
-		//~ redrawHandle(color | 0x666666);
 
 		//~ var y = handle.y + 50 * e.delta;
 		var y = handle.y + 50 * -e.delta;
@@ -274,13 +273,11 @@ class ScrollBar extends haxegui.controls.Component
 
 	override public function onMouseDown(e:MouseEvent)
 	{
-		//~ redrawHandle(color | 0x4D4D4D);
 
 
 		switch(e.target)
 			{
 			case handle:
-				//~ redrawHandle( color | 0x666666);
 				if(horizontal)
 					e.target.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
 				else
@@ -382,7 +379,6 @@ class ScrollBar extends haxegui.controls.Component
 
 		if(e.target.hitTestObject( CursorManager.getInstance()._mc ))
 		{
-			//~ redrawHandle(color | 0x4D4D4D);
 			c = 50;
 			CursorManager.setCursor (Cursor.HAND);
 		}
