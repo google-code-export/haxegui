@@ -1,0 +1,13 @@
+/*trace(parent.handle.y);*/
+
+var y = parent.handle.y - 50;
+if( y < 20 ) y = 20;
+
+if(parent.handleMotionTween!=null)
+	parent.handleMotionTween.stop();
+
+parent.handleMotionTween = new feffects.Tween( parent.handle.y, y, 1500, parent.handle, "y", feffects.easing.Expo.easeOut );
+parent.handleMotionTween.setTweenHandlers( function ( e ) { parent.adjust(); } );
+parent.handleMotionTween.start();
+
+
