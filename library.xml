@@ -21,9 +21,11 @@
 			<clip id="Hand" import="assets/cursor/HandPointer.png"/>
 			<clip id="Hand2" import="assets/cursor/Hand.png"/>
 			<clip id="Drag" import="assets/cursor/Handsqueezed.png"/>
-			<clip id="AngleNW" import="assets/cursor/AngleNW.png"/>
-			<clip id="AngleNE" import="assets/cursor/AngleNE.png"/>
 			<clip id="SizeAll" import="assets/cursor/SizeAll.png"/>
+			<clip id="SizeNESW" import="assets/cursor/SizeNESW.png"/>
+			<clip id="SizeNS" import="assets/cursor/SizeNS.png"/>
+			<clip id="SizeNWSE" import="assets/cursor/SizeNWSE.png"/>
+			<clip id="SizeWE" import="assets/cursor/SizeWE.png"/>
 			<clip id="Crosshair" import="assets/cursor/Crosshair.png"/>
 			
 			<!-- ICONS -->
