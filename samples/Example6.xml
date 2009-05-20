@@ -3,22 +3,66 @@
 
     <!-- Transcriber -->
     <haxegui:Window name="Transcriber" x="300" y="40" width="500" height="400" sizeable="true" >
-	<haxegui:Menubar name="Menubar" width="400" x="10" y="20" />
-	<haxegui:Toolbar name="Toolbar" width="400" x="10" y="44" >
-	    <haxegui:controls:Button name="Run" label="Run" x="30" y="4" />
+	<haxegui:MenuBar name="Menubar" width="400" x="10" y="20" />
+	<haxegui:ToolBar name="Toolbar" width="400" x="10" y="44" >
+	    <haxegui:controls:Button name="Run" label="Run" x="30" y="4" >
+		<events>
+		    <script type="text/hscript" action="mouseClick">
+			<![CDATA[
+			    var win = parent.parent;
+			    var scrollpane = win.getChildByName("ScrollPane1");
+			    var tf = scrollpane.content.getChildByName("HtmlTextArea");
+
+			    var parser = new hscript.Parser();
+			    var program = parser.parseString(tf.text);
+			    var interp = new hscript.Interp();
+			    
+			    interp.variables.set( "this", win );
+			    ScriptStandardLibrary.set(interp);
+
+			    trace(interp.execute(program)); 
+			]]>
+		    </script>
+		</events>
+	    </haxegui:controls:Button>
 	    <haxegui:controls:Button name="Clear" label="Clear" x="130" y="4" />
-	</haxegui:Toolbar>
+	    <haxegui:controls:Button name="CSS" label="CSS" x="230" y="4" >
+		<events>
+		    <script type="text/hscript" action="mouseClick"><![CDATA[
+			    var win = parent.parent;
+			    var scrollpane = win.getChildByName("ScrollPane1");
+			    var tf = scrollpane.content.getChildByName("HtmlTextArea");
+			    trace(tf.styleSheet);
+			    if(tf.styleSheet==null)
+			    {
+				var styles = new flash.text.StyleSheet();
+				styles.parseCSS(".code-line-numbers {    color:#809080;    border-right:1px dotted #809080;    float:left;    text-align:right;    width:2em;    padding-right:3px;    margin-right:12px;}.code-code {}.code-keyword {    font-weight: bold;    color: #000000;}.code-type {    font-weight: bold;    color: #106020;}.code-variable {    color: #004050;}.code-number {    color: #F08000;}.code-comment {    color: #208000;}.code-string {    color: #F00000;}");
+				tf.styleSheet = styles;
+				tf.text = CodeHighlighter.highlight( tf.text, "haxe") ;
+			    }
+			    else
+			    {
+			    tf.styleSheet = null;
+			    tf.text = tf.text.split("<").join("").split(">").join("");
+			    tf.text = tf.text.split(";").join(";\n");
+			    }
+			    
+		    ]]>
+		    </script>
+		</events>
+	    </haxegui:controls:Button>
+	    
+	</haxegui:ToolBar>
+	<haxegui:ScrollPane name="ScrollPane1" x="10" y="84" />
+    	    <events>
+		    <script type="text/hscript" action="onLoaded"><![CDATA[
 
-	<haxegui:ScrollPane name="ScrollPane1" x="10" y="84" >
-
-
-		    <script type="text/hscript">
 
 			
 			var window = root.getChildByName("Transcriber");
 			var toolbar = window.getChildByName("Toolbar");
 			var scrollpane = window.getChildByName("ScrollPane1");
-
+			
 			var tf = new flash.text.TextField();
 			tf.name = "HtmlTextArea";
 			tf.type = flash.text.TextFieldType.INPUT;
@@ -30,62 +74,20 @@
 			tf.height = 1000;
 			tf.mouseEnabled = true;
 			tf.tabEnabled = true;
-
 			
-			
-			var str = "var n = 6;\nvar factorial = 1;\nfor(i in factorial...n)\n\tfactorial *= i;\nn+\"! = \"+factorial;\n" ;
-			str += "\n/*\nvar window = new haxegui.Window(this.getChildByName(\"ScrollPane1\"));\nwindow.box.width = 160;\nwindow.box.height = 120;\nwindow.init();\n\nvar container = new haxegui.Container(window, \"Container\", 10, 20);\ncontainer.init();\n*/";
-	/*
-	var cssLoader = new flash.net.URLLoader();
-	var cssRequest = new flash.net.URLRequest("green.css");
-	function cssLoadComplete(e)
-	    {
-		trace(e);
-		styles.parseCSS(e.target.data);
-	    }
-	cssLoader.addEventListener(flash.events.Event.COMPLETE, cssLoadComplete);
-	cssLoader.load(cssRequest);
-	*/
-			
-			var styles = new flash.text.StyleSheet();
-			styles.parseCSS(".code-line-numbers {    color:#809080;    border-right:1px dotted #809080;    float:left;    text-align:right;    width:2em;    padding-right:3px;    margin-right:12px;}.code-code {}.code-keyword {    font-weight: bold;    color: #000000;}.code-type {    font-weight: bold;    color: #106020;}.code-variable {    color: #004050;}.code-number {    color: #F08000;}.code-comment {    color: #208000;}.code-string {    color: #F00000;}");
-			tf.styleSheet = styles;
-			tf.htmlText = CodeHighlighter.highlight( str, "haxe") ;
-			
+			tf.text = "root.getChildByName(\"Console\").clear();\nvar n = 6;\nvar factorial = 1;\nfor(i in factorial...n)\n\tfactorial *= i;\nn+\"! = \"+factorial;\n" ;
+			tf.text += "\n/*\nvar window = new haxegui.Window(this.getChildByName(\"ScrollPane1\"));\nwindow.box.width = 160;\nwindow.box.height = 120;\nwindow.init();\n\nvar container = new haxegui.Container(window, \"Container\", 10, 20);\ncontainer.init();\n*/";
 
-			scrollpane.addChild(tf);
-
-
+			scrollpane.addChild(tf);		
 				
-				function clear(e) { tf.text = ""; }
 
-				var clearbtn = toolbar.getChildByName("Clear");
-				clearbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, clear);			
-
-				
-				function run(e)
-					{
-					var parser = new hscript.Parser();
-					var program = parser.parseString(tf.text);
-					var interp = new hscript.Interp();
-					
-					interp.variables.set( "this", window );
-					ScriptStandardLibrary.set(interp);
-
-					trace(interp.execute(program)); 
-					
-					root.getChildByName("Console").onRaise(null);
-							
-					}
-
-					
-				var runbtn = toolbar.getChildByName("Run");
-				runbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, run);			
+			var clearbtn = toolbar.getChildByName("Clear");
+			clearbtn.addEventListener(flash.events.MouseEvent.MOUSE_UP, function(e){ tf.text = "";});
 			
-
+			
+		    ]]>
 		    </script>
-    
-	</haxegui:ScrollPane>
+		</events>   
     </haxegui:Window>
     
 
