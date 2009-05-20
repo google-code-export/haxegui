@@ -344,7 +344,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		/////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
-		loader.load(new URLRequest("samples/Example1.xml"));
+		loader.load(new URLRequest("samples/Example6.xml"));
 
 //  try {
 //      var l = flash.Lib.current.loaderInfo.parameters;
