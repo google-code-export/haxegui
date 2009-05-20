@@ -40,10 +40,10 @@ import flash.ui.Keyboard;
 
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Label;
-import haxegui.FocusManager;
+import haxegui.managers.FocusManager;
 import haxegui.Opts;
-import haxegui.StyleManager;
-import haxegui.controls.Component;
+import haxegui.managers.StyleManager;
+import haxegui.Component;
 import haxegui.events.ResizeEvent;
 import haxegui.events.MenuEvent;
 

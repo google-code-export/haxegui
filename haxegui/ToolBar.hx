@@ -51,18 +51,18 @@ import flash.filters.BitmapFilterQuality;
 import flash.filters.BevelFilter;
 
 
-import haxegui.controls.Component;
+import haxegui.Component;
 
-import haxegui.WindowManager;
-import haxegui.MouseManager;
-import haxegui.CursorManager;
-import haxegui.StyleManager;
+import haxegui.managers.WindowManager;
+import haxegui.managers.MouseManager;
+import haxegui.managers.CursorManager;
+import haxegui.managers.StyleManager;
 
 
 class ToolBar extends Component
 {
 
-	public var handle : Component;
+	public var handle : Sprite;
 
 	public function new (? parent : DisplayObjectContainer, ? name : String,
 			? x : Float, ? y : Float, ? width : Float, ? height : Float)
@@ -77,11 +77,13 @@ class ToolBar extends Component
 
 		super.init(opts);
 
-		handle = new Component(this, "handle");
+		handle = new Sprite();
+		handle.name = "handle";
 		handle.graphics.lineStyle(1, color - 0x202020);
 		handle.graphics.beginFill(color, .5);
 		handle.graphics.drawRoundRect(4, 8, 8, box.height - 16, 4, 4);
 		handle.graphics.endFill();
+		addChild(handle);
 
 		// inner-drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4, 0.5, BitmapFilterQuality.LOW,true,false,false);

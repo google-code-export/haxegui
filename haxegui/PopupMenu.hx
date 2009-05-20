@@ -43,10 +43,10 @@ import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 
-import haxegui.controls.Component;
+import haxegui.Component;
 import haxegui.controls.AbstractButton;
-import haxegui.CursorManager;
-import haxegui.StyleManager;
+import haxegui.managers.CursorManager;
+import haxegui.managers.StyleManager;
 
 import feffects.Tween;
 import feffects.easing.Quint;

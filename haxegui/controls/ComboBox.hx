@@ -31,10 +31,10 @@ import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 import flash.geom.Rectangle;
-
+import haxegui.Component;
 import haxegui.Opts;
-import haxegui.CursorManager;
-import haxegui.StyleManager;
+import haxegui.managers.CursorManager;
+import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 
 /**
@@ -66,18 +66,14 @@ class ComboBoxDropButton extends AbstractButton {
 **/
 class ComboBoxBackground extends Component
 {
-	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super(parent, name, x, y);
-		color = DefaultStyle.BACKGROUND;
-	}
-
 	static function __init__() {
 		haxegui.Haxegui.register(ComboBoxBackground);
 	}
 
 	override public function init(opts:Dynamic=null)
 	{
+		color = DefaultStyle.BACKGROUND;
+
 		super.init(opts);
 
 	}
@@ -85,7 +81,8 @@ class ComboBoxBackground extends Component
 
 /**
 *
-* ComboBox Class
+* ComboBox composited of a button for the pull-down menu, and an optional Input
+* for custom values.
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
@@ -99,7 +96,7 @@ class ComboBox extends Component
 
 	private var editable : Bool;
 
-	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		background = new ComboBoxBackground(this, "background");
 		dropButton = new ComboBoxDropButton(this, "button");
@@ -120,7 +117,7 @@ class ComboBox extends Component
 		if(editable)
 		{
 			if(input != null && input.parent == this)
-				input.destroy();
+				removeChild(input);
 			input = new Input(this, "input");
 			input.init({text: this.name });
 			input.redraw();
@@ -128,12 +125,13 @@ class ComboBox extends Component
 		else
 		{
 			if(background != null && background.parent == this)
-				background.destroy();
+				removeChild(background);
 			background = new ComboBoxBackground(this, "background");
 			background.init(opts);
 		}
 
 		dropButton.init(opts);
+
 	}
 
 	static function __init__() {

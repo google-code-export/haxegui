@@ -25,10 +25,11 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilterQuality;
-import haxegui.CursorManager;
+import haxegui.managers.CursorManager;
 import haxegui.Opts;
-import haxegui.ScriptManager;
-import haxegui.StyleManager;
+import haxegui.Component;
+import haxegui.managers.ScriptManager;
+import haxegui.managers.StyleManager;
 
 
 /**

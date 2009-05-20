@@ -45,13 +45,13 @@ import haxegui.events.MenuEvent;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
 
-import haxegui.WindowManager;
-import haxegui.StyleManager;
-import haxegui.ScriptManager;
-import haxegui.FocusManager;
-import haxegui.LayoutManager;
-import haxegui.CursorManager;
-import haxegui.MouseManager;
+import haxegui.managers.WindowManager;
+import haxegui.managers.StyleManager;
+import haxegui.managers.ScriptManager;
+import haxegui.managers.FocusManager;
+import haxegui.managers.LayoutManager;
+import haxegui.managers.CursorManager;
+import haxegui.managers.MouseManager;
 import haxegui.PopupMenu;
 
 import haxegui.Console;

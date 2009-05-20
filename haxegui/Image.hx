@@ -23,7 +23,7 @@ import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 
 
-import haxegui.controls.Component;
+import haxegui.Component;
 
 import flash.display.Loader;
 import flash.net.URLRequest;

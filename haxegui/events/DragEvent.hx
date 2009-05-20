@@ -19,7 +19,7 @@
 
 package haxegui.events;
 
-import haxegui.controls.Component;
+import haxegui.Component;
 
 class DragEvent extends flash.events.MouseEvent {
 

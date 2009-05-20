@@ -17,7 +17,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package haxegui.controls;
+package haxegui;
 
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
@@ -31,10 +31,10 @@ import flash.geom.Rectangle;
 
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
-import haxegui.FocusManager;
+import haxegui.managers.FocusManager;
 import haxegui.Haxegui;
 import haxegui.Opts;
-import haxegui.ScriptManager;
+import haxegui.managers.ScriptManager;
 import haxegui.Window;
 
 import feffects.Tween;

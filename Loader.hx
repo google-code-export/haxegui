@@ -29,7 +29,7 @@ import flash.net.URLRequest;
 
 import flash.Error;
 
-import haxegui.StyleManager;
+import haxegui.managers.StyleManager;
 
 
 class Loader extends Sprite

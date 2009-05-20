@@ -33,9 +33,10 @@ import flash.text.TextField;
 
 import haxe.Timer;
 
-import haxegui.CursorManager;
+import haxegui.Component;
+import haxegui.managers.CursorManager;
 import haxegui.Opts;
-import haxegui.StyleManager;
+import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
@@ -58,7 +59,7 @@ class Stepper extends Component
 {
 	public var up : StepperUpButton;
 	public var down : StepperDownButton;
-	public var background : Component;
+	public var background : Sprite;
 	public var tf : TextField;
 
 	public var value(__getValue,__setValue) : Float;
@@ -80,7 +81,9 @@ class Stepper extends Component
 
 		tf = new TextField();
 		tf.name = "tf";
-		background = new Component(this, "background");
+		background = new Sprite();
+		background.name = "background";
+		this.addChild(background);
 		this.addChild(tf);
 
 		up = new StepperUpButton(this, "up");

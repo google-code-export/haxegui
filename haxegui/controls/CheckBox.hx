@@ -34,16 +34,16 @@ import flash.geom.Rectangle;
 import flash.text.TextField;
 import flash.text.TextFormat;
 
-import haxegui.CursorManager;
-import haxegui.FocusManager;
+import haxegui.managers.CursorManager;
+import haxegui.managers.FocusManager;
 import haxegui.Opts;
-import haxegui.StyleManager;
+import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 
 
 /**
-* <p>An on \ off CheckBox, with composited Label. use the member variable <i>checked</i>
-* to get it's state.</p>
+* An on \ off CheckBox, with composited Label. use the member variable <i>checked</i>
+* to get it's state.
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>

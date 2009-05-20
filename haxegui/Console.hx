@@ -39,7 +39,8 @@ import flash.ui.Mouse;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
-import haxegui.StyleManager;
+import haxegui.managers.StyleManager;
+import haxegui.Window;
 
 import haxegui.controls.ScrollBar;
 
@@ -79,7 +80,7 @@ class Console extends Window, implements ITraceListener
 
 		input = new TextField();
 
-		container = new Container(this, "Console Container", 10, 20);
+		container = new Container(this, "Container", 10, 20);
 		container.init();
 
 		parser = new hscript.Parser();
@@ -136,12 +137,12 @@ class Console extends Window, implements ITraceListener
 		container.addChild(output);
 		container.addChild(input);
 
-		if(isSizeable())
-		{
-			bl.y = frame.height - 32;
-			br.x = frame.width - 32;
-			br.y = frame.height - 32;
-		}
+		//~ if(isSizeable())
+		//~ {
+			//~ bl.y = frame.height - 32;
+			//~ br.x = frame.width - 32;
+			//~ br.y = frame.height - 32;
+		//~ }
 
 		parser = new hscript.Parser();
 		history = new Array<String>();
@@ -158,10 +159,6 @@ class Console extends Window, implements ITraceListener
 		//~ var text:String =  "";
 		var text:String =  "<FONT FACE=\"MONO\" SIZE=\"10\" COLOR=\"#eeeeee\">";
 		text += DateTools.format (Date.now (), "%H:%M:%S") + "\t" ;
-
-		if(inf != null) {
-			text += inf.fileName + ":" + inf.lineNumber + " : ";
-		}
 
 		if(Std.is(e,Event))
 		{

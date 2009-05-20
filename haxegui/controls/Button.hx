@@ -41,9 +41,9 @@ import flash.filters.BitmapFilterQuality;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 
-import haxegui.CursorManager;
+import haxegui.managers.CursorManager;
 import haxegui.Opts;
-import haxegui.StyleManager;
+import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 
 /**

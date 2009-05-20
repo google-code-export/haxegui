@@ -19,8 +19,10 @@
 
 package haxegui;
 
-import haxegui.StyleManager;
-import haxegui.controls.Component;
+import haxegui.managers.MouseManager;
+import haxegui.managers.CursorManager;
+import haxegui.managers.StyleManager;
+import haxegui.Component;
 
 /**
 * Haxegui Class
@@ -55,7 +57,7 @@ class Haxegui {
 		StyleManager.setStyle("default");
 		trace("complete");
 
-		var t = new haxe.Timer(300);
+		var t = new haxe.Timer(150);
 		t.run = onInterval;
 	}
 

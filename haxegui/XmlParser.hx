@@ -19,7 +19,7 @@
 
 package haxegui;
 
-import haxegui.controls.Component;
+import haxegui.managers.ScriptManager;
 
 /**
 *
@@ -104,9 +104,8 @@ class XmlParser {
 		var className = node.nodeName.split(":").join(".");
 
 		// ignore <events> children, processed below.
-		switch(className) {
-		case "events", "haxegui:DataSource": return;
-		}
+		if(className == "events")
+			return;
 
 		if(!isStyle) {
 			if(Std.is(parent, List))
@@ -118,8 +117,7 @@ class XmlParser {
 			if(Std.is(parent, Array))
 			{
 				parent.push( node.firstChild().nodeValue );
-				if(node.parent.get("name") != null)
-					Reflect.setField(flash.Lib.current, node.parent.get("name"), parent);
+				Reflect.setField(flash.Lib.current, node.parent.get("name"), parent);
 				// trace(Reflect.field(flash.Lib.current, "IntArray"));
 				// trace(node.parent.get("name"));
 				return;
@@ -134,15 +132,9 @@ class XmlParser {
 
 		var inst : Dynamic = null;
 		var comp : Component = null;
-		var args : Dynamic = {};
-		var isListType = false;
 		if(!isStyle) {
-			try {
-				inst = Type.createInstance(resolvedClass, [parent]);
-			} catch(e:Dynamic) {
-				inst = Type.createInstance(resolvedClass, []);
-			}
-
+			var args : Dynamic = {};
+			inst = Type.createInstance(resolvedClass, [parent]);
 			if(Std.is(inst, Component)) {
 				comp = cast inst;
 			}
@@ -167,14 +159,9 @@ class XmlParser {
 				}
 			}
 
-			// parse data sources
-			for(sources in node.elementsNamed("haxegui:DataSource")) {
-				args.data = parseDataSourceNode(sources);
-			}
-
 			// run the init script, if it's a Component or other
 			// type with an Init field
-			if(inst != null && Reflect.hasField( inst, "init") )
+			if(Reflect.hasField( inst, "init") )
 				if(Reflect.isFunction( Reflect.field(inst, "init") ))
 					Reflect.callMethod( inst, inst.init, [args] );
 		}
@@ -190,7 +177,6 @@ class XmlParser {
 			if(node.elements().hasNext())
 				for(i in node.elements())
 					parseNode(i, inst);
-
 			if(comp != null && comp.hasAction("onLoaded")) {
 				trace("Executing onLoaded method for component "+ comp.name);
 				try {
@@ -242,38 +228,4 @@ class XmlParser {
 		}
 	}
 
-	/** haxgui:DataSource handler **/
-	function parseDataSourceNode(node:Xml) : Dynamic {
-		for(i in node.elements())
-			return parseDataNode(i);
-		return null;
-	}
-
-	function parseDataNode(node:Xml) {
-		var className = node.nodeName.split(":").join(".");
-		var rv : Dynamic = null;
-		var parts = className.split(".");
-		if(parts.length == 1) {
-			switch(className.toLowerCase()) {
-			case "list":
-				rv = new List<Dynamic>();
-				for(i in node.elements()) {
-					rv.add(parseDataNode(i));
-				}
-			case "array":
-				rv = new Array<Dynamic>();
-				for(i in node.elements()) {
-					rv.push(parseDataNode(i));
-				}
-			case "string":
-				rv = new String(node.firstChild().nodeValue);
-			case "float":
-				rv = new String(node.firstChild().nodeValue);
-			case "int":
-				rv = new String(node.firstChild().nodeValue);
-			default:
-			}
-		}
-		return rv;
-	}
 }

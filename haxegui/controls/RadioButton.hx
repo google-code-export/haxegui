@@ -34,15 +34,23 @@ import flash.geom.Rectangle;
 import flash.text.TextField;
 import flash.text.TextFormat;
 
-import haxegui.CursorManager;
-import haxegui.FocusManager;
+import haxegui.managers.CursorManager;
+import haxegui.managers.FocusManager;
 import haxegui.Opts;
-import haxegui.ScriptManager;
-import haxegui.StyleManager;
-import haxegui.controls.Component;
+import haxegui.managers.ScriptManager;
+import haxegui.managers.StyleManager;
+import haxegui.Component;
 import haxegui.controls.AbstractButton;
 import haxegui.events.MoveEvent;
 
+
+
+/**
+* RadioButton allows the user to select only one of the predefined set of similar widgets.
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+**/
 class RadioButton extends AbstractButton
 {
 	//~ public var group : Array<RadioButton>

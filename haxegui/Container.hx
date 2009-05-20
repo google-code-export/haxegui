@@ -19,10 +19,10 @@
 
 package haxegui;
 
-// import flash.display.Sprite;
+import flash.display.Sprite;
 import flash.display.DisplayObject;
-// import flash.display.MovieClip;
-// import flash.geom.Rectangle;
+import flash.display.MovieClip;
+import flash.geom.Rectangle;
 
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -33,14 +33,16 @@ import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 
-import haxegui.ScriptManager;
-import haxegui.StyleManager;
-import haxegui.controls.Component;
+import haxegui.managers.ScriptManager;
+import haxegui.managers.StyleManager;
+import haxegui.Component;
 
 
 class Container extends Component, implements IContainer
 //~ , implements IChildList
 {
+	private var _clip : Bool;
+
 	public function new (?parent : flash.display.DisplayObjectContainer, ?name:String, ?x : Float, ?y: Float)
 	{
 		super (parent, name, x, y);
@@ -55,9 +57,8 @@ class Container extends Component, implements IContainer
 		//~ box = transform.pixelBounds.clone();
 		//~ onResize(new ResizeEvent(ResizeEvent.RESIZE));
 		//~ box = box.union(o.getBounds(this));
-		var rv = super.addChild(o);
 		this.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-		return rv;
+		return super.addChild(o);
 	}
 
 
@@ -89,8 +90,8 @@ class Container extends Component, implements IContainer
 				this.box.width -= 20;
 			}
 
-		redraw(null);
-		//~ dirty = true;
+		//redraw(null);
+		dirty = true;
 		//
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
