@@ -68,6 +68,7 @@ class ScriptManager implements Dynamic
 			if(so.setup != null)
 				so.setup(so.interp,inst,options);
 			so.interp.variables.set("this",inst);
+			so.interp.variables.set("parent",inst.parent);
 			rv = so.interp.execute( so.program );
 		}
 		return rv;

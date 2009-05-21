@@ -6,9 +6,14 @@
 	<haxegui:MenuBar name="Menubar" width="400" x="10" y="20" />
 	<haxegui:ToolBar name="Toolbar" width="400" x="10" y="44" >
 	    <haxegui:controls:Button name="Run" label="Run" x="30" y="4" >
+		<haxegui:Image name="icon" src="assets/icons/run.png" x="4" y="4" />
 		<events>
 		    <script type="text/hscript" action="mouseClick">
 			<![CDATA[
+			    var console = root.getChildByName("Console");
+			    console.visible=true;
+			    WindowManager.toFront(console);
+
 			    var win = parent.parent;
 			    var scrollpane = win.getChildByName("ScrollPane1");
 			    var tf = scrollpane.content.getChildByName("HtmlTextArea");
@@ -25,10 +30,14 @@
 		    </script>
 		</events>
 	    </haxegui:controls:Button>
-	    <haxegui:controls:Button name="Clear" label="Clear" x="130" y="4" />
+	    <haxegui:controls:Button name="Clear" label="Clear" x="130" y="4" >
+		<haxegui:Image name="icon" src="assets/icons/clear.png" x="4" y="4" />
+	    </haxegui:controls:Button>
 	    <haxegui:controls:Button name="CSS" label="CSS" x="230" y="4" >
+		<haxegui:Image name="icon" src="assets/icons/highlight.png" x="4" y="4" />
 		<events>
 		    <script type="text/hscript" action="mouseClick"><![CDATA[
+
 			    var win = parent.parent;
 			    var scrollpane = win.getChildByName("ScrollPane1");
 			    var tf = scrollpane.content.getChildByName("HtmlTextArea");
@@ -38,6 +47,7 @@
 				var styles = new flash.text.StyleSheet();
 				styles.parseCSS(".code-line-numbers {    color:#809080;    border-right:1px dotted #809080;    float:left;    text-align:right;    width:2em;    padding-right:3px;    margin-right:12px;}.code-code {}.code-keyword {    font-weight: bold;    color: #000000;}.code-type {    font-weight: bold;    color: #106020;}.code-variable {    color: #004050;}.code-number {    color: #F08000;}.code-comment {    color: #208000;}.code-string {    color: #F00000;}");
 				tf.styleSheet = styles;
+				tf.text = tf.text.split(";").join(";\n");
 				tf.text = CodeHighlighter.highlight( tf.text, "haxe") ;
 			    }
 			    else
@@ -62,20 +72,37 @@
 			var window = root.getChildByName("Transcriber");
 			var toolbar = window.getChildByName("Toolbar");
 			var scrollpane = window.getChildByName("ScrollPane1");
+
+			var nums = new flash.text.TextField();
+			nums.name = "LineNumbers";
+			nums.multiline = true;
+			nums.background = true;
+			nums.backgroundColor = window.color - 0x141414;
+			var fmt = DefaultStyle.getTextFormat();
+			fmt.align = flash.text.TextFormatAlign.RIGHT;
+			fmt.rightMargin = 4;
+			nums.defaultTextFormat = fmt;
+			nums.width = 30;
+			nums.height = 1000;
+			for(i in 1...100) nums.text += i+"\n";
+			scrollpane.addChild(nums);
 			
+
 			var tf = new flash.text.TextField();
 			tf.name = "HtmlTextArea";
 			tf.type = flash.text.TextFieldType.INPUT;
 			tf.multiline = true;
 			tf.wordWrap = true;
-			tf.background = true;
+			tf.background = true;	
 			tf.backgroundColor = 0xFFFFFF;
+			tf.x = 30;
 			tf.width = 800;
 			tf.height = 1000;
 			tf.mouseEnabled = true;
 			tf.tabEnabled = true;
 			
 			tf.text = "root.getChildByName(\"Console\").clear();\nvar n = 6;\nvar factorial = 1;\nfor(i in factorial...n)\n\tfactorial *= i;\nn+\"! = \"+factorial;\n" ;
+			tf.text += "\n/*for(i in 1...6) LayoutManager.fetchLayout(\"samples/Example\"+i+\".xml\");*/\n";
 			tf.text += "\n/*\nvar window = new haxegui.Window(this.getChildByName(\"ScrollPane1\"));\nwindow.box.width = 160;\nwindow.box.height = 120;\nwindow.init();\n\nvar container = new haxegui.Container(window, \"Container\", 10, 20);\ncontainer.init();\n*/";
 
 			scrollpane.addChild(tf);		

@@ -50,7 +50,6 @@ import haxegui.managers.CursorManager;
 *
 *
 */
-
 class MouseManager extends EventDispatcher
 {
 

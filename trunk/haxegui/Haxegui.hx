@@ -57,7 +57,7 @@ class Haxegui {
 		StyleManager.setStyle("default");
 		trace("complete");
 
-		var t = new haxe.Timer(150);
+		var t = new haxe.Timer(50);
 		t.run = onInterval;
 	}
 

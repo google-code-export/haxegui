@@ -74,8 +74,10 @@ class Console extends Window, implements ITraceListener
 	{
 // 		if(opts == null) opts = {};
 // 		super.init({name:"Console", x:x, y:y, width:width, height:height, sizeable:true, color: 0x666666});
+		
+		type = WindowType.ALWAYS_ON_TOP;
 		super.init(opts);
-
+			
 		box = new Rectangle (0, 0, 640, 240);
 
 		input = new TextField();
@@ -154,7 +156,7 @@ class Console extends Window, implements ITraceListener
 *
 *
 */
-	public  function log( e : Dynamic, ?inf : haxe.PosInfos ) : Void
+	public function log( e : Dynamic, ?inf : haxe.PosInfos ) : Void
 	{
 		//~ var text:String =  "";
 		var text:String =  "<FONT FACE=\"MONO\" SIZE=\"10\" COLOR=\"#eeeeee\">";

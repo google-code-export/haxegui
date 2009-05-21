@@ -26,6 +26,7 @@ import flash.display.MovieClip;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
+import haxegui.events.ResizeEvent;
 
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
@@ -75,23 +76,50 @@ enum WindowType
 */
 class Window extends Component
 {
-	public var titlebar : TitleBar;
-	public var frame : WindowFrame;
-	public var type:WindowType;
-
-	private var lazyResize:Bool;
-	private var sizeable:Bool;
 	
-	//~ private var _mask:Sprite;
+	////////////////////////////////////////////////////////////////////////////
+	// Composition
+	////////////////////////////////////////////////////////////////////////////
+	public var titlebar : TitleBar;
+	public var frame 	: WindowFrame;
+	public var type		: WindowType;
 
+	
+	
+	////////////////////////////////////////////////////////////////////////////
+	// Privates
+	////////////////////////////////////////////////////////////////////////////
+	private var lazyResize:Bool;
+	private var sizeable(isSizeable, setSizeable):Bool;
+	
+	/** 
+	 * Constructor
+	 * 
+	 * @param parent The parent to hold the new window, will default to root.
+	 * @param name	 Window's instance name on stage nad title.
+	 * @param x		 Horizontal offset
+	 * @param y		 Vertical offset
+	 * @param height Window's height, set to member box
+	 * @param width  Window's width, set to member box
+	 * @param sizeable
+	 * 
+	 */
 	public function new (? parent : DisplayObjectContainer, ? name : String,
 				? x : Float, ? y : Float, ? width : Float,
 				? height : Float, ? sizeable : Bool)
 	{
-		if (parent == null || !Std.is (parent, DisplayObjectContainer))
+	/** Default new windows to be children of root **/
+	if (parent == null || !Std.is (parent, DisplayObjectContainer))
 		parent = flash.Lib.current;
+	
+	/** Check name with WindowManager **/
+	if( WindowManager.getInstance().windows.exists( this.name ) )
+		this.name += Std.string(haxe.Timer.stamp()*1000).substr(0,2);
 
 		super (parent, name, x, y);
+	
+		WindowManager.getInstance().windows.set( this.name, this );
+
 	}
 
 	public function getInnerRectangle() : Rectangle {
@@ -105,16 +133,14 @@ class Window extends Component
 		text = "Window";
 
 		super.init(opts);
-
-		type = WindowType.NORMAL;
+		
+		// options
 		sizeable = Opts.optBool(opts, "sizeable", true);
 		lazyResize = Opts.optBool(opts, "lazyResize", true);
-
 
 		// frame
 		frame = new WindowFrame(this, "frame");
 		frame.init({color: this.color});
-		frame.buttonMode = false;
 		
 		// add a titlebar
 		titlebar = new TitleBar(this, "titlebar");
@@ -122,9 +148,14 @@ class Window extends Component
 
 		// register with focus manager
 		//~ FocusManager.getInstance ().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, redraw, false, 0, true);
+	
 
 	}
 
+	public function setSizeable(s:Bool):Bool
+	{
+		return sizeable = s;
+	}
 
 	public function isSizeable ():Bool
 	{
@@ -153,13 +184,12 @@ class Window extends Component
 	override public function redraw(opts:Dynamic=null):Void
 	{
 
-		this.parent.dispatchEvent( new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
-
+		//~ this.parent.dispatchEvent( new ResizeEvent(ResizeEvent.RESIZE));
 		//~ this.box.width = this.frame.br.x + 22;
 		//~ this.box.height = this.frame.bl.y + 22;
 		//~ 
 		frame.redraw();
-		//~ titlebar.redraw({box: this.box.clone()});
+		titlebar.redraw();
 		
 		ScriptManager.exec(this,"redraw",
 			{
