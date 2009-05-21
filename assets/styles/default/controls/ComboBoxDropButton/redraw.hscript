@@ -38,3 +38,4 @@ if(this.filters == null || this.filters.length == 0) {
 }
 * */
 this.x = this.parent.box.width - w;
+this.y = 0;

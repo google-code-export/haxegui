@@ -41,6 +41,9 @@ class Image extends Component
 
 	override public function init(opts:Dynamic=null) : Void
 	{
+	    
+		super.init(opts);
+		
 		var pictLdr:Loader = new Loader();
 		//var pictURLReq:URLRequest = new URLRequest("./assets/banners/banner$
 		var pictURLReq:URLRequest = new URLRequest(Opts.string(opts,"src"));

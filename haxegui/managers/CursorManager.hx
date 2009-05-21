@@ -147,6 +147,7 @@ class CursorManager extends EventDispatcher
 		_mc.x = p.x;
 		_mc.y = p.y;
 		
+		showCursor();
 		toTop();
 
 		e.updateAfterEvent();

@@ -1,14 +1,16 @@
 this.background.graphics.lineStyle (1, this.color - 0x141414, 1, true,
-							flash.display.LineScaleMode.NONE,
-							flash.display.CapsStyle.ROUND,
-							flash.display.JointStyle.ROUND);
-this.background.graphics.beginFill(DefaultStyle.INPUT_BACK);
-this.background.graphics.drawRoundRect(0, -1, this.box.width, this.box.height, 8, 8);
-this.background.graphics.endFill();
+				    flash.display.LineScaleMode.NONE,
+				    flash.display.CapsStyle.ROUND,
+				    flash.display.JointStyle.ROUND);
 
-var shadow = new flash.filters.DropShadowFilter(
-	4, 45, DefaultStyle.DROPSHADOW,
-	0.8, 4, 4, 0.65,
-	flash.filters.BitmapFilterQuality.HIGH,
-	true, false, false );
-this.filters = [shadow];
+this.background.graphics.beginFill (DefaultStyle.INPUT_BACK);
+this.background.graphics.drawRoundRect (0, -1, this.box.width,
+					this.box.height, 8, 8);
+this.background.graphics.endFill ();
+
+var shadow =
+  new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW,
+				      0.8, 4, 4, 0.65,
+				      flash.filters.BitmapFilterQuality.HIGH,
+				      true, false, false);
+this.filters =[shadow];

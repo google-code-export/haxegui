@@ -78,7 +78,7 @@ import haxegui.controls.Input;
 */
 class ColorPicker extends Window
 {
-	var colSprite : Sprite;
+	var colSprite : Component;
 	var currentColor : UInt;
 	var input : Input;
 
@@ -94,7 +94,7 @@ class ColorPicker extends Window
 
 	public override function init(?initObj:Dynamic)
 	{
-		super.init({name:"ColorPicker", x:x, y:y, width:width, height:height, sizeable:false, color: 0xE6D3CC});
+		super.init({name:"ColorPicker", x:x, y:y, width:width, height:height, type: WindowType.MODAL, sizeable:false, color: 0xE6D3CC});
 
 		box = new Rectangle (0, 0, 400, 280);
 
@@ -126,19 +126,15 @@ class ColorPicker extends Window
 		spec.addEventListener(MouseEvent.MOUSE_UP, onMouseUpImage);
 		spec.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMoveImage);
 
-
-		colSprite =  new Sprite();
+		
+		colSprite =  new Component(container, "colSprite", 180, 10);
 		colSprite.graphics.lineStyle(2, color - 0x141414);
 		colSprite.graphics.beginFill(0);
 		colSprite.graphics.drawRect(0,0,40,30);
 		colSprite.graphics.endFill();
-		colSprite.x = 180;
-		colSprite.y = 10;
 
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
 		colSprite.filters = [shadow];
-
-		container.addChild(colSprite);
 
 
 		input = new Input(container, "Input", 230, 10);

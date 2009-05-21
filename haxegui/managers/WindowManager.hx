@@ -44,14 +44,12 @@ import haxegui.Window;
 */
 class WindowManager extends EventDispatcher
 {
-
   public var numWindows : UInt;
-  public var listeners:Array<haxegui.ITraceListener>;
-
-  public var windows : IntHash<Window>;
+  public var windows : Hash<Window>;
 
   private static var _instance : WindowManager = null;
 
+  public var listeners:Array<haxegui.ITraceListener>;
 
 
   public static function getInstance ():WindowManager
@@ -69,7 +67,7 @@ class WindowManager extends EventDispatcher
   {
     super ();
     listeners = new Array();
-    windows = new IntHash();
+    windows = new Hash();
     numWindows = 0;
   }
 
@@ -79,14 +77,21 @@ class WindowManager extends EventDispatcher
   }
 
 
-  public static function addWindow(?parent:Dynamic) {
+  public static function addWindow(?parent:Dynamic, ?name:String) {
     getInstance().numWindows++;
 
     if(parent==null)
         parent = flash.Lib.current;
 
-    var window =  new Window(parent);
-    getInstance().windows.set(getInstance().numWindows, window);
+   	if(name==null)
+        name = "Window" + Std.string(haxe.Timer.stamp()*1000).substr(0,2);
+    
+    if( getInstance().windows.exists( name ) )
+        name += Std.string(haxe.Timer.stamp()*1000).substr(0,2);
+
+    var window =  new Window(parent, name);
+
+    getInstance().windows.set(name, window);
 
     //~ window.addEventListener( ResizeEvent.RESIZE, proxy );
     //~ window.addEventListener( MoveEvent.MOVE, proxy );

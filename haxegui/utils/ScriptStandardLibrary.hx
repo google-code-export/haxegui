@@ -48,6 +48,7 @@ class ScriptStandardLibrary
 		interp.variables.set( "root", flash.Lib.current );
 		interp.variables.set( "Std", Std );
 		interp.variables.set( "String", String );
+		interp.variables.set( "StringTools", StringTools );
 		interp.variables.set( "Math", Math );
 		interp.variables.set( "Type", Type );
 		interp.variables.set( "Reflect", Reflect );
@@ -161,6 +162,7 @@ class ScriptStandardLibrary
 
 		/** haxegui exported with haxegui package stripped **/
 		interp.variables.set("ColorPicker", haxegui.ColorPicker);
+		interp.variables.set("ColorPicker2", haxegui.ColorPicker2);
 		interp.variables.set("Component", haxegui.Component);
 		interp.variables.set("Console", haxegui.Console);
 		interp.variables.set("Container", haxegui.Container);

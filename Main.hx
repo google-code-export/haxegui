@@ -39,7 +39,6 @@ import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
-
 import haxegui.events.MenuEvent;
 
 import flash.net.URLLoader;
@@ -62,6 +61,7 @@ import haxegui.MenuBar;
 import haxegui.Stats;
 import haxegui.ToolBar;
 import haxegui.ColorPicker;
+import haxegui.ColorPicker2;
 import haxegui.Utils;
 
 
@@ -78,12 +78,14 @@ import haxegui.controls.Expander;
 
 import feffects.Tween;
 
-
-
+/**
+ * 
+ * 
+ * 
+ * 
+ */
 class Main extends Sprite, implements haxe.rtti.Infos
 {
-
-// 	static var log : haxe.Log;
 
 	public static function main ()
 	{
@@ -147,8 +149,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		//~ stats.init();
 
 		// Color Picker
-		//~ var colorpicker = new ColorPicker(100,100);
-		//~ colorpicker.init();
+		var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
+		colorpicker.init();
 
 
 /*
