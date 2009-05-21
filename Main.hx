@@ -123,6 +123,18 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		flash.Lib.current.addChild(desktop);
 
 
+		// Desktop
+		var logo = flash.Lib.attach("HaxeLogo");
+		logo.name = "HaxeLogo";
+		logo.x = .5*(stage.stageWidth - logo.width);
+		logo.y = .5*(stage.stageHeight - logo.height);
+		flash.Lib.current.addChild(logo);
+		var shadow =
+		  new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 8, 8, 0.85,
+					flash.filters.BitmapFilterQuality.HIGH, false, false, false);
+
+		logo.filters =[shadow];		
+		
 
 		// Console to show some debug
 		var console = new Console (flash.Lib.current, 50, 50);
@@ -360,6 +372,9 @@ class Main extends Sprite, implements haxe.rtti.Infos
 //  }
 
 
+		
+
+
 		var a = new Array<String>();
 		var keys : Iterator<String> = untyped ScriptManager.defaultActions.keys();
 		for(k in keys)
@@ -417,6 +432,10 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 		back.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
 		back.graphics.endFill();
+
+		var logo = cast flash.Lib.current.getChildByName("HaxeLogo");
+		logo.x = .5*(stage.stageWidth - logo.width);
+		logo.y = .5*(stage.stageHeight - logo.height);		
 	}
 
 	public static dynamic function log(v:Dynamic) {
