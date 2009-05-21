@@ -76,7 +76,10 @@ class ComboBoxBackground extends Component
 
 		super.init(opts);
 
+		
 	}
+
+
 }
 
 /**
@@ -131,6 +134,46 @@ class ComboBox extends Component
 		}
 
 		dropButton.init(opts);
+		dropButton.setAction("mouseClick",
+		"
+			var list = new haxegui.controls.UiList(root);
+			list.color = this.color;
+			for(i in 0...5) list.data.push(\"item\"+i);
+			list.init();
+			list.removeChild(list.header);
+			list.box.width = this.parent.box.width - 20;
+			for(i in 0...list.numChildren)
+				{
+					list.getChildAt(i).box.width = this.parent.box.width - 20;
+					list.getChildAt(i).redraw();
+					/*list.getChildAt(i).filters = null;*/
+				}
+		
+		 	var p = new flash.geom.Point( parent.x, parent.y );
+			p = this.parent.parent.localToGlobal(p);
+			
+			list.x = p.x;
+			list.y = p.y;
+			
+			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
+			list.filters = [shadow];
+			
+			
+			function down(e) { 
+				trace(e); 
+				if(list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
+					list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+				list.parent.removeChild(list);
+				}
+	
+			list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+			/*
+			var t = new feffects.Tween(list.y-2*list.box.height, list.y , 2000, list,\"y\", feffects.easing.Linear.easeNone);
+			t.start();
+			*/
+
+		"
+		);
 
 	}
 

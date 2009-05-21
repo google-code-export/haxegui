@@ -165,6 +165,13 @@ class UiList extends Component
 		//
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 		this.filters = [shadow];
+		
+		var self=this;
+		this.setAction("onFocusOut",
+		"
+			this.parent.removeChild(this);
+		"
+		);
 	}
 
 	public function onItemMouseDown(e:MouseEvent) : Void

@@ -96,7 +96,10 @@ class ColorPicker2 extends Window
 	{
 		super.init({name:"ColorPicker2", x:x, y:y, width:240, height:480, type: WindowType.MODAL, sizeable:false, color: 0xE6D3CC});
 
-
+		this.type = WindowType.MODAL;
+		if(this.frame.hasEventListener(MouseEvent.MOUSE_MOVE))
+			this.frame.removeEventListener(MouseEvent.MOUSE_MOVE, this.frame.onMouseMove);
+		
 		//~ colors = [ 0, 0xFFFFFF, 0xFF0000, 0xFFFF00, 0x00FFFF, 0x00FF00 ];
 		colors = [];
 	
@@ -161,19 +164,19 @@ class ColorPicker2 extends Window
 
 			circle.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, function(e){ this.removeChild(circle); parent.parent.colors.pop(); parent.parent.colorRect.redraw(); });
 			circle.addEventListener(flash.events.MouseEvent.MOUSE_OVER, function(e){ CursorManager.setCursor(Cursor.HAND); });
+			circle.addEventListener(flash.events.MouseEvent.MOUSE_OUT, function(e){ CursorManager.setCursor(Cursor.CROSSHAIR); });
 
 			this.addChild(circle);
+
+			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,false,false,false);
+			circle.filters = [shadow];
+
 			
 			var color = this.getChildAt(0).bitmapData.getPixel(this.mouseX, this.mouseY);
 			parent.parent.colors.push(color);
 			this.parent.parent.colorRect.redraw();
 		"
 		);
-		
-
-
-
-		
 		
 
 		// icon 
@@ -190,6 +193,7 @@ class ColorPicker2 extends Window
 		lighter.init({src: "assets/icons/highlight.png"});
 
 
+		// 
 		colorRect = new Component(container, "colorRect", 10, 300);
 		colorRect.init();
 		
@@ -198,15 +202,15 @@ class ColorPicker2 extends Window
 		"
 			this.graphics.clear();
 			
-			this.graphics.lineStyle(2,0);
 			this.graphics.beginFill(0xFFFFFF);
 			this.graphics.drawRoundRect(0,0,210,40, 20, 20);
 			this.graphics.endFill();
 
+			var wheel = this.parent.getChildByName(\"wheel\");	
+
 			var j = parent.parent.colors.length;
 			for(i in 0...j)
 			{
-				this.graphics.lineStyle(2,0);
 				this.graphics.beginFill(parent.parent.colors[i]);
 				if(i==0)
 				this.graphics.drawRoundRectComplex(i*210/j, 0, 210/j, 40, 10, 0, 10, 0);				
@@ -248,7 +252,7 @@ class ColorPicker2 extends Window
 
 
 		//~ redraw(null);
-		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		//~ dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 
 }
