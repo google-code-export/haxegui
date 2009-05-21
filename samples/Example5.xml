@@ -103,7 +103,7 @@
 			<events>
 				<script type="text/hscript" action="redraw"><![CDATA[
 					this.graphics.clear();
-					this.graphics.beginFill (color, .75);
+					this.graphics.beginFill (this.color, .75);
 					this.graphics.drawRect (0, 0, this.box.width, this.box.height );
 					this.graphics.endFill ();
 					for(i in 0...(.5*this.box.width))

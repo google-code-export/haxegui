@@ -22,7 +22,7 @@
 			    var program = parser.parseString(tf.text);
 			    var interp = new hscript.Interp();
 			    
-			    interp.variables.set( "this", win );
+			    interp.variables.set( "this", tf );
 			    ScriptStandardLibrary.set(interp);
 
 			    trace(interp.execute(program)); 
@@ -108,10 +108,9 @@
 			for(i in 0...cp.colors.length)
 			{
 			var circle = wheel.getChildAt(1+i);
-			var tx = new feffects.Tween( circle.x, -100+Std.random(200), 1000, circle, \"x\", feffects.easing.Expo.easeNone );
-			var ty = new feffects.Tween( circle.y, -100+Std.random(200), 1000, circle, \"y\", feffects.easing.Linear.easeNone );
-			tx.start();
-			ty.start();
+			var tx = new feffects.Tween( circle.x, -100+Std.random(200), 1000, circle, \"x\", feffects.easing.Back.easeInOut );
+			var ty = new feffects.Tween( circle.y, -100+Std.random(200), 1000, circle, \"y\", feffects.easing.Back.easeInOut );
+			Timer.delay( function(){ tx.start(); ty.start(); }, 175*i );
 
 			function update(v) 
 			    {
