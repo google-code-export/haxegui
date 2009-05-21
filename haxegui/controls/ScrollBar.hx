@@ -153,7 +153,6 @@ class ScrollBar extends Component
 		frame.focusRect = false;
 		frame.tabEnabled = false;
 
-
 		frame.graphics.beginFill (color - 0x0A0A0A);
 		frame.graphics.drawRect (0, 0, box.width, box.height - 40 );
 		frame.graphics.endFill ();
@@ -161,7 +160,7 @@ class ScrollBar extends Component
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, .75, BitmapFilterQuality.HIGH, true, false, false);
 		frame.filters = [shadow];
 
-
+		//
 		handle = new ScrollBarHandle(this, "handle", 0, 20);
 		handle.init({color: this.color});
 		handle.redraw({h : 20, horizontal: this.horizontal });
@@ -169,12 +168,12 @@ class ScrollBar extends Component
 		shadow = new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, 0.75, BitmapFilterQuality.LOW, false, false, false);
 		handle.filters = [shadow];
 
-
-
+		//
 		up = new ScrollBarUpButton(this, "up" );
 		up.init({color: this.color});
 		up.redraw({color: this.color});
 
+		//
 		down = new ScrollBarDownButton(this, "down" );
 		down.init({color: this.color});
 		down.move(0, box.height - 20);

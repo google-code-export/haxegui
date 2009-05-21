@@ -16,9 +16,10 @@ this.graphics.drawRect (0, 0, this.box.width, 20);
 this.graphics.endFill ();
 
 this.tf.setTextFormat( DefaultStyle.getTextFormat() );
-
+/*
 if(i==1)
 {
 		var shadow = new flash.filters.DropShadowFilter (2, 90, DefaultStyle.DROPSHADOW, 0.75, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, true, false, false );
 		this.filters = [shadow];	
 }
+*/

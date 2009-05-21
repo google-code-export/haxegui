@@ -131,6 +131,7 @@ class Window extends Component
 		box = new Rectangle (0, 0, 320, 240);
 		color = DefaultStyle.BACKGROUND;
 		text = "Window";
+		type = WindowType.NORMAL;
 
 		super.init(opts);
 		

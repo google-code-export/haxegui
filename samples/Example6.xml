@@ -66,9 +66,6 @@
 	<haxegui:ScrollPane name="ScrollPane1" x="10" y="84" />
     	    <events>
 		    <script type="text/hscript" action="onLoaded"><![CDATA[
-
-
-			
 			var window = root.getChildByName("Transcriber");
 			var toolbar = window.getChildByName("Toolbar");
 			var scrollpane = window.getChildByName("ScrollPane1");
@@ -101,9 +98,43 @@
 			tf.mouseEnabled = true;
 			tf.tabEnabled = true;
 			
-			tf.text = "root.getChildByName(\"Console\").clear();\nvar n = 6;\nvar factorial = 1;\nfor(i in factorial...n)\n\tfactorial *= i;\nn+\"! = \"+factorial;\n" ;
+			tf.text = 
+			"
+			var cp = root.getChildByName(\"ColorPicker2\");
+			var cont = cp.getChildByName(\"Container\");
+			var wheel = cont.getChildByName(\"wheel\");
+			var cr = cont.getChildByName(\"colorRect\");
+			    
+			for(i in 0...cp.colors.length)
+			{
+			var circle = wheel.getChildAt(1+i);
+			var tx = new feffects.Tween( circle.x, -100+Std.random(200), 1000, circle, \"x\", feffects.easing.Expo.easeNone );
+			var ty = new feffects.Tween( circle.y, -100+Std.random(200), 1000, circle, \"y\", feffects.easing.Linear.easeNone );
+			tx.start();
+			ty.start();
+
+			function update(v) 
+			    {
+			    for(i in 1...wheel.numChildren) {
+				    var angle = Math.atan2( wheel.getChildAt(i).x, wheel.getChildAt(i).y ) * 180;
+				    /*
+				    wheel.getChildAt(i).x = Math.max(0, Math.min( wheel.getChildAt(i).x, Math.sin(angle) * 200 ));
+				    wheel.getChildAt(i).y = Math.max(0, Math.min( wheel.getChildAt(i).y, Math.cos(angle) * 200 ));
+				    if( wheel.getChildAt(i).x < 20 || wheel.getChildAt(i).x > Math.sin(angle) * 100 ) tx.stop();
+				    */
+				    var p = new flash.geom.Point(wheel.getChildAt(i).x, wheel.getChildAt(i).y);
+				    p.offset(200,200);
+				    cp.colors[i-1] = wheel.getChildAt(0).bitmapData.getPixel(p.x, p.y) ;
+				    cr.redraw();
+			     }
+			}
+			tx.setTweenHandlers( update );
+			}
+			    
+			
+			" ;
+			
 			tf.text += "\n/*for(i in 1...6) LayoutManager.fetchLayout(\"samples/Example\"+i+\".xml\");*/\n";
-			tf.text += "\n/*\nvar window = new haxegui.Window(this.getChildByName(\"ScrollPane1\"));\nwindow.box.width = 160;\nwindow.box.height = 120;\nwindow.init();\n\nvar container = new haxegui.Container(window, \"Container\", 10, 20);\ncontainer.init();\n*/";
 
 			scrollpane.addChild(tf);		
 				

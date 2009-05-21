@@ -74,13 +74,13 @@ class StyleManager implements Dynamic
 }
 
 class DefaultStyle {
-	public static var BACKGROUND:UInt = 0xADD8E6;
-	public static var BUTTON_FACE:UInt = 0xCFB675;
-	public static var INPUT_BACK:UInt = 0xE5E5E5;
-	public static var INPUT_TEXT:UInt = 0x333333;
-	public static var LABEL_TEXT:UInt = 0x1A1A1A;
-	public static var DROPSHADOW:UInt = 0x000000;
-	public static var PANEL:UInt = 0xF3F3F3;
+	public static var BACKGROUND:UInt   = 0xADD8E6;
+	public static var BUTTON_FACE:UInt  = 0xCFB675;
+	public static var INPUT_BACK:UInt   = 0xE5E5E5;
+	public static var INPUT_TEXT:UInt   = 0x333333;
+	public static var LABEL_TEXT:UInt   = 0x1A1A1A;
+	public static var DROPSHADOW:UInt   = 0x000000;
+	public static var PANEL:UInt 	    = 0xF3F3F3;
 	public static var PROGRESS_BAR:UInt = 0xFFFFFF;
 
 	public static function getTextFormat(?size:Dynamic, ?color:UInt, ?align:flash.text.TextFormatAlign) : TextFormat
@@ -98,7 +98,7 @@ class DefaultStyle {
 		//~ fmt.font = "04b25";
 		//~ fmt.font = "Pixel_Classic";
 		fmt.size = ( size == null || size == 0 || Math.isNaN(size) ) ? 8 : size;
-		fmt.align = ( align == null ) ? TextFormatAlign.LEFT : align;
+		fmt.align = ( align == null || !Std.is(align, flash.text.TextFormatAlign) ) ? TextFormatAlign.LEFT : align;
 		fmt.color = ( color == 0 ) ? DefaultStyle.LABEL_TEXT : color ;
 		return fmt;
 	}
