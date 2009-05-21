@@ -1,5 +1,5 @@
 this.graphics.clear();
-
+/*
 this.graphics.lineStyle (1,
 	Math.max(0, Math.min(0xFFFFFF, DefaultStyle.BACKGROUND - 0x282828)),
 	1, true, 
@@ -7,7 +7,7 @@ this.graphics.lineStyle (1,
 	flash.display.CapsStyle.ROUND,
 	flash.display.JointStyle.ROUND
 	);
-	
+*/	
 	
 var i = this.parent.getChildIndex(this) ;
 var c = ((i+1)%2==0) ? this.color :  this.color - 0x0F0F0F;
