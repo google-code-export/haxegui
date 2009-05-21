@@ -147,6 +147,7 @@ class ColorPicker2 extends Window
 
 		wheel.setAction("mouseClick",
 		"
+			var win = this.parent.parent;
 		
 			function toHex(v)
 			{
@@ -162,7 +163,7 @@ class ColorPicker2 extends Window
 			circle.graphics.drawCircle(this.mouseX,this.mouseY,20);
 			circle.graphics.endFill();
 
-			circle.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, function(e){ this.removeChild(circle); parent.parent.colors.pop(); parent.parent.colorRect.redraw(); });
+			circle.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, function(e){ var i = this.getChildIndex(circle); trace(i); win.colors.splice(i-1, 1); win.colorRect.redraw(); this.removeChild(circle); });
 			circle.addEventListener(flash.events.MouseEvent.MOUSE_OVER, function(e){ CursorManager.setCursor(Cursor.HAND); });
 			circle.addEventListener(flash.events.MouseEvent.MOUSE_OUT, function(e){ CursorManager.setCursor(Cursor.CROSSHAIR); });
 
