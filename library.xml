@@ -28,6 +28,9 @@
 			<clip id="SizeWE" import="assets/cursor/SizeWE.png"/>
 			<clip id="Crosshair" import="assets/cursor/Crosshair.png"/>
 			
+			<!-- Images -->
+			<clip id="HaxeLogo" import="assets/logo_haxe.jpg"/>
+
 			<!-- ICONS -->
 
 			
