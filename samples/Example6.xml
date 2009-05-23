@@ -42,31 +42,15 @@ var cp = root.getChildByName(\"ColorPicker2\");
 var cont = cp.getChildByName(\"Container\");
 var wheel = cont.getChildByName(\"wheel\");
 var cr = cont.getChildByName(\"colorRect\");
-
-
-			function update(v) 
-			    {
-				    var p = new flash.geom.Point(circle.x, circle.y);
-				    p.offset(150,150);
-				    cp.colors[i-1] = wheel.getChildAt(0).bitmapData.getPixel(p.x, p.y) ;
-				    cr.redraw();
-			    }
-			tx.setTweenHandlers( update );
-			}
-			    
-			
-
-for(i in 0...cp.colors.length)
-{
-var circle = wheel.getChildAt(1+i);
-var tx = new feffects.Tween( circle.x, -100+Std.random(200), 1000, circle, \"x\", feffects.easing.Back.easeInOut );
-var ty = new feffects.Tween( circle.y, -100+Std.random(200), 1000, circle, \"y\", feffects.easing.Back.easeInOut );
-Timer.delay( function(){ tx.start(); ty.start(); }, 175*i );
-
-function update(v)
-	{
+function update(v) {
 	for(i in 1...wheel.numChildren) {
 		var angle = Math.atan2( wheel.getChildAt(i).x, wheel.getChildAt(i).y ) * 180;
+		/*
+		var p = new flash.geom.Point(circle.x, circle.y);
+		p.offset(150,150);
+		cp.colors[i-1] = wheel.getChildAt(0).bitmapData.getPixel(p.x, p.y) ;
+		cr.redraw();
+		*/
 		/*
 		wheel.getChildAt(i).x = Math.max(0, Math.min( wheel.getChildAt(i).x, Math.sin(angle) * 200 ));
 		wheel.getChildAt(i).y = Math.max(0, Math.min( wheel.getChildAt(i).y, Math.cos(angle) * 200 ));
@@ -76,12 +60,17 @@ function update(v)
 		p.offset(200,200);
 		cp.colors[i-1] = wheel.getChildAt(0).bitmapData.getPixel(p.x, p.y) ;
 		cr.redraw();
-		}
+	}
 }
-tx.setTweenHandlers( update );
+for(i in 0...cp.colors.length)
+{
+	var circle = wheel.getChildAt(1+i);
+	var tx = new feffects.Tween( circle.x, -100+Std.random(200), 1000, circle, \"x\", feffects.easing.Back.easeInOut );
+	var ty = new feffects.Tween( circle.y, -100+Std.random(200), 1000, circle, \"y\", feffects.easing.Back.easeInOut );
+	Timer.delay( function(){ tx.start(); ty.start(); }, 175*i );
+	tx.setTweenHandlers( update );
 }
-
-			" ;
+" ;
 	
 			tf.text += "\n/*for(i in 1...6) LayoutManager.fetchLayout(\"samples/Example\"+i+\".xml\");*/\n";
 	
