@@ -47,7 +47,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 {
 	/** The static component id counter **/
 	private static var nextId : Int = 0;
-	
+
 	/** Rectangular dimensions **/
 	public var box : Rectangle;
 
@@ -81,12 +81,12 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** The initial opts **/
 	private var initOpts : Dynamic;
 
-	/** Number of interval calls per second **/	
+	/** Number of interval calls per second **/
 	private var intervalUpdatesPerSec : Float;
-	
+
 	/** Last timestamp when an interval occured **/
 	private var lastInterval : Float;
-	
+
 	/**
 	*
 	**/
@@ -167,13 +167,13 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 /*
-	override public function addChild(o : DisplayObject) : DisplayObject 
+	override public function addChild(o : DisplayObject) : DisplayObject
 	{
 		addDisplayObjectEvents(o);
 		return super.addChild(o);
 	}
-	
-	override public function addChildAt(o : DisplayObject, index:Int) : DisplayObject 
+
+	override public function addChildAt(o : DisplayObject, index:Int) : DisplayObject
 	{
 		addDisplayObjectEvents(o);
 		return super.addChildAt(o, index);
@@ -239,7 +239,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		var c = try ScriptManager.getInstanceActionObject(this, action) catch(e:Dynamic) null;
 		return (c != null);
 	}
-	
+
 	/**
 	* Returns true if this component has an action registered
 	* for the action type [action]. Only returns true if the
@@ -259,7 +259,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	{
 		return if(FocusManager.getInstance().getFocus() == this) true else false;
 	}
-	
+
 	/**
 	* Returns the window this component is contained in, if any
 	*
@@ -272,7 +272,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 			p = p.parent;
 		return cast p;
 	}
-	
+
 	/** Returns whether object validates **/
 	public function isValid() : Bool
 	{
@@ -282,7 +282,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		if(rv == null) return true;
 		return cast rv;
 	}
-	
+
 	/**
 	* Move relative to current location.
 	**/
@@ -319,7 +319,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 // 		trace(this.name + " redraw");
 		ScriptManager.exec(this,"redraw", opts);
 	}
-	
+
 	/**
 	*
 	**/
@@ -353,7 +353,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		stopInterval();
 		startIntervalDelayed(updatesPerSecond, 0.0);
 	}
-	
+
 	/**
 	* Starts an interval timer, which calls the "interval" action, after waiting [wait] seconds
 	*
@@ -366,9 +366,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		if(Math.isNaN(wait)) wait = 0.0;
 		lastInterval = haxe.Timer.stamp() + wait;
 		intervalUpdatesPerSec = updatesPerSecond;
-		this.addEventListener(flash.events.Event.ENTER_FRAME, onEnterFrame);	
+		this.addEventListener(flash.events.Event.ENTER_FRAME, onEnterFrame);
 	}
-	
+
 	/**
 	* Stop the current interval timer
 	**/
@@ -414,7 +414,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
  		//trace("------" + Std.string(this) + " __focusHandler");
  		//trace("__focusHandler " + (if(e.currentTarget != this) " ******* " + Std.string(e.currentTarget) else "") + " :  from " + Std.string(e.target) + " to " + Std.string(e.relatedObject));
 		//var o = e.target;
-		
+
 		var comp : Component = asComponent(e.currentTarget);
 		// first event is fired to the target about to lose focus
 		if(e.currentTarget == e.target && comp != null) {
@@ -423,7 +423,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 				e.preventDefault();
 				e.stopImmediatePropagation();
 				comp.stage.focus = comp;
-				trace("Losing focus prevented");
+				trace("Losing focus prevented by " + asComponentIfIs(e.relatedObject).name);
 				return;
 			}
 		}
@@ -435,13 +435,13 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 				e.preventDefault();
 				e.stopImmediatePropagation();
 				comp.stage.focus = comp;
-				trace("Gain of focus denied");
+				trace("Gain of focus denied by " + asComponentIfIs(e.relatedObject));
 				return;
 			}
 		}
-		
-		// if we are the last Component in the chain, simulate the focusOut and focusIn 
-		//ar p = 
+
+		// if we are the last Component in the chain, simulate the focusOut and focusIn
+		//ar p =
 	}
 
 	/** Placeholder **/
@@ -563,7 +563,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		var stepsF : Float  = (now - lastInterval) * intervalUpdatesPerSec;
 		var steps : Int = Math.floor( stepsF );
 		lastInterval += steps / intervalUpdatesPerSec;
-		
+
 		for(x in 0...steps) {
 			ScriptManager.exec(this,"interval",{event:e});
 		}
@@ -610,21 +610,21 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		}
 		return v;
 	}
-	
+
 	//////////////////////////////////////////////////
 	////               Privates                   ////
 	//////////////////////////////////////////////////
 	/** add the focus events to any child that is not a Component **/
 	private function addDisplayObjectEvents(o : DisplayObject) {
 		if(!Std.is(o, Component)) {
-			removeDisplayObjectEvents(o);			
+			removeDisplayObjectEvents(o);
 			o.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, __focusHandler, false, 0, true);
 			o.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, __focusHandler, false, 0, true);
 			//o.addEventListener(FocusEvent.FOCUS_IN, onFocusIn, false, 0, true);
 			//o.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut, false, 0, true);
 		}
 	}
-	
+
 	private function removeDisplayObjectEvents(o : DisplayObject) {
 		if(!Std.is(o, Component)) {
 			o.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE, __focusHandler);
@@ -633,7 +633,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 			o.removeEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
 		}
 	}
-	
+
 	//////////////////////////////////////////////////
 	////               Statics                    ////
 	//////////////////////////////////////////////////
@@ -665,7 +665,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	*
 	* @param obj DisplayObject or Component
 	* @return Component, or [obj] if is not a Component and does not belong to a Component.
-	**/	
+	**/
 	public static function asComponentIfIs( obj : DisplayObject ) : DisplayObject {
 		if(Std.is(obj, Component))
 			return obj;
@@ -678,7 +678,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 			return obj;
 		return p;
 	}
-	
+
 	/**
 	* Find the containing Component for any DisplayObject, if any.
 	*
