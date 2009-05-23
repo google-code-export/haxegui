@@ -34,13 +34,27 @@
 			tf.height = 1000;
 			tf.mouseEnabled = true;
 			tf.tabEnabled = true;
-	
+			tf.embedFonts = true;
+			tf.defaultTextFormat = DefaultStyle.getTextFormat();
 			tf.text =
 			"
 var cp = root.getChildByName(\"ColorPicker2\");
 var cont = cp.getChildByName(\"Container\");
 var wheel = cont.getChildByName(\"wheel\");
 var cr = cont.getChildByName(\"colorRect\");
+
+
+			function update(v) 
+			    {
+				    var p = new flash.geom.Point(circle.x, circle.y);
+				    p.offset(150,150);
+				    cp.colors[i-1] = wheel.getChildAt(0).bitmapData.getPixel(p.x, p.y) ;
+				    cr.redraw();
+			    }
+			tx.setTweenHandlers( update );
+			}
+			    
+			
 
 for(i in 0...cp.colors.length)
 {
@@ -66,6 +80,7 @@ function update(v)
 }
 tx.setTweenHandlers( update );
 }
+
 			" ;
 	
 			tf.text += "\n/*for(i in 1...6) LayoutManager.fetchLayout(\"samples/Example\"+i+\".xml\");*/\n";
