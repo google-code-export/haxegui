@@ -54,7 +54,12 @@ class MouseManager extends EventDispatcher
 {
 
 	private static var _instance : MouseManager = null;
+
 	public var listeners:Array<haxegui.ITraceListener>;
+	
+	public var lastPosition : Point;
+	public var delta : Point;
+
 
 	public static function getInstance ():MouseManager
 	{
@@ -79,10 +84,12 @@ class MouseManager extends EventDispatcher
 
 		var stage = flash.Lib.current.stage;
 
+		lastPosition = new Point();
+		
 		//~ CursorManager.getInstance().showCursor();
 		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseEnter, false, 0, true);
 		stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseEnter, false, 0, true);
-		stage.addEventListener(MouseEvent.MOUSE_UP, onMouseEnter, false, 0, true);
+		//~ stage.addEventListener(MouseEvent.MOUSE_UP, onMouseEnter, false, 0, true);
 		//~ stage.addEventListener(MouseEvent.MOUSE_UP, function(e){ CursorManager.getInstance().setCursor(Cursor.ARROW); });
 		//~ stage.addEventListener(MouseEvent.MOUSE_OUT, function(e){ CursorManager.setCursor(Cursor.ARROW); }, false, 0, true);
 		stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave, false, 0, true);
@@ -90,8 +97,11 @@ class MouseManager extends EventDispatcher
 
 	public inline function onMouseEnter(e:MouseEvent) : Void
 	{
+		//~ Mouse.hide();
 		CursorManager.getInstance().showCursor();
+		delta = new Point( e.stageX - lastPosition.x, e.stageY - lastPosition.y );
 		CursorManager.getInstance().inject( e );
+		lastPosition = new Point( e.stageX, e.stageY );
 	}
 
 	public inline function onMouseLeave(e:Event) : Void
