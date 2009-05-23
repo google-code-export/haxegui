@@ -70,7 +70,6 @@ import haxegui.windowClasses.WindowFrame;
 class WindowFrame extends Component
 {
 
-	public var isResizing : Bool;
 
 	override public function init(?opts:Dynamic) {
 
@@ -78,81 +77,73 @@ class WindowFrame extends Component
 		
 		super.init(opts);
 		
-		
-
-		var shadow =
-		  new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 8, 8, 0.85,
-					flash.filters.BitmapFilterQuality.HIGH, false, false, false);
-
-		this.filters =[shadow];		
 				
 		
-		
-		
 			
-		this.setAction("mouseDown", 
-		"
-		if(!parent.isModal())
+		if(!(cast parent).isModal())
 		{
-		isResizing = true;
-		this.updateColorTween( new feffects.Tween(0, 50, 350, feffects.easing.Linear.easeOut) );
-		this.startInterval(4);
-		this.stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, this.onStageMouseUp, false, 0, true);
-		}
-		"
-		);
+			this.setAction("mouseDown", 
+			"
+			this.updateColorTween( new feffects.Tween(0, 50, 350, feffects.easing.Linear.easeOut) );
+			this.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove);
+			this.stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, this.onStageMouseUp, false, 0, true);
+			this.startInterval(25);
+			"
+			);
 
-		this.setAction("mouseUp", 
-		"
-		isResizing = true;
-		this.updateColorTween( new feffects.Tween(50, 0, 350, feffects.easing.Linear.easeOut) );
-		this.stopInterval();
-		"
-		);
-
-
-
+			this.setAction("mouseUp", 
+			"
+			this.updateColorTween( new feffects.Tween(50, 0, 350, feffects.easing.Linear.easeOut) );
+			/*this.stopInterval();*/
+			/*this.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove, false, 0, true);*/
+			"
+			);
 	
-		this.setAction("interval", 
-		"
-			var d = -5;
-		
-				if(CursorManager.getInstance().cursor == Cursor.NS)
-					this.parent.box.height = this.stage.mouseY - this.parent.y + d ;
+			this.setAction("interval", 
+			"
+				var d = -5;
+			
+					if(CursorManager.getInstance().cursor == Cursor.NS)
+						/*this.parent.box.height = this.stage.mouseY - this.parent.y + d ;*/
+						this.parent.box.height = this.stage.mouseY - this.parent.y + d + MouseManager.getInstance().delta.y;
 
-
-				if(CursorManager.getInstance().cursor == Cursor.WE)
-					{
-					if(this.stage.mouseX > this.parent.x + .5*this.parent.box.width)
-						this.parent.box.width = this.stage.mouseX - this.parent.x + d ;
-					else
+					if(CursorManager.getInstance().cursor == Cursor.WE)
 						{
-							this.parent.box.width -= this.stage.mouseX - this.parent.x + d ; 
-							this.parent.x = this.stage.mouseX + d ;
+						if(this.stage.mouseX > this.parent.x + .5*this.parent.box.width)
+							/*this.parent.box.width = this.stage.mouseX - this.parent.x + d ;*/
+							this.parent.box.width = this.stage.mouseX - this.parent.x + d + MouseManager.getInstance().delta.x;
+						else
+							{
+								/*this.parent.box.width -= this.stage.mouseX - this.parent.x + d ;*/
+								this.parent.box.width -= this.stage.mouseX - this.parent.x + d + MouseManager.getInstance().delta.x;
+								this.parent.x = this.stage.mouseX + d ;
+							}
 						}
-					}
-					
-				if(CursorManager.getInstance().cursor == Cursor.NESW) {
-					this.parent.box.width -=  this.stage.mouseX - this.parent.x + d ;
-					this.parent.box.height = this.stage.mouseY - this.parent.y + d ;
-					this.parent.x = this.stage.mouseX + d;
-					}
+						
+					if(CursorManager.getInstance().cursor == Cursor.NESW) {
+						this.parent.box.width -=  this.stage.mouseX - this.parent.x + d ;
+						this.parent.box.height = this.stage.mouseY - this.parent.y + d ;
+						this.parent.box.width += MouseManager.getInstance().delta.x;
+						this.parent.box.height += MouseManager.getInstance().delta.y;
+						this.parent.x = this.stage.mouseX + d;
+						}
 
-				if(CursorManager.getInstance().cursor == Cursor.NWSE) {
-					this.parent.box.height =  this.stage.mouseY - this.parent.y + d;
-					this.parent.box.width = this.stage.mouseX - this.parent.x + d;
-					}
+					if(CursorManager.getInstance().cursor == Cursor.NWSE) {
+						this.parent.box.height =  this.stage.mouseY - this.parent.y + d;
+						this.parent.box.width = this.stage.mouseX - this.parent.x + d;
+						this.parent.box.width += MouseManager.getInstance().delta.x;
+						this.parent.box.height += MouseManager.getInstance().delta.y;
+						}
+				this.redraw();
 
-			this.parent.titlebar.redraw();
-			this.redraw();
-
-	"
-	);
-
-		
-		
-	if(!(cast parent).isModal())
+		"
+		);
+		// listener for changing cursor icon, resizing direction.
 		this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+		}
+		
+		var shadow = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 12, 12, 0.85, flash.filters.BitmapFilterQuality.HIGH, false, false, false);
+		this.filters =[shadow];		
 				
 	}
 	
@@ -161,10 +152,12 @@ class WindowFrame extends Component
 	}
 	
 	
-	public function onMouseMove(e:MouseEvent)
-	{
+	public function onMouseMove(e:MouseEvent) {
 		
-		if(this.isResizing || e.buttonDown ) { this.redraw(); return; }
+		if(e.buttonDown ) { 
+			//~ this.redraw(); 
+			return; 
+			}
 		
 		//trace(Std.string(e));
 		var box = (cast this.parent).box;
@@ -194,15 +187,18 @@ class WindowFrame extends Component
 	public function onStageMouseUp(e:MouseEvent) {
 		this.stopInterval();
 		stage.removeEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
+		stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		
 		if(!this.hitTestObject( CursorManager.getInstance()._mc )) 
 			CursorManager.setCursor(Cursor.ARROW);
+
+		this.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove, false, 0, true);
 			
 		//~ e.updateAfterEvent();
 	}
 	
 	public override function onRollOut(e:MouseEvent) {
-		if(isResizing || e.buttonDown ) return;
+		if(e.buttonDown ) return;
 			CursorManager.setCursor(Cursor.ARROW);
 
 		//~ e.updateAfterEvent();
