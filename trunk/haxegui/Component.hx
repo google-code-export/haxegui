@@ -227,6 +227,20 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	/**
+	* Returns the window this component is contained in, if any
+	*
+	* @return Parent window or null
+	**/
+	public function getParentWindow() : Window
+	{
+		var p = this.parent;
+		while(p != null && !Std.is(p,Window)) {
+			p = p.parent;
+		}
+		return cast p;
+	}
+
+	/**
 	* Returns true if this component has an action
 	* registered for the action type [action]. If this instance
 	* does not have an override, the default from the style is
@@ -260,18 +274,6 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		return if(FocusManager.getInstance().getFocus() == this) true else false;
 	}
 
-	/**
-	* Returns the window this component is contained in, if any
-	*
-	* @return Parent window or null
-	**/
-	public function getParentWindow() : Window
-	{
-		var p = this.parent;
-		while(p != null && !Std.is(p,Window))
-			p = p.parent;
-		return cast p;
-	}
 
 	/** Returns whether object validates **/
 	public function isValid() : Bool
