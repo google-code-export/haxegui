@@ -25,6 +25,7 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilterQuality;
+import haxegui.events.ResizeEvent;
 import haxegui.managers.CursorManager;
 import haxegui.Opts;
 import haxegui.managers.ScriptManager;
@@ -183,6 +184,8 @@ class TitleBar extends AbstractButton
 
 		this.addChild (title);
 		
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
+		
 
 	}
 
@@ -221,12 +224,9 @@ class TitleBar extends AbstractButton
 	override public function onMouseDown (e:MouseEvent)
 	{
 		this.updateColorTween( new feffects.Tween(0, -50, 350, feffects.easing.Linear.easeOut) );
-
 		(cast this.parent).startDrag();
-		//this.parent.addEventListener(flash.events.MouseEvent.MOUSE_UP, function(e){ this.parent.stopDrag(); });
 		var win = (cast this.parent);
 		win.addEventListener(flash.events.MouseEvent.MOUSE_UP, function(e){ win.stopDrag(); });
-		
 	}
 	
 	override public function onMouseUp (e:MouseEvent)
@@ -240,4 +240,9 @@ class TitleBar extends AbstractButton
 		haxegui.Haxegui.register(TitleBar);
 	}
 
+	public function onParentResize(e:ResizeEvent)
+	{
+		redraw();
+	}
+	
 }
