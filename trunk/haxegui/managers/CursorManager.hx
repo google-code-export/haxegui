@@ -144,6 +144,9 @@ class CursorManager extends EventDispatcher
 			case Cursor.WE, Cursor.NS:
 				p.offset(-23, -17);
 
+			case Cursor.SIZE_ALL:
+				p.offset(-23, -17);
+
 		}
 
 		_mc.x = p.x;
