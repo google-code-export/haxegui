@@ -76,7 +76,8 @@ class CursorManager extends EventDispatcher
 	public var cursor(default,__setCursor) : Cursor;
 	public var visible(__getVisible,__setVisible) : Bool;
 	public var _mc(default,null) : MovieClip;
-
+	public var lock : Bool;
+	
 	/** Singleton private constructor **/
 	private function new ()
 	{
@@ -110,6 +111,7 @@ class CursorManager extends EventDispatcher
 
 	public static function setCursor(c:Cursor) : Void
 	{
+		if(getInstance().lock) return;
 		getInstance().cursor = c;
 	}
 
