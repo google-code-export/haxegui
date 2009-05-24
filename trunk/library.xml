@@ -4,7 +4,6 @@
 	<frame>
 		<library>
 			<!-- FONTS -->
-			<font id="Impact" name="Impact" import="assets/fonts/Impact.ttf"/>		
 			<font id="FFF_Forward" name="FFF_Forward" import="assets/fonts/FFFFORWA.TTF"/>
 			<font id="FFF_Manager_Bold" name="FFF_Manager_Bold" import="assets/fonts/FFFMB___.TTF" />
 			<font id="FFF_Harmony" name="FFF_Harmony" import="assets/fonts/FFFHARMO.TTF" />
