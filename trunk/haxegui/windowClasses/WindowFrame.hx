@@ -77,17 +77,18 @@ class WindowFrame extends Component
 		
 		super.init(opts);
 		
-				
-		
-			
+		// Exclude modal windows from resizing
 		if(!(cast parent).isModal())
 		{
 			this.setAction("mouseDown", 
 			"
 			this.updateColorTween( new feffects.Tween(0, 50, 350, feffects.easing.Linear.easeOut) );
+			/* Remove corner detection */
 			this.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove);
+			/* Event for stopping the interval */
 			this.stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, this.onStageMouseUp, false, 0, true);
-			this.startInterval(25);
+			this.startInterval(12);
+			CursorManager.getInstance().lock = true;
 			"
 			);
 
@@ -115,7 +116,7 @@ class WindowFrame extends Component
 						else
 							{
 								/*this.parent.box.width -= this.stage.mouseX - this.parent.x + d ;*/
-								this.parent.box.width -= this.stage.mouseX - this.parent.x + d + MouseManager.getInstance().delta.x;
+								this.parent.box.width -= this.stage.mouseX - this.parent.x + d;
 								this.parent.x = this.stage.mouseX + d ;
 							}
 						}
@@ -131,8 +132,8 @@ class WindowFrame extends Component
 					if(CursorManager.getInstance().cursor == Cursor.NWSE) {
 						this.parent.box.height =  this.stage.mouseY - this.parent.y + d;
 						this.parent.box.width = this.stage.mouseX - this.parent.x + d;
-						this.parent.box.width += MouseManager.getInstance().delta.x;
-						this.parent.box.height += MouseManager.getInstance().delta.y;
+						this.parent.box.width += MouseManager.getInstance().delta.x ;
+						this.parent.box.height += MouseManager.getInstance().delta.y ;
 						}
 				this.redraw();
 
@@ -159,7 +160,6 @@ class WindowFrame extends Component
 			return; 
 			}
 		
-		//trace(Std.string(e));
 		var box = (cast this.parent).box;
 		var d = 10;
 
@@ -185,6 +185,8 @@ class WindowFrame extends Component
 
 	
 	public function onStageMouseUp(e:MouseEvent) {
+		//~ trace(e);
+		CursorManager.getInstance().lock = false;
 		this.stopInterval();
 		stage.removeEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
 		stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
