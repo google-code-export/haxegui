@@ -125,14 +125,14 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		flash.Lib.current.addChild(desktop);
 
 
-		// Desktop
+		// Logos
 		var logo = flash.Lib.attach("HaxeLogo");
 		logo.name = "HaxeLogo";
 		logo.x = .5*(stage.stageWidth - logo.width);
 		logo.y = .5*(stage.stageHeight - logo.height);
 		flash.Lib.current.addChild(logo);
 		var shadow =
-		  new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 8, 8, 0.85,
+		  new flash.filters.DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.9, 20, 20, 0.85,
 					flash.filters.BitmapFilterQuality.HIGH, false, false, false);
 
 		logo.filters =[shadow];		
@@ -167,11 +167,11 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		colorpicker.init();
 
 		// rte
-		//~ var rte = new RichTextEditor(flash.Lib.current, 120,120);
-		//~ rte.init();
+		var rte = new RichTextEditor(flash.Lib.current, 120,120);
+		rte.init();
 
 		// debugger
-		var introspect = new Introspector(flash.Lib.current, 120,120);
+		var introspect = new Introspector(flash.Lib.current, 150,150);
 		introspect.init();
 
 /*
@@ -365,7 +365,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		/////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
-		loader.load(new URLRequest("samples/Example1.xml"));
+		loader.load(new URLRequest("samples/Example2.xml"));
 
 //  try {
 //      var l = flash.Lib.current.loaderInfo.parameters;
