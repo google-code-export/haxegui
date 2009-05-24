@@ -181,9 +181,6 @@ class Console extends Window, implements ITraceListener
 	{
 		super.onResize(e);
 
-		e.stopImmediatePropagation ();
-		//~ e.stopPropagation ();
-
 		if(output!=null)
 		{
 			output.width = box.width - 30;
