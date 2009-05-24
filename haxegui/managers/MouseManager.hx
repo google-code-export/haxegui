@@ -60,6 +60,7 @@ class MouseManager extends EventDispatcher
 	public var lastPosition : Point;
 	public var delta : Point;
 
+	//~ public var lock : Bool;
 
 	public static function getInstance ():MouseManager
 	{
@@ -85,6 +86,7 @@ class MouseManager extends EventDispatcher
 		var stage = flash.Lib.current.stage;
 
 		lastPosition = new Point();
+		delta = new Point();
 		
 		//~ CursorManager.getInstance().showCursor();
 		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseEnter, false, 0, true);

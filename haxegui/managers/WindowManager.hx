@@ -93,10 +93,9 @@ class WindowManager extends EventDispatcher
 
     getInstance().windows.set(name, window);
 
-    //~ window.addEventListener( ResizeEvent.RESIZE, proxy );
-    //~ window.addEventListener( MoveEvent.MOVE, proxy );
     //~ window.addEventListener( DragEvent.DRAG_START, proxy );
     //~ window.addEventListener( DragEvent.DRAG_COMPLETE, proxy );
+    WindowManager.getInstance().register(window);
 
     return window;
   }
@@ -105,12 +104,19 @@ class WindowManager extends EventDispatcher
 		if(wnd.parent == null) return;
 		wnd.parent.addChild(wnd);
 	}
-//~
-  //~ public function proxy(e:Dynamic) {
+
+
+  public function register(w:Window) {
+    w.addEventListener( ResizeEvent.RESIZE, this.proxy );
+    w.addEventListener( MoveEvent.MOVE,  this.proxy );
+  }
+  
+  public function proxy(e:Dynamic) {
     		//~ for(i in 0...listeners.length) {
                 //~ var listener = listeners[i];
 				//~ Reflect.callMethod(listener, listener.log, [e]);
                 //~ }
-    //~ }
+        //~ trace(e);
+    }
 
 }
