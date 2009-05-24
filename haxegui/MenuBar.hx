@@ -118,7 +118,8 @@ class MenuBar extends Component
 		if(Std.is(parent, Component))
 			color = untyped parent.color;
 
-		box = new Rectangle(0,0, untyped parent.box.width, 24);
+		// assuming parent is a window
+		box = new Rectangle(0,0, untyped parent.box.width - 10, 24);
 
 		super.init(opts);
 

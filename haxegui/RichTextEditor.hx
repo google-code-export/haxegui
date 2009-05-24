@@ -91,7 +91,7 @@ class RichTextEditor extends Window
 
 	}
 
-	public override function init(?initObj:Dynamic)
+	public override function init(?opts:Dynamic)
 	{
 		super.init({name:"RichTextEditor", x:x, y:y, width:width, height:height, type: WindowType.NORMAL });
 
@@ -108,7 +108,7 @@ class RichTextEditor extends Window
 		var container = new Container (this, "Container", 10, 44);
 		container.init({width: 502, height: 310});
 
-		
+
 		tf = new TextField();
 		tf.x = tf.y = 10;
 		tf.width = container.box.width - 24;
@@ -122,9 +122,10 @@ class RichTextEditor extends Window
 		tf.multiline = true;
 		tf.wordWrap = true;
 		tf.defaultTextFormat = DefaultStyle.getTextFormat();
-		
+
 		tf.htmlText = "<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>";
-		
+		tf.htmlText += "<br><ul><li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li><li>Aliquam tincidunt mauris eu risus.</li><li>Vestibulum auctor dapibus neque.</li></ul><ul><li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li><li>Aliquam tincidunt mauris eu risus.</li><li>Vestibulum auctor dapibus neque.</li></ul>";
+
 		container.addChild(tf);
 
 		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,true,false,false);
@@ -140,8 +141,8 @@ class RichTextEditor extends Window
 		btn.init({width: 24, height: 24, label: null });
 		var icon = new Image(btn, "icon", 1, 1);
 		icon.init({src: "assets/icons/format-text-bold.png"});
-		
-		
+
+
 		btn = new Button(container, "Italic", 204, 260);
 		btn.init({width: 24, height: 24, label: null });
 		icon = new Image(btn, "icon", 1, 1);
@@ -158,8 +159,8 @@ class RichTextEditor extends Window
 		btn.init({width: 24, height: 24, label: null });
 		icon = new Image(btn, "icon", 1, 1);
 		icon.init({src: "assets/icons/format-justify-left.png"});
-		
-		
+
+
 		btn = new Button(container, "AlignCenter", 34, 290);
 		btn.init({width: 24, height: 24, label: null });
 		icon = new Image(btn, "icon", 1, 1);
@@ -176,14 +177,14 @@ class RichTextEditor extends Window
 		icon.init({src: "assets/icons/format-justify-fill.png"});
 
 		btn = new Button(container, "Color", 260, 260);
-		
-		btn.setAction("mouseClick", 
+
+		btn.setAction("mouseClick",
 		"
 		new haxegui.ColorPicker().init();
 		"
 		);
 		btn.init({width: 32, height: 24, label: null });
-		
+
 
 
 		//~ redraw(null);
@@ -214,9 +215,9 @@ class RichTextEditor extends Window
 
 
 	public override function onResize(e:ResizeEvent) {
-		
+
 		super.onResize(e);
-		
+
 		if(tf!=null) {
 			tf.width = this.box.width - 30;
 		}

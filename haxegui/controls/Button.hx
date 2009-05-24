@@ -67,11 +67,13 @@ class Button extends AbstractButton
 	override public function init(opts:Dynamic=null)
 	{
 		super.init(opts);
-
+		if(Opts.optString(opts, "label", null)!=null)
+		{
 		label = new Label();
 		label.text = Opts.optString(opts, "label", name);
 		label.init();
 		this.addChild(label);
+		}
 	}
 
 	static function __init__() {

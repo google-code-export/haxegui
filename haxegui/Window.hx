@@ -131,9 +131,13 @@ class Window extends Component
 		box = new Rectangle (0, 0, 320, 240);
 		color = DefaultStyle.BACKGROUND;
 		text = "Window";
-		type = WindowType.NORMAL;
+		
+		type = Opts.getField(opts, "type");
+		if(type==null) type = WindowType.NORMAL;
+		
 
 		super.init(opts);
+
 		
 		// options
 		sizeable = Opts.optBool(opts, "sizeable", true);
@@ -149,7 +153,12 @@ class Window extends Component
 
 		// register with focus manager
 		//~ FocusManager.getInstance ().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, redraw, false, 0, true);
-	
+
+		// register with WindowManager
+		//~ this.addEventListener( ResizeEvent.RESIZE, WindowManager.getInstance().proxy );
+		//~ this.addEventListener( MoveEvent.MOVE,  WindowManager.getInstance().proxy );
+		WindowManager.getInstance().register(this);
+
 
 	}
 

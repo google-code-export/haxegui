@@ -95,7 +95,8 @@ class ComboBox extends Component
 {
 	public var background : ComboBoxBackground;
 	public var dropButton : ComboBoxDropButton;
-	public var input : Input;
+	public var input	  : Input;
+	public var list 	  : UiList;
 
 	private var editable : Bool;
 
@@ -122,7 +123,7 @@ class ComboBox extends Component
 			if(input != null && input.parent == this)
 				removeChild(input);
 			input = new Input(this, "input");
-			input.init({text: this.name });
+			input.init({width: this.box.width, text: this.name });
 			input.redraw();
 		}
 		else
@@ -136,7 +137,9 @@ class ComboBox extends Component
 		dropButton.init(opts);
 		dropButton.setAction("mouseClick",
 		"
-			var list = new haxegui.controls.UiList(root);
+			if(parent.list==null) {
+			parent.list = new haxegui.controls.UiList(root);
+			var list = parent.list;
 			list.color = this.color;
 			for(i in 0...5) list.data.push(\"item\"+i);
 			list.init();
@@ -164,14 +167,12 @@ class ComboBox extends Component
 				if(list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
 					list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
 				list.parent.removeChild(list);
+				parent.list = null;
 				}
-	
-			list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
-			/*
-			var t = new feffects.Tween(list.y-2*list.box.height, list.y , 2000, list,\"y\", feffects.easing.Linear.easeNone);
-			t.start();
-			*/
 
+			list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+		
+		}
 		"
 		);
 
