@@ -62,6 +62,8 @@ import haxegui.Stats;
 import haxegui.ToolBar;
 import haxegui.ColorPicker;
 import haxegui.ColorPicker2;
+import haxegui.RichTextEditor;
+import haxegui.Introspector;
 import haxegui.Utils;
 
 
@@ -164,6 +166,13 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
 		colorpicker.init();
 
+		// rte
+		//~ var rte = new RichTextEditor(flash.Lib.current, 120,120);
+		//~ rte.init();
+
+		// debugger
+		var introspect = new Introspector(flash.Lib.current, 120,120);
+		introspect.init();
 
 /*
 		/////////////////////////////////////////////////////////////////////////////
@@ -348,17 +357,15 @@ class Main extends Sprite, implements haxe.rtti.Infos
 			container = new Container (window, "Container");
 			container.init({ x: 10, y: 20, width: 190, height: 150, color: 0xA5DE33 });
 
-
-
+			window.dispatchEvent(new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
 */
-			//~ window.dispatchEvent(new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
 
 		/////////////////////////////////////////////////////////////////////////
 		// Load XML
 		/////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
-		loader.load(new URLRequest("samples/Example6.xml"));
+		loader.load(new URLRequest("samples/Example1.xml"));
 
 //  try {
 //      var l = flash.Lib.current.loaderInfo.parameters;
@@ -371,6 +378,15 @@ class Main extends Sprite, implements haxe.rtti.Infos
 //      trace(here.methodName + " " + e);
 //  }
 
+
+
+		//~ stage.addEventListener(MouseEvent.MOUSE_DOWN,
+		//~ function(e)
+		//~ {
+		//~ var c = new haxegui.toys.Curvy(flash.Lib.current, "curvy"+haxe.Timer.stamp(), e.stageX, e.stageY);
+		//~ c.init();
+		//~ }
+		//~ );
 
 		
 
