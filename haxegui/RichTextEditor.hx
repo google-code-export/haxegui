@@ -1,4 +1,4 @@
-// Copyright (c) 2009 The haxegui developers
+// Copyright (c) 2409 The haxegui developers
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -80,7 +80,7 @@ import haxegui.controls.ComboBox;
 class RichTextEditor extends Window
 {
 	var tf : TextField;
-
+	var _color : UInt;
 
 	/**
 	*
@@ -95,7 +95,7 @@ class RichTextEditor extends Window
 	{
 		super.init({name:"RichTextEditor", x:x, y:y, width:width, height:height, type: WindowType.NORMAL });
 
-		box = new Rectangle (0, 0, 512, 350);
+		box = new Rectangle (0, 0, 512, 380);
 
 		//
 		var menubar = new MenuBar (this, "MenuBar", 10,20);
@@ -111,8 +111,8 @@ class RichTextEditor extends Window
 		
 		tf = new TextField();
 		tf.x = tf.y = 10;
-		tf.width = container.box.width - 20;
-		tf.height = 200;
+		tf.width = container.box.width - 24;
+		tf.height = 240;
 		tf.type = flash.text.TextFieldType.INPUT;
 		tf.background = true;
 		tf.backgroundColor = DefaultStyle.INPUT_BACK;
@@ -120,34 +120,70 @@ class RichTextEditor extends Window
 		tf.borderColor = DefaultStyle.BACKGROUND - 0x141414;
 		tf.embedFonts = true;
 		tf.multiline = true;
+		tf.wordWrap = true;
 		tf.defaultTextFormat = DefaultStyle.getTextFormat();
+		
+		tf.htmlText = "<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>";
 		
 		container.addChild(tf);
 
 		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,true,false,false);
 		container.filters = [shadow];
 
-		var fontbox = new ComboBox(container, "FontBox", 10, 220);
+		var fontbox = new ComboBox(container, "FontBox", 10, 262);
 		fontbox.init({width: 100});
 
-		var sizebox = new ComboBox(container, "SizeBox", 120, 220);
+		var sizebox = new ComboBox(container, "SizeBox", 120, 262);
 		sizebox.init({width: 50});
 
-		var btn = new Button(container, "Bold", 180, 220);
-		btn.init({width: 20, height: 20 });
+		var btn = new Button(container, "Bold", 180, 260);
+		btn.init({width: 24, height: 24, label: null });
+		var icon = new Image(btn, "icon", 1, 1);
+		icon.init({src: "assets/icons/format-text-bold.png"});
+		
+		
+		btn = new Button(container, "Italic", 204, 260);
+		btn.init({width: 24, height: 24, label: null });
+		icon = new Image(btn, "icon", 1, 1);
+		icon.init({src: "assets/icons/format-text-italic.png"});
 
-		btn = new Button(container, "Italic", 210, 220);
-		btn.init({width: 20, height: 20 });
 
-		btn = new Button(container, "UnderLine", 240, 220);
-		btn.init({width: 20, height: 20 });
+		btn = new Button(container, "UnderLine", 228, 260);
+		btn.init({width: 24, height: 24, label: null });
+		icon = new Image(btn, "icon", 1, 1);
+		icon.init({src: "assets/icons/format-text-underline.png"});
 
-		btn = new Button(container, "AlignLeft", 10, 250);
-		btn.init({width: 20, height: 20 });
-		btn = new Button(container, "AlignCenter", 30, 250);
-		btn.init({width: 20, height: 20 });
-		btn = new Button(container, "AlignRight", 50, 250);
-		btn.init({width: 20, height: 20 });
+
+		btn = new Button(container, "AlignLeft", 10, 290);
+		btn.init({width: 24, height: 24, label: null });
+		icon = new Image(btn, "icon", 1, 1);
+		icon.init({src: "assets/icons/format-justify-left.png"});
+		
+		
+		btn = new Button(container, "AlignCenter", 34, 290);
+		btn.init({width: 24, height: 24, label: null });
+		icon = new Image(btn, "icon", 1, 1);
+		icon.init({src: "assets/icons/format-justify-center.png"});
+
+		btn = new Button(container, "AlignRight", 58, 290);
+		btn.init({width: 24, height: 24, label: null });
+		icon = new Image(btn, "icon", 1, 1);
+		icon.init({src: "assets/icons/format-justify-right.png"});
+
+		btn = new Button(container, "AlignFill", 82, 290);
+		btn.init({width: 24, height: 24, label: null });
+		icon = new Image(btn, "icon", 1, 1);
+		icon.init({src: "assets/icons/format-justify-fill.png"});
+
+		btn = new Button(container, "Color", 260, 260);
+		
+		btn.setAction("mouseClick", 
+		"
+		new haxegui.ColorPicker().init();
+		"
+		);
+		btn.init({width: 32, height: 24, label: null });
+		
 
 
 		//~ redraw(null);
@@ -170,14 +206,21 @@ class RichTextEditor extends Window
 	}
 
 
-	public  function onMouseUpImage(e:MouseEvent)  : Void
+	public function onMouseUpImage(e:MouseEvent)  : Void
 	{
 		if(e.target.hitTestObject( CursorManager.getInstance()._mc ))
 			CursorManager.setCursor(Cursor.HAND);
 	}
 
 
-
+	public override function onResize(e:ResizeEvent) {
+		
+		super.onResize(e);
+		
+		if(tf!=null) {
+			tf.width = this.box.width - 30;
+		}
+	}
 
 
 }
