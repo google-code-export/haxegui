@@ -10,12 +10,16 @@ this.graphics.lineStyle (1,
 */	
 	
 var i = this.parent.getChildIndex(this) ;
-var c = ((i+1)%2==0) ? this.color :  this.color - 0x0F0F0F;
+var c = (i%2==0) ? this.color :  this.color - 0x0A0A0A;
 this.graphics.beginFill ( c );
 this.graphics.drawRect (0, 0, this.box.width, 20);
 this.graphics.endFill ();
 
+
+if( this.parent.data[i]!=null  ) this.tf.text = this.parent.data[i];
+this.tf.width = this.box.width;
 this.tf.setTextFormat( DefaultStyle.getTextFormat() );
+
 /*
 if(i==1)
 {
