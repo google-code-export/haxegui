@@ -80,18 +80,18 @@ class Introspector extends Window
 
 		//
 		tree = new Tree(container, "Tree", 0, 0);
-		tree.init({width: 250});
+		tree.init({width: 200});
 		
 		//
-		list1 = new UiList(container, "Properties", 260, 0);
+		list1 = new UiList(container, "Properties", 210, 0);
 		list1.init({text: "Property"});
 		
 		//
-		list2 = new UiList(container, "Values", 400, 0);
+		list2 = new UiList(container, "Values", 350, 0);
 		list2.init({text: "Value"});
 		
 		//
-		list3 = new UiList(container, "Types", 540, 0);
+		list3 = new UiList(container, "Types", 490, 0);
 		list3.init({text: "Type"});
 		
 	
@@ -110,18 +110,20 @@ class Introspector extends Window
 		if(!Std.is(e.target, Component)) return;
 		var self = this;
 		var props = {
-			name : "name",
-			type : function() { return Type.typeof(e.target); },
-			color : "color",
-			box	: "box",
-			x	: "x",
-			y	: "y",
-			visible	: "visible",
+			name 		: "name",
+			type 		: function() { return Type.typeof(e.target); },
+			color 		: "color",
+			box			: "box",
+			rect		: function(){ return e.target.getRect(e.target); },
+			bounds		: function(){ return e.target.getBounds(e.target); },
+			x			: "x",
+			y			: "y",
+			visible		: "visible",
 			disabled	: "disabled",
-			alpha	: "alpha",
+			alpha		: "alpha",
 			buttonMode	: "buttonMode",
-			globalX	: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
-			globalY	: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; }
+			globalX		: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
+			globalY		: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; }
 			}
 		
 		this.o = this.stage.getObjectsUnderPoint( new flash.geom.Point( e.stageX, e.stageY )).pop();
@@ -147,7 +149,9 @@ class Introspector extends Window
 		list2.redraw();
 
 		for(i in Reflect.fields(props))
-			if(!Reflect.isFunction(Reflect.field(props, i)))
+			if(Reflect.isFunction(Reflect.field(props, i)))
+				list3.data.push( "function" );
+			else
 				list3.data.push( Type.typeof(Reflect.field( e.target, Reflect.field(props, i) ) ) );
 				//~ list3.data.push( Type.typeof(Reflect.field(props, i) ) );
 		list3.redraw();
@@ -163,41 +167,38 @@ class Introspector extends Window
 		super.onResize(e);
 	
 	if(tree!=null) {
-		tree.box.height = this.box.height - 100;
-		tree.redraw();
+		tree.box.height = this.box.height - 70;
+		//~ tree.box.height = 600;
+		tree.dirty = true;
 	}
 	
 	
 	if(list1!=null) {
 
-
 		list1.box.width = .333*(this.box.width - list1.x - 30) ;
 		list1.box.height = tree.box.height;
-
-		list1.redraw();
+		list1.dirty = true;
+		//~ list1.redraw();
 	}
 
 	if(list2!=null) {
-
 
 		//~ list2.box.width = this.box.width - list2.x - 40 ;
 		list2.x = list1.x + list1.box.width;
 		list2.box.width = list1.box.width ;
 		list2.box.height = list1.box.height ;
-		list2.redraw();
+		list2.dirty = true;
+		//~ list2.redraw();
 	}
 
 	if(list3!=null) {
-
-		if( list3.box.height < this.box.height - list3.y - 60)
-			for(i in 0...Std.int((this.box.height - list3.y - 60 - list3.box.height)/20))
-			list3.data.push( "" );
 
 		//~ list3.box.width = this.box.width - list3.x - 40 ;
 		list3.x = list2.x + list2.box.width;
 		list3.box.width = list1.box.width ;
 		list3.box.height = list1.box.height ;
-		list3.redraw();
+		list3.dirty = true;
+		//~ list3.redraw();
 	}
 
 		//~ trace(e);

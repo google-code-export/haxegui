@@ -82,6 +82,7 @@ class Expander extends AbstractButton
 	override public function onMouseClick(e:MouseEvent) {
 		if(disabled) return;
 		expanded = !expanded;
+		e.stopImmediatePropagation();
 		for(i in 0...numChildren)
 			{
 			if(this.getChildAt(i) != label )

@@ -37,6 +37,7 @@ import haxegui.managers.DragManager;
 import haxegui.managers.CursorManager;
 import haxegui.Opts;
 import haxegui.managers.StyleManager;
+import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
 
@@ -55,14 +56,19 @@ class ListItem extends AbstractButton
 	public var tf : TextField;
 	public var fmt : TextFormat;
 
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	{
+		super (parent, name, x, y);
+	}
+
+	
 	override public function init(opts:Dynamic=null)
 	{
-
 		super.init(opts);
 
 		tf = new TextField();
 		tf.name = "tf";
-		tf.text = Opts.optString(opts, "text", tf.text);
+		tf.text = Opts.optString(opts, "text", "");
 		tf.selectable = false;
 		tf.x = 4;
 		tf.width = box.width - 4;
@@ -99,7 +105,7 @@ class ListItem extends AbstractButton
 class UiList extends Component
 {
 
-	public var header : Sprite;
+	public var header : AbstractButton;
 	public var data : Dynamic;
 
 	public var sortReverse : Bool;
@@ -108,13 +114,6 @@ class UiList extends Component
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super (parent, name, x, y);
-		data = [];
-		header = new Sprite();
-		header.name = "header";
-		this.addChild(header);
-
-
-
 	}
 
 	override public function init(opts : Dynamic=null)
@@ -122,9 +121,10 @@ class UiList extends Component
 		if(Std.is(parent, Component))
 			color = (cast parent).color;
 		box = new Rectangle(0,0, 140, 40);
-
+		
+		data = [];
+		
 		super.init(opts);
-
 
 		if(opts == null) opts = {}
 		if(opts.innerData!=null)
@@ -133,10 +133,12 @@ class UiList extends Component
 			data = opts.data;
 
 
-		for (i in 1...data.length+1)
-		{
-			var item = new ListItem(this, "item" + i, 0, 20*i );
+		header = new AbstractButton(this, "header");
 
+		var n = (data==null || !Std.is(data, Array)) ? 10 : data.length+1;
+		for (i in 1...n) {
+			var item = new ListItem(this, "item" + i, 0, 20*i );
+	
 
 			var str : String = "";
 			if(Std.is(data, Array))
@@ -146,12 +148,11 @@ class UiList extends Component
 				}
 				catch(e:flash.Error)
 				{
-					//~ tf.text = Std.string(new flash.Error());
 					str = Std.string(e);
 				}
 
 			item.init({text: str, width: this.box.width, color: DefaultStyle.INPUT_BACK});
-
+			
 			item.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
 			item.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
 			item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
@@ -162,16 +163,19 @@ class UiList extends Component
 
 		}
 
+
 		//
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
-		this.filters = [shadow];
+		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
+		//~ this.filters = [shadow];
 		
-		var self=this;
-		this.setAction("onFocusOut",
-		"
-			this.parent.removeChild(this);
-		"
-		);
+		//~ var self=this;
+		//~ this.setAction("onFocusOut",
+		//~ "
+			//~ this.parent.removeChild(this);
+		//~ "
+		//~ );
+		
+		
 	}
 
 	public function onItemMouseDown(e:MouseEvent) : Void
@@ -223,37 +227,54 @@ class UiList extends Component
 		if(color == 0) color = this.color;
 
 		header.graphics.clear();
-		header.graphics.lineStyle(1, color - 0x323232);
-		header.graphics.beginFill (color | 0x323232);
+		//~ header.graphics.lineStyle(1, color - 0x323232);
+		//~ header.graphics.beginFill (color | 0x323232);
+		var grad = flash.display.GradientType.LINEAR;
+		var colors = [ this.color, this.color - 0x191919 ];
+		var alphas = [ 100, 100 ];
+		var ratios = [ 0, 0xFF ];
+		var matrix = new flash.geom.Matrix();
+		matrix.createGradientBox(box.width, 20, Math.PI/2, 0, 0);
+		header.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
+		
 		header.graphics.drawRect (0, 0, box.width, 20);
 		header.graphics.endFill ();
 
+		header.graphics.lineStyle(1, color - 0x323232);
+		header.graphics.moveTo(0, 20);
+		header.graphics.lineTo(box.width, 20);
+
+
+		
+		// sort direction triangle
 		header.graphics.beginFill (color - 0x323232);
 		header.graphics.moveTo(box.width - 20, 8 +(sortReverse ? 5 : 0) );
 		header.graphics.lineTo(box.width - 10, 8 +(sortReverse ? 5 : 0) );
 		header.graphics.lineTo(box.width - 15, sortReverse ? 8 : 13);
 		header.graphics.endFill ();
-
+	
 
 	}
 
 	override public function redraw(opts:Dynamic=null)
 	{
+
+			
 		drawHeader();
 
-
+		if(header.getChildByName("tf")!=null)
+			header.removeChild(header.getChildByName("tf"));
+			
 		var tf = new TextField ();
 		tf.name = "tf";
-		//~ tf.text = header.name;
+		tf.text = (this.text==null) ? this.name : this.text;
 		tf.selectable = false;
-		//~ tf.width = 40;
 		tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
 		tf.x = Std.int(.5*(box.width - tf.width));
 		tf.y = 2;
 		tf.height = 18;
 		tf.embedFonts = true;
 		tf.mouseEnabled = false;
-		//~ tf.setTextFormat (StyleManager.getTextFormat(8, StyleManager.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
 		tf.setTextFormat (DefaultStyle.getTextFormat());
 		header.addChild (tf);
 
@@ -262,11 +283,80 @@ class UiList extends Component
 		header.addEventListener (MouseEvent.MOUSE_DOWN, onHeaderMouseDown, false, 0, true);
 		header.addEventListener (MouseEvent.MOUSE_UP, onHeaderMouseUp, false, 0, true);
 
-		//~ for(i in 0...numChildren-1)
-			//~ if( Std.is( this.getChildAt(i), ListItem ))
-				//~ untyped this.getChildAt(i).dirty = true;
-				//~ untyped this.getChildAt(i).redraw();
 
+		
+		//~ for(i in 0...numChildren-1)
+		//~ for(i in 0...data.length)
+			//~ if( Std.is( this.getChildAt(i), ListItem ))
+				//~ {
+					//~ untyped this.getChildAt(i).redraw();
+					//~ trace(this.getChildAt(i));
+				//~ }
+				//~ 
+		
+		// if all children are here just redraw them
+		//~ if(numChildren >= data.length ) {
+		if(numChildren >= data.length ) {
+
+			for(i in 0...numChildren) {
+				var item = cast this.getChildAt(i);
+				item.box.width = this.box.width;
+				item.redraw();
+			}
+		}
+		// if children were'nt yet created 
+		else
+		{
+			//~ var n = Std.int((this.box.height - numChildren*20)/20);
+			var n = Std.int((this.box.height)/20);
+			//~ var n = Std.int(this.box.height/20);
+			for (i in 1...n)
+			{
+				var item = new ListItem(this, "item" + i, 0, 20*i+1 );
+
+
+				var str : String = "";
+				if(Std.is(data, Array))
+					try
+					{
+						str = data[i-1];
+					}
+					catch(e:flash.Error)
+					{
+						//~ tf.text = Std.string(new flash.Error());
+						str = Std.string(e);
+					}
+				item.init({text: str, width: this.box.width, color: DefaultStyle.INPUT_BACK});
+
+				item.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
+				item.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
+				item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
+				item.addEventListener (MouseEvent.MOUSE_UP, onItemMouseUp, false, 0, true);
+
+				item.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
+				item.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
+			}
+		}
+		
+/*
+		//~ var n = numChildren+1;
+		var n = data.length-2;
+		if(this.box.height > n*20 ) {
+			for(i in 0...Std.int((this.box.height - n*20 )/20))
+			//~ for(i in 0...10)
+			{
+				var item = new ListItem(this, "item" + (n+i), 0, n*20+i*20 );
+				item.init({text: "-------", width: this.box.width, color: DefaultStyle.INPUT_BACK});
+			}
+		}
+*/
+		
+
+		this.graphics.clear();
+		this.graphics.lineStyle(2, DefaultStyle.BACKGROUND - 0x202020);
+		this.graphics.beginFill(this.color);
+		this.graphics.drawRect(0,0,this.box.width, this.box.height );
+		this.graphics.endFill();
 	}
 
 
@@ -286,9 +376,7 @@ class UiList extends Component
 	public function onHeaderMouseUp(e:MouseEvent)
 	{
 		data.sort(
-			function(x,y)
-			{
-				//~ return if( x.charAt(0) == y.charAt(0) ) 0 else if( x.charAt(0) > y.charAt(0) ) 1 else -1;
+			function(x,y) {
 				return ( x.charAt(0) == y.charAt(0) ) ? 0 : ( x.charAt(0) > y.charAt(0) ) ? 1 : -1;
 			}
 		);
@@ -298,5 +386,7 @@ class UiList extends Component
 	static function __init__() {
 		haxegui.Haxegui.register(UiList);
 	}
+
+
 
 }

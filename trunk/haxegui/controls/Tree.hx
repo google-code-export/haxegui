@@ -62,7 +62,7 @@ class Tree extends Component {
 		var last = Std.int(box.height/20);
 		for(i in 0...last)
 		{
-			var item = new Expander(this, "item"+i, 0, 20*i);
+			var item = new Expander(this, "item"+i, 4, 4+20*i);
 			item.init();
 
 			for(j in 0...4) {
@@ -86,8 +86,9 @@ class Tree extends Component {
 		this.setAction("redraw",
 		
 		"
-		this.graphics.lineStyle(1, this.color, 1);
-		this.graphics.beginFill(DefaultStyle.INPUT_BACK);
+		this.graphics.clear();
+		this.graphics.lineStyle(1, Math.max(0, DefaultStyle.BACKGROUND - 0x202020), 1);
+		this.graphics.beginFill(this.color);
 		this.graphics.drawRect(0,0, this.box.width, this.box.height);
 		this.graphics.endFill();
 		"
