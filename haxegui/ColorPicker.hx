@@ -92,10 +92,10 @@ class ColorPicker extends Window
 
 	}
 
-	public override function init(?initObj:Dynamic)
+	public override function init(?opts:Dynamic)
 	{
 		super.init({name:"ColorPicker", x:x, y:y, width:width, height:height, type: WindowType.MODAL, sizeable:false, color: 0xE6D3CC});
-
+		type = WindowType.MODAL;
 		box = new Rectangle (0, 0, 400, 280);
 
 		//
@@ -105,6 +105,10 @@ class ColorPicker extends Window
 		//
 		var container = new Container (this, "Container", 10, 44);
 		container.init({width: 390, height: 236, color: 0xE6D3CC});
+
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
+		container.filters = [shadow];
+
 
 		var spec = new Image(container, "Spectrum", 10, 10);
 		spec.init({src: "assets/spectrum.png"});
