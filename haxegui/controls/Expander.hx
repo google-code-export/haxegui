@@ -62,8 +62,8 @@ class Expander extends AbstractButton
 	override public function init(opts:Dynamic=null)
 	{
 		box = new Rectangle(0, 0, 15, 15);
-		color = 0;
-		expanded = true;
+		color = cast Math.max(0, DefaultStyle.BACKGROUND - 0x202020);
+		expanded = false;
 
 		expanded = Opts.optBool(opts, "expanded", expanded);
 
@@ -87,6 +87,7 @@ class Expander extends AbstractButton
 			if(this.getChildAt(i) != label )
 				this.getChildAt(i).visible = expanded;
 			}
+		dispatchEvent(new Event(Event.CHANGE));
 	}
 
 
