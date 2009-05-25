@@ -62,16 +62,16 @@ class Input extends Component
 
 	    tf = new TextField();
 	    tf.name = "tf";
-	    tf.type = flash.text.TextFieldType.INPUT;
+	    tf.type = disabled ? flash.text.TextFieldType.DYNAMIC : flash.text.TextFieldType.INPUT;
 	    tf.text = name;
 	    tf.text = Opts.optString(opts, "text", tf.text);
-
+	    tf.selectable = disabled ? false : true;
 	    tf.background = false;
 	    tf.border = false;
 	    tf.height = box.height - 3;
 	    tf.x = tf.y = 4;
 	    tf.embedFonts = true;
-
+	    tf.defaultTextFormat = DefaultStyle.getTextFormat();
 	    tf.setTextFormat(DefaultStyle.getTextFormat());
 	    addChild(tf);
 
@@ -82,10 +82,18 @@ class Input extends Component
 		if(this.disabled) {
 			mouseEnabled = false;
 			buttonMode = false;
+			if(tf!=null) {
+			    tf.mouseEnabled = false;
+			    tf.selectable = false;
+			}
 		}
 		else {
 			mouseEnabled = Opts.optBool(initOpts,"mouseEnabled",true);
 			buttonMode = Opts.optBool(initOpts,"buttonMode",true);
+			if(tf!=null) {
+			    tf.mouseEnabled = false;
+			    tf.selectable = true;
+			}
 		}
 		return v;
 	}

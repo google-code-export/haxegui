@@ -81,6 +81,14 @@ class RadioButton extends AbstractButton
 
 		label = new Label(this, "label", 24, 2);
 		label.init({innerData: name});
+		
+		
+		if(this.disabled) {
+			var fmt = DefaultStyle.getTextFormat();
+			fmt.color = DefaultStyle.BACKGROUND - 0x141414;
+			label.tf.setTextFormat(fmt);
+		}
+
 
 		// Listeners
 		addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown,false,0,true);

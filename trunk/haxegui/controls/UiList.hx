@@ -74,7 +74,7 @@ class ListItem extends AbstractButton
 		tf.width = box.width - 4;
 		tf.height = 20;
 		tf.embedFonts = true;
-
+		tf.defaultTextFormat = DefaultStyle.getTextFormat();
 		tf.mouseEnabled = false;
 
 		tf.setTextFormat (DefaultStyle.getTextFormat());
@@ -153,13 +153,10 @@ class UiList extends Component
 
 			item.init({text: str, width: this.box.width, color: DefaultStyle.INPUT_BACK});
 			
-			item.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
-			item.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
-			item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
-			item.addEventListener (MouseEvent.MOUSE_UP, onItemMouseUp, false, 0, true);
-
-			item.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
-			item.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
+			//~ item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
+			//~ item.addEventListener (MouseEvent.MOUSE_UP, onItemMouseUp, false, 0, true);
+			//~ item.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
+			//~ item.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
 
 		}
 
@@ -195,14 +192,6 @@ class UiList extends Component
 
 	}
 
-	public function onItemRollOver(e:MouseEvent) : Void
-	{
-		CursorManager.setCursor(Cursor.HAND);
-	}
-
-	public function onItemRollOut(e:MouseEvent) : Void
-	{
-	}
 
 
 	public function shrink()
@@ -253,6 +242,14 @@ class UiList extends Component
 		header.graphics.lineTo(box.width - 15, sortReverse ? 8 : 13);
 		header.graphics.endFill ();
 	
+		// label
+		if(header.getChildByName("label")==null) {
+			var label = new Label(header, "label", 4, 4);
+			label.init({innerData: this.text});
+			}
+		var label = cast header.getChildByName("label");
+		label.tf.defaultTextFormat = DefaultStyle.getTextFormat(8, 0, flash.text.TextFormatAlign.CENTER);
+		label.x = .5*(header.box.width - label.tf.width);
 
 	}
 
@@ -261,28 +258,8 @@ class UiList extends Component
 
 			
 		drawHeader();
-
-		if(header.getChildByName("tf")!=null)
-			header.removeChild(header.getChildByName("tf"));
-			
-		var tf = new TextField ();
-		tf.name = "tf";
-		tf.text = (this.text==null) ? this.name : this.text;
-		tf.selectable = false;
-		tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
-		tf.x = Std.int(.5*(box.width - tf.width));
-		tf.y = 2;
-		tf.height = 18;
-		tf.embedFonts = true;
-		tf.mouseEnabled = false;
-		tf.setTextFormat (DefaultStyle.getTextFormat());
-		header.addChild (tf);
-
-		header.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
-		header.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
 		header.addEventListener (MouseEvent.MOUSE_DOWN, onHeaderMouseDown, false, 0, true);
 		header.addEventListener (MouseEvent.MOUSE_UP, onHeaderMouseUp, false, 0, true);
-
 
 		
 		//~ for(i in 0...numChildren-1)
@@ -328,13 +305,10 @@ class UiList extends Component
 					}
 				item.init({text: str, width: this.box.width, color: DefaultStyle.INPUT_BACK});
 
-				item.addEventListener (MouseEvent.ROLL_OVER, onItemRollOver, false, 0, true);
-				item.addEventListener (MouseEvent.ROLL_OUT, onItemRollOut, false, 0, true);
-				item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
-				item.addEventListener (MouseEvent.MOUSE_UP, onItemMouseUp, false, 0, true);
-
-				item.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
-				item.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
+				//~ item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
+				//~ item.addEventListener (MouseEvent.MOUSE_UP, onItemMouseUp, false, 0, true);
+				//~ item.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
+				//~ item.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
 			}
 		}
 		
@@ -353,9 +327,10 @@ class UiList extends Component
 		
 
 		this.graphics.clear();
-		this.graphics.lineStyle(2, DefaultStyle.BACKGROUND - 0x202020);
-		this.graphics.beginFill(this.color);
-		this.graphics.drawRect(0,0,this.box.width, this.box.height );
+		this.graphics.lineStyle(1, DefaultStyle.BACKGROUND - 0x202020);
+		//~ this.graphics.beginFill(this.color);
+		this.graphics.beginFill(DefaultStyle.INPUT_BACK);
+		this.graphics.drawRect(-1,0,this.box.width, this.box.height+1 );
 		this.graphics.endFill();
 	}
 
@@ -377,7 +352,9 @@ class UiList extends Component
 	{
 		data.sort(
 			function(x,y) {
-				return ( x.charAt(0) == y.charAt(0) ) ? 0 : ( x.charAt(0) > y.charAt(0) ) ? 1 : -1;
+				return 
+				( Std.string(x).charAt(0) == Std.string(y).charAt(0) ) ? 0 : 
+				( Std.string(x).charAt(0) > Std.string(y).charAt(0) ) ? 1 : -1;
 			}
 		);
 		redraw();

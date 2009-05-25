@@ -138,6 +138,7 @@ class TitleBar extends AbstractButton
 	override public function init(?opts:Dynamic) {
 
 		box = new flash.geom.Rectangle(0,0, (cast parent).box.width, 32);
+		cursorOver = Cursor.SIZE_ALL;
 
 		super.init(opts);
 
@@ -213,7 +214,7 @@ class TitleBar extends AbstractButton
 
 	override public function onRollOver (e:MouseEvent)
 	{
-		CursorManager.setCursor(Cursor.HAND);
+		CursorManager.setCursor(this.cursorOver);		
 	}
 
 	override public function onRollOut (e:MouseEvent)
@@ -227,13 +228,18 @@ class TitleBar extends AbstractButton
 		(cast this.parent).startDrag();
 		var win = (cast this.parent);
 		win.addEventListener(flash.events.MouseEvent.MOUSE_UP, function(e){ win.stopDrag(); });
+		// dispatch(MoveEvent)
 	}
 	
 	override public function onMouseUp (e:MouseEvent)
 	{
 		this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
 		untyped this.parent.stopDrag();
-		CursorManager.setCursor(Cursor.ARROW);
+
+		if(this.hitTestObject( CursorManager.getInstance()._mc )) 
+			CursorManager.setCursor(this.cursorOver);
+		else
+			CursorManager.setCursor(Cursor.ARROW);
 	}
 
 	static function __init__() {

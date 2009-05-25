@@ -184,6 +184,7 @@ class ScriptStandardLibrary
 		interp.variables.set("DefaultStyle", DefaultStyle);
 		interp.variables.set("DragManager", haxegui.managers.DragManager);
 		interp.variables.set("FocusManager", haxegui.managers.FocusManager);
+		interp.variables.set("Haxegui", haxegui.Haxegui);
 		interp.variables.set("Image", haxegui.Image);
 		interp.variables.set("Introspector", haxegui.Introspector);
 		interp.variables.set("LayoutManager", haxegui.managers.LayoutManager);

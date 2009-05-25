@@ -1,24 +1,30 @@
 this.graphics.clear();
+
+var i = this.parent.getChildIndex(this) ;
+var c = (i%2==0) ? this.color :  this.color - 0x0A0A0A;
+
 /*
-this.graphics.lineStyle (1,
+if(this.hasFocus()) 
+this.graphics.lineStyle (4,
 	Math.max(0, Math.min(0xFFFFFF, DefaultStyle.BACKGROUND - 0x282828)),
 	1, true, 
 	flash.display.LineScaleMode.NONE,
 	flash.display.CapsStyle.ROUND,
 	flash.display.JointStyle.ROUND
 	);
-*/	
+*/
 	
-var i = this.parent.getChildIndex(this) ;
-var c = (i%2==0) ? this.color :  this.color - 0x0A0A0A;
 this.graphics.beginFill ( c );
 this.graphics.drawRect (0, 0, this.box.width, 20);
 this.graphics.endFill ();
 
 
 if( this.parent.data[i]!=null  ) this.tf.text = this.parent.data[i];
-this.tf.width = this.box.width;
-this.tf.setTextFormat( DefaultStyle.getTextFormat() );
+this.tf.x = 4;
+this.tf.y = 4;
+this.tf.width = this.box.width - 4;
+this.tf.height = this.box.height - 4;
+/*this.tf.setTextFormat( DefaultStyle.getTextFormat() );*/
 
 /*
 if(i==1)

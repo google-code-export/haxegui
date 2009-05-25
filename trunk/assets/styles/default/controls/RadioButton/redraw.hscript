@@ -28,9 +28,10 @@ if(this.selected)
 	this.graphics.beginFill(0);
 	this.graphics.drawCircle (10, 10, 4);
 	this.graphics.endFill ();
-
+/*
 	var shadow = new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
 	this.filters = [shadow];
+*/
 
 }
 else
@@ -43,8 +44,14 @@ else
 	this.graphics.drawCircle (10, 10, 8);
 	this.graphics.endFill ();
 
-
+/*
 	var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false );
 	this.filters = [shadow];
+*/
+}
 
+if(this.disabled) {
+	var fmt = DefaultStyle.getTextFormat();
+	fmt.color = DefaultStyle.BACKGROUND - 0x141414;
+	this.label.tf.setTextFormat(fmt);
 }

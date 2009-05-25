@@ -73,12 +73,12 @@ class FocusManager extends EventDispatcher, implements Dynamic
 
   public function setFocus (o:DisplayObject)
   {
-		return;
-	if(Std.is(o, Component)) {
-		if(! (cast o).focusable )
-			return;
-	}
-    if( o!=null && _focus!=o )
+		//~ return;
+	if(o==null || !Std.is(o, Component)) return;
+    else
+    if(!(cast o).focusable) return;
+	
+    if( _focus!=o )
     {
         if(_focus!=null)
         //~ _focus.dispatchEvent (new FocusEvent (FocusEvent.FOCUS_OUT, false, true));

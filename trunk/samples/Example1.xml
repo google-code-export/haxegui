@@ -9,7 +9,7 @@ TODO:
     <String name="hello">Hello World</String>/>
     <Float name="aNumber">3.45</Float>
 
-    <Array name="IntArray">
+    <Array name="StringArray">
 	<String>Item1</String>
 	<String>Item2</String>
 	<String>Item3</String>
@@ -19,31 +19,20 @@ TODO:
 
 
 	<haxegui:Window name="Xml hScript Widgets Window" x="300" y="30" width="512" height="512" sizeable="true" >
-		<events>
-			<script type="text/hscript" action="onLoaded">
-				function adjustStepper( e )
-				{
-					var x = e.target.getChildByName("handle").x;
-					stepper.value = x;
-					stepper.tf.text = Std.string(x);
-					stepper.tf.setTextFormat( DefaultStyle.getTextFormat() );
-				}
 
-				function adjustSlider( e )
-				{
-					var x = e.target.value;
-					slider.getChildByName("handle").x = x;
-				}
-				for( i in 1...4 )
-				{
-					var slider = this.getChildByName("Slider"+i);
-					var stepper = this.getChildByName("Stepper"+i);
-
-					slider.addEventListener( flash.events.Event.CHANGE, adjustStepper. false, 0, true);
-					stepper.addEventListener( flash.events.Event.CHANGE, adjustSlider. false, 0, true);
-				}
-			</script>
-		</events>
+				<events>
+					<script type="text/hscript" action="onLoaded">
+					<![CDATA[
+					var scrollpane = this.getChildByName("ScrollPane1");
+					var container = scrollpane.content.getChildByName("Container1");
+						for( i in 1...4 ) {
+							var slider = container.getChildByName("Slider"+i);
+							var stepper = container.getChildByName("Stepper"+i);
+						}
+					]]>
+					</script>
+				</events>
+					
 		<haxegui:MenuBar name="menubar" width="512" x="10" y="20">
 			<haxegui:Menu type="Object" name="menu1">
 				<Item type="String">a</Item>
@@ -56,16 +45,21 @@ TODO:
 				<Item type="String">c2</Item>
 			</haxegui:Menu>
 		</haxegui:MenuBar>
-		<haxegui:ScrollPane name="ScrollPane1" x="10" y="44" >
+		<haxegui:ToolBar name="Toolbar" width="400" x="10" y="44" >
+			<haxegui:controls:Button name="Btn1" x="30" y="4" width="30" />
+			<haxegui:controls:Button name="Btn2" x="60" y="4" width="30" />
+			<haxegui:controls:Button name="Btn3" x="90" y="4" width="30" />
+		</haxegui:ToolBar>
+		<haxegui:ScrollPane name="ScrollPane1" x="10" y="84" >
 			<haxegui:Container name="Container1" width="512" height="512" >
-				<haxegui:controls:Label x="30" y="8" >This window and it's content are dynamically generated from xml,
-				Some events are also defined in hscript.</haxegui:controls:Label>
+				<haxegui:controls:Label x="30" y="8" >This window and it's content are dynamically generated from xml, Some events are also defined in hscript.</haxegui:controls:Label>
 				<haxegui:controls:Button label="Click" x="30" y="50" width="120" />
 				<haxegui:controls:Button label="me" x="160" y="50" width="40" />
 				<haxegui:controls:Button label="disabled" x="210" y="50" disabled="true" />
 				<haxegui:controls:Button name="colorButton" label="Red" x="310" y="50" color="0xB35959">
 					<events>
-						<script type="text/hscript" action="mouseClick"><![CDATA[
+						<script type="text/hscript" action="mouseClick">
+						<![CDATA[
 							if(this.color == 0xB35959) {
 								this.color=0xA1F02A;
 								this.label.tf.text = "Green";
@@ -94,8 +88,8 @@ TODO:
 				<haxegui:controls:Slider name="Slider3" x="200" y="190" />
 
 				<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="128"/>
-				<haxegui:controls:Stepper name="Stepper2" x="360" y="160" step="5" max="128" />
-				<haxegui:controls:Stepper name="Stepper3" x="360" y="190" step="10" max="128" />
+				<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="128" />
+				<haxegui:controls:Stepper name="Stepper3" x="360" y="190" value="0" step="10" max="128" />
 
 				<haxegui:controls:Input name="Input1" x="30" y="220" />
 				<haxegui:controls:Input name="Input2" x="30" y="250" />
@@ -123,18 +117,16 @@ TODO:
 						]]></script>
 					</events>
 				</haxegui:controls:UiList>
-				<haxegui:controls:UiList name="List2" x="360" y="250" width="300" data="@IntArray" />
+				<haxegui:controls:UiList name="List2" x="360" y="250" width="300" data="@StringArray" />
 
 			</haxegui:Container>
 
-			<haxegui:Window name="ChildWindow" x="120" y="120" width="180" height="140" color="0xA5DE33">
+			<haxegui:Window name="ChildWindow" x="200" y="200" width="180" height="140" color="0xA5DE33">
 				<haxegui:Container name="Container1"  x="10" y="20" width="100%" height="100%" color="0xA5DE33"  >
 				<haxegui:controls:Label x="20" y="4" >I'm a green child window</haxegui:controls:Label>
 				<haxegui:controls:Button label="Click" x="20" y="30" width="120" color="0xA5DE33" />
 				</haxegui:Container>
 			</haxegui:Window>
-
-				<haxegui:controls:Component type="Class" name="comp" />
 
 		</haxegui:ScrollPane>
     </haxegui:Window>

@@ -113,7 +113,8 @@ class ComboBox extends Component
 		color = DefaultStyle.BACKGROUND;
 		box = new Rectangle(0,0,140,20);
 		editable = true;
-
+		list = null;
+		
 		super.init(opts);
 
 		editable = Opts.optBool(opts, "editable", editable);
@@ -123,7 +124,7 @@ class ComboBox extends Component
 			if(input != null && input.parent == this)
 				removeChild(input);
 			input = new Input(this, "input");
-			input.init({width: this.box.width, text: this.name });
+			input.init({width: this.box.width, text: this.name, disabled: this.disabled});
 			input.redraw();
 		}
 		else
@@ -137,31 +138,19 @@ class ComboBox extends Component
 		dropButton.init(opts);
 		dropButton.setAction("mouseClick",
 		"
-			if(parent.list==null) {
+		if(parent.list==null) {
 			parent.list = new haxegui.controls.UiList(root);
 			var list = parent.list;
 			list.color = this.color;
 			for(i in 0...5) list.data.push(\"item\"+i);
 			list.init();
 			list.removeChild(list.header);
-			list.box.width = this.parent.box.width - 20;
-			for(i in 0...list.numChildren)
-				{
-					list.getChildAt(i).box.width = this.parent.box.width - 20;
-					list.getChildAt(i).redraw();
-					/*list.getChildAt(i).filters = null;*/
-				}
-		
 		 	var p = new flash.geom.Point( parent.x, parent.y );
 			p = this.parent.parent.localToGlobal(p);
-			
 			list.x = p.x;
 			list.y = p.y;
-			
 			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
 			list.filters = [shadow];
-			
-			
 			function down(e) { 
 				trace(e); 
 				if(list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
@@ -169,9 +158,7 @@ class ComboBox extends Component
 				list.parent.removeChild(list);
 				parent.list = null;
 				}
-
 			list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
-		
 		}
 		"
 		);
@@ -181,4 +168,16 @@ class ComboBox extends Component
 	static function __init__() {
 		haxegui.Haxegui.register(ComboBox);
 	}
+	/*
+	public override function redraw(opts:Dynamic=null) {
+		super.redraw(opts);
+		if(this.input!=null) {
+			if(this.disabled)
+				input.redraw({color: DefaultStyle.BACKGROUND});
+			}
+		
+	}
+	*/
+	
+
 }

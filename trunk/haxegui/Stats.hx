@@ -134,7 +134,7 @@ class Stats extends Window
     public override function init(?initObj:Dynamic)
     {
 
-        super.init({name:"Stats", x:x, y:y, width:width, height:height, sizeable: false, color: 0x2A7ACD});
+        super.init({name:"Stats", x:x, y:y, width:width, height:height, color: 0x2A7ACD});
 
         frameCounter = 0;
         delta = 0;
@@ -159,7 +159,7 @@ class Stats extends Window
 
         list = new UiList(container, "List");
         list.data=["FPS:", "minFPS:", "maxFPS:", "avgFPS:", "Mem:", "Uptime:"];
-        list.init({color: 0xE5E5E5, width: 140});
+        list.init({color: 0xE5E5E5, width: 140, height: 140});
 
 
         graph = new Sprite();
@@ -186,8 +186,6 @@ class Stats extends Window
         }
 
 
-
-
         ploter = new Sprite();
         graph.addChild(grid);
         graph.addChild(ploter);
@@ -199,7 +197,6 @@ class Stats extends Window
         graph.scrollRect = new Rectangle(0,0,240,140);
 
         container.addChild(graph);
-
 
         var label = new Label(container, "Label", 160, 14);
         label.text = "Update Interval: ";
@@ -234,12 +231,7 @@ class Stats extends Window
         timer = new haxe.Timer(interval);
         timer.run = update;
 
-
-
-
-
-          this.addEventListener (Event.ENTER_FRAME, onStatsEnterFrame);
-
+        this.addEventListener (Event.ENTER_FRAME, onStatsEnterFrame);
 
         //~ redraw(null);
         dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
@@ -281,8 +273,8 @@ class Stats extends Window
             "Uptime: \t\t\t" + Std.string(haxe.Timer.stamp()).substr(0,5)
         ];
 
-
         list.redraw();
+
 
 
         var item = cast list.getChildAt(1);
@@ -304,7 +296,6 @@ class Stats extends Window
 		item.graphics.endFill ();
 
 
-        //~ ploter.graphics.clear();
 
         data.push( new Point( 240-ploter.x, 140 - fps ) );
         data2.push( new Point( 240-ploter.x, 140 - flash.system.System.totalMemory/Math.pow(10,6) ) );

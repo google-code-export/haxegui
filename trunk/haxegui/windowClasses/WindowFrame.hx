@@ -131,16 +131,16 @@ class WindowFrame extends Component
 					if(CursorManager.getInstance().cursor == Cursor.NESW) {
 						this.parent.box.width -=  this.stage.mouseX - this.parent.x + d ;
 						this.parent.box.height = this.stage.mouseY - this.parent.y + d ;
-						this.parent.box.width += MouseManager.getInstance().delta.x;
-						this.parent.box.height += MouseManager.getInstance().delta.y;
+						//~ this.parent.box.width += MouseManager.getInstance().delta.x;
+						//~ this.parent.box.height += MouseManager.getInstance().delta.y;
 						this.parent.x = this.stage.mouseX + d;
 						}
 
 					if(CursorManager.getInstance().cursor == Cursor.NWSE) {
 						this.parent.box.height =  this.stage.mouseY - this.parent.y + d;
 						this.parent.box.width = this.stage.mouseX - this.parent.x + d;
-						this.parent.box.width += MouseManager.getInstance().delta.x ;
-						this.parent.box.height += MouseManager.getInstance().delta.y ;
+						//~ this.parent.box.width += MouseManager.getInstance().delta.x ;
+						//~ this.parent.box.height += MouseManager.getInstance().delta.y ;
 						}
 				this.redraw();
 

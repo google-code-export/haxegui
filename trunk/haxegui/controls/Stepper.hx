@@ -114,6 +114,7 @@ class Stepper extends Component
 		tf.y = 4;
 		tf.text = Std.string(value);
 		tf.embedFonts = true;
+		tf.defaultTextFormat = DefaultStyle.getTextFormat();
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 
 		up.init({color: this.color});

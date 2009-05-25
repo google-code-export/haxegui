@@ -271,7 +271,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	**/
 	public function hasFocus ():Bool
 	{
-		return if(FocusManager.getInstance().getFocus() == this) true else false;
+		return FocusManager.getInstance().getFocus() == this ? true : false;
 	}
 
 
@@ -472,7 +472,6 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		//trace("onFocusIn relatedObject: " + Std.string(e.relatedObject));
 		//trace("onFocusIn currentTarget: " + Std.string(e.currentTarget));
 		//trace("onFocusIn target: " + Std.string(e.target));
-
 		ScriptManager.exec(this, "focusIn", {focusFrom : e.target});
 	}
 
@@ -531,15 +530,15 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Mouse click **/
 	public function onMouseClick(e:MouseEvent) : Void
 	{
-		if(e.target == this)
-			trace("onMouseClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseClick"));
+		//~ if(e.target == this)
+			//~ trace("onMouseClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseClick"));
 		ScriptManager.exec(this,"mouseClick", {event : e});
 	}
 
 	public function onMouseDown(e:MouseEvent) : Void
 	{
-		if(e.target == this)
-			trace("onMouseDown " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDown"));
+		//~ if(e.target == this)
+			//~ trace("onMouseDown " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDown"));
 		FocusManager.getInstance().setFocus(this);
 		ScriptManager.exec(this,"mouseDown", {event : e});
 	}

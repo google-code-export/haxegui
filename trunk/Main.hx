@@ -163,8 +163,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		//~ stats.init();
 
 		// Color Picker
-		var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
-		colorpicker.init();
+		//~ var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
+		//~ colorpicker.init();
 
 		// rte
 		var rte = new RichTextEditor(flash.Lib.current, 120,120);
@@ -365,7 +365,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		/////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
-		loader.load(new URLRequest("samples/Example2.xml"));
+		loader.load(new URLRequest("samples/Example1.xml"));
 
 //  try {
 //      var l = flash.Lib.current.loaderInfo.parameters;

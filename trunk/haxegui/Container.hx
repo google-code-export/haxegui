@@ -34,6 +34,7 @@ import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 
 import haxegui.managers.ScriptManager;
+import haxegui.managers.MouseManager;
 import haxegui.managers.StyleManager;
 import haxegui.Component;
 
@@ -82,6 +83,8 @@ class Container extends Component, implements IContainer
 
 		if(Std.is(parent.parent, ScrollPane)) {
 			box = untyped parent.parent.box.clone();
+		//~ box.width += MouseManager.getInstance().delta.x ;
+		//~ box.height += MouseManager.getInstance().delta.y ;
 		}
 
 		for(i in 0...numChildren)
@@ -95,6 +98,8 @@ class Container extends Component, implements IContainer
 		//
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
+
+		
 		if(e != null)
 			e.updateAfterEvent();
 	}
