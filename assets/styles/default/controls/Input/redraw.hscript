@@ -9,6 +9,7 @@ this.graphics.lineStyle (1,
 	);
 	
 this.graphics.beginFill ( (this.disabled ? DefaultStyle.BACKGROUND : DefaultStyle.INPUT_BACK) );
+
 this.graphics.drawRoundRect(0, 0, this.box.width, this.box.height, 8, 8 );
 this.graphics.endFill ();
 
@@ -18,3 +19,8 @@ this.tf.setTextFormat( 	DefaultStyle.getTextFormat(8,
 						DefaultStyle.INPUT_TEXT,
 						flash.text.TextFormatAlign.LEFT)
 						);
+
+
+var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, this.disabled ? 0.25 : 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false );
+this.filters = [shadow];
+		

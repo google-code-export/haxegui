@@ -3,7 +3,7 @@
 -lib hscript
 -swf9 loader.swf
 -swf-version 9
--swf-header 960:600:12:3C3C3C
+-swf-header 1024:768:12:3C3C3C
 
 --next
 -main Main.hx
@@ -21,7 +21,7 @@
 
 -swf9 main.swf
 -swf-version 9
--swf-header 960:600:12:3C3C3C
+-swf-header 1024:768:12:3C3C3C
 --flash-use-stage
 --flash-strict
 -debug

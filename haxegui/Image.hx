@@ -33,6 +33,7 @@ import flash.display.BitmapData;
 
 class Image extends Component
 {
+	var src : String;
 
 	public function new(?parent : DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
@@ -44,9 +45,12 @@ class Image extends Component
 	    
 		super.init(opts);
 		
+		src = Opts.optString(opts, "src", src);
+		
 		var pictLdr:Loader = new Loader();
 		//var pictURLReq:URLRequest = new URLRequest("./assets/banners/banner$
-		var pictURLReq:URLRequest = new URLRequest(Opts.string(opts,"src"));
+		//~ var pictURLReq:URLRequest = new URLRequest(Opts.string(opts,"src"));
+		var pictURLReq:URLRequest = new URLRequest(this.src);
 		pictLdr.load(pictURLReq);
 		pictLdr.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
 

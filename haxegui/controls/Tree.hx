@@ -42,6 +42,51 @@ import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
 
+class TreeNode extends AbstractButton
+{
+	
+	public var expander : Expander;
+
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	{
+		super (parent, name, x, y);
+	}
+
+	
+	override public function init(opts:Dynamic=null)
+	{
+		super.init(opts);
+
+		expander = new Expander(this, this.name, 4, 4);
+		expander.init();
+
+
+		setAction("mouseClick",
+		"
+		this.expander.expanded = !this.expander.expanded;
+		this.expander.redraw();
+		"
+		);
+		
+		setAction("redraw",
+		"
+		var i = this.parent.getChildIndex(this) ;
+		var c = (i%2==0) ? this.color :  this.color - 0x0A0A0A;
+		this.graphics.beginFill ( c );
+		this.graphics.drawRect (0, 0, this.box.width, 20);
+		this.graphics.endFill ();
+		"
+		);
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(TreeNode);
+	}
+	
+}
+
+
+
 /**
 *
 * Tree Class
@@ -53,22 +98,30 @@ import haxegui.events.DragEvent;
 */
 class Tree extends Component {
 	
+	public var data : Dynamic;
+	
 	override public function init(opts:Dynamic=null) {
 		
 		color = DefaultStyle.INPUT_BACK;
 		box = new Rectangle(0,0,140,200);
+		
 		super.init(opts);
 
-		var last = Std.int(box.height/20);
-		for(i in 0...last)
+		var last = Reflect.fields(data).length;
+		var i = 0;
+		//~ for(i in 0...last)
+		for(key in Reflect.fields(data))
 		{
-			var item = new Expander(this, "item"+i, 4, 4+20*i);
-			item.init();
-
+			var item = new TreeNode(this, key, 0, 20*i);
+			item.init({color: this.color, width: this.box.width});
+			
+			
+			/*
 			for(j in 0...4) {
 				var subitem = new Expander(item, "subitem"+i, 20, 20+20*j);
 				subitem.init({visible: false});
 				}
+
 			if(i>0)
 			{
 				var self = this;
@@ -80,17 +133,24 @@ class Tree extends Component {
 						
 					});
 			}
-			
+			*/
+		i++;
 		}
 		
 		this.setAction("redraw",
 		
 		"
 		this.graphics.clear();
-		this.graphics.lineStyle(1, Math.max(0, DefaultStyle.BACKGROUND - 0x202020), 1);
+
+		/* 'missing' nodes */
+ 		var n = Math.round(this.box.height/20) - this.numChildren ;
 		this.graphics.beginFill(this.color);
-		this.graphics.drawRect(0,0, this.box.width, this.box.height);
+		this.graphics.drawRect(0, this.numChildren*20, this.box.width, 20*n);
 		this.graphics.endFill();
+
+		/* entire frame */
+		this.graphics.lineStyle(1, Math.max(0, DefaultStyle.BACKGROUND - 0x141414), 1);
+		this.graphics.drawRect(0,0, this.box.width, this.box.height);
 		"
 		);
 

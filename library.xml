@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<movie width="960" height="600" framerate="12" version="9" >
+<movie width="1024" height="768" framerate="12" version="9" >
 	<background color="#000000"/>
 	<frame>
 		<library>

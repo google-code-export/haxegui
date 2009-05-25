@@ -108,6 +108,7 @@ class Console extends Window, implements ITraceListener
 		output.mouseEnabled = true;
 		output.focusRect = true;
 		output.tabEnabled = true;
+		output.defaultTextFormat = DefaultStyle.getTextFormat();
 
 		//
 		input.name = "input";

@@ -4,6 +4,7 @@
 
     <haxegui:Window name="Layout Test Window" x="100" y="100" width="300" height="300" >
 	<events>
+	    <!-- interval for resizing -->
 	    <script type="text/hscript" action="interval"><![CDATA[
 		var container = this.getChildByName("Container");
 		for(i in 0...3)
@@ -12,14 +13,16 @@
 		    var w = ( this.box.width -  10 ) / 3;
 		    var h = ( this.box.height - 60 ) / 3 ;
 		    var rect = container.getChildByName("r"+i+"_"+j);
+		    var tf = rect.getChildAt(0);
 		    rect.box.width = w;
 		    rect.box.height = h;
 		    rect.x = i*w;
 		    rect.y = j*h + 40;
+		    if(i==1 && j==1) { rect.pivot = new flash.geom.Point(-.5*w, -.5*h); rect.x += .5*w; rect.y+= .5*h; }
+		    if(i==1 && j==1) { tf.x = -.5*w; tf.y = -.5*h; }
 		    rect.redraw();
-		    
-		    rect.getChildAt(0).width = w;
-		    rect.getChildAt(0).height = h;
+		    tf.width = w;
+		    tf.height = h;
 		}
 	    /*super.redraw();*/
 	    
@@ -34,8 +37,20 @@
 	    ]]>
 	    </script>
 	</events>
-		    <haxegui:Container name="Container" x="10" y="20" >
+		<haxegui:Container name="Container" x="10" y="20" >
 		    <haxegui:controls:Button name="Run" label="Run" x="20" y="4" >
+			<events>
+			    <!-- interval for tweening -->
+			    <script type="text/hscript" action="mouseClick"><![CDATA[
+			    if (this.label.tf.text == "Run") 
+				parent.startInterval(1);
+			    else
+				parent.stopInterval();
+			    this.label.tf.text = (this.label.tf.text == "Run") ? "Pause" : "Run";
+			    this.redraw();
+			    ]]>
+			    </script>
+			</events>   
 		    <haxegui:Image name="icon" src="assets/icons/run.png" x="4" y="4" />
 		    </haxegui:controls:Button>
 		    <events>
@@ -51,10 +66,12 @@
 				    rect.box = new flash.geom.Rectangle(0,0,w,h);
 				    rect.x = i*w;
 				    rect.y = j*h + 40;
+				    if(i==1 && j==1) { rect.pivot = new flash.geom.Point(-.5*w, -.5*h); rect.x += .5*w; rect.y+= .5*h; }
 				    var tf = new flash.text.TextField();
 				    tf.name - "tf";
 				    tf.width = w;
 				    tf.height = w;
+				    if(i==1 && j==1) { tf.x = -.5*w; tf.y = -.5*h; }
 				    tf.wordWrap = true;
 				    tf.multiline = true;
 				    tf.embedFonts = true;
@@ -71,9 +88,29 @@
 			    ]]>
 			    </script>
 			    <script type="text/hscript" action="interval"><![CDATA[
+			    /*
+			    var r = this.getChildByName("r0_0");
+			    trace(r.transform.matrix);
+			    var tx = new feffects.Tween( r.box.width, 50, 1000, r.box, "width", feffects.easing.Linear.easeNone );
+			    var ty = new feffects.Tween( r.box.height, 50, 1000, r.box, "height", feffects.easing.Linear.easeNone );
+			    tx.start();
+			    ty.start();
+			    Timer.delay(
+			      function(){
+				tx.seek(500); ty.seek(500);
+				tx.pause(); ty.pause();
+				tx.reverse(); ty.reverse();
+				tx.resume(); ty.resume();
+				},500 
+				);
+			    tx.setTweenHandlers( function(v){
+			    r.getChildAt(0).width = r.box.width;
+			    r.getChildAt(0).height = r.box.height;
+			    r.redraw(); } );
+			    */
 			    ]]>
+			    
 			    </script>
-
 		    </events><!--
 		<haxegui:toys:Rectangle name="r1" />
 		<haxegui:toys:Rectangle name="r2" />

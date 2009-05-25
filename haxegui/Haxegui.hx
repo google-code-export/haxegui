@@ -57,7 +57,7 @@ class Haxegui {
 		StyleManager.setStyle("default");
 		trace("complete");
 
-		var t = new haxe.Timer(50);
+		var t = new haxe.Timer(100);
 		t.run = onInterval;
 	}
 
@@ -69,6 +69,7 @@ class Haxegui {
 			}
 			dirtyList.remove(c);
 		}
+		MouseManager.getInstance().delta = new flash.geom.Point();
 	}
 
 	/**

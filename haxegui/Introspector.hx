@@ -26,6 +26,7 @@ import flash.display.DisplayObjectContainer;
 
 import haxegui.Window;
 import haxegui.Component;
+import haxegui.Image;
 import haxegui.controls.Label;
 import haxegui.controls.UiList;
 import haxegui.controls.Tree;
@@ -35,6 +36,7 @@ import haxegui.ScrollPane;
 import haxegui.events.ResizeEvent;
 
 import haxegui.managers.FocusManager;
+import haxegui.managers.StyleManager;
 import flash.events.FocusEvent;
 
 
@@ -42,11 +44,9 @@ import flash.events.FocusEvent;
 class Introspector extends Window
 {
 
-	public var o : Dynamic;
 	public var tree : Tree;
 	public var list1 : UiList;
 	public var list2 : UiList;
-	public var list3 : UiList;
 
 
 	/**
@@ -80,7 +80,31 @@ class Introspector extends Window
 
 		//
 		tree = new Tree(container, "Tree", 0, 0);
+		tree.data = { 
+			var1 : 1, 
+			var2: 2, 
+			str: "String", 
+			bool: false, 
+			array: [1,2], 
+			obj2: { 
+				var1: 1,
+				var2: 2
+				  },
+			obj3: { 
+				var1: 1,
+				var2: 2,
+				obj4: { 
+					var1: 1,
+					var2: 2
+				      }
+				  },
+				obj5: { 
+					var1: 1,
+					var2: 2
+				}
+			};
 		tree.init({width: 200});
+		
 		
 		//
 		list1 = new UiList(container, "Properties", 210, 0);
@@ -90,76 +114,69 @@ class Introspector extends Window
 		list2 = new UiList(container, "Values", 350, 0);
 		list2.init({text: "Value"});
 		
-		//
-		list3 = new UiList(container, "Types", 490, 0);
-		list3.init({text: "Type"});
-		
+
 	
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		
 		//~ FocusManager.getInstance().addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
-		this.stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, onFocusChanged);
+		this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged);
+		onFocusChanged(this);
 	}
 
 	public function onFocusChanged(e:Dynamic)
 	{
-		//~ trace(e);
-		//~ this.o = e.target;
-		//~ this.o = FocusManager.getInstance().getFocus();
-		//~ if(!Std.is(e.target, DisplayObjectContainer)) return;
+		if(!Std.is(e, flash.events.Event)) return;
 		if(!Std.is(e.target, Component)) return;
+		
+		
 		var self = this;
 		var props = {
 			name 		: "name",
-			type 		: function() { return Type.typeof(e.target); },
+			//~ type 		: function() { return Type.typeof(e.target); },
 			color 		: "color",
 			box			: "box",
-			rect		: function(){ return e.target.getRect(e.target); },
-			bounds		: function(){ return e.target.getBounds(e.target); },
+			//~ rect		: function(){ return e.target.getRect(e.target); },
+			//~ bounds		: function(){ return e.target.getBounds(e.target); },
 			x			: "x",
 			y			: "y",
 			visible		: "visible",
 			disabled	: "disabled",
 			alpha		: "alpha",
-			buttonMode	: "buttonMode",
-			globalX		: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
-			globalY		: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; }
+			buttonMode	: "buttonMode"
+			//~ globalX		: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
+			//~ globalY		: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; }
 			}
 		
-		this.o = this.stage.getObjectsUnderPoint( new flash.geom.Point( e.stageX, e.stageY )).pop();
-		
-		if(list1!=null) {
-
-
-		//~ list1.data = [ "target", "object", "component", "component" ];
-		list1.data = [];
-		list2.data = [];
-		list3.data = [];
-
-		for(i in Reflect.fields(props))
-				list1.data.push(i);
-		list1.redraw();
-
-		for(i in Reflect.fields(props))
-			if(Std.is(Reflect.field(props, i), String))
-				list2.data.push( Reflect.field( e.target, Reflect.field(props, i) )	);
-			else
-				list2.data.push( Reflect.callMethod(props, Reflect.field(props, i),[]) );
-				
-		list2.redraw();
-
-		for(i in Reflect.fields(props))
-			if(Reflect.isFunction(Reflect.field(props, i)))
-				list3.data.push( "function" );
-			else
-				list3.data.push( Type.typeof(Reflect.field( e.target, Reflect.field(props, i) ) ) );
-				//~ list3.data.push( Type.typeof(Reflect.field(props, i) ) );
-		list3.redraw();
-
-
-		}
 		
 	
+		list1.data = [];
+		list2.data = [];
+
+		var src = "assets/icons/types/type-undefined.png";
+		
+		for(key in Reflect.fields(props)) {
+				list1.data.push(key);
+				var value = Reflect.field( e.target, Reflect.field(props, key));
+				list2.data.push( value );
+		}
+		
+		list1.redraw();
+		list2.redraw();
+		
+			for(i in 1...list1.numChildren-1)
+			{
+				var item = (cast list1).getChildAt(i);
+				var fmt = DefaultStyle.getTextFormat();
+				fmt.leftMargin = 20;
+				item.getChildAt(0).defaultTextFormat = fmt;
+				var icon = new Image((cast item), "icon"+i, 4, 4);
+					//~ src = "assets/icons/types/type-string.png";
+					//~ src = "assets/icons/types/type-float.png";
+					//~ src = "assets/icons/types/type-integer.png";
+					//~ src = "assets/icons/types/type-boolean.png";
+				
+				icon.init({src: src});
+			}
 	}
 	
 	public override function onResize(e:ResizeEvent)
@@ -175,7 +192,7 @@ class Introspector extends Window
 	
 	if(list1!=null) {
 
-		list1.box.width = .333*(this.box.width - list1.x - 30) ;
+		list1.box.width = .5*(this.box.width - list1.x - 30) ;
 		list1.box.height = tree.box.height;
 		list1.dirty = true;
 		//~ list1.redraw();
@@ -191,15 +208,7 @@ class Introspector extends Window
 		//~ list2.redraw();
 	}
 
-	if(list3!=null) {
 
-		//~ list3.box.width = this.box.width - list3.x - 40 ;
-		list3.x = list2.x + list2.box.width;
-		list3.box.width = list1.box.width ;
-		list3.box.height = list1.box.height ;
-		list3.dirty = true;
-		//~ list3.redraw();
-	}
 
 		//~ trace(e);
 	}

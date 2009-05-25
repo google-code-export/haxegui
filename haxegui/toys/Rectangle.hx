@@ -40,6 +40,7 @@ import haxegui.Component;
 class Rectangle extends Component
 {
 	public var roundness : Float;
+	public var pivot : Point;
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
@@ -51,6 +52,7 @@ class Rectangle extends Component
 		box = new flash.geom.Rectangle(0,0,100,100);
 		color = cast Math.random() * 0xFFFFFF;
 		roundness = 20;
+		pivot = new Point();
 		
 		super.init(opts);
 
@@ -62,7 +64,7 @@ class Rectangle extends Component
 		"
 		this.graphics.clear();
 		this.graphics.beginFill(this.color);
-		this.graphics.drawRoundRect(0,0,this.box.width,this.box.height, this.roundness, this.roundness);
+		this.graphics.drawRoundRect(this.pivot.x,this.pivot.y,this.box.width,this.box.height, this.roundness, this.roundness);
 		this.graphics.endFill();
 		
 		"
