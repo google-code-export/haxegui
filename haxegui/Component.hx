@@ -319,7 +319,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* Excecute redrawing script
 	**/
 	public function redraw(opts:Dynamic=null) {
-		trace(this.name + " redraw");
+// 		trace(this.name + " redraw");
 		ScriptManager.exec(this,"redraw", opts);
 	}
 
