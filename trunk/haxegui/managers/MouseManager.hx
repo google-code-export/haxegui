@@ -99,10 +99,16 @@ class MouseManager extends EventDispatcher
 
 	public inline function onMouseEnter(e:MouseEvent) : Void
 	{
-		//~ Mouse.hide();
+		/** Show fake cursor **/
 		CursorManager.getInstance().showCursor();
+		
+		/** Calculate new mouse delta **/
 		delta = new Point( e.stageX - lastPosition.x, e.stageY - lastPosition.y );
+		
+		/** Inject to fake cursor **/
 		CursorManager.getInstance().inject( e );
+		
+		/** Hold to last mouse position **/
 		lastPosition = new Point( e.stageX, e.stageY );
 	}
 
@@ -110,6 +116,6 @@ class MouseManager extends EventDispatcher
 	{
 		//~ trace(e);
 		CursorManager.getInstance().hideCursor();
-		CursorManager.getInstance()._mc.stopDrag();
+		//~ CursorManager.getInstance()._mc.stopDrag();
 	}
 }

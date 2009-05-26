@@ -46,9 +46,13 @@ import haxegui.controls.ScrollBar;
 
 /**
 *
+* Console for debugging, contains two TextFields, one output for tracing messages
+* and another hscript-parsing input field.
 *
 *
-*
+* @author <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.1
 */
 class Console extends Window, implements ITraceListener
 {

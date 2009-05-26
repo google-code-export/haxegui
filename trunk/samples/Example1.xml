@@ -75,9 +75,9 @@ TODO:
 					</events>
 				</haxegui:controls:Button>
 
-				<haxegui:controls:CheckBox name="CheckBox1" x="30" y="90" />
-				<haxegui:controls:CheckBox name="CheckBox2" x="170" y="90" checked="true" />
-				<haxegui:controls:CheckBox name="CheckBox3" x="310" y="90" disabled="true"/>
+				<haxegui:controls:CheckBox name="CheckBox1" label="CheckBox1" x="30" y="90" />
+				<haxegui:controls:CheckBox name="CheckBox2" label="CheckBox2" x="170" y="90" checked="true" />
+				<haxegui:controls:CheckBox name="CheckBox3" label="CheckBox3" x="310" y="90" disabled="true"/>
 
 				<haxegui:controls:ComboBox name="ComboBox1" x="30" y="130" />
 				<haxegui:controls:ComboBox name="ComboBox2" x="30" y="160" />

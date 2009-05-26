@@ -35,6 +35,7 @@ import haxegui.managers.FocusManager;
 import haxegui.Haxegui;
 import haxegui.Opts;
 import haxegui.managers.ScriptManager;
+import haxegui.managers.CursorManager;
 import haxegui.Window;
 
 import feffects.Tween;
@@ -518,12 +519,14 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** onRollOver Event **/
 	public function onRollOver(e:MouseEvent)
 	{
+		if(CursorManager.getInstance().lock) return;
 		ScriptManager.exec(this,"mouseOver", {event : e});
 	}
 
 	/** onRollOut Event **/
 	public function onRollOut(e:MouseEvent) : Void
 	{
+		if(CursorManager.getInstance().lock) return;
 		ScriptManager.exec(this,"mouseOut", {event : e});
 	}
 

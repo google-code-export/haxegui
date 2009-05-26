@@ -56,20 +56,25 @@ class CheckBox extends AbstractButton
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
-		label = new Label(this, "label", 24, 2);
 
 		super(parent, name, x, y);
 	}
 
 	override public function init(opts:Dynamic=null)
 	{
-		box = new Rectangle(0, 0, 140, 20);
+		box = new Rectangle(0, 0, 20, 20);
 		color = DefaultStyle.BACKGROUND;
 
 		super.init(opts);
+		
+		checked = Opts.optBool(opts, "checked", false);
 
+		// Default to a no-label checkbox
+		if(Opts.optString(opts, "label", null)!=null) {
+		label = new Label(this, "label", 24, 3);
 		label.text = Opts.optString(opts, "label", name);
-		label.init({text: name});
+		label.init();
+		}
 
 	}
 

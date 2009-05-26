@@ -38,6 +38,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
+import flash.events.TextEvent;
 import flash.events.EventDispatcher;
 
 import flash.ui.Keyboard;
@@ -65,6 +66,8 @@ import flash.filters.BitmapFilterQuality;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 import haxegui.Window;
+import haxegui.windowClasses.StatusBar;
+import haxegui.controls.Label;
 import haxegui.controls.Button;
 import haxegui.controls.Slider;
 import haxegui.controls.Stepper;
@@ -73,9 +76,13 @@ import haxegui.controls.ComboBox;
 
 /**
 *
+* RTE class
+* 
 *
 *
-*
+* @author <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.1
 */
 class RichTextEditor extends Window
 {
@@ -120,7 +127,7 @@ class RichTextEditor extends Window
 
 		var btn = new Button(toolbar, "Bold", 180, 8);
 		btn.init({width: 24, height: 24, label: null });
-		var icon = new Image(btn, "icon", 1, 1);
+		var icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-text-bold.png"});
 		btn.setAction("mouseClick",
 		"
@@ -138,7 +145,7 @@ class RichTextEditor extends Window
 
 		btn = new Button(toolbar, "Italic", 204, 8);
 		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 1, 1);
+		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-text-italic.png"});
 		btn.setAction("mouseClick",
 		"
@@ -149,7 +156,7 @@ class RichTextEditor extends Window
 
 		btn = new Button(toolbar, "UnderLine", 228, 8);
 		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 1, 1);
+		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-text-underline.png"});
 		btn.setAction("mouseClick",
 		"
@@ -162,40 +169,71 @@ class RichTextEditor extends Window
 
 		btn = new Button(toolbar, "AlignLeft", 252, 8);
 		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 1, 1);
+		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-justify-left.png"});
 
 
 		btn = new Button(toolbar, "AlignCenter", 276, 8);
 		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 1, 1);
+		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-justify-center.png"});
 
 		btn = new Button(toolbar, "AlignRight", 300, 8);
 		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 1, 1);
+		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-justify-right.png"});
 
 		btn = new Button(toolbar, "AlignFill", 324, 8);
 		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 1, 1);
+		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-justify-fill.png"});
 
 		btn = new Button(toolbar, "Color", 400, 8);
-		btn.setAction("mouseClick",
-		"
-		new haxegui.ColorPicker().init();
-		"
-		);
 		btn.init({width: 32, height: 24, label: null });
+		var col = new Sprite();
+		col.graphics.lineStyle(1, DefaultStyle.BACKGROUND - 0x141414, 1);
+		col.graphics.beginFill(_color);
+		col.graphics.drawRect(4,4,24,16);
+		col.graphics.endFill();
+		var shadow = new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,true,false,false);
+		col.filters = [shadow];
+
+		btn.addChild(col);
+		btn.setAction("mouseClick",
+			"
+				var win = this.getParentWindow();
+				var tf = win.getChildByName(\"Container1\").getChildByName(\"tf\");
+				var spr = this.getChildAt(0);
+				
+				var c = new haxegui.ColorPicker();
+				c.currentColor = win._color;
+				c.init();
+				var container = c.getChildByName(\"Container\");
+				var ok = container.getChildByName(\"Ok\");
+				var cancel = container.getChildByName(\"Cancel\");
+				
+				cancel.setAction(\"mouseClick\",\"this.getParentWindow().destroy();\");
+				ok.addEventListener(flash.events.MouseEvent.MOUSE_UP,
+				function(e) {
+					win._color = c.currentColor;
+					c.destroy();
+					spr.graphics.clear();
+					spr.graphics.beginFill(win._color);
+					spr.graphics.drawRect(4,4,24,16);
+					spr.graphics.endFill();
+					var hex = StringTools.hex(win._color);
+					tf.replaceSelectedText( \"<FONT COLOR='#\"+hex+\"' >\" + tf.selectedText + \"</FONT>\" );
+					});
+			"
+		);
+		
 
 
-		btn = new Button(toolbar, "Html", 430, 8);
-		icon = new Image(btn, "icon", 1, 1);
+		btn = new Button(toolbar, "Html", 432, 8);
+		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/text-html.png"});
 		btn.setAction("mouseClick",
 		"
-		this.getParentWindow()._html = !this.getParentWindow()._html;
 		var html = this.getParentWindow()._html;
 		var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
 		if(html)
@@ -210,13 +248,14 @@ class RichTextEditor extends Window
 		
 		this.removeChild(this.getChildByName(\"icon\"));
 		
-		var img = new haxegui.Image(this, \"icon\", 1, 1);
+		var img = new haxegui.Image(this, \"icon\", 4, 4);
 		if(html)
 			img.src = \"assets/icons/text-html.png\";
 		else
 			img.src = \"assets/icons/text-x-generic.png\";
 		img.init();
 		
+		this.getParentWindow()._html = !this.getParentWindow()._html;
 		"
 		);
 		btn.init({width: 24, height: 24, label: null });
@@ -224,7 +263,7 @@ class RichTextEditor extends Window
 
 
 		
-
+		//~ flash.system.System.useCodePage = false;
 
 		//
 		var container = new Container (this, "Container1", 10, 84);
@@ -234,7 +273,7 @@ class RichTextEditor extends Window
 		tf.name = "tf";
 		tf.x = tf.y = 10;
 		tf.width = this.box.width - 40;
-		tf.height = this.box.height - 140;
+		tf.height = this.box.height - 124;
 		tf.type = flash.text.TextFieldType.INPUT;
 		tf.background = true;
 		tf.backgroundColor = DefaultStyle.INPUT_BACK;
@@ -258,18 +297,64 @@ class RichTextEditor extends Window
 		
 		container.addChild(tf);
 
-		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,true,false,false);
+		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,false,false,false);
+		tf.filters = [shadow];
+
+
+		shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,true,false,false);
 		container.filters = [shadow];
 
+		//
+		var statusbar = new StatusBar(this, "StatusBar", 10, 360);
+		statusbar.init();
 
+		//
+		var info = new Label(statusbar, "Info", 4, 4);
+		info.init();
 
+		tf.addEventListener(TextEvent.TEXT_INPUT, updateInfo);
+		tf.addEventListener(Event.CHANGE, updateInfo);
+		tf.addEventListener(MouseEvent.MOUSE_DOWN, updateInfo);
+		tf.addEventListener(MouseEvent.MOUSE_UP, updateInfo);
+		tf.addEventListener(KeyboardEvent.KEY_DOWN, updateInfo);
 		//~ redraw(null);
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 
 
 
+	public function updateInfo(e:Dynamic) {
+		var container = cast this.getChildByName("Container1");
+		var tf = cast container.getChildByName("tf");
+		
+		
+		var status = cast this.getChildByName("StatusBar");
+		var info = cast status.getChildByName("Info");
 
+		var l = 0;
+		var c = 0;
+		if(Std.is(e, MouseEvent)) {
+			l = tf.getLineIndexAtPoint(e.localX, e.localY);
+			c = tf.getCharIndexAtPoint(e.localX, e.localY);
+			}
+		if(Std.is(e, KeyboardEvent)) {
+			l = tf.getLineIndexOfChar( tf.caretIndex );
+			}
+		
+		var o = {
+			line: l,
+			col: c,
+			numLines: tf.numLines,
+			pos: tf.caretIndex,
+			sel: tf.selectedText.length
+			};
+		var txt = Std.string(o);
+		txt = txt.substr(1, txt.length-2);
+		txt = txt.split(",").join("\t ");
+		info.tf.text = txt;
+		
+	}
+	
 
 
 
@@ -296,7 +381,7 @@ class RichTextEditor extends Window
 
 		if(tf!=null) {
 			tf.width = this.box.width - 30;
-			tf.height = this.box.height - 140;
+			tf.height = this.box.height - 124;
 		}
 		
 		

@@ -56,12 +56,15 @@ class Haxegui {
 		StyleManager.loadStyles(Xml.parse(haxe.Resource.getString("default_style")));
 		StyleManager.setStyle("default");
 		trace("complete");
-
-		var t = new haxe.Timer(100);
+		
+		//TODO: try and link to MouseManager.delta maybe, so when mouse jumps around a lot
+		//		refresh slower, when delta is small try to refresh faster for smoother movement
+		var t = new haxe.Timer(300);
 		t.run = onInterval;
 	}
 
 	private static function onInterval() {
+		if(dirtyList.isEmpty()) return;
 		for(c in dirtyList) {
 			if(c.dirty) {
 				c.redraw({});
@@ -69,7 +72,7 @@ class Haxegui {
 			}
 			dirtyList.remove(c);
 		}
-		MouseManager.getInstance().delta = new flash.geom.Point();
+		//~ MouseManager.getInstance().delta = new flash.geom.Point();
 	}
 
 	/**

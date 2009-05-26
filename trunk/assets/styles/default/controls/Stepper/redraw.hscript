@@ -4,8 +4,8 @@ this.background.graphics.lineStyle (1, this.color - 0x141414, 1, true,
 				    flash.display.JointStyle.ROUND);
 
 this.background.graphics.beginFill (DefaultStyle.INPUT_BACK);
-this.background.graphics.drawRoundRect (0, -1, this.box.width,
-					this.box.height, 8, 8);
+this.background.graphics.drawRoundRectComplex(0, -1, this.box.width - 10,
+					this.box.height, 4, 0, 4, 0);
 this.background.graphics.endFill ();
 
 var shadow =
@@ -13,4 +13,5 @@ var shadow =
 				      0.8, 4, 4, 0.65,
 				      flash.filters.BitmapFilterQuality.HIGH,
 				      true, false, false);
-this.filters =[shadow];
+this.background.filters =[shadow];
+

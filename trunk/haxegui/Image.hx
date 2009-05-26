@@ -37,22 +37,22 @@ class Image extends Component
 
 	public function new(?parent : DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
-		super(parent, name, x, y);
+	    super(parent, name, x, y);
 	}
 
 	override public function init(opts:Dynamic=null) : Void
 	{
 	    
-		super.init(opts);
-		
-		src = Opts.optString(opts, "src", src);
-		
-		var pictLdr:Loader = new Loader();
-		//var pictURLReq:URLRequest = new URLRequest("./assets/banners/banner$
-		//~ var pictURLReq:URLRequest = new URLRequest(Opts.string(opts,"src"));
-		var pictURLReq:URLRequest = new URLRequest(this.src);
-		pictLdr.load(pictURLReq);
-		pictLdr.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
+	    super.init(opts);
+	    
+	    src = Opts.optString(opts, "src", src);
+	    
+	    var pictLdr:Loader = new Loader();
+	    //var pictURLReq:URLRequest = new URLRequest("./assets/banners/banner$
+	    //~ var pictURLReq:URLRequest = new URLRequest(Opts.string(opts,"src"));
+	    var pictURLReq:URLRequest = new URLRequest(this.src);
+	    pictLdr.load(pictURLReq);
+	    pictLdr.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
 
 	}
 
@@ -66,7 +66,9 @@ class Image extends Component
 	static function __init__() {
 		haxegui.Haxegui.register(Image,initialize);
 	}
+	
 	static function initialize() {
+	
 	}
 
 }

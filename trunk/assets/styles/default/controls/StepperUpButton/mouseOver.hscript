@@ -1,2 +1,3 @@
 if(this.disabled) return;
 CursorManager.setCursor(Cursor.HAND);
+this.updateColorTween( new feffects.Tween(0, 50, 275, feffects.easing.Expo.easeOut ) );

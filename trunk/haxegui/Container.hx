@@ -74,6 +74,8 @@ class Container extends Component, implements IContainer
 
 
 	public function onParentResize(e:ResizeEvent) {
+		
+		
 		if(Std.is(parent, Component))
 		{
 			box = untyped parent.box.clone();
@@ -83,8 +85,6 @@ class Container extends Component, implements IContainer
 
 		if(Std.is(parent.parent, ScrollPane)) {
 			box = untyped parent.parent.box.clone();
-		//~ box.width += MouseManager.getInstance().delta.x ;
-		//~ box.height += MouseManager.getInstance().delta.y ;
 		}
 
 		for(i in 0...numChildren)
@@ -98,10 +98,16 @@ class Container extends Component, implements IContainer
 		//
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
-
+			
 		
-		if(e != null)
-			e.updateAfterEvent();
+//~ if(this.filters!=null) {
+//~ var shadow = this.filters[0];
+//~ shadow.quality = flash.filters.BitmapFilterQuality.LOW;
+//~ this.filters = [shadow];
+//~ }
+		
+		//~ if(e != null)
+			//~ e.updateAfterEvent();
 	}
 
 	static function __init__() {

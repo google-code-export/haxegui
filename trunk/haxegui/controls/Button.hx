@@ -36,8 +36,6 @@ import flash.display.DisplayObjectContainer;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilterQuality;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 
@@ -58,21 +56,19 @@ import haxegui.events.MoveEvent;
 */
 class Button extends AbstractButton
 {
-	/**
-	*  @see Label
-	*/
+
 	public var label :Label;
-	public var fmt : TextFormat;
+	//~ public var fmt : TextFormat;
 
 	override public function init(opts:Dynamic=null)
 	{
 		super.init(opts);
-		if(Opts.optString(opts, "label", null)!=null)
-		{
-		label = new Label();
+		
+		// Default to a no-label simple button
+		if(Opts.optString(opts, "label", null)!=null) {
+		label = new Label(this, "label");
 		label.text = Opts.optString(opts, "label", name);
 		label.init();
-		this.addChild(label);
 		}
 	}
 

@@ -224,6 +224,7 @@ class TitleBar extends AbstractButton
 
 	override public function onMouseDown (e:MouseEvent)
 	{
+		CursorManager.getInstance().lock = true;
 		this.updateColorTween( new feffects.Tween(0, -50, 350, feffects.easing.Linear.easeOut) );
 		(cast this.parent).startDrag();
 		var win = (cast this.parent);
@@ -233,6 +234,7 @@ class TitleBar extends AbstractButton
 	
 	override public function onMouseUp (e:MouseEvent)
 	{
+		CursorManager.getInstance().lock = false;
 		this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
 		untyped this.parent.stopDrag();
 

@@ -76,7 +76,7 @@ class StyleManager implements Dynamic
 class DefaultStyle {
 	public static var BACKGROUND:UInt   = 0xADD8E6;
 	public static var BUTTON_FACE:UInt  = 0xCFB675;
-	public static var INPUT_BACK:UInt   = 0xE5E5E5;
+	public static var INPUT_BACK:UInt   = 0xF5F5F5;
 	public static var INPUT_TEXT:UInt   = 0x333333;
 	public static var LABEL_TEXT:UInt   = 0x1A1A1A;
 	public static var DROPSHADOW:UInt   = 0x000000;

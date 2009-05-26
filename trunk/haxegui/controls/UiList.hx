@@ -272,8 +272,8 @@ class UiList extends Component
 				//~ 
 		
 		// if all children are here just redraw them
-		//~ if(numChildren >= data.length ) {
-		if(numChildren >= data.length ) {
+
+		if(numChildren <= data.length ) {
 
 			for(i in 0...numChildren) {
 				var item = cast this.getChildAt(i);
@@ -281,16 +281,15 @@ class UiList extends Component
 				item.redraw();
 			}
 		}
+
 		// if children were'nt yet created 
 		else
 		{
-			//~ var n = Std.int((this.box.height - numChildren*20)/20);
+			//~ var n = Std.int((this.box.height)/20);
 			var n = Std.int((this.box.height)/20);
-			//~ var n = Std.int(this.box.height/20);
 			for (i in 1...n)
 			{
 				var item = new ListItem(this, "item" + i, 0, 20*i+1 );
-
 
 				var str : String = "";
 				if(Std.is(data, Array))
@@ -330,7 +329,7 @@ class UiList extends Component
 		this.graphics.lineStyle(1, DefaultStyle.BACKGROUND - 0x202020);
 		//~ this.graphics.beginFill(this.color);
 		this.graphics.beginFill(DefaultStyle.INPUT_BACK);
-		this.graphics.drawRect(-1,0,this.box.width, this.box.height+1 );
+		this.graphics.drawRect(-1,-1,this.box.width+1, this.box.height+1 );
 		this.graphics.endFill();
 	}
 
