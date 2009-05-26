@@ -80,12 +80,16 @@ import haxegui.controls.Expander;
 
 import feffects.Tween;
 
+
+
 /**
- * 
- * 
- * 
- * 
- */
+* Haxegui Demo Application
+*
+*
+* @author <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.2
+*/
 class Main extends Sprite, implements haxe.rtti.Infos
 {
 

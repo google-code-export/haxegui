@@ -105,7 +105,7 @@ class CursorManager extends EventDispatcher
 	*
 	*/
 	public function init() {
-		//~ Mouse.hide();
+		Mouse.hide();
 		cursor = Cursor.ARROW;
 	}
 
@@ -149,6 +149,10 @@ class CursorManager extends EventDispatcher
 
 		}
 
+		/** Maybe smooths the movment a little... **/
+		p.add( MouseManager.getInstance().delta );
+		//~ p.add( Point.interpolate( new Point(), MouseManager.getInstance().delta, .5 ) );
+		
 		_mc.x = p.x;
 		_mc.y = p.y;
 		
@@ -233,7 +237,7 @@ class CursorManager extends EventDispatcher
 		_mc.focusRect = false;
 		_mc.tabEnabled = false;
 
-		_mc.width = _mc.height = 48;
+		_mc.width = _mc.height = 32;
 		//~ _mc.x = point.x;
 		//~ _mc.y = point.y;
 		//~ inject( new MouseEvent(MouseEvent.MOUSE_MOVE) );

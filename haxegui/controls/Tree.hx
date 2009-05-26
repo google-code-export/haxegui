@@ -42,6 +42,16 @@ import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
 
+/**
+*
+* Tree class
+* 
+*
+*
+* @author <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.1
+*/
 class TreeNode extends AbstractButton
 {
 	

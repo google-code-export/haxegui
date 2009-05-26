@@ -87,7 +87,7 @@ class WindowFrame extends Component
 			this.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove);
 			/* Event for stopping the interval */
 			this.stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, this.onStageMouseUp, false, 0, true);
-			this.startInterval(25);
+			this.startInterval(12);
 			CursorManager.getInstance().lock = true;
 
 			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 12, 12, 0.85, flash.filters.BitmapFilterQuality.LOW, false, false, false);

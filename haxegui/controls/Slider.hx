@@ -175,7 +175,9 @@ class Slider extends Component
 			CursorManager.setCursor (Cursor.ARROW);
 
 		handle.stopDrag();
-		e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
+		
+		//~ if(e.target.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
+			//~ e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
 
 		redraw(color);
 	}
@@ -183,5 +185,13 @@ class Slider extends Component
 	static function __init__() {
 		haxegui.Haxegui.register(Slider);
 	}
-
+	
+	
+	public override function destroy() {
+		
+		if(this.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
+			this.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
+		
+		super.destroy();
+	}
 }

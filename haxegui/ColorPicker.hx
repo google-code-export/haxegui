@@ -109,7 +109,7 @@ class ColorPicker extends Window
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
 		container.filters = [shadow];
 
-
+		//
 		var spec = new Image(container, "Spectrum", 10, 10);
 		spec.init({src: "assets/spectrum.png"});
 
@@ -130,50 +130,54 @@ class ColorPicker extends Window
 		spec.addEventListener(MouseEvent.MOUSE_UP, onMouseUpImage);
 		spec.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMoveImage);
 
-		
+		//
 		colSprite =  new Component(container, "colSprite", 180, 10);
 		colSprite.graphics.lineStyle(2, color - 0x141414);
-		colSprite.graphics.beginFill(0);
+		colSprite.graphics.beginFill(currentColor);
 		colSprite.graphics.drawRect(0,0,40,30);
 		colSprite.graphics.endFill();
 
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
 		colSprite.filters = [shadow];
 
-
+		// 
 		input = new Input(container, "Input", 230, 10);
 		input.init({height: 30});
-		input.tf.text = "0x000000";
+		input.tf.text = "0x"+StringTools.hex(currentColor);
 		input.tf.y += 4;
 
 		//~ redraw (null);
 		//~ menubar.redraw();
 
 		//
-		for(i in 1...4)
-		{
-
-
+		for(i in 1...4)	{
+			
+			//
 			var slider = new Slider(container, "Slider"+i);
 			slider.init({width: 128, color: 0xE6D3CC});
 			slider.move(180, 10+40*i);
-
+			
+			//
 			var stepper = new Stepper(container, "Stepper"+i);
 				stepper.init({step: 1, max: 255, color: 0xE6D3CC});
 			//~ stepper.init();
 			stepper.move(330, 10+40*i);
-
+			
+			//
 			var me = this;
 			slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value=2*e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); me.updateColor(); });
 			stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = .5*e.target.value; me.updateColor(); });
 
 		}
 
+		//
 		var button = new Button(container, "Ok", 180, 190);
-		button.init({color: 0xE6D3CC});
+		button.init({color: 0xE6D3CC, label: "Ok" });
 
+	
+		//
 		var button = new Button(container, "Cancel", 290, 190);
-		button.init({color: 0xE6D3CC});
+		button.init({color: 0xE6D3CC, label: "Cancel" });
 
 
 		//~ if(isSizeable())
@@ -300,5 +304,15 @@ class ColorPicker extends Window
 		input.tf.text = "0x"+StringTools.hex(currentColor);
 		input.tf.setTextFormat( DefaultStyle.getTextFormat() );
 	}
+	
+	
+	public override function destroy() {
+		
+		//~ for(i in 0...numChildren-1)
+			//~ getChildAt(i).removeEventListener()
+		
+		super.destroy();
+	}
+		
 
 }

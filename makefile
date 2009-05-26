@@ -2,7 +2,7 @@
 
 TARGET = assets.swf
 
-all: compile
+all: style compile
 
 compile:
 	swfmill  -v simple library.xml $(TARGET)

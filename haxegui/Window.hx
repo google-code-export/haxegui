@@ -51,6 +51,7 @@ import haxegui.controls.AbstractButton;
 import haxegui.Opts;
 import haxegui.windowClasses.TitleBar;
 import haxegui.windowClasses.WindowFrame;
+import haxegui.windowClasses.StatusBar;
 
 
 enum WindowType
@@ -71,8 +72,6 @@ enum WindowType
 * @author <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
-* @todo frame rendering to hscript
-* @todo corners to components
 */
 class Window extends Component
 {
@@ -80,9 +79,10 @@ class Window extends Component
 	////////////////////////////////////////////////////////////////////////////
 	// Composition
 	////////////////////////////////////////////////////////////////////////////
-	public var titlebar : TitleBar;
-	public var frame 	: WindowFrame;
-	public var type		: WindowType;
+	public var titlebar 	: TitleBar;
+	public var frame 		: WindowFrame;
+	public var statusbar	: StatusBar;
+	public var type			: WindowType;
 
 	
 	
@@ -200,6 +200,8 @@ class Window extends Component
 		//~ 
 		frame.redraw();
 		titlebar.redraw();
+		if(statusbar!=null)
+			statusbar.redraw();
 		
 		ScriptManager.exec(this,"redraw",
 			{

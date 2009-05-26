@@ -55,6 +55,17 @@ class StepperDownButton extends AbstractButton
 	}
 }
 
+
+
+/**
+*
+* Stepper Class
+*
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.1
+*/
 class Stepper extends Component
 {
 	public var up : StepperUpButton;
@@ -109,9 +120,9 @@ class Stepper extends Component
 		tf.type = flash.text.TextFieldType.INPUT;
 		tf.selectable = true;
 		tf.width = box.width - 10;
-		tf.height = 20;
+		tf.height = box.height - 2;
 		tf.x = 4;
-		tf.y = 4;
+		tf.y = 2;
 		tf.text = Std.string(value);
 		tf.embedFonts = true;
 		tf.defaultTextFormat = DefaultStyle.getTextFormat();
