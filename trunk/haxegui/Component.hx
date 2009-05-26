@@ -353,7 +353,6 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* @param updatesPerSecond Number of times per second the interval action will be called
 	**/
 	public function startInterval(updatesPerSecond : Float) : Void {
-		stopInterval();
 		startIntervalDelayed(updatesPerSecond, 0.0);
 	}
 

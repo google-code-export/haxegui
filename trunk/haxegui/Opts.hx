@@ -48,7 +48,7 @@ class Opts {
 		}
 		return rv;
 	}
-	
+
 	public static function classInstance(opts:Dynamic,field:String,classes:Array<Class<Dynamic>>)
 	{
 		var v =  getField(opts,field);
@@ -76,6 +76,12 @@ class Opts {
 	{
 		var v = getField(opts,field);
 		if(v == null) return defaultValue;
+		if(Std.is(v,String)) {
+			switch(v.toLowerCase()) {
+			case "1", "true", "yes": return true;
+			default: return false;
+			}
+		}
 		return cast v;
 	}
 
@@ -130,10 +136,10 @@ class Opts {
 		}
 		return getField(Reflect.field(opts, field.substr(0,idx)), field.substr(idx+1));
 	}
-	
+
 	/**
 	* Takes the input opts and removes all the fields specified.
-	* 
+	*
 	* @param opts Input opts to be modified
 	* @param fields list of field names to remove
 	**/
