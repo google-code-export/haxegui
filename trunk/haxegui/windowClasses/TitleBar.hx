@@ -184,37 +184,26 @@ class TitleBar extends AbstractButton
 		title.setTextFormat (DefaultStyle.getTextFormat());
 
 		this.addChild (title);
-		
+
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
-		
-
 	}
-
 
 	override public function redraw(opts:Dynamic=null):Void
 	{
 		this.box = (cast this.parent).box.clone();
 		title.x = Math.floor((this.box.width - title.width)/2);
-/*
-		if(closeButton != null)
-			closeButton.redraw(opts);
-		if(minimizeButton != null)
-			minimizeButton.redraw(opts);
-		if(minimizeButton != null)
-			maximizeButton.redraw(opts);
-*/
+
 		title.setTextFormat (DefaultStyle.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
 
 		ScriptManager.exec(this,"redraw",
 			{
 				color: Opts.optInt(opts, "color", color),
 			});
-
 	}
 
 	override public function onRollOver (e:MouseEvent)
 	{
-		CursorManager.setCursor(this.cursorOver);		
+		CursorManager.setCursor(this.cursorOver);
 	}
 
 	override public function onRollOut (e:MouseEvent)
@@ -226,19 +215,25 @@ class TitleBar extends AbstractButton
 	{
 		CursorManager.getInstance().lock = true;
 		this.updateColorTween( new feffects.Tween(0, -50, 350, feffects.easing.Linear.easeOut) );
-		(cast this.parent).startDrag();
-		var win = (cast this.parent);
-		win.addEventListener(flash.events.MouseEvent.MOUSE_UP, function(e){ win.stopDrag(); });
+		var win = this.getParentWindow();
+		if(win != null) {
+			win.startDrag();
+			win.addEventListener(flash.events.MouseEvent.MOUSE_UP, function(e){ win.stopDrag(); });
+		}
 		// dispatch(MoveEvent)
 	}
-	
+
 	override public function onMouseUp (e:MouseEvent)
 	{
 		CursorManager.getInstance().lock = false;
 		this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
-		untyped this.parent.stopDrag();
 
-		if(this.hitTestObject( CursorManager.getInstance()._mc )) 
+		var win = this.getParentWindow();
+		if(win != null) {
+			win.stopDrag();
+		}
+
+		if(this.hitTestObject( CursorManager.getInstance()._mc ))
 			CursorManager.setCursor(this.cursorOver);
 		else
 			CursorManager.setCursor(Cursor.ARROW);
@@ -252,5 +247,5 @@ class TitleBar extends AbstractButton
 	{
 		redraw();
 	}
-	
+
 }
