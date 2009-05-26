@@ -155,18 +155,23 @@ class Introspector extends Window
 			//~ bounds		: function(e){ return e.target.getBounds(e.target); },
 			//~ globalX		: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
 			//~ globalY		: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; }
-			init		: "init",
-			initOpts	: "initOpts",
-			visible		: "visible",
-			disabled	: "disabled",
-			alpha		: "alpha",
-			buttonMode	: "buttonMode",
-			focusable	: "focusable",
-			dirty		: "dirty",
-			id			: "id",
-			validate	: "validate"
+			init				: "init",
+			initOpts			: "initOpts",
+			visible				: "visible",
+			disabled			: "disabled",
+			alpha				: "alpha",
+			buttonMode			: "buttonMode",
+			focusable			: "focusable",
+			dirty				: "dirty",
+			id					: "id",
+			validate			: "validate",
 			}
 		
+		if(Std.is(e.target, haxegui.controls.AbstractButton)) {
+			Reflect.setField(props, "autoRepeat", "autoRepeat");
+			Reflect.setField(props, "repeatWaitTime", "repeatWaitTime");
+			Reflect.setField(props, "repeatsPerSecond", "repeatsPerSecond");
+		}
 		
 	
 		list1.data = [];
