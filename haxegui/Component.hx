@@ -319,7 +319,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* Excecute redrawing script
 	**/
 	public function redraw(opts:Dynamic=null) {
-// 		trace(this.name + " redraw");
+		trace(this.name + " redraw");
 		ScriptManager.exec(this,"redraw", opts);
 	}
 
@@ -442,9 +442,6 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 				return;
 			}
 		}
-
-		// if we are the last Component in the chain, simulate the focusOut and focusIn
-		//ar p =
 	}
 
 	/** Placeholder **/

@@ -1,24 +1,12 @@
--main Loader.hx
--lib feffects
--lib hscript
--swf9 loader.swf
--swf-version 9
--swf-header 1024:768:12:3C3C3C
-
---next
 -main Main.hx
 -cp ./
 -cp ./haxegui
 #-lib TweenerHX
 -lib feffects
 -lib hscript
-
 -swf-lib assets.swf
-
 -resource assets/styles/default_style.xml@default_style
-
 ### Output ###
-
 -swf9 main.swf
 -swf-version 9
 -swf-header 1024:768:12:3C3C3C
@@ -27,4 +15,10 @@
 -debug
 -xml output.xml
 
-# var win=root.getChildByName("Console"); trace(win.getAction("redraw")); var bar=win.getChildByName("titlebar"); trace(bar.getAction("redraw"));
+#--next
+#-main Loader.hx
+#-lib feffects
+#-lib hscript
+#-swf9 loader.swf
+#-swf-version 9
+#-swf-header 1024:768:12:3C3C3C
