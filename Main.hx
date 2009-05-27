@@ -139,8 +139,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		  new flash.filters.DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.9, 20, 20, 0.85,
 					flash.filters.BitmapFilterQuality.HIGH, false, false, false);
 
-		logo.filters =[shadow];		
-		
+		logo.filters =[shadow];
+
 
 		// Console to show some debug
 		var console = new Console (flash.Lib.current, 50, 50);
@@ -392,7 +392,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		//~ }
 		//~ );
 
-		
+
 
 
 		var a = new Array<String>();
@@ -401,9 +401,6 @@ class Main extends Sprite, implements haxe.rtti.Infos
 			a.push( k.split('.').slice(-2,-1).join('.') + "." + k.split('.').pop() );
 		a.sort(function(a,b) { if(a==b) return 0; if(a < b) return -1; return 1;});
 		log("Registered scripts: " + Std.string(a));
-		//~ trace("Registered scripts: " + Utils.print_r(a));
-
-
 	}//main
 
 
@@ -418,7 +415,6 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		LayoutManager.loadLayouts(Xml.parse(str));
 		for(k in LayoutManager.layouts.keys())
 			trace("Loaded layout : " + k);
-		//~ LayoutManager.setLayout("DemoLayout");
 		LayoutManager.setLayout(Xml.parse(str).firstElement().get("name"));
 	}
 
@@ -429,6 +425,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 	*/
 	public static function setRedirection(f:Dynamic) {
 		haxe.Log.trace = f;
+		ScriptManager.redirectTraces(f);
 	}
 
 
@@ -455,7 +452,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 		var logo = cast flash.Lib.current.getChildByName("HaxeLogo");
 		logo.x = .5*(stage.stageWidth - logo.width);
-		logo.y = .5*(stage.stageHeight - logo.height);		
+		logo.y = .5*(stage.stageHeight - logo.height);
 	}
 
 	public static dynamic function log(v:Dynamic) {
