@@ -363,7 +363,7 @@
 			<script type="text/hscript" action="mouseDown">
 			<![CDATA[
 				if(!this.disabled && this.autoRepeat) {
-					this.parent.value -= this.parent.step;
+					this.parent.__setValue(this.parent.__getValue() - this.parent.step);
 					this.startIntervalDelayed(this.repeatsPerSecond, this.repeatWaitTime);
 				}
 				this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
@@ -438,7 +438,7 @@
 			</script>
 			<script type="text/hscript" action="interval">
 			<![CDATA[
-				this.parent.value -= this.parent.step;
+				this.parent.__setValue(this.parent.__getValue() - this.parent.step);
 			]]>
 			</script>
 		</events>
@@ -778,7 +778,7 @@
 			<script type="text/hscript" action="mouseDown">
 			<![CDATA[
 				if(!this.disabled && this.autoRepeat) {
-					this.parent.value -= this.parent.step;
+					this.parent.__setValue(this.parent.__getValue() + this.parent.step);
 					this.startIntervalDelayed(this.repeatsPerSecond, this.repeatWaitTime);
 				}
 				this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
@@ -853,7 +853,7 @@
 			</script>
 			<script type="text/hscript" action="interval">
 			<![CDATA[
-				this.parent.value += this.parent.step;
+				this.parent.__setValue(this.parent.__getValue() + this.parent.step);
 			]]>
 			</script>
 		</events>

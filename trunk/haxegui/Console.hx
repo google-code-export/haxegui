@@ -165,7 +165,7 @@ class Console extends Window, implements ITraceListener
 	{
 		// var text:String =  "";
 		var text:String =  "<FONT FACE=\"MONO\" SIZE=\"10\" COLOR=\"#eeeeee\">";
-		text += DateTools.format (Date.now (), "%H:%M:%S") + "\t" ;
+		text += DateTools.format (Date.now (), "%H:%M:%S") + " " ;
 
 		if(Std.is(e,Event))
 		{
