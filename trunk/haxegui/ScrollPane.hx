@@ -66,8 +66,13 @@ class ScrollPane extends Component
 			color = (cast parent).color;
 		//~ box = untyped parent.box.clone();
 		box = new Rectangle(0, 0, 140, 100);
+		//~ fitH = fitV = true;
 
 		super.init(opts);
+
+		fitH = Opts.optBool(opts,"fitH", true);
+		fitV = Opts.optBool(opts,"fitV", true);
+
 
 		content = new Sprite();
 		content.name = "content";
@@ -77,20 +82,15 @@ class ScrollPane extends Component
 		content.cacheAsBitmap = true;
 		this.addChild(content);
 
+		if(Opts.optBool(opts,"vert", true)) {
 		vert = new ScrollBar(this, "vscrollbar", this.box.width - 20, 0, false);
-		vert.x = this.box.width - 20;
-		vert.y = 0;
-		vert.name = "vscrollbar";
-		vert.color = color;
-		vert.init({target: content});
+		vert.init({target: content, color: this.color});
+		}
 
+		if(Opts.optBool(opts,"horz", true)) {
 		horz = new ScrollBar(this, "hscrollbar", null, null, true);
-		//~ horz.y = box.height + 36 ;
-		horz.color = color;
-		horz.init({target: content});
-
-		//~ vert.scrollee = content;
-		//~ horz.scrollee = content;
+		horz.init({target: content, color: this.color});
+		}
 
 		cacheAsBitmap = true;
 		content.cacheAsBitmap = true;
@@ -106,22 +106,25 @@ class ScrollPane extends Component
 	*/
 	public function onParentResize(e:ResizeEvent)
 	{
-		box = untyped parent.box.clone();
+		//~ box = untyped parent.box.clone();
+		if(fitH) box.width = (cast parent).box.width - x - ((vert!=null && vert.visible) ? 20 : 0); 
+		if(fitV) box.height = (cast parent).box.height - y - ((horz!=null && horz.visible) ? 20 : 0);
 
-		box.width -= x;
-		box.height -= y;
+		//~ box.width -= x;
+		//~ box.height -= y;
 
-		if(horz.visible) box.height -= 20;
-		if(vert.visible) box.width -= 20;
+		//~ if(horz.visible) box.height -= 20;
+		//~ if(vert.visible) box.width -= 20;
 
 
-				this.graphics.clear();
-				if(horz.visible || vert.visible)
-				{
-					this.graphics.beginFill(color - 0x141414);
-					this.graphics.drawRect(box.width, box.height,22 ,22);
-					this.graphics.endFill();
-				}
+
+				//~ if( (horz!=null && horz.visible) || (vert!=null && vert.visible))
+				//~ {
+					//~ this.graphics.clear();
+					//~ this.graphics.beginFill(color - 0x141414);
+					//~ this.graphics.drawRect(box.width, box.height, 22, 22);
+					//~ this.graphics.endFill();
+				//~ }
 
 		var r = box.clone();
 		r.x = content.scrollRect.x;
@@ -139,6 +142,9 @@ class ScrollPane extends Component
 
 	}//resize
 
+
+	
+	
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollPane,initialize);
 	}
