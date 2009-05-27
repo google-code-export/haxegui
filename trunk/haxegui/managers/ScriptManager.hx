@@ -165,6 +165,23 @@ class ScriptManager implements Dynamic
 	}
 
 	/**
+	* Redirect "trace" calls to a new handler.
+	*
+	* @param func A Dynamic->?haxe.PosInfos->Void logging function
+	*/
+	public static function redirectTraces(func:Dynamic) {
+		for(so in defaultActions) {
+			so.interp.variables.set( "trace", f );
+		}
+		for(comp in instanceActions) {
+			var hash = instanceActions.get(comp);
+			for(so in hash) {
+				so.interp.variables.set( "trace", f );
+			}
+		}
+	}
+
+	/**
 	* Sets the hscript for a particular event. All events are the same names as the
 	* public fields of the ScriptManager instance.
 	*
