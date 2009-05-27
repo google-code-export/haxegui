@@ -41,7 +41,7 @@ import haxegui.events.ResizeEvent;
 import haxegui.managers.FocusManager;
 import haxegui.managers.StyleManager;
 import flash.events.FocusEvent;
-
+import haxegui.windowClasses.StatusBar;
 
 /**
 *
@@ -82,16 +82,19 @@ class Introspector extends Window
 		menubar.init ();
 
 		//
-		var scrollpane = new ScrollPane(this, "ScrollPane", 10, 44);
-		scrollpane.init({});
+		var scrollpane = new ScrollPane(this, "ScrollPane1", 10, 44);
+		scrollpane.init({horz: false});
 	
 		//
 		var container = new Container(scrollpane, "Container", 0, 0);
 		container.init({});
 
+		//
+		scrollpane = new ScrollPane(container, "ScrollPane2", 0, 0);
+		scrollpane.init({width: 190, fitH: false});
 
 		//
-		tree = new Tree(container, "Tree", 0, 0);
+		tree = new Tree(scrollpane, "Tree", 0, 0);
 		tree.data = { 
 			var1 : 1, 
 			var2: 2, 
@@ -115,7 +118,7 @@ class Introspector extends Window
 					var2: 2
 				}
 			};
-		tree.init({width: 200});
+		tree.init({width: 250});
 		
 		
 		//
@@ -126,7 +129,11 @@ class Introspector extends Window
 		list2 = new UiList(container, "Values", 350, 0);
 		list2.init({text: "Value"});
 		
+		//
+		//~ var statusbar = new StatusBar(this, "StatusBar", 10, 360);
+		//~ statusbar.init();
 
+	
 	
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		
@@ -139,7 +146,7 @@ class Introspector extends Window
 	{
 		if(!Std.is(e, flash.events.Event)) return;
 		if(!Std.is(e.target, Component)) return;
-		if(untyped this.getChildByName("ScrollPane").contains(e.target)) return;
+		if(untyped this.getChildByName("ScrollPane1").contains(e.target)) return;
 		
 		
 		var self = this;
@@ -173,6 +180,7 @@ class Introspector extends Window
 			Reflect.setField(props, "repeatsPerSecond", "repeatsPerSecond");
 		}
 		
+
 	
 		list1.data = [];
 		list2.data = [];
@@ -251,7 +259,7 @@ class Introspector extends Window
 				if(Std.is(list2.data[i], String)) {
 					src = "assets/icons/types/type-string.png";
 					var inpt = new Input(cast list2.getChildAt(i), "Input", 2, 2);
-					inpt.init({width: 16, height: 16, checked: list2.data[i], label: list2.data[i] });
+					inpt.init({width: 100, height: 16, checked: list2.data[i], label: list2.data[i] });
 					untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
 					}
 				else
@@ -268,6 +276,7 @@ class Introspector extends Window
 				else
 				if(Std.is( list2.data[i], Int ) || Std.is( list2.data[i], UInt ) ) {
 					src = "assets/icons/types/type-integer.png";
+				/*	
 					var stp = new Stepper(cast list2.getChildAt(i), "Stepper", 2, 2);
 					stp.init({height: 16, value: list2.data[i], label: list2.data[i] });
 					untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
@@ -275,6 +284,7 @@ class Introspector extends Window
 					untyped list2.getChildAt(i).setAction("mouseOut", "");
 					untyped list2.getChildAt(i).setAction("mouseDown", "");
 					untyped list2.getChildAt(i).setAction("mouseUp", "");
+				*/
 					}
 				else
 				if(Std.is( list2.data[i], Float ))
@@ -320,5 +330,12 @@ class Introspector extends Window
 			//~ trace(e);
 	}
 	
+
+	public override function destroy() {
+		this.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged);
+		super.destroy();
+	}
+
+
 	
 }
