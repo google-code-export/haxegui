@@ -153,6 +153,11 @@ class Stepper extends Component
 			this.value = max;
 		if(this.value < min)
 			this.value = min;
+		//this.dirty = true;
+		if(this.tf != null)
+			this.tf.text = Std.string(value);
+		else
+			this.dirty = true;
 		dispatchEvent(new Event(Event.CHANGE));
 		return v;
 	}

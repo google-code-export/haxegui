@@ -545,9 +545,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	public function onMouseDown(e:MouseEvent) : Void
 	{
-		if(e.target == this)
-			trace("onMouseDown " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDown"));
-		FocusManager.getInstance().setFocus(this);
+// 		if(e.target == this) {
+// 			trace("onMouseDown " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDown") + " hasAction:" + hasAction("mouseDown"));
+// 			trace(getAction("mouseDown"));
+// 		}
 		ScriptManager.exec(this,"mouseDown", {event : e});
 	}
 

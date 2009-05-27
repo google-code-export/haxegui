@@ -171,12 +171,12 @@ class ScriptManager implements Dynamic
 	*/
 	public static function redirectTraces(func:Dynamic) {
 		for(so in defaultActions) {
-			so.interp.variables.set( "trace", f );
+			so.interp.variables.set( "trace", func );
 		}
 		for(comp in instanceActions) {
 			var hash = instanceActions.get(comp);
 			for(so in hash) {
-				so.interp.variables.set( "trace", f );
+				so.interp.variables.set( "trace", func );
 			}
 		}
 	}
