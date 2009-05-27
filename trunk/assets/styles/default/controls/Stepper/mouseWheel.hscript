@@ -1,0 +1,3 @@
+if(!this.disabled) 
+	this.__setValue(this.__getValue() + event.delta * this.step);
+

@@ -144,7 +144,6 @@ class Stepper extends Component
 		dirty = true;
 
 		this.tf.text = Std.string(value);
-		//~ this.tf.setTextFormat(StyleManager.getTextFormat(12));
 		this.tf.setTextFormat(DefaultStyle.getTextFormat());
 	}
 
@@ -155,16 +154,7 @@ class Stepper extends Component
 	private function __setValue(v:Float) : Float {
 		if(this.value == v)
 			return v;
-		this.value = v;
-		if(this.value > max)
-			this.value = max;
-		if(this.value < min)
-			this.value = min;
-		//this.dirty = true;
-		if(this.tf != null)
-			this.tf.text = Std.string(value);
-		else
-			this.dirty = true;
+		this.value = Math.max( min, Math.min( max, v ));
 		dispatchEvent(new Event(Event.CHANGE));
 		return v;
 	}
