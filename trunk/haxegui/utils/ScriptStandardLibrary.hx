@@ -193,6 +193,7 @@ class ScriptStandardLibrary
 		interp.variables.set("Opts", haxegui.Opts);
 		interp.variables.set("PopupMenu", haxegui.PopupMenu);
 		interp.variables.set("ScrollPane", haxegui.ScrollPane);
+		interp.variables.set("ScriptManager", haxegui.managers.ScriptManager);
 		interp.variables.set("Stats", haxegui.Stats);
 		interp.variables.set("StyleManager", StyleManager);
 		interp.variables.set("ToolBar", haxegui.ToolBar);
@@ -200,8 +201,6 @@ class ScriptStandardLibrary
 		interp.variables.set("Window", haxegui.Window);
 		interp.variables.set("WindowManager", haxegui.managers.WindowManager);
 		interp.variables.set("XmlParser", haxegui.XmlParser);
-		interp.variables.set("ScriptStandardLibrary", haxegui.utils.ScriptStandardLibrary);
-		//~ interp.variables.set("TitleBar", haxegui.windowClasses.TitleBar);
 
 		interp.variables.set("windowClasses", {
 				TitleBar			: haxegui.windowClasses.TitleBar,
@@ -213,7 +212,8 @@ class ScriptStandardLibrary
 			{
 				ResizeEvent			: haxegui.events.ResizeEvent,
 				MoveEvent			: haxegui.events.MoveEvent,
-				MenuEvent			: haxegui.events.MenuEvent
+				MenuEvent			: haxegui.events.MenuEvent,
+				WindowEvent			: haxegui.events.WindowEvent,
 			}
 			);
 
@@ -231,14 +231,14 @@ class ScriptStandardLibrary
 				Stepper				: haxegui.controls.Stepper,
 				UiList				: haxegui.controls.UiList,
 			});
-			
+
 
 		interp.variables.set("toys",
 			{
-				Rectangle			: haxegui.toys.Rectangle			
+				Rectangle			: haxegui.toys.Rectangle
 			}
 			);
-		
+
 	}
 
 	//grep -e "static var" /usr/share/haxe/std/flash9/ui/Keyboard.hx | awk '{print "\t\t\t",$3," : Keyboard.",$3,","}' >> haxegui/utils/ScriptStandardLibrary.hx
