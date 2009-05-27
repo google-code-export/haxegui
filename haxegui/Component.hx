@@ -72,6 +72,12 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Does object validate ? **/
 	public var validate : Bool;
 
+	/** Fit horizontaly to parent **/
+	public var fitH : Bool;
+
+	/** Fit verticaly to parent **/
+	public var fitV : Bool;
+
 //~ public var margin : Rectangle;
 //~ public var padding : Array<Float>;
 //~ public var getBox : Void -> Rectangle;
@@ -148,6 +154,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.alpha = Opts.optFloat(opts, "alpha", this.alpha);
 		this.buttonMode = Opts.optBool(opts, "buttonMode", false);
 		this.visible = Opts.optBool(opts, "visible", true);
+		this.fitH = Opts.optBool(opts,"fitH", false);
+		this.fitV = Opts.optBool(opts,"fitV", false);
+
 
 		var aOps = Opts.clone(opts);
 		Opts.removeFields(aOps, ["name","disabled","width","height","x","y","color","alpha","buttonMode","visible"]);
@@ -529,15 +538,15 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Mouse click **/
 	public function onMouseClick(e:MouseEvent) : Void
 	{
-		//~ if(e.target == this)
-			//~ trace("onMouseClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseClick"));
+		if(e.target == this)
+			trace("onMouseClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseClick"));
 		ScriptManager.exec(this,"mouseClick", {event : e});
 	}
 
 	public function onMouseDown(e:MouseEvent) : Void
 	{
-		//~ if(e.target == this)
-			//~ trace("onMouseDown " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDown"));
+		if(e.target == this)
+			trace("onMouseDown " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDown"));
 		FocusManager.getInstance().setFocus(this);
 		ScriptManager.exec(this,"mouseDown", {event : e});
 	}
