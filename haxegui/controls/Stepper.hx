@@ -113,6 +113,7 @@ class Stepper extends Component
 		max = Opts.optFloat(aOpts,"max", max);
 		Opts.removeFields(aOpts, ["value","step","min","max"]);
 
+
 		super.init(aOpts);
 		// since we removed fields, reset the initOpts
 		this.initOpts = Opts.clone(opts);
@@ -128,8 +129,14 @@ class Stepper extends Component
 		tf.defaultTextFormat = DefaultStyle.getTextFormat();
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 
-		up.init({color: this.color});
-		down.init({color: this.color});
+
+		var bOpts = Opts.clone(aOpts);
+		Opts.optBool(bOpts, "autoRepeat", true);
+		Opts.optFloat(bOpts, "repeatsPerSecond", 1);
+		Opts.optFloat(bOpts, "repeatWaitTime", 1);
+
+		up.init(bOpts);
+		down.init(bOpts);
 	}
 
 	public function onChanged(?e:Dynamic)
