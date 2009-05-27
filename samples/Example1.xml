@@ -19,7 +19,6 @@ TODO:
 
 
 	<haxegui:Window name="Xml hScript Widgets Window" x="300" y="30" width="512" height="512" sizeable="true" >
-
 				<events>
 					<script type="text/hscript" action="onLoaded">
 					<![CDATA[
@@ -87,9 +86,9 @@ TODO:
 				<haxegui:controls:Slider name="Slider2" x="200" y="160" />
 				<haxegui:controls:Slider name="Slider3" x="200" y="190" />
 
-				<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="128"/>
-				<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="128" />
-				<haxegui:controls:Stepper name="Stepper3" x="360" y="190" value="0" step="10" max="128" />
+				<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="128" autoRepeat="true" repeatsPerSecond="20" repeatWaitTime=".5" />
+				<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="128" autoRepeat="true" repeatsPerSecond="10" repeatWaitTime=".5" />
+				<haxegui:controls:Stepper name="Stepper3" x="360" y="190" value="0" step="10" max="128" autoRepeat="false" />
 
 				<haxegui:controls:Input name="Input1" x="30" y="220" />
 				<haxegui:controls:Input name="Input2" x="30" y="250" />
@@ -100,7 +99,11 @@ TODO:
 				<haxegui:controls:RadioButton name="RadioButton3" x="30" y="370" disabled="true" />
 				<haxegui:controls:RadioButton name="RadioButton4" x="30" y="400" selected="true" disabled="true" />
 
-				<haxegui:controls:UiList name="List1" x="210" y="250" >
+				<haxegui:controls:Expander name="Expander1" x="430" y="80" >
+						<haxegui:controls:UiList name="List3" x="20" y="20" data="@StringArray" visible="false" />
+				</haxegui:controls:Expander>
+
+				<haxegui:controls:UiList name="List2" x="210" y="250" >
 					<haxegui:DataSource>
 						<List>
 							<String>Apples</String>
@@ -117,7 +120,7 @@ TODO:
 						]]></script>
 					</events>
 				</haxegui:controls:UiList>
-				<haxegui:controls:UiList name="List2" x="360" y="250" width="300" data="@StringArray" />
+				<haxegui:controls:UiList name="List3" x="360" y="250" width="300" data="@StringArray" />
 
 			</haxegui:Container>
 
