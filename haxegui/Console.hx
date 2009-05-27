@@ -78,10 +78,10 @@ class Console extends Window, implements ITraceListener
 	{
 // 		if(opts == null) opts = {};
 // 		super.init({name:"Console", x:x, y:y, width:width, height:height, sizeable:true, color: 0x666666});
-		
+
 		type = WindowType.ALWAYS_ON_TOP;
 		super.init(opts);
-			
+
 		box = new Rectangle (0, 0, 640, 240);
 
 		input = new TextField();
@@ -101,8 +101,8 @@ class Console extends Window, implements ITraceListener
 		output.htmlText = "";
 		output.width = box.width - 40;
 		output.height = box.height - 70;
-		//~ output.background = true;
-		//~ output.backgroundColor = 0x222222;
+		// output.background = true;
+		// output.backgroundColor = 0x222222;
 		output.border = true;
 		output.wordWrap = true;
 		output.multiline = true;
@@ -125,13 +125,13 @@ class Console extends Window, implements ITraceListener
 		input.height = 20;
 		input.addEventListener (KeyboardEvent.KEY_DOWN, onInputKeyDown);
 
-		//~ container.box.width -= 20;
-		//~ vert = new ScrollBar(container, "vscrollbar");
-		//~ vert = new ScrollBar(this, "vscrollbar");
-		//~ vert.x = box.width - 20;
-		//~ vert.y = 20;
-		//~ vert.color = color;
-		//~ vert.init(content);
+		// container.box.width -= 20;
+		// vert = new ScrollBar(container, "vscrollbar");
+		// vert = new ScrollBar(this, "vscrollbar");
+		// vert.x = box.width - 20;
+		// vert.y = 20;
+		// vert.color = color;
+		// vert.init(content);
 		vert = new ScrollBar(container, "vscrollbar");
 		vert.init({target : output, color: this.color});
 
@@ -144,12 +144,12 @@ class Console extends Window, implements ITraceListener
 		container.addChild(output);
 		container.addChild(input);
 
-		//~ if(isSizeable())
-		//~ {
-			//~ bl.y = frame.height - 32;
-			//~ br.x = frame.width - 32;
-			//~ br.y = frame.height - 32;
-		//~ }
+		// if(isSizeable())
+		// {
+			// bl.y = frame.height - 32;
+			// br.x = frame.width - 32;
+			// br.y = frame.height - 32;
+		// }
 
 		parser = new hscript.Parser();
 		history = new Array<String>();
@@ -163,7 +163,7 @@ class Console extends Window, implements ITraceListener
 */
 	public function log( e : Dynamic, ?inf : haxe.PosInfos ) : Void
 	{
-		//~ var text:String =  "";
+		// var text:String =  "";
 		var text:String =  "<FONT FACE=\"MONO\" SIZE=\"10\" COLOR=\"#eeeeee\">";
 		text += DateTools.format (Date.now (), "%H:%M:%S") + "\t" ;
 
@@ -174,6 +174,12 @@ class Console extends Window, implements ITraceListener
 				text += ":"+e.target.name;
 			text += "</B>\t" ;
 		}
+
+		#if debug
+			if(inf != null) {
+				text += inf.fileName + ":" + inf.lineNumber + ":";
+			}
+		#end
 
 		text += e ;
 
@@ -234,7 +240,7 @@ class Console extends Window, implements ITraceListener
 				interp.variables.set( "print_r", Utils.print_r );
 				interp.variables.set( "ls", Utils.print_r(pwd) );
 
-					//~ trace( ret==null ? "\n" : ret );
+					// trace( ret==null ? "\n" : ret );
 				trace(interp.execute(program));
 			}
 			catch(e : Dynamic)
