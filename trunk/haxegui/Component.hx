@@ -133,6 +133,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
 		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
 		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
+		this.addEventListener (MouseEvent.MOUSE_WHEEL,  onMouseWheel, false, 0, true);
 		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
 		this.addEventListener (ResizeEvent.RESIZE, onResize, false, 0, true);
 		this.addEventListener (Event.ADDED, onAdded, false, 0, true);
@@ -559,6 +560,11 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		ScriptManager.exec(this,"mouseUp", {event : e});
 	}
 
+	public function onMouseWheel(e:MouseEvent) : Void
+	{
+		ScriptManager.exec(this,"mouseWheel", {event : e});
+	}
+	
 	public function onKeyDown(e:KeyboardEvent)
 	{
 	}
