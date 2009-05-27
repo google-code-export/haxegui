@@ -49,6 +49,8 @@ typedef ScriptObject = {
 */
 class ScriptManager implements Dynamic
 {
+	public static var debug : Bool = false;
+	public static var debug_events : Array<String> = new Array<String>();
 	static var defaultActions : Hash<ScriptObject>;
 	static var instanceActions : TypedDictionary<Component,Hash<ScriptObject>>;
 	static var initialized : Bool;
@@ -83,6 +85,13 @@ class ScriptManager implements Dynamic
 	**/
 	public static function exec(inst:Component, action:String, options:Dynamic) : Dynamic {
 		try {
+			if(ScriptManager.debug) {
+				if(debug_events != null && Lambda.has(debug_events, action)) {
+					var a = getInstanceActionObject(inst, action);
+					if(a != null && a.code != null)
+						trace(a.code);
+				}
+			}
 			return doCall(inst, getInstanceActionObject(inst, action), options);
 		} catch(e:Dynamic) {
 			if(e != "No default action.") {
