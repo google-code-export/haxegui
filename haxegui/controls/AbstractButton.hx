@@ -124,6 +124,9 @@ class AbstractButton extends Component
 		if(box.isEmpty())
 			box = new Rectangle(0,0,90,30);
 		super.init(opts);
+		autoRepeat = Opts.optBool(opts,"autoRepeat", true);
+		repeatsPerSecond = Opts.optFloat(opts,"repeatsPerSecond", 1);
+		repeatWaitTime = Opts.optFloat(opts,"repeatWaitTime", 1);
 	}
 
 	static function __init__() {
