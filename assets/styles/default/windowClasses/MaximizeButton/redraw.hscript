@@ -8,7 +8,7 @@ matrix.createGradientBox (12, 12, Math.PI / 2, 0, 0);
 this.graphics.lineStyle (1,
 			 Math.max (0,
 				   Math.min (0xFFFFFF,
-					     this.color - 0x282828)), 2, true,
+					     this.color - 0x191919)), 2, true,
 			 flash.display.LineScaleMode.NONE,
 			 flash.display.CapsStyle.ROUND,
 			 flash.display.JointStyle.ROUND);

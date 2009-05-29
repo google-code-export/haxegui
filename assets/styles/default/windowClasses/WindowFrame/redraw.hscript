@@ -4,7 +4,7 @@ this.graphics.lineStyle (1,
 			 Math.max (0,
 				   Math.min (0xFFFFFF,
 					     this.parent.color - 0x282828)),
-			 2, true, flash.display.LineScaleMode.NONE,
+			 1, true, flash.display.LineScaleMode.NONE,
 			 flash.display.CapsStyle.ROUND,
 			 flash.display.JointStyle.ROUND);
 			 			 
@@ -15,15 +15,18 @@ this.graphics.endFill ();
 
 if(!this.parent.isModal())
 {
+	/* BL */
+	this.graphics.lineStyle(0,0,0);
+	this.graphics.beginFill( Math.max (0, Math.min (0xFFFFFF, this.parent.color | 0x202020)), .5);
+	this.graphics.drawRoundRectComplex(0,this.parent.box.height-10,20,20, 0, 0, 4, 0);
+	this.graphics.drawRect(10,this.parent.box.height-10,10,10);
+	this.graphics.endFill();
+
+	/* BR */
 	this.graphics.lineStyle(0,0,0);
 	this.graphics.beginFill( Math.max (0, Math.min (0xFFFFFF, this.parent.color | 0x202020)), .5);
 	this.graphics.drawRoundRectComplex(this.parent.box.width-10,this.parent.box.height-10,20,20, 0, 0, 0, 4);
 	this.graphics.drawRect(this.parent.box.width-10,this.parent.box.height-10,10,10);
 	this.graphics.endFill();
 
-	this.graphics.lineStyle(0,0,0);
-	this.graphics.beginFill( Math.max (0, Math.min (0xFFFFFF, this.parent.color | 0x202020)), .5);
-	this.graphics.drawRoundRectComplex(0,this.parent.box.height-10,20,20, 0, 4, 0, 0);
-	this.graphics.drawRect(10,this.parent.box.height-10,10,10);
-	this.graphics.endFill();
 }
