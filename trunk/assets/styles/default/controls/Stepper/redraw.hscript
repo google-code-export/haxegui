@@ -3,7 +3,7 @@ this.background.graphics.lineStyle (1, this.color - 0x141414, 1, true,
 				    flash.display.CapsStyle.ROUND,
 				    flash.display.JointStyle.ROUND);
 
-this.background.graphics.beginFill (DefaultStyle.INPUT_BACK);
+this.background.graphics.beginFill ( this.disabled ? DefaultStyle.BACKGROUND : DefaultStyle.INPUT_BACK );
 this.background.graphics.drawRoundRectComplex(0, -1, this.box.width - 10,
 					this.box.height, 4, 0, 4, 0);
 this.background.graphics.endFill ();
