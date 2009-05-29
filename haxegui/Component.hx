@@ -36,6 +36,7 @@ import haxegui.Haxegui;
 import haxegui.Opts;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.CursorManager;
+import haxegui.managers.TooltipManager;
 import haxegui.Window;
 
 import feffects.Tween;
@@ -94,6 +95,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Last timestamp when an interval occured **/
 	private var lastInterval : Float;
 
+
+	
 	/**
 	*
 	**/
@@ -103,32 +106,30 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.id = Component.nextId++;
 
 		color = 0xF00FFF;
+		box = new Rectangle();
 
 		tabEnabled = mouseEnabled = true;
 		buttonMode = false;
 		focusable = true;
+		doubleClickEnabled = true;
+		disabled = false;
 
 		if(name!=null)
 			this.name = name;
 		else
 			this.name = Type.getClassName(Type.getClass(this)).split(".").pop();
 
-
+		text = name;	
+		
 		if(parent!=null)
 			parent.addChild(this);
-
-		box = new Rectangle();
-
-		text = name;
-		disabled = false;
-
+		
+		//
 		move(x,y);
-
-		//~ margin = new Rectangle();
-		//~ trace("New " + this);
 
 		// Listeners
 		this.addEventListener (MouseEvent.CLICK, onMouseClick, false, 0, true);
+		this.addEventListener (MouseEvent.DOUBLE_CLICK, onMouseDoubleClick, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
 		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
@@ -143,6 +144,12 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.addEventListener (FocusEvent.FOCUS_OUT, onFocusOut, false, 0, true);
 	}
 
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	public function init(opts:Dynamic=null) {
 		if(opts == null) opts = {};
 		this.name = Opts.optString(opts, "name", this.name);
@@ -526,6 +533,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	public function onRollOver(e:MouseEvent)
 	{
 		if(CursorManager.getInstance().lock) return;
+		if(text!=null) TooltipManager.getInstance().create(this);
 		ScriptManager.exec(this,"mouseOver", {event : e});
 	}
 
@@ -533,7 +541,17 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	public function onRollOut(e:MouseEvent) : Void
 	{
 		if(CursorManager.getInstance().lock) return;
+		if(text!=null) TooltipManager.getInstance().destroy();
 		ScriptManager.exec(this,"mouseOut", {event : e});
+	}
+
+
+	/** Mouse double-click **/
+	public function onMouseDoubleClick(e:MouseEvent) : Void
+	{
+		if(e.target == this)
+			trace("onMouseDoubleClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDoubleClick"));
+		ScriptManager.exec(this,"mouseDoubleClick", {event : e});
 	}
 
 	/** Mouse click **/
@@ -541,6 +559,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	{
 		if(e.target == this)
 			trace("onMouseClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseClick"));
+		if(text!=null) TooltipManager.getInstance().destroy();
 		ScriptManager.exec(this,"mouseClick", {event : e});
 	}
 
