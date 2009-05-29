@@ -1,24 +1,20 @@
 -main Main.hx
+### ClassPaths ###
 -cp ./
 -cp ./haxegui
-#-lib TweenerHX
+### haxelibs Dependencies ###
 -lib feffects
 -lib hscript
+### Resources ###
 -swf-lib assets.swf
 -resource assets/styles/default_style.xml@default_style
+### Flags ###
+--flash-use-stage
+--flash-strict
+#-debug
 ### Output ###
 -swf9 main.swf
 -swf-version 9
 -swf-header 1024:768:12:3C3C3C
---flash-use-stage
---flash-strict
--debug
--xml output.xml
+#-xml output.xml
 
-#--next
-#-main Loader.hx
-#-lib feffects
-#-lib hscript
-#-swf9 loader.swf
-#-swf-version 9
-#-swf-header 1024:768:12:3C3C3C

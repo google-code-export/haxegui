@@ -557,18 +557,18 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Mouse click **/
 	public function onMouseClick(e:MouseEvent) : Void
 	{
-		if(e.target == this)
-			trace("onMouseClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseClick"));
+		#if debug
+		trace(e);
+		#end
 		if(text!=null) TooltipManager.getInstance().destroy();
 		ScriptManager.exec(this,"mouseClick", {event : e});
 	}
 
 	public function onMouseDown(e:MouseEvent) : Void
 	{
-// 		if(e.target == this) {
-// 			trace("onMouseDown " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDown") + " hasAction:" + hasAction("mouseDown"));
-// 			trace(getAction("mouseDown"));
-// 		}
+		#if debug
+		trace(e);
+		#end
 		ScriptManager.exec(this,"mouseDown", {event : e});
 	}
 
