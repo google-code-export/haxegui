@@ -40,7 +40,6 @@ import haxegui.Component;
 
 
 class Container extends Component, implements IContainer
-//~ , implements IChildList
 {
 	private var _clip : Bool;
 
@@ -55,10 +54,7 @@ class Container extends Component, implements IContainer
 
 	public override function addChild(o : DisplayObject) : DisplayObject
 	{
-		//~ box = transform.pixelBounds.clone();
-		//~ onResize(new ResizeEvent(ResizeEvent.RESIZE));
-		//~ box = box.union(o.getBounds(this));
-		this.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		dirty = true;
 		return super.addChild(o);
 	}
 
@@ -66,15 +62,14 @@ class Container extends Component, implements IContainer
 	override public function init(opts : Dynamic=null)
 	{
 		super.init(opts);
-
-		//~ if(this.parent!=null)
+		text = null;
+		
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 
 
 	public function onParentResize(e:ResizeEvent) {
-		
 		
 		if(Std.is(parent, Component))
 		{
@@ -93,21 +88,8 @@ class Container extends Component, implements IContainer
 				this.box.width -= 20;
 			}
 
-		//redraw(null);
 		dirty = true;
-		//
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-
-			
-		
-//~ if(this.filters!=null) {
-//~ var shadow = this.filters[0];
-//~ shadow.quality = flash.filters.BitmapFilterQuality.LOW;
-//~ this.filters = [shadow];
-//~ }
-		
-		//~ if(e != null)
-			//~ e.updateAfterEvent();
 	}
 
 	static function __init__() {
