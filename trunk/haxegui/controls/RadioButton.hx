@@ -73,12 +73,6 @@ class RadioButton extends AbstractButton
 
 		selected = Opts.optBool(opts, "selected", selected);
 
-
-		// drop-shadow filter
-		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
-		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
-		//~ this.filters = [shadow];
-
 		label = new Label(this, "label", 24, 2);
 		label.init({innerData: name});
 		

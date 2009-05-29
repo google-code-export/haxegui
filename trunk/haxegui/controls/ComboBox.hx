@@ -138,27 +138,31 @@ class ComboBox extends Component
 		dropButton.init(opts);
 		dropButton.setAction("mouseClick",
 		"
-		if(parent.list==null) {
-			parent.list = new haxegui.controls.UiList(root);
-			var list = parent.list;
-			list.color = this.color;
-			for(i in 0...5) list.data.push(\"item\"+i);
-			list.init();
-			list.removeChild(list.header);
-		 	var p = new flash.geom.Point( parent.x, parent.y );
-			p = this.parent.parent.localToGlobal(p);
-			list.x = p.x;
-			list.y = p.y;
-			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
-			list.filters = [shadow];
-			function down(e) { 
-				trace(e); 
-				if(list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
-					list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
-				list.parent.removeChild(list);
-				parent.list = null;
-				}
-			list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+		if(!this.disabled) {
+		  parent.list = new haxegui.controls.UiList(root, this.parent.name+\"List\");
+		  parent.list.init();
+		  parent.list.color = parent.color;
+		  var p = new flash.geom.Point( parent.x, parent.y );		 	
+		  p = parent.parent.localToGlobal(p);
+		  parent.list.x = p.x + 1;
+		  parent.list.y = p.y + 20;
+		  parent.list.box.width = parent.box.width - 22;
+		  parent.list.box.height = 200;
+		  parent.list.removeChild(parent.list.header);
+		  parent.list.data = [];
+		  for(i in 1...10)
+			parent.list.data.push(this.parent.name+\"_ListItem\"+i);
+		  parent.list.redraw();
+		  var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
+		  parent.list.filters = [shadow];
+		  function down(e) { 
+			  trace(e); 
+			  if(parent.list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
+				  parent.list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+			  parent.list.parent.removeChild(parent.list);
+			  parent.list = null;
+			  }
+		  parent.list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
 		}
 		"
 		);

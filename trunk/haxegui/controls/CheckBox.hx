@@ -64,8 +64,9 @@ class CheckBox extends AbstractButton
 	{
 		box = new Rectangle(0, 0, 20, 20);
 		color = DefaultStyle.BACKGROUND;
-
+		
 		super.init(opts);
+		text = name;
 		
 		checked = Opts.optBool(opts, "checked", false);
 

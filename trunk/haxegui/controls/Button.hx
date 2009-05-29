@@ -63,6 +63,7 @@ class Button extends AbstractButton
 	override public function init(opts:Dynamic=null)
 	{
 		super.init(opts);
+		text = name;
 		
 		// Default to a no-label simple button
 		if(Opts.optString(opts, "label", null)!=null) {

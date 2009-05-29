@@ -69,11 +69,10 @@ class Expander extends AbstractButton
 
 		label = new Label(this, "label", 20, 0);
 		//~ label.text = Opts.optString(opts, "label", name);
-		label.init({innerData: name});
+		label.init({innerData: this.name});
 
 
 		super.init(opts);
-
 
 	}
 
@@ -81,14 +80,16 @@ class Expander extends AbstractButton
 
 	override public function onMouseClick(e:MouseEvent) {
 		if(disabled) return;
-		expanded = !expanded;
 		e.stopImmediatePropagation();
+		expanded = !expanded;
 		for(i in 0...numChildren)
 			{
 			if(this.getChildAt(i) != label )
 				this.getChildAt(i).visible = expanded;
 			}
 		dispatchEvent(new Event(Event.CHANGE));
+		
+		super.onMouseClick(e);
 	}
 
 

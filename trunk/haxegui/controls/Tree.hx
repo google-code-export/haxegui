@@ -117,49 +117,38 @@ class Tree extends Component {
 		
 		super.init(opts);
 
-		var last = Reflect.fields(data).length;
 		var i = 0;
+		//~ var last = Reflect.fields(data).length;	
 		//~ for(i in 0...last)
 		for(key in Reflect.fields(data))
 		{
+
 			var item = new TreeNode(this, key, 0, 20*i);
 			item.init({color: this.color, width: this.box.width});
-			
-			
-			/*
-			for(j in 0...4) {
-				var subitem = new Expander(item, "subitem"+i, 20, 20+20*j);
-				subitem.init({visible: false});
-				}
 
-			if(i>0)
-			{
-				var self = this;
-				var prev = cast this.getChildAt(i-1);
-				prev.addEventListener(Event.CHANGE, function(e)
-					{ 
-						for(k in i...last)
-						self.getChildAt(k).y -= prev.expanded ? -80 : 80; 
-						
-					});
+			if(Reflect.isObject(Reflect.field(data, key))) {
+			var subtree = new Tree(item, "Tree"+i, 20,0);
+			subtree.data = Reflect.field(data, key);
+			//~ subtree.init({width: this.box.width});
+			subtree.init({width: this.box.width, visible: false});
+
 			}
-			*/
+
 		i++;
 		}
 		
 		this.setAction("redraw",
-		
 		"
-		this.graphics.clear();
+			this.graphics.clear();
 
-		/* 'missing' nodes */
- 		var n = Math.round(this.box.height/20) - this.numChildren ;
-		this.graphics.beginFill(this.color);
-		this.graphics.drawRect(0, this.numChildren*20, this.box.width, 20*n);
-		this.graphics.endFill();
+			/* 'missing' nodes */
+			var n = Math.round(this.box.height/20) - this.numChildren ;
+			this.graphics.beginFill(this.color);
+			this.graphics.drawRect(0, this.numChildren*20, this.box.width, 20*n);
+			this.graphics.endFill();
 
-		/* entire frame */
-		this.graphics.lineStyle(1, Math.max(0, DefaultStyle.BACKGROUND - 0x141414), 1);
+			/* entire frame */
+			this.graphics.lineStyle(1, Math.max(0, DefaultStyle.BACKGROUND - 0x141414), 1);
 		this.graphics.drawRect(0,0, this.box.width, this.box.height);
 		"
 		);
