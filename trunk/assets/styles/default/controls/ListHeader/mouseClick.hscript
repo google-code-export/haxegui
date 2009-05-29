@@ -1,0 +1,2 @@
+this.parent.sortReverse = !this.parent.sortReverse ;
+this.parent.redraw();
