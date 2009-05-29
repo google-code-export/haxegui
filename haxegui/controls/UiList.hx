@@ -50,6 +50,44 @@ import haxegui.events.DragEvent;
 * @author Russell Weir'
 *
 */
+class ListHeader extends AbstractButton
+{
+
+	var label : Label;
+	
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	{
+		super (parent, name, x, y);
+		
+		label = new Label(this, "label", 4, 4);
+		label.init();
+	}
+
+	
+	override public function init(opts:Dynamic=null)
+	{
+		super.init(opts);
+
+
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(ListHeader);
+	}
+}
+
+
+
+
+/**
+*
+* ListItem Class
+*
+* @version 0.1
+* @author <gershon@goosemoose.com>
+* @author Russell Weir'
+*
+*/
 class ListItem extends AbstractButton
 {
 
@@ -68,16 +106,16 @@ class ListItem extends AbstractButton
 
 		tf = new TextField();
 		tf.name = "tf";
-		tf.text = Opts.optString(opts, "text", "");
+		tf.text = Opts.optString(opts, "text", "ListItem");
 		tf.selectable = false;
+		tf.y = 4;
 		tf.x = 4;
 		tf.width = box.width - 4;
 		tf.height = 20;
 		tf.embedFonts = true;
 		tf.defaultTextFormat = DefaultStyle.getTextFormat();
 		tf.mouseEnabled = false;
-
-		tf.setTextFormat (DefaultStyle.getTextFormat());
+		//~ tf.setTextFormat (DefaultStyle.getTextFormat());
 
 		//~ label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
 		this.addChild(tf);
@@ -97,16 +135,19 @@ class ListItem extends AbstractButton
 
 
 /**
- *
- *
- *
- *
- */
+*
+* Sortable List Class
+*
+* @version 0.1
+* @author <gershon@goosemoose.com>
+* @author Russell Weir'
+*
+*/
 class UiList extends Component
 {
 
-	public var header : AbstractButton;
-	public var data : Dynamic;
+	public var header : ListHeader;
+	public var data : Array<Dynamic>;
 
 	public var sortReverse : Bool;
 	var dragItem : Int;
@@ -116,12 +157,12 @@ class UiList extends Component
 		super (parent, name, x, y);
 	}
 
-	override public function init(opts : Dynamic=null)
+	public override function init(opts : Dynamic=null)
 	{
+		sortReverse = false;
 		if(Std.is(parent, Component))
 			color = (cast parent).color;
-		box = new Rectangle(0,0, 140, 40);
-		
+		box = new Rectangle(0,0, 140, 100);
 		data = [];
 		
 		super.init(opts);
@@ -133,53 +174,20 @@ class UiList extends Component
 			data = opts.data;
 
 
-		header = new AbstractButton(this, "header");
+		header = new ListHeader(this, "header");
+		header.init({color: this.color, width: this.box.width});
 
-		var n = (data==null || !Std.is(data, Array)) ? 10 : data.length+1;
+
+  		var n = 4;
+		if(data!=null && data.length > 0) n = data.length+1;
 		for (i in 1...n) {
 			var item = new ListItem(this, "item" + i, 0, 20*i );
-	
-
-			var str : String = "";
-			if(Std.is(data, Array))
-				try
-				{
-					str = data[i-1];
-				}
-				catch(e:flash.Error)
-				{
-					str = Std.string(e);
-				}
-
-			item.init({text: str, width: this.box.width, color: DefaultStyle.INPUT_BACK});
-			
-			//~ item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
-			//~ item.addEventListener (MouseEvent.MOUSE_UP, onItemMouseUp, false, 0, true);
-			//~ item.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
-			//~ item.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
+			item.init({width: this.box.width, color: DefaultStyle.INPUT_BACK});
 
 		}
 
-
-		//
-		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
-		//~ this.filters = [shadow];
-		
-		//~ var self=this;
-		//~ this.setAction("onFocusOut",
-		//~ "
-			//~ this.parent.removeChild(this);
-		//~ "
-		//~ );
-		
-		
 	}
 
-	public function onItemMouseDown(e:MouseEvent) : Void
-	{
-
-	shrink();
-	}
 
 	public function onItemMouseUp(e:MouseEvent) : Void
 	{
@@ -194,85 +202,16 @@ class UiList extends Component
 
 
 
-	public function shrink()
-	{
-
-		for(i in 1...numChildren-1)
-		{
-
-			{
-				var item = getChildAt(i);
-				//~ if(item.y>20) item.y -= 20;
-
-			}
-
-		}
-
-	}
-
-	public function drawHeader(?color:UInt)
-	{
-
-		if(color == 0) color = this.color;
-
-		header.graphics.clear();
-		//~ header.graphics.lineStyle(1, color - 0x323232);
-		//~ header.graphics.beginFill (color | 0x323232);
-		var grad = flash.display.GradientType.LINEAR;
-		var colors = [ this.color, this.color - 0x191919 ];
-		var alphas = [ 100, 100 ];
-		var ratios = [ 0, 0xFF ];
-		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(box.width, 20, Math.PI/2, 0, 0);
-		header.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
-		
-		header.graphics.drawRect (0, 0, box.width, 20);
-		header.graphics.endFill ();
-
-		header.graphics.lineStyle(1, color - 0x323232);
-		header.graphics.moveTo(0, 20);
-		header.graphics.lineTo(box.width, 20);
-
-
-		
-		// sort direction triangle
-		header.graphics.beginFill (color - 0x323232);
-		header.graphics.moveTo(box.width - 20, 8 +(sortReverse ? 5 : 0) );
-		header.graphics.lineTo(box.width - 10, 8 +(sortReverse ? 5 : 0) );
-		header.graphics.lineTo(box.width - 15, sortReverse ? 8 : 13);
-		header.graphics.endFill ();
-	
-		// label
-		if(header.getChildByName("label")==null) {
-			var label = new Label(header, "label", 4, 4);
-			label.init({innerData: this.text});
-			}
-		var label = cast header.getChildByName("label");
-		label.tf.defaultTextFormat = DefaultStyle.getTextFormat(8, 0, flash.text.TextFormatAlign.CENTER);
-		label.x = .5*(header.box.width - label.tf.width);
-
-	}
-
 	override public function redraw(opts:Dynamic=null)
 	{
-
-			
-		drawHeader();
-		header.addEventListener (MouseEvent.MOUSE_DOWN, onHeaderMouseDown, false, 0, true);
-		header.addEventListener (MouseEvent.MOUSE_UP, onHeaderMouseUp, false, 0, true);
-
+		super.redraw();
 		
-		//~ for(i in 0...numChildren-1)
-		//~ for(i in 0...data.length)
-			//~ if( Std.is( this.getChildAt(i), ListItem ))
-				//~ {
-					//~ untyped this.getChildAt(i).redraw();
-					//~ trace(this.getChildAt(i));
-				//~ }
-				//~ 
+		var self = this;
+		data.sort(function(a,b) { if(a < b) return self.sortReverse ? 1 : -1; return 0;	});
+		
+		header.redraw();
 		
 		// if all children are here just redraw them
-
 		if(numChildren <= data.length ) {
 
 			for(i in 0...numChildren) {
@@ -281,50 +220,23 @@ class UiList extends Component
 				item.redraw();
 			}
 		}
+		
 
 		// if children were'nt yet created 
 		else
 		{
 			//~ var n = Std.int((this.box.height)/20);
 			var n = Std.int((this.box.height)/20);
-			for (i in 1...n)
+			for (i in numChildren...n)
 			{
-				var item = new ListItem(this, "item" + i, 0, 20*i+1 );
-
-				var str : String = "";
-				if(Std.is(data, Array))
-					try
-					{
-						str = data[i-1];
-					}
-					catch(e:flash.Error)
-					{
-						//~ tf.text = Std.string(new flash.Error());
-						str = Std.string(e);
-					}
-				item.init({text: str, width: this.box.width, color: DefaultStyle.INPUT_BACK});
-
-				//~ item.addEventListener (MouseEvent.MOUSE_DOWN, onItemMouseDown, false, 0, true);
-				//~ item.addEventListener (MouseEvent.MOUSE_UP, onItemMouseUp, false, 0, true);
-				//~ item.addEventListener (DragEvent.DRAG_START, DragManager.getInstance ().onStartDrag, false, 0, true);
-				//~ item.addEventListener (DragEvent.DRAG_COMPLETE, DragManager.getInstance ().onStopDrag, false, 0, true);
+				/*if(getChildByName("item"+i)!=null) removeChild(getChildByName("item"+i));*/
+				var item = new ListItem(this, "item" + i, 0, 20+20*i+1 );
+				item.init({width: this.box.width, color: DefaultStyle.INPUT_BACK});
 			}
 		}
 		
-/*
-		//~ var n = numChildren+1;
-		var n = data.length-2;
-		if(this.box.height > n*20 ) {
-			for(i in 0...Std.int((this.box.height - n*20 )/20))
-			//~ for(i in 0...10)
-			{
-				var item = new ListItem(this, "item" + (n+i), 0, n*20+i*20 );
-				item.init({text: "-------", width: this.box.width, color: DefaultStyle.INPUT_BACK});
-			}
-		}
-*/
 		
-
+		/* Draw the frame */
 		this.graphics.clear();
 		this.graphics.lineStyle(1, DefaultStyle.BACKGROUND - 0x202020);
 		//~ this.graphics.beginFill(this.color);
@@ -334,30 +246,6 @@ class UiList extends Component
 	}
 
 
-
-	public function onHeaderMouseDown(e:MouseEvent)
-	{
-
-
-		sortReverse = ! sortReverse;
-
-		//~ trace(data);
-		drawHeader();
-
-
-	}
-
-	public function onHeaderMouseUp(e:MouseEvent)
-	{
-		data.sort(
-			function(x,y) {
-				return 
-				( Std.string(x).charAt(0) == Std.string(y).charAt(0) ) ? 0 : 
-				( Std.string(x).charAt(0) > Std.string(y).charAt(0) ) ? 1 : -1;
-			}
-		);
-		redraw();
-	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(UiList);
