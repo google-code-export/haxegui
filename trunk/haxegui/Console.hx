@@ -44,6 +44,8 @@ import haxegui.Window;
 
 import haxegui.controls.ScrollBar;
 
+import hscript.Expr;
+
 /**
 *
 * Console for debugging, contains two TextFields, one output for tracing messages
@@ -58,7 +60,8 @@ class Console extends Window, implements ITraceListener
 {
 	var parser : hscript.Parser;
 	var history : Array<String>;
-	var pwd : DisplayObjectContainer;
+	var _pwd : DisplayObjectContainer;
+	var pwd : Array<String>;
 
 	var container : Container;
 	var output : TextField;
@@ -84,7 +87,6 @@ class Console extends Window, implements ITraceListener
 
 		box = new Rectangle (0, 0, 640, 240);
 
-		input = new TextField();
 
 		container = new Container(this, "Container", 10, 20);
 		container.init();
@@ -92,17 +94,16 @@ class Console extends Window, implements ITraceListener
 		parser = new hscript.Parser();
 		history = new Array<String>();
 
-		pwd = flash.Lib.current;
+		//~ pwd = flash.Lib.current;
+		pwd = ["root"];
 
 
-		//
+		// Output TextField for trace and log messages
 		output = new TextField();
 		output.name = "output";
 		output.htmlText = "";
 		output.width = box.width - 40;
 		output.height = box.height - 70;
-		// output.background = true;
-		// output.backgroundColor = 0x222222;
 		output.border = true;
 		output.wordWrap = true;
 		output.multiline = true;
@@ -114,7 +115,8 @@ class Console extends Window, implements ITraceListener
 		output.tabEnabled = true;
 		output.defaultTextFormat = DefaultStyle.getTextFormat();
 
-		//
+		// Input TextField for hscript execution
+		input = new TextField();
 		input.name = "input";
 		input.defaultTextFormat = DefaultStyle.getTextFormat(8, 0xFFFFFF);
 		input.type = flash.text.TextFieldType.INPUT;
@@ -125,17 +127,11 @@ class Console extends Window, implements ITraceListener
 		input.height = 20;
 		input.addEventListener (KeyboardEvent.KEY_DOWN, onInputKeyDown);
 
-		// container.box.width -= 20;
-		// vert = new ScrollBar(container, "vscrollbar");
-		// vert = new ScrollBar(this, "vscrollbar");
-		// vert.x = box.width - 20;
-		// vert.y = 20;
-		// vert.color = color;
-		// vert.init(content);
+		// Vertical Scrollbar
 		vert = new ScrollBar(container, "vscrollbar");
 		vert.init({target : output, color: this.color});
 
-		//
+		// Container
 		container.init({
 			color: Opts.optInt(opts,"bgcolor", 0x222222),
 			alpha: Opts.optFloat(opts, "bgalpha", 0.85),
@@ -164,16 +160,10 @@ class Console extends Window, implements ITraceListener
 	public function log( e : Dynamic, ?inf : haxe.PosInfos ) : Void
 	{
 		// var text:String =  "";
+		output.htmlText = output.htmlText.split("#eeeeee").join("#666666");
+		
 		var text:String =  "<FONT FACE=\"MONO\" SIZE=\"10\" COLOR=\"#eeeeee\">";
 		text += DateTools.format (Date.now (), "%H:%M:%S") + " " ;
-
-		if(Std.is(e,Event))
-		{
-			text += "<B>"+e.target;
-			if(Reflect.hasField(e.target, "name"))
-				text += ":"+e.target.name;
-			text += "</B>\t" ;
-		}
 
 		#if debug
 			if(inf != null) {
@@ -181,6 +171,34 @@ class Console extends Window, implements ITraceListener
 			}
 		#end
 
+		text += pwd.join(".") + "> ";
+
+		switch(Type.typeof(e)) {
+
+			case TClass(c):
+				switch(Type.getClassName(c).split(".").pop()) {
+					case "Event":
+						text += "<FONT COLOR=\"#00FF00\">EVENT</FONT>: ";
+						text += "<B>"+e.target.name+"</B>";
+					case "MouseEvent":
+						text += "<FONT COLOR=\"#89FF00\">MOUSEEVENT</FONT>: ";
+						text += "<B>"+e.target.name+"</B>";
+						if(Std.is(e.target, Component)) {
+						//~ var act =  "mouse"+e.type.charAt(0).toUpperCase()+e.type.substr(1,e.type.length);
+						var act =  e.type;
+						text += " hasOwnAction(" + act + "): " + e.target.hasOwnAction(act) + "\n";
+						}
+					
+					}
+			case TEnum(v):
+				text += "<FONT COLOR=\"#FF0000\">ERROR</FONT>: ";
+			case TFunction:
+				text += "<FONT COLOR=\"#FFC600\">FUNCTION</FONT>: ";
+			default:
+				//~ text += Std.string(Type.typeof(e));
+		}
+		
+		
 		text += e ;
 
 		output.htmlText += text;
@@ -225,27 +243,63 @@ class Console extends Window, implements ITraceListener
 				trace("");
 				return;
 			}
-
-			try {
+				
+				// some text replacements
+				if(input.text=="ls") input.text="ls()";
+				if(input.text=="cd") input.text="cd()";
+				
 				var program = parser.parseString(input.text);
+				var interp = new hscript.Interp();
+
+				haxegui.utils.ScriptStandardLibrary.set(interp);
+				interp.variables.set( "this", this );
+				//~ interp.variables.set( "pwd", "root"+this.pwd.slice(1,-1).join("/") );
+				interp.variables.set( "pwd", _pwd );
+
+				interp.variables.set( "help", help() );
+				interp.variables.set( "clear", clear() );
+				interp.variables.set( "print_r", Utils.print_r );
+			
+				var self = this;
+				interp.variables.set( "cd", function(?v) { 
+					if(v==null) return "";
+						switch(v) {
+							case "..":
+								self.pwd.pop();
+							case "/":
+								self.pwd = ["root"];
+							default:
+							self.pwd.push(v);
+						}
+
+					var o = cast flash.Lib.current;
+					for(i in 1...self.pwd.length)
+						o = cast(o.getChildByName(self.pwd[i]), flash.display.DisplayObjectContainer);
+					self._pwd = cast o;
+					
+					return self.pwd.join(".");
+					});
+
+				interp.variables.set( "ls", function(?v) {
+					if(Std.is(v, DisplayObjectContainer))
+						return "ls "+v + Utils.print_r(v);	
+					else {
+						var o = cast flash.Lib.current;
+						for(i in 1...self.pwd.length)
+							o = cast(o.getChildByName(self.pwd[i]), flash.display.DisplayObjectContainer);
+						return "ls "+self.pwd.join(".") + Utils.print_r(o);	
+					}
+					});
+
+				
 				history.push(input.text);
 				input.text = "";
 
-				var interp = new hscript.Interp();
-				haxegui.utils.ScriptStandardLibrary.set(interp);
-				interp.variables.set( "this", this );
-				interp.variables.set( "pwd", this.pwd );
-
-				interp.variables.set( "clear", clear() );
-				interp.variables.set( "print_r", Utils.print_r );
-				interp.variables.set( "ls", Utils.print_r(pwd) );
-
-					// trace( ret==null ? "\n" : ret );
+			try {
 				trace(interp.execute(program));
 			}
-			catch(e : Dynamic)
-			{
-				trace("ERROR: " + e);
+			catch(e : Dynamic) {
+				trace(e);
 			}
 
 		case Keyboard.UP :
@@ -253,10 +307,26 @@ class Console extends Window, implements ITraceListener
 		}
 	}
 
-	public function clear()
-	{
+	public function clear() : String {
 		output.text = "";
+		return "";
 	}
 
-
+	public function help() : String {
+		var text = "\n";
+		var commands = {
+			pwd 	 : "\tcurrent path",
+			cd 		 : "\tpush an object name to current path, ex. cd(\"Component\"), cd(\"..\"), cd(\"/\") ",
+			ls		 : "\tprints current object",
+			clear 	 : "clear the console",
+			help 	 : "display this help",
+			
+		}
+		
+		for(i in Reflect.fields(commands))
+			text += "\t<I>" + i + "</I>\t\t" + Reflect.field(commands, i) + "\n";
+			
+		return text;
+	}
+	
 }
