@@ -19,20 +19,11 @@
 
 package haxegui.controls;
 
-// import flash.display.Sprite;
-// import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-// import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-import flash.filters.DropShadowFilter;
-// import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-// import flash.filters.BevelFilter;
 import flash.geom.Rectangle;
-// import flash.geom.Transform;
-// import flash.text.TextField;
 import flash.text.TextFormat;
 
 import haxegui.managers.StyleManager;
@@ -40,18 +31,7 @@ import haxegui.managers.CursorManager;
 import haxegui.events.MoveEvent;
 import haxegui.Opts;
 import haxegui.Component;
-import feffects.Tween;
-import feffects.easing.Quint;
-import feffects.easing.Sine;
-import feffects.easing.Back;
-import feffects.easing.Bounce;
-import feffects.easing.Circ;
-import feffects.easing.Cubic;
-import feffects.easing.Elastic;
-import feffects.easing.Expo;
-import feffects.easing.Linear;
-import feffects.easing.Quad;
-import feffects.easing.Quart;
+
 
 
 
@@ -125,8 +105,8 @@ class AbstractButton extends Component
 			box = new Rectangle(0,0,90,30);
 		super.init(opts);
 		autoRepeat = Opts.optBool(opts,"autoRepeat", true);
-		repeatsPerSecond = Opts.optFloat(opts,"repeatsPerSecond", 1);
-		repeatWaitTime = Opts.optFloat(opts,"repeatWaitTime", 1);
+		repeatsPerSecond = Opts.optFloat(opts,"repeatsPerSecond", 25);
+		repeatWaitTime = Opts.optFloat(opts,"repeatWaitTime", .75);
 	}
 
 	static function __init__() {

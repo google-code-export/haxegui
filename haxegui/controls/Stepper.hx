@@ -126,14 +126,16 @@ class Stepper extends Component
 		tf.y = 2;
 		tf.text = Std.string(value);
 		tf.embedFonts = true;
-		tf.defaultTextFormat = DefaultStyle.getTextFormat();
-		tf.setTextFormat(DefaultStyle.getTextFormat());
+		var fmt = DefaultStyle.getTextFormat();
+		fmt.color = disabled ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.INPUT_TEXT;
+		tf.defaultTextFormat = fmt;
+		tf.setTextFormat(fmt);
 
 
 		var bOpts = Opts.clone(aOpts);
 		Opts.optBool(bOpts, "autoRepeat", true);
-		Opts.optFloat(bOpts, "repeatsPerSecond", 1);
-		Opts.optFloat(bOpts, "repeatWaitTime", 1);
+		Opts.optFloat(bOpts, "repeatsPerSecond", 50);
+		Opts.optFloat(bOpts, "repeatWaitTime", .75);
 
 		up.init(bOpts);
 		down.init(bOpts);
@@ -162,5 +164,6 @@ class Stepper extends Component
 	static function __init__() {
 		haxegui.Haxegui.register(Stepper);
 	}
+
 
 }

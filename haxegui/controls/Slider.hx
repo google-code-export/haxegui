@@ -40,6 +40,8 @@ import haxegui.events.DragEvent;
 class SliderHandle extends AbstractButton
 {
 
+
+	
 	static function __init__() {
 		haxegui.Haxegui.register(SliderHandle);
 	}
@@ -49,42 +51,41 @@ class Slider extends Component
 {
 	public var handle : SliderHandle;
 	//~ public var value : Float;
+	public var min : Float;
 	public var max : Float;
-
+	public var step : Float;
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
-		max = 100;
 	}
 
 	override public function init(opts:Dynamic=null)
 	{
+		max = Math.POSITIVE_INFINITY;
 		box = new Rectangle(0,0,140,20);
 		color = DefaultStyle.BACKGROUND;
+		
+		step = Opts.optFloat(opts,"step", 10);
+		max = Opts.optFloat(opts,"max", max);
 
 		super.init(opts);
 
-		redraw();
-
 		handle = new SliderHandle(this, "handle", 0, 0);
 		handle.init({color: this.color});
+		handle.text = null;
 
 		// add the drop-shadow filters
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
-		//~ var bevel:BevelFilter = new BevelFilter( 4, 45 ,color | 0x323232 ,1 ,0x000000, .25, 2, 2, 1, BitmapFilterQuality.LOW , flash.filters.BitmapFilterType.INNER, false );
-
-		//~ handle.filters = [shadow, bevel];
 		handle.filters = [shadow];
-
 
 
 		addEventListener (MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 
 		handle.addEventListener (MouseEvent.MOUSE_DOWN, onHandleMouseDown, false, 0, true);
 		handle.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
-		handle.addEventListener (MouseEvent.ROLL_OVER, onHandleRollOver, false, 0, true);
-		handle.addEventListener (MouseEvent.ROLL_OUT,  onHandleRollOut, false, 0, true);
+		//~ handle.addEventListener (MouseEvent.ROLL_OVER, onHandleRollOver, false, 0, true);
+		//~ handle.addEventListener (MouseEvent.ROLL_OUT,  onHandleRollOut, false, 0, true);
 
 		handle.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 
@@ -97,18 +98,20 @@ class Slider extends Component
 	public function onChanged(?e:Event)
 	{
 		//~ trace(e);
+		//~ value = Math.max( min, Math.min( max, value ));
 		if(handle.x < 0) handle.x = 0;
 		if(handle.x > (box.width - handle.width) ) handle.x = box.width - handle.width;
 
 	}
 
 
-	public function onMouseWheel(e:MouseEvent)
+	public override function onMouseWheel(e:MouseEvent)
 	{
 		//trace(e);
 		//~ handle.x += e.delta * 5;
-		handle.x += e.delta * 5 * ((rotation > 0) ? -1 : 1);
+		handle.x += e.delta * step * ((rotation > 0) ? -1 : 1);
 		dispatchEvent(new Event(Event.CHANGE));
+		super.onMouseWheel(e);
 	}
 
 
