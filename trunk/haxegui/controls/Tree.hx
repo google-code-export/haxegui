@@ -52,7 +52,7 @@ import haxegui.events.DragEvent;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class TreeNode extends AbstractButton
+class TreeNode extends Component
 {
 	
 	public var expander : Expander;
@@ -67,17 +67,25 @@ class TreeNode extends AbstractButton
 	{
 		super.init(opts);
 
-		expander = new Expander(this, this.name, 4, 4);
+		//~ expander = new Expander(this, name, 4, 4);
+		expander = new Expander(this, name, 0, 0);
 		expander.init();
 
+		expander.setAction("mouseDown", "");
+		expander.setAction("mouseUp", "");
 
+		setAction("mouseOver", "");
+		setAction("mouseOut", "");
+		
+/*
 		setAction("mouseClick",
 		"
 		this.expander.expanded = !this.expander.expanded;
+		this.expander.dispatchEvent(new flash.events(Event.CHANGE));
 		this.expander.redraw();
 		"
 		);
-		
+*/	
 		setAction("redraw",
 		"
 		var i = this.parent.getChildIndex(this) ;
@@ -117,39 +125,36 @@ class Tree extends Component {
 		
 		super.init(opts);
 
+		
 		var i = 0;
-		//~ var last = Reflect.fields(data).length;	
-		//~ for(i in 0...last)
 		for(key in Reflect.fields(data))
 		{
 
-			var item = new TreeNode(this, key, 0, 20*i);
-			item.init({color: this.color, width: this.box.width});
+			var node = new TreeNode(this, key, 0, 20*i);
+			node.init({color: this.color, width: this.box.width});
+
 
 			if(Reflect.isObject(Reflect.field(data, key))) {
-			var subtree = new Tree(item, "Tree"+i, 20,0);
-			subtree.data = Reflect.field(data, key);
-			//~ subtree.init({width: this.box.width});
-			subtree.init({width: this.box.width, visible: false});
-
+				var subtree = new Tree(node.expander, "Tree"+i, 0, 16);
+				subtree.data = Reflect.field(data, key);
+				subtree.init({width: this.box.width - 20, visible: false});
+				for(i in 0...subtree.numChildren)
+					untyped subtree.getChildAt(i).getChildAt(0).x = 20;
+				subtree.setAction("redraw", "");
 			}
-
+		
 		i++;
 		}
+
+
 		
 		this.setAction("redraw",
 		"
 			this.graphics.clear();
-
-			/* 'missing' nodes */
-			var n = Math.round(this.box.height/20) - this.numChildren ;
-			this.graphics.beginFill(this.color);
-			this.graphics.drawRect(0, this.numChildren*20, this.box.width, 20*n);
-			this.graphics.endFill();
-
-			/* entire frame */
 			this.graphics.lineStyle(1, Math.max(0, DefaultStyle.BACKGROUND - 0x141414), 1);
-		this.graphics.drawRect(0,0, this.box.width, this.box.height);
+			this.graphics.beginFill(this.color);
+			this.graphics.drawRect(0,0, this.box.width, this.box.height);
+			this.graphics.endFill();
 		"
 		);
 
