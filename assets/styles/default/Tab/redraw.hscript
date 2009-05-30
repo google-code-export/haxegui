@@ -1,27 +1,39 @@
 this.graphics.clear();
 
 
-var colors = [this.color, this.color - 0x141414 ] ;
+var colors = [this.color, this.color - 0x4D4D4D ] ;
 
 if(this.active)
-	colors = [this.color | 0x202020, this.color ] ;
+	colors = [Math.min(this.color | 0x333333,0xFFFFFF), this.color ] ;
 
 var alphas =[100, 100];
 var ratios =[0, 0xFF];
 var matrix = new flash.geom.Matrix ();
 matrix.createGradientBox (this.box.width, this.box.height, Math.PI / 2, 0, 0);
 
-
+/*
 this.graphics.lineStyle (1, this.color - 0x202020, 1, true,
 			 flash.display.LineScaleMode.NONE,
 			 flash.display.CapsStyle.ROUND,
 			 flash.display.JointStyle.ROUND);
-			 
+*/			
+this.graphics.lineStyle(1);
+this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ ~this.color, this.color ], [0xFF, 00], ratios, matrix);
+
+ 
 this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, colors,
 				 alphas, ratios, matrix);			 
 				 
-this.graphics.drawRoundRectComplex( 0, 0, this.box.width, this.box.height, 8, 8, 0, 0 );
+this.graphics.drawRoundRectComplex( 0, 4, this.box.width, this.box.height-4, 4, 4, 0, 0 );
 this.graphics.endFill();
+
+    matrix.createGradientBox (this.box.width, 4, Math.PI / 2, 0, 4);
+    this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, [ this.color - 0x202020, ~this.color ],
+					alphas, ratios, matrix);			 
+    this.graphics.drawRoundRectComplex( 0, 4, this.box.width, 4, 4, 4, 0, 0 );
+    this.graphics.endFill();
+
+
 
 /*
 if (this.filters.length == 0)
@@ -39,10 +51,8 @@ if (this.filters.length == 0)
 */
 
 
-if (this.label != null)
-  {
+if (this.label != null)  {
     this.label.moveTo (Math.floor (.5 * (this.box.width - this.label.width)),
-		       Math.floor (.5 *
-				   (this.box.height - this.label.height)));
+		       Math.floor (.5 * (this.box.height - this.label.height)+4));
   }
 

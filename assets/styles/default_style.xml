@@ -373,6 +373,16 @@
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.graphics.clear();
+				
+				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
+				var alphas = [ 100, 100 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(this.box.width, 24, Math.PI/2, 0, 0);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawRect (0, 0, this.box.width, 24);
+				
+				
 				this.graphics.lineStyle(1, this.color - 0x141414 );
 				this.graphics.beginFill( this.color );
 				this.graphics.drawRect( 0, 24, this.box.width, this.box.height );
@@ -418,6 +428,10 @@
 				this.graphics.clear();
 				
 				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
+				
+				if(parent.disabled)
+					colors = [ this.color, this.color - 0x141414 ];
+				
 				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
@@ -501,7 +515,7 @@
 			<script type="text/hscript" action="mouseOver">
 			<![CDATA[
 				if(!this.disabled) {
-				this.updateColorTween( new feffects.Tween(0, 50, 275, feffects.easing.Expo.easeOut ) );
+					this.updateColorTween( new feffects.Tween(0, 50, 275, feffects.easing.Expo.easeOut ) );
 					CursorManager.setCursor(this.cursorOver);
 				}
 			]]>
@@ -863,7 +877,7 @@
 				matrix.createGradientBox (this.box.width, this.box.height, Math.PI / 2, 0, 0);
 				
 				
-				this.graphics.lineStyle (1, this.color - toHex(20), 1, true,
+				this.graphics.lineStyle (1, Math.max(0, this.color - toHex(30)), 1, true,
 							 flash.display.LineScaleMode.NONE,
 							 flash.display.CapsStyle.ROUND,
 							 flash.display.JointStyle.ROUND);
@@ -897,8 +911,7 @@
 								      DefaultStyle.DROPSHADOW,
 								      this.disabled ? 0.2 : 0.5,
 								      4, 4, 0.5,
-								      flash.filters.BitmapFilterQuality.
-								      HIGH,
+								      flash.filters.BitmapFilterQuality.HIGH,
 								      false, false, false);
 				this.filters =[shadow];
 			]]>
@@ -943,6 +956,11 @@
 					this.graphics.lineTo(0,0);
 					this.graphics.endFill();
 				}
+				
+				for(i in 0...this.numChildren) {
+					if(this.getChildAt(i) != this.label )
+						this.getChildAt(i).visible = this.expanded;
+					}
 			]]>
 			</script>
 			<script type="text/hscript" action="mouseOver">
@@ -1105,6 +1123,10 @@
 				this.graphics.clear();
 				
 				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
+				
+				if(parent.disabled)
+					colors = [ this.color, this.color - 0x141414 ];
+				
 				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
@@ -1464,27 +1486,39 @@
 				this.graphics.clear();
 				
 				
-				var colors = [this.color, this.color - 0x141414 ] ;
+				var colors = [this.color, this.color - 0x4D4D4D ] ;
 				
 				if(this.active)
-					colors = [this.color | 0x202020, this.color ] ;
+					colors = [Math.min(this.color | 0x333333,0xFFFFFF), this.color ] ;
 				
 				var alphas =[100, 100];
 				var ratios =[0, 0xFF];
 				var matrix = new flash.geom.Matrix ();
 				matrix.createGradientBox (this.box.width, this.box.height, Math.PI / 2, 0, 0);
 				
-				
+				/*
 				this.graphics.lineStyle (1, this.color - 0x202020, 1, true,
 							 flash.display.LineScaleMode.NONE,
 							 flash.display.CapsStyle.ROUND,
 							 flash.display.JointStyle.ROUND);
+				*/
+				this.graphics.lineStyle(1);
+				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ ~this.color, this.color ], [0xFF, 00], ratios, matrix);
+				
 				
 				this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, colors,
 								 alphas, ratios, matrix);
 				
-				this.graphics.drawRoundRectComplex( 0, 0, this.box.width, this.box.height, 8, 8, 0, 0 );
+				this.graphics.drawRoundRectComplex( 0, 4, this.box.width, this.box.height-4, 4, 4, 0, 0 );
 				this.graphics.endFill();
+				
+				    matrix.createGradientBox (this.box.width, 4, Math.PI / 2, 0, 4);
+				    this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, [ this.color - 0x202020, ~this.color ],
+									alphas, ratios, matrix);
+				    this.graphics.drawRoundRectComplex( 0, 4, this.box.width, 4, 4, 4, 0, 0 );
+				    this.graphics.endFill();
+				
+				
 				
 				/*
 				if (this.filters.length == 0)
@@ -1502,11 +1536,9 @@
 				*/
 				
 				
-				if (this.label != null)
-				  {
+				if (this.label != null)  {
 				    this.label.moveTo (Math.floor (.5 * (this.box.width - this.label.width)),
-						       Math.floor (.5 *
-								   (this.box.height - this.label.height)));
+						       Math.floor (.5 * (this.box.height - this.label.height)+4));
 				  }
 			]]>
 			</script>
