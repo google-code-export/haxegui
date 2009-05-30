@@ -148,18 +148,18 @@ class TabChild extends Component
 		
 		super.init(opts);
 	
-		while(!Std.is(_tabNav,TabNavigator))
+		while(_tabNav!=null && !Std.is(_tabNav,TabNavigator))
 			_tabNav =  cast _tabNav.parent;
 
-		_tabNav.addEventListener(Event.CHANGE, onParentChanged, false, 0, true);
+		_tabNav.addEventListener(Event.CHANGE, onTabChanged, false, 0, true);
 	
 		for(i in 0..._tabNav.numChildren) 
 			if(Std.is(_tabNav.getChildAt(i), TabChild)) index++;
 		
 	}
 	
-	public function onParentChanged(e:Event) {
-		this.visible = (_tabNav.activeTab == index);
+	public function onTabChanged(e:Event) {
+		this.visible = (_tabNav.activeTab == index-1);
 	}
 	
 	
@@ -267,9 +267,9 @@ class TabNavigator extends Component
 			box.height -= 20;
 		}
 
-		//~ if(Std.is(parent.parent, ScrollPane)) {
-			//~ box = untyped parent.parent.box.clone();
-		//~ }
+		if(Std.is(parent.parent, ScrollPane)) {
+			box = untyped parent.parent.box.clone();
+		}
 
 		//~ for(i in 0...numChildren)
 			//~ if(Std.is( getChildAt(i), haxegui.controls.ScrollBar ))
