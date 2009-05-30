@@ -49,7 +49,9 @@ TODO:
 			<haxegui:controls:Button name="Btn2" x="60" y="4" width="30" />
 			<haxegui:controls:Button name="Btn3" x="90" y="4" width="30" />
 		</haxegui:ToolBar>
-		<haxegui:ScrollPane name="ScrollPane1" x="10" y="84" >
+		<haxegui:TabNavigator name="TabNavigator" x="10" y="84" width="512" height="512" >
+		<haxegui:ScrollPane name="ScrollPane1" x="0" y="24" >
+		<haxegui:TabChild>
 			<haxegui:Container name="Container1" width="512" height="512" >
 				<haxegui:controls:Label x="30" y="8" >This window and it's content are dynamically generated from xml, Some events are also defined in hscript.</haxegui:controls:Label>
 				<haxegui:controls:Button label="Click" x="30" y="50" width="120" />
@@ -88,7 +90,7 @@ TODO:
 
 				<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="128" autoRepeat="true" repeatsPerSecond="20" repeatWaitTime=".5" />
 				<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="128" autoRepeat="true" repeatsPerSecond="10" repeatWaitTime=".5" />
-				<haxegui:controls:Stepper name="Stepper3" x="360" y="190" value="0" step="10" max="128" autoRepeat="false" />
+				<haxegui:controls:Stepper name="Stepper3" x="360" y="190" value="0" step="10" max="128" disabled="true" />
 
 				<haxegui:controls:Input name="Input1" x="30" y="220" />
 				<haxegui:controls:Input name="Input2" x="30" y="250" />
@@ -112,25 +114,30 @@ TODO:
 						</List>
 					</haxegui:DataSource>
 					<events>
-						<script type="text/hscript" action="onLoaded"><![CDATA[
+						<script type="text/hscript" action="onLoaded">
+						<![CDATA[
+							this.data = [""];
 							this.data.push("Milk");
 							this.data.push("Bread");
 							this.data.push("Eggs");
 							this.redraw();
-						]]></script>
+						]]>
+						</script>
 					</events>
 				</haxegui:controls:UiList>
 				<haxegui:controls:UiList name="List3" x="360" y="250" width="300" data="@StringArray" />
 
 			</haxegui:Container>
-
+		</haxegui:TabChild>
+		<haxegui:TabChild>
 			<haxegui:Window name="ChildWindow" x="200" y="200" width="180" height="140" color="0xA5DE33">
 				<haxegui:Container name="Container1"  x="10" y="20" width="100%" height="100%" color="0xA5DE33"  >
 				<haxegui:controls:Label x="20" y="4" >I'm a green child window</haxegui:controls:Label>
 				<haxegui:controls:Button label="Click" x="20" y="30" width="120" color="0xA5DE33" />
 				</haxegui:Container>
 			</haxegui:Window>
-
+		</haxegui:TabChild>
 		</haxegui:ScrollPane>
+		</haxegui:TabNavigator>
     </haxegui:Window>
 </haxegui:Layout>

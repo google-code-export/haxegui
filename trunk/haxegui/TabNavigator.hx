@@ -74,6 +74,16 @@ class Tab extends AbstractButton
 		label.text = Opts.optString(opts, "label", name);
 		label.init({text: name});
 
+
+		//~ var shadow =
+		  //~ new flash.filters.DropShadowFilter (0, 235,
+						  //~ DefaultStyle.DROPSHADOW,
+						  //~ 0.5,
+						  //~ 3, 3, 0.75,
+						  //~ flash.filters.BitmapFilterQuality.LOW,
+						  //~ false, false, false);
+		//~ this.filters =[shadow];
+		
 	}
 
 	/** Mouse click **/
@@ -82,9 +92,11 @@ class Tab extends AbstractButton
 		//~ StyleManager.exec(this,"mouseClick", {event : e});
 		//~ this.active = true;
 		//~ redraw();
+		
 		(cast this.parent).activeTab = this.parent.getChildIndex(this);
 		parent.dispatchEvent(new Event(Event.CHANGE));
 
+		super.onMouseClick(e);
 	}
 
 
@@ -114,6 +126,44 @@ class Tab extends AbstractButton
 	}
 }
 
+
+
+/**
+*
+* TabChild Class
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*
+*/
+class TabChild extends Component
+{
+	var _tabNav : Dynamic;
+	var index : Int;
+	
+	override public function init(opts : Dynamic=null) {
+		index=0;
+		_tabNav = parent;
+		
+		super.init(opts);
+	
+		while(!Std.is(_tabNav,TabNavigator))
+			_tabNav =  cast _tabNav.parent;
+
+		_tabNav.addEventListener(Event.CHANGE, onParentChanged, false, 0, true);
+	
+		for(i in 0..._tabNav.numChildren) 
+			if(Std.is(_tabNav.getChildAt(i), TabChild)) index++;
+		
+	}
+	
+	public function onParentChanged(e:Event) {
+		this.visible = (_tabNav.activeTab == index);
+	}
+	
+	
+}
 
 
 
@@ -161,7 +211,7 @@ class TabNavigator extends Component
 
 		for(i in 1...5)
 			{
-				var tab = new Tab(this, "Tab"+i, 44*(i-1), 0);
+				var tab = new Tab(this, "Tab"+i, 40*(i-1), 0);
 				tab.init({width: 40, color: this.color, active: i==1 });
 				tab.redraw();
 				//~ numTabs = tabs.push(tab);
@@ -169,11 +219,12 @@ class TabNavigator extends Component
 
 
 		// add the drop-shadow filter
-		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
-		//~ this.filters = [shadow];
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
+		this.filters = [shadow];
 
 
 		addEventListener(Event.CHANGE, onChanged, false, 0, true);
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 
 		//~ if(this.parent!=null)
 		//~ parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
@@ -200,4 +251,33 @@ class TabNavigator extends Component
 	static function __init__() {
 		haxegui.Haxegui.register(TabNavigator);
 	}
+	
+	
+
+	public function onParentResize(e:ResizeEvent) {
+		
+		if(Std.is(parent, Component))
+		{
+			box = untyped parent.box.clone();
+			box.width -= x + 2;
+			box.height -= y + 2;
+		}
+
+		if(Std.is(parent, Window)) {
+			box.height -= 20;
+		}
+
+		//~ if(Std.is(parent.parent, ScrollPane)) {
+			//~ box = untyped parent.parent.box.clone();
+		//~ }
+
+		//~ for(i in 0...numChildren)
+			//~ if(Std.is( getChildAt(i), haxegui.controls.ScrollBar ))
+			//~ {
+				//~ this.box.width -= 20;
+			//~ }
+
+		dirty = true;
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+	}	
 }

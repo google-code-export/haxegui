@@ -143,11 +143,19 @@ class Introspector extends Window
 
 	public function onFocusChanged(e:Dynamic)
 	{
+		if(e == this) return;
 		if(!Std.is(e, flash.events.Event)) return;
 		if(!Std.is(e.target, Component)) return;
 		if(untyped this.getChildByName("ScrollPane1").contains(e.target)) return;
 		
-		
+		//~ var scrollpane = tree.parent;
+		//~ scrollpane.removeChild(tree);
+		//~ tree = new Tree(scrollpane, "Tree", 0, 0);
+		//~ var o = { root : reflectDisplayObject(cast flash.Lib.current) };
+		//~ tree.data = o;
+		//~ tree.init({width: 250});
+		//~ untyped tree.getChildAt(0).getChildAt(0).expanded = true;
+		//~ 
 		var self = this;
 		var props = {
 			parent 		: "parent",
@@ -370,11 +378,17 @@ class Introspector extends Window
 
 
 	function reflectDisplayObject(d:DisplayObjectContainer) : Dynamic {
+		if(d==null) return;
 		var o = {};
 		for(i in 0...d.numChildren) {
 		var child = cast d.getChildAt(i);
+		if(child==null) return;
+		if(Std.is(child, flash.display.BitmapData)) return;
+		if(Std.is(child, flash.display.Bitmap)) return;
+		//~ if(!Std.is(child, flash.text.TextField)) {
 		if(!Std.is(child, flash.text.TextField)) {
-			Reflect.setField( o, child.name, child );
+			//~ Reflect.setField( o, child.name, child );
+			Reflect.setField( o, child.name, reflectDisplayObject(cast child) );
 			}
 		}
 		return o;
