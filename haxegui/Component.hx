@@ -44,6 +44,13 @@ import feffects.Tween;
 
 /**
 * Component Class
+* 
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.2
+* 
+* 
 **/
 class Component extends Sprite, implements haxegui.IMovable, implements haxegui.IToolTip
 {
@@ -475,6 +482,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* have been notified of the focus change.
 	**/
 	public function onFocusIn(e:FocusEvent) {
+		if(disabled) return;
 		// -- Fired twice: first time --
 		// related == object losing focus
 		// target == object gaining focus
@@ -496,6 +504,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	*
 	**/
 	private function onFocusOut(e:FocusEvent) : Void {
+		if(disabled) return;
  		//trace("++++ " + Std.string(this) + " onFocusOut");
  		//trace("onFocusOut relatedObject: " + Std.string(e.relatedObject));
  		//trace("onFocusOut currentTarget: " + Std.string(e.currentTarget));
@@ -569,6 +578,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		#if debug
 		trace(e);
 		#end
+		if(text!=null) TooltipManager.getInstance().destroy();
 		ScriptManager.exec(this,"mouseDown", {event : e});
 	}
 
