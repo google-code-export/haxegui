@@ -20,3 +20,8 @@ else
 	this.graphics.lineTo(0,0);
 	this.graphics.endFill();
 }
+
+for(i in 0...this.numChildren) {
+	if(this.getChildAt(i) != this.label )
+		this.getChildAt(i).visible = this.expanded;
+	}

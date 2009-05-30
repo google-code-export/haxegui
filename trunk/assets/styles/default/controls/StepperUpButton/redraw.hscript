@@ -1,6 +1,10 @@
 this.graphics.clear();
 
 var colors = [ this.color | 0x323232, this.color - 0x141414 ];
+
+if(parent.disabled)
+	colors = [ this.color, this.color - 0x141414 ];
+
 var alphas = [ 100, 100 ];
 var ratios = [ 0, 0xFF ];
 var matrix = new flash.geom.Matrix();
