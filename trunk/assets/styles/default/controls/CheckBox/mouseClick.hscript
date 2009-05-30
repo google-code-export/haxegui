@@ -1,4 +1,5 @@
-if(this.disabled) return;
-this.checked = !this.checked;
-this.redraw();
-this.updateColorTween( new feffects.Tween(50, 0, 150, feffects.easing.Linear.easeNone) );
+if(!this.disabled) {
+	this.checked = !this.checked;
+	this.redraw();
+	this.updateColorTween( new feffects.Tween(50, 0, 150, feffects.easing.Linear.easeNone) );
+}

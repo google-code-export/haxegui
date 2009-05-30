@@ -1,7 +1,5 @@
 this.graphics.clear();
 
-this.filters = [];
-
 /* Label */
 if(this.label!=null) {
 
@@ -73,8 +71,7 @@ else
 
 
 /* Inner-Drop-Shadow */
-if (this.filters.length == 0)
-  {
+if (this.filters.length == 0) {
     var shadow =
       new flash.filters.DropShadowFilter (this.disabled ? 2 : 4, 45,
 					  DefaultStyle.DROPSHADOW,
@@ -84,4 +81,4 @@ if (this.filters.length == 0)
 					  HIGH,
 					  true, false, false);
     this.filters =[shadow];
-  }
+}

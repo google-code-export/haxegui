@@ -1,0 +1,3 @@
+
+var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, false, false, false);
+this.filters = [shadow];
