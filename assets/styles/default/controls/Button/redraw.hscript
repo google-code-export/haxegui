@@ -47,16 +47,12 @@ this.label.moveTo (Math.floor (.5 * (this.box.width - this.label.width)),
 }
 
 /* Drop-Shadow */
-if (this.filters.length == 0)
-  {
-    var shadow =
-      new flash.filters.DropShadowFilter (this.disabled ? 2 : 4, 45,
-					  DefaultStyle.DROPSHADOW,
-					  this.disabled ? 0.2 : 0.5,
-					  4, 4, 0.5,
-					  flash.filters.BitmapFilterQuality.
-					  HIGH,
-					  false, false, false);
-    this.filters =[shadow];
-  }
-
+var shadow =
+  new flash.filters.DropShadowFilter (this.disabled ? 2 : 4, 45,
+				      DefaultStyle.DROPSHADOW,
+				      this.disabled ? 0.2 : 0.5,
+				      4, 4, 0.5,
+				      flash.filters.BitmapFilterQuality.
+				      HIGH,
+				      false, false, false);
+this.filters =[shadow];

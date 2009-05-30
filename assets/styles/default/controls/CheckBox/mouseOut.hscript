@@ -1,1 +1,2 @@
-CursorManager.setCursor(Cursor.ARROW);
+if(!this.disabled)
+	CursorManager.setCursor(Cursor.ARROW);

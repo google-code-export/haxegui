@@ -566,6 +566,13 @@
 
 	<haxegui:controls:Input>
 		<events>
+			<script type="text/hscript" action="focusIn">
+			<![CDATA[
+				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false );
+				var glow = new flash.filters.GlowFilter (0x1E90FF, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
+				this.filters = [shadow, glow];
+			]]>
+			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.graphics.clear();
@@ -591,6 +598,12 @@
 										);
 				
 				
+				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, this.disabled ? 0.25 : 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false );
+				this.filters = [shadow];
+			]]>
+			</script>
+			<script type="text/hscript" action="focusOut">
+			<![CDATA[
 				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, this.disabled ? 0.25 : 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false );
 				this.filters = [shadow];
 			]]>
@@ -623,22 +636,30 @@
 		<events>
 			<script type="text/hscript" action="mouseOut">
 			<![CDATA[
-				CursorManager.setCursor(Cursor.ARROW);
+				if(!this.disabled)
+					CursorManager.setCursor(Cursor.ARROW);
+			]]>
+			</script>
+			<script type="text/hscript" action="focusIn">
+			<![CDATA[
+				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, true, false, false);
+				var glow = new flash.filters.GlowFilter (0x1E90FF, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
+				
+				this.filters = [shadow, glow];
 			]]>
 			</script>
 			<script type="text/hscript" action="mouseClick">
 			<![CDATA[
-				if(this.disabled) return;
-				this.checked = !this.checked;
-				this.redraw();
-				this.updateColorTween( new feffects.Tween(50, 0, 150, feffects.easing.Linear.easeNone) );
+				if(!this.disabled) {
+					this.checked = !this.checked;
+					this.redraw();
+					this.updateColorTween( new feffects.Tween(50, 0, 150, feffects.easing.Linear.easeNone) );
+				}
 			]]>
 			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.graphics.clear();
-				
-				this.filters = [];
 				
 				/* Label */
 				if(this.label!=null) {
@@ -711,8 +732,7 @@
 				
 				
 				/* Inner-Drop-Shadow */
-				if (this.filters.length == 0)
-				  {
+				if (this.filters.length == 0) {
 				    var shadow =
 				      new flash.filters.DropShadowFilter (this.disabled ? 2 : 4, 45,
 									  DefaultStyle.DROPSHADOW,
@@ -722,7 +742,14 @@
 									  HIGH,
 									  true, false, false);
 				    this.filters =[shadow];
-				  }
+				}
+			]]>
+			</script>
+			<script type="text/hscript" action="focusOut">
+			<![CDATA[
+				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, true, false, false);
+				
+				this.filters = [shadow];
 			]]>
 			</script>
 			<script type="text/hscript" action="mouseOver">
@@ -807,6 +834,13 @@
 
 	<haxegui:controls:Button>
 		<events>
+			<script type="text/hscript" action="focusIn">
+			<![CDATA[
+				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, false, false, false);
+				var glow = new flash.filters.GlowFilter (0x1E90FF, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
+				this.filters = [shadow, glow];
+			]]>
+			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.graphics.clear ();
@@ -858,18 +892,21 @@
 				}
 				
 				/* Drop-Shadow */
-				if (this.filters.length == 0)
-				  {
-				    var shadow =
-				      new flash.filters.DropShadowFilter (this.disabled ? 2 : 4, 45,
-									  DefaultStyle.DROPSHADOW,
-									  this.disabled ? 0.2 : 0.5,
-									  4, 4, 0.5,
-									  flash.filters.BitmapFilterQuality.
-									  HIGH,
-									  false, false, false);
-				    this.filters =[shadow];
-				  }
+				var shadow =
+				  new flash.filters.DropShadowFilter (this.disabled ? 2 : 4, 45,
+								      DefaultStyle.DROPSHADOW,
+								      this.disabled ? 0.2 : 0.5,
+								      4, 4, 0.5,
+								      flash.filters.BitmapFilterQuality.
+								      HIGH,
+								      false, false, false);
+				this.filters =[shadow];
+			]]>
+			</script>
+			<script type="text/hscript" action="focusOut">
+			<![CDATA[
+				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, false, false, false);
+				this.filters = [shadow];
 			]]>
 			</script>
 		</events>
@@ -1136,6 +1173,12 @@
 					this.__setValue(this.__getValue() + event.delta * this.step);
 			]]>
 			</script>
+			<script type="text/hscript" action="focusIn">
+			<![CDATA[
+				var glow = new flash.filters.GlowFilter (0x1E90FF, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
+				this.filters = [glow];
+			]]>
+			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.background.graphics.lineStyle (1, this.color - 0x141414, 1, true,
@@ -1154,6 +1197,11 @@
 								      flash.filters.BitmapFilterQuality.HIGH,
 								      true, false, false);
 				this.background.filters =[shadow];
+			]]>
+			</script>
+			<script type="text/hscript" action="focusOut">
+			<![CDATA[
+				this.filters = [];
 			]]>
 			</script>
 		</events>
@@ -1185,9 +1233,6 @@
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRectComplex(20,0,8,10,0,4,0,4);
 				this.graphics.endFill();
-				
-				
-				this.moveTo(0,4);
 			]]>
 			</script>
 		</events>

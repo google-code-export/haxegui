@@ -1,0 +1,7 @@
+//~ this.graphics.lineStyle(1, DefaultStyle.TOOLTIP - 0x141414);
+this.graphics.beginFill(DefaultStyle.TOOLTIP);
+this.graphics.drawRect(0,0, 100, 20);
+this.graphics.moveTo(10, 20);
+this.graphics.lineTo(15, 28);
+this.graphics.lineTo(25, 20);
+this.graphics.endFill();

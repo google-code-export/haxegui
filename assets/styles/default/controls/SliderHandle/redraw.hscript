@@ -22,4 +22,3 @@ this.graphics.drawRoundRectComplex(20,0,8,10,0,4,0,4);
 this.graphics.endFill();
 
 
-this.moveTo(0,4);
