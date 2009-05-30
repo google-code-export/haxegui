@@ -95,29 +95,28 @@ class Introspector extends Window
 
 		//
 		tree = new Tree(scrollpane, "Tree", 0, 0);
-		tree.data = { 
-			var1 : 1, 
-			var2: 2, 
-			str: "String", 
-			bool: false, 
-			array: [1,2], 
-			obj2: { 
-				var1: 1,
-				var2: 2
-				  },
-			obj3: { 
-				var1: 1,
-				var2: 2,
-				obj4: { 
-					var1: 1,
-					var2: 2
-				      }
-				  },
-				obj5: { 
-					var1: 1,
-					var2: 2
+/*
+		tree.data = {
+		root : {
+			desktop : flash.display.Sprite,
+			Cursor : flash.display.Sprite,
+			Console : {
+				vert : { 
+					up : haxegui.controls.AbstractButton, 
+					down: haxegui.controls.AbstractButton, 
+					frame: haxegui.controls.AbstractButton,
+					handle: haxegui.controls.AbstractButton
+					},
+				Container: {
+					input : flash.text.TextField,
+					output : flash.text.TextField
+					}
 				}
-			};
+			}
+		};
+*/
+		var o = { root : reflectDisplayObject(cast flash.Lib.current) };
+		tree.data = o;
 		tree.init({width: 250});
 		
 		
@@ -155,6 +154,8 @@ class Introspector extends Window
 			name 		: "name",
 			x			: "x",
 			y			: "y",
+			width		: function() { return (cast e.target).box.width; },
+			height		: function() { return (cast e.target).box.height; },
 			box			: "box",
 			color 		: "color",
 			type 		: function() { return Type.typeof(e.target); },
@@ -232,27 +233,54 @@ class Introspector extends Window
 					item.removeChild(item.getChildByName("icon"));
 				var icon = new Image((cast item), "icon", 4, 4);
 				var src = "assets/icons/types/type-undefined.png";
-/*				
+
 				switch( Type.typeof( list2.data[i]) ) {
 					case TClass(c):
-						if(Std.is(c, String))
+						if(Std.is(c, String)) {
 						src = "assets/icons/types/type-string.png";
+						var inpt = new Input(cast list2.getChildAt(i), "Input", 2, 2);
+						inpt.init({width: 100, height: 16, checked: list2.data[i], label: list2.data[i] });
+						untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));						
+						untyped list2.getChildAt(i).setAction("mouseOver", "");
+						untyped list2.getChildAt(i).setAction("mouseOut", "");
+						untyped list2.getChildAt(i).setAction("mouseDown", "");
+						untyped list2.getChildAt(i).setAction("mouseUp", "");
+						}
 					case TInt:
 						src = "assets/icons/types/type-integer.png";
-
+						var stp = new Stepper(cast list2.getChildAt(i), "Stepper", 2, 2);
+						stp.init({height: 16, value: list2.data[i], label: list2.data[i] });
+						untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
+						untyped list2.getChildAt(i).setAction("mouseOver", "");
+						untyped list2.getChildAt(i).setAction("mouseOut", "");
+						untyped list2.getChildAt(i).setAction("mouseDown", "");
+						untyped list2.getChildAt(i).setAction("mouseUp", "");
+						var l = list1;
+						stp.addEventListener(flash.events.Event.CHANGE, 
+							function(e) {
+								if(Reflect.hasField(e.target, l.data[i]))
+									Reflect.setField(e.target, l.data[i], stp.value); 
+								} );
 					case TFloat:
 						src = "assets/icons/types/type-float.png";
 
 					case TBool:
 						src = "assets/icons/types/type-boolean.png";
-
+						var chkbox = new CheckBox(cast list2.getChildAt(i), "CheckBox", 2, 2);
+						chkbox.init({width: 16, height: 16, checked: list2.data[i], label: null });
+						untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
+						untyped list2.getChildAt(i).setAction("mouseOver", "");
+						untyped list2.getChildAt(i).setAction("mouseOut", "");
+						untyped list2.getChildAt(i).setAction("mouseDown", "");
+						untyped list2.getChildAt(i).setAction("mouseUp", "");
 					case TFunction:
 						src = "assets/icons/types/type-function.png";
 
 					default:
 						src = "assets/icons/types/type-undefined.png";
 				}
-*/
+
+/*
 				if(Std.is(list2.data[i], Component))
 					src = "assets/icons/types/type-class.png";
 				else
@@ -276,7 +304,6 @@ class Introspector extends Window
 				else
 				if(Std.is( list2.data[i], Int ) || Std.is( list2.data[i], UInt ) ) {
 					src = "assets/icons/types/type-integer.png";
-				/*	
 					var stp = new Stepper(cast list2.getChildAt(i), "Stepper", 2, 2);
 					stp.init({height: 16, value: list2.data[i], label: list2.data[i] });
 					untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
@@ -284,7 +311,12 @@ class Introspector extends Window
 					untyped list2.getChildAt(i).setAction("mouseOut", "");
 					untyped list2.getChildAt(i).setAction("mouseDown", "");
 					untyped list2.getChildAt(i).setAction("mouseUp", "");
-				*/
+					var l = list1;
+					stp.addEventListener(flash.events.Event.CHANGE, 
+						function(e) {
+							if(Reflect.hasField(e.target, l.data[i]))
+								Reflect.setField(e.target, l.data[i], stp.value); 
+							} );
 					}
 				else
 				if(Std.is( list2.data[i], Float ))
@@ -292,7 +324,7 @@ class Introspector extends Window
 				else
 				if(Reflect.isFunction( list2.data[i] )) 
 					src = "assets/icons/types/type-function.png";
-
+*/
 				icon.init({src: src});
 			}
 	}
@@ -337,5 +369,17 @@ class Introspector extends Window
 	}
 
 
+	function reflectDisplayObject(d:DisplayObjectContainer) : Dynamic {
+		var o = {};
+		for(i in 0...d.numChildren) {
+		var child = cast d.getChildAt(i);
+		if(!Std.is(child, flash.text.TextField)) {
+			Reflect.setField( o, child.name, child );
+			}
+		}
+		return o;
+	}
+		
+		
 	
 }
