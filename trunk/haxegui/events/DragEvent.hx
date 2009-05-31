@@ -34,10 +34,10 @@ class DragEvent extends flash.events.MouseEvent {
 	var dragInitiator : Component;
 	//var dragSource : mx.core.DragSource;
 	var draggedItem : Dynamic;
-	public static var DRAG_COMPLETE : String = "stopDrag";
+	public static inline var DRAG_COMPLETE : String = "stopDrag";
 	static var DRAG_DROP : String;
 	static var DRAG_ENTER : String;
 	static var DRAG_EXIT : String;
-	public static var DRAG_OVER : String = "dragOver";
-	public static var DRAG_START : String = "startDrag";
+	public static inline var DRAG_OVER : String = "dragOver";
+	public static inline var DRAG_START : String = "startDrag";
 }

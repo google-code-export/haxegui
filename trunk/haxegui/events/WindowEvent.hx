@@ -33,6 +33,8 @@ class WindowEvent extends flash.events.Event {
 	public static inline var CLOSE : String = "close";
 	/** Fired when the window is closed **/
 	public static inline var DESTROYED : String = "destroyed";
+	/** Fired when the window is rolled **/
+	public static inline var ROLLED : String = "rooled";
 
 	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool, ?oldX : Float, ?oldY : Float) : Void
 	{

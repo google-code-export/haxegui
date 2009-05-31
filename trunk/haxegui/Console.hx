@@ -85,7 +85,7 @@ class Console extends Window, implements ITraceListener
 		type = WindowType.ALWAYS_ON_TOP;
 		super.init(opts);
 
-		box = new Rectangle (0, 0, 640, 240);
+		box = new Rectangle (0, 0, 640, 260);
 
 
 		container = new Container(this, "Container", 10, 20);
@@ -96,7 +96,7 @@ class Console extends Window, implements ITraceListener
 
 		//~ pwd = flash.Lib.current;
 		pwd = ["root"];
-
+		_pwd = cast root;
 
 		// Output TextField for trace and log messages
 		output = new TextField();
@@ -171,7 +171,7 @@ class Console extends Window, implements ITraceListener
 			}
 		#end
 
-		text += pwd.join(".") + "> ";
+		text += pwd.join(".") + "~> ";
 
 		switch(Type.typeof(e)) {
 

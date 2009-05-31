@@ -71,7 +71,8 @@ class Button extends AbstractButton
 		
 		// Default to a no-label simple button
 		if(Opts.optString(opts, "label", null)!=null) {
-		label = new Label(this, "label");
+		//~ label = cast this.addChild(new Label());
+		label = new Label(this);
 		label.text = Opts.optString(opts, "label", name);
 		label.init();
 		}

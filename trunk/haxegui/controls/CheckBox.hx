@@ -19,26 +19,13 @@
 
 package haxegui.controls;
 
-import flash.display.Sprite;
-import flash.display.MovieClip;
-import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-import flash.events.Event;
-import flash.events.MouseEvent;
-import flash.events.KeyboardEvent;
-import flash.events.FocusEvent;
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
 import flash.geom.Rectangle;
-import flash.text.TextField;
-import flash.text.TextFormat;
 
 import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
-import haxegui.Opts;
 import haxegui.managers.StyleManager;
-import haxegui.events.MoveEvent;
+import haxegui.Opts;
 
 
 /**

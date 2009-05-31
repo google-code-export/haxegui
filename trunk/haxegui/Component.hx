@@ -124,9 +124,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		if(name!=null)
 			this.name = name;
 		else
-			this.name = Type.getClassName(Type.getClass(this)).split(".").pop();
+			this.name = Type.getClassName(Type.getClass(this)).split(".").pop() + id;
 
-		text = name;	
+		text = this.name;	
 		
 		if(parent!=null)
 			parent.addChild(this);

@@ -24,10 +24,7 @@ import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.filters.BevelFilter;
+
 import flash.geom.Rectangle;
 import flash.text.TextField;
 import flash.text.TextFormat;
@@ -59,17 +56,11 @@ class ListHeader extends AbstractButton
 	{
 		super (parent, name, x, y);
 		
-		label = new Label(this, "label", 4, 4);
+		label = new Label(this);
 		label.init();
+		label.moveTo(4,4);
 	}
 
-	
-	override public function init(opts:Dynamic=null)
-	{
-		super.init(opts);
-
-
-	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(ListHeader);
@@ -174,15 +165,16 @@ class UiList extends Component
 			data = opts.data;
 
 
-		header = new ListHeader(this, "header");
+		header = new ListHeader(this);
 		header.init({color: this.color, width: this.box.width});
 
 
   		var n = 4;
 		if(data!=null && data.length > 0) n = data.length+1;
 		for (i in 1...n) {
-			var item = new ListItem(this, "item" + i, 0, 20*i );
+			var item = new ListItem(this);
 			item.init({width: this.box.width, color: DefaultStyle.INPUT_BACK});
+			item.move(0,20*i);
 
 		}
 

@@ -35,6 +35,8 @@ import haxegui.managers.StyleManager;
 
 import haxegui.Component;
 import haxegui.controls.AbstractButton;
+import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
 
 
 
@@ -70,60 +72,62 @@ class Transformer extends Component
 			
 		super.init(opts);
 	
+		blendMode = flash.display.BlendMode.DIFFERENCE;
+		target.addEventListener(FocusEvent.FOCUS_OUT, onTargetFocusOut, false, 0, true);
+		stage.addEventListener(MouseEvent.MOUSE_DOWN, onClose, false, 0, true);
 		 
 			
-	for(i in 0...8) {
-		handles.push(new AbstractButton(this, "handle"+i));
-		handles[i].init();
-		handles[i].text = null;
-		handles[i].setAction("redraw",
-		"
-		this.graphics.clear();
-		this.graphics.lineStyle (1, Math.min(0xFFFFFF, this.color | 0x4D4D4D), 1, true,
-			 flash.display.LineScaleMode.NONE,
-			 flash.display.CapsStyle.ROUND,
-			 flash.display.JointStyle.ROUND);		
-		this.graphics.beginFill(0xFFFFFF, .35);
-		this.graphics.drawRect(0,0,8,8);
-		this.graphics.endFill();
-		"
-		);
-		handles[i].setAction("mouseClick", "");
-		
-		handles[i].setAction("mouseDown",
-		"
-		this.startDrag();
-		this.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove, false, 0, true);
-		"
-		);
+		for(i in 0...8) {
+			handles.push(new AbstractButton(this, "handle"+i));
+			handles[i].init();
+			handles[i].text = null;
+			handles[i].setAction("redraw",
+			"
+			this.graphics.clear();
+			this.graphics.lineStyle (1, Math.min(0xFFFFFF, this.color | 0x4D4D4D), 1, true,
+				 flash.display.LineScaleMode.NONE,
+				 flash.display.CapsStyle.ROUND,
+				 flash.display.JointStyle.ROUND);		
+			this.graphics.beginFill(0xFFFFFF, .35);
+			this.graphics.drawRect(0,0,8,8);
+			this.graphics.endFill();
+			"
+			);
+			handles[i].setAction("mouseClick", "");
+			handles[i].setAction("mouseDown",
+			"
+			this.startDrag();
+			this.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove, false, 0, true);
+			"
+			);
 
-		handles[i].setAction("mouseUp",
-		"
-		this.stopDrag();
-		this.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);
-		"
-		);
+			handles[i].setAction("mouseUp",
+			"
+			this.stopDrag();
+			this.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);
+			"
+			);
 
 
-		switch(i) {
-			case 0:
-			case 1:
-				handles[i].moveTo( this.box.width/2 - 4, 0 );
-			case 2:
-				handles[i].moveTo( this.box.width - 8, 0 );
-			case 3:
-				handles[i].moveTo( this.box.width - 8, this.box.height/2 - 4 );
-			case 4:
-				handles[i].moveTo( this.box.width - 8, this.box.height - 8 );
-			case 5:
-				handles[i].moveTo( this.box.width/2 - 4, this.box.height - 8 );
-			case 6:
-				handles[i].moveTo( 0,  this.box.height - 8 );
-			case 7:
-				handles[i].moveTo( 0,  this.box.height/2 - 4 );
+			switch(i) {
+				case 0:
+				case 1:
+					handles[i].moveTo( this.box.width/2 - 4, 0 );
+				case 2:
+					handles[i].moveTo( this.box.width - 8, 0 );
+				case 3:
+					handles[i].moveTo( this.box.width - 8, this.box.height/2 - 4 );
+				case 4:
+					handles[i].moveTo( this.box.width - 8, this.box.height - 8 );
+				case 5:
+					handles[i].moveTo( this.box.width/2 - 4, this.box.height - 8 );
+				case 6:
+					handles[i].moveTo( 0,  this.box.height - 8 );
+				case 7:
+					handles[i].moveTo( 0,  this.box.height/2 - 4 );
+			}
+			
 		}
-		
-	}
 
 
 	
@@ -138,7 +142,7 @@ class Transformer extends Component
 			 flash.display.LineScaleMode.NONE,
 			 flash.display.CapsStyle.ROUND,
 			 flash.display.JointStyle.ROUND);		
-		this.graphics.beginFill(0xFFFFFF, .35);
+		this.graphics.beginFill(0xFFFFFF, .45);
 		this.graphics.drawCircle(0,0,4);
 		this.graphics.endFill();
 		"
@@ -160,7 +164,9 @@ class Transformer extends Component
 		pivot.moveTo( this.box.width/2, this.box.height/2 );
 
 	
-	
+		// dont transform transformers
+		this.setAction("mouseClick", "");
+
 		// draw the frame
 		this.setAction("redraw",
 		"
@@ -169,14 +175,15 @@ class Transformer extends Component
 			 flash.display.LineScaleMode.NONE,
 			 flash.display.CapsStyle.ROUND,
 			 flash.display.JointStyle.ROUND);		
-		this.graphics.beginFill(this.color, .35);
+		this.graphics.beginFill(this.color, .25);
 		this.graphics.drawRect(0,0,this.box.width,this.box.height);
 		this.graphics.drawRect(8,8,this.box.width-16,this.box.height-16);
 		this.graphics.endFill();
 		"
 		);
 		
-		target.addEventListener(FocusEvent.FOCUS_OUT, onTargetFocusOut, false, 0, true);
+		
+
 	}
 
 	static function __init__() {
@@ -185,7 +192,7 @@ class Transformer extends Component
 	
 	public function onTargetFocusOut(e:FocusEvent) {
 		if(e.relatedObject==this || this.contains(e.relatedObject)) return;
-		//~ trace(e);
+		trace(e);
 		this.destroy();
 	}
 
@@ -210,6 +217,7 @@ class Transformer extends Component
 				e.target.y = 0;
 				handles[3].y = handles[7].y = this.box.height/2 - 4;
 				handles[4].y = handles[5].y = handles[6].y = this.box.height - 8;
+				target.moveTo( p.x + 8, p.y + 8 );
 			case 2:
 				this.move( 0, e.target.y );
 				this.box.width = e.target.x + 8;
@@ -219,6 +227,7 @@ class Transformer extends Component
 				handles[1].x = handles[5].x = this.box.width/2 - 4;
 				handles[3].y = handles[7].y = this.box.height/2 - 4;
 				handles[4].y = handles[5].y = handles[6].y = this.box.height - 8;
+				target.moveTo( p.x + 8, p.y + 8 );				
 			case 3:
 				this.box.width = e.target.x + 8;
 				handles[1].x = handles[5].x = this.box.width/2 - 4;
@@ -257,25 +266,26 @@ class Transformer extends Component
 		}
 		pivot.moveTo( this.box.width/2, this.box.height/2 );
 		//~ dirty = true;
-		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-		dispatchEvent(new Event(Event.CHANGE));
 		redraw();
 
 		target.box = this.box.clone();
 		target.box.inflate(-8,-8);
+		if(i==8)
+			target.dispatchEvent(new MoveEvent(MoveEvent.MOVE));
+		else
+			target.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		target.dispatchEvent(new Event(Event.CHANGE));
 		target.redraw();
 		
 		
 	}
 
-
-	/** Mouse click **/
-	public override function onMouseClick(e:MouseEvent) : Void
-	{
-		#if debug
-		trace(e);
-		#end
-		ScriptManager.exec(this,"mouseClick", {event : e});
+	function onClose(e:Dynamic) {
+		if(Std.is(e, MouseEvent))
+			if(e.target==this || this.contains(e.target)) return;
+		this.destroy();
 	}
+	
+
 		
 }
