@@ -135,6 +135,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		move(x,y);
 
 		// Listeners
+		this.addEventListener (Event.ADDED, onAdded, false, 0, true);
+		this.addEventListener (ResizeEvent.RESIZE, onResize, false, 0, true);
 		this.addEventListener (MouseEvent.CLICK, onMouseClick, false, 0, true);
 		this.addEventListener (MouseEvent.DOUBLE_CLICK, onMouseDoubleClick, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
@@ -143,8 +145,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_WHEEL,  onMouseWheel, false, 0, true);
 		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
-		this.addEventListener (ResizeEvent.RESIZE, onResize, false, 0, true);
-		this.addEventListener (Event.ADDED, onAdded, false, 0, true);
+		this.addEventListener (KeyboardEvent.KEY_UP, onKeyUp, false, 0, true);
 		this.addEventListener (FocusEvent.KEY_FOCUS_CHANGE, __focusHandler, false, 0, true);
 		this.addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, __focusHandler, false, 0, true);
 		this.addEventListener (FocusEvent.FOCUS_IN, onFocusIn, false, 0, true);
@@ -570,6 +571,14 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		trace(e);
 		#end
 		if(text!=null) TooltipManager.getInstance().destroy();
+		if(e.ctrlKey) {
+			e.stopImmediatePropagation();
+			var t = new haxegui.toys.Transformer(this);
+			t.init();
+			var p = (cast this).localToGlobal( new flash.geom.Point(this.x, this.y) );
+			t.moveTo( p.x - this.x - 8, p.y - this.y - 8 );
+			}
+
 		ScriptManager.exec(this,"mouseClick", {event : e});
 	}
 
@@ -593,14 +602,15 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	{
 		ScriptManager.exec(this,"mouseWheel", {event : e});
 	}
-	
-	public function onKeyDown(e:KeyboardEvent)
-	{
-	}
 
-	public function onResize(e:ResizeEvent) : Void
-	{
-	}
+	/** Overiden in sub-classes **/
+	public function onKeyDown(e:KeyboardEvent) : Void {}
+
+	/** Overiden in sub-classes **/
+	public function onKeyUp(e:KeyboardEvent) : Void {}
+
+	/** Overiden in sub-classes **/
+	public function onResize(e:ResizeEvent) : Void {}
 
 	private function onEnterFrame(e:Event) : Void
 	{

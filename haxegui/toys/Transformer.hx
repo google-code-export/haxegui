@@ -27,10 +27,9 @@ import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 
 import flash.events.Event;
-import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
+import haxegui.events.ResizeEvent;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
 
@@ -48,24 +47,30 @@ import haxegui.controls.AbstractButton;
  */
 class Transformer extends Component
 {
-	public var target  : DisplayObject;
+	public var target  : Component;
 	public var pivot   : AbstractButton;
 	public var handles : Array<AbstractButton>;
 
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	public function new (trgt:Component)
 	{
-		super(parent, name, x, y);
+		target = trgt;
+		super(flash.Lib.current, "Transformer_"+target, target.x, target.y);
 	}
 
 	override public function init(?opts:Dynamic)
 	{
 		color = cast Math.random() * 0xFFFFFF;
 		handles = [];
-		this.text = null;
-		
+		//~ this.text = null;
+		if(target.box==null || target.box.isEmpty()) 
+			box = target.getBounds(this);
+		else
+			box = target.box.clone();
+		box.inflate(8,8);
+			
 		super.init(opts);
 	
-		
+		 
 			
 	for(i in 0...8) {
 		handles.push(new AbstractButton(this, "handle"+i));
@@ -143,11 +148,13 @@ class Transformer extends Component
 		pivot.setAction("mouseDown",
 		"
 		parent.startDrag();
+		this.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove, false, 0, true);	
 		"
 		);
 		pivot.setAction("mouseUp",
 		"
 		parent.stopDrag();
+		this.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);		
 		"
 		);	
 		pivot.moveTo( this.box.width/2, this.box.height/2 );
@@ -168,12 +175,20 @@ class Transformer extends Component
 		this.graphics.endFill();
 		"
 		);
+		
+		target.addEventListener(FocusEvent.FOCUS_OUT, onTargetFocusOut, false, 0, true);
 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(Transformer);
 	}
 	
+	public function onTargetFocusOut(e:FocusEvent) {
+		if(e.relatedObject==this || this.contains(e.relatedObject)) return;
+		//~ trace(e);
+		this.destroy();
+	}
+
 	public function onMouseMove(e:MouseEvent) {
 		if(!this.contains(e.target)) return;
 		var i = this.getChildIndex(e.target);
@@ -232,10 +247,22 @@ class Transformer extends Component
 				e.target.moveTo(0, this.box.height/2 - 4);
 				handles[1].x = handles[5].x = this.box.width/2 - 4;
 				handles[2].x = handles[3].x = handles[4].x = this.box.width - 8;
+			case 8: //pivot
+				var p = target.parent.globalToLocal(new Point(this.x, this.y));
+				target.moveTo( p.x + 8, p.y + 8 );
+				
 		}
 		pivot.moveTo( this.box.width/2, this.box.height/2 );
 		//~ dirty = true;
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		dispatchEvent(new Event(Event.CHANGE));
 		redraw();
+
+		target.box = this.box.clone();
+		target.box.inflate(-8,-8);
+		target.redraw();
+		
+		
 	}
 
 
