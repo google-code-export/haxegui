@@ -19,21 +19,18 @@
 
 package haxegui.controls;
 
+import flash.geom.Rectangle;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.geom.Rectangle;
-import flash.text.TextField;
 
 import haxe.Timer;
 
 import haxegui.Component;
+import haxegui.controls.Input;
 import haxegui.managers.CursorManager;
 import haxegui.Opts;
 import haxegui.managers.StyleManager;
@@ -70,8 +67,7 @@ class Stepper extends Component
 {
 	public var up : StepperUpButton;
 	public var down : StepperDownButton;
-	public var background : Sprite;
-	public var tf : TextField;
+	public var input : Input;
 
 	public var value(__getValue,__setValue) : Float;
 	public var step : Float;
@@ -82,6 +78,11 @@ class Stepper extends Component
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
+	}
+
+
+	override public function init(opts:Dynamic=null)
+	{
 
 		value = 0;
 		step = 1;
@@ -90,22 +91,12 @@ class Stepper extends Component
 		color = DefaultStyle.BACKGROUND;
 		box = new Rectangle(0,0,40,20);
 
-		tf = new TextField();
-		tf.name = "tf";
-		background = new Sprite();
-		background.name = "background";
-		this.addChild(background);
-		this.addChild(tf);
 
+		input = new Input(this, "input");
 		up = new StepperUpButton(this, "up");
 		down = new StepperDownButton(this, "down");
 
-		this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
-	}
-
-
-	override public function init(opts:Dynamic=null)
-	{
+	
 		var aOpts = Opts.clone(opts);
 		value = Opts.optFloat(aOpts,"value", value);
 		step = Opts.optFloat(aOpts,"step", step);
@@ -118,35 +109,28 @@ class Stepper extends Component
 		// since we removed fields, reset the initOpts
 		this.initOpts = Opts.clone(opts);
 
-		tf.type = flash.text.TextFieldType.INPUT;
-		tf.selectable = true;
-		tf.width = box.width - 10;
-		tf.height = box.height - 2;
-		tf.x = 4;
-		tf.y = 2;
-		tf.text = Std.string(value);
-		tf.embedFonts = true;
-		var fmt = DefaultStyle.getTextFormat();
-		fmt.color = disabled ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.INPUT_TEXT;
-		tf.defaultTextFormat = fmt;
-		tf.setTextFormat(fmt);
-
-
 		var bOpts = Opts.clone(aOpts);
 		Opts.optBool(bOpts, "autoRepeat", true);
 		Opts.optFloat(bOpts, "repeatsPerSecond", 50);
 		Opts.optFloat(bOpts, "repeatWaitTime", .75);
 
+		// init children
+		input.init({width: box.width, text: Std.string(value) });
 		up.init(bOpts);
 		down.init(bOpts);
+
+		
+		
+		this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
+
 	}
 
 	public function onChanged(?e:Dynamic)
 	{
 		dirty = true;
 
-		this.tf.text = Std.string(value);
-		this.tf.setTextFormat(DefaultStyle.getTextFormat());
+		input.tf.text = Std.string(value);
+		input.tf.setTextFormat(DefaultStyle.getTextFormat());
 	}
 
 	private function __getValue() : Float {

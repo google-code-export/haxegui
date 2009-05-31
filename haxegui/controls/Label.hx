@@ -45,6 +45,7 @@ class Label extends Component
 	override public function init(opts : Dynamic=null)
 	{
 		super.init(opts);
+		
 		tf = new TextField();
 		tf.name = "tf";
 		tf.text = ( text==null ) ? name : text;
@@ -52,26 +53,21 @@ class Label extends Component
 		tf.embedFonts = true;
 		tf.multiline = true;
 		tf.autoSize =  TextFieldAutoSize.LEFT;
-		//~ tf.autoSize =  TextFieldAutoSize.CENTER;
-		//~ tf.autoSize =  TextFieldAutoSize.NONE;
 		tf.selectable = false;
-
-		//~ tf.border = true;
-
 		tf.mouseEnabled = false;
 		tf.tabEnabled = false;
 		tf.focusRect = false;
 
-		this.mouseEnabled = false;
+		//~ this.mouseEnabled = false;
 		this.tabEnabled = false;
 		this.focusRect = false;
 
-		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
 		tf.text = Opts.optString(opts, "innerData", text);
-
 		tf.defaultTextFormat = DefaultStyle.getTextFormat();
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 		this.addChild(tf);
+
+		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
 
 	}
 

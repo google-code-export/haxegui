@@ -21,7 +21,7 @@ this.graphics.drawRoundRectComplex(0, 0, 16, this.parent.box.height/2, 0, 4, 0, 
 
 this.graphics.endFill();
 
-this.moveTo( this.parent.box.width - 10, -1 );
+this.moveTo( this.parent.box.width - 10, 0 );
 
 var shadow = new flash.filters.DropShadowFilter(
 	2, 45, DefaultStyle.DROPSHADOW,
