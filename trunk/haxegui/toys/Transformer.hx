@@ -54,7 +54,7 @@ class Transformer extends Component
 	public function new (trgt:Component)
 	{
 		target = trgt;
-		super(flash.Lib.current, "Transformer_"+target, target.x, target.y);
+		super(flash.Lib.current, "Transformer_"+target.name, target.x, target.y);
 	}
 
 	override public function init(?opts:Dynamic)
@@ -191,10 +191,12 @@ class Transformer extends Component
 
 	public function onMouseMove(e:MouseEvent) {
 		if(!this.contains(e.target)) return;
+		var p = target.parent.globalToLocal(new Point(this.x, this.y));
 		var i = this.getChildIndex(e.target);
 		switch(i) {
 			case 0:
 				this.move( e.target.x, e.target.y );
+				target.moveTo( p.x + 8, p.y + 8 );
 				this.box.width -= e.target.x;
 				this.box.height -= e.target.y;
 				e.target.moveTo(0,0);
@@ -241,14 +243,15 @@ class Transformer extends Component
 				handles[2].x = handles[3].x = handles[4].x = this.box.width - 8;
 				handles[3].y = handles[7].y = this.box.height/2 - 4;
 				handles[4].y = handles[5].y = e.target.y;
+				target.moveTo( p.x + 8, p.y + 8 );
 			case 7:
 				this.x += e.target.x;
 				this.box.width -= e.target.x;
 				e.target.moveTo(0, this.box.height/2 - 4);
 				handles[1].x = handles[5].x = this.box.width/2 - 4;
 				handles[2].x = handles[3].x = handles[4].x = this.box.width - 8;
+				target.moveTo( p.x + 8, p.y + 8 );
 			case 8: //pivot
-				var p = target.parent.globalToLocal(new Point(this.x, this.y));
 				target.moveTo( p.x + 8, p.y + 8 );
 				
 		}
