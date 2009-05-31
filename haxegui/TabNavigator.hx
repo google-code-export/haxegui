@@ -55,13 +55,11 @@ class Tab extends AbstractButton
 	public var label : Label;
 	public var active : Bool;
 
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super(parent, name, x, y);
 	}
 
-	override public function init(opts:Dynamic=null)
-	{
+	override public function init(opts:Dynamic=null) {
 		box = new Rectangle(0, 0, 40, 24);
 		color = DefaultStyle.BACKGROUND;
 
@@ -74,25 +72,11 @@ class Tab extends AbstractButton
 		label.text = Opts.optString(opts, "label", name);
 		label.init({text: name});
 
-
-		//~ var shadow =
-		  //~ new flash.filters.DropShadowFilter (0, 235,
-						  //~ DefaultStyle.DROPSHADOW,
-						  //~ 0.5,
-						  //~ 3, 3, 0.75,
-						  //~ flash.filters.BitmapFilterQuality.LOW,
-						  //~ false, false, false);
-		//~ this.filters =[shadow];
-		
 	}
 
 	/** Mouse click **/
 	public override function onMouseClick(e:MouseEvent) : Void
 	{
-		//~ StyleManager.exec(this,"mouseClick", {event : e});
-		//~ this.active = true;
-		//~ redraw();
-		
 		(cast this.parent).activeTab = this.parent.getChildIndex(this);
 		parent.dispatchEvent(new Event(Event.CHANGE));
 
@@ -211,9 +195,10 @@ class TabNavigator extends Component
 
 		for(i in 1...5)
 			{
-				var tab = new Tab(this, "Tab"+i, 40*(i-1), 0);
+				var tab = new Tab(this);
 				tab.init({width: 40, color: this.color, active: i==1 });
 				tab.redraw();
+				tab.move(40*(i-1), 0);
 				//~ numTabs = tabs.push(tab);
 			}
 

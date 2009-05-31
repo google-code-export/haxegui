@@ -139,6 +139,7 @@ class XmlParser {
 				comp = cast inst;
 			}
 
+
 			for(attr in node.attributes())
 			{
 				var val = node.get(attr);

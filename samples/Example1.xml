@@ -76,17 +76,17 @@ TODO:
 							</events>
 						</haxegui:controls:Button>
 
-						<haxegui:controls:CheckBox name="CheckBox1" label="CheckBox1" x="30" y="90" />
-						<haxegui:controls:CheckBox name="CheckBox2" label="CheckBox2" x="170" y="90" checked="true" />
-						<haxegui:controls:CheckBox name="CheckBox3" label="CheckBox3" x="310" y="90" disabled="true"/>
+						<haxegui:controls:CheckBox label="CheckBox1" x="30" y="90" />
+						<haxegui:controls:CheckBox label="CheckBox2" x="170" y="90" checked="true" />
+						<haxegui:controls:CheckBox label="CheckBox3" x="310" y="90" disabled="true"/>
 
-						<haxegui:controls:ComboBox name="ComboBox1" x="30" y="130" />
-						<haxegui:controls:ComboBox name="ComboBox2" x="30" y="160" />
-						<haxegui:controls:ComboBox name="ComboBox3" x="30" y="190" disabled="true" />
+						<haxegui:controls:ComboBox x="30" y="130" />
+						<haxegui:controls:ComboBox x="30" y="160" />
+						<haxegui:controls:ComboBox x="30" y="190" disabled="true" />
 
-						<haxegui:controls:Slider name="Slider1" x="200" y="130" />
-						<haxegui:controls:Slider name="Slider2" x="200" y="160" />
-						<haxegui:controls:Slider name="Slider3" x="200" y="190" />
+						<haxegui:controls:Slider x="200" y="130" />
+						<haxegui:controls:Slider x="200" y="160" />
+						<haxegui:controls:Slider x="200" y="190" />
 
 						<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="128" autoRepeat="true" repeatsPerSecond="20" repeatWaitTime=".5" />
 						<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="128" autoRepeat="true" repeatsPerSecond="10" repeatWaitTime=".5" />
@@ -96,16 +96,16 @@ TODO:
 						<haxegui:controls:Input name="Input2" x="30" y="250" />
 						<haxegui:controls:Input name="Input3" x="30" y="280" disabled="true"/>
 
-						<haxegui:controls:RadioButton name="RadioButton1" x="30" y="310" />
-						<haxegui:controls:RadioButton name="RadioButton2" x="30" y="340" />
-						<haxegui:controls:RadioButton name="RadioButton3" x="30" y="370" disabled="true" />
-						<haxegui:controls:RadioButton name="RadioButton4" x="30" y="400" selected="true" disabled="true" />
+						<haxegui:controls:RadioButton x="30" y="310" />
+						<haxegui:controls:RadioButton x="30" y="340" />
+						<haxegui:controls:RadioButton x="30" y="370" disabled="true" />
+						<haxegui:controls:RadioButton x="30" y="400" selected="true" disabled="true" />
 
-						<haxegui:controls:Expander name="Expander1" x="430" y="80" >
-								<haxegui:controls:UiList name="List3" x="20" y="20" data="@StringArray" visible="false" />
+						<haxegui:controls:Expander x="430" y="80" >
+								<haxegui:controls:UiList x="20" y="20" data="@StringArray" visible="false" />
 						</haxegui:controls:Expander>
 
-						<haxegui:controls:UiList name="List2" x="210" y="250" >
+						<haxegui:controls:UiList x="210" y="250" >
 							<haxegui:DataSource>
 								<List>
 									<String>Apples</String>
@@ -116,7 +116,6 @@ TODO:
 							<events>
 								<script type="text/hscript" action="onLoaded">
 								<![CDATA[
-									this.data = [""];
 									this.data.push("Milk");
 									this.data.push("Bread");
 									this.data.push("Eggs");
@@ -131,10 +130,10 @@ TODO:
 				<haxegui:TabChild visible="false">
 					<haxegui:Container name="Container2" width="512" height="512"  >
 						<haxegui:controls:Label x="20" y="20" >Second TabChild</haxegui:controls:Label>
-						<haxegui:controls:RadioButton name="RadioButton1" x="30" y="110" />
-						<haxegui:controls:RadioButton name="RadioButton2" x="30" y="140" />
-						<haxegui:controls:RadioButton name="RadioButton3" x="30" y="170" disabled="true" />
-						<haxegui:controls:RadioButton name="RadioButton4" x="30" y="200" selected="true" disabled="true" />
+						<haxegui:controls:RadioButton label="false" x="30" y="110" />
+						<haxegui:controls:RadioButton label="false" x="30" y="140" />
+						<haxegui:controls:RadioButton label="false" x="30" y="170" />
+						<haxegui:controls:RadioButton label="false" x="30" y="200" />
 					</haxegui:Container>
 				</haxegui:TabChild>
 				<haxegui:TabChild visible="false">

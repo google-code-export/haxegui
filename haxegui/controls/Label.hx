@@ -38,7 +38,6 @@ class Label extends Component
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
-		if(name==null) name="label";
 		super(parent, name, x, y);
 	}
 
@@ -48,7 +47,7 @@ class Label extends Component
 		
 		tf = new TextField();
 		tf.name = "tf";
-		tf.text = ( text==null ) ? name : text;
+		tf.text = text;
 		tf.type = TextFieldType.DYNAMIC;
 		tf.embedFonts = true;
 		tf.multiline = true;

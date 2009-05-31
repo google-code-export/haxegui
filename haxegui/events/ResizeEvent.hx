@@ -38,5 +38,5 @@ class ResizeEvent extends flash.events.MouseEvent {
 
 	public var oldHeight : Float;
 	public var oldWidth : Float;
-	public static var RESIZE : String = "Resize";
+	public static inline var RESIZE : String = "Resize";
 }

@@ -32,8 +32,6 @@ import flash.display.Shape;
 import flash.display.Sprite;
 import flash.display.LineScaleMode;
 
-import flash.text.TextField;
-import flash.text.TextFormat;
 
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -78,6 +76,7 @@ import feffects.easing.Linear;
 import feffects.easing.Quad;
 import feffects.easing.Quart;
 import haxegui.Window;
+import haxegui.windowClasses.StatusBar;
 
 
 
@@ -133,15 +132,15 @@ class Stats extends Window
      */
     public override function init(?initObj:Dynamic)
     {
-
-        super.init({name:"Stats", x:x, y:y, width:width, height:height, color: 0x2A7ACD});
-
+        super.init({name:"Stats", type: WindowType.MODAL, sizeable:false,
+                    x:x, y:y, width:width, height:height, color: 0x2A7ACD});
+        type = WindowType.MODAL;
         frameCounter = 0;
         delta = 0;
         maxFPS = Math.NEGATIVE_INFINITY;
         minFPS = Math.POSITIVE_INFINITY;
         avgFPS = [.0];
-        interval = 1500;
+        interval = 750;
         gridSpacing = 20;
 
         data =
@@ -149,7 +148,7 @@ class Stats extends Window
         data3 = [new Point(240, 140), new Point(240, 140)];
 
 
-        box = new Rectangle (0, 0, 400, 160);
+        box = new Rectangle (0, 0, 400, 220);
 
         //
         var container = new Container (this, "container", 10, 20);
@@ -158,9 +157,9 @@ class Stats extends Window
 
 
         list = new UiList(container, "List");
-        list.data=["FPS:", "minFPS:", "maxFPS:", "avgFPS:", "Mem:", "Uptime:"];
-        list.init({color: 0xE5E5E5, width: 140, height: 140});
-
+        list.data=["FPS:", "minFPS:", "maxFPS:", "avgFPS:", "objs:", "dirty:", "Mem:", "Uptime:"];
+        list.init({color: 0xE5E5E5, width: 140, height: 180});
+        list.redraw();
 
         graph = new Sprite();
         grid = new Sprite();
@@ -168,14 +167,14 @@ class Stats extends Window
 
         grid.graphics.lineStyle(0,0,0);
         grid.graphics.beginFill( 0xE5E5E5 );
-        grid.graphics.drawRect(0,0,240+gridSpacing*4,140);
+        grid.graphics.drawRect(0,0,240+gridSpacing*4,160);
         grid.graphics.endFill();
 
         for(i in 0...Std.int(240/(gridSpacing-4)))
         {
         grid.graphics.lineStyle(1,0xCCCCCC);
         grid.graphics.moveTo(gridSpacing*i,0);
-        grid.graphics.lineTo(gridSpacing*i,140);
+        grid.graphics.lineTo(gridSpacing*i,160);
         }
 
         for(i in 0...Std.int(140/gridSpacing))
@@ -194,15 +193,20 @@ class Stats extends Window
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
 		graph.filters = [shadow];
         graph.x = 150;
-        graph.scrollRect = new Rectangle(0,0,240,140);
+        graph.scrollRect = new Rectangle(0,0,240,160);
 
         container.addChild(graph);
 
-        var label = new Label(container, "Label", 160, 14);
+
+        
+        var statusbar = new StatusBar(this, "StatusBar", 10);
+        statusbar.init();
+
+        var label = new Label(statusbar, "Label", 260, 2);
         label.text = "Update Interval: ";
         label.init();
-
-        var stepper = new Stepper(container, "Stepper", 250, 10);
+        
+        var stepper = new Stepper(statusbar, "Stepper", 346, 0);
         stepper.init({value: interval, step: 5, min: 20, max: 5000, color: 0x2A7ACD});
         var self = this;
 		stepper.addEventListener(Event.CHANGE,
@@ -214,7 +218,7 @@ class Stats extends Window
                 self.avgFPS = [.0];
                 self.interval = e.target.value;
 
-                self.list.data=["FPS:", "minFPS:", "maxFPS:", "avgFPS:", "Mem:", "Uptime:"];
+                self.list.data=["FPS:", "minFPS:", "maxFPS:", "objs:", "dirty:", "avgFPS:", "Mem:", "Uptime:"];
                 self.list.redraw();
                 self.ploter.graphics.clear();
                 self.ploter.x = 0;
@@ -227,6 +231,9 @@ class Stats extends Window
                 self.timer.run = self.update;
 
                 });
+        
+
+
 
         timer = new haxe.Timer(interval);
         timer.run = update;
@@ -269,13 +276,15 @@ class Stats extends Window
             "minFPS: \t\t" + Std.string(minFPS).substr(0,5),
             "maxFPS: \t\t" + Std.string(maxFPS).substr(0,5),
             "avgFPS: \t\t" + Std.string(avg).substr(0,5),
+            "obj: \t\t\t" + Std.string(Math.NaN),
+            "dirty: \t\t\t" + Std.string(Math.NaN),
             "Mem(MB): \t\t" + Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5),
             "Uptime: \t\t\t" + Std.string(haxe.Timer.stamp()).substr(0,5)
         ];
 
         list.redraw();
 
-
+/*
 
         var item = cast list.getChildAt(1);
         item.redraw();
@@ -294,8 +303,8 @@ class Stats extends Window
 		item.graphics.beginFill (0xFF00A8);
 		item.graphics.drawRect (0, 0, Std.int(flash.system.System.totalMemory/Math.pow(10,6)), 20);
 		item.graphics.endFill ();
-
-
+*/
+/*
 
         data.push( new Point( 240-ploter.x, 140 - fps ) );
         data2.push( new Point( 240-ploter.x, 140 - flash.system.System.totalMemory/Math.pow(10,6) ) );
@@ -312,16 +321,14 @@ class Stats extends Window
         ploter.graphics.lineStyle(2,0x9ADF00);
         ploter.graphics.moveTo( data3[data3.length-2].x+gridSpacing, data3[data3.length-2].y );
         ploter.graphics.lineTo( data3[data3.length-1].x+gridSpacing, data3[data3.length-1].y );
+*/
 
 
+        //~ if(data.length > 2) data.shift();
+        //~ if(data2.length > 2) data.shift();
 
-        if(data.length > 2) data.shift();
-        if(data2.length > 2) data.shift();
-
-        //~ ploter.x -= gridSpacing*delta;
-        //~ var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, Std.int(delta*interval), ploter, "x", Linear.easeNone );
-        var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, interval, ploter, "x", Linear.easeNone );
-        p.start();
+        //~ var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, interval, ploter, "x", Linear.easeNone );
+        //~ p.start();
 
 
         //~ grid.x -= gridSpacing*delta;
@@ -336,7 +343,6 @@ class Stats extends Window
 
 
 
-        //~ stats.setTextFormat( StyleManager.getTextFormat(8, 0xffffff) );
 
     }
 

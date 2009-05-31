@@ -132,8 +132,8 @@ class ScrollPane extends Component
 		content.scrollRect = r.clone();
 
 		// add the drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8,0.5,BitmapFilterQuality.HIGH,true,false,false);
-		this.filters = [shadow];
+		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8,0.5,BitmapFilterQuality.HIGH,true,false,false);
+		//~ this.filters = [shadow];
 
 		content.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));

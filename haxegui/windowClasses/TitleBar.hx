@@ -45,6 +45,7 @@ class CloseButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
+		text = "Close Window";
 	}
 
 // 	override public function onMouseClick(e:MouseEvent) : Void	{
@@ -71,6 +72,7 @@ class MinimizeButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
+		text = "Minimize Window";
 	}
 
 
@@ -100,6 +102,7 @@ class MaximizeButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
+		text = "Maximize Window";
 	}
 
 	override public function onMouseClick(e:MouseEvent) : Void
@@ -145,7 +148,7 @@ class TitleBar extends AbstractButton
 		closeButton = new CloseButton(this, "closeButton");
 		closeButton.init({color: this.color });
 		closeButton.moveTo(4,4);
-		var shadow:DropShadowFilter = new DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, false, false, false );
+		var shadow:DropShadowFilter = new DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, BitmapFilterQuality.LOW, true, false, false );
 		closeButton.filters = [shadow];
 		closeButton.redraw();
 

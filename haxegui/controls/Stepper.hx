@@ -92,9 +92,9 @@ class Stepper extends Component
 		box = new Rectangle(0,0,40,20);
 
 
-		input = new Input(this, "input");
-		up = new StepperUpButton(this, "up");
-		down = new StepperDownButton(this, "down");
+		input = new Input(this);
+		up = new StepperUpButton(this);
+		down = new StepperDownButton(this);
 
 	
 		var aOpts = Opts.clone(opts);
@@ -119,8 +119,7 @@ class Stepper extends Component
 		up.init(bOpts);
 		down.init(bOpts);
 
-		
-		
+
 		this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 
 	}

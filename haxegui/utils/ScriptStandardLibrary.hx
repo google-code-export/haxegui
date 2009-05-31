@@ -76,6 +76,23 @@ class ScriptStandardLibrary
 		interp.variables.set("flash",
 			{
 				display : {
+					BlendMode : {
+						SUBTRACT : flash.display.BlendMode.SUBTRACT,
+						//~ SHADER : flash.display.BlendMode.SHADER,
+						SCREEN : flash.display.BlendMode.SCREEN,
+						OVERLAY : flash.display.BlendMode.OVERLAY,
+						NORMAL : flash.display.BlendMode.NORMAL,
+						MULTIPLY : flash.display.BlendMode.MULTIPLY,
+						LIGHTEN : flash.display.BlendMode.LIGHTEN,
+						LAYER : flash.display.BlendMode.LAYER,
+						INVERT : flash.display.BlendMode.INVERT,
+						HARDLIGHT : flash.display.BlendMode.HARDLIGHT,
+						ERASE : flash.display.BlendMode.ERASE,
+						DIFFERENCE : flash.display.BlendMode.DIFFERENCE,
+						DARKEN : flash.display.BlendMode.DARKEN,
+						ALPHA : flash.display.BlendMode.ALPHA,
+						ADD : flash.display.BlendMode.ADD,
+					},
 					GradientType : {
 						LINEAR: flash.display.GradientType.LINEAR,
 						RADIAL: flash.display.GradientType.RADIAL,
@@ -96,7 +113,6 @@ class ScriptStandardLibrary
 					ROUND : flash.display.CapsStyle.ROUND,
 					NONE : flash.display.CapsStyle.NONE
 					}
-
 				},
 				filters : {
 					BevelFilter : flash.filters.BevelFilter,
@@ -150,12 +166,13 @@ class ScriptStandardLibrary
 				},
 				ui : {
 					Keyboard : keyboard(),
+					Mouse	 : flash.ui.Mouse
 				},
 			});
 
 
 		interp.variables.set("Keyboard", keyboard());
-
+		interp.variables.set("Mouse", flash.ui.Mouse);
 
 		interp.variables.set("CodeHighlighter", CodeHighlighter);
 
@@ -197,6 +214,7 @@ class ScriptStandardLibrary
 		interp.variables.set("Stats", haxegui.Stats);
 		interp.variables.set("StyleManager", StyleManager);
 		interp.variables.set("ToolBar", haxegui.ToolBar);
+		interp.variables.set("TooltipManager", haxegui.managers.TooltipManager);
 		interp.variables.set("Utils", haxegui.Utils);
 		interp.variables.set("Window", haxegui.Window);
 		interp.variables.set("WindowManager", haxegui.managers.WindowManager);
@@ -235,7 +253,8 @@ class ScriptStandardLibrary
 
 		interp.variables.set("toys",
 			{
-				Rectangle			: haxegui.toys.Rectangle
+				Rectangle			: haxegui.toys.Rectangle,
+				Curvy				: haxegui.toys.Curvy
 			}
 			);
 

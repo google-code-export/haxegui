@@ -41,64 +41,46 @@ class Tooltip extends Component {
 	var t		: Tween;
 	
 
-	public function new (target:Component)
-	{
-	
-	//~ super (parent, "Tooltip", x, y);
-	super (flash.Lib.current, "Tooltip",  flash.Lib.current.stage.mouseX, flash.Lib.current.stage.mouseY - 20);
+	public function new (target:Component) {
+		//
+		super (flash.Lib.current, "Tooltip",  flash.Lib.current.stage.mouseX - 15, flash.Lib.current.stage.mouseY - 30);
+		
+		mouseEnabled = false;
+		buttonMode = false;
+		alpha = 0;
+		
+		tf = new TextField();
+		tf.text = target.text == null ? target.name : target.text;
+		tf.embedFonts = true;
+		tf.x = 4;
+		tf.y = 4;
+		tf.selectable = false;
+		tf.mouseEnabled = false;
+		tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
+		tf.defaultTextFormat = DefaultStyle.getTextFormat();
+		tf.setTextFormat( DefaultStyle.getTextFormat() );
+		
+		this.addChild(tf);		
 
-	alpha = 0;
-	
-	mouseEnabled = false;
-	buttonMode = false;
-	
-	tf = new TextField();
-	tf.embedFonts = true;
-	tf.x = 4;
-	tf.y = 4;
-	//~ tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
-	tf.defaultTextFormat = DefaultStyle.getTextFormat();
-	tf.setTextFormat( DefaultStyle.getTextFormat() );
-	this.addChild(tf);		
+		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
+		this.filters = [shadow];  
 
-	t = new feffects.Tween(0, .8, 500, this, "alpha", feffects.easing.Linear.easeNone);
-	
-
-			this.graphics.lineStyle(1, DefaultStyle.TOOLTIP - 0x141414);
-			this.graphics.beginFill(DefaultStyle.TOOLTIP);
-			//~ sprite.graphics.drawRect(0,0,tf.width+8, tf.height+8 );
-			this.graphics.drawRect(0,0, tf.width, 20);
-			this.graphics.endFill();
-
-			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
-			this.filters = [shadow];  
-	
-			tf.text = target.text == null ? target.name : target.text;
-			//~ t.start();
-			haxe.Timer.delay( t.start, 750 );
-			
+		t = new feffects.Tween(0, .8, 500, this, "alpha", feffects.easing.Linear.easeNone);
+		haxe.Timer.delay( t.start, 750 );
 
 		if (this.parent != null)
 			if (this.parent.contains (this))
 				this.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
 
-  }
+		}
+		
+		public function onMove(e:MouseEvent) {
+			this.x = e.stageX - 15;
+			this.y = e.stageY - 30;
 
-
-
-	
-
-	
-	public function onMove(e:MouseEvent) {
-		this.x = e.stageX + 4;
-		this.y = e.stageY - 24;
-
-		if (this.parent != null)
-			if (this.parent.contains (this))
-				this.parent.setChildIndex(this, this.parent.numChildren-1);
-				
-//~ trace(target.hitTestPoint(x,y));
-//~ if(target.hitTestPoint(x,y)) destroy();
+			if (this.parent != null)
+				if (this.parent.contains (this))
+					this.parent.setChildIndex(this, this.parent.numChildren-1);
 	}
 	
 
@@ -123,10 +105,8 @@ class Tooltip extends Component {
 	static function __init__() {
 		haxegui.Haxegui.register(Tooltip);
 	}
-		
-
-
 }
+
 
 class TooltipManager extends EventDispatcher
 {
@@ -135,32 +115,23 @@ class TooltipManager extends EventDispatcher
 
   var tt : Tooltip;
 
-
-  public static function getInstance ():TooltipManager
-  {
-    if (TooltipManager._instance == null)
-      {
-        TooltipManager._instance = new TooltipManager ();
-      }
-    return TooltipManager._instance;
-  }
-
-
-  public function new ()
-  {
-    super ();
-  }		
+	public static function getInstance ():TooltipManager
+	{
+	if (TooltipManager._instance == null) 
+		TooltipManager._instance = new TooltipManager ();
+	return TooltipManager._instance;
+	}
 
 
 	public function create(target:Component) {
-	
-		if(tt!=null) tt.destroy();
+		if(tt!=null)
+			tt.destroy();
 		tt = new Tooltip(target);
-		
+		tt.init();
 	}
 	
 	public function destroy() {
-	
+		if(tt==null) return;
 		tt.destroy();
 	}
 	

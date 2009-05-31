@@ -141,7 +141,6 @@ class ScrollBar extends Component
 	override public function init(opts:Dynamic=null)
 	{
 		super.init(opts);
-		text = null;
 
 		scroll = 0;
 		//~ box = new Rectangle(0,0,20,90);
@@ -163,26 +162,23 @@ class ScrollBar extends Component
 		frame.filters = [shadow];
 
 		//
-		handle = new ScrollBarHandle(this, "handle", 0, 20);
-		handle.init({color: this.color});
+		handle = new ScrollBarHandle(this);
+		handle.init({y: 20, color: this.color});
 		handle.redraw({h : 20, horizontal: this.horizontal });
 
 		shadow = new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, 0.75, BitmapFilterQuality.LOW, false, false, false);
 		handle.filters = [shadow];
-		handle.text = null;
 
 		//
-		up = new ScrollBarUpButton(this, "up" );
+		up = new ScrollBarUpButton(this);
 		up.init({color: this.color});
 		up.redraw({color: this.color});
-		up.text = null;
 
 		//
-		down = new ScrollBarDownButton(this, "down" );
+		down = new ScrollBarDownButton(this);
 		down.init({color: this.color});
 		down.move(0, box.height - 20);
 		down.redraw({color: this.color});
-		down.text = null;
 
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, .75, BitmapFilterQuality.HIGH, true, false, false);
 		//~ down.filters = [shadow];

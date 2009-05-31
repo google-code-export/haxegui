@@ -45,6 +45,7 @@ import haxegui.managers.ScriptManager;
 import haxegui.Component;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
+import haxegui.events.WindowEvent;
 import haxegui.events.DragEvent;
 
 import haxegui.controls.AbstractButton;
@@ -117,9 +118,10 @@ class Window extends Component
 		this.name += Std.string(haxe.Timer.stamp()*1000).substr(0,2);
 
 		super (parent, name, x, y);
-	
-		WindowManager.getInstance().windows.set( this.name, this );
+		
 
+		WindowManager.getInstance().windows.set( this.name, this );
+		
 	}
 
 	public function getInnerRectangle() : Rectangle {
@@ -130,11 +132,10 @@ class Window extends Component
 	{
 		box = new Rectangle (0, 0, 320, 240);
 		color = DefaultStyle.BACKGROUND;
-		text = "Window";
+		text = null;
 		
 		type = Opts.getField(opts, "type");
 		if(type==null) type = WindowType.NORMAL;
-		
 
 		super.init(opts);
 
@@ -209,6 +210,55 @@ class Window extends Component
 			});
 
 	}
+
+	override public function destroy() {
+	
+		var t = new feffects.Tween(1, 0, 750, this, "alpha", feffects.easing.Linear.easeNone);
+		t.start();
+		
+		var self = this;
+		haxe.Timer.delay(
+		function()
+		{
+				var idx : Int = 0;
+		for(i in 0...self.numChildren) {
+			var c = self.getChildAt(idx);
+			if(Std.is(c,Component))
+				(cast c).destroy();
+			else
+				idx++;
+		}
+		for(i in 0...self.numChildren)
+			self.removeChildAt(0);
+		if(self.parent != null)
+			self.parent.removeChild(self);
+		}, 750 );
+		
+	}
+	
+	public override function onMouseDoubleClick(e:MouseEvent) : Void {
+		
+		var self = this;
+		var t = new feffects.Tween(this.box.height, 40, 1500, feffects.easing.Back.easeInOut);
+		t.setTweenHandlers( function(v) {
+			self.box.height = v;
+			self.redraw();
+			} );
+		t.start();
+			
+		var self = this;
+		haxe.Timer.delay( function() {
+			for(i in 0...self.numChildren)
+			if(self.getChildAt(i)!=self.frame && 
+			self.getChildAt(i)!=self.titlebar && 
+			self.getChildAt(i)!=self.statusbar )
+			self.getChildAt(i).visible = false;
+			
+			}, 1500 );
+		dispatchEvent(new WindowEvent(WindowEvent.ROLLED));
+		super.onMouseDoubleClick(e);
+	}
+	
 
 	
 }

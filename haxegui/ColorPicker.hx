@@ -96,7 +96,7 @@ class ColorPicker extends Window
 	{
 		super.init({name:"ColorPicker", x:x, y:y, width:width, height:height, type: WindowType.MODAL, sizeable:false, color: 0xE6D3CC});
 		type = WindowType.MODAL;
-		box = new Rectangle (0, 0, 400, 280);
+		box = new Rectangle (0, 0, 460, 300);
 
 		//
 		var menubar = new MenuBar (this, "MenuBar", 10,20);
@@ -104,7 +104,7 @@ class ColorPicker extends Window
 
 		//
 		var container = new Container (this, "Container", 10, 44);
-		container.init({width: 390, height: 236, color: 0xE6D3CC});
+		container.init({width: 450, height: 256, color: 0xE6D3CC});
 
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
 		container.filters = [shadow];
@@ -137,8 +137,8 @@ class ColorPicker extends Window
 		colSprite.graphics.drawRect(0,0,40,30);
 		colSprite.graphics.endFill();
 
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
-		colSprite.filters = [shadow];
+		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
+		//~ colSprite.filters = [shadow];
 
 		// 
 		input = new Input(container, "Input", 230, 10);
@@ -146,46 +146,38 @@ class ColorPicker extends Window
 		input.tf.text = "0x"+StringTools.hex(currentColor);
 		input.tf.y += 4;
 
-		//~ redraw (null);
-		//~ menubar.redraw();
 
 		//
-		for(i in 1...4)	{
+		for(i in 1...5)	{
 			
 			//
 			var slider = new Slider(container, "Slider"+i);
-			slider.init({width: 128, color: 0xE6D3CC});
+			slider.init({width: 196, step: i==4 ? .1 : 1, max: i==4 ? 1 : 306, color: 0xE6D3CC});
 			slider.move(180, 10+40*i);
+			if(i==4) slider.handle.x=166;
 			
 			//
 			var stepper = new Stepper(container, "Stepper"+i);
-				stepper.init({step: 1, max: 255, color: 0xE6D3CC});
+				stepper.init({value: i==4 ? 1 : 0, step: i==4 ? .01 : 1, max: i==4 ? 1 : 0xFF, color: 0xE6D3CC, repeatsPerSecond: 10});
 			//~ stepper.init();
-			stepper.move(330, 10+40*i);
+			stepper.move(388, 10+40*i);
 			
 			//
 			var me = this;
-			slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value=2*e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); me.updateColor(); });
-			stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = .5*e.target.value; me.updateColor(); });
+			slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value = i==4 ? e.target.handle.x/166 : 2*e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); me.updateColor(); });
+			stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = i==4 ? 166*e.target.value : .5*e.target.value; me.updateColor(); });
 
 		}
 
 		//
-		var button = new Button(container, "Ok", 180, 190);
+		var button = new Button(container, "Ok", 180, 210);
 		button.init({color: 0xE6D3CC, label: "Ok" });
 
 	
 		//
-		var button = new Button(container, "Cancel", 290, 190);
+		var button = new Button(container, "Cancel", 290, 210);
 		button.init({color: 0xE6D3CC, label: "Cancel" });
 
-
-		//~ if(isSizeable())
-		//~ {
-			//~ bl.y = frame.height - 32;
-			//~ br.x = frame.width - 32;
-			//~ br.y = frame.height - 32;
-		//~ }
 
 
 		this.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
@@ -201,28 +193,16 @@ class ColorPicker extends Window
 	public override function onResize (e:ResizeEvent) : Void
 	{
 
-
 		super.onResize(e);
 
 		e.stopImmediatePropagation ();
-		//~ e.stopPropagation ();
-
-
-		//~ if( this.getChildByName("Container")!=null )
-		//~ {
-		//~ var container = cast this.getChildByName("Container");
-		//~ container.onResize(e);
-		//~ }
 
 
 		if( this.getChildByName("MenuBar")!=null )
 		{
 		var menubar = untyped this.getChildByName("MenuBar");
 		menubar.onResize(e);
-		//~ menubar.dispatchEvent(e.clone());
 		}
-
-		//~ dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 
 
@@ -268,11 +248,6 @@ class ColorPicker extends Window
 			untyped this.getChildByName("Container").getChildByName("Slider3").handle.x = .5*b;
 			untyped this.getChildByName("Container").getChildByName("Slider3").dispatchEvent(new Event(Event.CHANGE));
 
-			//~ colSprite.graphics.clear();
-			//~ colSprite.graphics.lineStyle(2, 0);
-			//~ colSprite.graphics.beginFill(currentColor);
-			//~ colSprite.graphics.drawRect(0,0,40,30);
-			//~ colSprite.graphics.endFill();
 
 	}
 
@@ -281,17 +256,31 @@ class ColorPicker extends Window
 		var r = 1 + 2 * untyped this.getChildByName("Container").getChildByName("Slider1").handle.x ;
 		var g = 1 + 2 * untyped this.getChildByName("Container").getChildByName("Slider2").handle.x ;
 		var b = 1 + 2 * untyped this.getChildByName("Container").getChildByName("Slider3").handle.x ;
-
-		//~ r = r & 0xFF >> 16 ;
-		//~ g = g & 0x00FF >> 8 ;
-		//~ b = b   ;
-		//~ trace(r+","+g+","+b);
+		var a = untyped this.getChildByName("Container").getChildByName("Stepper4").value ;
 
 		currentColor = r | g | b;
 		currentColor  = (r << 16) | (g << 8) | b;
+
+	    var matrix = new flash.geom.Matrix(); 
+		var bmpd:BitmapData = new BitmapData(20,20);
+		var rect1:Rectangle = new Rectangle(0,  0, 10, 10);
+		var rect2:Rectangle = new Rectangle(0, 10, 10, 20);
+		var rect3:Rectangle = new Rectangle(10, 0, 20, 10);
+		var rect4:Rectangle = new Rectangle(10,10, 20, 20);
+		bmpd.fillRect(rect1, 0xFFBFBFBF);
+		bmpd.fillRect(rect2, 0xFFDDDDDD);
+		bmpd.fillRect(rect3, 0xFFDDDDDD);
+		bmpd.fillRect(rect4, 0xFFBFBFBF);
+
 		colSprite.graphics.clear();
 		colSprite.graphics.lineStyle(2, color - 0x141414);
-		colSprite.graphics.beginFill(currentColor);
+
+		colSprite.graphics.beginBitmapFill(bmpd, matrix, true, true);
+		colSprite.graphics.drawRect(0,0,40,30);
+		colSprite.graphics.endFill();
+
+
+		colSprite.graphics.beginFill(currentColor, a);
 		colSprite.graphics.drawRect(0,0,40,30);
 		colSprite.graphics.endFill();
 

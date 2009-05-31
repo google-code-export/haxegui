@@ -133,7 +133,6 @@ class Tree extends Component {
 			var node = new TreeNode(this, key, 0, 20*i);
 			node.init({color: this.color, width: this.box.width});
 
-
 			if(Reflect.isObject(Reflect.field(data, key))) {
 				var subtree = new Tree(node.expander, "Tree"+i, 0, 16);
 				subtree.data = Reflect.field(data, key);

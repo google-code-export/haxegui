@@ -43,5 +43,4 @@ this.graphics.lineTo(w-7.5, 7.5);
 this.graphics.lineTo(w/2, h-7.5);
 this.graphics.endFill ();
 
-this.x = this.parent.box.width - w;
-this.y = -1;
+this.moveTo( parent.box.width - w, -1 );

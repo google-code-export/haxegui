@@ -66,18 +66,22 @@ class RadioButton extends AbstractButton
 
 	override public function init(?opts:Dynamic)
 	{
-		box = new Rectangle(0,0,140,20);
+		box = new Rectangle(0,0,20,20);
 		color = DefaultStyle.BACKGROUND;
 
 		super.init(opts);
 
 		selected = Opts.optBool(opts, "selected", selected);
 
-		label = new Label(this, "label", 24, 2);
-		label.init({innerData: name});
-		
-		
-		if(this.disabled) {
+		// label on by default
+		if(Opts.optString(opts, "label", name)!="false") {
+			label = new Label(this);
+			label.text = Opts.optString(opts, "label", name);
+			label.init();
+			label.move(24, 2);
+		}
+
+		if(label!=null && this.disabled) {
 			var fmt = DefaultStyle.getTextFormat();
 			fmt.color = DefaultStyle.BACKGROUND - 0x141414;
 			label.tf.setTextFormat(fmt);
@@ -109,6 +113,7 @@ class RadioButton extends AbstractButton
 	{
 		mouseEnabled = false;
 		buttonMode = false;
+		useHandCursor = false;
 		//~ tabEnabled = false;
 		redraw();
 	}
@@ -120,6 +125,7 @@ class RadioButton extends AbstractButton
 	{
 		mouseEnabled = true;
 		buttonMode = true;
+		useHandCursor = true;
 		//~ tabEnabled = false;
 		redraw();
 	}
@@ -139,28 +145,20 @@ class RadioButton extends AbstractButton
 	*/
 	public  function onBtnMouseDown(e:MouseEvent) : Void
 	{
-		//~ if(disabled) return;
-
-		//~ trace(Std.string(here)+Std.string(e));
-		//~ if(!this.hasFocus())
-		FocusManager.getInstance().setFocus(this);
-
-		//~ redraw(DefaultStyle.BACKGROUND - 0x141414);
-
+		if(disabled) return;
 		for(i in 0...parent.numChildren)
 			{
 				var child = parent.getChildAt(i);
 				if(Std.is(child, RadioButton))
 					if(child!=this)
-					//~ if(child!=this && untyped !child.disabled)
-						{
-						//~ trace(child);
 						untyped
 							{
 							child.selected = false;
 							child.redraw();
 							}
-						}
+		this.selected = true;
+		this.redraw();
+
 			}
 	}
 

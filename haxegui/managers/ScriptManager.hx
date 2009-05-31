@@ -169,14 +169,14 @@ class ScriptManager implements Dynamic
 	*
 	* @param func A Dynamic->?haxe.PosInfos->Void logging function
 	*/
-	public static function redirectTraces(func:Dynamic) {
+	public static function redirectTraces(f:Dynamic) {
 		for(so in defaultActions) {
-			so.interp.variables.set( "trace", func );
+			so.interp.variables.set( "trace", f );
 		}
 		for(comp in instanceActions) {
 			var hash = instanceActions.get(comp);
 			for(so in hash) {
-				so.interp.variables.set( "trace", func );
+				so.interp.variables.set( "trace", f );
 			}
 		}
 	}

@@ -1,3 +1,5 @@
+var r = .5*Math.min( this.box.width, this.box.height );
+
 this.graphics.clear();
 
 var colors = [ color | 0x323232, color - 0x141414 ];
@@ -18,12 +20,12 @@ if(this.selected)
 			 flash.display.JointStyle.ROUND);
 	
 	this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-	this.graphics.drawCircle (10, 10, 8);
+	this.graphics.drawCircle (r, r, r);
 	this.graphics.endFill ();
 
 	this.graphics.lineStyle(0,0,0);
 	this.graphics.beginFill(0);
-	this.graphics.drawCircle (10, 10, 4);
+	this.graphics.drawCircle (r, r, .5*r);
 	this.graphics.endFill ();
 
 
@@ -36,7 +38,7 @@ else
 			 flash.display.JointStyle.ROUND);
 			 
 	this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-	this.graphics.drawCircle (10, 10, 8);
+	this.graphics.drawCircle (r, r, r);
 	this.graphics.endFill ();
 
 
@@ -52,3 +54,4 @@ else
 	var shadow = new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.8, 2, 2, 0.65, flash.filters.BitmapFilterQuality.LOW, true, false, false );
 	this.filters = [shadow];
 }
+

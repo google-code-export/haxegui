@@ -76,6 +76,7 @@ class WindowFrame extends Component
 		this.box = (cast parent).box.clone();
 		
 		super.init(opts);
+		text = null;
 		
 		// Exclude modal windows from resizing
 		if(!(cast parent).isModal())
@@ -142,6 +143,7 @@ class WindowFrame extends Component
 						//~ this.parent.box.width += MouseManager.getInstance().delta.x ;
 						//~ this.parent.box.height += MouseManager.getInstance().delta.y ;
 						}
+						
 				this.redraw();
 
 		"

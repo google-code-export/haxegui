@@ -30,6 +30,7 @@ import flash.filters.BevelFilter;
 import flash.geom.Rectangle;
 import haxegui.Component;
 import haxegui.managers.CursorManager;
+import haxegui.managers.TooltipManager;
 import haxegui.Opts;
 import haxegui.managers.FocusManager;
 import haxegui.managers.StyleManager;
@@ -39,9 +40,6 @@ import haxegui.events.DragEvent;
 
 class SliderHandle extends AbstractButton
 {
-
-
-	
 	static function __init__() {
 		haxegui.Haxegui.register(SliderHandle);
 	}
@@ -55,6 +53,9 @@ class Slider extends Component
 	public var max : Float;
 	public var step : Float;
 
+	/** Number of ticks **/
+	public var ticks : Int;
+	
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
@@ -65,15 +66,17 @@ class Slider extends Component
 		max = Math.POSITIVE_INFINITY;
 		box = new Rectangle(0,0,140,20);
 		color = DefaultStyle.BACKGROUND;
+		step = 5;
+		ticks = 25;
 		
-		step = Opts.optFloat(opts,"step", 10);
+		step = Opts.optFloat(opts,"step", step);
 		max = Opts.optFloat(opts,"max", max);
 
 		super.init(opts);
 
-		handle = new SliderHandle(this, "handle", 0, 0);
+		handle = new SliderHandle(this);
 		handle.init({color: this.color});
-		handle.text = null;
+		handle.move(0,4);
 
 		// add the drop-shadow filters
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
@@ -84,11 +87,7 @@ class Slider extends Component
 
 		handle.addEventListener (MouseEvent.MOUSE_DOWN, onHandleMouseDown, false, 0, true);
 		handle.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
-		//~ handle.addEventListener (MouseEvent.ROLL_OVER, onHandleRollOver, false, 0, true);
-		//~ handle.addEventListener (MouseEvent.ROLL_OUT,  onHandleRollOut, false, 0, true);
-
 		handle.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
-
 
 		this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 
@@ -101,72 +100,25 @@ class Slider extends Component
 		//~ value = Math.max( min, Math.min( max, value ));
 		if(handle.x < 0) handle.x = 0;
 		if(handle.x > (box.width - handle.width) ) handle.x = box.width - handle.width;
-
+	
 	}
 
 
-	public override function onMouseWheel(e:MouseEvent)
-	{
-		//trace(e);
-		//~ handle.x += e.delta * 5;
+	public override function onMouseWheel(e:MouseEvent)	{
 		handle.x += e.delta * step * ((rotation > 0) ? -1 : 1);
 		dispatchEvent(new Event(Event.CHANGE));
 		super.onMouseWheel(e);
 	}
 
-
-	/**
-	*
-	*
-	*/
-	public function onHandleRollOver(e:MouseEvent) : Void
-	{
-		if(disabled) return;
-		//~ redraw(DefaultStyle.BACKGROUND + 0x323232 );
-//		redraw(DefaultStyle.BACKGROUND | 0x141414 );
-		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
-		//~ redraw(color | 0x202020 );
-		redraw(color | 0x4C4C4C );
-
-		//~ redraw(color + 0x141414 );
-		CursorManager.setCursor(Cursor.HAND);
-
-	}
-
-	/**
-	*
-	*
-	*/
-	public function onHandleRollOut(e:MouseEvent) : Void
-	{
-		//~ var color = checked ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
-		redraw(color);
-//		CursorManager.setCursor(Cursor.ARROW);
-	}
-
-
-
-	function onHandleMouseDown (e:MouseEvent) : Void
-	{
-
+	function onHandleMouseDown (e:MouseEvent) : Void {
 		CursorManager.setCursor (Cursor.DRAG);
-
-		redraw(color | 0x666666);
-
-
-		//
-		FocusManager.getInstance().setFocus (this);
-
 		handle.startDrag(false,new Rectangle(0,e.target.y, box.width - handle.width ,0));
-		//~ e.target.startDrag(false,new Rectangle(0,e.target.y, box.width - handle.width ,0));
-		//~ e.target.stage.startDrag(false,new Rectangle(0,e.target.y, box.width - handle.width ,0));
-
 		e.target.stage.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
-
 	}
 
 	public function onMouseMove (e:MouseEvent)
 	{
+		TooltipManager.getInstance().create(this);
 		dispatchEvent(new Event(Event.CHANGE));
 		//~ onChanged();
 		e.updateAfterEvent();
@@ -178,10 +130,6 @@ class Slider extends Component
 			CursorManager.setCursor (Cursor.ARROW);
 
 		handle.stopDrag();
-		
-		//~ if(e.target.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
-			//~ e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
-
 		redraw(color);
 	}
 
@@ -197,4 +145,15 @@ class Slider extends Component
 		
 		super.destroy();
 	}
+	
+	
+	public override function onResize(e:ResizeEvent) {
+		
+		//~ handle.dirty = true;
+		handle.redraw();
+		handle.y = .5*( this.box.height - handle.height );
+		
+		super.onResize(e);
+	}
+	
 }

@@ -105,7 +105,7 @@ class CursorManager extends EventDispatcher
 	*
 	*/
 	public function init() {
-		Mouse.hide();
+		//~ Mouse.hide();
 		cursor = Cursor.ARROW;
 	}
 
@@ -133,7 +133,7 @@ class CursorManager extends EventDispatcher
 				p.offset(-6,-3);
 
 			case Cursor.HAND, Cursor.HAND2, Cursor.DRAG:
-				p.offset(-14,-2);
+				p.offset(-8,-2);
 
 			case Cursor.CROSSHAIR:
 				p.offset(-23,-17);
@@ -142,10 +142,10 @@ class CursorManager extends EventDispatcher
 				p.offset(-18,-17);
 
 			case Cursor.WE, Cursor.NS:
-				p.offset(-23, -17);
+				p.offset(-13, -17);
 
 			case Cursor.SIZE_ALL:
-				p.offset(-23, -17);
+				p.offset(-15, -12);
 
 		}
 
@@ -164,18 +164,18 @@ class CursorManager extends EventDispatcher
 	}//inject
 
 
-	public function toTop() : Void
+	public inline function toTop() : Void
 	{
 		flash.Lib.current.setChildIndex(_mc, flash.Lib.current.numChildren - 1 );
 	}//toTop
 
 
-	public function hideCursor() : Void
+	public inline function hideCursor() : Void
 	{
 		_mc.visible = false;
 	}
 
-	public function showCursor() : Void
+	public inline function showCursor() : Void
 	{
 		_mc.visible = true;
 	}
@@ -261,23 +261,23 @@ class CursorManager extends EventDispatcher
 	//~ public function useCustom() {}
 
 	/** The default arrow cursor image **/
-	public static var img_arrow = flash.Lib.attach("Arrow");
+	public inline static var img_arrow = flash.Lib.attach("Arrow");
 	/** The hand type cursor image **/
-	public static var img_hand = flash.Lib.attach("Hand");
+	public inline static var img_hand = flash.Lib.attach("Hand");
 	/** The hand press/grab image **/
-	public static var img_hand2 = flash.Lib.attach("Hand2");
+	public inline static var img_hand2 = flash.Lib.attach("Hand2");
 	/** The drag cursor image **/
-	public static var img_drag = flash.Lib.attach("Drag");
+	public inline static var img_drag = flash.Lib.attach("Drag");
 	/** The All Direction resizer image **/
-	public static var img_sizeall = flash.Lib.attach("SizeAll");
+	public inline static var img_sizeall = flash.Lib.attach("SizeAll");
 	/** The   resizer image **/
-	public static var img_nesw = flash.Lib.attach("SizeNESW");
+	public inline static var img_nesw = flash.Lib.attach("SizeNESW");
 	/** The   resizer image **/
-	public static var img_ns = flash.Lib.attach("SizeNS");
+	public inline static var img_ns = flash.Lib.attach("SizeNS");
 	/** The   resizer image **/
-	public static var img_nwse = flash.Lib.attach("SizeNWSE");
+	public inline static var img_nwse = flash.Lib.attach("SizeNWSE");
 	/** The   resizer image **/
-	public static var img_we = flash.Lib.attach("SizeWE");
+	public inline static var img_we = flash.Lib.attach("SizeWE");
 	/** The crosshair cursor image **/
-	public static var img_crosshair = flash.Lib.attach("Crosshair");
+	public inline static var img_crosshair = flash.Lib.attach("Crosshair");
 }

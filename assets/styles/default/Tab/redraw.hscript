@@ -28,7 +28,9 @@ this.graphics.drawRoundRectComplex( 0, 4, this.box.width, this.box.height-4, 4, 
 this.graphics.endFill();
 
     matrix.createGradientBox (this.box.width, 4, Math.PI / 2, 0, 4);
-    this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, [ this.color - 0x202020, ~this.color ],
+    this.graphics.beginGradientFill (flash.display.GradientType.LINEAR,
+				    [ this.active ? this.color - 0x202020 : this.color,
+					this.active ? ~this.color : Math.max(0,this.color - 0x4D4D4D) ],
 					alphas, ratios, matrix);			 
     this.graphics.drawRoundRectComplex( 0, 4, this.box.width, 4, 4, 4, 0, 0 );
     this.graphics.endFill();

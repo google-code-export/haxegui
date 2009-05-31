@@ -129,6 +129,7 @@ class RichTextEditor extends Window
 		btn.init({width: 24, height: 24, label: null });
 		var icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-text-bold.png"});
+		icon.mouseEnabled = false;
 		btn.setAction("mouseClick",
 		"
 		var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
@@ -147,6 +148,7 @@ class RichTextEditor extends Window
 		btn.init({width: 24, height: 24, label: null });
 		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-text-italic.png"});
+		icon.mouseEnabled = false;
 		btn.setAction("mouseClick",
 		"
 		var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
@@ -158,6 +160,7 @@ class RichTextEditor extends Window
 		btn.init({width: 24, height: 24, label: null });
 		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-text-underline.png"});
+		icon.mouseEnabled = false;
 		btn.setAction("mouseClick",
 		"
 		var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
@@ -171,22 +174,26 @@ class RichTextEditor extends Window
 		btn.init({width: 24, height: 24, label: null });
 		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-justify-left.png"});
+		icon.mouseEnabled = false;
 
 
 		btn = new Button(toolbar, "AlignCenter", 276, 8);
 		btn.init({width: 24, height: 24, label: null });
 		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-justify-center.png"});
+		icon.mouseEnabled = false;
 
 		btn = new Button(toolbar, "AlignRight", 300, 8);
 		btn.init({width: 24, height: 24, label: null });
 		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-justify-right.png"});
+		icon.mouseEnabled = false;
 
 		btn = new Button(toolbar, "AlignFill", 324, 8);
 		btn.init({width: 24, height: 24, label: null });
 		icon = new Image(btn, "icon", 4, 4);
 		icon.init({src: "assets/icons/format-justify-fill.png"});
+		icon.mouseEnabled = false;
 
 		btn = new Button(toolbar, "Color", 400, 8);
 		btn.init({width: 32, height: 24, label: null });

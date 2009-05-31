@@ -102,9 +102,6 @@ class ComboBox extends Component
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
-		background = new ComboBoxBackground(this, "background");
-		dropButton = new ComboBoxDropButton(this, "button");
-
 		super(parent, name, x, y);
 	}
 
@@ -118,70 +115,38 @@ class ComboBox extends Component
 		super.init(opts);
 
 		editable = Opts.optBool(opts, "editable", editable);
-
-		if(editable)
-		{
+		
+		this.mouseEnabled = true;
+		this.focusRect = false;
+		this.tabEnabled = false;
+		this.tabChildren = true;
+		
+		if(editable) {
 			if(input != null && input.parent == this)
 				removeChild(input);
-			input = new Input(this, "input");
+			input = new Input(this);
 			input.init({width: this.box.width, text: this.name, disabled: this.disabled});
 			input.redraw();
 		}
-		else
-		{
+		else {
 			if(background != null && background.parent == this)
 				removeChild(background);
-			background = new ComboBoxBackground(this, "background");
+			background = new ComboBoxBackground(this);
 			background.init(opts);
 		}
 
-		dropButton.init(opts);
-		dropButton.setAction("mouseClick",
-		"
-		if(!this.disabled) {
-		  parent.list = new haxegui.controls.UiList(root, this.parent.name+\"List\");
-		  parent.list.init();
-		  parent.list.color = parent.color;
-		  var p = new flash.geom.Point( parent.x, parent.y );		 	
-		  p = parent.parent.localToGlobal(p);
-		  parent.list.x = p.x + 1;
-		  parent.list.y = p.y + 20;
-		  parent.list.box.width = parent.box.width - 22;
-		  parent.list.box.height = 200;
-		  parent.list.removeChild(parent.list.header);
-		  parent.list.data = [];
-		  for(i in 1...10)
-			parent.list.data.push(this.parent.name+\"_ListItem\"+i);
-		  parent.list.redraw();
-		  var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
-		  parent.list.filters = [shadow];
-		  function down(e) { 
-			  trace(e); 
-			  if(parent.list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
-				  parent.list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
-			  parent.list.parent.removeChild(parent.list);
-			  parent.list = null;
-			  }
-		  parent.list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
-		}
-		"
-		);
+		dropButton = new ComboBoxDropButton(this);
+		var bOpts = Opts.clone(opts);
+		Opts.removeFields(bOpts, ["x", "y"]);
+		dropButton.init(bOpts);
+
 
 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(ComboBox);
 	}
-	/*
-	public override function redraw(opts:Dynamic=null) {
-		super.redraw(opts);
-		if(this.input!=null) {
-			if(this.disabled)
-				input.redraw({color: DefaultStyle.BACKGROUND});
-			}
-		
-	}
-	*/
+
 	
 
 }

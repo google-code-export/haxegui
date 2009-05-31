@@ -68,6 +68,7 @@ class Input extends Component
 	    tf.selectable = disabled ? false : true;
 	    tf.background = false;
 	    tf.border = false;
+	    tf.width = box.width - 4;
 	    tf.height = box.height - 3;
 	    tf.x = tf.y = 4;
 	    tf.embedFonts = true;

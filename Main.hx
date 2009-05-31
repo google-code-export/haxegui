@@ -24,6 +24,7 @@ import flash.system.Capabilities;
 
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.geom.Transform;
 
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
@@ -33,6 +34,7 @@ import flash.display.Loader;
 import flash.display.LoaderInfo;
 
 import flash.display.Bitmap;
+import flash.display.BitmapData;
 
 import flash.events.EventDispatcher;
 import flash.events.Event;
@@ -114,7 +116,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
 
 		// Desktop
-		var desktop = new Sprite();
+		var desktop = untyped flash.Lib.current.addChild(new Sprite());
 		desktop.name = "desktop";
 		desktop.mouseEnabled = false;
 
@@ -126,15 +128,14 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 		desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
 		desktop.graphics.endFill();
-		flash.Lib.current.addChild(desktop);
 
 
 		// Logos
-		var logo = flash.Lib.attach("HaxeLogo");
+		var logo = flash.Lib.current.addChild(flash.Lib.attach("HaxeLogo"));
 		logo.name = "HaxeLogo";
 		logo.x = .5*(stage.stageWidth - logo.width);
 		logo.y = .5*(stage.stageHeight - logo.height);
-		flash.Lib.current.addChild(logo);
+		
 		var shadow =
 		  new flash.filters.DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.9, 20, 20, 0.85,
 					flash.filters.BitmapFilterQuality.HIGH, false, false, false);
@@ -156,10 +157,28 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		for(e in bootupMessages)
 			console.log(e.v, e.inf);
 
-		log("<FONT SIZE='24' FACE='_mono'>Hello and welcome.</FONT>");
-		log("<FONT SIZE='12' FACE='_mono'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+".</FONT>");
 
-		stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e){ if(e.charCode=="`".code) console.visible = !console.visible; });
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, 
+			function(e){ 
+				switch(e.charCode) {
+					case "`".code:
+						//~ console.visible = !console.visible; 
+						WindowManager.toFront(console);
+						if(!console.visible) { 
+							console.visible = true; 
+							var t = new feffects.Tween( 0, 1, 1000, console, "alpha", feffects.easing.Linear.easeNone);
+							var ty = new feffects.Tween( -console.height, console.y, 1000+Std.int(console.y*1.5), console, "y", feffects.easing.Back.easeOut);
+							t.start(); 
+							ty.start(); 
+							}
+						else {
+							var t = new feffects.Tween( 1, 0, 350, console, "alpha", feffects.easing.Linear.easeNone);
+							t.start();
+							t.setTweenHandlers(null, function(v){ console.visible = false; } );
+							}
+
+					}
+				});
 
 
 		// Statistics
@@ -170,6 +189,9 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		//~ var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
 		//~ colorpicker.init();
 
+		//~ WindowManager.addWindow().init();
+		
+		
 		// rte
 		var rte = new RichTextEditor(flash.Lib.current, 120,120);
 		rte.init();
@@ -177,192 +199,6 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		// debugger
 		var introspect = new Introspector(flash.Lib.current, 150,150);
 		introspect.init();
-
-/*
-		/////////////////////////////////////////////////////////////////////////////
-		// Widget Playground
-		/////////////////////////////////////////////////////////////////////////////
-			//
-			var window = WindowManager.getInstance().addWindow (flash.Lib.current);
-			window.init({name:"Widget Playground", x:120, y:10});
-
-			//
-			var menubar =  new MenuBar (window, "MenuBar", 10, 20);
-			menubar.init();
-
-			//
-			var toolbar =  new ToolBar (window, "ToolBar", 10, 44);
-			toolbar.init();
-
-			//
-			for(i in 0...10)
-			{
-			var btn = new Button(toolbar);
-			btn.init({height: 24, width: 44, label: ""+i });
-			btn.move(16+48*i, 8);
-			btn.filters = null;
-			}
-
-
-			//
-			var scrollpane = new ScrollPane(window, "scrollpane", 10, 84);
-			scrollpane.init();
-
-			//
-			var container = new Container (scrollpane, "Container");
-			container.init();
-
-			//
-			var label = new Label(container);
-			label.text = "This window, all it's controls and events are hard-coded haxegui, play around.";
-			label.init();
-			label.move(20,10);
-
-			//
-			var btn = new Button(container);
-			btn.init({label: "Button1"});
-			btn.move(20, 40);
-
-			//
-			btn = new Button(container);
-			btn.init({label: "Button2", color: 0x90EE90});
-			btn.move(120, 40);
-
-			btn = new Button(container);
-			btn.init({label: "Button3", width: 100});
-			btn.move(220, 40);
-			btn.label.x += 8;
-			var icon = flash.Lib.attach("Clear");
-			icon.width = icon.height = 20;
-			icon.x = icon.y = 4;
-			btn.addChild(icon);
-
-			//
-			btn = new Button(container);
-			btn.init({label:"1", x:330, y: 40, width: 70, height: 70, color: 0xE86B26});
-			btn.label.x = btn.label.y = 4;
-
-			btn.label.tf.multiline = true;
-			btn.label.tf.wordWrap = true;
-			btn.label.tf.width = 60;
-			btn.label.tf.height = 60;
-			btn.label.x = btn.label.y = 10;
-			btn.label.tf.text = "Button4 Multi line label colored";
-			btn.label.tf.setTextFormat(DefaultStyle.getTextFormat());
-
-
-			//
-			btn = new Button(container);
-			btn.init({label: "Button5", x:20, y: 80, width: 70, disabled: true});
-
-			//
-			btn = new Button(container);
-			btn.init({label: "Button #6 has a long label", x:100, y: 80, width: 220});
-
-			//
-			var chkbox = new CheckBox(container, "CheckBox1");
-			chkbox.init();
-			chkbox.move(20,120);
-
-			//
-			chkbox = new CheckBox(container, "CheckBox2");
-			chkbox.init({checked: true});
-			chkbox.move(160,120);
-
-			//
-			chkbox = new CheckBox(container, "CheckBox3");
-			chkbox.init({disabled: true});
-			chkbox.move(300,120);
-
-			//
-			var cmbbox = new ComboBox(container, "ComboBox1");
-			cmbbox.init();
-			cmbbox.move(20,150);
-
-			//
-			cmbbox = new ComboBox(container, "ComboBox2");
-			cmbbox.init({editable: false});
-			cmbbox.move(20,180);
-
-			//
-			cmbbox = new ComboBox(container, "ComboBox3");
-			cmbbox.init({disabled:true});
-			cmbbox.move(20,210);
-
-
-			//
-			for(i in 1...4)
-			{
-				var radio = new RadioButton(container, "RadioButton"+i);
-				radio.init({disabled: i==3, selected: i==1 });
-				radio.move(20,210+30*i);
-
-				var slider = new Slider(container, "Slider"+i);
-				slider.init();
-				slider.move(200, 120+30*i);
-
-				var stepper = new Stepper(container, "Stepper"+i);
-					stepper.init({step: i, max: 128});
-				//~ stepper.init();
-				stepper.move(360, 120+30*i);
-
-				slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value = e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); }, false, 0, true);
-				stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = e.target.value;  }, false, 0, true);
-
-			}
-
-			for(i in 1...4)
-			{
-				var slider = new Slider(container, "Slider"+(4+i));
-				slider.init({width: 200});
-				slider.move(400+40*i, 40);
-				slider.rotation = 90;
-			}
-
-			var input = new Input(container, "Input1", 200, 240);
-			input.init();
-
-			input = new Input(container, "Input2", 200, 270);
-			input.init();
-
-			input = new Input(container, "Input3", 200, 300);
-			input.init({disabled: true});
-
-			var list = new UiList(container, "List1", 400, 280);
-			list.data = [ "A", "B", "C", "D" ];
-			list.init();
-
-			var list = new UiList(container, "List2", 550, 280);
-			list.data = [ "1", "2", "3", "4" ];
-			list.init();
-
-
-			//
-			var expand = new Expander(container, "Expander1", 550, 40);
-			expand.init({ width: 200, height: 140 });
-
-			//
-			var scrollpane2 = new ScrollPane(expand, "ScrollPane2", 0, 20);
-			scrollpane2.init();
-
-			list = new UiList(scrollpane2, "List3", 0, -20);
-			list.removeChild( list.header );
-			for(i in 1...11) list.data.push("List Item "+i);
-			list.init({width: 300});
-
-			var tabnav = new TabNavigator(scrollpane, "TabNavigator1", 770, 40);
-			tabnav.init();
-
-			//
-			window = WindowManager.getInstance().addWindow (scrollpane.content);
-			window.init({name:"Nested Window", x:20, y:340, width: 200, height: 160, color: 0xA5DE33 });
-
-			//
-			container = new Container (window, "Container");
-			container.init({ x: 10, y: 20, width: 190, height: 150, color: 0xA5DE33 });
-
-			window.dispatchEvent(new haxegui.events.ResizeEvent(haxegui.events.ResizeEvent.RESIZE));
-*/
 
 		/////////////////////////////////////////////////////////////////////////
 		// Load XML
@@ -401,6 +237,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 			a.push( k.split('.').slice(-2,-1).join('.') + "." + k.split('.').pop() );
 		a.sort(function(a,b) { if(a==b) return 0; if(a < b) return -1; return 1;});
 		log("Registered scripts: " + Std.string(a));
+
+
 	}//main
 
 
@@ -416,6 +254,23 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		for(k in LayoutManager.layouts.keys())
 			trace("Loaded layout : " + k);
 		LayoutManager.setLayout(Xml.parse(str).firstElement().get("name"));
+
+
+		//~ var welcome = "\n<FONT SIZE='24'>Hello and welcome to <B>haxegui</B>.</FONT>\n";
+		var welcome = "
+	 _                       _ 
+	| |_ ___ _ _ ___ ___ _ _|_|
+	|   | .'|_'_| -_| . | | | |
+	|_|_|__,|_,_|___|_  |___|_| Copyright (c) 2009 The haxegui developers
+	                |___|\n\n\t";
+		
+		var info = "<FONT SIZE='8'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+".</FONT>\n";
+		info += "\n\t<U><A HREF=\"http://haxe.org/\">haXe</A></U> (pronounced as hex) is an open source programming language.\n";
+		info += "\tHaxe Graphical User Interface for the flash9 platform, is a set of classes\n\tworking as widgets like flash/flex's components and windows.\n\n";
+		info += "\tThis console can exeute hscript in the textfield below,\n\ttype <I>help</I> to display a list of a few special commands.\n\n";
+		log(welcome+info);
+		log("");
+		
 	}
 
 
