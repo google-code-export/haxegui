@@ -101,8 +101,7 @@ class AbstractButton extends Component
 
 	override public function init(?opts:Dynamic)
 	{
-		if(box.isEmpty())
-			box = new Rectangle(0,0,90,30);
+		//if(box.isEmpty()) box = new Rectangle(0,0,90,30);
 		super.init(opts);
 		autoRepeat = Opts.optBool(opts,"autoRepeat", true);
 		repeatsPerSecond = Opts.optFloat(opts,"repeatsPerSecond", 25);

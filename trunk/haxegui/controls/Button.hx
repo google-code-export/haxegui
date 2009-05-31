@@ -62,6 +62,10 @@ class Button extends AbstractButton
 
 	override public function init(opts:Dynamic=null)
 	{
+		// dont create zero sized buttons
+		if(box==null || box.isEmpty()) 
+			box = new Rectangle(0,0,90,30);
+		
 		super.init(opts);
 		text = name;
 		
