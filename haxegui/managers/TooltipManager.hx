@@ -49,7 +49,7 @@ class Tooltip extends Component {
 		buttonMode = false;
 		alpha = 0;
 		
-		tf = new TextField();
+		tf = cast this.addChild(new TextField());		
 		tf.text = target.text == null ? target.name : target.text;
 		tf.embedFonts = true;
 		tf.x = 4;
@@ -60,7 +60,7 @@ class Tooltip extends Component {
 		tf.defaultTextFormat = DefaultStyle.getTextFormat();
 		tf.setTextFormat( DefaultStyle.getTextFormat() );
 		
-		this.addChild(tf);		
+		this.box = new Rectangle(0,0, tf.width+8, tf.height+8);
 
 		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
 		this.filters = [shadow];  

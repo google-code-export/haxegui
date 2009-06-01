@@ -18,7 +18,7 @@ TODO:
     </Array>
 
 
-	<haxegui:Window name="Xml hScript Widgets Window" x="300" y="30" width="512" height="512" sizeable="true" >
+	<haxegui:Window name="Xml hScript Widgets Window" x="100" y="30" width="800" height="600" sizeable="true" >
 				<events>
 					<script type="text/hscript" action="onLoaded">
 					<![CDATA[
@@ -125,6 +125,11 @@ TODO:
 							</events>
 						</haxegui:controls:UiList>
 						<haxegui:controls:UiList name="List3" x="360" y="250" width="300" data="@StringArray" />
+						<!-- watch this out, if horizontal, set height for width (r220) --> 
+						<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="450" height="300" />
+						<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="480" height="300" />
+						<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="510" height="300" disabled="true"/>
+					
 					</haxegui:Container>
 				</haxegui:TabChild>
 				<haxegui:TabChild visible="false">

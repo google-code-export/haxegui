@@ -2,7 +2,7 @@ var h = this.parent.box.height / 2;
 
 this.graphics.clear();
 
-this.graphics.lineStyle (1, Math.max(0, this.color - 0x333333), 1, true,
+this.graphics.lineStyle (1, Math.max(0, this.color - 0x282828), 1, true,
 				    flash.display.LineScaleMode.NONE,
 				    flash.display.CapsStyle.ROUND,
 				    flash.display.JointStyle.ROUND);
@@ -17,8 +17,11 @@ matrix.createGradientBox(24, 10, Math.PI/2, 0, 0);
 this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 this.graphics.drawRoundRectComplex(0,0,8,h,4,0,4,0);
 this.graphics.endFill();
+
 this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, [ Math.max(0, this.color - 0x141414), Math.max(0, this.color - 0x282828) ], alphas, ratios, matrix );
 this.graphics.drawRect(8,0,12,h);
+this.graphics.endFill();
+
 this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 this.graphics.drawRoundRectComplex(20,0,8,h,0,4,0,4);
 this.graphics.endFill();

@@ -24,7 +24,7 @@ if(this.selected)
 	this.graphics.endFill ();
 
 	this.graphics.lineStyle(0,0,0);
-	this.graphics.beginFill(0);
+	this.graphics.beginFill(0, this.disabled ? .5 : 1 );
 	this.graphics.drawCircle (r, r, .5*r);
 	this.graphics.endFill ();
 

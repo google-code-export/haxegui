@@ -84,16 +84,15 @@ class Transformer extends Component
 			handles[i].setAction("redraw",
 			"
 			this.graphics.clear();
-			this.graphics.lineStyle (1, Math.min(0xFFFFFF, this.color | 0x4D4D4D), 1, true,
+			this.graphics.lineStyle (1, Math.min(0xFFFFFF, this.color | 0x4D4D4D), .5, true,
 				 flash.display.LineScaleMode.NONE,
 				 flash.display.CapsStyle.ROUND,
 				 flash.display.JointStyle.ROUND);		
-			this.graphics.beginFill(0xFFFFFF, .35);
+			this.graphics.beginFill( this.color, .35);
 			this.graphics.drawRect(0,0,8,8);
 			this.graphics.endFill();
 			"
 			);
-			handles[i].setAction("mouseClick", "");
 			handles[i].setAction("mouseDown",
 			"
 			this.startDrag();
@@ -108,6 +107,7 @@ class Transformer extends Component
 			"
 			);
 
+			
 
 			switch(i) {
 				case 0:
@@ -142,7 +142,7 @@ class Transformer extends Component
 			 flash.display.LineScaleMode.NONE,
 			 flash.display.CapsStyle.ROUND,
 			 flash.display.JointStyle.ROUND);		
-		this.graphics.beginFill(0xFFFFFF, .45);
+		this.graphics.beginFill(0xFFFFFF, .5);
 		this.graphics.drawCircle(0,0,4);
 		this.graphics.endFill();
 		"
@@ -164,18 +164,16 @@ class Transformer extends Component
 		pivot.moveTo( this.box.width/2, this.box.height/2 );
 
 	
-		// dont transform transformers
-		this.setAction("mouseClick", "");
 
 		// draw the frame
 		this.setAction("redraw",
 		"
 		this.graphics.clear();
-		this.graphics.lineStyle (1, Math.min(0xFFFFFF, this.color | 0x4D4D4D), .5, true,
+		this.graphics.lineStyle (1, Math.min(0xFFFFFF, this.color | 0x4D4D4D), .35, true,
 			 flash.display.LineScaleMode.NONE,
 			 flash.display.CapsStyle.ROUND,
 			 flash.display.JointStyle.ROUND);		
-		this.graphics.beginFill(this.color, .25);
+		this.graphics.beginFill(this.color, .15);
 		this.graphics.drawRect(0,0,this.box.width,this.box.height);
 		this.graphics.drawRect(8,8,this.box.width-16,this.box.height-16);
 		this.graphics.endFill();
@@ -286,6 +284,7 @@ class Transformer extends Component
 		this.destroy();
 	}
 	
+
 
 		
 }

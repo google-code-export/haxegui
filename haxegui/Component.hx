@@ -573,10 +573,14 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		if(text!=null) TooltipManager.getInstance().destroy();
 		if(e.ctrlKey) {
 			e.stopImmediatePropagation();
+			// dont transform transformers
+			if(Std.is(this, haxegui.toys.Transformer) || Std.is(this.parent, haxegui.toys.Transformer)) return;
 			var t = new haxegui.toys.Transformer(this);
 			t.init();
 			var p = (cast this).localToGlobal( new flash.geom.Point(this.x, this.y) );
 			t.moveTo( p.x - this.x - 8, p.y - this.y - 8 );
+			// no point in doing the normal action, user wants to transform
+			return;
 			}
 
 		ScriptManager.exec(this,"mouseClick", {event : e});

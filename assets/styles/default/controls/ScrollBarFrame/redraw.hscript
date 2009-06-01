@@ -1,0 +1,4 @@
+this.graphics.clear();
+this.graphics.beginFill ( Math.max(0, parent.disabled ? this.color : this.color - 0x0A0A0A ) ) ;
+this.graphics.drawRect (0, 20, parent.box.width, parent.box.height - 40 );
+this.graphics.endFill ();
