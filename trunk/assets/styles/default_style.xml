@@ -320,10 +320,10 @@
 			<![CDATA[
 				//~ this.graphics.lineStyle(1, DefaultStyle.TOOLTIP - 0x141414);
 				this.graphics.beginFill(DefaultStyle.TOOLTIP);
-				this.graphics.drawRect(0,0, 100, 20);
-				this.graphics.moveTo(10, 20);
-				this.graphics.lineTo(15, 28);
-				this.graphics.lineTo(25, 20);
+				this.graphics.drawRect(0,0, this.box.width, this.box.height);
+				this.graphics.moveTo(10, this.box.height);
+				this.graphics.lineTo(15, this.box.height+8);
+				this.graphics.lineTo(25, this.box.height);
 				this.graphics.endFill();
 			]]>
 			</script>
@@ -583,7 +583,7 @@
 			<script type="text/hscript" action="focusIn">
 			<![CDATA[
 				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false );
-				var glow = new flash.filters.GlowFilter (0x1E90FF, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
+				var glow = new flash.filters.GlowFilter (DefaultStyle.FOCUS, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
 				this.filters = [shadow, glow];
 			]]>
 			</script>
@@ -657,7 +657,7 @@
 			<script type="text/hscript" action="focusIn">
 			<![CDATA[
 				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, true, false, false);
-				var glow = new flash.filters.GlowFilter (0x1E90FF, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
+				var glow = new flash.filters.GlowFilter (DefaultStyle.FOCUS, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
 				
 				this.filters = [shadow, glow];
 			]]>
@@ -694,7 +694,7 @@
 						this.label.tf.setTextFormat(fmt);
 				}
 				
-				/* Box */
+				
 				this.graphics.lineStyle (1,
 					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
 					2, true,
@@ -704,8 +704,7 @@
 					);
 				
 				/* CheckMark */
-				if(this.checked)
-				{
+				if(this.checked) {
 					var colors = [ this.color | 0x323232, this.color - 0x141414 ];
 					var alphas = [ 100, 100 ];
 					var ratios = [ 0, 0xFF ];
@@ -715,23 +714,25 @@
 					this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
 					this.graphics.endFill();
 				
-					this.graphics.lineStyle (4, Math.max(0, this.color - 0x282828));
-				/*
-					this.graphics.moveTo (6, 6);
-					this.graphics.lineTo (14, 14);
-					this.graphics.moveTo (14, 6);
-					this.graphics.lineTo (6, 14);
-				*/
+					var colors = [ Math.max(0, this.color - 0x4D4D4D), Math.max(0, this.color - 0x191919) ] ;
+					var alphas =[100, 100];
+					var ratios =[0, 0xFF];
+					var matrix = new flash.geom.Matrix ();
+					matrix.createGradientBox (this.box.width, this.box.height, Math.PI / 2, 0, 0);
 				
-					this.graphics.moveTo (4, 4);
-					this.graphics.lineTo (this.box.width - 4, this.box.height - 4);
-					this.graphics.moveTo (this.box.width - 4, 4);
-					this.graphics.lineTo (4, this.box.height - 4);
+					var w = this.box.width / 4;
+					this.graphics.lineStyle(w);
+					this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix);
+				
+					this.graphics.moveTo (w, w);
+					this.graphics.lineTo (this.box.width - w, this.box.height - w);
+					this.graphics.moveTo (this.box.width - w, w);
+					this.graphics.lineTo (w, this.box.height - w);
 				
 				
 				}
-				else
-				{
+				/** Box **/
+				else {
 					var colors = [ this.color - 0x141414, this.color | 0x323232 ];
 					var alphas = [ 100, 100 ];
 					var ratios = [ 0, 0xFF ];
@@ -810,7 +811,12 @@
 			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
+				this.graphics.clear();
+				
 				var colors = [ this.color - 0x141414,  this.color | 0x323232 ];
+				if(parent.disabled)
+					colors = [ this.color - 0x0C0C0C,  this.color - 0x191919 ];
+				
 				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
@@ -821,11 +827,15 @@
 					flash.display.LineScaleMode.NONE,
 					flash.display.CapsStyle.ROUND,
 					flash.display.JointStyle.ROUND
-					);				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+					);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 20, 20 );
 				this.graphics.endFill ();
 				
-				var colors = [ this.color - 0x141414,  this.color - 0x333333 ];
+				/** Arrow **/
+				var colors = [ Math.max(0, this.color - 0x333333),  Math.max(0, this.color - 0x4D4D4D) ];
+				if(parent.disabled)
+					colors = [ this.color - 0x0C0C0C,  this.color - 0x191919 ];
 				matrix.createGradientBox(10, 110, Math.PI, 5, 5);
 				this.graphics.lineStyle (1, this.color - 0x333333 );
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
@@ -851,7 +861,7 @@
 			<script type="text/hscript" action="focusIn">
 			<![CDATA[
 				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, false, false, false);
-				var glow = new flash.filters.GlowFilter (0x1E90FF, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
+				var glow = new flash.filters.GlowFilter (DefaultStyle.FOCUS, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
 				this.filters = [shadow, glow];
 			]]>
 			</script>
@@ -975,17 +985,27 @@
 
 	<haxegui:controls:ScrollBarHandle>
 		<events>
+			<script type="text/hscript" action="mouseUp">
+			<![CDATA[
+				if(this.stage.hasEventListener(flash.events.MouseEvent.MOUSE_MOVE))
+					this.stage.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);
+			]]>
+			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.graphics.clear();
 				
-				var colors = [ this.color - 0x141414, this.color | 0x323232 ];
-				/*if(horizontal)
-					colors = [ color | 0x323232, color - 0x141414 ];*/
+				var colors = [ this.color - 0x141414,  this.color | 0x323232 ];
+				if(parent.disabled)
+					colors = [ this.color - 0x0C0C0C,  this.color - 0x191919 ];
+				
+				
 				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
+				
 				matrix.createGradientBox(20, h, Math.PI, 0, 0);
+				
 				this.graphics.lineStyle (1,
 					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
 					1, true,
@@ -993,9 +1013,25 @@
 					flash.display.CapsStyle.ROUND,
 					flash.display.JointStyle.ROUND
 					);
+				
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRect (0, 0, 20, h );
+				this.graphics.drawRect (0, 0, parent.box.width, parent.box.height/2 );
 				this.graphics.endFill ();
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseDown">
+			<![CDATA[
+				if(!parent.disabled) {
+					this.startDrag(false,
+						new flash.geom.Rectangle(
+						0, parent.up.height-2,
+						/*0, parent.box.height - 2*parent.down.height - this.height + 4)*/
+						0, parent.box.height/2 - 2*parent.down.height + 4)
+						);
+				
+					this.stage.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove, false, 0, true);
+					CursorManager.setCursor (Cursor.DRAG);
+				}
 			]]>
 			</script>
 		</events>
@@ -1197,7 +1233,7 @@
 			</script>
 			<script type="text/hscript" action="focusIn">
 			<![CDATA[
-				var glow = new flash.filters.GlowFilter (0x1E90FF, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
+				var glow = new flash.filters.GlowFilter (DefaultStyle.FOCUS, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
 				this.filters = [glow];
 			]]>
 			</script>
@@ -1217,7 +1253,7 @@
 				
 				this.graphics.clear();
 				
-				this.graphics.lineStyle (1, Math.max(0, this.color - 0x333333), 1, true,
+				this.graphics.lineStyle (1, Math.max(0, this.color - 0x282828), 1, true,
 								    flash.display.LineScaleMode.NONE,
 								    flash.display.CapsStyle.ROUND,
 								    flash.display.JointStyle.ROUND);
@@ -1232,8 +1268,11 @@
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRectComplex(0,0,8,h,4,0,4,0);
 				this.graphics.endFill();
+				
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, [ Math.max(0, this.color - 0x141414), Math.max(0, this.color - 0x282828) ], alphas, ratios, matrix );
 				this.graphics.drawRect(8,0,12,h);
+				this.graphics.endFill();
+				
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRectComplex(20,0,8,h,0,4,0,4);
 				this.graphics.endFill();
@@ -1278,7 +1317,12 @@
 			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
+				this.graphics.clear();
+				
 				var colors = [ this.color - 0x141414,  this.color | 0x323232 ];
+				if(parent.disabled)
+					colors = [ this.color - 0x0C0C0C,  this.color - 0x191919 ];
+				
 				var alphas = [ 100, 100 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
@@ -1289,13 +1333,18 @@
 					flash.display.LineScaleMode.NONE,
 					flash.display.CapsStyle.ROUND,
 					flash.display.JointStyle.ROUND
-					);				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+					);
+				
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 20, 20 );
 				this.graphics.endFill ();
 				
-				var colors = [ this.color - 0x141414,  this.color - 0x333333 ];
+				/** Arrow **/
+				var colors = [ Math.max(0, this.color - 0x333333),  Math.max(0, this.color - 0x4D4D4D) ];
+				if(parent.disabled)
+					colors = [ this.color - 0x0C0C0C,  this.color - 0x191919 ];
 				matrix.createGradientBox(10, 110, Math.PI, 5, 5);
-				this.graphics.lineStyle (1, this.color - 0x333333 );
+				this.graphics.lineStyle (1, parent.disabled ? Math.max(0, this.color - 0x262626) : Math.max(0, this.color - 0x4D4D4D) );
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );
 				this.graphics.moveTo( 7.5, 12.5);
 				this.graphics.lineTo(  10,  7.5);
@@ -1316,6 +1365,12 @@
 
 	<haxegui:controls:Slider>
 		<events>
+			<script type="text/hscript" action="focusIn">
+			<![CDATA[
+				var glow = new flash.filters.GlowFilter (DefaultStyle.FOCUS, 1, 8, 8, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
+				this.filters = [glow];
+			]]>
+			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.graphics.clear();
@@ -1334,15 +1389,14 @@
 				}
 				
 				/** Draw the track */
-				/*this.graphics.lineStyle(this.box.height/4, this.color - 0x323232);*/
-				var colors = [this.color, this.color - 0x4D4D4D ] ;
+				var colors = [ Math.max(0, this.color - 0x4D4D4D), this.color ] ;
 				var alphas =[100, 100];
 				var ratios =[0, 0xFF];
 				var matrix = new flash.geom.Matrix ();
 				matrix.createGradientBox (this.box.width, this.box.height, Math.PI / 2, 0, 0);
 				
 				this.graphics.lineStyle(this.box.height/4);
-				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ ~this.color, this.color ], [0xFF, 00], ratios, matrix);
+				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix);
 				
 				this.graphics.moveTo(0, this.box.height/2);
 				this.graphics.lineTo(this.box.width, this.box.height/2);
@@ -1353,6 +1407,11 @@
 				this.graphics.beginFill(0,0);
 				this.graphics.drawRect(0,0,this.box.width,this.box.height);
 				this.graphics.endFill();
+			]]>
+			</script>
+			<script type="text/hscript" action="focusOut">
+			<![CDATA[
+				this.filters = [];
 			]]>
 			</script>
 		</events>
@@ -1454,6 +1513,44 @@
 		</events>
 	</haxegui:controls:ComboBoxDropButton>
 
+	<haxegui:controls:ScrollBarFrame>
+		<events>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.graphics.clear();
+				this.graphics.beginFill ( Math.max(0, parent.disabled ? this.color : this.color - 0x0A0A0A ) ) ;
+				this.graphics.drawRect (0, 20, parent.box.width, parent.box.height - 40 );
+				this.graphics.endFill ();
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseDown">
+			<![CDATA[
+				CursorManager.setCursor (Cursor.HAND2);
+				
+				var y = e.target.mouseY ;
+				if(y+handle.height+20 > box.height ) y = box.height - handle.height + 20;
+				
+				if(parent.handleMotionTween!=null)
+					parent.handleMotionTween.stop();
+				
+				
+				parent.handleMotionTween = new Tween( handle.y, y, 750, handle, "y", feffects.easing.Back.easeInOut );
+				handleMotionTween.setTweenHandlers( function ( e ) { parent.adjust(e); } );
+				handleMotionTween.start();
+				
+				Timer.delay( function(){CursorManager.setCursor (Cursor.DRAG);}, 750 );
+				
+				if(parent.horizontal)
+					handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
+				else
+					handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.height - 2*down.height - handle.height + 4));
+				
+				root.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+			]]>
+			</script>
+		</events>
+	</haxegui:controls:ScrollBarFrame>
+
 	<haxegui:controls:RadioButton>
 		<events>
 			<script type="text/hscript" action="redraw">
@@ -1484,7 +1581,7 @@
 					this.graphics.endFill ();
 				
 					this.graphics.lineStyle(0,0,0);
-					this.graphics.beginFill(0);
+					this.graphics.beginFill(0, this.disabled ? .5 : 1 );
 					this.graphics.drawCircle (r, r, .5*r);
 					this.graphics.endFill ();
 				

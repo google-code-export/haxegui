@@ -83,13 +83,13 @@ class ScrollPane extends Component
 		this.addChild(content);
 
 		if(Opts.optBool(opts,"vert", true)) {
-		vert = new ScrollBar(this, "vscrollbar", this.box.width - 20, 0, false);
+		vert = new ScrollBar(this, "vscrollbar", this.box.width - 20, 0);
 		vert.init({target: content, color: this.color});
 		}
 
 		if(Opts.optBool(opts,"horz", true)) {
-		horz = new ScrollBar(this, "hscrollbar", null, null, true);
-		horz.init({target: content, color: this.color});
+		horz = new ScrollBar(this, "hscrollbar");
+		horz.init({target: content, horizontal: true, color: this.color});
 		}
 
 		cacheAsBitmap = true;

@@ -150,9 +150,7 @@ class RadioButton extends AbstractButton
 			{
 				var child = parent.getChildAt(i);
 				if(Std.is(child, RadioButton))
-					if(child!=this)
-						untyped
-							{
+					untyped if(child!=this && !child.disabled) {
 							child.selected = false;
 							child.redraw();
 							}

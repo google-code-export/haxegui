@@ -1,0 +1,11 @@
+if(!parent.disabled) {
+	this.startDrag(false, 
+		new flash.geom.Rectangle(
+		0, parent.up.height-2,
+		/*0, parent.box.height - 2*parent.down.height - this.height + 4)*/
+		0, parent.box.height/2 - 2*parent.down.height + 4)
+		);
+
+	this.stage.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove, false, 0, true);
+	CursorManager.setCursor (Cursor.DRAG);
+}

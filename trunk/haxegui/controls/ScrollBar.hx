@@ -39,13 +39,6 @@ import haxegui.managers.StyleManager;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
-enum ScrollBarType {
-	VERTICAL;
-	HORIZONTAL;
-}
-
-
-
 /**
 *
 * ScrollBarUpButton Class
@@ -56,10 +49,6 @@ enum ScrollBarType {
 */
 class ScrollBarUpButton extends AbstractButton
 {
-	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
-		super (parent, name, x, y);
-	}
-
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBarUpButton);
 	}
@@ -77,10 +66,6 @@ class ScrollBarUpButton extends AbstractButton
 */
 class ScrollBarDownButton extends AbstractButton
 {
-	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
-		super (parent, name, x, y);
-	}
-
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBarDownButton);
 	}
@@ -96,14 +81,28 @@ class ScrollBarDownButton extends AbstractButton
 */
 class ScrollBarHandle extends AbstractButton
 {
-	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
-		super (parent, name, x, y);
-	}
-
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBarHandle);
 	}
 }
+
+
+/**
+*
+* ScrollBarFrame Class
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
+class ScrollBarFrame extends Component
+{
+	static function __init__() {
+		haxegui.Haxegui.register(ScrollBarFrame);
+	}
+}
+
+
 
 /**
 *
@@ -116,23 +115,15 @@ class ScrollBarHandle extends AbstractButton
 class ScrollBar extends Component
 {
 
-	var frame : Component;
-	var handle : ScrollBarHandle;
-	var up : ScrollBarUpButton;
-	var down : ScrollBarDownButton;
-	public var scrollee : Dynamic;
-	public var scroll : Float;
-	var horizontal : Bool;
+	public var frame	  : ScrollBarFrame;
+	public var handle	  : ScrollBarHandle;
+	public var up 		  : ScrollBarUpButton;
+	public var down 	  : ScrollBarDownButton;
+	public var scrollee	  : Dynamic;
+	public var scroll	  : Float;
+	public var horizontal : Bool;
 
 	private var handleMotionTween : Tween;
-
-	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float, ?horz : Bool)
-	{
-		super(parent, name, x, y);
-		horizontal = horz;
-		if(horizontal)
-			rotation = -90;
-	}
 
 
 	/**
@@ -140,25 +131,34 @@ class ScrollBar extends Component
 	*/
 	override public function init(opts:Dynamic=null)
 	{
+		color = DefaultStyle.BACKGROUND;
+		scroll = 0;
+		scrollee = null;
+		box = new Rectangle(0,0,20,80);	
+		horizontal = false;
+		
 		super.init(opts);
 
-		scroll = 0;
-		//~ box = new Rectangle(0,0,20,90);
-		this.scrollee = Opts.classInstance(opts, "target", untyped [TextField, DisplayObject]);
+		horizontal = Opts.optBool(opts, "horizontal", horizontal);
+		if(horizontal) 
+			rotation = -90;
+		
+		// Silently notify only when target is missing 	
+		try {
+			this.scrollee = Opts.classInstance(opts, "target", untyped [TextField, DisplayObject]);
+		}
+		catch(s:String) { 
+			trace(s); 
+		}
 
-		frame = new Component(this, "frame", 0, 20);
+		// 
+		frame = new ScrollBarFrame(this);
 		frame.init({color: this.color});
-		//~ frame.mouseEnabled = false;
-		frame.buttonMode = false;
 		frame.focusRect = false;
 		frame.tabEnabled = false;
 		frame.text = null;
-		
-		frame.graphics.beginFill (color - 0x0A0A0A);
-		frame.graphics.drawRect (0, 0, box.width, box.height - 40 );
-		frame.graphics.endFill ();
 
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, .75, BitmapFilterQuality.HIGH, true, false, false);
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, disabled ? .35 : .75, BitmapFilterQuality.HIGH, true, false, false);
 		frame.filters = [shadow];
 
 		//
@@ -166,87 +166,56 @@ class ScrollBar extends Component
 		handle.init({y: 20, color: this.color});
 		handle.redraw({h : 20, horizontal: this.horizontal });
 
-		shadow = new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, 0.75, BitmapFilterQuality.LOW, false, false, false);
+		shadow = new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, disabled ? .35 : .75, BitmapFilterQuality.LOW, false, false, false);
 		handle.filters = [shadow];
 
 		//
 		up = new ScrollBarUpButton(this);
 		up.init({color: this.color});
-		up.redraw({color: this.color});
 
 		//
 		down = new ScrollBarDownButton(this);
 		down.init({color: this.color});
 		down.move(0, box.height - 20);
-		down.redraw({color: this.color});
-
-		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, .75, BitmapFilterQuality.HIGH, true, false, false);
-		//~ down.filters = [shadow];
-
-
-		this.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 
 		//
-		parent.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
+		this.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 
-
-
-
-	}//init
+	}
 
 
 
 	/**
 	*
 	*
-	* @param
 	*
 	*/
-	override public function onResize(e:ResizeEvent)
+	public function onParentResize(e:ResizeEvent)
 	{
 
-		//~ if(box.isEmpty())
-		box = untyped parent.box.clone();
-
-		//~ up.redraw({color: this.color});
-		//~ down.redraw({color: this.color});
-		//~ handle.redraw({h : 20 + .5*(frame.height - handle.height + 20), color: this.color, horizontal: this.horizontal });
-		//handle.redraw({h : 40, color: this.color, horizontal: this.horizontal });
-
-		dirty = true;
-
-
-		frame.graphics.clear();
-
-		frame.graphics.beginFill (color - 0x0A0A0A);
-
-		if(horizontal)
-		{
-			this.y = box.height + 20;
-			down.y = box.width - 20;
-			frame.graphics.drawRect (0, 0, 20, box.width - 40 );
-		}
-		else
-		{
-			this.x = box.width ;
-			down.y = box.height - 20 ;
-
-			frame.graphics.drawRect (0, 0, 20, box.height - 40 );
-			//~ adjust();
-
-			if(Std.is(scrollee, DisplayObject))
-			{
-				if(handle.y>20)
-					handle.y = scroll * ( frame.height - handle.height + 2) + 20;
+		if(Std.is(parent, Component)) untyped {
+			if(horizontal) {
+				box.height = parent.box.width;
+				this.y = parent.box.height + 20;
+				}
+			else {
+				box.height = parent.box.height;
+				this.x = parent.box.width ;
 			}
-
 		}
+		down.y = Math.max( 20, box.height - 20);
+		
+		dirty = true;
+		frame.dirty = true;
+		handle.dirty = true;
 
-		frame.graphics.endFill ();
+			//~ if(Std.is(scrollee, DisplayObject))
+			//~ {
+				//~ if(handle.y>20)
+					//~ handle.y = scroll * ( frame.height - handle.height + 2) + 20;
+			//~ }
 
-
-		if(e != null)
-			e.updateAfterEvent();
 
 	}
 
@@ -258,102 +227,20 @@ class ScrollBar extends Component
 		//~ var y = handle.y + 50 * e.delta;
 		var y = handle.y + 50 * -e.delta;
 		if( y < 20 ) y = 20;
-		if( y > frame.height - handle.height + 20) y = frame.height - handle.height + 20;
-		//~ e.target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-		//~ var t = new Tween( handle.y, handle.y - 50, 500, handle, "y", Linear.easeNone );
+		if( y > box.height - handle.height + 20) y = box.height - handle.height + 20;
 
 		if(handleMotionTween!=null)
 			handleMotionTween.stop();
 
 		handleMotionTween = new Tween( handle.y, y, 1000, handle, "y", feffects.easing.Expo.easeOut );
-		var scope = this;
-		handleMotionTween.setTweenHandlers( function ( e ) { scope.adjust(); } );
+		var self = this;
+		handleMotionTween.setTweenHandlers( function(v) { self.adjust(); } );
 		handleMotionTween.start();
 		
 		super.onMouseWheel(e);
 	}
 
-	override public function onMouseDown(e:MouseEvent)
-	{
 
-
-		switch(e.target)
-			{
-			case handle:
-				if(horizontal)
-					e.target.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
-				else
-					e.target.startDrag(false,new Rectangle(0,up.height-2, 0, box.height - 2*down.height - handle.height + 4));
-
-				//~ e.target.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
-				flash.Lib.current.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
-
-				CursorManager.setCursor (Cursor.DRAG);
-
-
-			case frame:
-				CursorManager.setCursor (Cursor.HAND2);
-
-				var y = e.target.mouseY ;
-				if(y+handle.height+20 > frame.height ) y = frame.height - handle.height + 20;
-
-				if(handleMotionTween!=null)
-					handleMotionTween.stop();
-
-
-				handleMotionTween = new Tween( handle.y, y, 500, handle, "y", feffects.easing.Back.easeInOut );
-				var scope = this;
-				handleMotionTween.setTweenHandlers( function ( e ) { scope.adjust(e); } );
-				handleMotionTween.start();
-
-				haxe.Timer.delay( function(){CursorManager.setCursor (Cursor.DRAG);}, 500 );
-
-				if(horizontal)
-					handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
-				else
-					handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.height - 2*down.height - handle.height + 4));
-
-				flash.Lib.current.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
-			}
-		adjust();
-		//~ e.stopImmediatePropagation ();
-		e.updateAfterEvent ();
-
-	}
-
-
-	/**
-	*
-	* @param
-	*
-	*/
-	public function onScrollBarEnterFrame(e:Event)
-	{
-		switch(e.target)
-		{
-			case up:
-				//~ handle.y -= ( frame.height - handle.height ) / 20 ;
-				handle.y -=2 ;
-			case down:
-		//~ }		handle.y += ( frame.height - handle.height ) / 20 ;
-		}		handle.y ++ ;
-
-		adjust();
-	}
-
-
-	override public function onMouseUp(e:MouseEvent)
-	{
-
-		var c = 0;
-
-		if(e.target.hitTestObject( CursorManager.getInstance()._mc ))
-		{
-			c = 50;
-			CursorManager.setCursor (Cursor.HAND);
-		}
-
-	}
 
 
 	public function onMouseMove(e:MouseEvent)
@@ -365,7 +252,6 @@ class ScrollBar extends Component
 
 	/**
 	*
-	* @param
 	*
 	*/
 	public function adjust(?e:Dynamic)
