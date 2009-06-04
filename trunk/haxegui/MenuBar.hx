@@ -24,7 +24,6 @@ import flash.geom.Rectangle;
 import flash.display.DisplayObjectContainer;
 import flash.display.DisplayObject;
 import flash.display.MovieClip;
-import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -61,6 +60,8 @@ class MenuBarItem extends AbstractButton
 
 	override public function init(opts:Dynamic=null)
 	{
+		box = new Rectangle(0,0,40,24);
+		
 		super.init(opts);
 
 		var tf = new TextField();
@@ -105,13 +106,6 @@ class MenuBar extends Component
 	public var numMenus : Int;
 	private var _menu:Int;
 
-
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float, ?width:Float)
-	{
-		super (parent, name, x, y);
-		this.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-
-	}
 
 	override public function init(opts : Dynamic=null)
 	{
@@ -164,14 +158,11 @@ class MenuBar extends Component
 	*/
 	public function onParentResize(e:ResizeEvent)
 	{
-		this.box = untyped parent.box.clone();
-
-		this.box.width -= x;
-		this.box.height -= y;
+		box.width = untyped parent.box.width - 10;
 
 		var b = box.clone();
 		b.height = box.height;
-		b.x=b.y=0;
+		b.x = b.y =0;
 		this.scrollRect = b;
 
 		dirty = true;

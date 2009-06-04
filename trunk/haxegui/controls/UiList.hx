@@ -59,12 +59,20 @@ class ListHeader extends AbstractButton
 		label = new Label(this);
 		label.init();
 		label.moveTo(4,4);
+		
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
 
 
 	static function __init__() {
 		haxegui.Haxegui.register(ListHeader);
 	}
+	
+	public function onParentResize(e:ResizeEvent) {
+		this.box = (cast parent).box.clone();
+		dirty = true;
+	}
+	
 }
 
 
@@ -82,44 +90,35 @@ class ListHeader extends AbstractButton
 class ListItem extends AbstractButton
 {
 
-	public var tf : TextField;
-	public var fmt : TextFormat;
-
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super (parent, name, x, y);
-	}
+	public var label : Label;
 
 	
 	override public function init(opts:Dynamic=null)
 	{
 		super.init(opts);
 
-		tf = new TextField();
-		tf.name = "tf";
-		tf.text = Opts.optString(opts, "text", "ListItem");
-		tf.selectable = false;
-		tf.y = 4;
-		tf.x = 4;
-		tf.width = box.width - 4;
-		tf.height = 20;
-		tf.embedFonts = true;
-		tf.defaultTextFormat = DefaultStyle.getTextFormat();
-		tf.mouseEnabled = false;
-		//~ tf.setTextFormat (DefaultStyle.getTextFormat());
-
-		//~ label.move( Math.floor(.5*(this.box.width - label.width)), Math.floor(.5*(this.box.height - label.height)) );
-		this.addChild(tf);
-
+		label = new Label(this);
+		var text = Opts.optString(opts, "text", name);
+		label.init({innerData: text });
+		label.move(4,4);
+		
 		// add the drop-shadow filter
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, true, false, false );
 		//~ this.filters = [shadow];
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 
 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(ListItem);
 	}
+	
+	public function onParentResize(e:ResizeEvent) {
+		this.box = (cast parent).box.clone();
+		dirty = true;
+	}
+
+	
 }
 
 
@@ -143,13 +142,10 @@ class UiList extends Component
 	public var sortReverse : Bool;
 	var dragItem : Int;
 
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super (parent, name, x, y);
-	}
 
 	public override function init(opts : Dynamic=null)
 	{
+		this.color = DefaultStyle.BACKGROUND;
 		sortReverse = false;
 		if(Std.is(parent, Component))
 			color = (cast parent).color;
@@ -169,18 +165,25 @@ class UiList extends Component
 		header.init({color: this.color, width: this.box.width});
 
 
-  		var n = 4;
+  		var n = 1;
 		if(data!=null && data.length > 0) n = data.length+1;
 		for (i in 1...n) {
 			var item = new ListItem(this);
 			item.init({width: this.box.width, color: DefaultStyle.INPUT_BACK});
 			item.move(0,20*i);
-
 		}
+
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
+
 
 	}
 
 
+	public function onParentResize(e:ResizeEvent) : Void {
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+	}
+	
+	
 	public function onItemMouseUp(e:MouseEvent) : Void
 	{
 		e.target.dispatchEvent (new DragEvent (DragEvent.DRAG_COMPLETE));
@@ -198,34 +201,32 @@ class UiList extends Component
 	{
 		super.redraw();
 		
-		var self = this;
-		data.sort(function(a,b) { if(a < b) return self.sortReverse ? 1 : -1; return 0;	});
+		//~ var self = this;
+		//~ data.sort(function(a,b) { if(a < b) return self.sortReverse ? 1 : -1; return 0;	});
 		
 		header.redraw();
 		
 		// if all children are here just redraw them
-		if(numChildren <= data.length ) {
-
-			for(i in 0...numChildren) {
-				var item = cast this.getChildAt(i);
-				item.box.width = this.box.width;
-				item.redraw();
-			}
-		}
-		
+		//~ if(numChildren <= data.length ) 
+			//~ for(i in 0...numChildren) {
+				//~ var item = cast this.getChildAt(i);
+				//~ item.box.width = this.box.width;
+				//~ item.redraw();
+			//~ }
+		//~ 
 
 		// if children were'nt yet created 
-		else
-		{
+		//~ else
+		//~ {
 			//~ var n = Std.int((this.box.height)/20);
-			var n = Std.int((this.box.height)/20);
-			for (i in numChildren...n)
-			{
-				/*if(getChildByName("item"+i)!=null) removeChild(getChildByName("item"+i));*/
-				var item = new ListItem(this, "item" + i, 0, 20+20*i+1 );
-				item.init({width: this.box.width, color: DefaultStyle.INPUT_BACK});
-			}
-		}
+			//~ var n = Std.int((this.box.height)/20);
+			//~ for (i in numChildren...n)
+			//~ {
+				//~ var item = new ListItem(this);
+				//~ item.init({width: this.box.width, color: DefaultStyle.INPUT_BACK});
+				//~ item.move(0, 20*(i+1)+1 );
+			//~ }
+		//~ }
 		
 		
 		/* Draw the frame */

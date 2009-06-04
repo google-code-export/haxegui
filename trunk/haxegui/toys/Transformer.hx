@@ -73,7 +73,8 @@ class Transformer extends Component
 		super.init(opts);
 	
 		blendMode = flash.display.BlendMode.DIFFERENCE;
-		target.addEventListener(FocusEvent.FOCUS_OUT, onTargetFocusOut, false, 0, true);
+		if(Std.is(target, Component))
+			target.addEventListener(FocusEvent.FOCUS_OUT, onTargetFocusOut, false, 0, true);
 		stage.addEventListener(MouseEvent.MOUSE_DOWN, onClose, false, 0, true);
 		 
 			
@@ -189,6 +190,7 @@ class Transformer extends Component
 	}
 	
 	public function onTargetFocusOut(e:FocusEvent) {
+		if(!Std.is(e.relatedObject, Component)) return;
 		if(e.relatedObject==this || this.contains(e.relatedObject)) return;
 		trace(e);
 		this.destroy();

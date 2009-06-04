@@ -15,12 +15,14 @@ this.graphics.lineStyle (4,
 */
 	
 this.graphics.beginFill ( c );
-this.graphics.drawRect (0, 0, this.box.width, 20);
+this.graphics.drawRect (0, 0, parent.box.width, 20);
 this.graphics.endFill ();
 
 
-if( this.parent.data[i]!=null && this.tf!=null) 
-	this.tf.text = this.parent.data[i];
+if( this.parent.data[i]!=null && this.label!=null) 
+	//~ this.tf.text = this.parent.data[i];
+	this.label.tf.text = this.parent.data[i];
+	
 /*
 this.tf.x = 4;
 this.tf.y = 4;

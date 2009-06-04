@@ -58,12 +58,6 @@ class RadioButton extends AbstractButton
 	public var label : Label;
 
 
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super(parent, name, x, y);
-	}
-
-
 	override public function init(?opts:Dynamic)
 	{
 		box = new Rectangle(0,0,20,20);
@@ -87,13 +81,10 @@ class RadioButton extends AbstractButton
 			label.tf.setTextFormat(fmt);
 		}
 
+		var shadow = new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.8, 2, 2, 0.65, flash.filters.BitmapFilterQuality.LOW, true, false, false );
+		this.filters = [shadow];
 
 		// Listeners
-		addEventListener (MouseEvent.MOUSE_DOWN, onBtnMouseDown,false,0,true);
-		addEventListener (MouseEvent.MOUSE_UP,   onBtnMouseUp,false,0,true);
-		//~ addEventListener (MouseEvent.ROLL_OVER, onBtnRollOver,false,0,true);
-		//~ addEventListener (MouseEvent.ROLL_OUT,  onBtnRollOut,false,0,true);
-
 		this.addEventListener (Event.ACTIVATE, onEnabled,false,0,true);
 		this.addEventListener (Event.DEACTIVATE, onDisabled,false,0,true);
 
@@ -130,22 +121,15 @@ class RadioButton extends AbstractButton
 		redraw();
 	}
 
-	override public function redraw (opts:Dynamic = null):Void
-	{
-		ScriptManager.exec(this,"redraw",
-			{
-				color: Opts.optInt(opts, "color", color),
-				selected: Opts.optBool(opts, "selected", selected),
-			});
-	}
+
 
 	/**
 	*
 	*
 	*/
-	public  function onBtnMouseDown(e:MouseEvent) : Void
-	{
+	public override function onMouseClick(e:MouseEvent) {
 		if(disabled) return;
+
 		for(i in 0...parent.numChildren)
 			{
 				var child = parent.getChildAt(i);
@@ -154,22 +138,11 @@ class RadioButton extends AbstractButton
 							child.selected = false;
 							child.redraw();
 							}
-		this.selected = true;
-		this.redraw();
-
 			}
-	}
-
-	/**
-	*
-	*
-	*/
-	public  function onBtnMouseUp(e:MouseEvent) {
-		this.selected = !this.selected;
-
-		//~ redraw(DefaultStyle.BACKGROUND);
-		var color = selected ? DefaultStyle.BACKGROUND - 0x202020 : DefaultStyle.BACKGROUND;
-		//~ redraw(color);
+		selected = true;
+		redraw();
+		
+		super.onMouseClick(e);
 	}
 
 	static function __init__() {

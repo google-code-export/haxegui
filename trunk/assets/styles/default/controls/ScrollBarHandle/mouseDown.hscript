@@ -1,11 +1,31 @@
-if(!parent.disabled) {
+if(!this.disabled) {
+
+	if(parent.handleMotionTween!=null)
+		parent.handleMotionTween.stop();
+	
+	if(parent.up!=null)
+		parent.up.stopInterval();
+	if(parent.down!=null)
+		parent.down.stopInterval();
+		
 	this.startDrag(false, 
 		new flash.geom.Rectangle(
 		0, parent.up.height-2,
-		/*0, parent.box.height - 2*parent.down.height - this.height + 4)*/
 		0, parent.box.height/2 - 2*parent.down.height + 4)
 		);
 
 	this.stage.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove, false, 0, true);
+	
+	var self = this;
+	function stop(e) {
+		self.stopDrag();
+		self.stage.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);
+		self.stage.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, stop);
+		}
+
+	this.stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, stop, false, 0, true);
+
+	this.updateColorTween( new feffects.Tween(50, -50, 500, feffects.easing.Expo.easeOut) );
 	CursorManager.setCursor (Cursor.DRAG);
 }
+

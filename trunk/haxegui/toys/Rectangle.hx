@@ -32,7 +32,7 @@ import flash.events.MouseEvent;
 import flash.events.FocusEvent;
 
 import haxegui.managers.StyleManager;
-
+import haxegui.Opts;
 
 import haxegui.Component;
 
@@ -55,6 +55,9 @@ class Rectangle extends Component
 		pivot = new Point();
 		
 		super.init(opts);
+
+		//roundness = Opts.optFloat(opts, "roundness", roundness);
+		
 
 		//~ var shadow = new flash.filters.DropShadowFilter (8, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
 		//~ this.filters = [shadow];
