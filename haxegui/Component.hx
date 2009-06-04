@@ -219,7 +219,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 				idx++;
 		}
 		for(i in 0...numChildren)
-			removeChildAt(0);
+			removeChildAt(i);
 		if(this.parent != null)
 			this.parent.removeChild(this);
 	}
@@ -450,7 +450,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 				e.preventDefault();
 				e.stopImmediatePropagation();
 				comp.stage.focus = comp;
+				#if debug
 				trace("Losing focus prevented by " + asComponentIfIs(e.relatedObject).name);
+				#end
 				return;
 			}
 		}
@@ -462,7 +464,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 				e.preventDefault();
 				e.stopImmediatePropagation();
 				comp.stage.focus = comp;
+				#if debug
 				trace("Gain of focus denied by " + asComponentIfIs(e.relatedObject));
+				#end
 				return;
 			}
 		}
@@ -559,8 +563,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Mouse double-click **/
 	public function onMouseDoubleClick(e:MouseEvent) : Void
 	{
+		#if debug
 		if(e.target == this)
 			trace("onMouseDoubleClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDoubleClick"));
+		#end
 		ScriptManager.exec(this,"mouseDoubleClick", {event : e});
 	}
 

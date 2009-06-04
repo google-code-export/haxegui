@@ -89,18 +89,11 @@ class RichTextEditor extends Window
 	var tf : TextField;
 	var _color : UInt;
 	var _html : Bool;
-	/**
-	*
-	*/
-	public function new (?parent:DisplayObjectContainer, ?x:Float, ?y:Float)
-	{
-		super (parent, x, y);
 
-	}
 
 	public override function init(?opts:Dynamic)
 	{
-		super.init({name:"RichTextEditor", x:x, y:y, width:width, height:height, type: WindowType.NORMAL });
+		super.init();
 		_color = 0x000000;
 		_html = true;
 		box = new Rectangle (0, 0, 512, 380);
@@ -133,13 +126,6 @@ class RichTextEditor extends Window
 		btn.setAction("mouseClick",
 		"
 		var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
-		/*
-		var sel = tf.selectedText;
-		var begin = StringTools.htmlEscape(tf.htmlText.substr(0, tf.selectionBeginIndex));
-		var end = StringTools.htmlEscape(tf.htmlText.substr( tf.selectionEndIndex, tf.htmlText.length));
-		var txt = begin + \"<B>\" + sel + \"</B>\" + end;
-		tf.htmlText = txt;
-		*/
 		tf.replaceSelectedText( \"<B>\" + tf.selectedText + \"</B>\" );
 		"
 		);

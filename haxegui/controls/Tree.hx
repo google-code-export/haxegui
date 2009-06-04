@@ -57,41 +57,50 @@ class TreeNode extends Component
 	
 	public var expander : Expander;
 
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super (parent, name, x, y);
-	}
-
-	
 	override public function init(opts:Dynamic=null)
 	{
+		box = new Rectangle(0,0,140,20);
+		
 		super.init(opts);
 
-		//~ expander = new Expander(this, name, 4, 4);
 		expander = new Expander(this, name, 0, 0);
 		expander.init();
-
+		
+	
 		expander.setAction("mouseDown", "");
 		expander.setAction("mouseUp", "");
+
+		expander.setAction("mouseClick",
+		"
+		//~ var h = root.getBounds(this).height - 20;
+		var h = this.getChildAt(1).numChildren * 20;
+
+		for(i in parent.parent.getChildIndex(parent)+1...parent.parent.numChildren) {
+			var child = parent.parent.getChildAt(i);
+				var t = new feffects.Tween( 
+				child.y, child.y + this.expanded ? h : -h, 1500,
+				child, \"y\",
+				feffects.easing.Expo.easeOut
+				);
+				t.start();
+			}
+		//~ var o = parent;
+		//~ while(o!=null && Std.is(o, controls.TreeNode)) 
+			//~ o = o.parent;
+
+		"
+		);
+
 
 		setAction("mouseOver", "");
 		setAction("mouseOut", "");
 		
-/*
-		setAction("mouseClick",
-		"
-		this.expander.expanded = !this.expander.expanded;
-		this.expander.dispatchEvent(new flash.events(Event.CHANGE));
-		this.expander.redraw();
-		"
-		);
-*/	
 		setAction("redraw",
 		"
 		var i = this.parent.getChildIndex(this) ;
-		var c = (i%2==0) ? this.color :  this.color - 0x0A0A0A;
+		var c = (i%2==0) ? this.color :  Math.max(0, this.color - 0x0A0A0A);
 		this.graphics.beginFill ( c );
-		this.graphics.drawRect (0, 0, this.box.width, 20);
+		this.graphics.drawRect (0, 0, this.box.width, this.box.height);
 		this.graphics.endFill ();
 		"
 		);
@@ -121,27 +130,30 @@ class Tree extends Component {
 	override public function init(opts:Dynamic=null) {
 		
 		color = DefaultStyle.INPUT_BACK;
-		box = new Rectangle(0,0,140,200);
+		box = new Rectangle(0,0,140,20);
 		
 		super.init(opts);
 
 		
 		var i = 0;
-		for(key in Reflect.fields(data))
-		{
+		for(key in Reflect.fields(data)) {
 
 			var node = new TreeNode(this, key, 0, 20*i);
-			node.init({color: this.color, width: this.box.width});
+			node.init({width: this.box.width, color: this.color});
 
 			if(Reflect.isObject(Reflect.field(data, key))) {
-				var subtree = new Tree(node.expander, "Tree"+i, 0, 16);
+				
+				var subtree = new Tree(node.expander);
 				subtree.data = Reflect.field(data, key);
-				subtree.init({width: this.box.width - 20, visible: false});
-				for(i in 0...subtree.numChildren)
+				subtree.init({width: this.box.width, visible: false});
+				subtree.move(0, 16);
+				
+				for(i in 0...subtree.numChildren) 
 					untyped subtree.getChildAt(i).getChildAt(0).x = 20;
+
 				subtree.setAction("redraw", "");
 			}
-		
+			
 		i++;
 		}
 

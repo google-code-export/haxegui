@@ -35,21 +35,23 @@ import haxegui.managers.StyleManager;
 import haxegui.Component;
 
 
-
+/**
+* Input Class
+*
+*
+* @author <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.2
+*/
 class Input extends Component
 {
 
     public var tf : TextField;
 
 
-	public function new(?parent : DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-	    super(parent, name, x, y);
-	}
-
 	override public function init(?opts:Dynamic) : Void
 	{
-	    this.box = new Rectangle(0, 0, 140, 20);
+	    box = new Rectangle(0, 0, 140, 20);
 
 	    super.init(opts);
 

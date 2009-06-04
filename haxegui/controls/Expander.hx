@@ -40,6 +40,7 @@ import haxegui.Opts;
 import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 
+import feffects.Tween;
 
 /**
 * Expander class, may be expanded or collapsed by the user to reveal or hide child
@@ -53,7 +54,9 @@ class Expander extends AbstractButton
 	public var expanded(__getExpanded,__setExpanded) : Bool;
 	public var label : Label;
 
-
+	public var scrollTween : Tween;
+	
+	
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
 		super(parent, name, x, y);
@@ -67,10 +70,14 @@ class Expander extends AbstractButton
 
 		expanded = Opts.optBool(opts, "expanded", expanded);
 
-		label = new Label(this, "label", 20, 0);
+		label = new Label(this);
 		//~ label.text = Opts.optString(opts, "label", name);
 		label.init({innerData: this.name});
+		label.move(20,0);
+		label.mouseEnabled = false;
+		label.tf.mouseEnabled = false;
 
+		scrollRect = new Rectangle(0,0,stage.stageWidth,this.box.height);
 
 		super.init(opts);
 
@@ -87,6 +94,26 @@ class Expander extends AbstractButton
 		
 		dirty = true;
 		dispatchEvent(new Event(Event.CHANGE));
+		
+		
+		var r = new Rectangle(0,0,stage.stageWidth,this.box.height);
+		
+		var h = root.getRect(this).height;
+		var self = this;
+		
+		
+		//~ if(scrollTween!=null) {
+			//~ scrollTween.pause();
+			//~ scrollTween.reverse();
+			//~ scrollTween.resume();
+		//~ }
+		//~ else {
+		if(scrollTween!=null)
+			scrollTween.stop();
+		scrollTween = new Tween(15, h, 1500, r, "height", feffects.easing.Linear.easeNone);
+		scrollTween.setTweenHandlers( function(v) { self.scrollRect = r.clone(); } );
+		scrollTween.start();
+		//~ }
 		
 		super.onMouseClick(e);
 	}

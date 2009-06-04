@@ -55,12 +55,13 @@ import haxegui.windowClasses.StatusBar;
 */
 class Introspector extends Window
 {
-
+	
 	public var tree : Tree;
 	public var list1 : UiList;
 	public var list2 : UiList;
 
-
+	public var target : Component;
+	
 	/**
 	*
 	*/
@@ -82,63 +83,44 @@ class Introspector extends Window
 		menubar.init ();
 
 		//
-		var scrollpane = new ScrollPane(this, "ScrollPane1", 10, 44);
-		scrollpane.init({horz: false});
-	
-		//
-		var container = new Container(scrollpane, "Container", 0, 0);
+		var container = new Container(this, "Container", 10, 44);
 		container.init({});
+		
+		//
+		var scrollpane = new ScrollPane(container, "ScrollPane1", 210, 0);
+		scrollpane.init({width: 400, fitH: false, fitV: false});
+		scrollpane.removeChild(scrollpane.horz);
 
 		//
-		scrollpane = new ScrollPane(container, "ScrollPane2", 0, 0);
-		scrollpane.init({width: 190, fitH: false});
+		var scrollpane2 = new ScrollPane(container, "ScrollPane2", 0, 0);
+		scrollpane2.init({width: 190, fitH: false, fitV: false});
 
 		//
-		tree = new Tree(scrollpane, "Tree", 0, 0);
-/*
-		tree.data = {
-		root : {
-			desktop : flash.display.Sprite,
-			Cursor : flash.display.Sprite,
-			Console : {
-				vert : { 
-					up : haxegui.controls.AbstractButton, 
-					down: haxegui.controls.AbstractButton, 
-					frame: haxegui.controls.AbstractButton,
-					handle: haxegui.controls.AbstractButton
-					},
-				Container: {
-					input : flash.text.TextField,
-					output : flash.text.TextField
-					}
-				}
-			}
-		};
-*/
+		tree = new Tree(scrollpane2);
 		var o = { root : reflectDisplayObject(cast flash.Lib.current) };
 		tree.data = o;
 		tree.init({width: 250});
 		
 		
 		//
-		list1 = new UiList(container, "Properties", 210, 0);
+		list1 = new UiList(scrollpane, "Properties", 210, 0);
 		list1.init({text: "Property"});
 		
 		//
-		list2 = new UiList(container, "Values", 350, 0);
+		list2 = new UiList(scrollpane, "Values", 350, 0);
 		list2.init({text: "Value"});
 		
 		//
-		//~ var statusbar = new StatusBar(this, "StatusBar", 10, 360);
-		//~ statusbar.init();
+		var statusbar = new StatusBar(this, "StatusBar", 10, 360);
+		statusbar.init();
 
 	
 	
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		
 		//~ FocusManager.getInstance().addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
-		this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged);
-		onFocusChanged(this);
+		//~ this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged);
+		//~ onFocusChanged(this);
 	}
 
 	public function onFocusChanged(e:Dynamic)
@@ -146,7 +128,9 @@ class Introspector extends Window
 		if(e == this) return;
 		if(!Std.is(e, flash.events.Event)) return;
 		if(!Std.is(e.target, Component)) return;
-		if(untyped this.getChildByName("ScrollPane1").contains(e.target)) return;
+		if(this.contains(e.target)) return;
+		
+		target = e.target;
 		
 		//~ var scrollpane = tree.parent;
 		//~ scrollpane.removeChild(tree);
@@ -157,44 +141,45 @@ class Introspector extends Window
 		//~ untyped tree.getChildAt(0).getChildAt(0).expanded = true;
 		//~ 
 		var self = this;
-		var props = {
-			parent 		: "parent",
-			name 		: "name",
-			x			: "x",
-			y			: "y",
-			width		: function() { return (cast e.target).box.width; },
-			height		: function() { return (cast e.target).box.height; },
-			box			: "box",
-			color 		: "color",
-			type 		: function() { return Type.typeof(e.target); },
-			//~ rect		: function(e){ return e.target.getRect(e.target); },
-			//~ bounds		: function(e){ return e.target.getBounds(e.target); },
-			//~ globalX		: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
-			//~ globalY		: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; }
-			init				: "init",
-			initOpts			: "initOpts",
-			visible				: "visible",
-			disabled			: "disabled",
-			alpha				: "alpha",
-			buttonMode			: "buttonMode",
-			focusable			: "focusable",
-			dirty				: "dirty",
-			id					: "id",
-			validate			: "validate",
-			}
 		
-		if(Std.is(e.target, haxegui.controls.AbstractButton)) {
-			Reflect.setField(props, "autoRepeat", "autoRepeat");
-			Reflect.setField(props, "repeatWaitTime", "repeatWaitTime");
-			Reflect.setField(props, "repeatsPerSecond", "repeatsPerSecond");
+		var props = {
+			name 					: "name",
+			parent 					: "parent",
+			x						: "x",
+			y						: "y",
+			width					: "width",
+			height					: "height",
+			visible					: "visible",
+			alpha					: "alpha",
+			//~ width					: function() { return (cast e.target).box.width; },
+			//~ height					: function() { return (cast e.target).box.height; },
+			//~ type 					: function() { return Type.typeof(e.target); },
+			//~ globalX					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
+			//~ globalY					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; },
+			//~ init					: "init",
+			//~ initOpts				: "initOpts",
+			//~ focusable				: "focusable",
+			//~ dirty					: "dirty",
+			//~ id						: "id",
+			//~ validate				: "validate"
+			}
+		if(Std.is(e.target, Component)) {
+			Reflect.setField(props, "disabled", "disabled");
+			Reflect.setField(props, "color", "color");
+			Reflect.setField(props, "focusable", "focusable");
+			Reflect.setField(props, "dirty", "dirty");
 		}
 		
-
-	
+		//~ if(Std.is(e.target, haxegui.controls.AbstractButton)) {
+			//~ Reflect.setField(props, "autoRepeat", "autoRepeat");
+			//~ Reflect.setField(props, "repeatWaitTime", "repeatWaitTime");
+			//~ Reflect.setField(props, "repeatsPerSecond", "repeatsPerSecond");
+		//~ }
+		
 		list1.data = [];
 		list2.data = [];
 
-		
+
 		// fill the lists
 		for(key in Reflect.fields(props)) {
 				
@@ -206,16 +191,9 @@ class Introspector extends Window
 					list2.data.push( Reflect.callMethod(props, Reflect.field(props, key), []) );
 				
 				else {
-				var value = Reflect.field( e.target, Reflect.field(props, key));
-				list2.data.push( value );
+				var value = Reflect.field( target, Reflect.field(props, key));
+					list2.data.push( value );
 				}
-					//~ list2.data.push("");
-					//~ list2.data.push( Reflect.field(props, key) );
-				//~ else
-				//~ if(Reflect.isObject(Reflect.field(props, key)))
-					//~ list2.data.push( Std.string( Reflect.field( e.target, Reflect.field(props, key)) ));
-				//~ else
-					//~ list2.data.push( Reflect.field( e.target, Reflect.field(props, key)));
 		}
 
 		// redraw
@@ -223,19 +201,13 @@ class Introspector extends Window
 		list2.redraw();
 			
 			// place some icons
-			for(i in 1...list1.numChildren)	
+			//~ for(i in 1...list1.numChildren-1)	
+			for(i in 0...Reflect.fields(props).length-1)	
 				if(Std.is(list1.getChildAt(i), ListItem)) {
 
 				// get a ListItem
 				var item = cast(list1.getChildAt(i), ListItem);
-				// text
-				var tf = cast(item.getChildAt(0), flash.text.TextField);
-				var fmt = DefaultStyle.getTextFormat();
-				fmt.leftMargin = 20;
-				tf.defaultTextFormat = fmt;
-				tf.setTextFormat(fmt);
-				
-			
+
 				// icon
 				if(item.numChildren>1)
 					item.removeChild(item.getChildByName("icon"));
@@ -247,7 +219,7 @@ class Introspector extends Window
 						if(Std.is(c, String)) {
 						src = "assets/icons/types/type-string.png";
 						var inpt = new Input(cast list2.getChildAt(i), "Input", 2, 2);
-						inpt.init({width: 100, height: 16, checked: list2.data[i], label: list2.data[i] });
+						inpt.init({width: 100, height: 16, text: list2.data[i], label: list2.data[i] });
 						untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));						
 						untyped list2.getChildAt(i).setAction("mouseOver", "");
 						untyped list2.getChildAt(i).setAction("mouseOut", "");
@@ -257,7 +229,7 @@ class Introspector extends Window
 					case TInt:
 						src = "assets/icons/types/type-integer.png";
 						var stp = new Stepper(cast list2.getChildAt(i), "Stepper", 2, 2);
-						stp.init({height: 16, value: list2.data[i], label: list2.data[i] });
+						stp.init({height: 16, value: list2.data[i], max: Math.POSITIVE_INFINITY });
 						untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
 						untyped list2.getChildAt(i).setAction("mouseOver", "");
 						untyped list2.getChildAt(i).setAction("mouseOut", "");
@@ -266,12 +238,24 @@ class Introspector extends Window
 						var l = list1;
 						stp.addEventListener(flash.events.Event.CHANGE, 
 							function(e) {
-								if(Reflect.hasField(e.target, l.data[i]))
-									Reflect.setField(e.target, l.data[i], stp.value); 
+								if(Reflect.hasField(self.target, l.data[i]))
+									Reflect.setField(self.target, l.data[i], stp.value); 
 								} );
 					case TFloat:
 						src = "assets/icons/types/type-float.png";
-
+						var stp = new Stepper(cast list2.getChildAt(i), "Stepper", 2, 2);
+						stp.init({height: 16, value: list2.data[i], max: Math.POSITIVE_INFINITY });
+						untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
+						untyped list2.getChildAt(i).setAction("mouseOver", "");
+						untyped list2.getChildAt(i).setAction("mouseOut", "");
+						untyped list2.getChildAt(i).setAction("mouseDown", "");
+						untyped list2.getChildAt(i).setAction("mouseUp", "");
+						var l = list1;
+						stp.addEventListener(flash.events.Event.CHANGE, 
+							function(e) {
+								if(Reflect.hasField(self.target, l.data[i]))
+									Reflect.setField(self.target, l.data[i], stp.value); 
+								} );
 					case TBool:
 						src = "assets/icons/types/type-boolean.png";
 						var chkbox = new CheckBox(cast list2.getChildAt(i), "CheckBox", 2, 2);
@@ -281,69 +265,54 @@ class Introspector extends Window
 						untyped list2.getChildAt(i).setAction("mouseOut", "");
 						untyped list2.getChildAt(i).setAction("mouseDown", "");
 						untyped list2.getChildAt(i).setAction("mouseUp", "");
+						var l = list1;
+						chkbox.addEventListener(flash.events.Event.CHANGE, 
+							function(e) {
+								if(Reflect.hasField(self.target, l.data[i]))
+									Reflect.setField(self.target, l.data[i], chkbox.checked); 
+								} );						
 					case TFunction:
 						src = "assets/icons/types/type-function.png";
 
 					default:
 						src = "assets/icons/types/type-undefined.png";
 				}
-
-/*
-				if(Std.is(list2.data[i], Component))
-					src = "assets/icons/types/type-class.png";
-				else
-				if(Std.is(list2.data[i], String)) {
-					src = "assets/icons/types/type-string.png";
-					var inpt = new Input(cast list2.getChildAt(i), "Input", 2, 2);
-					inpt.init({width: 100, height: 16, checked: list2.data[i], label: list2.data[i] });
-					untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
-					}
-				else
-				if(Std.is( list2.data[i], Bool )) {
-					src = "assets/icons/types/type-boolean.png";
-					var chkbox = new CheckBox(cast list2.getChildAt(i), "CheckBox", 2, 2);
-					chkbox.init({width: 16, height: 16, checked: list2.data[i], label: null });
-					untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
-					untyped list2.getChildAt(i).setAction("mouseOver", "");
-					untyped list2.getChildAt(i).setAction("mouseOut", "");
-					untyped list2.getChildAt(i).setAction("mouseDown", "");
-					untyped list2.getChildAt(i).setAction("mouseUp", "");
-					}
-				else
-				if(Std.is( list2.data[i], Int ) || Std.is( list2.data[i], UInt ) ) {
-					src = "assets/icons/types/type-integer.png";
-					var stp = new Stepper(cast list2.getChildAt(i), "Stepper", 2, 2);
-					stp.init({height: 16, value: list2.data[i], label: list2.data[i] });
-					untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
-					untyped list2.getChildAt(i).setAction("mouseOver", "");
-					untyped list2.getChildAt(i).setAction("mouseOut", "");
-					untyped list2.getChildAt(i).setAction("mouseDown", "");
-					untyped list2.getChildAt(i).setAction("mouseUp", "");
-					var l = list1;
-					stp.addEventListener(flash.events.Event.CHANGE, 
-						function(e) {
-							if(Reflect.hasField(e.target, l.data[i]))
-								Reflect.setField(e.target, l.data[i], stp.value); 
-							} );
-					}
-				else
-				if(Std.is( list2.data[i], Float ))
-					src = "assets/icons/types/type-float.png";
-				else
-				if(Reflect.isFunction( list2.data[i] )) 
-					src = "assets/icons/types/type-function.png";
-*/
+				// icon
 				icon.init({src: src});
+				
+				// text
+				//~ var tf = cast(item.getChildAt(0), flash.text.TextField);
+				//~ var fmt = DefaultStyle.getTextFormat();
+				//~ fmt.leftMargin = 20;
+				//~ tf.defaultTextFormat = fmt;
+				//~ tf.setTextFormat(fmt);
+				//~ tf.x = 20;
+				item.label.moveTo(20,4);
+			
+				target.redraw();
 			}
 	}
 	
 	
 	
 	public override function onResize(e:ResizeEvent) {
-		super.onResize(e);
-	
+
+		var container = cast this.getChildByName("Container");
+		if(container!=null) {
+			var scrollpane = cast container.getChildByName("ScrollPane1");
+			if(scrollpane!=null) {
+				scrollpane.box.height = this.box.height - 65;
+				scrollpane.box.width = this.box.width - scrollpane.x - 30;
+				}
+			scrollpane = cast container.getChildByName("ScrollPane2");
+			if(scrollpane!=null) 
+				scrollpane.box.height = this.box.height - 85;
+				
+		}
+		
+		
 		if(tree!=null) {
-			tree.box.height = this.box.height - 70;
+			tree.box.height = this.box.height - 85;
 			//~ tree.box.height = 600;
 			tree.dirty = true;
 		}
@@ -351,8 +320,9 @@ class Introspector extends Window
 		
 		if(list1!=null) {
 
-			list1.box.width = .5*(this.box.width - list1.x - 30) ;
-			list1.box.height = tree.box.height;
+			list1.x = 0;
+			list1.box.width = .5*(this.box.width - list1.parent.parent.x - 30) ;
+			list1.box.height = tree.box.height + 20;
 			list1.dirty = true;
 			//~ list1.redraw();
 		}
@@ -368,6 +338,7 @@ class Introspector extends Window
 		}
 
 			//~ trace(e);
+		super.onResize(e);
 	}
 	
 

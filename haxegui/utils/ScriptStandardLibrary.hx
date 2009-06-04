@@ -156,9 +156,11 @@ class ScriptStandardLibrary
 					StyleSheet : flash.text.StyleSheet
 				},
 				events : {
-					Event : flash.events.Event,
-					MouseEvent : flash.events.MouseEvent,
-					KeyboardEvent : flash.events.KeyboardEvent
+					Event 		  : flash.events.Event,
+					FocusEvent    : flash.events.FocusEvent,
+					KeyboardEvent : flash.events.KeyboardEvent,
+					MouseEvent    : flash.events.MouseEvent,
+					TextEvent     : flash.events.TextEvent
 				},
 				net : {
 					URLLoader	: flash.net.URLLoader,
@@ -209,6 +211,7 @@ class ScriptStandardLibrary
 		interp.variables.set("MouseManager", haxegui.managers.MouseManager);
 		interp.variables.set("Opts", haxegui.Opts);
 		interp.variables.set("PopupMenu", haxegui.PopupMenu);
+		interp.variables.set("RichTextEditor", haxegui.RichTextEditor);
 		interp.variables.set("ScrollPane", haxegui.ScrollPane);
 		interp.variables.set("ScriptManager", haxegui.managers.ScriptManager);
 		interp.variables.set("Stats", haxegui.Stats);
@@ -243,18 +246,21 @@ class ScriptStandardLibrary
 				ComboBox			: haxegui.controls.ComboBox,
 				Input				: haxegui.controls.Input,
 				Label				: haxegui.controls.Label,
+				ProgressBar			: haxegui.controls.ProgressBar,
 				RadioButton			: haxegui.controls.RadioButton,
 				ScrollBar			: haxegui.controls.ScrollBar,
 				Slider				: haxegui.controls.Slider,
 				Stepper				: haxegui.controls.Stepper,
+				Tree				: haxegui.controls.Tree,
 				UiList				: haxegui.controls.UiList,
 			});
 
 
 		interp.variables.set("toys",
 			{
+				Curvy				: haxegui.toys.Curvy,
 				Rectangle			: haxegui.toys.Rectangle,
-				Curvy				: haxegui.toys.Curvy
+				Transformer			: haxegui.toys.Transformer
 			}
 			);
 

@@ -27,6 +27,7 @@ import flash.geom.Rectangle;
 
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.events.FocusEvent;
 
 import haxegui.events.ResizeEvent;
 
@@ -55,22 +56,23 @@ class Tab extends AbstractButton
 	public var label : Label;
 	public var active : Bool;
 
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
-		super(parent, name, x, y);
-	}
 
 	override public function init(opts:Dynamic=null) {
 		box = new Rectangle(0, 0, 40, 24);
 		color = DefaultStyle.BACKGROUND;
+		active = false;
 
 		super.init(opts);
 
 		active = Opts.optBool(opts, "active", active);
 
-
 		label = new Label(this, "label");
 		label.text = Opts.optString(opts, "label", name);
 		label.init({text: name});
+
+		parent.dispatchEvent(new Event(Event.CHANGE));
+		
+		//~ addEventListener(FocusEvent.FOCUS_IN, (cast parent).onChanged, false, 0, true);
 
 	}
 
@@ -83,28 +85,21 @@ class Tab extends AbstractButton
 		super.onMouseClick(e);
 	}
 
+	public override function onMouseDown(e:MouseEvent) : Void {
+	
+		this.startDrag(false, new Rectangle(0,0,untyped parent.box.width,0));		
 
+		super.onMouseDown(e);
+	}
 
-	//////////////////////////////////////////////////
-	////           Getters/Setters                ////
-	//////////////////////////////////////////////////
-	override private function __setDisabled(v:Bool) : Bool {
-		super.__setDisabled(v);
-		if(this.disabled) {
-			mouseEnabled = false;
-			buttonMode = false;
-		}
-		else {
-			mouseEnabled = Opts.optBool(initOpts,"mouseEnabled",true);
-			buttonMode = Opts.optBool(initOpts,"buttonMode",true);
-		}
-		return v;
+	public override function onMouseUp(e:MouseEvent) : Void {
+	
+		this.stopDrag();		
+
+		super.onMouseUp(e);
 	}
 
 
-	//////////////////////////////////////////////////
-	////           Initialization                 ////
-	//////////////////////////////////////////////////
 	static function __init__() {
 		haxegui.Haxegui.register(Tab);
 	}
@@ -124,10 +119,8 @@ class Tab extends AbstractButton
 class TabChild extends Component
 {
 	var _tabNav : Dynamic;
-	var index : Int;
 	
 	override public function init(opts : Dynamic=null) {
-		index=0;
 		_tabNav = parent;
 		
 		super.init(opts);
@@ -137,13 +130,14 @@ class TabChild extends Component
 
 		_tabNav.addEventListener(Event.CHANGE, onTabChanged, false, 0, true);
 	
-		for(i in 0..._tabNav.numChildren) 
-			if(Std.is(_tabNav.getChildAt(i), TabChild)) index++;
 		
 	}
 	
 	public function onTabChanged(e:Event) {
-		this.visible = (_tabNav.activeTab == index-1);
+		for(i in 0..._tabNav.numChildren) 
+			if(Std.is(_tabNav.getChildAt(i), TabChild))
+				_tabNav.getChildAt(i).visible = false; 
+		this.visible = true;
 	}
 	
 	
@@ -168,16 +162,9 @@ class TabNavigator extends Component
 	//~ public var numTabs : Int;
 	public var activeTab : Int;
 
-	public function new (?parent : flash.display.DisplayObjectContainer, ?name:String, ?x : Float, ?y: Float)
-	{
-		super (parent, name, x, y);
-	}
-
 	public override function addChild(o : DisplayObject) : DisplayObject
 	{
-		//~ box = transform.pixelBounds.clone();
-		//~ onResize(new ResizeEvent(ResizeEvent.RESIZE));
-		//~ box = box.union(o.getBounds(this));
+		//if(Std.is(o, Tab)) for(i in 0...numChildren) if(Std.is(getChildAt(i), Tab)) getChildAt(i).active = false;
 		this.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		return super.addChild(o);
 	}
@@ -191,21 +178,22 @@ class TabNavigator extends Component
 		//~ numTabs = 0;
 
 		super.init(opts);
-
+/*
 
 		for(i in 1...5)
 			{
 				var tab = new Tab(this);
-				tab.init({width: 40, color: this.color, active: i==1 });
+				tab.init({width: 60, color: this.color, active: i==1 });
 				tab.redraw();
-				tab.move(40*(i-1), 0);
+				tab.move(60*(i-1), 0);
 				//~ numTabs = tabs.push(tab);
 			}
+*/
 
-
-		// add the drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
-		this.filters = [shadow];
+		// add the drop-shadow filters
+		var shadow1:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
+		var shadow2:DropShadowFilter = new DropShadowFilter (4, 235, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false);
+		this.filters = [shadow1,shadow2];
 
 
 		addEventListener(Event.CHANGE, onChanged, false, 0, true);
@@ -218,18 +206,21 @@ class TabNavigator extends Component
 
 	}
 
+
 	public function onChanged(e:Event)
 	{
-		//~ (cast getChildAt(activeTab)).redraw();
-		for(i in 0...numChildren)
-			{
+		
+		for(i in 0...numChildren) {
 			var child = getChildAt(i);
-			if(!Std.is(child, Tab)) return;
-			untyped {
-				child.active = i == activeTab;
+			if(Std.is(child, Tab)) untyped {
+				child.active = ( i == activeTab );
 				child.redraw();
 				}
-			}
+			//~ if(Std.is(child, TabChild)) untyped {
+				//~ child.visible = i == activeTab;
+				//~ child.redraw();
+				//~ }				
+		}
 
 	}
 
@@ -241,19 +232,19 @@ class TabNavigator extends Component
 
 	public function onParentResize(e:ResizeEvent) {
 		
-		if(Std.is(parent, Component))
-		{
+		if(Std.is(parent, Component)) {
 			box = untyped parent.box.clone();
 			box.width -= x + 2;
 			box.height -= y + 2;
 		}
 
 		if(Std.is(parent, Window)) {
-			box.height -= 20;
+			box.inflate(-20,-30);
 		}
 
 		if(Std.is(parent.parent, ScrollPane)) {
 			box = untyped parent.parent.box.clone();
+			box.inflate(-5,0);		
 		}
 
 		//~ for(i in 0...numChildren)

@@ -105,8 +105,8 @@ class MouseManager extends EventDispatcher
 		CursorManager.getInstance().showCursor();
 		
 		/** Calculate new mouse delta **/
-		delta = new Point( e.stageX - lastPosition.x, e.stageY - lastPosition.y );
-		moving = delta.equals(new Point());  
+		//~ delta = new Point( e.stageX - lastPosition.x, e.stageY - lastPosition.y );
+		//~ moving = delta.equals(new Point());  
 		
 		/** Inject to fake cursor **/
 		CursorManager.getInstance().inject( e );

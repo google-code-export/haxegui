@@ -83,7 +83,7 @@ class DefaultStyle {
 	public static var LABEL_TEXT	: UInt   = 0x1A1A1A;
 	public static var DROPSHADOW	: UInt   = 0x000000;
 	public static var PANEL		    : UInt 	 = 0xF3F3F3;
-	public static var PROGRESS_BAR  : UInt	 = 0xFFFFFF;
+	public static var PROGRESS_BAR  : UInt	 = 0x7FD2FF;
 
 	public static function getTextFormat(?size:Dynamic, ?color:UInt, ?align:flash.text.TextFormatAlign) : TextFormat
 	{

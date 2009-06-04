@@ -25,3 +25,4 @@ for(i in 0...this.numChildren) {
 	if(this.getChildAt(i) != this.label )
 		this.getChildAt(i).visible = this.expanded;
 	}
+

@@ -51,6 +51,9 @@ TODO:
 		</haxegui:ToolBar>
 		<haxegui:ScrollPane name="ScrollPane1" x="0" y="84" >
 		<haxegui:TabNavigator name="TabNavigator" x="10" y="0" width="512" height="512" >
+		<haxegui:Tab x="0" width="60" />
+		<haxegui:Tab x="60" width="60"/>
+		
 				<haxegui:TabChild>
 					<haxegui:Container name="Container1" width="512" height="512" >
 						<haxegui:controls:Label x="14" y="14" >This window and it's content are dynamically generated from xml, Some events are also defined in hscript.</haxegui:controls:Label>
@@ -72,6 +75,7 @@ TODO:
 									this.dirty = true;
 									this.redraw();
 									this.label.tf.setTextFormat(DefaultStyle.getTextFormat());
+									
 								]]></script>
 							</events>
 						</haxegui:controls:Button>
@@ -125,10 +129,18 @@ TODO:
 							</events>
 						</haxegui:controls:UiList>
 						<haxegui:controls:UiList name="List3" x="360" y="250" width="300" data="@StringArray" />
+
+						<haxegui:controls:ProgressBar x="30" y="450" width="300" />
+						<haxegui:controls:ProgressBar x="30" y="480" width="300" />
+						<haxegui:controls:ProgressBar x="30" y="510" width="300" disabled="true"/>
+
 						<!-- watch this out, if horizontal, set height for width (r220) --> 
 						<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="450" height="300" />
 						<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="480" height="300" />
 						<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="510" height="300" disabled="true"/>
+
+					
+
 					
 					</haxegui:Container>
 				</haxegui:TabChild>

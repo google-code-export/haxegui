@@ -25,6 +25,7 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
+import flash.events.TextEvent;
 import flash.events.FocusEvent;
 
 import haxe.Timer;
@@ -115,19 +116,25 @@ class Stepper extends Component
 		Opts.optFloat(bOpts, "repeatWaitTime", .75);
 
 		// init children
-		input.init({width: box.width, text: Std.string(value) });
+		input.init({width: box.width, height: box.height, text: Std.string(value), disabled: this.disabled });
 		up.init(bOpts);
 		down.init(bOpts);
 
-
-		this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
+		input.setAction("focusIn", "");
+		input.setAction("focusOut", "");
+		
+		input.tf.addEventListener (KeyboardEvent.KEY_DOWN, onInput, false, 0, true);
+		addEventListener (Event.CHANGE, onChanged, false, 0, true);
 
 	}
 
+	public function onInput(e:KeyboardEvent) {
+		//~ value = Std.parseFloat(e.text);
+	}
+	
 	public function onChanged(?e:Dynamic)
 	{
 		dirty = true;
-
 		input.tf.text = Std.string(value);
 		input.tf.setTextFormat(DefaultStyle.getTextFormat());
 	}
