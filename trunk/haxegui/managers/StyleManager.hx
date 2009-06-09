@@ -74,17 +74,20 @@ class StyleManager implements Dynamic
 }
 
 class DefaultStyle {
-	//~ public static var BACKGROUND 	: UInt   = 0xADD8E6;
-	public static var BACKGROUND:UInt   = 0xE5E5E5;
-	public static var TOOLTIP		: UInt 	 = 0xCFB675;
-	public static var FOCUS			: UInt   = 0xFFFF00;
-	public static var INPUT_BACK	: UInt   = 0xF5F5F5;
-	public static var INPUT_TEXT	: UInt   = 0x333333;
-	public static var LABEL_TEXT	: UInt   = 0x1A1A1A;
-	public static var DROPSHADOW	: UInt   = 0x000000;
-	public static var PANEL		    : UInt 	 = 0xF3F3F3;
-	public static var PROGRESS_BAR  : UInt	 = 0x7FD2FF;
+	public static var BACKGROUND 		: UInt   = 0xADD8E6;
+	public static var ACTIVE_TITLEBAR 	: UInt   = 0xB3EEFF;
+	//~ public static var BACKGROUND		: UInt   = 0x5E5E5E;
+	//~ public static var ACTIVE_TITLEBAR 	: UInt   = 0xBFBFBF;
+	public static var TOOLTIP			: UInt 	 = 0xe5baac;
+	public static var FOCUS				: UInt   = 0xd7ace5;
+	public static var INPUT_BACK		: UInt   = 0xF5F5F5;
+	public static var INPUT_TEXT		: UInt   = 0x333333;
+	public static var LABEL_TEXT		: UInt   = 0x1A1A1A;
+	public static var DROPSHADOW		: UInt   = 0x000000;
+	public static var PANEL		    	: UInt 	 = 0xF3F3F3;
+	public static var PROGRESS_BAR  	: UInt	 = 0xace5b5;
 
+	public static var FONT				:	String = "FFF_Harmony";
 	public static function getTextFormat(?size:Dynamic, ?color:UInt, ?align:flash.text.TextFormatAlign) : TextFormat
 	{
 		var fmt = new TextFormat ();
@@ -92,13 +95,14 @@ class DefaultStyle {
 		//~ fmt.font = "FFF_FORWARD";
 		//~ fmt.font = "Impact";
 		//~ fmt.font = "FFF_Manager_Bold";
-		fmt.font = "FFF_Harmony";
+		//~ fmt.font = "FFF_Harmony";
 		//~ fmt.font = "FFF_Freedom_Trial";
 		//~ fmt.font = "FFF_Reaction_Trial";
 		//~ fmt.font = "Amiga_Forever_Pro2";
 		//~ fmt.font = "Silkscreen";
 		//~ fmt.font = "04b25";
 		//~ fmt.font = "Pixel_Classic";
+		fmt.font = DefaultStyle.FONT;
 		fmt.size = ( size == null || size == 0 || Math.isNaN(size) ) ? 8 : size;
 		fmt.align = ( align == null || !Std.is(align, flash.text.TextFormatAlign) ) ? TextFormatAlign.LEFT : align;
 		fmt.color = ( color == 0 ) ? DefaultStyle.LABEL_TEXT : color ;

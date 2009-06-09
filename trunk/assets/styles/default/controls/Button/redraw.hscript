@@ -5,8 +5,9 @@ function toGrayscaleHex(value)
     return ( value << 16 | value << 8 | value );
 }
 
-var highlight = Math.max(0, Math.min(0xFFFFFF, this.color | toGrayscaleHex(50) ));
-var mid = Math.max(0, Math.min(0xFFFFFF, this.color - toGrayscaleHex(10) ));
+var highlight = Utils.tint(this.color,.85);
+//var mid = Utils.clamp(this.color - toGrayscaleHex(10));
+var mid = Utils.tint(this.color,.95);
 
 var colors = this.disabled ? 
   [this.color, highlight, mid, this.color] :
@@ -15,7 +16,7 @@ var alphas =[100, 100, 100, 100];
 var ratios =[0, 0x70, 0xD0, 0xFF];
 var matrix = new flash.geom.Matrix ();
 
-matrix.createGradientBox (this.box.width, this.box.height, Math.PI / 2, 0, 0);
+matrix.createGradientBox (this.box.width, this.box.height, .5*Math.PI, 0, 0);
 
 
 this.graphics.lineStyle (1, Math.max(0, this.color - toGrayscaleHex(30)), 1, true,
@@ -39,7 +40,7 @@ var fmt =
   DefaultStyle.getTextFormat (8, DefaultStyle.LABEL_TEXT,
 			      flash.text.TextFormatAlign.LEFT);
 if (this.disabled)
-  fmt.color = this.color - 0x202020;
+  fmt.color = Utils.clamp(this.color - 0x202020);
 this.label.tf.setTextFormat (fmt);
 
 this.label.moveTo (Math.floor (.5 * (this.box.width - this.label.width)),

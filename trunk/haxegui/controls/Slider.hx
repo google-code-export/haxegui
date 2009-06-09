@@ -75,7 +75,7 @@ class Slider extends Component
 		super.init(opts);
 
 		handle = new SliderHandle(this);
-		handle.init({color: this.color});
+		handle.init({color: this.color, disabled: this.disabled });
 		handle.move(0,4);
 
 		// add the drop-shadow filters
@@ -111,10 +111,23 @@ class Slider extends Component
 	}
 
 	function onHandleMouseDown (e:MouseEvent) : Void {
+		if(this.disabled) return;
 		CursorManager.setCursor (Cursor.DRAG);
+		CursorManager.getInstance().lock = true;
 		handle.startDrag(false,new Rectangle(0,e.target.y, box.width - handle.width ,0));
 		e.target.stage.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
 	}
+
+	override public function onMouseUp (e:MouseEvent) : Void {
+		if(this.disabled) return;	
+		CursorManager.getInstance().lock = false;
+		if(hitTestObject( CursorManager.getInstance()._mc ))
+			CursorManager.setCursor (Cursor.ARROW);
+
+		handle.stopDrag();
+		redraw(color);
+	}
+
 
 	public function onMouseMove (e:MouseEvent)
 	{
@@ -124,14 +137,6 @@ class Slider extends Component
 		e.updateAfterEvent();
 	}
 
-	override public function onMouseUp (e:MouseEvent) : Void
-	{
-		if(hitTestObject( CursorManager.getInstance()._mc ))
-			CursorManager.setCursor (Cursor.ARROW);
-
-		handle.stopDrag();
-		redraw(color);
-	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(Slider);

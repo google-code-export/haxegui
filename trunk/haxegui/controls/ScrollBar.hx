@@ -163,7 +163,7 @@ class ScrollBar extends Component
 
 		//
 		handle = new ScrollBarHandle(this);
-		handle.init({y: 20, color: this.color});
+		handle.init({y: 20, color: this.color, disabled: this.disabled});
 		handle.redraw({h : 20, horizontal: this.horizontal });
 
 		shadow = new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, disabled ? .35 : .75, BitmapFilterQuality.LOW, false, false, false);
@@ -171,11 +171,11 @@ class ScrollBar extends Component
 
 		//
 		up = new ScrollBarUpButton(this);
-		up.init({color: this.color});
+		up.init({color: this.color, disabled: this.disabled});
 
 		//
 		down = new ScrollBarDownButton(this);
-		down.init({color: this.color});
+		down.init({color: this.color, disabled: this.disabled});
 		down.move(0, box.height - 20);
 
 		//

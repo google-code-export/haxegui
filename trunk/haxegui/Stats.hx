@@ -50,31 +50,12 @@ import flash.ui.Mouse;
 
 import flash.Error;
 import haxe.Timer;
-//~ import flash.utils.Timer;
-
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.filters.BevelFilter;
 
 import haxegui.managers.StyleManager;
 import haxegui.controls.Label;
 import haxegui.controls.Stepper;
 import haxegui.controls.UiList;
 
-
-import feffects.Tween;
-import feffects.easing.Quint;
-import feffects.easing.Sine;
-import feffects.easing.Back;
-import feffects.easing.Bounce;
-import feffects.easing.Circ;
-import feffects.easing.Cubic;
-import feffects.easing.Elastic;
-import feffects.easing.Expo;
-import feffects.easing.Linear;
-import feffects.easing.Quad;
-import feffects.easing.Quart;
 import haxegui.Window;
 import haxegui.windowClasses.StatusBar;
 
@@ -89,6 +70,7 @@ class Stats extends Window
 {
 
   var list : UiList;
+  var list2 : UiList;
 
   var gridSpacing : UInt;
   var graph : Sprite;
@@ -132,7 +114,7 @@ class Stats extends Window
      */
     public override function init(?initObj:Dynamic)
     {
-        super.init({name:"Stats", type: WindowType.MODAL, sizeable:false,
+        super.init({name: "Stats", type: WindowType.MODAL, sizeable:false,
                     x:x, y:y, width:width, height:height, color: 0x2A7ACD});
         type = WindowType.MODAL;
         frameCounter = 0;
@@ -156,49 +138,56 @@ class Stats extends Window
         container.init({color: 0x2A7ACD});
 
 
-        list = new UiList(container, "List");
-        list.data=["FPS:", "minFPS:", "maxFPS:", "avgFPS:", "objs:", "dirty:", "Mem:", "Uptime:"];
-        list.init({color: 0xE5E5E5, width: 140, height: 180});
-        list.redraw();
+        list = new UiList(container, "List1");
+        list.data=["FPS", "minFPS", "maxFPS", "avgFPS", "objs", "dirty", "Mem", "Uptime"];
+        list.init({color: 0x2A7ACD, width: 70, height: 160});
 
-        graph = new Sprite();
-        grid = new Sprite();
+        list2 = new UiList(container, "List2");
+        list2.data =
+        [
+            Std.string(Math.NaN),
+            Std.string(Math.NaN),
+            Std.string(Math.NaN),
+            Std.string(Math.NaN),
+            Std.string(Math.NaN),
+            Std.string(Math.NaN),
+            Std.string(Math.NaN),
+            Std.string(Math.NaN)
+        ];
+        list2.init({color: 0x2A7ACD, width: 70, height: 180});
+        list2.move(70,0);
 
+        graph = new Component(container);
+        grid = new Component(graph);
 
         grid.graphics.lineStyle(0,0,0);
         grid.graphics.beginFill( 0xE5E5E5 );
-        grid.graphics.drawRect(0,0,240+gridSpacing*4,160);
+        grid.graphics.drawRect(0,0,240+gridSpacing*4,180);
         grid.graphics.endFill();
 
         for(i in 0...Std.int(240/(gridSpacing-4)))
         {
         grid.graphics.lineStyle(1,0xCCCCCC);
         grid.graphics.moveTo(gridSpacing*i,0);
-        grid.graphics.lineTo(gridSpacing*i,160);
+        grid.graphics.lineTo(gridSpacing*i,180);
         }
 
-        for(i in 0...Std.int(140/gridSpacing))
+        for(i in 0...Std.int(180/gridSpacing))
         {
         grid.graphics.lineStyle(1,0xCCCCCC);
         grid.graphics.moveTo(0,gridSpacing*i);
-        grid.graphics.lineTo(240+4*gridSpacing,gridSpacing*i);
+        grid.graphics.lineTo(250+4*gridSpacing,gridSpacing*i);
         }
 
 
         ploter = new Sprite();
-        graph.addChild(grid);
         graph.addChild(ploter);
 
 		//
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
-		graph.filters = [shadow];
-        graph.x = 150;
-        graph.scrollRect = new Rectangle(0,0,240,160);
+        (cast graph).moveTo(141, 0);
+        graph.scrollRect = new Rectangle(0,0,250,180);
 
-        container.addChild(graph);
-
-
-        
+       
         var statusbar = new StatusBar(this, "StatusBar", 10);
         statusbar.init();
 
@@ -207,7 +196,10 @@ class Stats extends Window
         label.init();
         
         var stepper = new Stepper(statusbar, "Stepper", 346, 0);
-        stepper.init({value: interval, step: 5, min: 20, max: 5000, color: 0x2A7ACD});
+        stepper.init({value: interval, step: 10, min: 20, max: 5000, color: 0x2A7ACD});
+        stepper.value = interval;
+        stepper.input.tf.text = Std.string(interval);
+        
         var self = this;
 		stepper.addEventListener(Event.CHANGE,
             function(e:Event) {
@@ -218,8 +210,6 @@ class Stats extends Window
                 self.avgFPS = [.0];
                 self.interval = e.target.value;
 
-                self.list.data=["FPS:", "minFPS:", "maxFPS:", "objs:", "dirty:", "avgFPS:", "Mem:", "Uptime:"];
-                self.list.redraw();
                 self.ploter.graphics.clear();
                 self.ploter.x = 0;
 
@@ -238,7 +228,9 @@ class Stats extends Window
         timer = new haxe.Timer(interval);
         timer.run = update;
 
-        this.addEventListener (Event.ENTER_FRAME, onStatsEnterFrame);
+       this.addEventListener (Event.ENTER_FRAME, onStatsEnterFrame);
+       //~ this.setAction("interval", "this.frameCounter++;" );
+       //~ this.startInterval(30);
 
         //~ redraw(null);
         dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
@@ -268,21 +260,26 @@ class Stats extends Window
             avg += i;
         avg /= avgFPS.length;
         if(avgFPS.length > 10 ) avgFPS.shift();
-
-
-        list.data =
+        
+        //list.data=["FPS", "minFPS", "maxFPS", "avgFPS", "objs", "dirty", "Mem", "Uptime"];
+        list2.data =
         [
-            "FPS: \t\t\t" + Std.string(fps).substr(0,5),
-            "minFPS: \t\t" + Std.string(minFPS).substr(0,5),
-            "maxFPS: \t\t" + Std.string(maxFPS).substr(0,5),
-            "avgFPS: \t\t" + Std.string(avg).substr(0,5),
-            "obj: \t\t\t" + Std.string(Math.NaN),
-            "dirty: \t\t\t" + Std.string(Math.NaN),
-            "Mem(MB): \t\t" + Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5),
-            "Uptime: \t\t\t" + Std.string(haxe.Timer.stamp()).substr(0,5)
+            Std.string(fps).substr(0,5),
+            Std.string(minFPS).substr(0,5),
+            Std.string(maxFPS).substr(0,5),
+            Std.string(avg).substr(0,5),
+            Std.string(count(flash.Lib.current)),
+            //Std.string(Math.NaN),
+            Std.string(Lambda.count(Haxegui.dirtyList)),
+            Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5),
+            Std.string(haxe.Timer.stamp()).substr(0,5),
+            ""
         ];
 
-        list.redraw();
+//        list2.redraw();
+        for(i in 0...list2.numChildren)
+           if(Std.is(list2.getChildAt(i), ListItem))
+                untyped list2.getChildAt(i).redraw();
 
 /*
 
@@ -357,7 +354,16 @@ class Stats extends Window
 
 
 
-
+    public function count(o:DisplayObjectContainer) : Int {
+        if(o==null) return 0;
+        var c = o.numChildren;
+        for(i in 0...o.numChildren)
+        if(!Std.is(o.getChildAt(i), flash.text.TextField) &&
+            !Std.is(o.getChildAt(i), flash.display.Bitmap) &&
+            !Std.is(o.getChildAt(i), flash.display.Shape) ) 
+            c += count(cast o.getChildAt(i));
+        return c;
+    }
 
 
 

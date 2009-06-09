@@ -108,24 +108,24 @@ class Transformer extends Component
 			"
 			);
 
-			
+			var mid = new Point(Std.int(this.box.width) >> 1,Std.int(this.box.height) >> 1);
 
 			switch(i) {
 				case 0:
 				case 1:
-					handles[i].moveTo( this.box.width/2 - 4, 0 );
+					handles[i].moveTo( mid.x - 4, 0 );
 				case 2:
 					handles[i].moveTo( this.box.width - 8, 0 );
 				case 3:
-					handles[i].moveTo( this.box.width - 8, this.box.height/2 - 4 );
+					handles[i].moveTo( this.box.width - 8, mid.y - 4 );
 				case 4:
 					handles[i].moveTo( this.box.width - 8, this.box.height - 8 );
 				case 5:
-					handles[i].moveTo( this.box.width/2 - 4, this.box.height - 8 );
+					handles[i].moveTo( mid.x - 4, this.box.height - 8 );
 				case 6:
 					handles[i].moveTo( 0,  this.box.height - 8 );
 				case 7:
-					handles[i].moveTo( 0,  this.box.height/2 - 4 );
+					handles[i].moveTo( 0,  mid.y - 4 );
 			}
 			
 		}
@@ -162,10 +162,9 @@ class Transformer extends Component
 		this.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);		
 		"
 		);	
-		pivot.moveTo( this.box.width/2, this.box.height/2 );
+		pivot.moveTo( Std.int(this.box.width)>>1, Std.int(this.box.height)>>1 );
 
 	
-
 		// draw the frame
 		this.setAction("redraw",
 		"
@@ -200,6 +199,7 @@ class Transformer extends Component
 		if(!this.contains(e.target)) return;
 		var p = target.parent.globalToLocal(new Point(this.x, this.y));
 		var i = this.getChildIndex(e.target);
+		var mid = new Point(Std.int(this.box.width) >> 1,Std.int(this.box.height) >> 1);
 		switch(i) {
 			case 0:
 				this.move( e.target.x, e.target.y );
@@ -208,14 +208,14 @@ class Transformer extends Component
 				this.box.height -= e.target.y;
 				e.target.moveTo(0,0);
 				handles[2].x = handles[3].x = handles[4].x = this.box.width - 8;
-				handles[1].x = handles[5].x = this.box.width/2 - 4;
-				handles[3].y = handles[7].y = this.box.height/2 - 4;
+				handles[1].x = handles[5].x = mid.x - 4;
+				handles[3].y = handles[7].y = mid.y - 4;
 				handles[4].y = handles[5].y = handles[6].y = this.box.height - 8;
 			case 1:
 				this.y += e.target.y;
 				this.box.height -= e.target.y;
 				e.target.y = 0;
-				handles[3].y = handles[7].y = this.box.height/2 - 4;
+				handles[3].y = handles[7].y = mid.y - 4;
 				handles[4].y = handles[5].y = handles[6].y = this.box.height - 8;
 				target.moveTo( p.x + 8, p.y + 8 );
 			case 2:
@@ -224,47 +224,47 @@ class Transformer extends Component
 				this.box.height -= e.target.y ;
 				e.target.y = 0;
 				handles[3].x = handles[4].x = e.target.x;
-				handles[1].x = handles[5].x = this.box.width/2 - 4;
-				handles[3].y = handles[7].y = this.box.height/2 - 4;
+				handles[1].x = handles[5].x = mid.x - 4;
+				handles[3].y = handles[7].y = mid.y - 4;
 				handles[4].y = handles[5].y = handles[6].y = this.box.height - 8;
 				target.moveTo( p.x + 8, p.y + 8 );				
 			case 3:
 				this.box.width = e.target.x + 8;
-				handles[1].x = handles[5].x = this.box.width/2 - 4;
+				handles[1].x = handles[5].x = mid.x - 4;
 				handles[2].x = handles[4].x = e.target.x;
 			case 4:
 				this.box.width = e.target.x + 8;
 				this.box.height = e.target.y + 8;
-				handles[1].x = handles[5].x = this.box.width/2 - 4;
+				handles[1].x = handles[5].x = mid.x - 4;
 				handles[2].x = handles[3].x = e.target.x;
-				handles[3].y = handles[7].y = this.box.height/2 - 4;
+				handles[3].y = handles[7].y = mid.y - 4;
 				handles[5].y = handles[6].y = e.target.y;
 			case 5:
 				this.box.height = e.target.y + 8;
-				handles[3].y = handles[7].y = this.box.height/2 - 4;
+				handles[3].y = handles[7].y = mid.y - 4;
 				handles[4].y = handles[6].y = e.target.y;
 			case 6:
 				this.x += e.target.x;
 				this.box.width -= e.target.x;
 				this.box.height = e.target.y + 8;
 				e.target.moveTo(0, this.box.height - 8);
-				handles[1].x = handles[5].x = this.box.width/2 - 4;
+				handles[1].x = handles[5].x = mid.x - 4;
 				handles[2].x = handles[3].x = handles[4].x = this.box.width - 8;
-				handles[3].y = handles[7].y = this.box.height/2 - 4;
+				handles[3].y = handles[7].y = mid.y - 4;
 				handles[4].y = handles[5].y = e.target.y;
 				target.moveTo( p.x + 8, p.y + 8 );
 			case 7:
 				this.x += e.target.x;
 				this.box.width -= e.target.x;
-				e.target.moveTo(0, this.box.height/2 - 4);
-				handles[1].x = handles[5].x = this.box.width/2 - 4;
+				e.target.moveTo(0, mid.y - 4);
+				handles[1].x = handles[5].x = mid.x - 4;
 				handles[2].x = handles[3].x = handles[4].x = this.box.width - 8;
 				target.moveTo( p.x + 8, p.y + 8 );
 			case 8: //pivot
 				target.moveTo( p.x + 8, p.y + 8 );
 				
 		}
-		pivot.moveTo( this.box.width/2, this.box.height/2 );
+		pivot.moveTo( mid.x, mid.y );
 		//~ dirty = true;
 		redraw();
 

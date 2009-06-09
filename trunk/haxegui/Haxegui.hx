@@ -35,7 +35,7 @@ class Haxegui {
 
 
 	private static var initializers : List<{c:Class<Dynamic>, f:Void->Void}>;
-	private static var dirtyList : List<Component> = new List();
+	public static var dirtyList : List<Component> = new List();
 
 	/** Public **/
 

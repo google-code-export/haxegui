@@ -49,9 +49,6 @@ class ProgressBarIndicator extends Component
 		super.init(opts);
 		
 		mouseEnabled = false;
-		//~ scrollRect = new Rectangle(0,0,(cast parent).progress*box.width,box.height);
-
-	
 	}
 		
 		static function __init__() {
@@ -87,52 +84,49 @@ class ProgressBar extends Component
 		super.init(opts);
 
 
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, disabled ? .35 : .75, BitmapFilterQuality.HIGH, true, false, false);
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, disabled ? .35 : .75, BitmapFilterQuality.HIGH, true, false, false);
 		this.filters = [shadow];
 		
 		
-		bar = new ProgressBarIndicator(this);
+		bar = new ProgressBarIndicator(this, "Indicator");
 		bar.init();
 		bar.cacheAsBitmap = true;
 		this.cacheAsBitmap = true;
 		
-		
 
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.5, 4, 4, disabled ? .35 : .75, BitmapFilterQuality.LOW, false, false, false);
-		var glow = new flash.filters.GlowFilter (DefaultStyle.PROGRESS_BAR, 1, 4, 4, 2, flash.filters.BitmapFilterQuality.LOW, false, false);
-		if(this.disabled)
+		//~ var glow = new flash.filters.GlowFilter (DefaultStyle.PROGRESS_BAR, 1, 16, 16, 1.5, flash.filters.BitmapFilterQuality.HIGH, false, false);
+		//~ if(this.disabled)
 			bar.filters = [shadow];
-		else 
-			bar.filters = [glow, shadow];
+		//~ else 
+			//~ bar.filters = [glow, shadow];
 		
 		
 		mazk = cast addChild(new Shape());
 		mazk.graphics.beginFill(0xFF00FF);
 		mazk.graphics.drawRect(0,0,progress*box.width,box.height);
 		mazk.graphics.endFill();
-		bar.mask = cast mazk;
+		bar.mask = mazk;
 
 
-			bar.setAction("interval", 
-			"
-			var x = -1;
-			if(this.x < -parent.box.width/10) x = parent.box.width/10;
-			this.move(x,0);
-			//~ this.scrollRect = new flash.geom.Rectangle(0,0,parent.progress*parent.box.width,parent.box.height);
-			//this.scrollRect = parent.box.clone();
-			"
-			);
-			bar.moveTo(1,1);
-			bar.startInterval(12);
+		bar.setAction("interval", 
+		"
+		var x = -1;
+		if(this.x < -parent.box.width/10) x = parent.box.width/10;
+		this.move(x,0);
+		"
+		);
+		bar.moveTo(0,1);
+		bar.startInterval(10);
 
 		label = new Label(this);
 		label.init();
 		label.tf.text = Math.round(100*progress) + "%";
-		label.moveTo( (box.width-label.width)/2, (box.height-label.height)/2 + 1 );
+		label.moveTo( .5*(box.width-label.width), .5*(box.height-label.height) + 1 );
 		
-		var t = new feffects.Tween(0, 1, 30000, this, "progress", feffects.easing.Linear.easeNone);
+		var t = new feffects.Tween(0, 1, 10000+Std.random(20000), this, "progress", feffects.easing.Linear.easeNone);
 		var self = this;
-		t.setTweenHandlers( function(v) { self.update(); } , function(v) { t.start(); } );
+		t.setTweenHandlers( function(v) { self.update(); } , function(v) { t.stop(); t.start(); } );
 		t.start();
 
 	}
@@ -143,17 +137,32 @@ class ProgressBar extends Component
 	}
 
 	public function update() {
+		progress = Math.max(0, Math.min(1, progress));
+		
 		if(label!=null) 
 			label.tf.text = Math.round(100*progress) + "%";
 		
-		if(mask!=null)
+		if(mask!=null) {
 			mazk = cast addChild(new Shape());
-		mazk.graphics.clear();
-		mazk.graphics.beginFill(0xFF00FF);
-		mazk.graphics.drawRect(0,0,progress*box.width, box.height);
-		mazk.graphics.endFill();
-		bar.mask = mazk;
+			mazk.graphics.clear();
+			mazk.graphics.beginFill(0xFF00FF);
+			mazk.graphics.drawRect(2,1,progress*box.width, box.height);
+			mazk.graphics.endFill();
+			bar.mask = mazk;
+		}
+		mazk.width = progress*box.width;
+		mazk.height = box.height;
+	
 	}
+	
+	
+	public override function onResize(e:ResizeEvent) {
+		label.moveTo( .5*(box.width-label.width), .5*(box.height-label.height) + 1 );
+		bar.dirty = true;
+		update();
+		super.onResize(e);
+	}
+	
 	
 
 }//ProgressBar

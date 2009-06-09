@@ -19,6 +19,8 @@
 
 package haxegui.controls;
 
+import flash.geom.Rectangle;
+
 import flash.display.Sprite;
 import flash.display.MovieClip;
 import flash.display.DisplayObject;
@@ -27,10 +29,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.geom.Rectangle;
+
 import haxegui.Component;
 import haxegui.Opts;
 import haxegui.managers.CursorManager;

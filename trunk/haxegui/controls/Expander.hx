@@ -56,15 +56,11 @@ class Expander extends AbstractButton
 
 	public var scrollTween : Tween;
 	
-	
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super(parent, name, x, y);
-	}
+
 
 	override public function init(opts:Dynamic=null)
 	{
-		box = new Rectangle(0, 0, 15, 15);
+		box = new Rectangle(0, 0, 140, 15);
 		color = cast Math.max(0, DefaultStyle.BACKGROUND - 0x202020);
 		expanded = false;
 
@@ -78,6 +74,7 @@ class Expander extends AbstractButton
 		label.tf.mouseEnabled = false;
 
 		scrollRect = new Rectangle(0,0,stage.stageWidth,this.box.height);
+		cacheAsBitmap = true;
 
 		super.init(opts);
 
@@ -87,21 +84,20 @@ class Expander extends AbstractButton
 
 	override public function onMouseClick(e:MouseEvent) {
 		if(disabled) return;
+
 		
-		e.stopImmediatePropagation();
-		
-		expanded = !expanded;
-		
-		dirty = true;
-		dispatchEvent(new Event(Event.CHANGE));
-		
-		
-		var r = new Rectangle(0,0,stage.stageWidth,this.box.height);
-		
-		var h = root.getRect(this).height;
+		var h = Math.max( box.height, root.getRect(this).height );
+
+		var r = new Rectangle(0,0,stage.stageWidth, h);
 		var self = this;
 		
-		
+
+				
+		for(i in 0...this.numChildren) {
+			if(this.getChildAt(i) != this.label )
+				this.getChildAt(i).visible = true;
+			}
+			
 		//~ if(scrollTween!=null) {
 			//~ scrollTween.pause();
 			//~ scrollTween.reverse();
@@ -110,11 +106,26 @@ class Expander extends AbstractButton
 		//~ else {
 		if(scrollTween!=null)
 			scrollTween.stop();
-		scrollTween = new Tween(15, h, 1500, r, "height", feffects.easing.Linear.easeNone);
+		if(!expanded)  
+			scrollTween = new Tween(box.height, h, 3500, r, "height", feffects.easing.Linear.easeNone);
+		else
+			scrollTween = new Tween(h, box.height, 1500, r, "height", feffects.easing.Expo.easeOut);
+			
 		scrollTween.setTweenHandlers( function(v) { self.scrollRect = r.clone(); } );
+		
 		scrollTween.start();
 		//~ }
+
 		
+		e.stopImmediatePropagation();
+		
+		expanded = !expanded;
+		
+		//~ dirty = true;
+		dispatchEvent(new Event(Event.CHANGE));
+		
+
+				
 		super.onMouseClick(e);
 	}
 

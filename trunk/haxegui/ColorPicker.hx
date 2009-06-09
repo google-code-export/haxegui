@@ -146,20 +146,28 @@ class ColorPicker extends Window
 		input.tf.text = "0x"+StringTools.hex(currentColor);
 		input.tf.y += 4;
 
+		var r = currentColor >> 16 ;
+		var g = currentColor >> 8 & 0xFF ;
+		var b = currentColor & 0xFF ;
 
 		//
 		for(i in 1...5)	{
+			
 			
 			//
 			var slider = new Slider(container, "Slider"+i);
 			slider.init({width: 196, step: i==4 ? .1 : 1, max: i==4 ? 1 : 306, color: 0xE6D3CC});
 			slider.move(180, 10+40*i);
-			if(i==4) slider.handle.x=166;
+			if(i==1) slider.handle.x = .5*r;
+			if(i==2) slider.handle.x = .5*g;
+			if(i==3) slider.handle.x = .5*b;
+			if(i==4) slider.handle.x = 166;
 			
 			//
 			var stepper = new Stepper(container, "Stepper"+i);
 				stepper.init({value: i==4 ? 1 : 0, step: i==4 ? .01 : 1, max: i==4 ? 1 : 0xFF, color: 0xE6D3CC, repeatsPerSecond: 10});
 			//~ stepper.init();
+			stepper.value = 2*slider.handle.x;
 			stepper.move(388, 10+40*i);
 			
 			//

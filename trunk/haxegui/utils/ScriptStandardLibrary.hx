@@ -47,6 +47,7 @@ class ScriptStandardLibrary
 		interp.variables.set( "trace", haxe.Log.trace );
 		interp.variables.set( "root", flash.Lib.current );
 		interp.variables.set( "Std", Std );
+		interp.variables.set( "Lambda", Lambda );
 		interp.variables.set( "String", String );
 		interp.variables.set( "StringTools", StringTools );
 		interp.variables.set( "Math", Math );
@@ -153,7 +154,17 @@ class ScriptStandardLibrary
 					TextFieldType : flash.text.TextFieldType,
 					TextFormat : flash.text.TextFormat,
 					TextFormatAlign : flash.text.TextFormatAlign,
-					StyleSheet : flash.text.StyleSheet
+					StyleSheet : flash.text.StyleSheet,
+					AntiAliasType: {
+						NORMAL  : flash.text.AntiAliasType.NORMAL,
+						ADVANCED  : flash.text.AntiAliasType.ADVANCED
+					},
+					TextFieldAutoSize: {
+							LEFT  : flash.text.TextFieldAutoSize.LEFT,
+							RIGHT  : flash.text.TextFieldAutoSize.RIGHT,
+							CENTER  : flash.text.TextFieldAutoSize.CENTER,
+							NONE  : flash.text.TextFieldAutoSize.NONE,								
+					}
 				},
 				events : {
 					Event 		  : flash.events.Event,
@@ -187,18 +198,19 @@ class ScriptStandardLibrary
 		interp.variables.set("Container", haxegui.Container);
 
 		interp.variables.set("Cursor",{
-				ARROW : Cursor.ARROW,
-				HAND : Cursor.HAND,
-				HAND2 : Cursor.HAND2,
-				DRAG : Cursor.DRAG,
-				IBEAM : Cursor.IBEAM,
-				SIZE_ALL : Cursor.SIZE_ALL,
-				NESW : Cursor.NESW,
-				NS : Cursor.NS,
-				NWSE : Cursor.NWSE,
-				WE : Cursor.WE,
+				ARROW 	  : Cursor.ARROW,
+				HAND 	  : Cursor.HAND,
+				HAND2 	  : Cursor.HAND2,
+				DRAG 	  : Cursor.DRAG,
+				IBEAM 	  : Cursor.IBEAM,
+				SIZE_ALL  : Cursor.SIZE_ALL,
+				NESW 	  : Cursor.NESW,
+				NS 	 	  : Cursor.NS,
+				NWSE 	  : Cursor.NWSE,
+				WE 		  : Cursor.WE,
 				CROSSHAIR : Cursor.CROSSHAIR,
 			});
+		interp.variables.set("Appearance", haxegui.Appearance);
 		interp.variables.set("CursorManager", CursorManager);
 		interp.variables.set("DefaultStyle", DefaultStyle);
 		interp.variables.set("DragManager", haxegui.managers.DragManager);
@@ -214,6 +226,7 @@ class ScriptStandardLibrary
 		interp.variables.set("RichTextEditor", haxegui.RichTextEditor);
 		interp.variables.set("ScrollPane", haxegui.ScrollPane);
 		interp.variables.set("ScriptManager", haxegui.managers.ScriptManager);
+		interp.variables.set("ScriptStandardLibrary", ScriptStandardLibrary);
 		interp.variables.set("Stats", haxegui.Stats);
 		interp.variables.set("StyleManager", StyleManager);
 		interp.variables.set("ToolBar", haxegui.ToolBar);
