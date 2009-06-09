@@ -58,6 +58,7 @@ class ListHeader extends AbstractButton
 		
 		label = new Label(this);
 		label.init();
+		label.text = null;
 		label.moveTo(4,4);
 		
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
@@ -99,7 +100,9 @@ class ListItem extends AbstractButton
 
 		label = new Label(this);
 		var text = Opts.optString(opts, "text", name);
-		label.init({innerData: text });
+		label.init({innerData: text, color: DefaultStyle.INPUT_TEXT });
+		label.text = null;
+		label.mouseEnabled = false;
 		label.move(4,4);
 		
 		// add the drop-shadow filter
@@ -150,7 +153,8 @@ class UiList extends Component
 		if(Std.is(parent, Component))
 			color = (cast parent).color;
 		box = new Rectangle(0,0, 140, 100);
-		data = [];
+		if(data==null)
+			data = [];
 		
 		super.init(opts);
 
@@ -170,7 +174,9 @@ class UiList extends Component
 		for (i in 1...n) {
 			var item = new ListItem(this);
 			item.init({width: this.box.width, color: DefaultStyle.INPUT_BACK});
-			item.move(0,20*i);
+			item.label.text = null;
+			item.label.mouseEnabled = false;
+			item.move(0,20*i+1);
 		}
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);

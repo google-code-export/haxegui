@@ -1,14 +1,14 @@
 this.graphics.clear();
-var colors = [ Math.max(0, this.color - 0x141414), Math.min(0xFFFFFF, this.color | 0x323232) ];
+var colors = [ Utils.darken(this.color, 8), Utils.tint(this.color, .8) ];
 var alphas = [ 100, 100 ];
 var ratios = [ 0, 0xFF ];
 var matrix = new flash.geom.Matrix();
-matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
+matrix.createGradientBox(40, 24, .5*Math.PI, 0, 0);
 this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 this.graphics.drawRect (0, 0, this.box.width, this.box.height-1);
 this.graphics.endFill();
 
 
-this.graphics.lineStyle(2, Math.max(0, this.color - 0x191919));
+this.graphics.lineStyle(2, Utils.darken(this.color, 10));
 this.graphics.moveTo(0, this.box.height);
 this.graphics.lineTo(this.box.width, this.box.height);

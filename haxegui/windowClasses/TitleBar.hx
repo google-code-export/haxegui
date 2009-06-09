@@ -194,14 +194,13 @@ class TitleBar extends AbstractButton
 	override public function redraw(opts:Dynamic=null):Void
 	{
 		this.box = (cast this.parent).box.clone();
-		title.x = Math.floor((this.box.width - title.width)/2);
+		if(opts!=null)
+			this.color = opts.color == null ? color : opts.color;
+		title.x = Math.floor(.5*(this.box.width - title.width));
 
-		title.setTextFormat (DefaultStyle.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
+		//title.setTextFormat (DefaultStyle.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
 
-		ScriptManager.exec(this,"redraw",
-			{
-				color: Opts.optInt(opts, "color", color),
-			});
+		super.redraw(opts);
 	}
 
 	override public function onRollOver (e:MouseEvent)

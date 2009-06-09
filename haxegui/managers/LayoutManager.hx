@@ -35,7 +35,8 @@ import haxegui.XmlParser;
 class LayoutManager
 {
 	public static var layouts : Hash<Xml> = new Hash<Xml>();
-
+	public static var lastLoaded : String;
+	
 	/**
 	* Convenience method for loading a style from a url.
 	*
@@ -59,6 +60,7 @@ class LayoutManager
 			if(name == null)
 				continue;
 			layouts.set(name, elem);
+			lastLoaded = name;
 		}
 	}
 
@@ -89,4 +91,14 @@ class LayoutManager
 		}
 		if(cb != null) cb(rv);
 	}
+	
+
+	/**
+	* Reload last layout.
+	**/
+	public static function reload() {
+		setLayout(lastLoaded);
+	}
+
+	
 }

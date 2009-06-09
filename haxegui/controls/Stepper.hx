@@ -92,19 +92,16 @@ class Stepper extends Component
 		color = DefaultStyle.BACKGROUND;
 		box = new Rectangle(0,0,40,20);
 
-
 		input = new Input(this);
 		up = new StepperUpButton(this);
 		down = new StepperDownButton(this);
 
-	
 		var aOpts = Opts.clone(opts);
 		value = Opts.optFloat(aOpts,"value", value);
 		step = Opts.optFloat(aOpts,"step", step);
 		min = Opts.optFloat(aOpts,"min", min);
 		max = Opts.optFloat(aOpts,"max", max);
 		Opts.removeFields(aOpts, ["value","step","min","max"]);
-
 
 		super.init(aOpts);
 		// since we removed fields, reset the initOpts

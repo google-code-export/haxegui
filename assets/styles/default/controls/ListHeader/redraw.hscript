@@ -3,21 +3,21 @@ this.graphics.clear();
 //~ this.graphics.lineStyle(1, color - 0x323232);
 //~ this.graphics.beginFill (color | 0x323232);
 var grad = flash.display.GradientType.LINEAR;
-var colors = [ this.color, Math.max(0, this.color - 0x191919) ];
-var alphas = [ 100, 100 ];
+var colors = [ this.color, Utils.darken(this.color, 10) ];
+var alphas = [ 1, 1 ];
 var ratios = [ 0, 0xFF ];
 var matrix = new flash.geom.Matrix();
-matrix.createGradientBox(this.box.width, 20, Math.PI/2, 0, 0);
+matrix.createGradientBox(this.box.width, 20, .5*Math.PI, 0, 0);
 this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
 this.graphics.drawRect (0, 0, this.box.width, 20);
 this.graphics.endFill ();
 
-this.graphics.lineStyle(1, Math.max(0, this.color - 0x323232) );
+this.graphics.lineStyle(1, Utils.darken(this.color, 20));
 this.graphics.moveTo(0, 20);
 this.graphics.lineTo(this.box.width, 20);
 
 // sort direction triangle
-this.graphics.beginFill (Math.max(0, this.color - 0x323232));
+this.graphics.beginFill (Utils.darken(this.color, 20));
 this.graphics.moveTo(this.box.width - 20, 8 + (parent.sortReverse ? 5 : 0) );
 this.graphics.lineTo(this.box.width - 10, 8 + (parent.sortReverse ? 5 : 0) );
 this.graphics.lineTo(this.box.width - 15, 0 + (parent.sortReverse ? 8 : 13) );

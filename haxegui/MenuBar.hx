@@ -56,7 +56,7 @@ import haxegui.events.MenuEvent;
 class MenuBarItem extends AbstractButton
 {
 
-	public var tf : TextField;
+	public var label : Label;
 
 	override public function init(opts:Dynamic=null)
 	{
@@ -64,26 +64,10 @@ class MenuBarItem extends AbstractButton
 		
 		super.init(opts);
 
-		var tf = new TextField();
-		var tf = new TextField();
-		tf.name = "tf";
-		tf.text = this.name;
-		tf.selectable = false;
-		tf.mouseEnabled = false;
-		tf.width = 38;
-		tf.height = 18;
-		tf.x = 2;
-		tf.y = 4;
-		tf.embedFonts = true;
-
-		tf.tabEnabled = false;
-		tf.focusRect = false;
-		tf.mouseEnabled = false;
-
-
-		tf.setTextFormat (DefaultStyle.getTextFormat(8, 10, flash.text.TextFormatAlign.CENTER ));
-		this.addChild (tf);
-
+		label = new Label(this);
+		label.text = this.name;
+		label.init();
+		label.move(4,4);
 	}
 
 	static function __init__() {

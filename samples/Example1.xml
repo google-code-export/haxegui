@@ -49,8 +49,8 @@ TODO:
 			<haxegui:controls:Button name="Btn2" x="60" y="4" width="30" />
 			<haxegui:controls:Button name="Btn3" x="90" y="4" width="30" />
 		</haxegui:ToolBar>
-		<haxegui:ScrollPane name="ScrollPane1" x="0" y="84" >
-		<haxegui:TabNavigator name="TabNavigator" x="10" y="0" width="512" height="512" >
+		<haxegui:ScrollPane name="ScrollPane1" x="10" y="84" >
+		<haxegui:TabNavigator name="TabNavigator" x="0" y="0" width="512" height="512" >
 		<haxegui:Tab x="0" width="60" />
 		<haxegui:Tab x="60" width="60"/>
 		
@@ -90,7 +90,7 @@ TODO:
 
 						<haxegui:controls:Slider x="200" y="130" />
 						<haxegui:controls:Slider x="200" y="160" />
-						<haxegui:controls:Slider x="200" y="190" />
+						<haxegui:controls:Slider x="200" y="190" disabled="true" />
 
 						<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="128" autoRepeat="true" repeatsPerSecond="20" repeatWaitTime=".5" />
 						<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="128" autoRepeat="true" repeatsPerSecond="10" repeatWaitTime=".5" />

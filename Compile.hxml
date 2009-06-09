@@ -15,6 +15,6 @@
 ### Output ###
 -swf9 main.swf
 -swf-version 9
--swf-header 1024:768:12:3C3C3C
+-swf-header 1024:768:120:3C3C3C
 #-xml output.xml
 

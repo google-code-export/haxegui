@@ -174,6 +174,7 @@ class TabNavigator extends Component
 	{
 		box = new Rectangle(0, 0, 200, 200);
 		color = DefaultStyle.BACKGROUND;
+		text = null;
 		//~ tabs = new Array();
 		//~ numTabs = 0;
 
@@ -239,12 +240,13 @@ class TabNavigator extends Component
 		}
 
 		if(Std.is(parent, Window)) {
-			box.inflate(-20,-30);
+			//box.inflate(-20,-30);
+			box.inflate(0,-10);
 		}
 
 		if(Std.is(parent.parent, ScrollPane)) {
 			box = untyped parent.parent.box.clone();
-			box.inflate(-5,0);		
+			//~ box.inflate(-5,0);		
 		}
 
 		//~ for(i in 0...numChildren)

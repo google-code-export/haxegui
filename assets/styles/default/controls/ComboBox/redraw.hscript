@@ -1,3 +1,4 @@
+/*
 if(this.color==0 || Math.isNaN(this.color))
 	this.color = DefaultStyle.BACKGROUND;
 
@@ -10,3 +11,4 @@ if(this.background!=null)
 this.dropButton.redraw();
 
 this.setChildIndex(this.dropButton, this.numChildren - 1);
+*/

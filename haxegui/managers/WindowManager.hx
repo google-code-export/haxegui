@@ -46,7 +46,8 @@ class WindowManager extends EventDispatcher
 {
   public var numWindows : UInt;
   public var windows : Hash<Window>;
-
+  public static var current : Window;
+  
   private static var _instance : WindowManager = null;
 
   public var listeners:Array<haxegui.ITraceListener>;
@@ -91,11 +92,8 @@ class WindowManager extends EventDispatcher
 
     var window =  new Window(parent, name);
 
-    getInstance().windows.set(name, window);
-
-    //~ window.addEventListener( DragEvent.DRAG_START, proxy );
-    //~ window.addEventListener( DragEvent.DRAG_COMPLETE, proxy );
-    WindowManager.getInstance().register(window);
+    //~ getInstance().windows.set(name, window);
+    //~ WindowManager.getInstance().register(window);
 
     return window;
   }
@@ -103,12 +101,14 @@ class WindowManager extends EventDispatcher
 	public static function toFront(wnd:Window) {
 		if(wnd.parent == null) return;
 		wnd.parent.addChild(wnd);
+        current = wnd;
 	}
 
 
   public function register(w:Window) {
     w.addEventListener( ResizeEvent.RESIZE, this.proxy );
     w.addEventListener( MoveEvent.MOVE,  this.proxy );
+    w.addEventListener( FocusEvent.FOCUS_IN,  this.proxy );
   }
   
   public function proxy(e:Dynamic) {
@@ -117,6 +117,18 @@ class WindowManager extends EventDispatcher
 				//~ Reflect.callMethod(listener, listener.log, [e]);
                 //~ }
         //~ trace(e);
+        if(Std.is(e,FocusEvent)) {
+        switch(e.type) {
+            case FocusEvent.FOCUS_IN:
+                var o = e.target;
+                while(o!=null && !Std.is(o, Window))
+                    o = cast o.parent;
+                if(o==null) return;
+                //if(o.isModal()) return;
+                toFront(cast o);
+            }
+        }
+    
     }
 
 }

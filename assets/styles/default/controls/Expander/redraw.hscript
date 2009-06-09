@@ -1,28 +1,25 @@
 this.graphics.clear();
 
-if(this.expanded)
-{
+this.graphics.lineStyle(1, Utils.darken(this.color, 16));
+this.graphics.beginFill( this.color );
 
-	this.graphics.lineStyle(1, Math.max(0, this.color - 0x202020));
-	this.graphics.beginFill( this.color );
+if(this.expanded) {
+
 	this.graphics.moveTo(0,0);
 	this.graphics.lineTo(12, 0);
 	this.graphics.lineTo(6, 12);
-	this.graphics.endFill();
 
 }
-else
-{
-	this.graphics.lineStyle(1, Math.max(0, this.color - 0x202020) );
-	this.graphics.beginFill( this.color );
+else {
 	this.graphics.moveTo(0, 12);
 	this.graphics.lineTo(12, 6);
 	this.graphics.lineTo(0,0);
-	this.graphics.endFill();
 }
 
-for(i in 0...this.numChildren) {
-	if(this.getChildAt(i) != this.label )
-		this.getChildAt(i).visible = this.expanded;
-	}
+this.graphics.endFill();
+//~ for(i in 0...this.numChildren) {
+	//~ if(this.getChildAt(i) != this.label )
+		//~ this.getChildAt(i).visible = this.expanded;
+	//~ }
+
 

@@ -1,24 +1,18 @@
 this.graphics.clear ();
 var grad = flash.display.GradientType.LINEAR;
-var colors =[this.color | 0x323232, this.color - 0x141414];
-var alphas =[100, 100];
+var colors =[ Utils.tint(this.color, .8), Utils.darken(this.color, 8) ];
+var alphas =[1, 1];
 var ratios =[0, 0xFF];
 var matrix = new flash.geom.Matrix ();
-matrix.createGradientBox (12, 12, Math.PI / 2, 0, 0);
-this.graphics.lineStyle (1,
-			 Math.max (0,
-				   Math.min (0xFFFFFF,
-					     this.color - 0x191919)), 2, true,
+matrix.createGradientBox (12, 12, .5*Math.PI, 0, 0);
+this.graphics.lineStyle (1, Utils.darken(this.color, 16), 1, true,
 			 flash.display.LineScaleMode.NONE,
 			 flash.display.CapsStyle.ROUND,
 			 flash.display.JointStyle.ROUND);
 this.graphics.beginGradientFill (grad, colors, alphas, ratios, matrix);
 this.graphics.drawRoundRect (0, 0, 12, 12, 4, 4);
 this.graphics.endFill ();
-this.graphics.lineStyle (2,
-			 Math.max (0,
-				   Math.min (0xFFFFFF,
-					     this.color - 0x282828)));
+this.graphics.lineStyle (2, Utils.darken(this.color, 30));
 this.graphics.moveTo (4, 6);
 this.graphics.lineTo (8, 6);
 this.graphics.moveTo (6, 4);

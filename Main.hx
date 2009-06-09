@@ -45,6 +45,9 @@ import haxegui.events.MenuEvent;
 
 import flash.net.URLLoader;
 import flash.net.URLRequest;
+import flash.net.FileFilter;
+import flash.net.FileReference;
+import flash.net.FileReferenceList;
 
 import haxegui.managers.WindowManager;
 import haxegui.managers.StyleManager;
@@ -66,6 +69,7 @@ import haxegui.ColorPicker;
 import haxegui.ColorPicker2;
 import haxegui.RichTextEditor;
 import haxegui.Introspector;
+import haxegui.Appearance;
 import haxegui.Utils;
 
 
@@ -106,6 +110,9 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		// Setup Haxegui
 		haxegui.Haxegui.init();
 
+
+
+
 		// Set stage propeties
 		var stage = flash.Lib.current.stage;
 		stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
@@ -120,11 +127,11 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		desktop.name = "desktop";
 		desktop.mouseEnabled = false;
 
-		var colors = [ DefaultStyle.BACKGROUND, DefaultStyle.BACKGROUND - 0x4D4D4D ];
+		var colors = [ DefaultStyle.BACKGROUND, Utils.darken(DefaultStyle.BACKGROUND, 30) ];
 		var alphas = [ 100, 100 ];
 		var ratios = [ 0, 0xFF ];
 		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(stage.stageWidth, stage.stageHeight, Math.PI/2, 0, 0);
+		matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
 		desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 		desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
 		desktop.graphics.endFill();
@@ -133,8 +140,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		// Logos
 		var logo = flash.Lib.current.addChild(flash.Lib.attach("HaxeLogo"));
 		logo.name = "HaxeLogo";
-		logo.x = .5*(stage.stageWidth - logo.width);
-		logo.y = .5*(stage.stageHeight - logo.height);
+		logo.x = cast (stage.stageWidth - logo.width) >> 1;
+		logo.y = cast (stage.stageHeight - logo.height) >> 1;
 		
 		var shadow =
 		  new flash.filters.DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.9, 20, 20, 0.85,
@@ -165,9 +172,10 @@ class Main extends Sprite, implements haxe.rtti.Infos
 						//~ console.visible = !console.visible; 
 						WindowManager.toFront(console);
 						if(!console.visible) { 
-							console.visible = true; 
 							var t = new feffects.Tween( 0, 1, 1000, console, "alpha", feffects.easing.Linear.easeNone);
 							var ty = new feffects.Tween( -console.height, console.y, 1000+Std.int(console.y*1.5), console, "y", feffects.easing.Back.easeOut);
+							console.y = -console.height;
+							console.visible = true; 
 							t.start(); 
 							ty.start(); 
 							}
@@ -182,8 +190,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 
 		// Statistics
-		//~ var stats = new Stats (flash.Lib.current, 540, 80);
-		//~ stats.init();
+		var stats = new Stats (flash.Lib.current, 540, 80);
+		stats.init();
 
 		// Color Picker
 		//~ var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
@@ -196,9 +204,24 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		var rte = new RichTextEditor(flash.Lib.current, 120,120);
 		rte.init();
 
+		// style
+		var appearance = new Appearance(flash.Lib.current, 180,180);
+		appearance.init();
+			
 		// debugger
 		var introspect = new Introspector(flash.Lib.current, 150,150);
 		introspect.init();
+
+
+
+//~ var imageTypes:FileFilter = new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg; *.jpeg; *.gif; *.png");
+//~ var textTypes:FileFilter = new FileFilter("Text Files (*.txt, *.rtf)", "*.txt; *.rtf");
+//~ var allTypes = [imageTypes, textTypes];
+//~ var fileRef:FileReference = new FileReference();
+//~ fileRef.browse(allTypes);
+//~ var xmlType = [new FileFilter("Xml Files (*.xml)", "*.xml;")];
+//~ fileRef.browse(xmlType);
+
 
 		/////////////////////////////////////////////////////////////////////////
 		// Load XML
@@ -257,7 +280,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 
 		//~ var welcome = "\n<FONT SIZE='24'>Hello and welcome to <B>haxegui</B>.</FONT>\n";
-		var welcome = "
+		var welcome = "\n
 	 _                       _ 
 	| |_ ___ _ _ ___ ___ _ _|_|
 	|   | .'|_'_| -_| . | | | |
@@ -295,19 +318,19 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 		var back = cast flash.Lib.current.getChildByName("desktop");
 		back.graphics.clear();
-		  var colors = [ DefaultStyle.BACKGROUND, DefaultStyle.BACKGROUND - 0x4D4D4D ];
+		  var colors = [ DefaultStyle.BACKGROUND, Utils.darken(DefaultStyle.BACKGROUND,30) ];
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];
 		  var matrix = new flash.geom.Matrix();
-		  matrix.createGradientBox(stage.stageWidth, stage.stageHeight, Math.PI/2, 0, 0);
+		  matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
 		  back.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
 		back.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
 		back.graphics.endFill();
 
 		var logo = cast flash.Lib.current.getChildByName("HaxeLogo");
-		logo.x = .5*(stage.stageWidth - logo.width);
-		logo.y = .5*(stage.stageHeight - logo.height);
+		logo.x = Std.int(stage.stageWidth - logo.width) >> 1;
+		logo.y = Std.int(stage.stageHeight - logo.height) >> 1;
 	}
 
 	public static dynamic function log(v:Dynamic) {

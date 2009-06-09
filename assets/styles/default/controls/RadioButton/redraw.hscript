@@ -2,17 +2,17 @@ var r = .5*Math.min( this.box.width, this.box.height );
 
 this.graphics.clear();
 
-var colors = [ Math.min(0xFFFFFF, this.color | 0x323232), Math.max(0, this.color - 0x141414) ];
+var colors = [ Utils.tint(this.color, .8), Utils.clamp(this.color - 0x141414) ];
 var alphas = [ 100, 100 ];
 var ratios = [ 0, 0xFF ];
 var matrix = new flash.geom.Matrix();
-matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
+matrix.createGradientBox(this.box.width, this.box.height, .5*Math.PI, 0, 0);
 
 if(this.selected)
 {
 
 	ratios = [ 0x66, 0xFF ];
-	colors = [ Math.min(0xFFFFFF, this.color | 0x323232), Math.max(0, this.color - 0x333333) ];
+	colors = [ Utils.tint(this.color, .8), Math.max(0, this.color - 0x333333) ];
 
 	this.graphics.lineStyle (1, this.color - 0x141414, 1, true,
 			 flash.display.LineScaleMode.NONE,

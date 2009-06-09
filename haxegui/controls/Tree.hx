@@ -78,7 +78,7 @@ class TreeNode extends Component
 		for(i in parent.parent.getChildIndex(parent)+1...parent.parent.numChildren) {
 			var child = parent.parent.getChildAt(i);
 				var t = new feffects.Tween( 
-				child.y, child.y + this.expanded ? h : -h, 1500,
+				child.y, child.y + this.expanded ? h : -h, 1750,
 				child, \"y\",
 				feffects.easing.Expo.easeOut
 				);
