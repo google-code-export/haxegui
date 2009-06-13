@@ -1,10 +1,10 @@
 this.graphics.clear();
 
 
-var colors = [this.color, Utils.darken(this.color, 30) ] ;
+var colors = [this.color, Color.darken(this.color, 30) ] ;
 
 if(this.active)
-	colors = [ Utils.tint(this.color, .8), this.color ] ;
+	colors = [ Color.tint(this.color, .8), this.color ] ;
 
 var alphas =[1, 1];
 var ratios =[0, 0xFF];
@@ -19,7 +19,7 @@ this.graphics.lineStyle (1, this.color - 0x202020, 1, true,
 */			
 this.graphics.lineStyle(1);
 this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, 
-		[ Utils.darken(this.color, 50), this.color ], [0xFF, 0], ratios, matrix);
+		[ Color.darken(this.color, 50), this.color ], [0xFF, 0], ratios, matrix);
 
  
 this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, colors,
@@ -30,8 +30,8 @@ this.graphics.endFill();
 
     matrix.createGradientBox (this.box.width, 4, Math.PI / 2, 0, 4);
     this.graphics.beginGradientFill (flash.display.GradientType.LINEAR,
-				    [ this.active ? Utils.darken(this.color, 16) : this.color,
-					this.active ? Utils.darken(this.color, 50) : Utils.darken(this.color, 16) ],
+				    [ this.active ? Color.darken(this.color, 16) : this.color,
+					this.active ? Color.darken(this.color, 50) : Color.darken(this.color, 16) ],
 					alphas, ratios, matrix);			 
     this.graphics.drawRoundRectComplex( 0, 4, this.box.width, 4, 4, 4, 0, 0 );
     this.graphics.endFill();

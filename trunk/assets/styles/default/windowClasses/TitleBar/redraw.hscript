@@ -1,12 +1,11 @@
 this.graphics.clear();
 var grad = flash.display.GradientType.LINEAR;
-var colors = [ this.color, Utils.tint(this.color, .15) ];
-var alphas = [ .75, 0 ];
+var colors = [ this.color, Color.tint(this.color, .5) ];
+var alphas = [ .85, 0 ];
 var ratios = [ 0, 0xFF ];
 var matrix = new flash.geom.Matrix();
-matrix.createGradientBox(this.parent.box.width, 32, .5*Math.PI, 0, 0);
+matrix.createGradientBox(this.parent.box.width, 20, .5*Math.PI, 0, 0);
 this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
-this.graphics.drawRoundRectComplex (0, 0, this.parent.box.width + 10, 32, 4, 4, 0, 0);
-this.graphics.drawRect (10, 20, this.parent.box.width - 10, 12);
+this.graphics.drawRoundRectComplex (0, 0, this.parent.box.width + 10, 20, 4, 4, 0, 0);
 this.graphics.endFill ();
 

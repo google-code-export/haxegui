@@ -2,15 +2,15 @@ var h = .5*this.parent.box.height;
 
 this.graphics.clear();
 
-this.graphics.lineStyle (1, this.disabled ? Utils.darken(this.color, 16) :
-			    Utils.darken(this.color, 35), 1, true,
+this.graphics.lineStyle (1, this.disabled ? Color.darken(this.color, 16) :
+			    Color.darken(this.color, 35), 1, true,
 				    flash.display.LineScaleMode.NONE,
 				    flash.display.CapsStyle.ROUND,
 				    flash.display.JointStyle.ROUND);
 					
-var colors = [ Utils.tint(this.color, .8), Utils.darken(this.color, 10) ];
+var colors = [ Color.tint(this.color, .8), Color.darken(this.color, 10) ];
 if(this.disabled) 
-	colors = [ this.color, Utils.darken(this.color, 10) ] ;
+	colors = [ this.color, Color.darken(this.color, 10) ] ;
 var alphas = [ 1, 1 ];
 var ratios = [ 0, 0xFF ];
 
@@ -22,9 +22,9 @@ this.graphics.drawRoundRectComplex(0,0,8,h,4,0,4,0);
 this.graphics.endFill();
 
 if(this.disabled)
-    this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, [ this.color, Utils.darken(this.color, 8) ], alphas, ratios, matrix );
+    this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, [ this.color, Color.darken(this.color, 8) ], alphas, ratios, matrix );
 else
-    this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, [ Utils.darken(this.color, 8), Utils.darken(this.color, 16) ], alphas, ratios, matrix );
+    this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, [ Color.darken(this.color, 8), Color.darken(this.color, 16) ], alphas, ratios, matrix );
 this.graphics.drawRect(8,0,12,h);
 this.graphics.endFill();
 

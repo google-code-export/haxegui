@@ -1,5 +1,5 @@
 this.graphics.clear();
-var colors = [ Utils.darken(this.color, 8), Utils.tint(this.color, .8) ];
+var colors = [ Color.darken(this.color, 8), Color.tint(this.color, .8) ];
 var alphas = [ 100, 100 ];
 var ratios = [ 0, 0xFF ];
 var matrix = new flash.geom.Matrix();
@@ -9,6 +9,6 @@ this.graphics.drawRect (0, 0, this.box.width, this.box.height-1);
 this.graphics.endFill();
 
 
-this.graphics.lineStyle(2, Utils.darken(this.color, 10));
+this.graphics.lineStyle(2, Color.darken(this.color, 10));
 this.graphics.moveTo(0, this.box.height);
 this.graphics.lineTo(this.box.width, this.box.height);

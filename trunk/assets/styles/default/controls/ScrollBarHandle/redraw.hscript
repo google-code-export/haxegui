@@ -1,8 +1,8 @@
 this.graphics.clear();
 
-var colors = [ Utils.darken(this.color, 8),  Utils.tint(this.color, .8) ];
+var colors = [ Color.darken(this.color, 8),  Color.tint(this.color, .8) ];
 if(parent.disabled)
-	colors = [ Utils.darken(this.color, 5),  Utils.darken(this.color, 10) ];
+	colors = [ Color.darken(this.color, 5),  Color.darken(this.color, 10) ];
 
 
 var alphas = [ 100, 100 ];
@@ -12,7 +12,7 @@ var matrix = new flash.geom.Matrix();
 matrix.createGradientBox(20, h, Math.PI, 0, 0);
 
 this.graphics.lineStyle (1,
-	Utils.darken(this.color, 16),
+	Color.darken(this.color, 16),
 	1, true, 
 	flash.display.LineScaleMode.NONE,
 	flash.display.CapsStyle.ROUND,

@@ -6,7 +6,7 @@ if(this.label!=null) {
 	var fmt = DefaultStyle.getTextFormat();
 	if( this.disabled )
 	{
-		fmt.color = Utils.darken(this.color, 16);
+		fmt.color = Color.darken(this.color, 16);
 
 		var shadow = new flash.filters.DropShadowFilter(
 				4, 45, DefaultStyle.DROPSHADOW,
@@ -21,7 +21,7 @@ if(this.label!=null) {
 
 
 this.graphics.lineStyle (1,
-	Utils.darken(this.color, 16),
+	Color.darken(this.color, 16),
 	2, true, 
 	flash.display.LineScaleMode.NONE,
 	flash.display.CapsStyle.ROUND,
@@ -30,7 +30,7 @@ this.graphics.lineStyle (1,
 	
 /* CheckMark */	
 if(this.checked) {
-	var colors = [ Utils.tint(this.color, .8), Utils.darken(this.color, 8) ];
+	var colors = [ Color.tint(this.color, .8), Color.darken(this.color, 8) ];
 	var alphas = [ 1, 1 ];
 	var ratios = [ 0, 0xFF ];
 	var matrix = new flash.geom.Matrix();
@@ -39,7 +39,7 @@ if(this.checked) {
 	this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
 	this.graphics.endFill();
 
-	var colors = [ Utils.darken(this.color, 30), Utils.darken(this.color, 10) ] ;
+	var colors = [ Color.darken(this.color, 30), Color.darken(this.color, 10) ] ;
 	var alphas =[1, 1];
 	var ratios =[0, 0xFF];
 	var matrix = new flash.geom.Matrix ();
@@ -58,7 +58,7 @@ if(this.checked) {
 }
 /** Box **/
 else {
-	var colors = [ Utils.darken(this.color, 8), Utils.tint(this.color, .8) ];
+	var colors = [ Color.darken(this.color, 8), Color.tint(this.color, .8) ];
 	var alphas = [ 100, 100 ];
 	var ratios = [ 0, 0xFF ];
 	var matrix = new flash.geom.Matrix();

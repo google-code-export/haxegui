@@ -104,34 +104,5 @@ class Utils
 	}
 	
 
-	public static inline function darken(color:UInt, v:UInt ) : UInt {
-		return clamp(color - grayHex(v));
-	}
-	
-		
-	public static inline function grayHex( v:UInt ) : UInt {
-		return ( v << 16 | v << 8 | v );
-	}
-	
-	
-	public static inline function clamp( color:UInt ) : UInt {
-		return cast Math.max(0, Math.min(0xFFFFFF, color));
-	}
-	
-	
-	public static inline function tint( color:UInt, tint:Float ) : UInt	{
-
-	var r = color >> 16 ;
-	var g = color >> 8 & 0xFF ;
-	var b = color & 0xFF ;
-			
-	tint = 1 - tint;
-
-	r = Math.round( r + ( ( 255 - r ) * tint ) );
-	g = Math.round( g + ( ( 255 - g ) * tint ) );
-	b = Math.round( b + ( ( 255 - b ) * tint ) );
-
-	return clamp(( r << 16 ) | ( g << 8 ) | b);
-	}
 		
 }

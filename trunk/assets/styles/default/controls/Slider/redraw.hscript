@@ -3,8 +3,8 @@ this.graphics.clear();
 
 /** Draw Ticks **/
 this.graphics.lineStyle(1, this.disabled ? 
-							Utils.darken(DefaultStyle.BACKGROUND, 20) :
-							Utils.darken(this.color, 35));
+							Color.darken(DefaultStyle.BACKGROUND, 20) :
+							Color.darken(this.color, 35));
 var s = this.box.width/this.ticks;
 for(i in 1...this.ticks) {
 	/*top*/
@@ -16,9 +16,9 @@ for(i in 1...this.ticks) {
 }
 
 /** Draw the track */
-var colors = [ Utils.darken(this.color, 30), this.color ] ;
+var colors = [ Color.darken(this.color, 30), this.color ] ;
 if(this.disabled) 
-	colors = [ Utils.darken(this.color, 10), this.color ] ;
+	colors = [ Color.darken(this.color, 10), this.color ] ;
 var alphas =[1, 1];
 var ratios =[0, 0xFF];
 var matrix = new flash.geom.Matrix ();
