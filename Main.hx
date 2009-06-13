@@ -71,7 +71,7 @@ import haxegui.RichTextEditor;
 import haxegui.Introspector;
 import haxegui.Appearance;
 import haxegui.Utils;
-
+import haxegui.utils.Color;
 
 import haxegui.controls.Button;
 import haxegui.controls.Label;
@@ -127,7 +127,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		desktop.name = "desktop";
 		desktop.mouseEnabled = false;
 
-		var colors = [ DefaultStyle.BACKGROUND, Utils.darken(DefaultStyle.BACKGROUND, 30) ];
+		var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND, 30) ];
 		var alphas = [ 100, 100 ];
 		var ratios = [ 0, 0xFF ];
 		var matrix = new flash.geom.Matrix();
@@ -318,7 +318,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 		var back = cast flash.Lib.current.getChildByName("desktop");
 		back.graphics.clear();
-		  var colors = [ DefaultStyle.BACKGROUND, Utils.darken(DefaultStyle.BACKGROUND,30) ];
+		  var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND,30) ];
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];
 		  var matrix = new flash.geom.Matrix();

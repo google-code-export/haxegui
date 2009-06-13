@@ -212,6 +212,7 @@ class ScriptStandardLibrary
 			});
 		interp.variables.set("Appearance", haxegui.Appearance);
 		interp.variables.set("CursorManager", CursorManager);
+		interp.variables.set("Color", haxegui.utils.Color);
 		interp.variables.set("DefaultStyle", DefaultStyle);
 		interp.variables.set("DragManager", haxegui.managers.DragManager);
 		interp.variables.set("FocusManager", haxegui.managers.FocusManager);

@@ -4,14 +4,14 @@ var w = h;
 this.graphics.clear();
 
 /************* Button ********************/
-var colors = [ Utils.tint(this.color, .8), Utils.darken(this.color, 8) ];
+var colors = [ Color.tint(this.color, .8), Color.darken(this.color, 8) ];
 var alphas = [ 100, 100 ];
 var ratios = [ 0, 0xFF ];
 var matrix = new flash.geom.Matrix();
 matrix.createGradientBox(w, h, .5*Math.PI, 0, 0);
 
 this.graphics.lineStyle (1,
-	Utils.darken(DefaultStyle.BACKGROUND, 16),
+	Color.darken(DefaultStyle.BACKGROUND, 16),
 	1, true, 
 	flash.display.LineScaleMode.NONE,
 	flash.display.CapsStyle.ROUND,
@@ -21,20 +21,20 @@ this.graphics.lineStyle (1,
 
 /***************** Arrow *****************************/
 if(parent.disabled)
-	colors = [ this.color, Utils.darken(this.color, 8) ];
+	colors = [ this.color, Color.darken(this.color, 8) ];
 this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 this.graphics.drawRoundRectComplex(0, 1, w, h-1, 0, 4, 0, 4 );
 this.graphics.endFill ();
 
 if(parent.disabled)
-	this.graphics.lineStyle (1, Utils.darken(this.color, 10) );
+	this.graphics.lineStyle (1, Color.darken(this.color, 10) );
 else
-	this.graphics.lineStyle (1, Utils.darken(this.color, 20) );
+	this.graphics.lineStyle (1, Color.darken(this.color, 20) );
 
-colors = [Utils.darken(this.color, 8),  Utils.darken(this.color, 20) ];
+colors = [Color.darken(this.color, 8),  Color.darken(this.color, 20) ];
 
 if(parent.disabled)
-	colors = [ this.color, Utils.darken(this.color, 8) ];
+	colors = [ this.color, Color.darken(this.color, 8) ];
 	
 matrix.createGradientBox(.5*w, .5*h, .5*Math.PI, 7.5, 7.5);
 this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, [0, 0x66], matrix );

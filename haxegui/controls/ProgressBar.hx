@@ -117,17 +117,17 @@ class ProgressBar extends Component
 		"
 		);
 		bar.moveTo(0,1);
-		bar.startInterval(10);
+		//~ bar.sstartInterval(10);
 
 		label = new Label(this);
 		label.init();
 		label.tf.text = Math.round(100*progress) + "%";
 		label.moveTo( .5*(box.width-label.width), .5*(box.height-label.height) + 1 );
 		
-		var t = new feffects.Tween(0, 1, 10000+Std.random(20000), this, "progress", feffects.easing.Linear.easeNone);
-		var self = this;
-		t.setTweenHandlers( function(v) { self.update(); } , function(v) { t.stop(); t.start(); } );
-		t.start();
+		//~ var t = new feffects.Tween(0, 1, 10000+Std.random(20000), this, "progress", feffects.easing.Linear.easeNone);
+		//~ var self = this;
+		//~ t.setTweenHandlers( function(v) { self.update(); } , function(v) { t.stop(); t.start(); } );
+		//~ t.sstart();
 
 	}
 

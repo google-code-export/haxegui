@@ -1,7 +1,7 @@
 
 this.graphics.clear ();
 
-var colors = [ this.color - 0x141414, Utils.tint(this.color, .8), this.color];
+var colors = [ this.color - 0x141414, Color.tint(this.color, .8), this.color];
 var alphas = [ 1, 1, 1 ];
 var ratios = [ 0, 0x80, 0xFF ];
 var matrix = new flash.geom.Matrix();

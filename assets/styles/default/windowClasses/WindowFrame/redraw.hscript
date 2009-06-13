@@ -1,7 +1,7 @@
 this.graphics.clear ();
 
 this.graphics.lineStyle (1,
-			 Utils.darken(this.color, 16),
+			 Color.darken(this.color, 16),
 			 .5, true, flash.display.LineScaleMode.NONE,
 			 flash.display.CapsStyle.ROUND,
 			 flash.display.JointStyle.ROUND);
@@ -15,14 +15,14 @@ if(!this.parent.isModal())
 {
 	/* BL */
 	this.graphics.lineStyle(0,0,0);
-	this.graphics.beginFill( Utils.tint(this.color, .85), .5);
+	this.graphics.beginFill( Color.tint(this.color, .85), .5);
 	this.graphics.drawRoundRectComplex(0,this.parent.box.height-10,20,20, 0, 0, 4, 0);
 	this.graphics.drawRect(10,this.parent.box.height-10,10,10);
 	this.graphics.endFill();
 
 	/* BR */
 	this.graphics.lineStyle(0,0,0);
-	this.graphics.beginFill( Utils.tint(this.color, .85), .5);
+	this.graphics.beginFill( Color.tint(this.color, .85), .5);
 	this.graphics.drawRoundRectComplex(this.parent.box.width-10,this.parent.box.height-10,20,20, 0, 0, 0, 4);
 	this.graphics.drawRect(this.parent.box.width-10,this.parent.box.height-10,10,10);
 	this.graphics.endFill();

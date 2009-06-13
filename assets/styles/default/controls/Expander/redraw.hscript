@@ -1,6 +1,6 @@
 this.graphics.clear();
 
-this.graphics.lineStyle(1, Utils.darken(this.color, 16));
+this.graphics.lineStyle(1, Color.darken(this.color, 16));
 this.graphics.beginFill( this.color );
 
 if(this.expanded) {

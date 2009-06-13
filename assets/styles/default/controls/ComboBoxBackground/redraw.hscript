@@ -1,13 +1,13 @@
 var h = this.parent.box.height;
 var w = this.parent.box.width;
 
-var colors = [ Utils.tint(this.color, .8), Utils.darken(this.color, 8) ];
+var colors = [ Color.tint(this.color, .8), Color.darken(this.color, 8) ];
 var matrix = new flash.geom.Matrix();
 
 matrix.createGradientBox(w, h*2, .5*Math.PI, 0, 0);
 
 this.graphics.lineStyle (1,
-	Utils.darken(DefaultStyle.BACKGROUND, 16),
+	Color.darken(DefaultStyle.BACKGROUND, 16),
 	1, true, 
 	flash.display.LineScaleMode.NONE,
 	flash.display.CapsStyle.ROUND,
