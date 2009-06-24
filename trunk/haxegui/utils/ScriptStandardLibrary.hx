@@ -272,6 +272,7 @@ class ScriptStandardLibrary
 
 		interp.variables.set("toys",
 			{
+				Arrow				: haxegui.toys.Arrow,
 				Curvy				: haxegui.toys.Curvy,
 				Rectangle			: haxegui.toys.Rectangle,
 				Transformer			: haxegui.toys.Transformer

@@ -6,3 +6,6 @@ this.titlebar.title.setTextFormat(fmt);
 //this.frame.color = Math.min(0xFFFFFF, this.color | 0x262626);
 this.titlebar.redraw();
 //this.frame.redraw();
+
+var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 12, 12, 0.85, flash.filters.BitmapFilterQuality.LOW, false, false, false);
+this.frame.filters =[shadow];	

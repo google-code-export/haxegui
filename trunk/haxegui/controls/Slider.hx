@@ -19,25 +19,29 @@
 
 package haxegui.controls;
 
-import flash.display.DisplayObjectContainer;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.filters.BevelFilter;
 import flash.geom.Rectangle;
 import haxegui.Component;
-import haxegui.managers.CursorManager;
-import haxegui.managers.TooltipManager;
-import haxegui.Opts;
-import haxegui.managers.FocusManager;
-import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
+import haxegui.managers.CursorManager;
+import haxegui.managers.FocusManager;
+import haxegui.managers.StyleManager;
+import haxegui.managers.TooltipManager;
+import haxegui.Opts;
+import haxegui.IAdjustable;
 
+/**
+*
+* Draggable handle to slide values.
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
 class SliderHandle extends AbstractButton
 {
 	static function __init__() {
@@ -45,32 +49,39 @@ class SliderHandle extends AbstractButton
 	}
 }
 
-class Slider extends Component
+/**
+*
+* Slider Class
+*
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
+class Slider extends Component, implements haxegui.IAdjustable
 {
+	/** Slider handle **/
 	public var handle : SliderHandle;
-	//~ public var value : Float;
-	public var min : Float;
-	public var max : Float;
-	public var step : Float;
+	
+	/** Adjustment object **/
+	public var adjustment : Adjustment;
 
 	/** Number of ticks **/
 	public var ticks : Int;
-	
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super(parent, name, x, y);
-	}
+
 
 	override public function init(opts:Dynamic=null)
 	{
-		max = Math.POSITIVE_INFINITY;
-		box = new Rectangle(0,0,140,20);
+		adjustment = new Adjustment( 0, 0, 110, 5, 10 );
+		box = new Rectangle(0, 0, 140, 20);
 		color = DefaultStyle.BACKGROUND;
-		step = 5;
 		ticks = 25;
 		
-		step = Opts.optFloat(opts,"step", step);
-		max = Opts.optFloat(opts,"max", max);
+		adjustment.value = Opts.optFloat(opts,"value", adjustment.value);
+		adjustment.min = Opts.optFloat(opts,"min", adjustment.min);
+		adjustment.max = Opts.optFloat(opts,"max", adjustment.max);
+		adjustment.step = Opts.optFloat(opts,"step", adjustment.step);
+		adjustment.page = Opts.optFloat(opts,"page", adjustment.page);
 
 		super.init(opts);
 
@@ -79,7 +90,7 @@ class Slider extends Component
 		handle.move(0,4);
 
 		// add the drop-shadow filters
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, false, false, false );
+		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
 		handle.filters = [shadow];
 
 
@@ -89,26 +100,18 @@ class Slider extends Component
 		handle.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
 		handle.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 
-		this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
+		//~ this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
+		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 
 	}
 
 
-	public function onChanged(?e:Event)
+	public function onChanged(e:Event)
 	{
-		//~ trace(e);
-		//~ value = Math.max( min, Math.min( max, value ));
-		if(handle.x < 0) handle.x = 0;
-		if(handle.x > (box.width - handle.width) ) handle.x = box.width - handle.width;
-	
+		handle.x = adjustment.value;
 	}
 
 
-	public override function onMouseWheel(e:MouseEvent)	{
-		handle.x += e.delta * step * ((rotation > 0) ? -1 : 1);
-		dispatchEvent(new Event(Event.CHANGE));
-		super.onMouseWheel(e);
-	}
 
 	function onHandleMouseDown (e:MouseEvent) : Void {
 		if(this.disabled) return;
@@ -120,6 +123,9 @@ class Slider extends Component
 
 	override public function onMouseUp (e:MouseEvent) : Void {
 		if(this.disabled) return;	
+
+		e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
+		
 		CursorManager.getInstance().lock = false;
 		if(hitTestObject( CursorManager.getInstance()._mc ))
 			CursorManager.setCursor (Cursor.ARROW);
@@ -131,10 +137,7 @@ class Slider extends Component
 
 	public function onMouseMove (e:MouseEvent)
 	{
-		TooltipManager.getInstance().create(this);
-		dispatchEvent(new Event(Event.CHANGE));
-		//~ onChanged();
-		e.updateAfterEvent();
+		adjustment.value = handle.x;
 	}
 
 

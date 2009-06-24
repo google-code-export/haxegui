@@ -77,6 +77,9 @@
 				//this.frame.color = Math.min(0xFFFFFF, this.color | 0x262626);
 				this.titlebar.redraw();
 				//this.frame.redraw();
+				
+				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 12, 12, 0.85, flash.filters.BitmapFilterQuality.LOW, false, false, false);
+				this.frame.filters =[shadow];
 			]]>
 			</script>
 			<script type="text/hscript" action="focusOut">
@@ -90,6 +93,9 @@
 				//this.frame.color = this.color;
 				this.titlebar.redraw();
 				//this.frame.redraw();
+				
+				var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.4, 12, 12, 0.85, flash.filters.BitmapFilterQuality.LOW, false, false, false);
+				this.frame.filters =[shadow];
 			]]>
 			</script>
 			<script type="text/hscript" action="losingFocus">
@@ -113,7 +119,7 @@
 							 flash.display.CapsStyle.ROUND,
 							 flash.display.JointStyle.ROUND);
 				
-				this.graphics.beginFill (this.color, 0.25);
+				this.graphics.beginFill (this.color, 0.5);
 				this.graphics.drawRoundRect (0, 0, this.parent.box.width + 10, this.parent.box.height + 10, 8, 8);
 				this.graphics.drawRect (10, 20, this.parent.box.width - 10, this.parent.box.height - 20);
 				this.graphics.endFill ();
@@ -413,7 +419,8 @@
 			</script>
 			<script type="text/hscript" action="interval">
 			<![CDATA[
-				this.parent.__setValue(this.parent.__getValue() - this.parent.step);
+				//this.parent.__setValue(this.parent.__getValue() - this.parent.step);
+				this.parent.adjustment.__setValue ( this.parent.adjustment.value - this.parent.adjustment.step );
 			]]>
 			</script>
 			<script type="text/hscript" action="mouseUp">
@@ -486,7 +493,8 @@
 			<![CDATA[
 				if(!this.disabled) {
 					if(this.autoRepeat) {
-						this.parent.__setValue(this.parent.__getValue() - this.parent.step);
+						//this.parent.__setValue(this.parent.__getValue() - this.parent.step);
+						this.parent.adjustment.__setValue ( this.parent.adjustment.value - this.parent.adjustment.step );
 						this.startIntervalDelayed(this.repeatsPerSecond, this.repeatWaitTime);
 					}
 					this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
@@ -502,7 +510,7 @@
 			<script type="text/hscript" action="mouseOut">
 			<![CDATA[
 				if(!this.disabled) {
-				this.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 350, feffects.easing.Linear.easeOut ) );
+				this.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 150, feffects.easing.Linear.easeOut ) );
 				CursorManager.setCursor(Cursor.ARROW);
 				}
 			]]>
@@ -511,7 +519,7 @@
 			<![CDATA[
 				if(!this.disabled) {
 				if(this.hitTestObject( CursorManager.getInstance()._mc )) {
-					this.updateColorTween( new feffects.Tween(-50, 50, 150, feffects.easing.Linear.easeNone) );
+					this.updateColorTween( new feffects.Tween(-50, 50, 120, feffects.easing.Linear.easeNone) );
 					CursorManager.setCursor(this.cursorOver);
 				}
 				else {
@@ -523,7 +531,7 @@
 			<script type="text/hscript" action="mouseOver">
 			<![CDATA[
 				if(!this.disabled) {
-					this.updateColorTween( new feffects.Tween(0, 50, 275, feffects.easing.Expo.easeOut ) );
+					this.updateColorTween( new feffects.Tween(0, 50, 100, feffects.easing.Expo.easeOut ) );
 					CursorManager.setCursor(this.cursorOver);
 				}
 			]]>
@@ -531,7 +539,7 @@
 			<script type="text/hscript" action="mouseDown">
 			<![CDATA[
 				if(!this.disabled) {
-				this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
+				this.updateColorTween( new feffects.Tween(50, -50, 120, feffects.easing.Linear.easeOut) );
 				CursorManager.setCursor(this.cursorPress);
 				}
 			]]>
@@ -1009,45 +1017,6 @@
 
 	<haxegui:controls:Expander>
 		<events>
-			<script type="text/hscript" action="mouseOut">
-			<![CDATA[
-				CursorManager.setCursor(Cursor.ARROW);
-			]]>
-			</script>
-			<script type="text/hscript" action="redraw">
-			<![CDATA[
-				this.graphics.clear();
-				
-				this.graphics.lineStyle(1, Color.darken(this.color, 16));
-				this.graphics.beginFill( this.color );
-				
-				if(this.expanded) {
-				
-					this.graphics.moveTo(0,0);
-					this.graphics.lineTo(12, 0);
-					this.graphics.lineTo(6, 12);
-				
-				}
-				else {
-					this.graphics.moveTo(0, 12);
-					this.graphics.lineTo(12, 6);
-					this.graphics.lineTo(0,0);
-				}
-				
-				this.graphics.endFill();
-				//~ for(i in 0...this.numChildren) {
-					//~ if(this.getChildAt(i) != this.label )
-						//~ this.getChildAt(i).visible = this.expanded;
-					//~ }
-			]]>
-			</script>
-			<script type="text/hscript" action="mouseOver">
-			<![CDATA[
-				if(!this.disabled) {
-					CursorManager.setCursor(Cursor.HAND);
-				}
-			]]>
-			</script>
 		</events>
 	</haxegui:controls:Expander>
 
@@ -1239,7 +1208,8 @@
 			</script>
 			<script type="text/hscript" action="interval">
 			<![CDATA[
-				this.parent.__setValue(this.parent.__getValue() + this.parent.step);
+				//this.parent.__setValue(this.parent.__getValue() + this.parent.step);
+				this.parent.adjustment.__setValue ( this.parent.adjustment.value + this.parent.adjustment.step );
 			]]>
 			</script>
 			<script type="text/hscript" action="mouseUp">
@@ -1313,7 +1283,8 @@
 				if(!this.disabled) {
 				
 					if(this.autoRepeat) {
-						this.parent.__setValue(this.parent.__getValue() + this.parent.step);
+						//this.parent.__setValue(this.parent.__getValue() + this.parent.step);
+						this.parent.adjustment.__setValue ( this.parent.adjustment.value + this.parent.adjustment.step );
 						this.startIntervalDelayed(this.repeatsPerSecond, this.repeatWaitTime);
 						}
 				
@@ -1331,7 +1302,8 @@
 			<script type="text/hscript" action="mouseWheel">
 			<![CDATA[
 				if(!this.disabled)
-					this.__setValue(this.__getValue() + event.delta * this.step);
+					//this.__setValue(this.__getValue() + event.delta * this.step);
+					this.adjustment.__setValue( this.adjustment.value + this.adjustment.step * event.delta );
 			]]>
 			</script>
 			<script type="text/hscript" action="focusIn">
@@ -1509,6 +1481,11 @@
 
 	<haxegui:controls:Slider>
 		<events>
+			<script type="text/hscript" action="mouseWheel">
+			<![CDATA[
+				this.adjustment.__setValue( this.adjustment.value + event.delta * this.adjustment.step * ((this.rotation > 0) ? -1 : 1) );
+			]]>
+			</script>
 			<script type="text/hscript" action="focusIn">
 			<![CDATA[
 				var glow = new flash.filters.GlowFilter (DefaultStyle.FOCUS, 1, 8, 8, 1, flash.filters.BitmapFilterQuality.HIGH, false, false);
@@ -1577,7 +1554,7 @@
 				this.graphics.clear();
 				
 				var colors = [ DefaultStyle.PROGRESS_BAR, Color.darken(DefaultStyle.PROGRESS_BAR, 20) ];
-				if(parent.disabled)
+				if(this.disabled)
 					colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND, 20) ];
 				var alphas = [ 1, 1 ];
 				var ratios = [ 0, 0xFF ];
@@ -1588,7 +1565,7 @@
 				this.graphics.endFill();
 				
 				colors = [ DefaultStyle.PROGRESS_BAR, Color.tint(DefaultStyle.PROGRESS_BAR, .5), Color.darken(DefaultStyle.PROGRESS_BAR, 16) ];
-				if(parent.disabled)
+				if(this.disabled)
 					colors = [ DefaultStyle.BACKGROUND, Color.tint(DefaultStyle.PROGRESS_BAR, .25), Color.darken(DefaultStyle.PROGRESS_BAR, 30) ];
 				alphas = [ 1, .5, 0 ];
 				ratios = [ 0, 0x80, 0xFF ];
@@ -1626,10 +1603,11 @@
 				  parent.list.removeChild(parent.list.header);
 				  parent.list.data = [];
 				
-				  for(i in 1...10)
-					parent.list.data.push("List Item "+i);
+				  //for(i in 1...10)
+					//parent.list.data.push("List Item "+i);
 				
-				  parent.list.redraw();
+				  parent.list.dispatchEvent(new flash.events.Event(flash.events.Event.INIT));
+				  //parent.list.redraw();
 				
 				  var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
 				  parent.list.filters = [shadow];

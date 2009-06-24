@@ -19,19 +19,7 @@ TODO:
 
 
 	<haxegui:Window name="Xml hScript Widgets Window" x="100" y="30" width="800" height="600" sizeable="true" >
-				<events>
-					<script type="text/hscript" action="onLoaded">
-					<![CDATA[
-					var scrollpane = this.getChildByName("ScrollPane1");
-					var container = scrollpane.content.getChildByName("Container1");
-						for( i in 1...4 ) {
-							var slider = container.getChildByName("Slider"+i);
-							var stepper = container.getChildByName("Stepper"+i);
-						}
-					]]>
-					</script>
-				</events>
-					
+				
 		<haxegui:MenuBar name="menubar" width="512" x="10" y="20">
 			<haxegui:Menu type="Object" name="menu1">
 				<Item type="String">a</Item>
@@ -89,12 +77,12 @@ TODO:
 						<haxegui:controls:ComboBox x="30" y="190" disabled="true" />
 
 						<haxegui:controls:Slider x="200" y="130" />
-						<haxegui:controls:Slider x="200" y="160" />
+						<haxegui:controls:Slider x="200" y="160" step="10" />
 						<haxegui:controls:Slider x="200" y="190" disabled="true" />
 
-						<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="128" autoRepeat="true" repeatsPerSecond="20" repeatWaitTime=".5" />
-						<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="128" autoRepeat="true" repeatsPerSecond="10" repeatWaitTime=".5" />
-						<haxegui:controls:Stepper name="Stepper3" x="360" y="190" value="0" step="10" max="128" disabled="true" />
+						<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="100" autoRepeat="true" repeatsPerSecond="20" repeatWaitTime=".5" />
+						<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="200" autoRepeat="true" repeatsPerSecond="10" repeatWaitTime=".5" />
+						<haxegui:controls:Stepper name="Stepper3" x="360" y="190" value="0" step="10" max="300" disabled="true" />
 
 						<haxegui:controls:Input name="Input1" x="30" y="220" />
 						<haxegui:controls:Input name="Input2" x="30" y="250" />

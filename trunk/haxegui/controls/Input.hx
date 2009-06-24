@@ -20,13 +20,9 @@
 package haxegui.controls;
 
 import flash.geom.Rectangle;
-import flash.display.DisplayObject;
-import flash.display.DisplayObjectContainer;
 import flash.events.Event;
 import flash.events.TextEvent;
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
+
 import flash.text.TextField;
 import flash.text.TextFormat;
 
@@ -59,7 +55,7 @@ class Input extends Component
 	    mouseEnabled = true;
 	    tabEnabled = true;
 
-	    var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, BitmapFilterQuality.HIGH, true, false, false );
+	    var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false );
 	    filters = [shadow];
 
 	    tf = new TextField();

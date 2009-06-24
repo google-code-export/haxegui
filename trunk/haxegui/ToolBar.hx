@@ -31,7 +31,6 @@ import flash.display.Shape;
 import flash.display.Sprite;
 import flash.display.LineScaleMode;
 
-import flash.text.TextField;
 import flash.text.TextFormat;
 
 import flash.events.Event;
@@ -44,12 +43,6 @@ import haxegui.events.DragEvent;
 
 import flash.ui.Mouse;
 import flash.ui.Keyboard;
-
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.filters.BevelFilter;
-
 
 import haxegui.Component;
 
@@ -86,7 +79,7 @@ class ToolBar extends Component
 		addChild(handle);
 
 		// inner-drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4, 0.5, BitmapFilterQuality.LOW,true,false,false);
+		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4, 0.5, flash.filters.BitmapFilterQuality.LOW,true,false,false);
 		this.filters = [shadow];
 
 

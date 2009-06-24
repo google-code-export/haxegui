@@ -238,8 +238,9 @@ class Introspector extends Window
 						var l = list1;
 						stp.addEventListener(flash.events.Event.CHANGE, 
 							function(e) {
-								if(Reflect.hasField(self.target, l.data[i]))
-									Reflect.setField(self.target, l.data[i], stp.value); 
+								if(Reflect.hasField(self.target, l.data[i])) 
+									//~ Reflect.setField(self.target, l.data[i], stp.value); 
+									continue;
 								} );
 					case TFloat:
 						src = "assets/icons/types/type-float.png";
@@ -254,7 +255,8 @@ class Introspector extends Window
 						stp.addEventListener(flash.events.Event.CHANGE, 
 							function(e) {
 								if(Reflect.hasField(self.target, l.data[i]))
-									Reflect.setField(self.target, l.data[i], stp.value); 
+									//~ Reflect.setField(self.target, l.data[i], stp.value); 
+									continue;
 								} );
 					case TBool:
 						src = "assets/icons/types/type-boolean.png";

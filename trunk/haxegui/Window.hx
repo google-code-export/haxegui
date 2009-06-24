@@ -20,21 +20,18 @@
 package haxegui;
 
 import flash.geom.Rectangle;
-import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-import flash.display.MovieClip;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-import haxegui.events.ResizeEvent;
-
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-
 import flash.ui.Mouse;
 import flash.ui.Keyboard;
-
+import haxegui.Component;
+import haxegui.controls.AbstractButton;
+import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
+import haxegui.events.WindowEvent;
+import haxegui.events.DragEvent;
 import haxegui.managers.CursorManager;
 import haxegui.managers.MouseManager;
 import haxegui.managers.StyleManager;
@@ -42,18 +39,10 @@ import haxegui.managers.WindowManager;
 import haxegui.managers.DragManager;
 import haxegui.managers.FocusManager;
 import haxegui.managers.ScriptManager;
-import haxegui.Component;
-import haxegui.events.MoveEvent;
-import haxegui.events.ResizeEvent;
-import haxegui.events.WindowEvent;
-import haxegui.events.DragEvent;
-
-import haxegui.controls.AbstractButton;
 import haxegui.Opts;
 import haxegui.windowClasses.TitleBar;
 import haxegui.windowClasses.WindowFrame;
 import haxegui.windowClasses.StatusBar;
-
 
 enum WindowType
 {
@@ -237,7 +226,6 @@ class Window extends Component
 	}
 	
 	public override function onMouseDoubleClick(e:MouseEvent) : Void {
-		
 		var self = this;
 		var t = new feffects.Tween(this.box.height, 40, 1500, feffects.easing.Back.easeInOut);
 		t.setTweenHandlers( function(v) {

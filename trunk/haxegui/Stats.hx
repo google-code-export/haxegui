@@ -197,7 +197,7 @@ class Stats extends Window
         
         var stepper = new Stepper(statusbar, "Stepper", 346, 0);
         stepper.init({value: interval, step: 10, min: 20, max: 5000, color: 0x2A7ACD});
-        stepper.value = interval;
+        stepper.adjustment.value = interval;
         stepper.input.tf.text = Std.string(interval);
         
         var self = this;

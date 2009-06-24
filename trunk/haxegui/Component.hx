@@ -31,27 +31,28 @@ import flash.geom.Rectangle;
 
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
-import haxegui.managers.FocusManager;
 import haxegui.Haxegui;
-import haxegui.Opts;
-import haxegui.managers.ScriptManager;
 import haxegui.managers.CursorManager;
+import haxegui.managers.FocusManager;
+import haxegui.managers.ScriptManager;
 import haxegui.managers.TooltipManager;
+import haxegui.Opts;
 import haxegui.Window;
 
 import feffects.Tween;
 
 
 /**
-* Component Class
-* 
-*
-* @author Omer Goshen <gershon@goosemoose.com>
-* @author Russell Weir <damonsbane@gmail.com>
-* @version 0.2
-* 
-* 
-**/
+ * 
+ * Component Class
+ * 
+ *
+ * @author Omer Goshen <gershon@goosemoose.com>
+ * @author Russell Weir <damonsbane@gmail.com>
+ * @version 0.2
+ * 
+ * 
+ **/
 class Component extends Sprite, implements haxegui.IMovable, implements haxegui.IToolTip
 {
 	/** The static component id counter **/
@@ -130,6 +131,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		
 		if(parent!=null)
 			parent.addChild(this);
+		else
+			flash.Lib.current.addChild(this);
 		
 		//
 		move(x,y);
