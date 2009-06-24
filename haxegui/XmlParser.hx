@@ -134,7 +134,8 @@ class XmlParser {
 		var comp : Component = null;
 		if(!isStyle) {
 			var args : Dynamic = {};
-			inst = Type.createInstance(resolvedClass, [parent]);
+			inst = Type.createInstance(resolvedClass, [parent, node.get("name")]);
+			//inst = Type.createInstance(resolvedClass, [parent]);
 			if(Std.is(inst, Component)) {
 				comp = cast inst;
 			}

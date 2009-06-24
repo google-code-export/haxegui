@@ -167,13 +167,13 @@ class ColorPicker extends Window
 			var stepper = new Stepper(container, "Stepper"+i);
 				stepper.init({value: i==4 ? 1 : 0, step: i==4 ? .01 : 1, max: i==4 ? 1 : 0xFF, color: 0xE6D3CC, repeatsPerSecond: 10});
 			//~ stepper.init();
-			stepper.value = 2*slider.handle.x;
+			stepper.adjustment.value = 2*slider.handle.x;
 			stepper.move(388, 10+40*i);
 			
 			//
 			var me = this;
-			slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value = i==4 ? e.target.handle.x/166 : 2*e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); me.updateColor(); });
-			stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = i==4 ? 166*e.target.value : .5*e.target.value; me.updateColor(); });
+			//~ slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value = i==4 ? e.target.handle.x/166 : 2*e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); me.updateColor(); });
+			//~ stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = i==4 ? 166*e.target.value : .5*e.target.value; me.updateColor(); });
 
 		}
 

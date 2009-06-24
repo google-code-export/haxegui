@@ -22,14 +22,9 @@ package haxegui.windowClasses;
 import flash.geom.Rectangle;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-import flash.display.MovieClip;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
 
 import flash.ui.Mouse;
 import flash.ui.Keyboard;
@@ -91,7 +86,7 @@ class WindowFrame extends Component
 			this.startInterval(12);
 			CursorManager.getInstance().lock = true;
 
-			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 12, 12, 0.85, flash.filters.BitmapFilterQuality.LOW, false, false, false);
+			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.4, 12, 12, 0.85, flash.filters.BitmapFilterQuality.LOW, false, false, false);
 			this.filters =[shadow];		
 			
 			"
@@ -152,7 +147,7 @@ class WindowFrame extends Component
 		this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
 		}
 		
-		var shadow = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 12, 12, 0.85, flash.filters.BitmapFilterQuality.HIGH, false, false, false);
+		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 12, 12, 0.85, flash.filters.BitmapFilterQuality.HIGH, false, false, false);
 		this.filters =[shadow];		
 				
 	}

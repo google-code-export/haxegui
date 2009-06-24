@@ -42,10 +42,6 @@ class Rectangle extends Component
 	public var roundness : Float;
 	public var pivot : Point;
 
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super(parent, name, x, y);
-	}
 
 	override public function init(?opts:Dynamic)
 	{

@@ -19,10 +19,6 @@
 
 package haxegui;
 
-import flash.display.DisplayObject;
-import flash.display.DisplayObjectContainer;
-
-
 import haxegui.Component;
 
 import flash.display.Loader;
@@ -33,12 +29,9 @@ import flash.display.BitmapData;
 
 class Image extends Component
 {
-	var src : String;
-
-	public function new(?parent : DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-	    super(parent, name, x, y);
-	}
+	public var src : String;
+	public var bitmap : Bitmap;
+	public var loader : Loader;
 
 	override public function init(opts:Dynamic=null) : Void
 	{
@@ -47,29 +40,28 @@ class Image extends Component
 	    
 	    src = Opts.optString(opts, "src", src);
 	    
-	    var pictLdr:Loader = new Loader();
-	    //var pictURLReq:URLRequest = new URLRequest("./assets/banners/banner$
-	    //~ var pictURLReq:URLRequest = new URLRequest(Opts.string(opts,"src"));
-	    var pictURLReq:URLRequest = new URLRequest(this.src);
-	    pictLdr.load(pictURLReq);
-	    pictLdr.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
+		if(loader==null)
+			loader = new Loader();
+
+	    var urlReq:URLRequest = new URLRequest(this.src);
+	    
+	    loader.load(urlReq);
+	    loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
 
 	}
+	
 
 	function onComplete(e:Event)
 	{
-	    var bmp:Bitmap = e.currentTarget.content ;
-	    addChild(bmp);
+		bitmap = e.currentTarget.content ;
+	    addChild(bitmap);
 	    dispatchEvent(e);
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(Image,initialize);
+		haxegui.Haxegui.register(Image);
 	}
 	
-	static function initialize() {
-	
-	}
 
 }
 

@@ -39,12 +39,18 @@ import haxegui.managers.FocusManager;
 import haxegui.Opts;
 import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
+
+import haxegui.toys.Arrow;
+import haxegui.utils.Color;
 
 import feffects.Tween;
 
+
+
+
 /**
-* Expander class, may be expanded or collapsed by the user to reveal or hide child
-* widgets.
+* Expander class, may be expanded or collapsed by the user to reveal or hide child widgets.
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
@@ -52,10 +58,13 @@ import feffects.Tween;
 class Expander extends AbstractButton
 {
 	public var expanded(__getExpanded,__setExpanded) : Bool;
+
+	
+	public var arrow : Arrow;
 	public var label : Label;
 
 	public var scrollTween : Tween;
-	
+	public var arrowTween : Tween;
 
 
 	override public function init(opts:Dynamic=null)
@@ -66,6 +75,10 @@ class Expander extends AbstractButton
 
 		expanded = Opts.optBool(opts, "expanded", expanded);
 
+		arrow = new Arrow(this);
+		arrow.init({color: Color.darken(DefaultStyle.BACKGROUND, 16)});
+		//arrow.move(arrow.box.width,arrow.box.height);
+		
 		label = new Label(this);
 		//~ label.text = Opts.optString(opts, "label", name);
 		label.init({innerData: this.name});
@@ -73,8 +86,8 @@ class Expander extends AbstractButton
 		label.mouseEnabled = false;
 		label.tf.mouseEnabled = false;
 
-		scrollRect = new Rectangle(0,0,stage.stageWidth,this.box.height);
-		cacheAsBitmap = true;
+		//scrollRect = new Rectangle(0, 0, box.width, box.height);
+		//cacheAsBitmap = true;
 
 		super.init(opts);
 
@@ -85,41 +98,38 @@ class Expander extends AbstractButton
 	override public function onMouseClick(e:MouseEvent) {
 		if(disabled) return;
 
-		
-		var h = Math.max( box.height, root.getRect(this).height );
-
-		var r = new Rectangle(0,0,stage.stageWidth, h);
 		var self = this;
-		
-
-				
-		for(i in 0...this.numChildren) {
-			if(this.getChildAt(i) != this.label )
-				this.getChildAt(i).visible = true;
-			}
+		var r = new Rectangle(0,0,this.stage.stageWidth,expanded?this.stage.stageHeight:0);
 			
-		//~ if(scrollTween!=null) {
-			//~ scrollTween.pause();
-			//~ scrollTween.reverse();
-			//~ scrollTween.resume();
-		//~ }
-		//~ else {
 		if(scrollTween!=null)
 			scrollTween.stop();
+				
 		if(!expanded)  
-			scrollTween = new Tween(box.height, h, 3500, r, "height", feffects.easing.Linear.easeNone);
+			scrollTween = new Tween(box.height, this.stage.stageHeight, 3500, r, "height", feffects.easing.Linear.easeNone);
 		else
-			scrollTween = new Tween(h, box.height, 1500, r, "height", feffects.easing.Expo.easeOut);
-			
-		scrollTween.setTweenHandlers( function(v) { self.scrollRect = r.clone(); } );
+			scrollTween = new Tween(this.stage.stageHeight, box.height, 1500, r, "height", feffects.easing.Expo.easeOut);
 		
+		scrollTween.setTweenHandlers( function(v) { self.scrollRect = r; });
+
 		scrollTween.start();
-		//~ }
+	
+
+
+		if(arrowTween!=null)
+			arrowTween.stop();
+			
+		arrowTween = new Tween(expanded?90:0, expanded?0:90, 500, arrow, "rotation", feffects.easing.Linear.easeNone);
+			
+		arrowTween.start();
 
 		
 		e.stopImmediatePropagation();
 		
 		expanded = !expanded;
+
+		for(i in 2...numChildren)
+//			this.getChildAt(i).visible = expanded;
+			this.getChildAt(i).visible = true;
 		
 		//~ dirty = true;
 		dispatchEvent(new Event(Event.CHANGE));

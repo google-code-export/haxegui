@@ -19,30 +19,8 @@
 
 package haxegui.controls;
 
-import feffects.Tween;
-import feffects.easing.Quint;
-import feffects.easing.Sine;
-import feffects.easing.Back;
-import feffects.easing.Bounce;
-import feffects.easing.Circ;
-import feffects.easing.Cubic;
-import feffects.easing.Elastic;
-import feffects.easing.Expo;
-import feffects.easing.Linear;
-import feffects.easing.Quad;
-import feffects.easing.Quart;
-
-import flash.display.DisplayObjectContainer;
-import flash.events.MouseEvent;
-import flash.events.KeyboardEvent;
-import flash.events.FocusEvent;
 import flash.geom.Rectangle;
-import flash.text.TextFormat;
-
-import haxegui.managers.CursorManager;
 import haxegui.Opts;
-import haxegui.managers.StyleManager;
-import haxegui.events.MoveEvent;
 
 /**
 *

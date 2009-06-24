@@ -1,2 +1,3 @@
-this.parent.__setValue(this.parent.__getValue() + this.parent.step);
+//this.parent.__setValue(this.parent.__getValue() + this.parent.step);
+this.parent.adjustment.__setValue ( this.parent.adjustment.value + this.parent.adjustment.step );
 

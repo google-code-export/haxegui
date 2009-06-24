@@ -196,8 +196,8 @@ class TitleBar extends AbstractButton
 		this.box = (cast this.parent).box.clone();
 		if(opts!=null)
 			this.color = opts.color == null ? color : opts.color;
-		title.x = Math.floor(.5*(this.box.width - title.width));
 
+		title.x = Std.int(this.box.width - title.width) >> 1;
 		//title.setTextFormat (DefaultStyle.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
 
 		super.redraw(opts);

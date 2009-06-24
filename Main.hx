@@ -98,7 +98,10 @@ import feffects.Tween;
 */
 class Main extends Sprite, implements haxe.rtti.Infos
 {
-
+	static var desktop : Sprite;
+	static var root = flash.Lib.current;
+	static var stage = root.stage;
+		
 	public static function main ()
 	{
 		var bootupMessages = new Array<{v:Dynamic, inf:haxe.PosInfos}>();
@@ -110,11 +113,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		// Setup Haxegui
 		haxegui.Haxegui.init();
 
-
-
-
 		// Set stage propeties
-		var stage = flash.Lib.current.stage;
 		stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
 		stage.align = flash.display.StageAlign.TOP_LEFT;
 		stage.stageFocusRect = true;
@@ -123,7 +122,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
 
 		// Desktop
-		var desktop = untyped flash.Lib.current.addChild(new Sprite());
+		desktop = untyped flash.Lib.current.addChild(new Sprite());
 		desktop.name = "desktop";
 		desktop.mouseEnabled = false;
 
@@ -147,7 +146,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		  new flash.filters.DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.9, 20, 20, 0.85,
 					flash.filters.BitmapFilterQuality.HIGH, false, false, false);
 
-		logo.filters =[shadow];
+		logo.filters = [shadow];
 
 
 		// Console to show some debug
@@ -169,7 +168,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 			function(e){ 
 				switch(e.charCode) {
 					case "`".code:
-						//~ console.visible = !console.visible; 
+						console.visible = !console.visible; 
+						/*
 						WindowManager.toFront(console);
 						if(!console.visible) { 
 							var t = new feffects.Tween( 0, 1, 1000, console, "alpha", feffects.easing.Linear.easeNone);
@@ -184,7 +184,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 							t.start();
 							t.setTweenHandlers(null, function(v){ console.visible = false; } );
 							}
-
+						*/
 					}
 				});
 
@@ -315,18 +315,18 @@ class Main extends Sprite, implements haxe.rtti.Infos
 	{
 
 		var stage = e.target;
-
-		var back = cast flash.Lib.current.getChildByName("desktop");
-		back.graphics.clear();
+	if(desktop!=null) {
+		desktop.graphics.clear();
 		  var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND,30) ];
 		  var alphas = [ 100, 100 ];
 		  var ratios = [ 0, 0xFF ];
 		  var matrix = new flash.geom.Matrix();
 		  matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
-		  back.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+		  desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
-		back.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
-		back.graphics.endFill();
+		desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
+		desktop.graphics.endFill();
+	}
 
 		var logo = cast flash.Lib.current.getChildByName("HaxeLogo");
 		logo.x = Std.int(stage.stageWidth - logo.width) >> 1;

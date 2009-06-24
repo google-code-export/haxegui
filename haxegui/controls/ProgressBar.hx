@@ -23,16 +23,10 @@ import feffects.Tween;
 
 import flash.geom.Rectangle;
 import flash.geom.Transform;
-import flash.text.TextField;
 import flash.display.Shape;
-import flash.display.DisplayObject;
-import flash.display.DisplayObjectContainer;
-import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
+
 import haxegui.Component;
 import haxegui.managers.CursorManager;
 import haxegui.Opts;
@@ -41,7 +35,14 @@ import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
 
-
+/**
+*
+* ProgressBarIndicator class
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.1
+*/
 class ProgressBarIndicator extends Component
 {
 	override public function init(opts:Dynamic=null) {
@@ -83,8 +84,9 @@ class ProgressBar extends Component
 		
 		super.init(opts);
 
-
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, disabled ? .35 : .75, BitmapFilterQuality.HIGH, true, false, false);
+	    progress = Opts.optFloat(opts, "progress", progress);
+	    
+		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, disabled ? .35 : .75, flash.filters.BitmapFilterQuality.HIGH, true, false, false);
 		this.filters = [shadow];
 		
 		
@@ -94,7 +96,7 @@ class ProgressBar extends Component
 		this.cacheAsBitmap = true;
 		
 
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.5, 4, 4, disabled ? .35 : .75, BitmapFilterQuality.LOW, false, false, false);
+		var shadow = new flash.filters.DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.5, 4, 4, disabled ? .35 : .75, flash.filters.BitmapFilterQuality.LOW, false, false, false);
 		//~ var glow = new flash.filters.GlowFilter (DefaultStyle.PROGRESS_BAR, 1, 16, 16, 1.5, flash.filters.BitmapFilterQuality.HIGH, false, false);
 		//~ if(this.disabled)
 			bar.filters = [shadow];
@@ -121,6 +123,7 @@ class ProgressBar extends Component
 
 		label = new Label(this);
 		label.init();
+		label.text = null;
 		label.tf.text = Math.round(100*progress) + "%";
 		label.moveTo( .5*(box.width-label.width), .5*(box.height-label.height) + 1 );
 		
@@ -137,10 +140,12 @@ class ProgressBar extends Component
 	}
 
 	public function update() {
+
 		progress = Math.max(0, Math.min(1, progress));
 		
 		if(label!=null) 
 			label.tf.text = Math.round(100*progress) + "%";
+
 		
 		if(mask!=null) {
 			mazk = cast addChild(new Shape());

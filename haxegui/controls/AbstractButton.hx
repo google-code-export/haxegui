@@ -90,18 +90,17 @@ class AbstractButton extends Component
 		super (parent, name, x, y);
 		cursorOver = defaultCursorOver;
 		cursorPress = defaultCursorPress;
-		//~ useHandCursors = false;
 		useHandCursors = true;
-		color = DefaultStyle.BACKGROUND;
 		buttonMode = true;
 		tabEnabled = true;
 		mouseEnabled = true;
 		focusRect = true;
+		mouseChildren = true;
 	}
 
 	override public function init(?opts:Dynamic)
 	{
-		//if(box.isEmpty()) box = new Rectangle(0,0,90,30);
+		color = DefaultStyle.BACKGROUND;
 		super.init(opts);
 		autoRepeat = Opts.optBool(opts,"autoRepeat", true);
 		repeatsPerSecond = Opts.optFloat(opts,"repeatsPerSecond", 25);
