@@ -1,0 +1,12 @@
+this.titlebar.color = this.color;
+
+var fmt = DefaultStyle.getTextFormat();
+fmt.color = Math.max(0, DefaultStyle.BACKGROUND - 0x191919);
+this.titlebar.title.setTextFormat(fmt);
+
+//this.frame.color = this.color;
+this.titlebar.redraw();
+//this.frame.redraw();
+
+var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.4, 12, 12, 0.85, flash.filters.BitmapFilterQuality.LOW, false, false, false);
+this.frame.filters =[shadow];	
