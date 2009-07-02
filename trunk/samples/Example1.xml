@@ -37,14 +37,34 @@ TODO:
 			<haxegui:controls:Button name="Btn2" x="60" y="4" width="30" />
 			<haxegui:controls:Button name="Btn3" x="90" y="4" width="30" />
 		</haxegui:ToolBar>
-		<haxegui:ScrollPane name="ScrollPane1" x="10" y="84" >
+		<haxegui:containers:ScrollPane name="ScrollPane1" x="10" y="84" >
 		<haxegui:TabNavigator name="TabNavigator" x="0" y="0" width="512" height="512" >
 		<haxegui:Tab x="0" width="60" />
 		<haxegui:Tab x="60" width="60"/>
+		<haxegui:Tab x="120" width="60"/>
+
+		<haxegui:controls:Label x="120" y="3" >Active tab: </haxegui:controls:Label>
+		<haxegui:controls:Stepper name="TabStepper" x="300" y="2" value="0" step="1" max="2" autoRepeat="false" >
+			<events>
+				<script type="text/hscript" action="onLoaded">
+				<![CDATA[
+				this.adjustment.addEventListener(flash.events.Event.CHANGE,
+				function(e) {
+					this.parent.__setActive( this.adjustment.value );
+				}, false, 0, true);
+				
+				this.parent.addEventListener(flash.events.Event.CHANGE,
+				function(e) {
+					this.adjustment.__setValue ( this.parent.activeTab );
+				}, false, 0, true);
+				]]>
+				</script>
+			</events>
+		</haxegui:controls:Stepper>
 		
 				<haxegui:TabChild>
-					<haxegui:Container name="Container1" width="512" height="512" >
-						<haxegui:controls:Label x="14" y="14" >This window and it's content are dynamically generated from xml, Some events are also defined in hscript.</haxegui:controls:Label>
+					<haxegui:containers:Container name="Container1" width="512" height="512" >
+						<haxegui:controls:Label x="14" y="14" >This window and it's content are dynamically generated from xml, Some events are also defined in hscript. </haxegui:controls:Label>
 						<haxegui:controls:Button label="Click" x="30" y="50" width="120" />
 						<haxegui:controls:Button label="me" x="160" y="50" width="40" />
 						<haxegui:controls:Button label="disabled" x="210" y="50" disabled="true" />
@@ -130,28 +150,35 @@ TODO:
 					
 
 					
-					</haxegui:Container>
+					</haxegui:containers:Container>
 				</haxegui:TabChild>
+				
 				<haxegui:TabChild visible="false">
-					<haxegui:Container name="Container2" width="512" height="512"  >
+					<haxegui:containers:Divider width="512" height="512"  >
 						<haxegui:controls:Label x="20" y="20" >Second TabChild</haxegui:controls:Label>
+					</haxegui:containers:Divider>
+				</haxegui:TabChild>
+												
+				<haxegui:TabChild visible="false">
+					<haxegui:containers:Container width="512" height="512"  >
+						<haxegui:controls:Label x="20" y="20" >Third TabChild</haxegui:controls:Label>
 						<haxegui:controls:RadioButton label="false" x="30" y="110" />
 						<haxegui:controls:RadioButton label="false" x="30" y="140" />
 						<haxegui:controls:RadioButton label="false" x="30" y="170" />
 						<haxegui:controls:RadioButton label="false" x="30" y="200" />
-					</haxegui:Container>
+					</haxegui:containers:Container>
 				</haxegui:TabChild>
 				<haxegui:TabChild visible="false">
-					<haxegui:Container name="Container3" width="512" height="512" >
+					<haxegui:containers:Container name="Container3" width="512" height="512" >
 						<haxegui:Window name="ChildWindow" x="200" y="200" width="180" height="140" color="0xA5DE33">
-							<haxegui:Container name="Container1"  x="10" y="20" width="100%" height="100%" color="0xA5DE33"  >
+							<haxegui:containers:Container name="Container1"  x="10" y="20" width="100%" height="100%" color="0xA5DE33"  >
 								<haxegui:controls:Label x="20" y="4" >I'm a green child window</haxegui:controls:Label>
 								<haxegui:controls:Button label="Click" x="20" y="30" width="120" color="0xA5DE33" />
-							</haxegui:Container>
+							</haxegui:containers:Container>
 						</haxegui:Window>
-					</haxegui:Container>
+					</haxegui:containers:Container>
 				</haxegui:TabChild>
 		</haxegui:TabNavigator>
-		</haxegui:ScrollPane>
+		</haxegui:containers:ScrollPane>
     </haxegui:Window>
 </haxegui:Layout>

@@ -23,11 +23,11 @@ import flash.events.Event;
 
 class Adjustment extends flash.events.EventDispatcher {
     
-    public var value(default, __setValue)   : Float;
-    public var min(default, __setMin)       : Float;
-    public var max(default, __setMax)       : Float;
-    public var step(default, __setStep)     : Float;
-    public var page(default, __setPage)     : Float;
+    public var value    (default, __setValue)   : Float;
+    public var min      (default, __setMin)     : Float;
+    public var max      (default, __setMax)     : Float;
+    public var step     (default, __setStep)    : Float;
+    public var page     (default, __setPage)    : Float;
     
     public function new(?value:Float, ?min:Float, ?max:Float, ?step:Float, ?page:Float) {
         super();
@@ -45,7 +45,7 @@ class Adjustment extends flash.events.EventDispatcher {
     
     
     public override function toString() : String {
-        return "Adjustment"+Std.string({value: value, min: min, max: max, step: step, page: page});
+        return "[Adjustment]"+Std.string({value: value, min: min, max: max, step: step, page: page});
     }
        
 

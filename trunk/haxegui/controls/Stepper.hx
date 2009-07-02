@@ -40,13 +40,30 @@ import haxegui.IAdjustable;
 
 class StepperUpButton extends AbstractButton
 {
+	override public function init(opts:Dynamic=null) {
+		super.init(opts);
+		var arrow = new haxegui.toys.Arrow(this);
+		arrow.init({ color: haxegui.utils.Color.darken(this.color, 20), width: .5*(cast this.parent).box.height-6, height: 8 });
+		arrow.rotation = -90;
+		arrow.move(6,1);
+	}
+	
 	static function __init__() {
 		haxegui.Haxegui.register(StepperUpButton);
+
 	}
 }
 
 class StepperDownButton extends AbstractButton
 {
+	override public function init(opts:Dynamic=null) {
+		super.init(opts);
+		var arrow = new haxegui.toys.Arrow(this);
+		arrow.init({ color: haxegui.utils.Color.darken(this.color, 20), width: .5*(cast this.parent).box.height-6, height: 8 });
+		arrow.rotation = 90;
+		arrow.move(6,1);
+	}
+		
 	static function __init__() {
 		haxegui.Haxegui.register(StepperDownButton);
 	}

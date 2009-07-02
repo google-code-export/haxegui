@@ -105,7 +105,7 @@ class CursorManager extends EventDispatcher
 	*
 	*/
 	public function init() {
-		//~ Mouse.hide();
+		//Mouse.hide();
 		cursor = Cursor.ARROW;
 	}
 
@@ -142,7 +142,7 @@ class CursorManager extends EventDispatcher
 				p.offset(-18,-17);
 
 			case Cursor.WE, Cursor.NS:
-				p.offset(-13, -17);
+				p.offset(-13, -12);
 
 			case Cursor.SIZE_ALL:
 				p.offset(-15, -12);
@@ -150,13 +150,13 @@ class CursorManager extends EventDispatcher
 		}
 
 		/** Maybe smooths the movment a little... **/
-		p.add( MouseManager.getInstance().delta );
+		//p.add( MouseManager.getInstance().delta );
 		//~ p.add( Point.interpolate( new Point(), MouseManager.getInstance().delta, .5 ) );
 		
 		_mc.x = p.x;
 		_mc.y = p.y;
 		
-		showCursor();
+		//showCursor();
 		toTop();
 
 		e.updateAfterEvent();

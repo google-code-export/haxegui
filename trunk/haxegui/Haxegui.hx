@@ -42,7 +42,9 @@ class Haxegui {
 
 	public static function init() {
 		for(o in initializers) {
+			#if debug
 			trace("Initializing " + Type.getClassName(o.c));
+			#end
 			if(o.f != null)
 				o.f();
 		}

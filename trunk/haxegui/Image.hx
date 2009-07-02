@@ -33,16 +33,15 @@ class Image extends Component
 	public var bitmap : Bitmap;
 	public var loader : Loader;
 
-	override public function init(opts:Dynamic=null) : Void
-	{
+	override public function init(opts:Dynamic=null) : Void	{
 	    
 	    super.init(opts);
 	    
 	    src = Opts.optString(opts, "src", src);
 	    
-		if(loader==null)
-			loader = new Loader();
-
+	    if(loader==null)
+		loader = new Loader();
+	    
 	    var urlReq:URLRequest = new URLRequest(this.src);
 	    
 	    loader.load(urlReq);
@@ -53,13 +52,13 @@ class Image extends Component
 
 	function onComplete(e:Event)
 	{
-		bitmap = e.currentTarget.content ;
+	    bitmap = e.currentTarget.content ;
 	    addChild(bitmap);
 	    dispatchEvent(e);
 	}
 
 	static function __init__() {
-		haxegui.Haxegui.register(Image);
+	    haxegui.Haxegui.register(Image);
 	}
 	
 

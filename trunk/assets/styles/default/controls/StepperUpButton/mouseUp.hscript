@@ -1,5 +1,9 @@
 if(!this.disabled) {
-	this.stopInterval();
+	if(this.autoRepeat) 
+		this.stopInterval();
+	else
+		this.parent.adjustment.__setValue ( this.parent.adjustment.value + this.parent.adjustment.step );
+
 
 	if(this.hitTestObject( CursorManager.getInstance()._mc )) {
 		this.updateColorTween( new feffects.Tween(-50, 50, 150, feffects.easing.Linear.easeNone) );

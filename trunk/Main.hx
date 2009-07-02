@@ -59,8 +59,6 @@ import haxegui.managers.MouseManager;
 import haxegui.PopupMenu;
 
 import haxegui.Console;
-import haxegui.Container;
-import haxegui.ScrollPane;
 import haxegui.TabNavigator;
 import haxegui.MenuBar;
 import haxegui.Stats;
@@ -86,6 +84,9 @@ import haxegui.controls.Expander;
 
 import feffects.Tween;
 
+import haxegui.containers.Container;
+import haxegui.containers.Divider;
+import haxegui.containers.ScrollPane;
 
 
 /**
@@ -101,17 +102,9 @@ class Main extends Sprite, implements haxe.rtti.Infos
 	static var desktop : Sprite;
 	static var root = flash.Lib.current;
 	static var stage = root.stage;
-		
-	public static function main ()
-	{
-		var bootupMessages = new Array<{v:Dynamic, inf:haxe.PosInfos}>();
-		var bootupHandler = function(v : Dynamic, ?inf:haxe.PosInfos) {
-			bootupMessages.push({v:v, inf:inf});
-		}
-		setRedirection(bootupHandler);
 
-		// Setup Haxegui
-		haxegui.Haxegui.init();
+	
+	public static function main () {
 
 		// Set stage propeties
 		stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
@@ -126,8 +119,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		desktop.name = "desktop";
 		desktop.mouseEnabled = false;
 
-		var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND, 30) ];
-		var alphas = [ 100, 100 ];
+		var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND, 40) ];
+		var alphas = [ 1, 1 ];
 		var ratios = [ 0, 0xFF ];
 		var matrix = new flash.geom.Matrix();
 		matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
@@ -137,16 +130,44 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 
 		// Logos
-		var logo = flash.Lib.current.addChild(flash.Lib.attach("HaxeLogo"));
-		logo.name = "HaxeLogo";
+		var logo = flash.Lib.current.addChild(flash.Lib.attach("Logo"));
+		logo.name = "Logo";
 		logo.x = cast (stage.stageWidth - logo.width) >> 1;
 		logo.y = cast (stage.stageHeight - logo.height) >> 1;
-		
+		logo.alpha = 0;
+		/*
 		var shadow =
 		  new flash.filters.DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.9, 20, 20, 0.85,
 					flash.filters.BitmapFilterQuality.HIGH, false, false, false);
 
 		logo.filters = [shadow];
+		*/
+		/*
+		var t = new Tween(0,1,300,logo,"alpha",feffects.easing.Linear.easeNone);
+		haxe.Timer.delay( t.start, 150);
+		*/
+		haxe.Timer.delay( init, 75);
+		
+	}
+
+	public static function init ()	{
+		
+		// Setup Haxegui
+		haxegui.Haxegui.init();
+
+		
+		var t = new Tween(1,0,300,flash.Lib.current.getChildByName("Logo"),"alpha",feffects.easing.Linear.easeNone);
+		t.setTweenHandlers(null,
+		function(v) {
+		flash.Lib.current.removeChild(flash.Lib.current.getChildByName("Logo"));	
+		});
+		t.start();
+		
+		var bootupMessages = new Array<{v:Dynamic, inf:haxe.PosInfos}>();
+		var bootupHandler = function(v : Dynamic, ?inf:haxe.PosInfos) {
+			bootupMessages.push({v:v, inf:inf});
+		}
+		setRedirection(bootupHandler);
 
 
 		// Console to show some debug
@@ -251,17 +272,24 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		//~ }
 		//~ );
 
+    //~ var URL = "http://localhost:2000/remoting.n";
+    //~ var cnx = haxe.remoting.HttpAsyncConnection.urlConnect(URL);
+    //~ cnx.setErrorHandler( function(err) trace("Error : "+Std.string(err)) );
+	//~ 
 
 
-
+	#if debug
 		var a = new Array<String>();
 		var keys : Iterator<String> = untyped ScriptManager.defaultActions.keys();
 		for(k in keys)
 			a.push( k.split('.').slice(-2,-1).join('.') + "." + k.split('.').pop() );
 		a.sort(function(a,b) { if(a==b) return 0; if(a < b) return -1; return 1;});
 		log("Registered scripts: " + Std.string(a));
+	#end
 
 
+	
+ 
 	}//main
 
 
@@ -271,13 +299,17 @@ class Main extends Sprite, implements haxe.rtti.Infos
 	*/
 	static function loadXML(e:Event) : Void
 	{
-		trace(here.methodName);
+		trace(here.methodName) ;
 		var str = e.target.data;
 		LayoutManager.loadLayouts(Xml.parse(str));
 		for(k in LayoutManager.layouts.keys())
 			trace("Loaded layout : " + k);
 		LayoutManager.setLayout(Xml.parse(str).firstElement().get("name"));
 
+//~ LayoutManager.fetchLayout("samples/Example6.xml");
+//~ LayoutManager.setLayout("Example6");
+
+	trace("Finished Initialization in "+ haxe.Timer.stamp() +" sec.");
 
 		//~ var welcome = "\n<FONT SIZE='24'>Hello and welcome to <B>haxegui</B>.</FONT>\n";
 		var welcome = "\n
@@ -314,11 +346,12 @@ class Main extends Sprite, implements haxe.rtti.Infos
 	public static function onStageResize(e:Event)
 	{
 
-		var stage = e.target;
+	var stage = e.target;
+	haxe.Timer.delay( function() {
 	if(desktop!=null) {
 		desktop.graphics.clear();
-		  var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND,30) ];
-		  var alphas = [ 100, 100 ];
+		  var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND,40) ];
+		  var alphas = [ 1, 1 ];
 		  var ratios = [ 0, 0xFF ];
 		  var matrix = new flash.geom.Matrix();
 		  matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
@@ -328,9 +361,11 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		desktop.graphics.endFill();
 	}
 
-		var logo = cast flash.Lib.current.getChildByName("HaxeLogo");
+		var logo = cast flash.Lib.current.getChildByName("Logo");
 		logo.x = Std.int(stage.stageWidth - logo.width) >> 1;
 		logo.y = Std.int(stage.stageHeight - logo.height) >> 1;
+	},300);
+	
 	}
 
 	public static dynamic function log(v:Dynamic) {

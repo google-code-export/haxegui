@@ -42,6 +42,7 @@ import haxegui.events.DragEvent;
 import haxegui.managers.StyleManager;
 import haxegui.Window;
 
+import haxegui.containers.Container;
 import haxegui.controls.ScrollBar;
 
 import hscript.Expr;

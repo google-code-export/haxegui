@@ -202,14 +202,16 @@ class Window extends Component
 
 	override public function destroy() {
 	
-		var t = new feffects.Tween(1, 0, 750, this, "alpha", feffects.easing.Linear.easeNone);
-		t.start();
+		//var t = new feffects.Tween(1, 0, 750, this, "alpha", feffects.easing.Linear.easeNone);
+		//t.start();
 		
 		var self = this;
+		/*
 		haxe.Timer.delay(
 		function()
 		{
-				var idx : Int = 0;
+		*/
+		var idx : Int = 0;
 		for(i in 0...self.numChildren) {
 			var c = self.getChildAt(idx);
 			if(Std.is(c,Component))
@@ -221,7 +223,7 @@ class Window extends Component
 			self.removeChildAt(0);
 		if(self.parent != null)
 			self.parent.removeChild(self);
-		}, 750 );
+		//}, 750 );
 		
 	}
 	

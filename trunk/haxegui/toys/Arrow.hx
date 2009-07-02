@@ -41,7 +41,10 @@ class Arrow extends Component
 		"
 		var p = new flash.geom.Point(.5*this.box.width, .5*this.box.height);
 		this.graphics.clear();
-		this.graphics.lineStyle(1, Color.darken(this.color, 16));
+		this.graphics.lineStyle(1, Color.darken(this.color, 16), 1, true,
+				    flash.display.LineScaleMode.NONE,
+				    flash.display.CapsStyle.ROUND,
+				    flash.display.JointStyle.ROUND);
 		this.graphics.beginFill( this.color );
 		this.graphics.moveTo(-p.x,-p.y);
 		this.graphics.lineTo(p.x, 0);

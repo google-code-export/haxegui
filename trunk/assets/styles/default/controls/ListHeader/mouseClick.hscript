@@ -1,2 +1,3 @@
 this.parent.sortReverse = !this.parent.sortReverse ;
+this.arrow.rotation = this.parent.sortReverse ? -90 : 90;
 this.parent.redraw();

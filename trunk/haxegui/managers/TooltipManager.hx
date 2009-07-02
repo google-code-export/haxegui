@@ -34,7 +34,15 @@ import haxegui.managers.StyleManager;
 
 import feffects.Tween;
 
-
+/**
+*
+* Tooltip Class
+*
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.1
+*/
 class Tooltip extends Component {
 	var target  : Component;
 	var tf 		: TextField;

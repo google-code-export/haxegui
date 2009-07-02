@@ -37,6 +37,7 @@ import haxegui.managers.StyleManager;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
+import haxegui.toys.Arrow;
 
 /**
 *
@@ -49,17 +50,22 @@ import haxegui.events.DragEvent;
 */
 class ListHeader extends AbstractButton
 {
-
-	var label : Label;
-	
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
+	public var label : Label;
+	public var arrow : Arrow;
+		
+	override public function init(opts:Dynamic=null)
 	{
-		super (parent, name, x, y);
+		super.init(opts);
 		
 		label = new Label(this);
 		label.init();
 		label.text = null;
 		label.moveTo(4,4);
+		
+		arrow = new Arrow(this);
+		arrow.init({ width: 8, height: 8, color: haxegui.utils.Color.darken(this.color, 20)});
+		arrow.rotation = (cast parent).sortReverse ? -90 : 90;
+		arrow.moveTo((cast parent).box.width - 10, 10);
 		
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
@@ -174,7 +180,7 @@ class UiList extends Component
 		for (i in 1...n) {
 			var item = new ListItem(this);
 			item.init({width: this.box.width, color: DefaultStyle.INPUT_BACK});
-			item.label.text = null;
+			//item.label.text = null;
 			item.label.mouseEnabled = false;
 			item.move(0,20*i+1);
 		}
@@ -210,7 +216,7 @@ class UiList extends Component
 		//~ var self = this;
 		//~ data.sort(function(a,b) { if(a < b) return self.sortReverse ? 1 : -1; return 0;	});
 		
-		header.redraw();
+		//~ header.redraw();
 		
 		// if all children are here just redraw them
 		//~ if(numChildren <= data.length ) 

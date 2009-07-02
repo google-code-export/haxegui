@@ -133,7 +133,7 @@ class Stats extends Window
         box = new Rectangle (0, 0, 400, 220);
 
         //
-        var container = new Container (this, "container", 10, 20);
+        var container = new haxegui.containers.Container (this, "container", 10, 20);
         //~ container.init({color: 0x222222, alpha: .5});
         container.init({color: 0x2A7ACD});
 
@@ -201,7 +201,7 @@ class Stats extends Window
         stepper.input.tf.text = Std.string(interval);
         
         var self = this;
-		stepper.addEventListener(Event.CHANGE,
+		stepper.adjustment.addEventListener(Event.CHANGE,
             function(e:Event) {
                 self.frameCounter = 0;
                 self.delta = 0;
@@ -272,7 +272,12 @@ class Stats extends Window
             //Std.string(Math.NaN),
             Std.string(Lambda.count(Haxegui.dirtyList)),
             Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5),
-            Std.string(haxe.Timer.stamp()).substr(0,5),
+//            Std.string(haxe.Timer.stamp()).substr(0,5),
+            StringTools.lpad(Std.string(Std.int(haxe.Timer.stamp()/Math.pow(60,2))).substr(0,2), "0", 2)+":"+
+            StringTools.lpad(Std.string(Std.int(haxe.Timer.stamp()/60)).substr(0,2), "0", 2)+":"+
+            StringTools.lpad(Std.string(Std.int(haxe.Timer.stamp())).substr(0,2), "0", 2), 
+
+
             ""
         ];
 
@@ -281,29 +286,29 @@ class Stats extends Window
            if(Std.is(list2.getChildAt(i), ListItem))
                 untyped list2.getChildAt(i).redraw();
 
-/*
+
 
         var item = cast list.getChildAt(1);
         item.redraw();
 		item.graphics.beginFill (0xFF9300);
-		item.graphics.drawRect (0, 0, Std.int(fps), 20);
+		item.graphics.drawRect (0, 0, Std.int(minFPS), 20);
 		item.graphics.endFill ();
 
-        item = cast list.getChildAt(4);
+        item = cast list.getChildAt(3);
         item.redraw();
 		item.graphics.beginFill (0x9ADF00);
 		item.graphics.drawRect (0, 0, Std.int(avg), 20);
 		item.graphics.endFill ();
 
-        item = cast list.getChildAt(5);
+        item = cast list.getChildAt(6);
         item.redraw();
 		item.graphics.beginFill (0xFF00A8);
 		item.graphics.drawRect (0, 0, Std.int(flash.system.System.totalMemory/Math.pow(10,6)), 20);
 		item.graphics.endFill ();
-*/
-/*
 
-        data.push( new Point( 240-ploter.x, 140 - fps ) );
+
+
+        data.push( new Point( 240-ploter.x, 140 - minFPS ) );
         data2.push( new Point( 240-ploter.x, 140 - flash.system.System.totalMemory/Math.pow(10,6) ) );
         data3.push( new Point( 240-ploter.x, 140 - avg ) );
 
@@ -318,28 +323,26 @@ class Stats extends Window
         ploter.graphics.lineStyle(2,0x9ADF00);
         ploter.graphics.moveTo( data3[data3.length-2].x+gridSpacing, data3[data3.length-2].y );
         ploter.graphics.lineTo( data3[data3.length-1].x+gridSpacing, data3[data3.length-1].y );
-*/
+
 
 
         //~ if(data.length > 2) data.shift();
         //~ if(data2.length > 2) data.shift();
 
-        //~ var p = new Tween(ploter.x, ploter.x-delta*gridSpacing, interval, ploter, "x", Linear.easeNone );
-        //~ p.start();
+        var p = new feffects.Tween(ploter.x, ploter.x-delta*gridSpacing, interval, ploter, "x", feffects.easing.Linear.easeNone );
+        p.start();
 
-
-        //~ grid.x -= gridSpacing*delta;
-        //~ var g = new Tween(0, -gridSpacing, interval, grid, "x", Linear.easeNone );
-        //~ var g = new Tween(0, -delta*gridSpacing, Std.int(delta*interval), grid, "x", Linear.easeNone );
-        //~ g.start();
-
+/*
+        grid.x -= gridSpacing*delta;
+        var g = new feffects.Tween(0, -gridSpacing, interval, grid, "x", feffects.easing.Linear.easeNone );
+//        var g = new feffects.Tween(0, -delta*gridSpacing, Std.int(delta*interval), grid, "x", feffects.easing.Linear.easeNone );
+        g.start();
+*/
         //~ if(grid.x<-gridSpacing) grid.x=0;
+
 
         frameCounter = 0;
         last = haxe.Timer.stamp();
-
-
-
 
     }
 

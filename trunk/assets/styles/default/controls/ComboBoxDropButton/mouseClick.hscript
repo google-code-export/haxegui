@@ -11,12 +11,13 @@ if(!this.disabled) {
   parent.list.box.width = parent.box.width - 22;
   parent.list.box.height = 200;
   parent.list.removeChild(parent.list.header);
-  parent.list.data = [];
+  //parent.list.data = [];
   
   //for(i in 1...10)
 	//parent.list.data.push("List Item "+i);
+  //parent.list.data = parent.data;
   
-  parent.list.dispatchEvent(new flash.events.Event(flash.events.Event.INIT));
+  //parent.list.dispatchEvent(new flash.events.Event(flash.events.Event.INIT));
   //parent.list.redraw();
   
   var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );

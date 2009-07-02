@@ -49,6 +49,15 @@ import haxegui.events.MoveEvent;
 */
 class ComboBoxDropButton extends AbstractButton {
 
+	override public function init(opts:Dynamic=null) {
+		super.init(opts);
+		
+		var arrow = new haxegui.toys.Arrow(this);
+		arrow.init({ width: 8, height: 8, color: haxegui.utils.Color.darken(this.color, 10)});
+		arrow.rotation = 90;
+		arrow.move(6,7);
+	}
+
 	static function __init__() {
 		haxegui.Haxegui.register(ComboBoxDropButton);
 	}
@@ -98,6 +107,9 @@ class ComboBox extends Component
 	public var list 	  : UiList;
 
 	private var editable : Bool;
+
+	//public var  : Array<Dynamic>;
+
 
 	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
 	{
