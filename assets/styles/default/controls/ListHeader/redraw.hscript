@@ -1,7 +1,5 @@
-
 this.graphics.clear();
-//~ this.graphics.lineStyle(1, color - 0x323232);
-//~ this.graphics.beginFill (color | 0x323232);
+
 var grad = flash.display.GradientType.LINEAR;
 var colors = [ this.color, Color.darken(this.color, 10) ];
 var alphas = [ 1, 1 ];
@@ -16,18 +14,4 @@ this.graphics.lineStyle(1, Color.darken(this.color, 20));
 this.graphics.moveTo(0, 20);
 this.graphics.lineTo(this.box.width, 20);
 
-// sort direction triangle
-this.graphics.beginFill (Color.darken(this.color, 20));
-this.graphics.moveTo(this.box.width - 20, 8 + (parent.sortReverse ? 5 : 0) );
-this.graphics.lineTo(this.box.width - 10, 8 + (parent.sortReverse ? 5 : 0) );
-this.graphics.lineTo(this.box.width - 15, 0 + (parent.sortReverse ? 8 : 13) );
-this.graphics.endFill ();
-/*
-// label
-if(this.getChildByName("label")==null) {
-	var label = new Label(this, "label", 4, 4);
-	label.init({innerData: this.name});
-	//~ label.tf.defaultTextFormat = DefaultStyle.getTextFormat(8, 0, flash.text.TextFormatAlign.CENTER);
-	//~ label.x = .5*(this.box.width - label.tf.width);
-	}
-*/
+this.arrow.moveTo( this.box.width-10, 10 );

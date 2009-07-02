@@ -33,8 +33,8 @@ import haxegui.controls.CheckBox;
 import haxegui.controls.Stepper;
 import haxegui.controls.Input;
 import haxegui.controls.Tree;
-import haxegui.Container;
-import haxegui.ScrollPane;
+import haxegui.containers.Container;
+import haxegui.containers.ScrollPane;
 
 import haxegui.events.ResizeEvent;
 
@@ -62,16 +62,8 @@ class Introspector extends Window
 
 	public var target : Component;
 	
-	/**
-	*
-	*/
-	public function new (?parent:DisplayObjectContainer, ?x:Float, ?y:Float)
-	{
-		super (parent, "Introspector", x, y);
-	}
 
-	public override function init(?opts:Dynamic)
-	{
+	public override function init(?opts:Dynamic) {
 		//~ o = flash.Lib.current;
 
 		super.init(opts);
@@ -118,9 +110,9 @@ class Introspector extends Window
 	
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		
-		//~ FocusManager.getInstance().addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
-		//~ this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged);
-		//~ onFocusChanged(this);
+		//FocusManager.getInstance().addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
+		//this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged);
+
 	}
 
 	public function onFocusChanged(e:Dynamic)

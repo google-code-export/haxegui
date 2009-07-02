@@ -53,9 +53,11 @@ class ScriptStandardLibrary
 		interp.variables.set( "Math", Math );
 		interp.variables.set( "Type", Type );
 		interp.variables.set( "Reflect", Reflect );
+		interp.variables.set( "Reflect", Reflect );
 		interp.variables.set( "Timer", haxe.Timer );
 		interp.variables.set( "Xml", Xml );
-
+	
+		//interp.variables.set("HttpAsyncConnection", haxe.remoting.HttpAsyncConnection);
 
 		interp.variables.set("feffects",
 			{
@@ -181,6 +183,11 @@ class ScriptStandardLibrary
 					Keyboard : keyboard(),
 					Mouse	 : flash.ui.Mouse
 				},
+				system : {
+					Capabilities : flash.system.Capabilities,
+					Security 	 : flash.system.Security,
+					System 		 : flash.system.System,
+				}
 			});
 
 
@@ -195,7 +202,7 @@ class ScriptStandardLibrary
 		interp.variables.set("ColorPicker2", haxegui.ColorPicker2);
 		interp.variables.set("Component", haxegui.Component);
 		interp.variables.set("Console", haxegui.Console);
-		interp.variables.set("Container", haxegui.Container);
+		interp.variables.set("Container", haxegui.containers.Container);
 
 		interp.variables.set("Cursor",{
 				ARROW 	  : Cursor.ARROW,
@@ -225,7 +232,7 @@ class ScriptStandardLibrary
 		interp.variables.set("Opts", haxegui.Opts);
 		interp.variables.set("PopupMenu", haxegui.PopupMenu);
 		interp.variables.set("RichTextEditor", haxegui.RichTextEditor);
-		interp.variables.set("ScrollPane", haxegui.ScrollPane);
+		interp.variables.set("ScrollPane", haxegui.containers.ScrollPane);
 		interp.variables.set("ScriptManager", haxegui.managers.ScriptManager);
 		interp.variables.set("ScriptStandardLibrary", ScriptStandardLibrary);
 		interp.variables.set("Stats", haxegui.Stats);

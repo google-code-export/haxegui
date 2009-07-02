@@ -109,7 +109,7 @@ class ColorPicker2 extends Window
 		menubar.init ();
 
 		//
-		var container = new Container (this, "Container", 10, 44);
+		var container = new haxegui.containers.Container (this, "Container", 10, 44);
 		container.init({width: 230, height: 440, color: 0xE6D3CC});
 
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);

@@ -27,14 +27,14 @@ import flash.display.DisplayObjectContainer;
 import haxegui.Window;
 import haxegui.Component;
 import haxegui.Image;
+import haxegui.containers.Container;
+import haxegui.containers.ScrollPane;
 import haxegui.controls.Label;
 import haxegui.controls.UiList;
 import haxegui.controls.CheckBox;
 import haxegui.controls.Stepper;
 import haxegui.controls.Input;
 import haxegui.controls.Tree;
-import haxegui.Container;
-import haxegui.ScrollPane;
 import haxegui.TabNavigator;
 
 import haxegui.events.ResizeEvent;

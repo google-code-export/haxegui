@@ -25,7 +25,7 @@ if(parent.disabled)
 this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 this.graphics.drawRoundRectComplex(0, 1, w, h-1, 0, 4, 0, 4 );
 this.graphics.endFill ();
-
+/*
 if(parent.disabled)
 	this.graphics.lineStyle (1, Color.darken(this.color, 10) );
 else
@@ -42,7 +42,7 @@ this.graphics.moveTo(7.5,7.5);
 this.graphics.lineTo(w-7.5, 7.5);
 this.graphics.lineTo(.5*w, h-7.5);
 this.graphics.endFill ();
-
+*/
 this.moveTo( parent.box.width - w, -1 );
 
 /* Drop-Shadow */

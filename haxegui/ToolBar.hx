@@ -45,23 +45,38 @@ import flash.ui.Mouse;
 import flash.ui.Keyboard;
 
 import haxegui.Component;
-
+import haxegui.controls.AbstractButton;
 import haxegui.managers.WindowManager;
 import haxegui.managers.MouseManager;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 
 
+/**
+ * 
+ * 
+ * 
+ */
+class ToolBarHandle extends AbstractButton {
+	
+	static function __init__() {
+		haxegui.Haxegui.register(ToolBarHandle);
+
+	}
+}
+
+
+/**
+ * 
+ * 
+ * 
+ * 
+ */
 class ToolBar extends Component
 {
 
-	public var handle : Sprite;
+	public var handle : ToolBarHandle;
 
-	public function new (? parent : DisplayObjectContainer, ? name : String,
-			? x : Float, ? y : Float, ? width : Float, ? height : Float)
-	{
-		super (parent, name, x, y);
-	}
 
 	override public function init (? opts : Dynamic)
 	{
@@ -70,13 +85,9 @@ class ToolBar extends Component
 
 		super.init(opts);
 
-		handle = new Sprite();
-		handle.name = "handle";
-		handle.graphics.lineStyle(1, color - 0x202020);
-		handle.graphics.beginFill(color, .5);
-		handle.graphics.drawRoundRect(4, 8, 8, box.height - 16, 4, 4);
-		handle.graphics.endFill();
-		addChild(handle);
+		handle = new ToolBarHandle(this);
+		handle.init();
+		handle.move(8,8);
 
 		// inner-drop-shadow filter
 		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4, 0.5, flash.filters.BitmapFilterQuality.LOW,true,false,false);
