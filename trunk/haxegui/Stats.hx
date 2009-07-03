@@ -112,8 +112,8 @@ class Stats extends Window
      *
      *
      */
-    public override function init(?initObj:Dynamic)
-    {
+    public override function init(?initObj:Dynamic) {
+
         super.init({name: "Stats", type: WindowType.MODAL, sizeable:false,
                     x:x, y:y, width:width, height:height, color: 0x2A7ACD});
         type = WindowType.MODAL;
@@ -128,7 +128,6 @@ class Stats extends Window
         data =
         data2 =
         data3 = [new Point(240, 140), new Point(240, 140)];
-
 
         box = new Rectangle (0, 0, 400, 220);
 
@@ -272,12 +271,7 @@ class Stats extends Window
             //Std.string(Math.NaN),
             Std.string(Lambda.count(Haxegui.dirtyList)),
             Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5),
-//            Std.string(haxe.Timer.stamp()).substr(0,5),
-            StringTools.lpad(Std.string(Std.int(haxe.Timer.stamp()/Math.pow(60,2))).substr(0,2), "0", 2)+":"+
-            StringTools.lpad(Std.string(Std.int(haxe.Timer.stamp()/60)).substr(0,2), "0", 2)+":"+
-            StringTools.lpad(Std.string(Std.int(haxe.Timer.stamp())).substr(0,2), "0", 2), 
-
-
+			DateTools.format(new Date(0,0,0,0,0,Std.int(haxe.Timer.stamp())), "%H:%M:%S"),
             ""
         ];
 

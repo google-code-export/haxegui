@@ -19,17 +19,10 @@
 
 package haxegui;
 
-import Type;
-
 import flash.geom.Rectangle;
 
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-import flash.display.MovieClip;
-import flash.display.Graphics;
-import flash.display.Shape;
-import flash.display.Sprite;
-import flash.display.LineScaleMode;
 
 import flash.text.TextField;
 import flash.text.TextFormat;
@@ -38,25 +31,14 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-import flash.events.EventDispatcher;
-
-import flash.ui.Keyboard;
 
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 import haxegui.events.MenuEvent;
 
-import flash.ui.Mouse;
-
-import flash.Error;
-import haxe.Timer;
-//~ import flash.utils.Timer;
-
 import flash.display.Bitmap;
 import flash.display.BitmapData;
-
-
 
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
@@ -72,8 +54,11 @@ import haxegui.controls.Input;
 
 /**
 *
+* ColorPicker class
 *
-*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
 *
 */
 class ColorPicker extends Window
@@ -81,16 +66,6 @@ class ColorPicker extends Window
 	var colSprite : Component;
 	var currentColor : UInt;
 	var input : Input;
-
-
-	/**
-	*
-	*/
-	public function new (?parent:DisplayObjectContainer, ?x:Float, ?y:Float)
-	{
-		super (parent, x, y);
-
-	}
 
 	public override function init(?opts:Dynamic)
 	{
@@ -115,13 +90,13 @@ class ColorPicker extends Window
 
 		var self = this;
 		spec.addEventListener(Event.COMPLETE,
-		function(e)
-			{
+		function(e) {
 			spec.graphics.lineStyle(4, self.color - 0x141414);
 			spec.graphics.beginFill(0xffffff);
 			spec.graphics.drawRect(0,0,spec.width,spec.height);
 			spec.graphics.endFill();
-			});
+			}
+		);
 
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
 		spec.filters = [shadow];
@@ -158,10 +133,12 @@ class ColorPicker extends Window
 			var slider = new Slider(container, "Slider"+i);
 			slider.init({width: 196, step: i==4 ? .1 : 1, max: i==4 ? 1 : 306, color: 0xE6D3CC});
 			slider.move(180, 10+40*i);
-			if(i==1) slider.handle.x = .5*r;
-			if(i==2) slider.handle.x = .5*g;
-			if(i==3) slider.handle.x = .5*b;
-			if(i==4) slider.handle.x = 166;
+			switch(i) {
+			case 1: slider.handle.x = .5*r;
+			case 2: slider.handle.x = .5*g;
+			case 3: slider.handle.x = .5*b;
+			case 4: slider.handle.x = 166;
+			}
 			
 			//
 			var stepper = new Stepper(container, "Stepper"+i);
@@ -198,16 +175,14 @@ class ColorPicker extends Window
 
 
 
-	public override function onResize (e:ResizeEvent) : Void
-	{
+	public override function onResize (e:ResizeEvent) {
 
 		super.onResize(e);
 
 		e.stopImmediatePropagation ();
 
 
-		if( this.getChildByName("MenuBar")!=null )
-		{
+		if( this.getChildByName("MenuBar")!=null )	{
 		var menubar = untyped this.getChildByName("MenuBar");
 		menubar.onResize(e);
 		}
@@ -215,29 +190,24 @@ class ColorPicker extends Window
 
 
 
-	public override function onRollOver(e:MouseEvent)  : Void
-	{
+	public override function onRollOver(e:MouseEvent) {
 		CursorManager.setCursor(Cursor.HAND);
 	}
 
-	public override function onRollOut(e:MouseEvent)
-	{
+	public override function onRollOut(e:MouseEvent) {
 	}
 
 
-	public  function onMouseUpImage(e:MouseEvent)  : Void
-	{
+	public  function onMouseUpImage(e:MouseEvent) {
 		if(e.target.hitTestObject( CursorManager.getInstance()._mc ))
 			CursorManager.setCursor(Cursor.HAND);
 	}
 
 
 
-	public function onMouseMoveImage(e:MouseEvent)
-	{
+	public function onMouseMoveImage(e:MouseEvent) {
 
 		if(!Std.is(e.target, Image) || !e.buttonDown ) return;
-
 
 			CursorManager.setCursor(Cursor.CROSSHAIR);
 			//~ trace(e.target.getChildAt(0).bitmapData.getPixel(e.localX, e.localY));
@@ -266,7 +236,7 @@ class ColorPicker extends Window
 		var b = 1 + 2 * untyped this.getChildByName("Container").getChildByName("Slider3").handle.x ;
 		var a = untyped this.getChildByName("Container").getChildByName("Stepper4").value ;
 
-		currentColor = r | g | b;
+		//currentColor = r | g | b;
 		currentColor  = (r << 16) | (g << 8) | b;
 
 	    var matrix = new flash.geom.Matrix(); 
@@ -296,8 +266,8 @@ class ColorPicker extends Window
 
 	}
 
-	public function updateInput()
-	{
+
+	public function updateInput() {
 		input.tf.text = "0x"+StringTools.hex(currentColor);
 		input.tf.setTextFormat( DefaultStyle.getTextFormat() );
 	}

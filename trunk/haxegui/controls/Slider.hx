@@ -90,7 +90,7 @@ class Slider extends Component, implements haxegui.IAdjustable
 		handle.move(0,4);
 
 		// add the drop-shadow filters
-		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
+		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, disabled ? 0.4 : 0.8, 4, 4, disabled ?  0.4 : 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
 		handle.filters = [shadow];
 
 

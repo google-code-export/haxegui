@@ -31,6 +31,7 @@ import haxegui.managers.CursorManager;
 import haxegui.events.MoveEvent;
 import haxegui.Opts;
 import haxegui.Component;
+import haxegui.IRepeater;
 
 
 
@@ -44,7 +45,7 @@ import haxegui.Component;
  * @author Russell Weir <damonsbane@gmail.com>
  *
  */
-class AbstractButton extends Component
+class AbstractButton extends Component, implements IRepeater
 {
 	/** Sets whether mouse events in buttons use hand cursors **/
 	public static var useHandCursors(default,__setHandCursors) : Bool;

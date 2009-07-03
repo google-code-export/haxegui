@@ -78,8 +78,7 @@ class ToolBar extends Component
 	public var handle : ToolBarHandle;
 
 
-	override public function init (? opts : Dynamic)
-	{
+	override public function init (? opts : Dynamic) {
 		color = DefaultStyle.BACKGROUND;
 		box = new Rectangle(0,0,502,40);
 

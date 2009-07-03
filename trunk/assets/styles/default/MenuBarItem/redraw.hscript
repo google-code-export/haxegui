@@ -1,6 +1,7 @@
 this.graphics.clear();
+
 var colors = [ Color.darken(this.color, 8), Color.tint(this.color, .8) ];
-var alphas = [ 100, 100 ];
+var alphas = [ 1, 1 ];
 var ratios = [ 0, 0xFF ];
 var matrix = new flash.geom.Matrix();
 matrix.createGradientBox(40, 24, .5*Math.PI, 0, 0);

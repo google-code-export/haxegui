@@ -124,14 +124,18 @@ class Stepper extends Component, implements IAdjustable
 		input.setAction("focusIn", "");
 		input.setAction("focusOut", "");
 		
-		//~ input.tf.addEventListener (KeyboardEvent.KEY_DOWN, onInput, false, 0, true);
+		input.tf.addEventListener (KeyboardEvent.KEY_DOWN, onInput, false, 0, true);
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 
 	}
 
-	//~ public function onInput(e:KeyboardEvent) {
-		//~ value = Std.parseFloat(e.text);
-	//~ }
+	public function onInput(e:KeyboardEvent) {
+		switch(e.keyCode) {
+		case flash.ui.Keyboard.ENTER:
+			adjustment.value = Std.parseFloat(e.target.text);
+		}
+		
+	}
 	
 
 	public function onChanged(e:Event)

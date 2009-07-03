@@ -51,12 +51,14 @@ TODO:
 				this.adjustment.addEventListener(flash.events.Event.CHANGE,
 				function(e) {
 					this.parent.__setActive( this.adjustment.value );
-				}, false, 0, true);
+				});
+				//, false, 0, true);
 				
 				this.parent.addEventListener(flash.events.Event.CHANGE,
 				function(e) {
 					this.adjustment.__setValue ( this.parent.activeTab );
-				}, false, 0, true);
+				});
+				//, false, 0, true);
 				]]>
 				</script>
 			</events>
@@ -155,7 +157,9 @@ TODO:
 				
 				<haxegui:TabChild visible="false">
 					<haxegui:containers:Divider width="512" height="512"  >
-						<haxegui:controls:Label x="20" y="20" >Second TabChild</haxegui:controls:Label>
+						<!--<haxegui:containers:Container color="0xFFFFFF" >-->
+							<haxegui:controls:Label x="20" y="20" >Second TabChild</haxegui:controls:Label>
+						<!--</haxegui:containers:Container>-->
 					</haxegui:containers:Divider>
 				</haxegui:TabChild>
 												
