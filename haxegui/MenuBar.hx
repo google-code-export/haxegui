@@ -68,6 +68,9 @@ class MenuBarItem extends AbstractButton
 		label.text = this.name;
 		label.init();
 		label.move(4,4);
+		label.mouseEnabled = false;
+		label.text = null;
+		
 	}
 
 	static function __init__() {
@@ -117,16 +120,6 @@ class MenuBar extends Component
 		{
 			var menu = new MenuBarItem(this, "Menu"+(i+1), 40*i, 0);
 			menu.init({color: this.color});
-
-			menu.redraw({color: this.color});
-
-			menu.addEventListener (MouseEvent.ROLL_OVER, onMenuRollOver, false, 0, true);
-			menu.addEventListener (MouseEvent.ROLL_OUT, onMenuMouseOut, false, 0, true);
-			menu.addEventListener (MouseEvent.MOUSE_MOVE, onMenuMouseMove, false, 0, true);
-			menu.addEventListener (MouseEvent.MOUSE_DOWN, onMenuMouseDown, false, 0, true);
-			menu.addEventListener (MouseEvent.MOUSE_UP, onMenuMouseUp, false, 0, true);
-
-
 		}
 
 		// inner-drop-shadow filter
@@ -151,52 +144,14 @@ class MenuBar extends Component
 
 		dirty = true;
 
-		e.updateAfterEvent();
+		//e.updateAfterEvent();
 	}
 
 
 
 
-	function onMenuMouseOut (e:Event)
-	{
-
-	}
-
-	function onMenuMouseUp (e:MouseEvent)
-	{
-	}
-
-	function onMenuMouseDown (e:MouseEvent)
-	{
-
-		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
-		//~ onChanged();
-		_menu = this.getChildIndex (e.target);
-		openMenuAt (_menu);
-	}//onMouseDown
 
 
-	function onMenuMouseMove (e:MouseEvent)
-	{
-		//if(PopupMenu.getInstance().exists())
-		//~ if (this.getChildIndex (e.target) != _menu)
-		//~ if (this.hasFocus())
-		//~ {
-			//dispatchEvent(new Event("CLOSE_POPUP"));
-			//~ _menu = this.getChildIndex (e.target);
-			//~ onChanged();
-
-			//~ openmenuByName (e.target.parent.name);
-			//~ openMenuAt( _menu );
-		//~ }
-	}
-
-	function onMenuRollOver (e:MouseEvent)
-	{
-		var oldmenu = _menu;
-		_menu = this.getChildIndex (e.target);
-		//~ onChanged (oldmenu);
-	}
 
 	function onPopupClosed (e:Event)
 	{
@@ -213,7 +168,7 @@ class MenuBar extends Component
 	/**
 	*
 	*/
-	function openmenuByName (name:String)
+	function openMenuByName (name:String)
 	{
 		openMenuAt (this.getChildIndex (this.getChildByName (name)));
 	}

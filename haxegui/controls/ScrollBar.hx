@@ -34,10 +34,12 @@ import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 import haxegui.Component;
 import haxegui.managers.CursorManager;
-import haxegui.Opts;
 import haxegui.managers.StyleManager;
+import haxegui.Opts;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
+import haxegui.IAdjustable;
+
 
 /**
 *
@@ -115,15 +117,20 @@ class ScrollBarFrame extends Component
 class ScrollBar extends Component
 {
 
-	public var frame	  : ScrollBarFrame;
-	public var handle	  : ScrollBarHandle;
-	public var up 		  : ScrollBarUpButton;
-	public var down 	  : ScrollBarDownButton;
-	public var scrollee	  : Dynamic;
-	public var scroll	  : Float;
-	public var horizontal : Bool;
+	public var frame	 			: 	ScrollBarFrame;
+	public var handle	 			: 	ScrollBarHandle;
+	public var up 		  			:	ScrollBarUpButton;
+	public var down 	 			:	ScrollBarDownButton;
+	
+	/** The scroll target **/
+	public var scrollee	 			:	Dynamic;
+	/** Percent of scroll **/
+	public var scroll	  			:	Float;
+	//public var adjustment			:	Adjustment;
+	
+	public var horizontal			:	Bool;
 
-	private var handleMotionTween : Tween;
+	private var handleMotionTween 	:	Tween;
 
 
 	/**
@@ -220,9 +227,7 @@ class ScrollBar extends Component
 	}
 
 
-	public override function onMouseWheel(e:MouseEvent)
-	{
-
+	public override function onMouseWheel(e:MouseEvent)	{
 
 		//~ var y = handle.y + 50 * e.delta;
 		var y = handle.y + 50 * -e.delta;
@@ -243,8 +248,7 @@ class ScrollBar extends Component
 
 
 
-	public function onMouseMove(e:MouseEvent)
-	{
+	public function onMouseMove(e:MouseEvent) {
 		//~ if(e.buttonDown)
 			adjust();
 	}
@@ -254,8 +258,7 @@ class ScrollBar extends Component
 	*
 	*
 	*/
-	public function adjust(?e:Dynamic)
-	{
+	public function adjust(?e:Dynamic) {
 		if(!scrollee) return;
 
 		if(scroll<0 || handle.y < 20)

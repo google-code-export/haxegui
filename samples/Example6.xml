@@ -144,7 +144,7 @@ for(i in 0...cp.colors.length)
 			</haxegui:controls:Button>
 		</haxegui:ToolBar>
 	
-		<haxegui:ScrollPane name="ScrollPane1" x="10" y="84" />
+		<haxegui:containers:ScrollPane name="ScrollPane1" x="10" y="84" />
 
     </haxegui:Window>
 

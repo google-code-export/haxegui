@@ -77,6 +77,7 @@
 		<events>
 			<script type="text/hscript" action="mouseOut">
 			<![CDATA[
+				/*
 				this.graphics.clear();
 				var colors = [ this.color - 0x141414, this.color | 0x323232 ];
 				var alphas = [ 100, 100 ];
@@ -86,13 +87,15 @@
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 40, 24);
 				this.graphics.endFill();
+				*/
 			]]>
 			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.graphics.clear();
+				
 				var colors = [ Color.darken(this.color, 8), Color.tint(this.color, .8) ];
-				var alphas = [ 100, 100 ];
+				var alphas = [ 1, 1 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(40, 24, .5*Math.PI, 0, 0);
@@ -108,6 +111,7 @@
 			</script>
 			<script type="text/hscript" action="mouseOver">
 			<![CDATA[
+				/*
 				this.graphics.clear();
 				
 				var colors = [ this.color, 0xFFFFFF ];
@@ -118,10 +122,12 @@
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 40, 24);
 				this.graphics.endFill();
+				*/
 			]]>
 			</script>
 			<script type="text/hscript" action="mouseDown">
 			<![CDATA[
+				/*
 				this.graphics.clear();
 				
 				var colors = [ this.color, Math.min(0xFFFFFF, this.color - 0x282828) ];
@@ -132,6 +138,7 @@
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRect (0, 0, 40, 24);
 				this.graphics.endFill();
+				*/
 			]]>
 			</script>
 		</events>
@@ -424,8 +431,8 @@
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.graphics.clear();
-				var colors = [ this.color - 0x141414, Color.tint(this.color, .8) ];
-				var alphas = [ 100, 100 ];
+				var colors = [ Color.darken(this.color, 10), Color.tint(this.color, .8) ];
+				var alphas = [ 1, 1 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(this.box.width, 24, .5*Math.PI, 0, 0);
@@ -434,7 +441,7 @@
 				this.graphics.endFill();
 				
 				
-				this.graphics.lineStyle(2, Color.clamp(this.color - 0x191919));
+				this.graphics.lineStyle(2, Color.darken(this.color, 20));
 				this.graphics.moveTo(0, this.box.height);
 				this.graphics.lineTo(this.box.width, this.box.height);
 			]]>
@@ -1762,6 +1769,21 @@
 		</events>
 	</haxegui:controls:ScrollBarFrame>
 
+	<haxegui:controls:TreeNode>
+		<events>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.graphics.clear();
+				var i = this.parent.getChildIndex(this) ;
+				var c = (i%2==0) ? this.color :  Math.max(0, this.color - 0x0A0A0A);
+				this.graphics.beginFill ( c );
+				this.graphics.drawRect (0, 0, this.box.width, this.box.height);
+				this.graphics.endFill ();
+			]]>
+			</script>
+		</events>
+	</haxegui:controls:TreeNode>
+
 	<haxegui:controls:RadioButton>
 		<events>
 			<script type="text/hscript" action="focusIn">
@@ -1859,7 +1881,7 @@
 				
 				this.graphics.lineStyle(1);
 				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR,
-						[ Color.darken(this.color, 50), this.color ], [0xFF, 0], ratios, matrix);
+						[ Color.darken(this.color, 50), this.color ], alphas, ratios, matrix);
 				
 				
 				this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix);

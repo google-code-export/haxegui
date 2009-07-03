@@ -19,38 +19,54 @@
 
 package haxegui.controls;
 
+import flash.geom.Rectangle;
+
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.filters.BevelFilter;
-import flash.geom.Rectangle;
-import flash.text.TextField;
-import flash.text.TextFormat;
 
-import haxegui.Component;
-import haxegui.controls.Expander;
 import haxegui.managers.DragManager;
 import haxegui.managers.CursorManager;
-import haxegui.Opts;
 import haxegui.managers.StyleManager;
+
+import haxegui.Component;
+import haxegui.Opts;
+import haxegui.controls.Expander;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
 
 /**
 *
-* Tree class
+* TreeLeaf class
 * 
 *
 *
 * @author <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
+*/
+class TreeLeaf extends Component
+{
+	static function __init__() {
+		haxegui.Haxegui.register(TreeLeaf);
+	}
+	
+}
+
+
+
+/**
+*
+* TreeNode class
+* 
+*
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
 */
 class TreeNode extends Component
 {
@@ -63,7 +79,7 @@ class TreeNode extends Component
 		
 		super.init(opts);
 
-		expander = new Expander(this, name, 0, 0);
+		expander = new Expander(this, name);
 		expander.init();
 		
 	
@@ -92,19 +108,16 @@ class TreeNode extends Component
 		);
 
 
-		setAction("mouseOver", "");
-		setAction("mouseOut", "");
-		
-		setAction("redraw",
-		"
-		var i = this.parent.getChildIndex(this) ;
-		var c = (i%2==0) ? this.color :  Math.max(0, this.color - 0x0A0A0A);
-		this.graphics.beginFill ( c );
-		this.graphics.drawRect (0, 0, this.box.width, this.box.height);
-		this.graphics.endFill ();
-		"
-		);
 	}
+
+	public override function onRollOver(e:MouseEvent) {
+		//e.stopPropagation();
+	}
+
+	public override function onRollOut(e:MouseEvent) {
+		//e.stopPropagation();
+	}
+				
 
 	static function __init__() {
 		haxegui.Haxegui.register(TreeNode);
@@ -119,8 +132,8 @@ class TreeNode extends Component
 * Tree Class
 *
 * @version 0.1
-* @author <gershon@goosemoose.com>
-* @author Russell Weir'
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
 *
 */
 class Tree extends Component {
@@ -177,7 +190,14 @@ class Tree extends Component {
 	}
 
 
-	
+	public override function onRollOver(e:MouseEvent) {
+		//e.stopPropagation();
+	}
 
+	public override function onRollOut(e:MouseEvent) {
+		//e.stopPropagation();
+	}
+
+				
 }
 

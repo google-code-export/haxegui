@@ -1,3 +1,4 @@
+/*
 this.graphics.clear();
 
 var colors = [ this.color, 0xFFFFFF ];
@@ -8,3 +9,4 @@ matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
 this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 this.graphics.drawRect (0, 0, 40, 24);
 this.graphics.endFill();
+*/
