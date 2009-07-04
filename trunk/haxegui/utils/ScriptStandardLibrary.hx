@@ -173,7 +173,8 @@ class ScriptStandardLibrary
 					FocusEvent    : flash.events.FocusEvent,
 					KeyboardEvent : flash.events.KeyboardEvent,
 					MouseEvent    : flash.events.MouseEvent,
-					TextEvent     : flash.events.TextEvent
+					TextEvent     : flash.events.TextEvent,
+					EventPhase	  : flash.events.EventPhase
 				},
 				net : {
 					URLLoader	: flash.net.URLLoader,

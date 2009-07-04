@@ -572,8 +572,9 @@
 			<script type="text/hscript" action="mouseOut">
 			<![CDATA[
 				if(!this.disabled) {
-				this.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 150, feffects.easing.Linear.easeOut ) );
-				CursorManager.setCursor(Cursor.ARROW);
+					//this.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 150, feffects.easing.Linear.easeOut ) );
+					event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 150, feffects.easing.Linear.easeOut ) );
+					CursorManager.setCursor(Cursor.ARROW);
 				}
 			]]>
 			</script>
@@ -593,7 +594,9 @@
 			<script type="text/hscript" action="mouseOver">
 			<![CDATA[
 				if(!this.disabled) {
-					this.updateColorTween( new feffects.Tween(0, 50, 100, feffects.easing.Expo.easeOut ) );
+					//this.updateColorTween( new feffects.Tween(0, 50, 100, feffects.easing.Expo.easeOut ) );
+					event.stopPropagation();
+					event.target.updateColorTween( new feffects.Tween(0, 50, 100, feffects.easing.Expo.easeOut ) );
 					CursorManager.setCursor(this.cursorOver);
 				}
 			]]>

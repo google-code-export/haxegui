@@ -108,8 +108,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/**
 	*
 	**/
-	public function new (parent:DisplayObjectContainer=null, name:String=null, ?x:Float, ?y:Float)
-	{
+	public function new (parent:DisplayObjectContainer=null, name:String=null, ?x:Float, ?y:Float) {
 		super ();
 		this.id = Component.nextId++;
 
@@ -144,8 +143,12 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.addEventListener (MouseEvent.DOUBLE_CLICK, onMouseDoubleClick, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
-		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
-		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
+//		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
+//		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
+
+		this.addEventListener (MouseEvent.MOUSE_OVER, onRollOver, false, 0, true);
+		this.addEventListener (MouseEvent.MOUSE_OUT,  onRollOut, false, 0, true);
+
 		this.addEventListener (MouseEvent.MOUSE_WHEEL,  onMouseWheel, false, 0, true);
 		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
 		this.addEventListener (KeyboardEvent.KEY_UP, onKeyUp, false, 0, true);
@@ -153,6 +156,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, __focusHandler, false, 0, true);
 		this.addEventListener (FocusEvent.FOCUS_IN, onFocusIn, false, 0, true);
 		this.addEventListener (FocusEvent.FOCUS_OUT, onFocusOut, false, 0, true);
+		
 	}
 
 	/**

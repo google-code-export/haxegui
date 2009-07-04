@@ -1,4 +1,5 @@
 if(!this.disabled) {
-this.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 150, feffects.easing.Linear.easeOut ) );
-CursorManager.setCursor(Cursor.ARROW);
+	//this.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 150, feffects.easing.Linear.easeOut ) );
+	event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 150, feffects.easing.Linear.easeOut ) );
+	CursorManager.setCursor(Cursor.ARROW);
 }
