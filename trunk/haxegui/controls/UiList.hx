@@ -39,6 +39,9 @@ import haxegui.events.DragEvent;
 
 import haxegui.toys.Arrow;
 
+import haxegui.DataSource;
+import haxegui.IData;
+
 /**
 *
 * ListItem Class
@@ -61,6 +64,7 @@ class ListHeader extends AbstractButton
 		label.init();
 		label.text = null;
 		label.moveTo(4,4);
+		label.mouseEnabled = false;
 		
 		arrow = new Arrow(this);
 		arrow.init({ width: 8, height: 8, color: haxegui.utils.Color.darken(this.color, 20)});
@@ -99,23 +103,25 @@ class ListItem extends AbstractButton
 
 	public var label : Label;
 
-	
-	override public function init(opts:Dynamic=null)
-	{
+	override public function init(opts:Dynamic=null) {
+		color = DefaultStyle.INPUT_BACK;
+		
 		super.init(opts);
 
 		label = new Label(this);
 		var text = Opts.optString(opts, "text", name);
 		label.init({innerData: text, color: DefaultStyle.INPUT_TEXT });
 		label.text = null;
-		label.mouseEnabled = false;
+		//label.mouseEnabled = false;
 		label.move(4,4);
+
+		text = null;
 		
 		// add the drop-shadow filter
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, true, false, false );
 		//~ this.filters = [shadow];
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
-
+		
 	}
 
 	static function __init__() {
@@ -142,19 +148,20 @@ class ListItem extends AbstractButton
 * @author Russell Weir'
 *
 */
-class UiList extends Component
+class UiList extends Component, implements IData
 {
 
 	public var header : ListHeader;
-	public var data : Array<Dynamic>;
 
+	public var data : Dynamic;
+	public var dataSource( default, __setDataSource ) : DataSource;
+	
 	public var sortReverse : Bool;
 	var dragItem : Int;
 
 
-	public override function init(opts : Dynamic=null)
-	{
-		this.color = DefaultStyle.BACKGROUND;
+	public override function init(opts : Dynamic=null) {
+		color = DefaultStyle.BACKGROUND;
 		sortReverse = false;
 		if(Std.is(parent, Component))
 			color = (cast parent).color;
@@ -163,7 +170,7 @@ class UiList extends Component
 			data = [];
 		
 		super.init(opts);
-
+	
 		if(opts == null) opts = {}
 		if(opts.innerData!=null)
 			data = opts.innerData.split(",");
@@ -173,31 +180,101 @@ class UiList extends Component
 
 		header = new ListHeader(this);
 		header.init({color: this.color, width: this.box.width});
-
-
-  		var n = 1;
-		if(data!=null && data.length > 0) n = data.length+1;
-		for (i in 1...n) {
-			var item = new ListItem(this);
-			item.init({width: this.box.width, color: DefaultStyle.INPUT_BACK});
-			//item.label.text = null;
-			item.label.mouseEnabled = false;
-			item.move(0,20*i+1);
+		
+	
+		if(Std.is(data, Array)) {
+			data = cast(data, Array<Dynamic>);
+			for (i in 0...data.length) {
+				var item = new ListItem(this);
+				item.init({ width: this.box.width,
+							color: DefaultStyle.INPUT_BACK,
+							text: data[i]
+							});
+				//item.label.mouseEnabled = false;
+				item.move(0,20+20*i+1);
+				}
+		}
+		else
+		if(Std.is(data, List)) {
+			var j=0;
+			data = cast(data, List<Dynamic>);
+			var items : Iterator<Dynamic> = data.iterator();
+			for(i in items) {
+				var item = new ListItem(this);
+				item.init({ width: this.box.width,
+							color: DefaultStyle.INPUT_BACK,
+							text: i
+							});
+				//item.label.mouseEnabled = false;
+				item.move(0,20+20*j+1);			
+				j++;
+			}
 		}
 
+			
+
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
+/*
+		setAction("mouseClick",
+		"
+		if(this.dataSource!=null) {
+			trace(this.dataSource);
+			if(Std.is(this.dataSource.data, List)) {
+				var l = this.dataSource.data;
+				l.add('Item'+l.length);
+				this.dataSource.__setData(l);
+				var item = new haxegui.controls.ListItem(this, 'Item'+l.length);
+				item.color = DefaultStyle.INPUT_BACK;
+				item.init();
+				item.moveTo(0,20*l.length);
+				this.box.height += 20;
+				this.dirty=true;
+				}
+			trace(this.dataSource.data);
+			}
+		trace(this.data);
+		"
+		);
+*/		
+	}
 
-
+	public function __setDataSource(d:DataSource) : DataSource {
+		dataSource = d;
+		dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
+		trace(this.dataSource+" => "+this);
+		trace(dataSource.data);
+		if(Std.is(dataSource.data, List)) {
+			var j=0;
+			data = cast(dataSource.data, List<Dynamic>);
+			var items : Iterator<Dynamic> = data.iterator();
+			for(i in items) {
+				var item = new ListItem(this);
+				item.init({ width: this.box.width,
+							color: DefaultStyle.INPUT_BACK,
+							text: i
+							});
+				item.label.mouseEnabled = false;
+				item.move(0,header==null ? 0 : 20+20*j+1);			
+				j++;
+			}
+		}		
+		return dataSource;
 	}
 
 
+	public function onData(e:Event) {
+		trace(e);
+		data = dataSource.data;
+		dirty = true;
+	}
+	
+	
 	public function onParentResize(e:ResizeEvent) : Void {
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	
 	
-	public function onItemMouseUp(e:MouseEvent) : Void
-	{
+	public function onItemMouseUp(e:MouseEvent) : Void {
 		e.target.dispatchEvent (new DragEvent (DragEvent.DRAG_COMPLETE));
 		e.target.x = 0;
 		//~ e.target.y = dragItem * 20;
@@ -209,48 +286,28 @@ class UiList extends Component
 
 
 
-	override public function redraw(opts:Dynamic=null)
-	{
+	override public function redraw(opts:Dynamic=null) {
 		super.redraw();
-		
-		//~ var self = this;
-		//~ data.sort(function(a,b) { if(a < b) return self.sortReverse ? 1 : -1; return 0;	});
-		
-		//~ header.redraw();
-		
-		// if all children are here just redraw them
-		//~ if(numChildren <= data.length ) 
-			//~ for(i in 0...numChildren) {
-				//~ var item = cast this.getChildAt(i);
-				//~ item.box.width = this.box.width;
-				//~ item.redraw();
-			//~ }
-		//~ 
 
-		// if children were'nt yet created 
-		//~ else
-		//~ {
-			//~ var n = Std.int((this.box.height)/20);
-			//~ var n = Std.int((this.box.height)/20);
-			//~ for (i in numChildren...n)
-			//~ {
-				//~ var item = new ListItem(this);
-				//~ item.init({width: this.box.width, color: DefaultStyle.INPUT_BACK});
-				//~ item.move(0, 20*(i+1)+1 );
-			//~ }
-		//~ }
-		
-		
 		/* Draw the frame */
 		this.graphics.clear();
-		this.graphics.lineStyle(1, DefaultStyle.BACKGROUND - 0x202020);
+		this.graphics.lineStyle(1, haxegui.utils.Color.darken(DefaultStyle.BACKGROUND, 20), 1);
 		//~ this.graphics.beginFill(this.color);
 		this.graphics.beginFill(DefaultStyle.INPUT_BACK);
-		this.graphics.drawRect(-1,-1,this.box.width+1, this.box.height+1 );
+		if(header!=null)
+			this.graphics.drawRect(-1,header.box.height-1, box.width+1, box.height-header.box.height+1 );
+		else
+			this.graphics.drawRect(-1,-1, box.width+1, box.height+1 );
+
 		this.graphics.endFill();
 	}
 
 
+	public override function destroy() {
+		parent.removeEventListener(ResizeEvent.RESIZE, onParentResize);
+		super.destroy();
+	}
+	
 
 	static function __init__() {
 		haxegui.Haxegui.register(UiList);

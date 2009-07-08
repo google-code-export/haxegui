@@ -252,16 +252,18 @@ class Console extends Window, implements ITraceListener
 				var program = parser.parseString(input.text);
 				var interp = new hscript.Interp();
 
+				var self = this;
+
+
 				haxegui.utils.ScriptStandardLibrary.set(interp);
 				interp.variables.set( "this", this );
 				//~ interp.variables.set( "pwd", "root"+this.pwd.slice(1,-1).join("/") );
-				interp.variables.set( "pwd", _pwd );
+				interp.variables.set( "pwd", getPwd() );
 
 				interp.variables.set( "help", help() );
 				interp.variables.set( "clear", clear() );
 				interp.variables.set( "print_r", Utils.print_r );
 			
-				var self = this;
 				interp.variables.set( "cd", function(?v) { 
 					if(v==null) return "";
 						switch(v) {
@@ -307,6 +309,16 @@ class Console extends Window, implements ITraceListener
 			input.text = history.pop();
 		}
 	}
+	
+	public function getPwd() : Dynamic {
+		var o = cast flash.Lib.current;
+		for(i in 1...pwd.length)
+			o = cast(o.getChildByName(pwd[i]), flash.display.DisplayObjectContainer);
+		_pwd = cast o;
+		//return pwd.join(".");
+		return _pwd;
+	}
+	
 
 	public function clear() : String {
 		output.text = "";

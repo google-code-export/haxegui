@@ -78,7 +78,7 @@ class WindowFrame extends Component
 		{
 			this.setAction("mouseDown", 
 			"
-			this.updateColorTween( new feffects.Tween(0, 50, 350, feffects.easing.Linear.easeOut) );
+			this.updateColorTween( new feffects.Tween(0, 50, 150, feffects.easing.Linear.easeOut) );
 			/* Remove corner detection */
 			this.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove);
 			/* Event for stopping the interval */
@@ -87,19 +87,18 @@ class WindowFrame extends Component
 			CursorManager.getInstance().lock = true;
 
 			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.4, 12, 12, 0.85, flash.filters.BitmapFilterQuality.LOW, false, false, false);
-			this.filters =[shadow];		
+			this.filters = [shadow];		
 			
 			"
 			);
 
 			this.setAction("mouseUp", 
 			"
-			this.updateColorTween( new feffects.Tween(50, 0, 350, feffects.easing.Linear.easeOut) );
+			this.updateColorTween( new feffects.Tween(50, 0, 150, feffects.easing.Linear.easeOut) );
 			/*this.stopInterval();*/
 			/*this.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove, false, 0, true);*/
 			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 12, 12, 0.85, flash.filters.BitmapFilterQuality.HIGH, false, false, false);
-			this.filters =[shadow];		
-			
+			this.filters = [shadow];		
 			"
 			);
 	
@@ -123,7 +122,7 @@ class WindowFrame extends Component
 								this.parent.x = this.stage.mouseX + d ;
 							}
 						}
-						
+					
 					if(CursorManager.getInstance().cursor == Cursor.NESW) {
 						this.parent.box.width -=  this.stage.mouseX - this.parent.x + d ;
 						this.parent.box.height = this.stage.mouseY - this.parent.y + d ;
@@ -211,8 +210,7 @@ class WindowFrame extends Component
 	}
 	
 
-	override public function redraw(opts:Dynamic=null):Void
-	{	
+	override public function redraw(opts:Dynamic=null):Void {	
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		ScriptManager.exec(this,"redraw", null);
 

@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <haxegui:Layout name="Example1">
-<![CDATA[
-TODO:
-* Menu and items
-* Radio groups
-* HScript scope's
-]]>
     <String name="hello">Hello World</String>/>
     <Float name="aNumber">3.45</Float>
+	<haxegui:DataSource>
+		<Array name="StringArray">
+			<String>Array Item 1</String>
+			<String>Array Item 2</String>
+			<String>Array Item 3</String>
+			<String>Array Item 4</String>
+			<String>Array Item 5</String>
+		</Array>
+	</haxegui:DataSource>
+	<haxegui:DataSource>
+		<List name="List1">
+			<String>List Item 1</String>
+			<String>List Item 2</String>
+			<String>List Item 3</String>
+			<String>List Item 4</String>
+			<String>List Item 5</String>
+		</List>
+	</haxegui:DataSource>
+	
 
-    <Array name="StringArray">
-	<String>Item1</String>
-	<String>Item2</String>
-	<String>Item3</String>
-	<String>Item4</String>
-	<String>Item5</String>
-    </Array>
-
-
-	<haxegui:Window name="Xml hScript Widgets Window" x="100" y="30" width="800" height="600" sizeable="true" >
+	
+	<haxegui:Window name="Widgets" x="100" y="30" width="800" height="600" sizeable="true" >
 				
 		<haxegui:MenuBar name="menubar" width="512" x="10" y="20">
 			<haxegui:Menu type="Object" name="menu1">
@@ -33,11 +38,16 @@ TODO:
 			</haxegui:Menu>
 		</haxegui:MenuBar>
 		<haxegui:ToolBar name="Toolbar" width="400" x="10" y="44" >
-			<haxegui:controls:Button name="Btn1" x="30" y="4" width="30" />
-			<haxegui:controls:Button name="Btn2" x="60" y="4" width="30" />
-			<haxegui:controls:Button name="Btn3" x="90" y="4" width="30" />
+			<haxegui:controls:Button name="Btn1" x="30" y="4" width="30" icon="STOCK_NEW" />
+			<haxegui:controls:Button name="Btn2" x="60" y="4" width="30" icon="STOCK_OPEN"/>
+			<haxegui:controls:Button name="Btn3" x="90" y="4" width="30" icon="STOCK_SAVE"/>
+			<haxegui:controls:Button name="Btn4" x="120" y="4" width="30" icon="STOCK_COPY" />
+			<haxegui:controls:Button name="Btn5" x="150" y="4" width="30" icon="STOCK_CUT"/>
+			<haxegui:controls:Button name="Btn6" x="180" y="4" width="30" icon="STOCK_PASTE"/>
+			<haxegui:controls:Button name="Btn7" x="210" y="4" width="30" icon="STOCK_FIND"/>
 		</haxegui:ToolBar>
 		<haxegui:containers:ScrollPane name="ScrollPane1" x="10" y="84" >
+		<haxegui:containers:Container width="512" height="512" >
 		<haxegui:TabNavigator name="TabNavigator" x="0" y="0" width="512" height="512" >
 		<haxegui:Tab x="0" width="60" />
 		<haxegui:Tab x="60" width="60"/>
@@ -48,29 +58,30 @@ TODO:
 			<events>
 				<script type="text/hscript" action="onLoaded">
 				<![CDATA[
+/*
 				this.adjustment.addEventListener(flash.events.Event.CHANGE,
 				function(e) {
 					this.parent.__setActive( this.adjustment.value );
 				});
-				//, false, 0, true);
 				
 				this.parent.addEventListener(flash.events.Event.CHANGE,
 				function(e) {
 					this.adjustment.__setValue ( this.parent.activeTab );
 				});
-				//, false, 0, true);
+*/				
 				]]>
 				</script>
 			</events>
 		</haxegui:controls:Stepper>
 		
 				<haxegui:TabChild>
-					<haxegui:containers:Container name="Container1" width="512" height="512" >
+					<haxegui:containers:Container width="512" height="512" >
 						<haxegui:controls:Label x="14" y="14" >This window and it's content are dynamically generated from xml, Some events are also defined in hscript. </haxegui:controls:Label>
 						<haxegui:controls:Button label="Click" x="30" y="50" width="120" />
-						<haxegui:controls:Button label="me" x="160" y="50" width="40" />
-						<haxegui:controls:Button label="disabled" x="210" y="50" disabled="true" />
-						<haxegui:controls:Button name="colorButton" label="Red" x="310" y="50" color="0xB35959">
+						<haxegui:controls:Button label="Toggle" x="160" y="50" width="60" toggle="true" />
+						<haxegui:controls:Button label="disabled" x="230" y="50" disabled="true" />
+						<haxegui:controls:Button label="disabled" x="330" y="50" disabled="true" toggle="true" selected="true" />
+						<haxegui:controls:Button name="colorButton" x="430" y="50" label="Red" color="0xB35959">
 							<events>
 								<script type="text/hscript" action="mouseClick">
 								<![CDATA[
@@ -94,12 +105,22 @@ TODO:
 						<haxegui:controls:CheckBox label="CheckBox2" x="170" y="90" checked="true" />
 						<haxegui:controls:CheckBox label="CheckBox3" x="310" y="90" disabled="true"/>
 
-						<haxegui:controls:ComboBox x="30" y="130" />
-						<haxegui:controls:ComboBox x="30" y="160" />
+						<haxegui:controls:ComboBox x="30" y="130" >
+							<haxegui:DataSource>
+								<List>
+									<String>ComboBox Item1</String>
+									<String>ComboBox Item2</String>
+									<String>ComboBox Item3</String>
+									<String>ComboBox Item4</String>
+								</List>
+							</haxegui:DataSource>
+						</haxegui:controls:ComboBox>
+							
+						<haxegui:controls:ComboBox x="30" y="160" dataSource="@List1"/>
 						<haxegui:controls:ComboBox x="30" y="190" disabled="true" />
 
 						<haxegui:controls:Slider x="200" y="130" />
-						<haxegui:controls:Slider x="200" y="160" step="10" />
+						<haxegui:controls:Slider x="200" y="160" step="10" page="40" />
 						<haxegui:controls:Slider x="200" y="190" disabled="true" />
 
 						<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="100" autoRepeat="true" repeatsPerSecond="20" repeatWaitTime=".5" />
@@ -115,12 +136,12 @@ TODO:
 						<haxegui:controls:RadioButton x="30" y="370" disabled="true" />
 						<haxegui:controls:RadioButton x="30" y="400" selected="true" disabled="true" />
 
-						<haxegui:controls:Expander x="430" y="80" >
+						<haxegui:controls:Expander x="430" y="90" >
 								<haxegui:controls:UiList x="20" y="20" data="@StringArray" visible="false" />
 						</haxegui:controls:Expander>
 
-						<haxegui:controls:UiList x="210" y="250" >
-							<haxegui:DataSource>
+						<haxegui:controls:UiList x="210" y="250">
+							<haxegui:DataSource name="FruitList">
 								<List>
 									<String>Apples</String>
 									<String>Bananas</String>
@@ -130,15 +151,16 @@ TODO:
 							<events>
 								<script type="text/hscript" action="onLoaded">
 								<![CDATA[
-									this.data.push("Milk");
-									this.data.push("Bread");
-									this.data.push("Eggs");
-									this.redraw();
+									var d = this.dataSource;
+									//d = this.dataSource;
+									d.data.add("Pineapple");
+									d.data.add("Watermelon");
+									this.__setDataSource( d );
 								]]>
 								</script>
 							</events>
 						</haxegui:controls:UiList>
-						<haxegui:controls:UiList name="List3" x="360" y="250" width="300" data="@StringArray" />
+						<haxegui:controls:UiList name="List3" x="360" y="250" width="300" data="@List1" />
 
 						<haxegui:controls:ProgressBar x="30" y="450" width="300" />
 						<haxegui:controls:ProgressBar x="30" y="480" width="300" />
@@ -156,10 +178,10 @@ TODO:
 				</haxegui:TabChild>
 				
 				<haxegui:TabChild visible="false">
-					<haxegui:containers:Divider width="512" height="512"  >
-						<!--<haxegui:containers:Container color="0xFFFFFF" >-->
+					<haxegui:containers:Divider width="512" height="512">
+						<haxegui:containers:Container color="0xFFFFFF">
 							<haxegui:controls:Label x="20" y="20" >Second TabChild</haxegui:controls:Label>
-						<!--</haxegui:containers:Container>-->
+						</haxegui:containers:Container>
 					</haxegui:containers:Divider>
 				</haxegui:TabChild>
 												
@@ -183,6 +205,7 @@ TODO:
 					</haxegui:containers:Container>
 				</haxegui:TabChild>
 		</haxegui:TabNavigator>
+		</haxegui:containers:Container>
 		</haxegui:containers:ScrollPane>
     </haxegui:Window>
 </haxegui:Layout>

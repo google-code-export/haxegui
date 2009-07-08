@@ -19,9 +19,9 @@ this.graphics.drawRect (0, 0, parent.box.width, 20);
 this.graphics.endFill ();
 
 
-if( this.parent.data[i]!=null && this.label!=null) 
+//~ if( this.parent.data[i]!=null && this.label!=null) 
 	//~ this.tf.text = this.parent.data[i];
-	this.label.tf.text = this.parent.data[i];
+	//~ this.label.tf.text = this.parent.data[i];
 	
 /*
 this.tf.x = 4;

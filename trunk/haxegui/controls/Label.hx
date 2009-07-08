@@ -32,17 +32,9 @@ import haxegui.Component;
 
 class Label extends Component
 {
-
 	public var tf : TextField;
 
-
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super(parent, name, x, y);
-	}
-
-	override public function init(opts : Dynamic=null)
-	{
+	override public function init(opts : Dynamic=null) {
 		super.init(opts);
 		
 		tf = new TextField();
@@ -70,9 +62,11 @@ class Label extends Component
 
 	}
 
+	public function getText() : String {
+		return tf.text;
+	}
 
-	public function setText(s:String)
-	{
+	public function setText(s:String) {
 		tf.text = s;
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 	}
@@ -80,7 +74,17 @@ class Label extends Component
 	static function __init__() {
 		haxegui.Haxegui.register(Label,initialize);
 	}
+
 	static function initialize() {
 	}
 
+
+	public override function redraw(opts:Dynamic=null) {
+		
+		tf.x = Math.round(tf.x);
+		tf.y = Math.round(tf.y);
+		
+		super.redraw(Opts.clone(opts));
+	}
+	
 }

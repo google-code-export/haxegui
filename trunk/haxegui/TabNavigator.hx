@@ -69,6 +69,7 @@ class Tab extends AbstractButton
 		label = new Label(this, "label");
 		label.text = Opts.optString(opts, "label", name);
 		label.init({text: name});
+		label.mouseEnabled = false;
 
 		parent.dispatchEvent(new Event(Event.CHANGE));
 		
@@ -125,12 +126,13 @@ class TabChild extends Component
 		
 		super.init(opts);
 	
+		text = null;
+		
 		while(_tabNav!=null && !Std.is(_tabNav,TabNavigator))
 			_tabNav =  cast _tabNav.parent;
 
 		_tabNav.addEventListener(Event.CHANGE, onTabChanged, false, 0, true);
-	
-		
+				
 	}
 	
 	public function onTabChanged(e:Event) {
@@ -147,8 +149,7 @@ class TabChild extends Component
 				
 
 	}
-	
-	
+
 }
 
 
@@ -186,8 +187,8 @@ class TabNavigator extends Component
 
 
 		// add the drop-shadow filters
-		var shadow1:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
-		var shadow2:DropShadowFilter = new DropShadowFilter (4, 235, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false);
+		var shadow1:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false);
+		var shadow2:DropShadowFilter = new DropShadowFilter (4, 235, DefaultStyle.DROPSHADOW, 0.45, 4, 4,0.35,BitmapFilterQuality.HIGH,true,false,false);
 		this.filters = [shadow1,shadow2];
 
 

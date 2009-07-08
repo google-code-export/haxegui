@@ -42,6 +42,7 @@ import haxegui.Component;
 import haxegui.IContainer;
 
 
+
 class DividerHandleButton extends AbstractButton {
 
 	override public function init(opts : Dynamic=null)
@@ -81,13 +82,21 @@ class DividerHandle extends AbstractButton {
 		button.init();
 		button.moveTo(.5*(512-100),0);
 		
-		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);				
+		var p = Component.getParentComponent(this);
+		while(p!=null) {
+			p.addEventListener(ResizeEvent.RESIZE, onParentResize);				
+			p = Component.getParentComponent(p);
+			}
 	}
 
 
 	public function onParentResize(e:ResizeEvent) {
-		box = (cast parent).box.clone();
-		dirty = true;
+		//box.width = (cast parent).box.width;
+		var b = untyped parent.parent.parent.box;
+		box.width = b.width;
+		button.moveTo(.5*(box.width-100),0);
+		//dirty = true;
+		redraw();
 	}
 	
 	static function __init__() {
@@ -105,28 +114,52 @@ class DividerHandle extends AbstractButton {
  */
 class Divider extends Container
 {
-
-
+	
+	var handle : DividerHandle;
+	
 	override public function init(opts : Dynamic=null)
 	{
+		
 		super.init(opts);
 		
-		var handle = new DividerHandle(this);
+		handle = new DividerHandle(this);
 		handle.init();
-		handle.moveTo(0, 200);
+		handle.moveTo(0, 250);
+
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
+
 	}
 
 	public override function onMouseDown(e:MouseEvent) {
-		this.startDrag();
+		handle.startDrag(false, new Rectangle(0,-this.stage.stageHeight,0,2*this.stage.stageHeight));
+		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		super.onMouseDown(e);
 	}
 
 	public override function onMouseUp(e:MouseEvent) {
-		this.stopDrag();
+		handle.stopDrag();
+		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		super.onMouseUp(e);
 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(Divider);
 	}
+
+	public function onMouseMove(e:MouseEvent) {
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		//dirty = true;
+		redraw();
+	}
+
+	public override function onParentResize(e:ResizeEvent) {
+		if(handle!=null) {
+			handle.box.width = this.box.width;
+			handle.dirty = true;
+		}
+		
+		dirty = true;
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));	
+	}
+	
 }

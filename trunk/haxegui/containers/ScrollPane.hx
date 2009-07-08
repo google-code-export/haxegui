@@ -28,12 +28,8 @@ import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.Shape;
 import flash.display.Sprite;
+import flash.events.MouseEvent;
 import haxegui.events.ResizeEvent;
-
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.filters.BevelFilter;
 
 import haxegui.managers.StyleManager;
 
@@ -46,13 +42,6 @@ class ScrollPane extends Component
 
 	public var vert : ScrollBar;
 	public var horz : ScrollBar;
-
-
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super(parent, name, x, y);
-		//~ this.name = (name==null) ? "scroll_pane" : name;
-	}
 
 
 	public override function addChild(o : DisplayObject) : DisplayObject
@@ -105,6 +94,21 @@ class ScrollPane extends Component
 
 	}
 
+	public override function onMouseWheel(e:MouseEvent) {
+		if(vert==null) return;
+		var y = vert.handle.y + 50 * -e.delta;
+
+		if(vert.handleMotionTween!=null)
+			vert.handleMotionTween.stop();
+
+		vert.handleMotionTween = new feffects.Tween( vert.handle.y, y, 1000, vert.handle, "y", feffects.easing.Expo.easeOut );
+		var scrollbar = vert;
+		vert.handleMotionTween.setTweenHandlers( function(v) { scrollbar.adjust(); } );
+		vert.handleMotionTween.start();
+
+		super.onMouseWheel(e);
+	}
+	
 	/**
 	*
 	*

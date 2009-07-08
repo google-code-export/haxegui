@@ -143,8 +143,6 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.addEventListener (MouseEvent.DOUBLE_CLICK, onMouseDoubleClick, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
-//		this.addEventListener (MouseEvent.ROLL_OVER, onRollOver, false, 0, true);
-//		this.addEventListener (MouseEvent.ROLL_OUT,  onRollOut, false, 0, true);
 
 		this.addEventListener (MouseEvent.MOUSE_OVER, onRollOver, false, 0, true);
 		this.addEventListener (MouseEvent.MOUSE_OUT,  onRollOut, false, 0, true);
@@ -218,8 +216,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	*/
 	public function destroy() {
 		var idx : Int = 0;
-		for(i in 0...numChildren) {
-			var c = getChildAt(idx);
+		for(c in this) {
 			if(Std.is(c,Component))
 				(cast c).destroy();
 			else
@@ -355,10 +352,51 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		ScriptManager.exec(this,"redraw", opts);
 	}
 
+	public function iterator() : Iterator<DisplayObject> {
+		var a = [];
+		for(i in 0...numChildren)
+			a.push(getChildAt(i));
+		return a.iterator();
+	}
+	
+	
+	public function getChildById(id:Int) : DisplayObject {
+		for(i in this)
+		if(Std.is(i, Component))
+			if((cast i).id==id) return i;
+		return null;
+	}
+	
+	public function removeChildren() {
+		for(i in this)
+			removeChild(i);
+	}
+	
+
+	public function raise() : Int {
+		var d = Std.int(Math.max(0, Math.min(parent.numChildren-1, parent.getChildIndex(this)+1)));
+		parent.setChildIndex(this, d);
+		return d;
+	}
+
+	public function lower() : Int {
+		var d = Std.int(Math.max(0, Math.min(parent.numChildren-1, parent.getChildIndex(this)-1)));
+		parent.setChildIndex(this, d);
+		return d;
+	}
+	
+	public function toFront() {
+		parent.setChildIndex(this, parent.numChildren-1);
+	}
+	
+	public function toBack() {
+		parent.setChildIndex(this, 0);
+	}
+
 	/**
 	*
 	**/
-	public function setBox(b:Rectangle) : Rectangle
+	public function resize(b:Rectangle) : Rectangle
 	{
 		var event = new ResizeEvent(ResizeEvent.RESIZE);
 		event.oldWidth = box.width;
@@ -598,7 +636,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 		ScriptManager.exec(this,"mouseClick", {event : e});
 	}
-
+	
+	/** Mouse Down **/
 	public function onMouseDown(e:MouseEvent) : Void
 	{
 		#if debug
@@ -608,13 +647,13 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		ScriptManager.exec(this,"mouseDown", {event : e});
 	}
 
-	/**
-	*/
+	/** Mouse Up **/
 	public function onMouseUp(e:MouseEvent) : Void
 	{
 		ScriptManager.exec(this,"mouseUp", {event : e});
 	}
 
+	/** Mouse Wheel **/
 	public function onMouseWheel(e:MouseEvent) : Void
 	{
 		ScriptManager.exec(this,"mouseWheel", {event : e});
@@ -645,10 +684,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	//////////////////////////////////////////////////
 	////               Actions                    ////
 	//////////////////////////////////////////////////
-	// redraw, mouseClick, mouseOver, mouseOut
-	// mouseDown, mouseUp, validate, gainingFocus
-	// losingFocus, focusIn, focusOut
-	// interval
+	// redraw, validate, interval
+	// mouseClick, mouseOver, mouseOut, mouseDown, mouseUp
+	// gainingFocus, losingFocus, focusIn, focusOut
 
 
 	//////////////////////////////////////////////////
@@ -675,8 +713,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		if(this.disabled == v) return v;
 		this.disabled = v;
 		this.dirty = true;
-		for(i in 0...numChildren) {
-			var c = getChildAt(i);
+		for(c in this) {
 			if(Std.is(c,Component))
 				(cast c).disabled = v;
 		}

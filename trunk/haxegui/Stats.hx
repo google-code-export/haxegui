@@ -261,7 +261,7 @@ class Stats extends Window
         if(avgFPS.length > 10 ) avgFPS.shift();
         
         //list.data=["FPS", "minFPS", "maxFPS", "avgFPS", "objs", "dirty", "Mem", "Uptime"];
-        list2.data =
+        list2.data = 
         [
             Std.string(fps).substr(0,5),
             Std.string(minFPS).substr(0,5),
@@ -275,11 +275,11 @@ class Stats extends Window
             ""
         ];
 
-//        list2.redraw();
         for(i in 0...list2.numChildren)
-           if(Std.is(list2.getChildAt(i), ListItem))
-                untyped list2.getChildAt(i).redraw();
-
+           if(Std.is(list2.getChildAt(i), ListItem)) {
+                untyped list2.getChildAt(i).label.tf.text = list2.data[i];
+                //~ untyped list2.getChildAt(i).redraw();
+        }
 
 
         var item = cast list.getChildAt(1);
@@ -341,14 +341,9 @@ class Stats extends Window
     }
 
 
-  public function onStatsEnterFrame(e:Event) : Void
-  {
-
-    frameCounter++;
-  }
-
-
-
+    public function onStatsEnterFrame(e:Event) {
+        frameCounter++;
+    }
 
 
     public function count(o:DisplayObjectContainer) : Int {
@@ -363,7 +358,11 @@ class Stats extends Window
     }
 
 
-
+    public override function destroy() {
+        timer.stop();
+        
+        super.destroy();
+    }
 
 
 }

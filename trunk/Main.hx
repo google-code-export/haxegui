@@ -110,6 +110,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
 		stage.align = flash.display.StageAlign.TOP_LEFT;
 		stage.stageFocusRect = true;
+        stage.frameRate = 120;
 
 		// Assign a stage resize listener
 		stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
@@ -155,13 +156,14 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		// Setup Haxegui
 		haxegui.Haxegui.init();
 
-		
+		/*
 		var t = new Tween(1,0,300,flash.Lib.current.getChildByName("Logo"),"alpha",feffects.easing.Linear.easeNone);
 		t.setTweenHandlers(null,
 		function(v) {
 		flash.Lib.current.removeChild(flash.Lib.current.getChildByName("Logo"));	
 		});
 		t.start();
+		*/
 		
 		var bootupMessages = new Array<{v:Dynamic, inf:haxe.PosInfos}>();
 		var bootupHandler = function(v : Dynamic, ?inf:haxe.PosInfos) {
@@ -215,8 +217,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		stats.init();
 
 		// Color Picker
-		//~ var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
-		//~ colorpicker.init();
+		var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
+		colorpicker.init();
 
 		//~ WindowManager.addWindow().init();
 		
@@ -343,8 +345,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 	*
 	*
 	*/
-	public static function onStageResize(e:Event)
-	{
+	public static function onStageResize(e:Event) {
 
 	var stage = e.target;
 	haxe.Timer.delay( function() {

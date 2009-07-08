@@ -23,7 +23,6 @@ import flash.geom.Rectangle;
 
 import flash.display.DisplayObjectContainer;
 import flash.display.DisplayObject;
-import flash.display.MovieClip;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -58,8 +57,7 @@ class MenuBarItem extends AbstractButton
 
 	public var label : Label;
 
-	override public function init(opts:Dynamic=null)
-	{
+	override public function init(opts:Dynamic=null) {
 		box = new Rectangle(0,0,40,24);
 		
 		super.init(opts);
@@ -115,15 +113,13 @@ class MenuBar extends Component
 		_menu = 0;
 		numMenus = 1+Math.round( Math.random() * 4 );
 
-
-		for (i in 0...numMenus)
-		{
+		for (i in 0...numMenus) {
 			var menu = new MenuBarItem(this, "Menu"+(i+1), 40*i, 0);
 			menu.init({color: this.color});
 		}
 
 		// inner-drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, 0x000000, 0.5,4, 4,0.75,BitmapFilterQuality.LOW,true,false,false);
+		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.LOW,true,false,false);
 		this.filters = [shadow];
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
@@ -133,8 +129,7 @@ class MenuBar extends Component
 	/**
 	*
 	*/
-	public function onParentResize(e:ResizeEvent)
-	{
+	public function onParentResize(e:ResizeEvent) {
 		box.width = untyped parent.box.width - 10;
 
 		var b = box.clone();
@@ -148,17 +143,6 @@ class MenuBar extends Component
 	}
 
 
-
-
-
-
-
-	function onPopupClosed (e:Event)
-	{
-		_menu = -1;
-		//~ onChanged();
-	}
-
 	override public function onKeyDown (e:KeyboardEvent)
 	{
 	}
@@ -168,22 +152,18 @@ class MenuBar extends Component
 	/**
 	*
 	*/
-	function openMenuByName (name:String)
-	{
+	function openMenuByName (name:String) {
 		openMenuAt (this.getChildIndex (this.getChildByName (name)));
 	}
 
 	/**
 	*
 	*/
-	function openMenuAt (i:UInt)
-	{
+	function openMenuAt (i:UInt) {
 		var menu = this.getChildAt (i);
 		var popup = PopupMenu.getInstance();
 		popup.init ({parent:this.parent, x:menu.x, y:menu.y + 20});
 		//register new popups for close
-		popup.addEventListener (MenuEvent.MENU_HIDE, onPopupClosed);
-
 	}
 
 	static function __init__() {

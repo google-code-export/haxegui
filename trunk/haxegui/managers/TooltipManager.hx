@@ -22,7 +22,6 @@ package haxegui.managers;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
-import flash.text.TextField;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
@@ -31,6 +30,7 @@ import flash.geom.Rectangle;
 
 import haxegui.Component;
 import haxegui.managers.StyleManager;
+import haxegui.controls.Label;
 
 import feffects.Tween;
 
@@ -44,45 +44,49 @@ import feffects.Tween;
 * @version 0.1
 */
 class Tooltip extends Component {
+	
 	var target  : Component;
-	var tf 		: TextField;
+	var label 	: Label;
 	var t		: Tween;
 	
 
 	public function new (target:Component) {
 		//
 		super (flash.Lib.current, "Tooltip",  flash.Lib.current.stage.mouseX - 15, flash.Lib.current.stage.mouseY - 30);
-		
+
+	
 		mouseEnabled = false;
 		buttonMode = false;
+		visible = false;
 		alpha = 0;
-		
-		tf = cast this.addChild(new TextField());		
-		tf.text = target.text == null ? target.name : target.text;
-		tf.embedFonts = true;
-		tf.x = 4;
-		tf.y = 4;
-		tf.selectable = false;
-		tf.mouseEnabled = false;
-		tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
-		tf.defaultTextFormat = DefaultStyle.getTextFormat();
-		tf.setTextFormat( DefaultStyle.getTextFormat() );
-		
-		this.box = new Rectangle(0,0, tf.width+8, tf.height+8);
+						
+	
+		label = new Label(this);		
+		label.init({ innerData: target.text == null ? target.name : target.text });
+		label.move(4,4);
+		label.mouseEnabled = false;
+		label.tf.selectable = false;
+		label.tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
+	
+		box = new Rectangle(0,0, label.tf.width+8, label.tf.height+8);
 
 		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
 		this.filters = [shadow];  
-
-		t = new feffects.Tween(0, .8, 500, this, "alpha", feffects.easing.Linear.easeNone);
-		haxe.Timer.delay( t.start, 750 );
+			
 
 		if (this.parent != null)
 			if (this.parent.contains (this))
 				this.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
 
-		}
-		
-		public function onMove(e:MouseEvent) {
+		var tween = new feffects.Tween(0, .8, 350, this, "alpha", feffects.easing.Expo.easeOut);
+		var self = this;
+		var t = tween;
+		haxe.Timer.delay( function(){ self.visible=true; t.start(); }, 750 );
+				
+	}
+
+	
+	public function onMove(e:MouseEvent) {
 			this.x = e.stageX - 15;
 			this.y = e.stageY - 30;
 
@@ -91,13 +95,15 @@ class Tooltip extends Component {
 					this.parent.setChildIndex(this, this.parent.numChildren-1);
 	}
 	
+	
+	
 
 	public override function destroy() {
 		if(this.filters!=null)
 			this.filters = null;
-		if(this.tf!=null)
-			if (this.contains (tf))	
-				this.removeChild(tf);
+		if(this.label!=null)
+			if (this.contains (label))	
+				this.removeChild(label);
 		if(this.stage!=null)
 			if(this.stage.hasEventListener(MouseEvent.MOUSE_MOVE))
 				this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
@@ -115,7 +121,15 @@ class Tooltip extends Component {
 	}
 }
 
-
+/**
+*
+* TooltipManager Class
+*
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.1
+*/
 class TooltipManager extends EventDispatcher
 {
 	

@@ -22,6 +22,8 @@ package haxegui.controls;
 import flash.geom.Rectangle;
 import haxegui.Opts;
 
+import haxegui.Image;
+
 /**
 *
 * Button Class
@@ -35,14 +37,22 @@ import haxegui.Opts;
 class Button extends AbstractButton
 {
 
-	public var label :Label;
+	public var label : Label;
+	public var icon  : Icon;
 	//~ public var fmt : TextFormat;
 
+	public var toggle : Bool;
+	
+	public var selected( __getSelected, __setSelected ) : Bool;
+	
 	override public function init(opts:Dynamic=null)
 	{
 		// dont create zero sized buttons
 		if(box==null || box.isEmpty()) 
 			box = new Rectangle(0,0,90,30);
+		
+		toggle = Opts.optBool(opts, "toggle", false);
+		selected = Opts.optBool(opts, "selected", false);
 		
 		super.init(opts);
 		text = name;
@@ -53,11 +63,51 @@ class Button extends AbstractButton
 		label = new Label(this);
 		label.text = Opts.optString(opts, "label", name);
 		label.init();
+		label.mouseEnabled = false;
+		label.tabEnabled = false;
 		}
+		
+		if(Opts.optString(opts, "icon", null)!=null) {
+		icon = new Icon(this);
+		icon.src = Reflect.field(Icon, Opts.optString(opts, "icon", null));
+		icon.init();
+		icon.mouseEnabled = false;
+		icon.tabEnabled = false;
+		icon.move(4,4);
+		}
+		
+		if(Std.is(parent, haxegui.ToolBar)) {
+			redraw();
+			dirty = false;
+			this.graphics.clear();
+			setAction("mouseOut", "event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
+			setAction("mouseUp", "event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
+			setAction("mouseOver","this.redraw();");
+			}
 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(Button);
 	}
+	
+	public function __getSelected() : Bool {
+		return selected;
+	}
+
+	public function __setSelected(v:Bool) {
+		selected = v;
+		redraw();
+		return selected;
+	}
+
+
+	public override function onMouseClick(e:flash.events.MouseEvent) {
+		if(disabled) return;
+		if(toggle)
+			selected = !selected;
+		redraw();
+		super.onMouseClick(cast e.clone());
+	}
+	
 }
 

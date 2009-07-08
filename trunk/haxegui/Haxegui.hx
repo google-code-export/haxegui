@@ -34,11 +34,17 @@ import haxegui.Component;
 class Haxegui {
 
 
+	/** Private **/
 	private static var initializers : List<{c:Class<Dynamic>, f:Void->Void}>;
-	public static var dirtyList : List<Component> = new List();
 
 	/** Public **/
+	public static var dirtyList : List<Component> = new List();
 
+	public static var dirtyTimer : haxe.Timer;
+	public static var dirtyInterval( default, setInterval ) : Int;
+	
+	public static var gridSnapping : Bool = false;
+	
 
 	public static function init() {
 		for(o in initializers) {
@@ -59,12 +65,16 @@ class Haxegui {
 		StyleManager.setStyle("default");
 		trace("complete");
 		
-		//TODO: try and link to MouseManager.delta maybe, so when mouse jumps around a lot
-		//		refresh slower, when delta is small try to refresh faster for smoother movement
-		var t = new haxe.Timer(300);
-		t.run = onInterval;
+		dirtyInterval = 300;
 	}
 
+	public static function setInterval(v:Int) : Int {
+		dirtyInterval = v;
+		dirtyTimer = new haxe.Timer(dirtyInterval);
+		dirtyTimer.run = onInterval;	
+		return dirtyInterval;
+	}
+	
 	private static function onInterval() {
 		if(dirtyList.isEmpty()) return;
 		for(c in dirtyList) {
@@ -95,7 +105,7 @@ class Haxegui {
 	*
 	* @param c Component
 	**/
-	public static function setDirty(c : Component) : Void {
+	public static inline function setDirty(c : Component) : Void {
 		dirtyList.add(c);
 	}
 

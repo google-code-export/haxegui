@@ -54,4 +54,12 @@ class Color
 	return clamp(( r << 16 ) | ( g << 8 ) | b);
 	}
 
+	
+	public static inline function toRGB(color:UInt) : Dynamic {
+		var r = color >> 16 ;
+		var g = color >> 8 & 0xFF ;
+		var b = color & 0xFF ;
+		return { r: r, g: g, b: b };
+	}
+	
 }

@@ -55,7 +55,8 @@ import haxegui.windowClasses.StatusBar;
 */
 class Introspector extends Window
 {
-	
+	public var container : Container;
+	public var scrollpane : ScrollPane;
 	public var tree : Tree;
 	public var list1 : UiList;
 	public var list2 : UiList;
@@ -75,11 +76,11 @@ class Introspector extends Window
 		menubar.init ();
 
 		//
-		var container = new Container(this, "Container", 10, 44);
+		container = new Container(this, "Container", 10, 44);
 		container.init({});
 		
 		//
-		var scrollpane = new ScrollPane(container, "ScrollPane1", 210, 0);
+		scrollpane = new ScrollPane(container, "ScrollPane1", 210, 0);
 		scrollpane.init({width: 400, fitH: false, fitV: false});
 		scrollpane.removeChild(scrollpane.horz);
 
@@ -110,18 +111,17 @@ class Introspector extends Window
 	
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		
-		//FocusManager.getInstance().addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
-		//this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged);
+		//FocusManager.getInstance().addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged, false, 0, true);
+		this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged, false, 0, true);
 
 	}
 
-	public function onFocusChanged(e:Dynamic)
-	{
+	public function onFocusChanged(e:Dynamic) {
 		if(e == this) return;
 		if(!Std.is(e, flash.events.Event)) return;
 		if(!Std.is(e.target, Component)) return;
 		if(this.contains(e.target)) return;
-		
+		if(e.target==target) return;
 		target = e.target;
 		
 		//~ var scrollpane = tree.parent;
@@ -134,6 +134,7 @@ class Introspector extends Window
 		//~ 
 		var self = this;
 		
+		
 		var props = {
 			name 					: "name",
 			parent 					: "parent",
@@ -145,33 +146,43 @@ class Introspector extends Window
 			alpha					: "alpha",
 			//~ width					: function() { return (cast e.target).box.width; },
 			//~ height					: function() { return (cast e.target).box.height; },
-			//~ type 					: function() { return Type.typeof(e.target); },
-			//~ globalX					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
-			//~ globalY					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; },
+			type 					: function() { return Type.typeof(e.target); },
+			globalX					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
+			globalY					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; },
 			//~ init					: "init",
 			//~ initOpts				: "initOpts",
-			//~ focusable				: "focusable",
-			//~ dirty					: "dirty",
-			//~ id						: "id",
 			//~ validate				: "validate"
+			path					: function(){ var path = []; var p=e.target.parent; while(p!=null) untyped { path.push(p.name); p=p.parent; } path.pop();path.pop(); path.push("root"); path.reverse(); return path.join(".")+"."+e.target.name; },
 			}
 		if(Std.is(e.target, Component)) {
+			Reflect.setField(props, "id", "id");
 			Reflect.setField(props, "disabled", "disabled");
-			Reflect.setField(props, "color", "color");
+			Reflect.setField(props, "color",function() { return StringTools.hex(e.target.color); });
 			Reflect.setField(props, "focusable", "focusable");
 			Reflect.setField(props, "dirty", "dirty");
+			Reflect.setField(props, "box", "box");
 		}
-		
+
+		if(Std.is(e.target, UiList)) {
+			Reflect.setField(props, "dataSource", "dataSource");
+		}		
 		//~ if(Std.is(e.target, haxegui.controls.AbstractButton)) {
 			//~ Reflect.setField(props, "autoRepeat", "autoRepeat");
 			//~ Reflect.setField(props, "repeatWaitTime", "repeatWaitTime");
 			//~ Reflect.setField(props, "repeatsPerSecond", "repeatsPerSecond");
 		//~ }
+
+
+		if(list1!=null)
+			list1.destroy();
+		if(list2!=null)
+			list2.destroy();
+
+		list1 = new UiList(scrollpane, "Properties", 210, 0);
+		list2 = new UiList(scrollpane, "Values", 350, 0);
 		
 		list1.data = [];
 		list2.data = [];
-
-
 		// fill the lists
 		for(key in Reflect.fields(props)) {
 				
@@ -188,103 +199,16 @@ class Introspector extends Window
 				}
 		}
 
-		// redraw
-		list1.redraw();
-		list2.redraw();
-			
-			// place some icons
-			//~ for(i in 1...list1.numChildren-1)	
-			for(i in 0...Reflect.fields(props).length-1)	
-				if(Std.is(list1.getChildAt(i), ListItem)) {
-
-				// get a ListItem
-				var item = cast(list1.getChildAt(i), ListItem);
-
-				// icon
-				if(item.numChildren>1)
-					item.removeChild(item.getChildByName("icon"));
-				var icon = new Image((cast item), "icon", 4, 4);
-				var src = "assets/icons/types/type-undefined.png";
-
-				switch( Type.typeof( list2.data[i]) ) {
-					case TClass(c):
-						if(Std.is(c, String)) {
-						src = "assets/icons/types/type-string.png";
-						var inpt = new Input(cast list2.getChildAt(i), "Input", 2, 2);
-						inpt.init({width: 100, height: 16, text: list2.data[i], label: list2.data[i] });
-						untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));						
-						untyped list2.getChildAt(i).setAction("mouseOver", "");
-						untyped list2.getChildAt(i).setAction("mouseOut", "");
-						untyped list2.getChildAt(i).setAction("mouseDown", "");
-						untyped list2.getChildAt(i).setAction("mouseUp", "");
-						}
-					case TInt:
-						src = "assets/icons/types/type-integer.png";
-						var stp = new Stepper(cast list2.getChildAt(i), "Stepper", 2, 2);
-						stp.init({height: 16, value: list2.data[i], max: Math.POSITIVE_INFINITY });
-						untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
-						untyped list2.getChildAt(i).setAction("mouseOver", "");
-						untyped list2.getChildAt(i).setAction("mouseOut", "");
-						untyped list2.getChildAt(i).setAction("mouseDown", "");
-						untyped list2.getChildAt(i).setAction("mouseUp", "");
-						var l = list1;
-						stp.addEventListener(flash.events.Event.CHANGE, 
-							function(e) {
-								if(Reflect.hasField(self.target, l.data[i])) 
-									//~ Reflect.setField(self.target, l.data[i], stp.value); 
-									continue;
-								} );
-					case TFloat:
-						src = "assets/icons/types/type-float.png";
-						var stp = new Stepper(cast list2.getChildAt(i), "Stepper", 2, 2);
-						stp.init({height: 16, value: list2.data[i], max: Math.POSITIVE_INFINITY });
-						untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
-						untyped list2.getChildAt(i).setAction("mouseOver", "");
-						untyped list2.getChildAt(i).setAction("mouseOut", "");
-						untyped list2.getChildAt(i).setAction("mouseDown", "");
-						untyped list2.getChildAt(i).setAction("mouseUp", "");
-						var l = list1;
-						stp.addEventListener(flash.events.Event.CHANGE, 
-							function(e) {
-								if(Reflect.hasField(self.target, l.data[i]))
-									//~ Reflect.setField(self.target, l.data[i], stp.value); 
-									continue;
-								} );
-					case TBool:
-						src = "assets/icons/types/type-boolean.png";
-						var chkbox = new CheckBox(cast list2.getChildAt(i), "CheckBox", 2, 2);
-						chkbox.init({width: 16, height: 16, checked: list2.data[i], label: null });
-						untyped list2.getChildAt(i).removeChild(list2.getChildAt(i).getChildAt(0));
-						untyped list2.getChildAt(i).setAction("mouseOver", "");
-						untyped list2.getChildAt(i).setAction("mouseOut", "");
-						untyped list2.getChildAt(i).setAction("mouseDown", "");
-						untyped list2.getChildAt(i).setAction("mouseUp", "");
-						var l = list1;
-						chkbox.addEventListener(flash.events.Event.CHANGE, 
-							function(e) {
-								if(Reflect.hasField(self.target, l.data[i]))
-									Reflect.setField(self.target, l.data[i], chkbox.checked); 
-								} );						
-					case TFunction:
-						src = "assets/icons/types/type-function.png";
-
-					default:
-						src = "assets/icons/types/type-undefined.png";
-				}
-				// icon
-				icon.init({src: src});
-				
-				// text
-				//~ var tf = cast(item.getChildAt(0), flash.text.TextField);
-				//~ var fmt = DefaultStyle.getTextFormat();
-				//~ fmt.leftMargin = 20;
-				//~ tf.defaultTextFormat = fmt;
-				//~ tf.setTextFormat(fmt);
-				//~ tf.x = 20;
-				item.label.moveTo(20,4);
-			
-				target.redraw();
+		list1.init({text: "Property"});
+		list2.init({text: "Value"});		
+		for(i in 1...list2.numChildren-1) untyped {
+			list2.getChildAt(i).label.tf.selectable = true;
+			list2.getChildAt(i).label.tf.mouseEnabled = true;
 			}
+		
+		
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+
 	}
 	
 	
@@ -292,46 +216,39 @@ class Introspector extends Window
 	public override function onResize(e:ResizeEvent) {
 
 		var container = cast this.getChildByName("Container");
-		if(container!=null) {
-			var scrollpane = cast container.getChildByName("ScrollPane1");
-			if(scrollpane!=null) {
-				scrollpane.box.height = this.box.height - 65;
-				scrollpane.box.width = this.box.width - scrollpane.x - 30;
-				}
-			scrollpane = cast container.getChildByName("ScrollPane2");
-			if(scrollpane!=null) 
-				scrollpane.box.height = this.box.height - 85;
-				
-		}
+		if(container==null) return;
 		
+		var scrollpane = cast container.getChildByName("ScrollPane1");
+		if(scrollpane!=null) {
+			scrollpane.box.height = this.box.height - 65;
+			scrollpane.box.width = this.box.width - scrollpane.x - 30;
+			scrollpane.dirty = true;
+			}
+		scrollpane = cast container.getChildByName("ScrollPane2");
+		if(scrollpane!=null) 
+			scrollpane.box.height = this.box.height - 85;
+				
 		
 		if(tree!=null) {
 			tree.box.height = this.box.height - 85;
-			//~ tree.box.height = 600;
 			tree.dirty = true;
 		}
 		
 		
 		if(list1!=null) {
-
 			list1.x = 0;
 			list1.box.width = .5*(this.box.width - list1.parent.parent.x - 30) ;
 			list1.box.height = tree.box.height + 20;
 			list1.dirty = true;
-			//~ list1.redraw();
 		}
 
 		if(list2!=null) {
-
-			//~ list2.box.width = this.box.width - list2.x - 40 ;
 			list2.x = list1.x + list1.box.width;
 			list2.box.width = list1.box.width ;
 			list2.box.height = list1.box.height ;
 			list2.dirty = true;
-			//~ list2.redraw();
 		}
 
-			//~ trace(e);
 		super.onResize(e);
 	}
 	

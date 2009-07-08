@@ -73,9 +73,10 @@ class Input extends Component
 	    tf.defaultTextFormat = DefaultStyle.getTextFormat();
 	    tf.setTextFormat(DefaultStyle.getTextFormat());
 	    addChild(tf);
+	    
 
 	}
-
+	
 	override private function __setDisabled(v:Bool) : Bool {
 		super.__setDisabled(v);
 		if(this.disabled) {

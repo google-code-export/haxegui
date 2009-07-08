@@ -93,6 +93,19 @@ class XmlParser {
 		return false;
 	}
 
+	public static function isDataNode(xml:Xml) : Bool {
+		if(xml.nodeName == "List" || xml.nodeName == "Array" )
+			return true;
+		return false;
+	}
+
+	public static function isDataSourceNode(xml:Xml) : Bool {
+		var typeParts = xml.nodeName.split(":");
+		if(typeParts[0] == "haxegui" && typeParts[1].toLowerCase() == "datasource")
+			return true;
+		return false;
+	}
+		
 	/**
 	* Applies the given style or layout from the provided Xml node
 	**/
@@ -107,10 +120,19 @@ class XmlParser {
 		if(className == "events")
 			return;
 
+
+		var resolvedClass = Type.resolveClass(className);
+		if(resolvedClass == null) {
+			trace("XmlParser : warning : Class " + className + " not resolved.");
+			return;
+		}
+
+
 		if(!isStyle) {
 			if(Std.is(parent, List))
 			{
 				parent.add( node.firstChild().nodeValue );
+				Reflect.setField(flash.Lib.current, node.parent.get("name"), parent);
 				return;
 			}
 
@@ -123,12 +145,30 @@ class XmlParser {
 				return;
 			}
 		}
+		
+		if(!isStyle)
+		if(isDataSourceNode(node) || isDataNode(node)) {
+			var data : Dynamic = null;
+			if(isDataSourceNode(node))
+				data = Type.createInstance(resolvedClass, [node.get("name")]);
+			else
+				data = Type.createInstance(resolvedClass, []);
+				
+			if(Std.is(parent, DataSource)) 
+				parent.data = data;
+				
+			if(node.elements().hasNext())
+				for(i in node.elements())
+					parseNode(i, data);		
 
-		var resolvedClass = Type.resolveClass(className);
-		if(resolvedClass == null) {
-			trace("XmlParser : warning : Class " + className + " not resolved.");
+			if(Std.is(parent, Component) && Std.is(data, DataSource)) 
+					//parent.dataSource = data;
+					parent.__setDataSource(data);
+					
+	
+			//trace(haxegui.Utils.print_r(data));			
 			return;
-		}
+			}
 
 		var inst : Dynamic = null;
 		var comp : Component = null;

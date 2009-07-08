@@ -245,8 +245,7 @@ class TitleBar extends AbstractButton
 		haxegui.Haxegui.register(TitleBar);
 	}
 
-	public function onParentResize(e:ResizeEvent)
-	{
+	public function onParentResize(e:ResizeEvent) {
 		redraw();
 	}
 

@@ -1,15 +1,12 @@
 this.graphics.clear ();
 
+var highlight = Color.tint(this.color, .7);
 
-var highlight = Color.tint(this.color,.85);
-//var mid = Color.clamp(this.color - toGrayscaleHex(10));
-var mid = Color.tint(this.color,.95);
-
-var colors = this.disabled ? 
-  [this.color, highlight, mid, this.color] :
-  [this.color, highlight, mid, this.color];
-var alphas =[100, 100, 100, 100];
-var ratios =[0, 0x70, 0xD0, 0xFF];
+var colors = (this.toggle && this.__getSelected()) ? 
+  [this.color, Color.darken(this.color, this.disabled ? 20 : 40 )] :
+  [highlight, this.color] ;
+var alphas =[1, 1];
+var ratios =[0, 0xFF];
 var matrix = new flash.geom.Matrix ();
 
 matrix.createGradientBox (this.box.width, this.box.height, .5*Math.PI, 0, 0);
@@ -19,36 +16,37 @@ this.graphics.lineStyle (1, Color.darken(this.color, this.disabled ? 15 : 30), 1
 			 flash.display.LineScaleMode.NONE,
 			 flash.display.CapsStyle.ROUND,
 			 flash.display.JointStyle.ROUND);
-/*
-this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR,
-				 [this.color - toGrayscaleHex(20), this.color - toGrayscaleHex(40)], alphas,
-				 ratios, matrix);
-*/				 
-this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, colors,
-				 alphas, ratios, matrix);
-this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8);
+
+this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, 
+				colors,	alphas,	ratios,	matrix);
+
+if (this.toggle && this.__getSelected())
+    this.graphics.drawRoundRect (-1, -1, this.box.width+1, this.box.height+1, 8, 8);
+else
+    this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8);
 this.graphics.endFill ();
 
 /* Label text, position and formating */
-if(this.label!=null)
-{
-var fmt =
-  DefaultStyle.getTextFormat (8, DefaultStyle.LABEL_TEXT,
-			      flash.text.TextFormatAlign.LEFT);
-if (this.disabled)
-  fmt.color = Color.clamp(this.color - 0x202020);
-this.label.tf.setTextFormat (fmt);
+if(this.label!=null) {
+    var fmt = DefaultStyle.getTextFormat (8, DefaultStyle.LABEL_TEXT,
+				  flash.text.TextFormatAlign.LEFT);
+    if (this.disabled)
+      fmt.color = Color.darken(this.color, 24);
 
-this.label.moveTo (Math.floor (.5 * (this.box.width - this.label.width)),
-		   Math.floor (.5 * (this.box.height - this.label.height)));
+    this.label.tf.setTextFormat (fmt);
+    this.label.moveTo (Math.floor (.5 * (this.box.width - this.label.width)),
+		       Math.floor (.5 * (this.box.height - this.label.height)));
 }
 
 /* Drop-Shadow */
-var shadow =
+this.filters = [
   new flash.filters.DropShadowFilter (this.disabled ? 0 : 1, 45,
 				      DefaultStyle.DROPSHADOW,
 				      this.disabled ? 0.2 : 0.5,
-				      2, 2, 0.5,
+				      4, 4, 0.5,
 				      flash.filters.BitmapFilterQuality.HIGH,
-				      false, false, false);
-this.filters =[shadow];
+				      (this.toggle && this.__getSelected()),
+				      false, false)
+				      ];
+
+this.cacheAsBitmap = true;

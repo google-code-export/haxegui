@@ -36,6 +36,9 @@ import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 
+import haxegui.DataSource;
+
+
 /**
 *
 * The pulldown button for a ComboBox.
@@ -103,21 +106,17 @@ class ComboBox extends Component
 {
 	public var background : ComboBoxBackground;
 	public var dropButton : ComboBoxDropButton;
+	
 	public var input	  : Input;
+	
+	
 	public var list 	  : UiList;
+	
+	public var  dataSource( default, __setDataSource ) : DataSource;
 
 	private var editable : Bool;
 
-	//public var  : Array<Dynamic>;
-
-
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super(parent, name, x, y);
-	}
-
-	override public function init(?opts:Dynamic)
-	{
+	public override function init(?opts:Dynamic) {
 		color = DefaultStyle.BACKGROUND;
 		box = new Rectangle(0,0,140,20);
 		editable = true;
@@ -158,6 +157,13 @@ class ComboBox extends Component
 		haxegui.Haxegui.register(ComboBox);
 	}
 
-	
+
+	public function __setDataSource(d:DataSource) : DataSource {
+		dataSource = d;
+		//dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
+		trace(this.dataSource+" => "+this);
+		trace(dataSource.data);
+		return dataSource;
+	}	
 
 }

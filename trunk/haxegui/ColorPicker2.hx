@@ -83,14 +83,6 @@ class ColorPicker2 extends Window
 
 	var colorRect : Component;
 
-	/**
-	*
-	*/
-	public function new (?parent:DisplayObjectContainer, ?x:Float, ?y:Float)
-	{
-		super (parent, x, y);
-
-	}
 
 	public override function init(?initObj:Dynamic)
 	{
@@ -256,4 +248,9 @@ class ColorPicker2 extends Window
 		//~ dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 
+
+	public override function destroy() {
+		super.destroy();
+	}
+	
 }
