@@ -57,6 +57,20 @@ import haxegui.managers.StyleManager;
  * 
  * 
  */
+class Seperator extends Component {
+	
+	static function __init__() {
+		haxegui.Haxegui.register(Seperator);
+
+	}
+}
+
+
+/**
+ * 
+ * 
+ * 
+ */
 class ToolBarHandle extends AbstractButton {
 	
 	static function __init__() {
@@ -67,11 +81,13 @@ class ToolBarHandle extends AbstractButton {
 
 
 /**
- * 
- * 
- * 
- * 
- */
+* ToolBar Class
+*
+*
+* @author <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.2
+*/
 class ToolBar extends Component
 {
 
@@ -83,6 +99,8 @@ class ToolBar extends Component
 		box = new Rectangle(0,0,502,40);
 
 		super.init(opts);
+		
+		text = null;
 
 		handle = new ToolBarHandle(this);
 		handle.init();
@@ -97,8 +115,7 @@ class ToolBar extends Component
 	}
 
 
-	public function onParentResize(e:ResizeEvent)
-	{
+	public function onParentResize(e:ResizeEvent) {
 		var b = untyped parent.box.clone();
 		//~ box = untyped parent.box.clone();
 		//~ if(!Math.isNaN(e.oldWidth))

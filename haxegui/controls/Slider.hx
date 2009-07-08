@@ -70,8 +70,7 @@ class Slider extends Component, implements haxegui.IAdjustable
 	public var ticks : Int;
 
 
-	override public function init(opts:Dynamic=null)
-	{
+	override public function init(opts:Dynamic=null) {
 		adjustment = new Adjustment( 0, 0, 110, 5, 10 );
 		box = new Rectangle(0, 0, 140, 20);
 		color = DefaultStyle.BACKGROUND;
@@ -90,11 +89,11 @@ class Slider extends Component, implements haxegui.IAdjustable
 		handle.move(0,4);
 
 		// add the drop-shadow filters
-		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, disabled ? 0.4 : 0.8, 4, 4, disabled ?  0.4 : 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
+		var shadow = new flash.filters.DropShadowFilter (disabled ? 1 : 2, 45, DefaultStyle.DROPSHADOW, disabled ? 0.25 : 0.5, 4, 4, disabled ?  0.25 : 0.5, flash.filters.BitmapFilterQuality.LOW, false, false, false );
 		handle.filters = [shadow];
 
 
-		addEventListener (MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
+		//addEventListener (MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 
 		handle.addEventListener (MouseEvent.MOUSE_DOWN, onHandleMouseDown, false, 0, true);
 		handle.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
@@ -105,33 +104,46 @@ class Slider extends Component, implements haxegui.IAdjustable
 
 	}
 
+	public override function destroy() {
+		handle.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+		handle.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+		handle.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 
-	public function onChanged(e:Event)
-	{
-		handle.x = adjustment.value;
+		
+		if(this.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
+			this.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
+				
+		super.destroy();
 	}
 
+	public function onChanged(e:Event) {
+		handle.x = adjustment.value;
+	}
 
 
 	function onHandleMouseDown (e:MouseEvent) : Void {
 		if(this.disabled) return;
 		CursorManager.setCursor (Cursor.DRAG);
 		CursorManager.getInstance().lock = true;
-		handle.startDrag(false,new Rectangle(0,e.target.y, box.width - handle.width ,0));
+		handle.startDrag(false,new Rectangle(0, e.target.y, box.width - handle.width ,0));
 		e.target.stage.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
 	}
 
 	override public function onMouseUp (e:MouseEvent) : Void {
 		if(this.disabled) return;	
 
-		e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
+		e.target.removeEventListener (MouseEvent.MOUSE_UP, onMouseUp);
+
+		if(this.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
+			e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
 		
 		CursorManager.getInstance().lock = false;
 		if(hitTestObject( CursorManager.getInstance()._mc ))
 			CursorManager.setCursor (Cursor.ARROW);
 
 		handle.stopDrag();
-		redraw(color);
+		
+		super.onMouseUp(cast e.clone());
 	}
 
 
@@ -144,16 +156,7 @@ class Slider extends Component, implements haxegui.IAdjustable
 	static function __init__() {
 		haxegui.Haxegui.register(Slider);
 	}
-	
-	
-	public override function destroy() {
-		
-		if(this.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
-			this.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
-		
-		super.destroy();
-	}
-	
+
 	
 	public override function onResize(e:ResizeEvent) {
 		
@@ -161,7 +164,7 @@ class Slider extends Component, implements haxegui.IAdjustable
 		handle.redraw();
 		handle.y = .5*( this.box.height - handle.height );
 		
-		super.onResize(e);
+		super.onResize(cast e.clone());
 	}
 	
 }

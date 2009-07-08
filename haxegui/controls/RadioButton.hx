@@ -37,6 +37,20 @@ import haxegui.Opts;
 
 
 /**
+* RadioGroup Class
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+**/
+class RadioGroup extends AbstractButton
+{
+	static function __init__() {
+		haxegui.Haxegui.register(RadioGroup);
+	}
+}
+
+
+/**
 * RadioButton allows the user to select only one of the predefined set of similar widgets.
 *
 * @author Omer Goshen <gershon@goosemoose.com>
@@ -49,8 +63,7 @@ class RadioButton extends AbstractButton
 	public var label : Label;
 
 
-	override public function init(?opts:Dynamic)
-	{
+	override public function init(?opts:Dynamic) {
 		box = new Rectangle(0,0,20,20);
 		color = DefaultStyle.BACKGROUND;
 
@@ -68,7 +81,7 @@ class RadioButton extends AbstractButton
 
 		if(label!=null && this.disabled) {
 			var fmt = DefaultStyle.getTextFormat();
-			fmt.color = DefaultStyle.BACKGROUND - 0x141414;
+			fmt.color = haxegui.utils.Color.darken(DefaultStyle.BACKGROUND, 20);
 			label.tf.setTextFormat(fmt);
 		}
 
@@ -91,8 +104,7 @@ class RadioButton extends AbstractButton
 	*
 	*
 	*/
-	public function onDisabled(e:Event)
-	{
+	public function onDisabled(e:Event)	{
 		mouseEnabled = false;
 		buttonMode = false;
 		useHandCursor = false;
@@ -103,8 +115,7 @@ class RadioButton extends AbstractButton
 	/**
 	*
 	*/
-	public function onEnabled(e:Event)
-	{
+	public function onEnabled(e:Event) {
 		mouseEnabled = true;
 		buttonMode = true;
 		useHandCursor = true;
@@ -121,9 +132,9 @@ class RadioButton extends AbstractButton
 	public override function onMouseClick(e:MouseEvent) {
 		if(disabled) return;
 
-		for(i in 0...parent.numChildren)
+		//~ for(i in 0...parent.numChildren)
+		for(child in cast(parent, Component))
 			{
-				var child = parent.getChildAt(i);
 				if(Std.is(child, RadioButton))
 					untyped if(child!=this && !child.disabled) {
 							child.selected = false;
@@ -133,7 +144,7 @@ class RadioButton extends AbstractButton
 		selected = true;
 		redraw();
 		
-		super.onMouseClick(e);
+		super.onMouseClick(cast e.clone());
 	}
 
 	static function __init__() {

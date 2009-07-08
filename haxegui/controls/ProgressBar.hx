@@ -119,7 +119,7 @@ class ProgressBar extends Component
 		"
 		);
 		bar.moveTo(0,1);
-		//bar.startInterval(12);
+		//bar.startInterval(5);
 
 		label = new Label(this);
 		label.init();
@@ -165,10 +165,10 @@ class ProgressBar extends Component
 	
 	
 	public override function onResize(e:ResizeEvent) {
-		label.moveTo( .5*(box.width-label.width), .5*(box.height-label.height) + 1 );
+		label.moveTo( Std.int(box.width-label.width)>>1, Std.int(box.height-label.height)>>1 + 1 );
 		bar.dirty = true;
 		update();
-		super.onResize(e);
+		super.onResize(cast e.clone());
 	}
 	
 	

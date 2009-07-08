@@ -49,6 +49,15 @@ class Utils
 		var type = obj.constructor;
 		var str : String = "\n"+indent + type;
 
+		// special cases - list
+		if(Std.is(obj, List)) {
+			var a = cast(obj, List<Dynamic>).iterator();
+			var i = 0;
+			for(j in a)
+				str += "\n" + indent + "["+(i++)+"] => "+j+" "+Type.typeof(j);
+		}
+
+
 		// Make sure its an object, and not a of class String
 		if(!Reflect.isObject(obj) || Std.is(obj, String) )
 			return Std.string(obj) + " " + type;
@@ -66,8 +75,7 @@ class Utils
 					str += print_r(field, indent+indent) ;
 
 			}
-			else
-			{
+			else {
 				str += indent + "["+i+"] => "+field+" "+type;
 			}
 		}

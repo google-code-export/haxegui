@@ -52,6 +52,8 @@ import haxegui.controls.Slider;
 import haxegui.controls.Stepper;
 import haxegui.controls.Input;
 
+import haxegui.utils.Color;
+
 /**
 *
 * ColorPicker class
@@ -63,7 +65,9 @@ import haxegui.controls.Input;
 */
 class ColorPicker extends Window
 {
+	var colMarker : Component;
 	var colSprite : Component;
+	var spectrum  : Image;
 	var currentColor : UInt;
 	var input : Input;
 
@@ -85,28 +89,38 @@ class ColorPicker extends Window
 		container.filters = [shadow];
 
 		//
-		var spec = new Image(container, "Spectrum", 10, 10);
-		spec.init({src: "assets/spectrum.png"});
+		spectrum = new Image(container, "Spectrum", 10, 10);
+		spectrum.init({src: "assets/spectrum.png"});
 
 		var self = this;
-		spec.addEventListener(Event.COMPLETE,
+		var spec = spectrum;
+		spectrum.addEventListener(Event.COMPLETE,
 		function(e) {
-			spec.graphics.lineStyle(4, self.color - 0x141414);
+			spec.graphics.lineStyle(4, haxegui.utils.Color.darken(self.color, 10));
 			spec.graphics.beginFill(0xffffff);
 			spec.graphics.drawRect(0,0,spec.width,spec.height);
 			spec.graphics.endFill();
+			spec.scrollRect = new Rectangle(0,0,spec.width, spec.height);
+			spec.setChildIndex(spec.bitmap, 0);
 			}
 		);
 
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
-		spec.filters = [shadow];
+		spectrum.filters = [shadow];
 
-		spec.addEventListener(MouseEvent.MOUSE_DOWN, onMouseMoveImage);
-		spec.addEventListener(MouseEvent.MOUSE_UP, onMouseUpImage);
-		spec.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMoveImage);
+		spectrum.addEventListener(MouseEvent.MOUSE_DOWN, onMouseMoveImage, false, 0, true);
+		spectrum.addEventListener(MouseEvent.MOUSE_UP, onMouseUpImage, false, 0, true);
+		spectrum.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMoveImage, false, 0, true);
 
+		colMarker = new Component(spec, "marker");
+		colMarker.init();
+		var shadow:DropShadowFilter = new DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5,2, 2,0.5,BitmapFilterQuality.LOW,false,false,false);
+		colMarker.filters = [shadow];
+		colMarker.mouseEnabled = false;
+		
 		//
 		colSprite =  new Component(container, "colSprite", 180, 10);
+		colSprite.mouseEnabled = false;
 		colSprite.graphics.lineStyle(2, color - 0x141414);
 		colSprite.graphics.beginFill(currentColor);
 		colSprite.graphics.drawRect(0,0,40,30);
@@ -142,15 +156,18 @@ class ColorPicker extends Window
 			
 			//
 			var stepper = new Stepper(container, "Stepper"+i);
-				stepper.init({value: i==4 ? 1 : 0, step: i==4 ? .01 : 1, max: i==4 ? 1 : 0xFF, color: 0xE6D3CC, repeatsPerSecond: 10});
+				stepper.init({value: i==4 ? 1 : 0, step: i==4 ? .01 : 1, page: i==4 ? .01 : 5, max: i==4 ? 1 : 0xFF, color: 0xE6D3CC, repeatsPerSecond: 10});
 			//~ stepper.init();
 			stepper.adjustment.value = 2*slider.handle.x;
 			stepper.move(388, 10+40*i);
 			
 			//
 			var me = this;
-			//~ slider.addEventListener(Event.CHANGE, function(e:Event) { stepper.value = i==4 ? e.target.handle.x/166 : 2*e.target.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); me.updateColor(); });
-			//~ stepper.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = i==4 ? 166*e.target.value : .5*e.target.value; me.updateColor(); });
+			//~ slider.adjustment.addEventListener(Event.CHANGE, function(e:Event) { stepper.adjustment.value = i==4 ? e.target.parent.handle.x/166 : 2*e.target.parent.handle.x; stepper.dispatchEvent(new Event(Event.CHANGE)); me.updateColor(); });
+			//~ stepper.adjustment.addEventListener(Event.CHANGE, function(e:Event) { slider.handle.x = i==4 ? 166*e.target.value : .5*e.target.value; me.updateColor(); });
+
+			slider.adjustment.addEventListener(Event.CHANGE, function(e:Event) { me.updateColor(); });
+			stepper.adjustment.addEventListener(Event.CHANGE, function(e:Event) { me.updateColor(); });
 
 		}
 
@@ -209,24 +226,30 @@ class ColorPicker extends Window
 
 		if(!Std.is(e.target, Image) || !e.buttonDown ) return;
 
+			colMarker.graphics.clear();
+			colMarker.graphics.lineStyle(2,0xFFFFFF);
+			colMarker.graphics.beginFill(0xFFFFFF, .1);
+			colMarker.graphics.drawCircle(e.localX,e.localY,10);
+			colMarker.graphics.endFill();
+			colMarker.graphics.moveTo(e.localX-1, e.localY);
+			colMarker.graphics.lineTo(e.localX+1, e.localY);
+			colMarker.graphics.moveTo(e.localX, e.localY-1);
+			colMarker.graphics.lineTo(e.localX, e.localY+1);
+		
 			CursorManager.setCursor(Cursor.CROSSHAIR);
 			//~ trace(e.target.getChildAt(0).bitmapData.getPixel(e.localX, e.localY));
-			currentColor = e.target.getChildAt(0).bitmapData.getPixel(e.localX, e.localY);
+			currentColor = (cast spectrum.getChildAt(0)).bitmapData.getPixel(e.localX, e.localY);
 
-			var r = currentColor >> 16 ;
-			var g = currentColor >> 8 & 0xFF ;
-			var b = currentColor & 0xFF ;
+			untyped this.getChildByName("Container").getChildByName("Slider1").handle.x = .5*Color.toRGB(currentColor).r ;
+			//~ untyped this.getChildByName("Container").getChildByName("Slider1").dispatchEvent(new Event(Event.CHANGE));
 
-			untyped this.getChildByName("Container").getChildByName("Slider1").handle.x = .5*r ;
-			untyped this.getChildByName("Container").getChildByName("Slider1").dispatchEvent(new Event(Event.CHANGE));
+			untyped this.getChildByName("Container").getChildByName("Slider2").handle.x = .5* Color.toRGB(currentColor).g;
+			//~ untyped this.getChildByName("Container").getChildByName("Slider2").dispatchEvent(new Event(Event.CHANGE));
 
-			untyped this.getChildByName("Container").getChildByName("Slider2").handle.x = .5*g;
-			untyped this.getChildByName("Container").getChildByName("Slider2").dispatchEvent(new Event(Event.CHANGE));
+			untyped this.getChildByName("Container").getChildByName("Slider3").handle.x = .5*Color.toRGB(currentColor).b;
+			//~ untyped this.getChildByName("Container").getChildByName("Slider3").dispatchEvent(new Event(Event.CHANGE));
 
-			untyped this.getChildByName("Container").getChildByName("Slider3").handle.x = .5*b;
-			untyped this.getChildByName("Container").getChildByName("Slider3").dispatchEvent(new Event(Event.CHANGE));
-
-
+			updateColor();
 	}
 
 	public function updateColor()
@@ -234,7 +257,7 @@ class ColorPicker extends Window
 		var r = 1 + 2 * untyped this.getChildByName("Container").getChildByName("Slider1").handle.x ;
 		var g = 1 + 2 * untyped this.getChildByName("Container").getChildByName("Slider2").handle.x ;
 		var b = 1 + 2 * untyped this.getChildByName("Container").getChildByName("Slider3").handle.x ;
-		var a = untyped this.getChildByName("Container").getChildByName("Stepper4").value ;
+		var a = untyped this.getChildByName("Container").getChildByName("Stepper4").adjustment.value ;
 
 		//currentColor = r | g | b;
 		currentColor  = (r << 16) | (g << 8) | b;
@@ -275,6 +298,12 @@ class ColorPicker extends Window
 	
 	public override function destroy() {
 		
+		if(spectrum.hasEventListener(MouseEvent.MOUSE_UP))
+			spectrum.removeEventListener(MouseEvent.MOUSE_UP, onMouseUpImage);
+
+		if(spectrum.hasEventListener(MouseEvent.MOUSE_MOVE))
+			spectrum.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMoveImage);
+
 		//~ for(i in 0...numChildren-1)
 			//~ getChildAt(i).removeEventListener()
 		

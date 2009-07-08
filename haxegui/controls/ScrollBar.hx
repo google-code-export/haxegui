@@ -130,7 +130,7 @@ class ScrollBar extends Component
 	
 	public var horizontal			:	Bool;
 
-	private var handleMotionTween 	:	Tween;
+	public var handleMotionTween 	:	Tween;
 
 
 	/**
@@ -261,24 +261,20 @@ class ScrollBar extends Component
 	public function adjust(?e:Dynamic) {
 		if(!scrollee) return;
 
-		if(scroll<0 || handle.y < 20)
-		{
+		if(scroll<0 || handle.y < 20) {
 			scroll=0;
 			handle.y = 20;
 			return;
 		}
 
-
-		if(scroll>1 || handle.y > frame.height - handle.height + 20)
-		{
+		if(scroll>1 || handle.y > (frame.height - handle.height + 20)) {
 			scroll=1;
 			handle.y = frame.height - handle.height + 20;
 			return;
 		}
 
 
-		if(Std.is(scrollee, TextField))
-		{
+		if(Std.is(scrollee, TextField))	{
 			scroll = (handle.y-20) / (frame.height - handle.height + 2) ;
 			if(horizontal)
 				scrollee.scrollH = scrollee.maxScrollH * scroll;
@@ -288,8 +284,7 @@ class ScrollBar extends Component
 			return;
 		}
 
-		if(Std.is(scrollee, DisplayObject))
-		{
+		if(Std.is(scrollee, DisplayObject))	{
 			if(scrollee.scrollRect==null || scrollee.scrollRect.isEmpty()) return;
 
 			var rect = scrollee.scrollRect.clone();
@@ -300,28 +295,21 @@ class ScrollBar extends Component
 			scroll = (handle.y-20) / (frame.height - handle.height + 2) ;
 
 			if(horizontal)
-			{
 				rect.x = ( bounds.width - rect.width ) * scroll ;
-			}
 			else
-			{
 				rect.y = ( bounds.height - rect.height ) * scroll ;
-			}
 
 			scrollee.scrollRect = rect;
 			//~ trace(Std.int(scrollee.scrollRect.y)+"/"+(bounds.height)+" "+Std.int(100*scroll)+"% "+rect);
 		}
 
-	}//adjust
-
-
+	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBar,initialize);
 	}
+
 	static function initialize() {
 	}
 
-
-
-}//ScrollBar
+}

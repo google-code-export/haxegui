@@ -29,10 +29,6 @@ import flash.events.MouseEvent;
 
 import haxegui.events.ResizeEvent;
 
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-
 import haxegui.managers.ScriptManager;
 import haxegui.managers.MouseManager;
 import haxegui.managers.StyleManager;
@@ -42,10 +38,8 @@ import haxegui.IContainer;
 
 class Container extends Component, implements IContainer
 {
-	private var _clip : Bool;
 
-	public function new (?parent : flash.display.DisplayObjectContainer, ?name:String, ?x : Float, ?y: Float)
-	{
+	public function new (?parent : flash.display.DisplayObjectContainer, ?name:String, ?x : Float, ?y: Float) {
 		super (parent, name, x, y);
 		this.color = DefaultStyle.BACKGROUND;
 		this.buttonMode = false;
@@ -53,17 +47,19 @@ class Container extends Component, implements IContainer
 		this.tabEnabled = false;
 	}
 
-	public override function addChild(o : DisplayObject) : DisplayObject
-	{
+	public override function addChild(o : DisplayObject) : DisplayObject {
 		dirty = true;
 		return super.addChild(o);
 	}
 
 
-	override public function init(opts : Dynamic=null)
-	{
+	override public function init(opts : Dynamic=null) {
 		super.init(opts);
 		text = null;
+		
+		if(Std.is(parent, haxegui.Window))
+			if(x==0 && y==0)
+				move(10,20);
 		
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
@@ -78,11 +74,17 @@ class Container extends Component, implements IContainer
 			box.width -= x;
 			box.height -= y;
 		}
-
+		else
+		if(Std.is(parent, Divider)) untyped {
+			var b = parent.box.clone();
+			b.height = parent.handle.y;
+			box = b;
+		}
+		else
 		if(Std.is(parent.parent, ScrollPane)) {
 			box = untyped parent.parent.box.clone();
 		}
-
+		
 		for(i in 0...numChildren)
 			if(Std.is( getChildAt(i), haxegui.controls.ScrollBar ))
 			{
@@ -91,6 +93,7 @@ class Container extends Component, implements IContainer
 
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+	
 	}
 
 	static function __init__() {

@@ -9,10 +9,11 @@ if(!this.disabled) {
   parent.list.x = p.x + 1;
   parent.list.y = p.y + 20;
   parent.list.box.width = parent.box.width - 22;
-  parent.list.box.height = 200;
+  //parent.list.box.height = 200;
   parent.list.removeChild(parent.list.header);
   //parent.list.data = [];
   
+  parent.list.__setDataSource( parent.dataSource );
   //for(i in 1...10)
 	//parent.list.data.push("List Item "+i);
   //parent.list.data = parent.data;
@@ -23,12 +24,24 @@ if(!this.disabled) {
   var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
   parent.list.filters = [shadow];
   
-  function down(e) { 
-	  trace(e); 
-	  if(parent.list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
-		  parent.list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
-	  parent.list.parent.removeChild(parent.list);
-	  parent.list = null;
-	  }
-  parent.list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+  
+
+    function click(e) {
+	if(parent.list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
+	    parent.list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+	parent.input.tf.text = e.target.getChildAt(0).tf.text;
+	parent.list.destroy();
+	parent.list = null;		
+    }
+
+    for(i in 0...parent.list.numChildren) 
+	parent.list.getChildAt(i).addEventListener(flash.events.MouseEvent.MOUSE_DOWN, click);
+
+    function down(e) { 
+	parent.list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+	parent.list.destroy();
+	parent.list = null;
+    }
+    parent.list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+
 }

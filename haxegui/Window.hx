@@ -94,20 +94,25 @@ class Window extends Component
 	 * @param sizeable
 	 * 
 	 */
-	public function new (? parent : DisplayObjectContainer, ? name : String,
-				? x : Float, ? y : Float, ? width : Float,
-				? height : Float, ? sizeable : Bool)
-	{
-	/** Default new windows to be children of root **/
-	if (parent == null || !Std.is (parent, DisplayObjectContainer))
-		parent = flash.Lib.current;
-	
-	/** Check name with WindowManager **/
-	if( WindowManager.getInstance().windows.exists( this.name ) )
-		this.name += Std.string(haxe.Timer.stamp()*1000).substr(0,2);
+	public function new (
+				? parent : DisplayObjectContainer, 
+				? name   	: String,
+				? x 	 	: Float, 
+				? y 	 	: Float, 
+				? width  	: Float,
+				? height 	: Float, 
+				? sizeable  : Bool
+				) {
+						
+		/** Default new windows to be children of root **/
+		if (parent == null || !Std.is (parent, DisplayObjectContainer))
+			parent = flash.Lib.current;
+		
+		/** Check name with WindowManager **/
+		if( WindowManager.getInstance().windows.exists( this.name ) )
+			this.name += Std.string(haxe.Timer.stamp()*1000).substr(0,2);
 
 		super (parent, name, x, y);
-		
 
 		WindowManager.getInstance().windows.set( this.name, this );
 		
@@ -117,8 +122,8 @@ class Window extends Component
 		return new Rectangle();
 	}
 
-	override public function init(opts : Dynamic=null)
-	{
+	override public function init(opts : Dynamic=null) {
+		
 		box = new Rectangle (0, 0, 320, 240);
 		color = DefaultStyle.BACKGROUND;
 		text = null;
@@ -152,13 +157,11 @@ class Window extends Component
 
 	}
 
-	public function setSizeable(s:Bool):Bool
-	{
+	public function setSizeable(s:Bool):Bool {
 		return sizeable = s;
 	}
 
-	public function isSizeable ():Bool
-	{
+	public function isSizeable ():Bool	{
 		return sizeable;
 	}
 
@@ -183,21 +186,17 @@ class Window extends Component
 	
 	override public function redraw(opts:Dynamic=null):Void
 	{
-
-		//~ this.parent.dispatchEvent( new ResizeEvent(ResizeEvent.RESIZE));
-		//~ this.box.width = this.frame.br.x + 22;
-		//~ this.box.height = this.frame.bl.y + 22;
-		//~ 
-		frame.redraw();
-		titlebar.redraw();
-		if(statusbar!=null)
-			statusbar.redraw();
+ 
+		//~ frame.redraw();
+		//~ titlebar.redraw();
+		//~ if(statusbar!=null)
+			//~ statusbar.redraw();
 		
-		ScriptManager.exec(this,"redraw",
-			{
-				color: Opts.optInt(opts, "color", color),
-			});
-
+		//~ ScriptManager.exec(this,"redraw",
+			//~ {
+				//~ color: Opts.optInt(opts, "color", color),
+			//~ });
+		super.redraw(opts);
 	}
 
 	override public function destroy() {
@@ -228,6 +227,7 @@ class Window extends Component
 	}
 	
 	public override function onMouseDoubleClick(e:MouseEvent) : Void {
+		/*
 		var self = this;
 		var t = new feffects.Tween(this.box.height, 40, 1500, feffects.easing.Back.easeInOut);
 		t.setTweenHandlers( function(v) {
@@ -246,6 +246,7 @@ class Window extends Component
 			
 			}, 1500 );
 		dispatchEvent(new WindowEvent(WindowEvent.ROLLED));
+		*/
 		super.onMouseDoubleClick(e);
 	}
 	

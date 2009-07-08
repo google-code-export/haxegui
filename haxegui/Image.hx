@@ -27,12 +27,24 @@ import flash.events.Event;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 
+/**
+*
+* Image Class
+*
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
 class Image extends Component
 {
 	public var src : String;
-	public var bitmap : Bitmap;
 	public var loader : Loader;
 
+	public var bitmap : Bitmap;
+
+	public var aspect(default, null) : Float;
+	
 	override public function init(opts:Dynamic=null) : Void	{
 	    
 	    super.init(opts);
@@ -49,10 +61,9 @@ class Image extends Component
 
 	}
 	
-
-	function onComplete(e:Event)
-	{
+	function onComplete(e:Event) {
 	    bitmap = e.currentTarget.content ;
+	    aspect = bitmap.width / bitmap.height;
 	    addChild(bitmap);
 	    dispatchEvent(e);
 	}
@@ -64,3 +75,24 @@ class Image extends Component
 
 }
 
+
+class Icon extends Image
+{
+    public static var iconDirectory : String = "/assets/icons/";
+    
+    public static var STOCK_NEW : String = iconDirectory+"document-new.png";
+    public static var STOCK_OPEN : String = iconDirectory+"document-open.png";
+    public static var STOCK_SAVE : String = iconDirectory+"document-save.png";
+
+    public static var STOCK_COPY : String = iconDirectory+"edit-copy.png";
+    public static var STOCK_CUT : String = iconDirectory+"edit-cut.png";
+    public static var STOCK_PASTE : String = iconDirectory+"edit-paste.png";
+    public static var STOCK_CLEAR : String = iconDirectory+"edit-clear.png";
+    public static var STOCK_DELETE : String = iconDirectory+"edit-delete.png";
+
+    public static var STOCK_FIND : String = iconDirectory+"edit-find.png";
+    
+    static function __init__() {
+	haxegui.Haxegui.register(Image);
+    }  
+}

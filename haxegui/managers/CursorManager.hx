@@ -122,39 +122,11 @@ class CursorManager extends EventDispatcher
 
 	public function inject(e:MouseEvent) {
 
-		var p = new Point( e.stageX, e.stageY );
+		_mc.visible = false;
 
-		switch(cursor)
-		{
-			default:
-				p.offset(-10,-10);
-				
-			case Cursor.ARROW:
-				p.offset(-6,-3);
 
-			case Cursor.HAND, Cursor.HAND2, Cursor.DRAG:
-				p.offset(-8,-2);
-
-			case Cursor.CROSSHAIR:
-				p.offset(-23,-17);
-				
-			case Cursor.NESW, Cursor.NWSE:
-				p.offset(-18,-17);
-
-			case Cursor.WE, Cursor.NS:
-				p.offset(-13, -12);
-
-			case Cursor.SIZE_ALL:
-				p.offset(-15, -12);
-
-		}
-
-		/** Maybe smooths the movment a little... **/
-		//p.add( MouseManager.getInstance().delta );
-		//~ p.add( Point.interpolate( new Point(), MouseManager.getInstance().delta, .5 ) );
-		
-		_mc.x = p.x;
-		_mc.y = p.y;
+		_mc.x = e.stageX;
+		_mc.y = e.stageY;
 		
 		//showCursor();
 		toTop();
@@ -248,7 +220,7 @@ class CursorManager extends EventDispatcher
 
 		flash.Lib.current.addChild(_mc);
 
-		//~ _mc.startDrag(true);
+
 		return c;
 	}
 

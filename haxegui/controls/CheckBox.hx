@@ -41,12 +41,6 @@ class CheckBox extends AbstractButton
 	public var label : Label;
 
 
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-
-		super(parent, name, x, y);
-	}
-
 	override public function init(opts:Dynamic=null)
 	{
 		box = new Rectangle(0, 0, 20, 20);

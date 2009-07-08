@@ -48,6 +48,7 @@ class ScriptStandardLibrary
 		interp.variables.set( "root", flash.Lib.current );
 		interp.variables.set( "Std", Std );
 		interp.variables.set( "Lambda", Lambda );
+		interp.variables.set( "List", List );
 		interp.variables.set( "String", String );
 		interp.variables.set( "StringTools", StringTools );
 		interp.variables.set( "Math", Math );
@@ -57,6 +58,8 @@ class ScriptStandardLibrary
 		interp.variables.set( "Timer", haxe.Timer );
 		interp.variables.set( "Xml", Xml );
 	
+		interp.variables.set( ".5*Math.PI", .5*Math.PI );
+
 		//interp.variables.set("HttpAsyncConnection", haxe.remoting.HttpAsyncConnection);
 
 		interp.variables.set("feffects",
@@ -79,6 +82,8 @@ class ScriptStandardLibrary
 		interp.variables.set("flash",
 			{
 				display : {
+					Bitmap : flash.display.Bitmap,
+					BitmapData : flash.display.BitmapData,
 					BlendMode : {
 						SUBTRACT : flash.display.BlendMode.SUBTRACT,
 						//~ SHADER : flash.display.BlendMode.SHADER,
@@ -221,6 +226,7 @@ class ScriptStandardLibrary
 		interp.variables.set("Appearance", haxegui.Appearance);
 		interp.variables.set("CursorManager", CursorManager);
 		interp.variables.set("Color", haxegui.utils.Color);
+		interp.variables.set("DataSource", haxegui.DataSource);
 		interp.variables.set("DefaultStyle", DefaultStyle);
 		interp.variables.set("DragManager", haxegui.managers.DragManager);
 		interp.variables.set("FocusManager", haxegui.managers.FocusManager);

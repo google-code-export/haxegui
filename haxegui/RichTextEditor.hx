@@ -114,57 +114,103 @@ class RichTextEditor extends Window
 
 		var fontbox = new ComboBox(toolbar, "FontBox", 14, 10);
 		fontbox.init({width: 100});
+		fontbox.dropButton.setAction("mouseClick",
+		"
+			parent.list = new haxegui.controls.UiList(root);
+			parent.list.color = parent.color;
+			var p = new flash.geom.Point( parent.x, parent.y );		 	
+			p = parent.parent.localToGlobal(p);
+			parent.list.data = ['Arial', 'Arial Black', 'Bitstream Vera Sans', 'Courier', 'Georgia', 'Comic Sans MS', 'Impact', 'Times New Roman', 'Trebuchet MS', 'Verdana'];
+			parent.list.init();
+			parent.list.move(p.x+1, p.y+20);
+			parent.list.box.width = parent.box.width - 22;
+			parent.list.box.height = 20*parent.list.data.length;
+			parent.list.removeChild(parent.list.header);
+			parent.list.redraw();
+			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
+			parent.list.filters = [shadow];
 
+
+			function click(e) {
+			parent.input.tf.text = e.target.getChildAt(0).tf.text;
+			
+			var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
+			var text = tf.selectedText;
+			tf.replaceSelectedText( \"[replace]\" );
+
+			var htmlText  = new flash.text.TextField();
+			htmlText.text = tf.htmlText;
+					
+			var start = htmlText.text.indexOf(\"[replace]\", 0);
+			var end = start + \"[replace]\".length;
+			
+			htmlText.replaceText(start, end, \"<FONT FACE='\"+parent.input.tf.text+\"'>\"+ text + \"</FONT>\" );
+
+			tf.htmlText = htmlText.text;			
+			}
+
+			for(child in cast(parent, Component))
+				child.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, click);
+
+			function down(e) { 
+			  trace(e); 
+			  if(parent.list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
+				  parent.list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+			  parent.list.parent.removeChild(parent.list);
+			  parent.list = null;
+			  }
+			parent.list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);			
+		"
+		);
+		
 		/** Font size ComboBox **/
 		var sizebox = new ComboBox(toolbar, "SizeBox", 124, 10);
 		sizebox.init({width: 50});
-		//sizebox.list.addEventListener(Event.INIT, function(e){ sizebox.list.data=[1,2,3,4,5]; sizebox.list.redraw(); }, false, 0, true);
 		sizebox.dropButton.setAction("mouseClick",
-		//sizebox.dropButton.getAction("mouseClick")+
 		"
-		parent.list = new haxegui.controls.UiList(root);
-		parent.list.color = parent.color;
-		var p = new flash.geom.Point( parent.x, parent.y );		 	
-		p = parent.parent.localToGlobal(p);
-		parent.list.data = [7,8,12,14,16,18,20,22,24,32,48,72,96];
-		parent.list.init();
-		parent.list.move(p.x+1, p.y+20);
-		parent.list.box.width = parent.box.width - 22;
-		parent.list.box.height = 20*parent.list.data.length;
-		parent.list.removeChild(parent.list.header);
-		parent.list.redraw();
-		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
-		parent.list.filters = [shadow];
+			parent.list = new haxegui.controls.UiList(root);
+			parent.list.color = parent.color;
+			var p = new flash.geom.Point( parent.x, parent.y );		 	
+			p = parent.parent.localToGlobal(p);
+			parent.list.data = [7,8,12,14,16,18,20,22,24,32,48,72,96];
+			parent.list.init();
+			parent.list.move(p.x+1, p.y+20);
+			parent.list.box.width = parent.box.width - 22;
+			parent.list.box.height = 20*parent.list.data.length;
+			parent.list.removeChild(parent.list.header);
+			parent.list.redraw();
+			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
+			parent.list.filters = [shadow];
 
-		function click(e) {
-		parent.input.tf.text = e.target.getChildAt(0).tf.text;
-		
-		var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
-		var text = tf.selectedText;
-		tf.replaceSelectedText( \"[replace]\" );
+			function click(e) {
+			parent.input.tf.text = e.target.getChildAt(0).tf.text;
+			
+			var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
+			var text = tf.selectedText;
+			tf.replaceSelectedText( \"[replace]\" );
 
-		var htmlText  = new flash.text.TextField();
-		htmlText.text = tf.htmlText;
-				
-		var start = htmlText.text.indexOf(\"[replace]\", 0);
-		var end = start + \"[replace]\".length;
-		
-		htmlText.replaceText(start, end, \"<FONT SIZE='\"+parent.input.tf.text+\"'>\"+ text + \"</FONT>\" );
+			var htmlText  = new flash.text.TextField();
+			htmlText.text = tf.htmlText;
+					
+			var start = htmlText.text.indexOf(\"[replace]\", 0);
+			var end = start + \"[replace]\".length;
+			
+			htmlText.replaceText(start, end, \"<FONT SIZE='\"+parent.input.tf.text+\"'>\"+ text + \"</FONT>\" );
 
-		tf.htmlText = htmlText.text;
-		}
+			tf.htmlText = htmlText.text;
+			}
 
-		for(i in 0...parent.list.numChildren)
-			parent.list.getChildAt(i).addEventListener(flash.events.MouseEvent.MOUSE_DOWN, click);
+			for(child in cast(parent, Component))
+				child.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, click);
 
-		function down(e) { 
-		  trace(e); 
-		  if(parent.list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
-			  parent.list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
-		  parent.list.parent.removeChild(parent.list);
-		  parent.list = null;
-		  }
-		parent.list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+			function down(e) { 
+			  trace(e); 
+			  if(parent.list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
+				  parent.list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
+			  parent.list.parent.removeChild(parent.list);
+			  parent.list = null;
+			  }
+			parent.list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
 		"
 		);
 
@@ -267,6 +313,7 @@ class RichTextEditor extends Window
 		btn = new Button(toolbar, "Color", 400, 8);
 		btn.init({width: 32, height: 24, label: null });
 		var col = new Sprite();
+		col.mouseEnabled = false;
 		col.graphics.lineStyle(1, DefaultStyle.BACKGROUND - 0x141414, 1);
 		col.graphics.beginFill(_color);
 		col.graphics.drawRect(4,4,24,16);

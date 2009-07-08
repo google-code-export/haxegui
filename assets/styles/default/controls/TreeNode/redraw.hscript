@@ -1,0 +1,6 @@
+this.graphics.clear();
+var i = this.parent.getChildIndex(this) ;
+var c = (i%2==0) ? this.color :  Math.max(0, this.color - 0x0A0A0A);
+this.graphics.beginFill ( c );
+this.graphics.drawRect (0, 0, this.box.width, this.box.height);
+this.graphics.endFill ();

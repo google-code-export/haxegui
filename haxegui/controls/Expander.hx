@@ -136,7 +136,7 @@ class Expander extends AbstractButton
 		
 
 				
-		super.onMouseClick(e);
+		super.onMouseClick(cast e.clone());
 	}
 
 

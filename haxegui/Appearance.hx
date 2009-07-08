@@ -204,7 +204,7 @@ class Appearance extends Window
 				ok.addEventListener(flash.events.MouseEvent.MOUSE_UP,
 				function(e) {
 					spr.graphics.clear();
-					spr.graphics.lineStyle(1,0);
+					spr.graphics.lineStyle(1,Color.darken(this.color, 40));
 					spr.graphics.beginFill(c.currentColor);
 					spr.graphics.drawRect(4,4,32,22);
 					spr.graphics.endFill();
@@ -215,11 +215,14 @@ class Appearance extends Window
 		");
 		
 		var sprite = cast btn.addChild(new flash.display.Sprite());
-		sprite.graphics.lineStyle(1,0);
+		sprite.graphics.lineStyle(1,haxegui.utils.Color.darken(this.color, 40));
 		sprite.graphics.beginFill(Reflect.field(colors, Reflect.fields(colors)[i]));
 		sprite.graphics.drawRect(4,4,32,22);
 		sprite.graphics.endFill();
-
+		sprite.mouseEnabled = false;
+		var shadow = new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,flash.filters.BitmapFilterQuality.HIGH,true,false,false);
+		sprite.filters = [shadow];
+		
 		}
 	}
 
