@@ -52,9 +52,8 @@ class WindowManager extends EventDispatcher
 
   public var listeners:Array<haxegui.ITraceListener>;
 
-
-  public static function getInstance ():WindowManager
-  {
+    
+  public static function getInstance ():WindowManager {
     if (WindowManager._instance == null)
       {
         WindowManager._instance = new WindowManager ();
@@ -72,8 +71,7 @@ class WindowManager extends EventDispatcher
     numWindows = 0;
   }
 
-  public override function toString () : String
-  {
+  public override function toString () : String {
     return "WindowManager";
   }
 
@@ -128,7 +126,5 @@ class WindowManager extends EventDispatcher
                 toFront(cast o);
             }
         }
-    
     }
-
 }

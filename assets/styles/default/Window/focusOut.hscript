@@ -2,7 +2,7 @@ this.titlebar.color = this.color;
 
 var fmt = DefaultStyle.getTextFormat();
 fmt.color = Math.max(0, DefaultStyle.BACKGROUND - 0x191919);
-this.titlebar.title.setTextFormat(fmt);
+this.titlebar.title.tf.setTextFormat(fmt);
 
 //this.frame.color = this.color;
 this.titlebar.redraw();

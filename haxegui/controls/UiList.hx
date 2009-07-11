@@ -30,12 +30,14 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 
 import haxegui.Component;
+import haxegui.Opts;
 import haxegui.managers.DragManager;
 import haxegui.managers.CursorManager;
-import haxegui.Opts;
 import haxegui.managers.StyleManager;
-import haxegui.events.ResizeEvent;
+
 import haxegui.events.DragEvent;
+import haxegui.events.ListEvent;
+import haxegui.events.ResizeEvent;
 
 import haxegui.toys.Arrow;
 
@@ -56,15 +58,14 @@ class ListHeader extends AbstractButton
 	public var label : Label;
 	public var arrow : Arrow;
 		
-	override public function init(opts:Dynamic=null)
-	{
+	override public function init(opts:Dynamic=null) {
+		mouseChildren = false;
+
 		super.init(opts);
 		
 		label = new Label(this);
 		label.init();
-		label.text = null;
 		label.moveTo(4,4);
-		label.mouseEnabled = false;
 		
 		arrow = new Arrow(this);
 		arrow.init({ width: 8, height: 8, color: haxegui.utils.Color.darken(this.color, 20)});
@@ -102,25 +103,31 @@ class ListItem extends AbstractButton
 {
 
 	public var label : Label;
+	public var selected : Bool;
 
 	override public function init(opts:Dynamic=null) {
+		if(!Std.is(parent, UiList)) throw parent+" not a UiList";
+		
 		color = DefaultStyle.INPUT_BACK;
 		
 		super.init(opts);
 
 		label = new Label(this);
-		var text = Opts.optString(opts, "text", name);
-		label.init({innerData: text, color: DefaultStyle.INPUT_TEXT });
+		var txt = Opts.optString(opts, "label", name);
+		label.init({innerData: txt, color: DefaultStyle.INPUT_TEXT });
 		label.text = null;
-		//label.mouseEnabled = false;
 		label.move(4,4);
-
+		label.mouseEnabled = false;
+		
 		text = null;
 		
 		// add the drop-shadow filter
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, true, false, false );
 		//~ this.filters = [shadow];
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
+		
+		//~ setAction("mouseOver", "");
+		//~ setAction("mouseOut", "");
 		
 	}
 
@@ -161,11 +168,13 @@ class UiList extends Component, implements IData
 
 
 	public override function init(opts : Dynamic=null) {
+		box = new Rectangle(0,0, 140, 100);
 		color = DefaultStyle.BACKGROUND;
 		sortReverse = false;
+		
 		if(Std.is(parent, Component))
 			color = (cast parent).color;
-		box = new Rectangle(0,0, 140, 100);
+		
 		if(data==null)
 			data = [];
 		
@@ -188,7 +197,7 @@ class UiList extends Component, implements IData
 				var item = new ListItem(this);
 				item.init({ width: this.box.width,
 							color: DefaultStyle.INPUT_BACK,
-							text: data[i]
+							label: data[i]
 							});
 				//item.label.mouseEnabled = false;
 				item.move(0,20+20*i+1);
@@ -201,9 +210,8 @@ class UiList extends Component, implements IData
 			var items : Iterator<Dynamic> = data.iterator();
 			for(i in items) {
 				var item = new ListItem(this);
-				item.init({ width: this.box.width,
-							color: DefaultStyle.INPUT_BACK,
-							text: i
+				item.init({ color: DefaultStyle.INPUT_BACK,
+							label: i
 							});
 				//item.label.mouseEnabled = false;
 				item.move(0,20+20*j+1);			
@@ -211,8 +219,11 @@ class UiList extends Component, implements IData
 			}
 		}
 
-			
-
+		for(i in this) {
+			untyped box.width = i.box.width = Math.max(box.width, i.label.tf.width);
+			(cast i).dirty=true;
+		}
+		
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 /*
 		setAction("mouseClick",
@@ -249,10 +260,10 @@ class UiList extends Component, implements IData
 			var items : Iterator<Dynamic> = data.iterator();
 			for(i in items) {
 				var item = new ListItem(this);
-				item.init({ width: this.box.width,
-							color: DefaultStyle.INPUT_BACK,
+				item.init({ color: DefaultStyle.INPUT_BACK,
 							text: i
 							});
+				box.width = item.box.width = Math.max(box.width, item.label.tf.width);
 				item.label.mouseEnabled = false;
 				item.move(0,header==null ? 0 : 20+20*j+1);			
 				j++;

@@ -58,9 +58,6 @@ class ScriptStandardLibrary
 		interp.variables.set( "Timer", haxe.Timer );
 		interp.variables.set( "Xml", Xml );
 	
-		interp.variables.set( ".5*Math.PI", .5*Math.PI );
-
-		//interp.variables.set("HttpAsyncConnection", haxe.remoting.HttpAsyncConnection);
 
 		interp.variables.set("feffects",
 			{
@@ -120,7 +117,9 @@ class ScriptStandardLibrary
 					SQUARE : flash.display.CapsStyle.SQUARE,
 					ROUND : flash.display.CapsStyle.ROUND,
 					NONE : flash.display.CapsStyle.NONE
-					}
+					},
+					Shape : flash.display.Shape,
+					Sprite : flash.display.Sprite
 				},
 				filters : {
 					BevelFilter : flash.filters.BevelFilter,
@@ -223,6 +222,7 @@ class ScriptStandardLibrary
 				WE 		  : Cursor.WE,
 				CROSSHAIR : Cursor.CROSSHAIR,
 			});
+		interp.variables.set("Alert", haxegui.Alert);
 		interp.variables.set("Appearance", haxegui.Appearance);
 		interp.variables.set("CursorManager", CursorManager);
 		interp.variables.set("Color", haxegui.utils.Color);
@@ -242,6 +242,7 @@ class ScriptStandardLibrary
 		interp.variables.set("ScrollPane", haxegui.containers.ScrollPane);
 		interp.variables.set("ScriptManager", haxegui.managers.ScriptManager);
 		interp.variables.set("ScriptStandardLibrary", ScriptStandardLibrary);
+		interp.variables.set("Stack", haxegui.containers.Stack);
 		interp.variables.set("Stats", haxegui.Stats);
 		interp.variables.set("StyleManager", StyleManager);
 		interp.variables.set("ToolBar", haxegui.ToolBar);

@@ -37,7 +37,10 @@ import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 import haxegui.IAdjustable;
 
-
+/**
+ *
+ * 
+ */
 class StepperUpButton extends AbstractButton
 {
 	override public function init(opts:Dynamic=null) {
@@ -54,6 +57,10 @@ class StepperUpButton extends AbstractButton
 	}
 }
 
+/**
+ *
+ * 
+ */
 class StepperDownButton extends AbstractButton
 {
 	override public function init(opts:Dynamic=null) {
@@ -125,8 +132,10 @@ class Stepper extends Component, implements IAdjustable
 		input.setAction("focusOut", "");
 		
 		input.tf.addEventListener (KeyboardEvent.KEY_DOWN, onInput, false, 0, true);
-		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
+		input.addEventListener (MoveEvent.MOVE, onInputMoved, false, 0, true);
+		input.addEventListener (ResizeEvent.RESIZE, onInputResized, false, 0, true);
 
+		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 	}
 
 	public function onInput(e:KeyboardEvent) {
@@ -136,10 +145,23 @@ class Stepper extends Component, implements IAdjustable
 		}
 		
 	}
-	
 
-	public function onChanged(e:Event)
-	{
+	public function onInputMoved(e:MoveEvent) {
+		move(input.x, input.y);
+		input.removeEventListener (MoveEvent.MOVE, onInputMoved);
+		input.moveTo(0,0);
+		input.addEventListener (MoveEvent.MOVE, onInputMoved, false, 0, true);
+		
+	}
+
+	public function onInputResized(e:ResizeEvent) {
+		up.resize(new Rectangle(0, 0, .5*box.height, .5*box.height)); 
+		up.moveTo(box.width-up.box.width,0);
+		down.moveTo(box.width-up.box.width,up.box.height);
+		this.box = input.box.clone();
+	}
+
+	public function onChanged(e:Event)	{
 		input.tf.text = Std.string(adjustment.value);
 	}
 	

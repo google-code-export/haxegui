@@ -19,7 +19,10 @@
 
 package haxegui.events;
 
-class ResizeEvent extends flash.events.MouseEvent {
+import flash.events.Event;
+import flash.events.MouseEvent;
+
+class ResizeEvent extends MouseEvent {
 
 
 	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool, ?oldWidth : Float, ?oldHeight : Float) : Void
@@ -35,6 +38,11 @@ class ResizeEvent extends flash.events.MouseEvent {
 	public override function toString() : String {
 		return "["+"ResizeEvent"+" type=\""+type+"\" bubbles="+bubbles+" cancelable="+cancelable+" oldWidth="+oldWidth+" oldHeight="+oldHeight+"]";
 	}
+
+
+	override public function clone():Event {  
+		return new ResizeEvent(this.type, this.bubbles, this.cancelable, this.oldWidth, this.oldHeight);  
+	}  
 
 	public var oldHeight : Float;
 	public var oldWidth : Float;

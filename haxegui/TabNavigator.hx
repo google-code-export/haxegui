@@ -58,6 +58,8 @@ class Tab extends AbstractButton
 
 
 	override public function init(opts:Dynamic=null) {
+		if(!Std.is(parent, TabNavigator)) throw parent+" not a TabNavigator";
+		
 		box = new Rectangle(0, 0, 40, 24);
 		color = DefaultStyle.BACKGROUND;
 		active = false;
@@ -71,8 +73,8 @@ class Tab extends AbstractButton
 		label.init({text: name});
 		label.mouseEnabled = false;
 
-		parent.dispatchEvent(new Event(Event.CHANGE));
-		
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
+		//~ parent.dispatchEvent(new Event(Event.CHANGE));
 		//~ addEventListener(FocusEvent.FOCUS_IN, (cast parent).onChanged, false, 0, true);
 
 	}
@@ -100,6 +102,9 @@ class Tab extends AbstractButton
 		super.onMouseUp(e);
 	}
 */
+	public function onParentResize(e:ResizeEvent) {
+		moveTo(x, (cast parent).box.height-box.height);
+	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(Tab);
@@ -107,50 +112,6 @@ class Tab extends AbstractButton
 }
 
 
-
-/**
-*
-* TabChild Class
-*
-* @version 0.1
-* @author Omer Goshen <gershon@goosemoose.com>
-* @author Russell Weir <damonsbane@gmail.com>
-*
-*/
-class TabChild extends Component
-{
-	var _tabNav : Dynamic;
-	
-	override public function init(opts : Dynamic=null) {
-		_tabNav = parent;
-		
-		super.init(opts);
-	
-		text = null;
-		
-		while(_tabNav!=null && !Std.is(_tabNav,TabNavigator))
-			_tabNav =  cast _tabNav.parent;
-
-		_tabNav.addEventListener(Event.CHANGE, onTabChanged, false, 0, true);
-				
-	}
-	
-	public function onTabChanged(e:Event) {
-		var tabchildren = new Array();
-		// make an array of all TabChildren 
-		for(i in 0..._tabNav.numChildren) 
-			if(Std.is(_tabNav.getChildAt(i), TabChild))  {
-				_tabNav.getChildAt(i).visible = false;
-				tabchildren.push(_tabNav.getChildAt(i));
-			}
-
-		tabchildren[_tabNav.activeTab].visible = true;
-		//visible = _tabNav.getChildIndex(this) == _tabNav.activeTab;
-				
-
-	}
-
-}
 
 
 
@@ -177,20 +138,17 @@ class TabNavigator extends Component
 	}
 
 
-	override public function init(opts : Dynamic=null)
-	{
-		box = new Rectangle(0, 0, 200, 200);
+	override public function init(opts : Dynamic=null) {
+		box = new Rectangle(0, 0, 200, 24);
 		color = DefaultStyle.BACKGROUND;
 		text = null;
 
 		super.init(opts);
 
-
 		// add the drop-shadow filters
 		var shadow1:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false);
 		var shadow2:DropShadowFilter = new DropShadowFilter (4, 235, DefaultStyle.DROPSHADOW, 0.45, 4, 4,0.35,BitmapFilterQuality.HIGH,true,false,false);
 		this.filters = [shadow1,shadow2];
-
 
 		addEventListener(Event.CHANGE, onChanged, false, 0, true);
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
@@ -208,8 +166,7 @@ class TabNavigator extends Component
 		return activeTab;	
 	}
 
-	public function onChanged(e:Event)
-	{
+	public function onChanged(e:Event) {
 		#if debug
 			trace(this+" tab changed: "+activeTab);
 		#end
@@ -236,19 +193,12 @@ class TabNavigator extends Component
 	public function onParentResize(e:ResizeEvent) {
 		
 		if(Std.is(parent, Component)) {
-			box = untyped parent.box.clone();
-			box.width -= x + 2;
-			box.height -= y + 2;
+			box.width = untyped parent.box.width - x;
 		}
 
-		if(Std.is(parent, Window)) {
-			//box.inflate(-20,-30);
-			box.inflate(0,-10);
-		}
 
 		if(Std.is(parent.parent, haxegui.containers.ScrollPane)) {
-			box = untyped parent.parent.box.clone();
-			//~ box.inflate(-5,0);		
+			box.width = untyped parent.parent.box.width;
 		}
 
 		//~ for(i in 0...numChildren)

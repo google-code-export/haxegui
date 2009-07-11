@@ -92,6 +92,9 @@ class Icon extends Image
 
     public static var STOCK_FIND : String = iconDirectory+"edit-find.png";
     
+    public static var DIALOG_ERROR : String = iconDirectory+"dialog-error.png";
+    public static var DIALOG_WARNING : String = iconDirectory+"dialog-warning.png";
+    
     static function __init__() {
 	haxegui.Haxegui.register(Image);
     }  

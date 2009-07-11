@@ -173,7 +173,7 @@
 				this.titlebar.color = DefaultStyle.ACTIVE_TITLEBAR;
 				
 				var fmt = DefaultStyle.getTextFormat();
-				this.titlebar.title.setTextFormat(fmt);
+				this.titlebar.title.tf.setTextFormat(fmt);
 				
 				//this.frame.color = Math.min(0xFFFFFF, this.color | 0x262626);
 				this.titlebar.redraw();
@@ -189,7 +189,7 @@
 				
 				var fmt = DefaultStyle.getTextFormat();
 				fmt.color = Math.max(0, DefaultStyle.BACKGROUND - 0x191919);
-				this.titlebar.title.setTextFormat(fmt);
+				this.titlebar.title.tf.setTextFormat(fmt);
 				
 				//this.frame.color = this.color;
 				this.titlebar.redraw();
@@ -428,6 +428,17 @@
 		</events>
 	</haxegui:managers:Tooltip>
 
+	<haxegui:Alert>
+		<events>
+			<script type="text/hscript" action="losingFocus">
+			<![CDATA[
+				if(!this.contains(focusTo))
+				return false;
+			]]>
+			</script>
+		</events>
+	</haxegui:Alert>
+
 	<haxegui:ToolBar>
 		<events>
 			<script type="text/hscript" action="redraw">
@@ -478,17 +489,19 @@
 				this.graphics.clear();
 				
 				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(this.box.width, 24, .5*Math.PI, 0, 0);
+				matrix.createGradientBox(this.box.width, this.box.height, .5*Math.PI, 0, 0);
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR,
 												[ Color.tint(this.color, .8), this.color ],
 												[1,1], [0, 0xFF], matrix );
 				
-				this.graphics.drawRect (0, 0, this.box.width, 24);
+				this.graphics.drawRect (0, 0, this.box.width, this.box.height);
 				
-				
+				/*
 				this.graphics.lineStyle(1, Color.darken(this.color, 8) );
 				this.graphics.beginFill( this.color );
 				this.graphics.drawRect( 0, 24, this.box.width, this.box.height );
+				*/
+				
 				this.graphics.endFill();
 			]]>
 			</script>
@@ -1742,8 +1755,8 @@
 			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
-				var h = this.parent.box.height + 1;
-				var w = h;
+				var h = this.box.height + 1;
+				var w = this.box.width;
 				
 				this.graphics.clear();
 				
@@ -1763,12 +1776,13 @@
 					);
 				
 				
-				/***************** Arrow *****************************/
 				if(parent.disabled)
 					colors = [ this.color, Color.darken(this.color, 8) ];
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 				this.graphics.drawRoundRectComplex(0, 1, w, h-1, 0, 4, 0, 4 );
 				this.graphics.endFill ();
+				
+				/***************** Arrow *****************************/
 				/*
 				if(parent.disabled)
 					this.graphics.lineStyle (1, Color.darken(this.color, 10) );
@@ -1787,17 +1801,14 @@
 				this.graphics.lineTo(.5*w, h-7.5);
 				this.graphics.endFill ();
 				*/
-				this.moveTo( parent.box.width - w, -1 );
 				
 				/* Drop-Shadow */
-				var shadow =
-				  new flash.filters.DropShadowFilter (this.disabled ? 1 : 2, 45,
+				this.filters =[new flash.filters.DropShadowFilter (this.disabled ? 1 : 2, 45,
 								      DefaultStyle.DROPSHADOW,
 								      this.disabled ? 0.2 : 0.5,
 								      2, 2, 0.35,
 								      flash.filters.BitmapFilterQuality.HIGH,
-								      false, false, false);
-				this.filters =[shadow];
+								      false, false, false)];
 			]]>
 			</script>
 		</events>

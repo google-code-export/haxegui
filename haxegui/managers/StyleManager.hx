@@ -87,6 +87,7 @@ class DefaultStyle {
 	public static var PANEL		    	: UInt 	 = 0xF3F3F3;
 	public static var PROGRESS_BAR  	: UInt	 = 0xace5b5;
 
+	public static var FONT_SIZE			:	UInt = 8;
 	public static var FONT				:	String = "FFF_Harmony";
 	public static function getTextFormat(?size:Dynamic, ?color:UInt, ?align:flash.text.TextFormatAlign) : TextFormat
 	{
@@ -103,7 +104,7 @@ class DefaultStyle {
 		//~ fmt.font = "04b25";
 		//~ fmt.font = "Pixel_Classic";
 		fmt.font = DefaultStyle.FONT;
-		fmt.size = ( size == null || size == 0 || Math.isNaN(size) ) ? 8 : size;
+		fmt.size = ( size == null || size == 0 || Math.isNaN(size) ) ? DefaultStyle.FONT_SIZE : size;
 		fmt.align = ( align == null || !Std.is(align, flash.text.TextFormatAlign) ) ? TextFormatAlign.LEFT : align;
 		fmt.color = ( color == 0 ) ? DefaultStyle.LABEL_TEXT : color ;
 		return fmt;

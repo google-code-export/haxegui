@@ -274,10 +274,9 @@ class Transformer extends Component
 			target.dispatchEvent(new MoveEvent(MoveEvent.MOVE));
 		else
 			target.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-		target.dispatchEvent(new Event(Event.CHANGE));
+		//~ target.dispatchEvent(new Event(Event.CHANGE));
 		target.redraw();
-		
-		
+		//~ target.dirty = true;
 	}
 
 	function onClose(e:Dynamic) {

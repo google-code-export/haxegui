@@ -45,7 +45,6 @@ class Haxegui {
 	
 	public static var gridSnapping : Bool = false;
 	
-
 	public static function init() {
 		for(o in initializers) {
 			#if debug

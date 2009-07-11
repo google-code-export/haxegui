@@ -182,22 +182,7 @@ class Window extends Component
 
 	static function initialize() {
 	}
-	
-	
-	override public function redraw(opts:Dynamic=null):Void
-	{
- 
-		//~ frame.redraw();
-		//~ titlebar.redraw();
-		//~ if(statusbar!=null)
-			//~ statusbar.redraw();
-		
-		//~ ScriptManager.exec(this,"redraw",
-			//~ {
-				//~ color: Opts.optInt(opts, "color", color),
-			//~ });
-		super.redraw(opts);
-	}
+
 
 	override public function destroy() {
 	

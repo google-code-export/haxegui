@@ -35,6 +35,7 @@ import haxegui.Opts;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
 
 import haxegui.DataSource;
 
@@ -52,15 +53,38 @@ import haxegui.DataSource;
 */
 class ComboBoxDropButton extends AbstractButton {
 
-	override public function init(opts:Dynamic=null) {
+	public var arrow : haxegui.toys.Arrow;
+	
+	public override function init(opts:Dynamic=null) {
+		if(!Std.is(parent, ComboBox)) throw parent+" not a ComboBox";
+		
 		super.init(opts);
 		
-		var arrow = new haxegui.toys.Arrow(this);
+		arrow = new haxegui.toys.Arrow(this);
 		arrow.init({ width: 8, height: 8, color: haxegui.utils.Color.darken(this.color, 10)});
 		arrow.rotation = 90;
 		arrow.move(6,7);
+		arrow.mouseEnabled = false;
+		
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
 
+	public function onParentResize(e:ResizeEvent) {
+		untyped moveTo(parent.box.width - box.width, -1);
+		untyped box  = parent.box.clone();
+		box.width = box.height;
+		dirty = true;
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+	}
+
+	public override function onResize(e:ResizeEvent) {
+		arrow.box = box.clone();
+		arrow.box.inflate(-6,-6);
+		arrow.moveTo(.5*box.width, .5*box.height+1);
+		arrow.dirty = true;
+		super.onResize(e);
+	}
+	
 	static function __init__() {
 		haxegui.Haxegui.register(ComboBoxDropButton);
 	}
@@ -109,7 +133,6 @@ class ComboBox extends Component
 	
 	public var input	  : Input;
 	
-	
 	public var list 	  : UiList;
 	
 	public var  dataSource( default, __setDataSource ) : DataSource;
@@ -149,7 +172,12 @@ class ComboBox extends Component
 		var bOpts = Opts.clone(opts);
 		Opts.removeFields(bOpts, ["x", "y"]);
 		dropButton.init(bOpts);
+		dropButton.box = new Rectangle(0,0,20,20);
+		dropButton.moveTo(box.width-box.height,-1);
 
+
+		input.addEventListener(MoveEvent.MOVE, onInputMoved, false, 0, true);
+		input.addEventListener(ResizeEvent.RESIZE, onInputResized, false, 0, true);
 
 	}
 
@@ -157,13 +185,30 @@ class ComboBox extends Component
 		haxegui.Haxegui.register(ComboBox);
 	}
 
+	public function onInputMoved(e:MoveEvent) {
+		this.move(input.x, input.y);
+		e.target.removeEventListener(MoveEvent.MOVE, onInputMoved);
+		e.target.moveTo(0,0);
+		e.target.addEventListener(MoveEvent.MOVE, onInputMoved, false, 0, true);		
+	}
+
+	public function onInputResized(e:ResizeEvent) {
+		this.box = input.box.clone();
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+	}
+	
 
 	public function __setDataSource(d:DataSource) : DataSource {
 		dataSource = d;
 		//dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
-		trace(this.dataSource+" => "+this);
-		trace(dataSource.data);
+		//~ trace(this.dataSource+" => "+this);
+		//~ trace(dataSource.data);
 		return dataSource;
 	}	
 
+	public override function onResize(e:ResizeEvent) {
+		if(box.width<input.tf.width) return;
+		super.onResize(e);
+	}
+	
 }

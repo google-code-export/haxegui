@@ -21,23 +21,26 @@ package haxegui.events;
 
 import flash.events.Event;
 
-class MoveEvent extends Event {
+import haxegui.Component;
+import haxegui.controls.UiList;
 
-	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool, ?oldX : Float, ?oldY : Float) : Void
-	{
-		super(type, bubbles, cancelable);
-	}
+class ListEvent extends Event {
 
-	public override function toString():String {
-		return "["+"MoveEvent"+" type=\""+type+"\" bubbles="+bubbles+" cancelable="+cancelable+" oldX="+oldX+" oldY="+oldY+"]";
+	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool,
+						?list : UiList,
+						?item : flash.display.DisplayObject,
+						?index : Int)
+						: Void {
+		super(type,bubbles,cancelable);
 	}
 
 	override public function clone():Event {  
-		return new MoveEvent(this.type, this.bubbles, this.cancelable);  
+		return new ListEvent(this.type, this.bubbles, this.cancelable);  
 	}  
-
-	public var relatedObject : flash.display.InteractiveObject;
-	public var oldX : Float;
-	public var oldY : Float;
-	public static var MOVE : String = "Move";
+	
+	var index : Int;
+	public var list : UiList;
+	public static var ITEM_CLICK : String = "itemClick";
+	public static var ITEM_ROLL_OUT : String;
+	public static var ITEM_ROLL_OVER : String;
 }

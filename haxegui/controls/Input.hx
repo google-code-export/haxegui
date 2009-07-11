@@ -21,10 +21,13 @@ package haxegui.controls;
 
 import flash.geom.Rectangle;
 import flash.events.Event;
+import flash.events.MouseEvent;
 import flash.events.TextEvent;
+import flash.events.FocusEvent;
 
 import flash.text.TextField;
 import flash.text.TextFormat;
+import flash.text.TextFieldAutoSize;
 
 import haxegui.Opts;
 import haxegui.managers.StyleManager;
@@ -52,6 +55,7 @@ class Input extends Component
 	    super.init(opts);
 
 	    //~ buttonMode = false;
+	    mouseChildren = true;
 	    mouseEnabled = true;
 	    tabEnabled = true;
 
@@ -66,8 +70,11 @@ class Input extends Component
 	    tf.selectable = disabled ? false : true;
 	    tf.background = false;
 	    tf.border = false;
-	    tf.width = box.width - 4;
-	    tf.height = box.height - 3;
+	    tf.mouseEnabled = true;
+	    tf.tabEnabled = false;
+	    //~ tf.width = box.width - 4;
+	    //~ tf.height = box.height - 3;
+	    tf.autoSize =  TextFieldAutoSize.LEFT;
 	    tf.x = tf.y = 4;
 	    tf.embedFonts = true;
 	    tf.defaultTextFormat = DefaultStyle.getTextFormat();
@@ -102,5 +109,15 @@ class Input extends Component
 		haxegui.Haxegui.register(Input);
 	}
 
+    
+    //public override function onMouseClick(e:MouseEvent) {
+	//tf.setSelection(0,tf.text.length);
+	//super.onMouseClick(e);
+    //}
+
+    //private override function onFocusOut(e:FocusEvent) {
+	//tf.setSelection(0,0);
+	//super.onFocusOut(e);
+    //}    
 }
 
