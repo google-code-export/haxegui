@@ -21,6 +21,14 @@ package haxegui;
 
 import flash.events.Event;
 
+/**
+*
+* Adjustment class
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.1
+*/
 class Adjustment extends flash.events.EventDispatcher {
     
     public var value    (default, __setValue)   : Float;
@@ -87,6 +95,11 @@ class Adjustment extends flash.events.EventDispatcher {
 }
 
 
+/**
+*
+* Interface for adjustable widgets.
+*
+*/
 interface IAdjustable {
     public var adjustment : Adjustment;
 }

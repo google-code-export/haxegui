@@ -54,7 +54,7 @@ class MouseManager extends EventDispatcher
 
 	private static var _instance : MouseManager = null;
 
-	public var listeners:Array<haxegui.ITraceListener>;
+	public var listeners:Array<haxegui.logging.ILogger>;
 	
 	public var lastPosition : Point;
 	public var delta : Point;

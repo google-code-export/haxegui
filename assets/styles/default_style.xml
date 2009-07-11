@@ -1113,14 +1113,15 @@
 				this.graphics.clear();
 				
 				this.graphics.lineStyle (1,
-					Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
+					this.disabled ? Color.darken(this.color, 5) : Color.darken(this.color, 16),
 					1, false,
 					flash.display.LineScaleMode.NONE,
 					flash.display.CapsStyle.ROUND,
 					flash.display.JointStyle.ROUND
 					);
 				
-				var colors = [ Math.max(0, this.disabled ? this.color - 0x191919 : this.color - 0x333333), Math.max(0, this.disabled ? this.color : this.color - 0x141414) ];
+				var colors = [ this.disabled ? Color.darken(this.color, 10) : Color.darken(this.color, 20),
+							   this.disabled ? this.color : Color.darken(this.color, 10) ];
 				var alphas = [1, 1];
 				var ratios = [0, 0xFF];
 				var matrix = new flash.geom.Matrix();
@@ -1270,7 +1271,7 @@
 			<![CDATA[
 				this.graphics.clear();
 				
-				var i = this.parent.getChildIndex(this) ;
+				var i = parent.getChildIndex(this) ;
 				var c = (i%2==0) ? this.color :  Color.darken(this.color, 10);
 				
 				/*
@@ -1438,8 +1439,6 @@
 		<events>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
-				var h = .5*this.parent.box.height;
-				
 				this.graphics.clear();
 				
 				this.graphics.lineStyle (1, this.disabled ? Color.darken(this.color, 16) :
@@ -1455,25 +1454,25 @@
 				var ratios = [ 0, 0xFF ];
 				
 				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(24, 10, .5*Math.PI, 0, 0);
+				matrix.createGradientBox(this.box.width, this.box.height, .5*Math.PI, 0, 0);
 				
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRoundRectComplex(0,0,8,h,4,0,4,0);
+				this.graphics.drawRoundRectComplex(0,0,this.box.width/3,this.box.height,4,0,4,0);
 				this.graphics.endFill();
 				
 				if(this.disabled)
 				    this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, [ this.color, Color.darken(this.color, 8) ], alphas, ratios, matrix );
 				else
 				    this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, [ Color.darken(this.color, 8), Color.darken(this.color, 16) ], alphas, ratios, matrix );
-				this.graphics.drawRect(8,0,12,h);
+				this.graphics.drawRect(this.box.width/3,0,this.box.width/3,this.box.height);
 				this.graphics.endFill();
 				
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRoundRectComplex(20,0,8,h,0,4,0,4);
+				this.graphics.drawRoundRectComplex(this.box.width*2/3,0,this.box.width/3,this.box.height,0,4,0,4);
 				this.graphics.endFill();
 				
-				this.graphics.moveTo(14,h/4);
-				this.graphics.lineTo(14,.75*h);
+				this.graphics.moveTo(.5*this.box.width,.25*this.box.height);
+				this.graphics.lineTo(.5*this.box.width,.75*this.box.height);
 			]]>
 			</script>
 		</events>
@@ -1669,9 +1668,10 @@
 			<![CDATA[
 				this.graphics.clear();
 				
-				var colors = [ DefaultStyle.PROGRESS_BAR, Color.darken(DefaultStyle.PROGRESS_BAR, 20) ];
-				if(this.disabled)
-					colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND, 20) ];
+				var colors = this.disabled ?
+					[ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND, 20) ] :
+					[ DefaultStyle.PROGRESS_BAR, Color.darken(DefaultStyle.PROGRESS_BAR, 20) ];
+				
 				var alphas = [ 1, 1 ];
 				var ratios = [ 0, 0xFF ];
 				var matrix = new flash.geom.Matrix();
@@ -1680,9 +1680,10 @@
 				this.graphics.drawRect(0, 0, parent.box.width-1, parent.box.height-1 );
 				this.graphics.endFill();
 				
-				colors = [ DefaultStyle.PROGRESS_BAR, Color.tint(DefaultStyle.PROGRESS_BAR, .5), Color.darken(DefaultStyle.PROGRESS_BAR, 16) ];
-				if(this.disabled)
-					colors = [ DefaultStyle.BACKGROUND, Color.tint(DefaultStyle.PROGRESS_BAR, .25), Color.darken(DefaultStyle.PROGRESS_BAR, 30) ];
+				colors = this.disabled ?
+				[ DefaultStyle.BACKGROUND, Color.tint(DefaultStyle.BACKGROUND, .5), Color.darken(DefaultStyle.BACKGROUND, 32) ] :
+				[ DefaultStyle.PROGRESS_BAR, Color.tint(DefaultStyle.PROGRESS_BAR, .5), Color.darken(DefaultStyle.PROGRESS_BAR, 16) ];
+				
 				alphas = [ 1, .5, 0 ];
 				ratios = [ 0, 0x80, 0xFF ];
 				

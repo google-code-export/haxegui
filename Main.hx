@@ -135,7 +135,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		logo.name = "Logo";
 		logo.x = cast (stage.stageWidth - logo.width) >> 1;
 		logo.y = cast (stage.stageHeight - logo.height) >> 1;
-		logo.alpha = 0;
+		//~ logo.alpha = 0;
 		/*
 		var shadow =
 		  new flash.filters.DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.9, 20, 20, 0.85,
@@ -217,11 +217,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		stats.init();
 
 		// Color Picker
-		var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
-		colorpicker.init();
-
-		//~ WindowManager.addWindow().init();
-		
+		//~ var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
+		//~ colorpicker.init();
 		
 		// rte
 		var rte = new RichTextEditor(flash.Lib.current, 120,120);
@@ -251,18 +248,23 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		/////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
-		loader.load(new URLRequest("samples/Example1.xml"));
+		//~ loader.load(new URLRequest("samples/Example1.xml"));
 
-//  try {
-//      var l = flash.Lib.current.loaderInfo.parameters;
-//  	trace(here.methodName + " " + Utils.print_r(l));
-//  	loader.load(new URLRequest(Reflect.field(l, "layout")));
-//      //~ for (f in Reflect.fields(l)) {
-//          //~ trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
-//      //~ }
-//  } catch (e:Dynamic) {
-//      trace(here.methodName + " " + e);
-//  }
+/////////////////////////////////////////////////////////////////////////
+// Load XML, try by input flashvars first
+/////////////////////////////////////////////////////////////////////////
+  try {
+    var l = flash.Lib.current.loaderInfo.parameters;
+  	trace(here.methodName + " " + Utils.print_r(l));
+  	var layout = Reflect.field(l, "layout");
+	if(layout==null) layout="samples/Example1.xml";
+	loader.load(new URLRequest(layout));
+      for (f in Reflect.fields(l)) {
+          trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
+      }
+  } catch (e:Dynamic) {
+      trace(here.methodName + " " + e);
+  }
 
 
 
@@ -321,7 +323,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 	|_|_|__,|_,_|___|_  |___|_| Copyright (c) 2009 The haxegui developers
 	                |___|\n\n\t";
 		
-		var info = "<FONT SIZE='8'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+".</FONT>\n";
+		var info = "<FONT SIZE='8'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+" "+(flash.system.Capabilities.isDebugger ? "Debug" : "")+".</FONT>\n";
 		info += "\n\t<U><A HREF=\"http://haxe.org/\">haXe</A></U> (pronounced as hex) is an open source programming language.\n";
 		info += "\tHaxe Graphical User Interface for the flash9 platform, is a set of classes\n\tworking as widgets like flash/flex's components and windows.\n\n";
 		info += "\tThis console can exeute hscript in the textfield below,\n\ttype <I>help</I> to display a list of a few special commands.\n\n";

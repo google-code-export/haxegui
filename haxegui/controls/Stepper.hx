@@ -44,6 +44,8 @@ import haxegui.IAdjustable;
 class StepperUpButton extends AbstractButton
 {
 	override public function init(opts:Dynamic=null) {
+		if(!Std.is(parent, Stepper)) throw parent+" not a Stepper";
+		mouseChildren = false;
 		super.init(opts);
 		var arrow = new haxegui.toys.Arrow(this);
 		arrow.init({ color: haxegui.utils.Color.darken(this.color, 20), width: .5*(cast this.parent).box.height-6, height: 8 });
@@ -61,9 +63,10 @@ class StepperUpButton extends AbstractButton
  *
  * 
  */
-class StepperDownButton extends AbstractButton
-{
+class StepperDownButton extends AbstractButton {
 	override public function init(opts:Dynamic=null) {
+		if(!Std.is(parent, Stepper)) throw parent+" not a Stepper";
+		mouseChildren = false;	
 		super.init(opts);
 		var arrow = new haxegui.toys.Arrow(this);
 		arrow.init({ color: haxegui.utils.Color.darken(this.color, 20), width: .5*(cast this.parent).box.height-6, height: 8 });

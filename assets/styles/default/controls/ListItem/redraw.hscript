@@ -1,6 +1,6 @@
 this.graphics.clear();
 
-var i = this.parent.getChildIndex(this) ;
+var i = parent.getChildIndex(this) ;
 var c = (i%2==0) ? this.color :  Color.darken(this.color, 10);
 
 /*

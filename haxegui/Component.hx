@@ -125,7 +125,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	
 	/**
-	*
+	* @param parent DisplayObjectContainer to attach to
+	* @param name	Component's name
+	* @param x		Horizontal position relative to parent
+	* @param y		Vertical position relative to parent
 	**/
 	public function new (parent:DisplayObjectContainer=null, name:String=null, ?x:Float, ?y:Float) {
 		super ();
@@ -177,10 +180,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	/**
+	 * Initialize a component 
 	 * 
 	 * 
-	 * 
-	 * 
+	 * @param opts Initial options object
 	 */
 	public function init(opts:Dynamic=null) {
 		if(opts == null) opts = {};
@@ -231,20 +234,31 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 */
 
 	/**
+	* Remove all children
+	*/
+	public function removeChildren() {
+		for(child in this)
+			if(Std.is(child, Component))
+				(cast child).destroy();
+			else
+				removeChild(child);
+	}
+	
+	public function swapParent(np:DisplayObjectContainer) {
+		if(np==null) throw "new parent is null";
+		np.addChild(this);
+		parent.removeChild(this);
+	}
+
+
+	/**
 	* Destroy this component and all children
 	*/
 	public function destroy() {
-		var idx : Int = 0;
-		for(c in this) {
-			if(Std.is(c,Component))
-				(cast c).destroy();
-			else
-				idx++;
-		}
-		for(i in 0...numChildren)
-			removeChildAt(i);
+		removeChildren();
 		if(this.parent != null)
 			this.parent.removeChild(this);
+		//~ flash.system.System.gc();
 	}
 
 	/**
@@ -316,10 +330,9 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	/**
-	* @todo complete focus, recurse, that is check all children's children too..
+	* @todo recurse
 	**/
-	public function hasFocus ():Bool
-	{
+	public function hasFocus ():Bool {
 		return FocusManager.getInstance().getFocus() == this ? true : false;
 	}
 
@@ -362,64 +375,15 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		box.y = y;
 		dispatchEvent(event);
 	}
-
-	/** move to parent center **/
+	
+	/** move to parent's center **/
 	public function center() {
 		moveTo(Std.int((cast parent).box.width-box.width)>>1, Std.int((cast parent).box.height-box.height)>>1);
 	}
-	
-
-	public function iterator() : Iterator<DisplayObject> {
-		var l = new List<DisplayObject>();
-		for(i in 0...numChildren)
-			l.add(getChildAt(i));
-		return l.iterator();
-	}
-	
-	
-	public function getChildById(id:Int) : DisplayObject {
-		for(i in this)
-		if(Std.is(i, Component))
-			if((cast i).id==id) return i;
-		return null;
-	}
-
-	public function getElementsdByClass(c:Class<Dynamic>) : Iterator<Dynamic> {
-		var l = new List<Dynamic>();
-		for(i in this)
-		if(Std.is(i, c))
-			l.add(i);
-		return l.iterator();
-	}
-		
-	public function removeChildren() {
-		for(i in this)
-			removeChild(i);
-	}
-	
-
-	public function raise() : Int {
-		var d = Std.int(Math.max(0, Math.min(parent.numChildren-1, parent.getChildIndex(this)+1)));
-		parent.setChildIndex(this, d);
-		return d;
-	}
-
-	public function lower() : Int {
-		var d = Std.int(Math.max(0, Math.min(parent.numChildren-1, parent.getChildIndex(this)-1)));
-		parent.setChildIndex(this, d);
-		return d;
-	}
-	
-	public function toFront() {
-		parent.setChildIndex(this, parent.numChildren-1);
-	}
-	
-	public function toBack() {
-		parent.setChildIndex(this, 0);
-	}
 
 	/**
-	*
+	* resize box
+	* @return Rectangle new size
 	**/
 	public function resize(b:Rectangle) : Rectangle
 	{
@@ -428,9 +392,102 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		event.oldHeight = box.height;
 		box = b.clone();
 		dispatchEvent(event);
-		//~ trace(event);
 		return box;
 	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	// Layering function
+	////////////////////////////////////////////////////////////////////////////
+	/**
+	* Raise one layer
+	* @return Int new depth
+	**/
+	public function raise() : Int {
+		var d = Std.int(Math.max(0, Math.min(parent.numChildren-1, parent.getChildIndex(this)+1)));
+		parent.setChildIndex(this, d);
+		return d;
+	}
+
+	/**
+	* Lower one layer
+	* @return Int new depth
+	**/
+	public function lower() : Int {
+		var d = Std.int(Math.max(0, Math.min(parent.numChildren-1, parent.getChildIndex(this)-1)));
+		parent.setChildIndex(this, d);
+		return d;
+	}
+	
+	/**
+	* Raise to top layer
+	* @return Int new depth
+	**/
+	public function toFront() : Int {
+		parent.setChildIndex(this, parent.numChildren-1);
+		return parent.numChildren-1;
+	}
+	
+	public function toBack() {
+		parent.setChildIndex(this, 0);
+	}
+	
+	
+	
+	////////////////////////////////////////////////////////////////////////////
+	// Iterators and child matching functions
+	////////////////////////////////////////////////////////////////////////////	
+	
+	/** 
+	 * Returns iterator of all children.
+	 * Example:
+	 * 	for(child in component)
+	 * 
+ 	 * @return Iterator<DisplayObject> Iterator for children
+	 */
+	public function iterator() : Iterator<DisplayObject> {
+		var l = new List<DisplayObject>();
+		for(i in 0...numChildren)
+			l.add(getChildAt(i));
+		return l.iterator();
+	}
+
+	/** 
+	 * Returns iterator of all ancestors.
+	 * Example:
+	 * 	for(parent in component.ancestors())
+	 *
+	 * @return Iterator<DisplayObject> Iterator for parents
+	 */	
+	public function ancestors() : Iterator<DisplayObject> {
+		var l = new List<DisplayObject>();
+		var p = parent;
+		while(p!=null) {
+			l.add(p);
+			p = p.parent;
+			}
+		return l.iterator();
+	}
+	
+	/** returns a child by given id number **/
+	public function getChildById(id:Int) : DisplayObject {
+		for(i in this)
+		if(Std.is(i, Component))
+			if((cast i).id==id) return i;
+		return null;
+	}
+
+	/** returns all children of type **/
+	public function getElementsdByClass(c:Class<Dynamic>) : Iterator<Dynamic> {
+		var l = new List<Dynamic>();
+		for(i in this)
+		if(Std.is(i, c))
+			l.add(i);
+		return l.iterator();
+	}
+	
+
+
+
 
 	/**
 	* Sets the action code for the specified action name for this component.
@@ -505,8 +562,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	////               Events                     ////
 	//////////////////////////////////////////////////
 	/** Triggered by addChild() or addChildAt() **/
-	public function onAdded(e:Event) {
-	}
+	public function onAdded(e:Event) {}
 
 	private function __focusHandler(e:FocusEvent) {
 		// relatedObject is one gaining focus
@@ -596,6 +652,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/**
 	* If the component will not take focus, return false from this handler
 	* which will cancel the focus transfer.
+	* 
+	* @return Bool wheter the component will take focus
 	**/
 	public function onGainingFocus(from : flash.display.InteractiveObject) : Bool {
 		var rv : Dynamic = ScriptManager.exec(this,"gainingFocus", {focusFrom : from});
@@ -608,7 +666,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/**
 	* Dispatched to this object when it is about to lose focus
 	*
-	* @return true to allow change, false to prevent focus change
+	* @return Bool true to allow change, false to prevent focus change
 	**/
 	public function onLosingFocus(losingTo : flash.display.InteractiveObject) : Bool {
 		var rv : Dynamic = ScriptManager.exec(this,"losingFocus", {focusTo : losingTo});

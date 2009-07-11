@@ -50,7 +50,7 @@ class WindowManager extends EventDispatcher
   
   private static var _instance : WindowManager = null;
 
-  public var listeners:Array<haxegui.ITraceListener>;
+  public var listeners:Array<haxegui.logging.ILogger>;
 
     
   public static function getInstance ():WindowManager {

@@ -150,6 +150,7 @@ class ScrollBar extends Component
 			rotation = -90;
 		
 		// Silently notify only when target is missing 	
+		if(scrollee!=null)
 		try {
 			this.scrollee = Opts.classInstance(opts, "target", untyped [TextField, DisplayObject]);
 		}

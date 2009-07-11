@@ -82,27 +82,17 @@ class Stats extends Window
   var data2 : Array<Point>;
   var data3 : Array<Point>;
 
+
+  public var timer : Timer;
   public var interval : Int;
-
-  var avgFPS : Array<Float>;
-
-  var frameCounter : Int;
-  var timer : Timer;
   var last : Float;
   var delta : Float;
 
+  var frameCounter : Int;
+  var fps    : Float;
+  var avgFPS : Array<Float>;
   var maxFPS : Float;
   var minFPS : Float;
-
-
-
-	/**
-	 *
-	 */
-  public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-  {
-    super (parent, name, x, y);
-  }//end new
 
 
     /**
@@ -240,7 +230,7 @@ class Stats extends Window
         //~ var fps = frameCounter/(haxe.Timer.stamp() - delta);
         var delta = haxe.Timer.stamp() - last;
         if(delta<=0) return;
-        var fps = frameCounter/delta ;
+        fps = frameCounter/delta ;
 
 
         if(fps > maxFPS) maxFPS = fps;
@@ -350,9 +340,8 @@ class Stats extends Window
 
     public override function destroy() {
         timer.stop();
-        
+        removeEventListener(Event.ENTER_FRAME, onStatsEnterFrame);
         super.destroy();
     }
-
 
 }

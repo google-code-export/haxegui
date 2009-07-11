@@ -30,6 +30,14 @@ import haxegui.Opts;
 import haxegui.managers.StyleManager;
 import haxegui.Component;
 
+/**
+*
+* Label class, non-interactive text component.
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.1
+*/
 class Label extends Component
 {
 	public var tf : TextField;

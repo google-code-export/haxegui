@@ -66,7 +66,7 @@ class ListHeader extends AbstractButton
 		super.init(opts);
 		
 		label = new Label(this);
-		label.init();
+		label.init({innerData : name});
 		label.moveTo(4,4);
 		
 		arrow = new Arrow(this);
@@ -255,7 +255,9 @@ class UiList extends Component, implements IData
 		dataSource = d;
 		dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
 		trace(this.dataSource+" => "+this);
-		trace(dataSource.data);
+		#if debug
+			trace(this.dataSource+": "+dataSource.data);
+		#end
 		if(Std.is(dataSource.data, List)) {
 			var j=0;
 			data = cast(dataSource.data, List<Dynamic>);

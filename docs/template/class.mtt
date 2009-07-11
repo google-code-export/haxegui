@@ -197,7 +197,7 @@ function windowTitle()
 	</pre>
 	</div>
 	<div class="example-embed">
-		<object type="application/x-shockwave-flash" data="samples/main.swf" width="100%" height="400">
+		<object type="application/x-shockwave-flash" data="main.swf" width="100%" height="400">
 			<param name="movie" value="main.swf"/>
 			<param name="play" value="true"/>
 			<param name="loop" value="false"/>

@@ -19,6 +19,10 @@
 
 package haxegui;
 
+/**
+*
+* Interface for containers.
+*
+*/
 interface IContainer {
-
 }
