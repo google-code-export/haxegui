@@ -70,9 +70,15 @@ class Button extends AbstractButton
 		}
 		
 		if(Opts.optString(opts, "icon", null)!=null) {
+		
 		icon = new Icon(this);
-		icon.src = Reflect.field(Icon, Opts.optString(opts, "icon", null));
-		icon.init();
+		var src = Opts.optString(opts, "icon", null);
+		
+		// check for STOCK_ type icon
+		if(Reflect.field(Icon, src)!=null)
+			src = Reflect.field(Icon, src);
+		
+		icon.init({src: src});
 		icon.mouseEnabled = false;
 		icon.tabEnabled = false;
 		icon.move(4,4);
