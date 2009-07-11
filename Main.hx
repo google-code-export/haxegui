@@ -131,23 +131,24 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 
 		// Logos
+/*		
 		var logo = flash.Lib.current.addChild(flash.Lib.attach("Logo"));
 		logo.name = "Logo";
 		logo.x = cast (stage.stageWidth - logo.width) >> 1;
 		logo.y = cast (stage.stageHeight - logo.height) >> 1;
-		//~ logo.alpha = 0;
-		/*
-		var shadow =
-		  new flash.filters.DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.9, 20, 20, 0.85,
-					flash.filters.BitmapFilterQuality.HIGH, false, false, false);
 
-		logo.filters = [shadow];
-		*/
-		/*
-		var t = new Tween(0,1,300,logo,"alpha",feffects.easing.Linear.easeNone);
-		haxe.Timer.delay( t.start, 150);
-		*/
-		haxe.Timer.delay( init, 75);
+		var t = new Tween(0,1,2000,feffects.easing.Bounce.easeOut);
+		t.setTweenHandlers( function(v) {
+			logo.alpha = v;
+			var trans = new flash.geom.Matrix();
+			trans.translate(cast (stage.stageWidth - logo.width) >> 1, cast (stage.stageHeight - logo.height) >> 1);
+			trans.scale(v,v);
+			logo.transform.matrix = trans;
+		});		
+		haxe.Timer.delay( t.start, 75);
+		haxe.Timer.delay( init, 2200);
+*/		
+		haxe.Timer.delay( init, 50);
 		
 	}
 
@@ -256,8 +257,13 @@ class Main extends Sprite, implements haxe.rtti.Infos
   try {
     var l = flash.Lib.current.loaderInfo.parameters;
   	trace(here.methodName + " " + Utils.print_r(l));
+
+  	var baseURL = Reflect.field(l, "baseURL");
+	if(baseURL!=null) haxegui.Haxegui.baseURL = baseURL;
+
   	var layout = Reflect.field(l, "layout");
 	if(layout==null) layout="samples/Example1.xml";
+
 	loader.load(new URLRequest(layout));
       for (f in Reflect.fields(l)) {
           trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
