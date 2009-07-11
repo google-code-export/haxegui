@@ -259,12 +259,15 @@ class Main extends Sprite, implements haxe.rtti.Infos
   	trace(here.methodName + " " + Utils.print_r(l));
 
   	var baseURL = Reflect.field(l, "baseURL");
-	if(baseURL!=null) haxegui.Haxegui.baseURL = baseURL;
+	if(baseURL==null)  baseURL = "";
+
+	haxegui.Haxegui.baseURL = baseURL;
 
   	var layout = Reflect.field(l, "layout");
-	if(layout==null) layout="samples/Example1.xml";
-
-	loader.load(new URLRequest(layout));
+	if(layout==null) 
+		layout="samples/Example1.xml";
+		
+	loader.load(new URLRequest(baseURL+layout));
       for (f in Reflect.fields(l)) {
           trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
       }
