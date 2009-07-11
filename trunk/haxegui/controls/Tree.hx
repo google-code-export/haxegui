@@ -73,19 +73,16 @@ class TreeNode extends Component
 	
 	public var expander : Expander;
 
-	override public function init(opts:Dynamic=null)
-	{
+	override public function init(opts:Dynamic=null) {
 		box = new Rectangle(0,0,140,20);
 		
 		super.init(opts);
 
 		expander = new Expander(this, name);
 		expander.init();
-		
-	
+			
 		expander.setAction("mouseDown", "");
 		expander.setAction("mouseUp", "");
-
 		expander.setAction("mouseClick",
 		"
 		//~ var h = root.getBounds(this).height - 20;
@@ -100,25 +97,11 @@ class TreeNode extends Component
 				);
 				t.start();
 			}
-		//~ var o = parent;
-		//~ while(o!=null && Std.is(o, controls.TreeNode)) 
-			//~ o = o.parent;
-
 		"
 		);
 
 
 	}
-
-	public override function onRollOver(e:MouseEvent) {
-		//e.stopPropagation();
-	}
-
-	public override function onRollOut(e:MouseEvent) {
-		//e.stopPropagation();
-	}
-				
-
 	static function __init__() {
 		haxegui.Haxegui.register(TreeNode);
 	}
@@ -161,8 +144,8 @@ class Tree extends Component {
 				subtree.init({width: this.box.width, visible: false});
 				subtree.move(0, 16);
 				
-				for(i in 0...subtree.numChildren) 
-					untyped subtree.getChildAt(i).getChildAt(0).x = 20;
+				for(s in subtree) 
+					(cast s).getChildAt(0).x = 20;
 
 				subtree.setAction("redraw", "");
 			}
@@ -189,14 +172,6 @@ class Tree extends Component {
 		haxegui.Haxegui.register(Tree);
 	}
 
-
-	public override function onRollOver(e:MouseEvent) {
-		//e.stopPropagation();
-	}
-
-	public override function onRollOut(e:MouseEvent) {
-		//e.stopPropagation();
-	}
 
 				
 }

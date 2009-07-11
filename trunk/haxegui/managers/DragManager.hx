@@ -33,7 +33,7 @@ import haxegui.events.ResizeEvent;
 class DragManager extends EventDispatcher
 {
 	private static var _instance : DragManager = null;
-	public var listeners:Array<haxegui.ITraceListener>;
+	public var listeners:Array<haxegui.logging.ILogger>;
 
 	public static function getInstance ():DragManager
 	{

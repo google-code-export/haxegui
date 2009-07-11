@@ -91,7 +91,7 @@ class ProgressBar extends Component
 		
 		
 		bar = new ProgressBarIndicator(this, "Indicator");
-		bar.init();
+		bar.init({disabled: this.disabled});
 		bar.cacheAsBitmap = true;
 		this.cacheAsBitmap = true;
 		
@@ -119,20 +119,31 @@ class ProgressBar extends Component
 		"
 		);
 		bar.moveTo(0,1);
-		//bar.startInterval(5);
+		bar.startInterval(12);
 
 		label = new Label(this);
 		label.init();
 		label.text = null;
 		label.tf.text = Math.round(100*progress) + "%";
-		label.moveTo( .5*(box.width-label.width), .5*(box.height-label.height) + 1 );
+		label.center();
+		label.move(0,2);
 		
-		
+		//TODO: move to xml
 		/*
-		var t = new feffects.Tween(0, 1, 10000+Std.random(20000), this, "progress", feffects.easing.Linear.easeNone);
-		var self = this;
-		t.setTweenHandlers( function(v) { self.update(); } , function(v) { t.stop(); t.start(); } );
-		t.start();
+		if(!disabled) {
+			var t = new feffects.Tween(0, 1, 10000+Std.random(20000), this, "progress", feffects.easing.Linear.easeNone);
+			var self = this;
+			t.setTweenHandlers( 
+				function(v) {
+					self.update(); 
+				},
+				function(v) { 
+					t.stop(); 
+					t.start(); 
+				}
+			);
+			t.start();
+		}
 		*/
 
 	}
@@ -165,7 +176,8 @@ class ProgressBar extends Component
 	
 	
 	public override function onResize(e:ResizeEvent) {
-		label.moveTo( Std.int(box.width-label.width)>>1, Std.int(box.height-label.height)>>1 + 1 );
+		label.center();
+		label.move(0,2);
 		bar.dirty = true;
 		update();
 		super.onResize(cast e.clone());

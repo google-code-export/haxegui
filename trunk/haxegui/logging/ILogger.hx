@@ -17,8 +17,10 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package haxegui;
+package haxegui.logging;
 
-interface ITraceListener {
-  public  function log( e : Dynamic, ?inf : haxe.PosInfos ) : Void ;
+import haxegui.logging.ErrorType;
+
+interface ILogger {
+  public  function log( e : Dynamic, ?inf : haxe.PosInfos, ?error:ErrorType ) : Void ;
 }

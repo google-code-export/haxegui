@@ -38,44 +38,56 @@ import flash.display.BitmapData;
 */
 class Image extends Component
 {
-	public var src : String;
-	public var loader : Loader;
+    public var src : String;
+    public var loader : Loader;
 
-	public var bitmap : Bitmap;
+    public var bitmap : Bitmap;
 
-	public var aspect(default, null) : Float;
+    public var aspect(default, null) : Float;
 	
-	override public function init(opts:Dynamic=null) : Void	{
-	    
-	    super.init(opts);
-	    
-	    src = Opts.optString(opts, "src", src);
-	    
-	    if(loader==null)
-		loader = new Loader();
-	    
-	    var urlReq:URLRequest = new URLRequest(this.src);
-	    
-	    loader.load(urlReq);
-	    loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
-
-	}
+    override public function init(opts:Dynamic=null) : Void	{
 	
-	function onComplete(e:Event) {
-	    bitmap = e.currentTarget.content ;
-	    aspect = bitmap.width / bitmap.height;
-	    addChild(bitmap);
-	    dispatchEvent(e);
-	}
-
-	static function __init__() {
-	    haxegui.Haxegui.register(Image);
-	}
+	super.init(opts);
 	
+	src = Opts.optString(opts, "src", src);
+	
+	if(loader==null)
+	    loader = new Loader();
+	
+	var urlReq:URLRequest = new URLRequest(this.src);
+	
+	loader.load(urlReq);
+	loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
+
+    }
+    
+    function onComplete(e:Event) {
+	bitmap = e.currentTarget.content ;
+	aspect = bitmap.width / bitmap.height;
+	addChild(bitmap);
+	dispatchEvent(e);
+    }
+
+    static function __init__() {
+	haxegui.Haxegui.register(Image);
+    }
+    
 
 }
 
-
+/**
+*
+* Icon Class
+*
+* Defines stock icons, used like this:
+* 
+* 	var icon = new Icon();
+* 	icon.init({src: STOCK_NEW});
+* 
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
 class Icon extends Image
 {
     public static var iconDirectory : String = "/assets/icons/";

@@ -19,7 +19,11 @@
 
 package haxegui;
 
-
+/**
+*
+* Interface for moveable widgets.
+*
+*/
 interface IMovable {
   //~ public function move (x : Float, y : Float) : Void;
   public function move (x : Float, y : Float) : Void;

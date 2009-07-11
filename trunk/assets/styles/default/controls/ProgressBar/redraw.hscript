@@ -1,14 +1,15 @@
 this.graphics.clear();
 
 this.graphics.lineStyle (1,
-	Math.max(0, Math.min(0xFFFFFF, this.color - 0x282828)),
+	this.disabled ? Color.darken(this.color, 5) : Color.darken(this.color, 16),
 	1, false, 
 	flash.display.LineScaleMode.NONE,
 	flash.display.CapsStyle.ROUND,
 	flash.display.JointStyle.ROUND
 	);
 	
-var colors = [ Math.max(0, this.disabled ? this.color - 0x191919 : this.color - 0x333333), Math.max(0, this.disabled ? this.color : this.color - 0x141414) ];
+var colors = [ this.disabled ? Color.darken(this.color, 10) : Color.darken(this.color, 20), 
+			   this.disabled ? this.color : Color.darken(this.color, 10) ];
 var alphas = [1, 1];
 var ratios = [0, 0xFF];
 var matrix = new flash.geom.Matrix();

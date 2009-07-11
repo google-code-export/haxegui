@@ -72,9 +72,11 @@ import haxegui.controls.ComboBox;
 
 /**
 *
+* Advanced color picker.
 *
-*
-*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+* @version 0.1
 */
 class ColorPicker2 extends Window
 {

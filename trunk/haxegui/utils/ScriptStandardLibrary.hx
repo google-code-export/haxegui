@@ -46,6 +46,8 @@ class ScriptStandardLibrary
 	{
 		interp.variables.set( "trace", haxe.Log.trace );
 		interp.variables.set( "root", flash.Lib.current );
+		interp.variables.set( "stage", flash.Lib.current.stage );
+		interp.variables.set( "Date", Date );
 		interp.variables.set( "Std", Std );
 		interp.variables.set( "Lambda", Lambda );
 		interp.variables.set( "List", List );

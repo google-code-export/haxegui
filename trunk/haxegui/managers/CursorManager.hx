@@ -72,7 +72,7 @@ class CursorManager extends EventDispatcher
 	///////////////////////////////////////////////////
 	////              Public                       ////
 	///////////////////////////////////////////////////
-	public var listeners:Array<haxegui.ITraceListener>;
+	public var listeners:Array<haxegui.logging.ILogger>;
 	public var cursor(default,__setCursor) : Cursor;
 	public var visible(__getVisible,__setVisible) : Bool;
 	public var _mc(default,null) : MovieClip;

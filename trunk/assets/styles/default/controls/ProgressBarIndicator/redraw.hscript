@@ -1,8 +1,9 @@
 this.graphics.clear();
 
-var colors = [ DefaultStyle.PROGRESS_BAR, Color.darken(DefaultStyle.PROGRESS_BAR, 20) ];
-if(this.disabled)
-	colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND, 20) ];
+var colors = this.disabled ? 
+	[ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND, 20) ] :
+	[ DefaultStyle.PROGRESS_BAR, Color.darken(DefaultStyle.PROGRESS_BAR, 20) ];
+
 var alphas = [ 1, 1 ];
 var ratios = [ 0, 0xFF ];
 var matrix = new flash.geom.Matrix();
@@ -11,9 +12,10 @@ this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alph
 this.graphics.drawRect(0, 0, parent.box.width-1, parent.box.height-1 );
 this.graphics.endFill();
 
-colors = [ DefaultStyle.PROGRESS_BAR, Color.tint(DefaultStyle.PROGRESS_BAR, .5), Color.darken(DefaultStyle.PROGRESS_BAR, 16) ];
-if(this.disabled)
-	colors = [ DefaultStyle.BACKGROUND, Color.tint(DefaultStyle.PROGRESS_BAR, .25), Color.darken(DefaultStyle.PROGRESS_BAR, 30) ];
+colors = this.disabled ? 
+[ DefaultStyle.BACKGROUND, Color.tint(DefaultStyle.BACKGROUND, .5), Color.darken(DefaultStyle.BACKGROUND, 32) ] :
+[ DefaultStyle.PROGRESS_BAR, Color.tint(DefaultStyle.PROGRESS_BAR, .5), Color.darken(DefaultStyle.PROGRESS_BAR, 16) ];
+
 alphas = [ 1, .5, 0 ];
 ratios = [ 0, 0x80, 0xFF ];
 

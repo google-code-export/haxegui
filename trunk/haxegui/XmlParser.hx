@@ -42,11 +42,15 @@ class XmlParser {
 		default:		throw "Unhandled xml type: " + typeParts[1];
 		}
 
-		trace("XmlParser: Setting " + typeParts[1].toLowerCase() + " to " + xml.get("name"));
+		trace(this+": Setting " + typeParts[1].toLowerCase() + " to " + xml.get("name"));
 		for(x in xml.elements())
 			parseNode(x);
 	}
 
+	public function toString() : String {
+		return "XmlParser";
+	}
+	
 	/**
 	* Gets the name from a layout xml node.
 	*
@@ -123,7 +127,7 @@ class XmlParser {
 
 		var resolvedClass = Type.resolveClass(className);
 		if(resolvedClass == null) {
-			trace("XmlParser : warning : Class " + className + " not resolved.");
+			trace(this+": warning : Class " + className + " not resolved.");
 			return;
 		}
 
