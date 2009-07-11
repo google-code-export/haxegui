@@ -59,6 +59,8 @@ class ListHeader extends AbstractButton
 	public var arrow : Arrow;
 		
 	override public function init(opts:Dynamic=null) {
+		if(!Std.is(parent, UiList)) throw parent+" not a UiList";
+
 		mouseChildren = false;
 
 		super.init(opts);

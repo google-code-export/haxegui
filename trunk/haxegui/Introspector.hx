@@ -90,7 +90,7 @@ class Introspector extends Window
 
 		//
 		tree = new Tree(scrollpane2);
-		var o = { root : reflectDisplayObject(cast flash.Lib.current) };
+		var o = { root : reflectDisplayObjectContainer(cast flash.Lib.current) };
 		tree.data = o;
 		tree.init({width: 250});
 		
@@ -127,7 +127,7 @@ class Introspector extends Window
 		//~ var scrollpane = tree.parent;
 		//~ scrollpane.removeChild(tree);
 		//~ tree = new Tree(scrollpane, "Tree", 0, 0);
-		//~ var o = { root : reflectDisplayObject(cast flash.Lib.current) };
+		//~ var o = { root : reflectComponent(cast flash.Lib.current) };
 		//~ tree.data = o;
 		//~ tree.init({width: 250});
 		//~ untyped tree.getChildAt(0).getChildAt(0).expanded = true;
@@ -202,9 +202,9 @@ class Introspector extends Window
 
 		list1.init({text: "Property"});
 		list2.init({text: "Value"});		
-		for(i in 1...list2.numChildren-1) untyped {
-			list2.getChildAt(i).label.tf.selectable = true;
-			list2.getChildAt(i).label.tf.mouseEnabled = true;
+		for(item in list2.getElementsdByClass(ListItem)) {
+			item.label.tf.selectable = true;
+			item.label.tf.mouseEnabled = true;
 			}
 		
 		
@@ -260,19 +260,15 @@ class Introspector extends Window
 	}
 
 
-	function reflectDisplayObject(d:DisplayObjectContainer) : Dynamic {
+	function reflectDisplayObjectContainer(d:DisplayObjectContainer) : Dynamic {
 		if(d==null) return;
 		var o = {};
 		for(i in 0...d.numChildren) {
-		var child = cast d.getChildAt(i);
-		if(child==null) return;
-		if(Std.is(child, flash.display.BitmapData)) return;
-		if(Std.is(child, flash.display.Bitmap)) return;
-		//~ if(!Std.is(child, flash.text.TextField)) {
-		if(!Std.is(child, flash.text.TextField)) {
-			//~ Reflect.setField( o, child.name, child );
-			Reflect.setField( o, child.name, reflectDisplayObject(cast child) );
-			}
+			var child = d.getChildAt(i);
+			if(Std.is(child, flash.display.BitmapData)) return;
+			if(Std.is(child, flash.display.Bitmap)) return;
+			if(Std.is(child, flash.text.TextField)) return;
+				Reflect.setField( o, child.name, reflectDisplayObjectContainer(cast child) );
 		}
 		return o;
 	}

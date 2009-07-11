@@ -124,7 +124,6 @@ class CursorManager extends EventDispatcher
 
 		_mc.visible = false;
 
-
 		_mc.x = e.stageX;
 		_mc.y = e.stageY;
 		

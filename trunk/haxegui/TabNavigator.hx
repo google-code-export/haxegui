@@ -114,6 +114,11 @@ class Tab extends AbstractButton
 
 
 
+enum TabPosition {
+	TOP;
+	BOTTOM;
+}
+
 
 /**
 *
@@ -127,7 +132,7 @@ class Tab extends AbstractButton
 */
 class TabNavigator extends Component
 {
-
+	public var tabPosition : TabPosition;
 	public var activeTab(default, __setActive) : Int;
 
 	public override function addChild(o : DisplayObject) : DisplayObject
@@ -142,6 +147,7 @@ class TabNavigator extends Component
 		box = new Rectangle(0, 0, 200, 24);
 		color = DefaultStyle.BACKGROUND;
 		text = null;
+		tabPosition = TabPosition.TOP;
 
 		super.init(opts);
 
@@ -170,25 +176,15 @@ class TabNavigator extends Component
 		#if debug
 			trace(this+" tab changed: "+activeTab);
 		#end
-		for(i in 0...numChildren) {
-			var child = getChildAt(i);
-			if(Std.is(child, Tab)) untyped {
-				child.active = ( i == activeTab );
-				child.redraw();
+		for(tab in getElementsdByClass(Tab)) {
+				tab.active = ( getChildIndex(cast tab) == activeTab );
+				tab.redraw();
 				}
-			//~ if(Std.is(child, TabChild)) untyped {
-				//~ child.visible = i == activeTab;
-				//~ child.redraw();
-				//~ }				
-		}
-
 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(TabNavigator);
 	}
-	
-	
 
 	public function onParentResize(e:ResizeEvent) {
 		
@@ -200,12 +196,6 @@ class TabNavigator extends Component
 		if(Std.is(parent.parent, haxegui.containers.ScrollPane)) {
 			box.width = untyped parent.parent.box.width;
 		}
-
-		//~ for(i in 0...numChildren)
-			//~ if(Std.is( getChildAt(i), haxegui.controls.ScrollBar ))
-			//~ {
-				//~ this.box.width -= 20;
-			//~ }
 
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));

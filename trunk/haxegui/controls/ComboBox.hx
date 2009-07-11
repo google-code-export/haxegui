@@ -58,6 +58,8 @@ class ComboBoxDropButton extends AbstractButton {
 	public override function init(opts:Dynamic=null) {
 		if(!Std.is(parent, ComboBox)) throw parent+" not a ComboBox";
 		
+		mouseChildren = false;
+		
 		super.init(opts);
 		
 		arrow = new haxegui.toys.Arrow(this);

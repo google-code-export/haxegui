@@ -149,7 +149,7 @@ class RichTextEditor extends Window
 			tf.htmlText = htmlText.text;			
 			}
 
-			for(child in cast(parent, Component))
+			for(child in parent.list)
 				child.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, click);
 
 			function down(e) { 
@@ -200,7 +200,7 @@ class RichTextEditor extends Window
 			tf.htmlText = htmlText.text;
 			}
 
-			for(child in cast(parent, Component))
+			for(child in parent.list)
 				child.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, click);
 
 			function down(e) { 

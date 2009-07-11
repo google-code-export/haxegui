@@ -267,11 +267,9 @@ class Stats extends Window
             ""
         ];
 
-        for(i in 0...list2.numChildren)
-           if(Std.is(list2.getChildAt(i), ListItem)) {
-                untyped list2.getChildAt(i).label.tf.text = list2.data[i];
-                //~ untyped list2.getChildAt(i).redraw();
-        }
+        for(item in list2.getElementsdByClass(ListItem))
+           item.label.tf.text = list2.data[list2.getChildIndex(cast item)];
+        
 
 
         var item = cast list.getChildAt(2);

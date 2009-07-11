@@ -58,6 +58,8 @@ class MenuBarItem extends AbstractButton
 	public var label : Label;
 
 	override public function init(opts:Dynamic=null) {
+		if(!Std.is(parent, MenuBar)) throw parent+" not a MenuBar";
+
 		box = new Rectangle(0,0,40,24);
 		
 		super.init(opts);

@@ -55,12 +55,40 @@ import feffects.Tween;
  **/
 class Component extends Sprite, implements haxegui.IMovable, implements haxegui.IToolTip
 {
+	////////////////////////////////////////////////////////////////////////////
+	// Static members
+	////////////////////////////////////////////////////////////////////////////
+	
 	/** The static component id counter **/
 	private static var nextId : Int = 0;
 
+	////////////////////////////////////////////////////////////////////////////
+	// Private members
+	////////////////////////////////////////////////////////////////////////////
+
+	/** Current color tween in effect **/
+	private var colorTween : Tween;
+
+	/** Current position tween in effect **/
+	//~ private var positionTween : Tween;
+
+
+	/** The initial opts **/
+	private var initOpts : Dynamic;
+
+	/** Number of interval calls per second **/
+	private var intervalUpdatesPerSec : Float;
+
+	/** Last timestamp when an interval occured **/
+	private var lastInterval : Float;
+	
+	////////////////////////////////////////////////////////////////////////////
+	// Public members
+	////////////////////////////////////////////////////////////////////////////
+
 	/** Rectangular dimensions **/
 	public var box : Rectangle;
-	public var minimumBox : Rectangle;
+	//~ public var minimumBox : Rectangle;
 
 	/** The color of this component, which has different meanings per component **/
 	public var color:Int;
@@ -80,7 +108,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	public var text : String;
 
 	/** Does object validate ? **/
-	public var validate : Bool;
+	public var validates : Bool;
 
 	/** Fit horizontaly to parent **/
 	public var fitH : Bool;
@@ -92,17 +120,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 //~ public var padding : Array<Float>;
 //~ public var getBox : Void -> Rectangle;
 
-	/** Current color tween in effect **/
-	private var colorTween : Tween;
 
-	/** The initial opts **/
-	private var initOpts : Dynamic;
-
-	/** Number of interval calls per second **/
-	private var intervalUpdatesPerSec : Float;
-
-	/** Last timestamp when an interval occured **/
-	private var lastInterval : Float;
 
 
 	
@@ -115,7 +133,6 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 		color = 0xF00FFF;
 		box = new Rectangle();
-		minimumBox = new Rectangle();
 
 		tabEnabled = mouseEnabled = true;
 		buttonMode = false;
@@ -232,7 +249,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	/**
 	* Returns the code associated with the specified action. If this instance
-	* does not have a script, the default from the style is returned.
+	* does not have a script, the default from the upstyle is returned.
 	*
 	* @param action Action name
 	* @return String code
@@ -366,7 +383,15 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 			if((cast i).id==id) return i;
 		return null;
 	}
-	
+
+	public function getElementsdByClass(c:Class<Dynamic>) : Iterator<Dynamic> {
+		var l = new List<Dynamic>();
+		for(i in this)
+		if(Std.is(i, c))
+			l.add(i);
+		return l.iterator();
+	}
+		
 	public function removeChildren() {
 		for(i in this)
 			removeChild(i);
