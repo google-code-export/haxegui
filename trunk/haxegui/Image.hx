@@ -90,22 +90,28 @@ class Image extends Component
 */
 class Icon extends Image
 {
-    public static var iconDirectory : String = Haxegui.baseURL+"/assets/icons/";
+    public static var iconDirectory : String = "assets/icons/";
     
-    public static var STOCK_NEW : String = iconDirectory+"document-new.png";
-    public static var STOCK_OPEN : String = iconDirectory+"document-open.png";
-    public static var STOCK_SAVE : String = iconDirectory+"document-save.png";
+    public static var STOCK_NEW : String = "document-new.png";
+    public static var STOCK_OPEN : String = "document-open.png";
+    public static var STOCK_SAVE : String = "document-save.png";
 
-    public static var STOCK_COPY : String = iconDirectory+"edit-copy.png";
-    public static var STOCK_CUT : String = iconDirectory+"edit-cut.png";
-    public static var STOCK_PASTE : String = iconDirectory+"edit-paste.png";
-    public static var STOCK_CLEAR : String = iconDirectory+"edit-clear.png";
-    public static var STOCK_DELETE : String = iconDirectory+"edit-delete.png";
+    public static var STOCK_COPY : String = "edit-copy.png";
+    public static var STOCK_CUT : String = "edit-cut.png";
+    public static var STOCK_PASTE : String = "edit-paste.png";
+    public static var STOCK_CLEAR : String = "edit-clear.png";
+    public static var STOCK_DELETE : String = "edit-delete.png";
 
-    public static var STOCK_FIND : String = iconDirectory+"edit-find.png";
+    public static var STOCK_FIND : String = "edit-find.png";
     
-    public static var DIALOG_ERROR : String = iconDirectory+"dialog-error.png";
-    public static var DIALOG_WARNING : String = iconDirectory+"dialog-warning.png";
+    public static var DIALOG_ERROR : String = "dialog-error.png";
+    public static var DIALOG_WARNING : String = "dialog-warning.png";
+
+    override public function init(opts:Dynamic=null) : Void {
+	src = Opts.optString(opts, "src", src);
+	src = Haxegui.baseURL + iconDirectory + src;
+	super.init(opts);
+    }
     
     static function __init__() {
 	haxegui.Haxegui.register(Image);
