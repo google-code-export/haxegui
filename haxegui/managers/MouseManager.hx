@@ -26,7 +26,6 @@ import flash.geom.Rectangle;
 
 import flash.display.DisplayObject;
 import flash.display.Sprite;
-import flash.display.MovieClip;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -99,26 +98,24 @@ class MouseManager extends EventDispatcher
 		stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave, false, 0, true);
 	}
 
-	public inline function onMouseEnter(e:MouseEvent) : Void
-	{
+	public inline function onMouseEnter(e:MouseEvent) : Void {
 		/** Show fake cursor **/
-		CursorManager.getInstance().showCursor();
+		//~ CursorManager.getInstance().showCursor();
 		
 		/** Calculate new mouse delta **/
 		//~ delta = new Point( e.stageX - lastPosition.x, e.stageY - lastPosition.y );
 		//~ moving = delta.equals(new Point());  
 		
 		/** Inject to fake cursor **/
-		CursorManager.getInstance().inject( e );
+		CursorManager.getInstance().inject(e);
 		
 		/** Hold to last mouse position **/
 		//lastPosition = new Point( e.stageX, e.stageY );
 
-		e.updateAfterEvent();
+		//~ e.updateAfterEvent();
 	}
 
-	public inline function onMouseLeave(e:Event) : Void
-	{
+	public inline function onMouseLeave(e:Event) : Void	{
 		//~ trace(e);
 		CursorManager.getInstance().hideCursor();
 		//~ CursorManager.getInstance()._mc.stopDrag();
