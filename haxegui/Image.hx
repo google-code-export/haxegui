@@ -24,6 +24,7 @@ import haxegui.Component;
 import flash.display.Loader;
 import flash.net.URLRequest;
 import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 
@@ -56,9 +57,15 @@ class Image extends Component
 	
 	var urlReq:URLRequest = new URLRequest(this.src);
 	
-	loader.load(urlReq);
-	loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
+	try {
+	    loader.load(urlReq);
+	}
+	catch(e:Dynamic) {
+	    trace(e);
+	}
 
+	loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
+	loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
     }
     
     function onComplete(e:Event) {
@@ -68,6 +75,10 @@ class Image extends Component
 	dispatchEvent(e);
     }
 
+    function onError(e:IOErrorEvent) {
+	trace(e);
+    }
+    
     static function __init__() {
 	haxegui.Haxegui.register(Image);
     }
@@ -110,7 +121,7 @@ class Icon extends Image
     override public function init(opts:Dynamic=null) : Void {
 	src = Opts.optString(opts, "src", src);
 	src = Haxegui.baseURL + iconDirectory + src;
-	super.init(opts);
+	super.init({src: src});
     }
     
     static function __init__() {

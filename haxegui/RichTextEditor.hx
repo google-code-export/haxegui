@@ -215,10 +215,7 @@ class RichTextEditor extends Window
 		);
 
 		var btn = new Button(toolbar, "Bold", 180, 8);
-		btn.init({width: 24, height: 24, label: null });
-		var icon = new Image(btn, "icon", 4, 4);
-		icon.init({src: "assets/icons/format-text-bold.png"});
-		icon.mouseEnabled = false;
+		btn.init({width: 24, height: 24, label: null, icon: "format-text-bold.png" });
 		btn.setAction("mouseClick",
 		"
 		var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
@@ -238,10 +235,7 @@ class RichTextEditor extends Window
 		);
 
 		btn = new Button(toolbar, "Italic", 204, 8);
-		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 4, 4);
-		icon.init({src: "assets/icons/format-text-italic.png"});
-		icon.mouseEnabled = false;
+		btn.init({width: 24, height: 24, label: null, icon: "format-text-italic.png" });
 		btn.setAction("mouseClick",
 		"
 		var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
@@ -261,10 +255,7 @@ class RichTextEditor extends Window
 		);
 
 		btn = new Button(toolbar, "UnderLine", 228, 8);
-		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 4, 4);
-		icon.init({src: "assets/icons/format-text-underline.png"});
-		icon.mouseEnabled = false;
+		btn.init({width: 24, height: 24, label: null, icon: "format-text-underline.png" });
 		btn.setAction("mouseClick",
 		"
 		var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
@@ -286,29 +277,16 @@ class RichTextEditor extends Window
 
 
 		btn = new Button(toolbar, "AlignLeft", 252, 8);
-		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 4, 4);
-		icon.init({src: "assets/icons/format-justify-left.png"});
-		icon.mouseEnabled = false;
-
+		btn.init({width: 24, height: 24, label: null, icon: "format-justify-left.png" });
 
 		btn = new Button(toolbar, "AlignCenter", 276, 8);
-		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 4, 4);
-		icon.init({src: "assets/icons/format-justify-center.png"});
-		icon.mouseEnabled = false;
+		btn.init({width: 24, height: 24, label: null, icon: "format-justify-center.png" });
 
 		btn = new Button(toolbar, "AlignRight", 300, 8);
-		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 4, 4);
-		icon.init({src: "assets/icons/format-justify-right.png"});
-		icon.mouseEnabled = false;
-
+		btn.init({width: 24, height: 24, label: null, icon: "format-justify-right.png" });
+	
 		btn = new Button(toolbar, "AlignFill", 324, 8);
-		btn.init({width: 24, height: 24, label: null });
-		icon = new Image(btn, "icon", 4, 4);
-		icon.init({src: "assets/icons/format-justify-fill.png"});
-		icon.mouseEnabled = false;
+		btn.init({width: 24, height: 24, label: null, icon: "format-justify-fill.png" });
 
 		btn = new Button(toolbar, "Color", 400, 8);
 		btn.init({width: 32, height: 24, label: null });
@@ -366,8 +344,6 @@ class RichTextEditor extends Window
 
 
 		btn = new Button(toolbar, "Html", 432, 8);
-		icon = new Image(btn, "icon", 4, 4);
-		icon.init({src: "assets/icons/text-html.png"});
 		btn.setAction("mouseClick",
 		"
 		var html = this.getParentWindow()._html;
@@ -384,18 +360,18 @@ class RichTextEditor extends Window
 		
 		this.removeChild(this.getChildByName(\"icon\"));
 		
-		var img = new haxegui.Image(this, \"icon\", 4, 4);
+		var icn = new Icon(this, \"icon\", 4, 4);
 		if(html)
-			img.src = \"assets/icons/text-html.png\";
+			icn.src = \"text-html.png\";
 		else
-			img.src = \"assets/icons/text-x-generic.png\";
-		img.init();
+			icn.src = \"text-x-generic.png\";
+		icn.init();
 		
 		this.getParentWindow()._html = !this.getParentWindow()._html;
 		"
 		);
-		btn.init({width: 24, height: 24, label: null });
-
+		btn.init({width: 24, height: 24, label: null, icon: "text-html.png" });
+		btn.icon.name = "icon";
 
 
 		

@@ -66,6 +66,7 @@ import haxegui.ToolBar;
 import haxegui.ColorPicker;
 import haxegui.ColorPicker2;
 import haxegui.RichTextEditor;
+import haxegui.Haxegui;
 import haxegui.Introspector;
 import haxegui.Appearance;
 import haxegui.Utils;
@@ -221,17 +222,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		//~ var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
 		//~ colorpicker.init();
 		
-		// rte
-		var rte = new RichTextEditor(flash.Lib.current, 120,120);
-		rte.init();
 
-		// style
-		var appearance = new Appearance(flash.Lib.current, 180,180);
-		appearance.init();
-			
-		// debugger
-		var introspect = new Introspector(flash.Lib.current, 150,150);
-		introspect.init();
 
 
 
@@ -254,20 +245,19 @@ class Main extends Sprite, implements haxe.rtti.Infos
 /////////////////////////////////////////////////////////////////////////
 // Load XML, try by input flashvars first
 /////////////////////////////////////////////////////////////////////////
+  var layout = "";
   try {
     var l = flash.Lib.current.loaderInfo.parameters;
   	trace(here.methodName + " " + Utils.print_r(l));
 
   	var baseURL = Reflect.field(l, "baseURL");
 	if(baseURL==null)  baseURL = "";
-
 	haxegui.Haxegui.baseURL = baseURL;
 
-  	var layout = Reflect.field(l, "layout");
+  	layout = Reflect.field(l, "layout");
 	if(layout==null) 
 		layout="samples/Example1.xml";
 		
-	loader.load(new URLRequest(baseURL+layout));
       for (f in Reflect.fields(l)) {
           trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
       }
@@ -276,6 +266,20 @@ class Main extends Sprite, implements haxe.rtti.Infos
   }
 
 
+		// rte
+		var rte = new RichTextEditor(flash.Lib.current, 120,120);
+		rte.init();
+
+		// style
+		var appearance = new Appearance(flash.Lib.current, 180,180);
+		appearance.init();
+			
+		// debugger
+		var introspect = new Introspector(flash.Lib.current, 150,150);
+		introspect.init();
+		
+		
+		loader.load(new URLRequest(Haxegui.baseURL+layout));
 
 		//~ stage.addEventListener(MouseEvent.MOUSE_DOWN,
 		//~ function(e)
