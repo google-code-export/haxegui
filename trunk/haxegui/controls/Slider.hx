@@ -107,7 +107,9 @@ class Slider extends Component, implements haxegui.IAdjustable
 	public override function destroy() {
 		handle.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		handle.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-		handle.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+
+		if(this.stage.hasEventListener (MouseEvent.MOUSE_UP))
+			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 
 		
 		if(this.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
@@ -147,8 +149,7 @@ class Slider extends Component, implements haxegui.IAdjustable
 	}
 
 
-	public function onMouseMove (e:MouseEvent)
-	{
+	public function onMouseMove (e:MouseEvent) {
 		adjustment.value = handle.x;
 	}
 

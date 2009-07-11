@@ -71,6 +71,13 @@ class MenuBarItem extends AbstractButton
 		
 	}
 
+	public override function onMouseClick(e:MouseEvent) {
+			var a = new haxegui.Alert();
+			a.init({label: this+"."+here.methodName+":\n\n\n"+"Not implemented yet..."});
+			
+		super.onMouseClick(e);
+	}
+
 	static function __init__() {
 		haxegui.Haxegui.register(MenuBarItem);
 	}

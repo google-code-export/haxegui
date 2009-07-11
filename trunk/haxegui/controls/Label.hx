@@ -58,8 +58,10 @@ class Label extends Component
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 		this.addChild(tf);
 
+		resize(new flash.geom.Rectangle(0,0, tf.width, tf.height));
 		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
 
+		dirty = false;
 	}
 
 	public function getText() : String {

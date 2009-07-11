@@ -35,7 +35,6 @@ import haxegui.controls.CheckBox;
 import haxegui.controls.Stepper;
 import haxegui.controls.Input;
 import haxegui.controls.Tree;
-import haxegui.TabNavigator;
 
 import haxegui.events.ResizeEvent;
 
@@ -78,14 +77,8 @@ class Appearance extends Window
 		menubar.init ();
 
 		//
-		//~ var container = new Container(this, "Container", 10, 44);
-		//~ container.init({});
-		
-		var tabnav = new TabNavigator(this, "TabNavigator", 10, 44);
-		tabnav.init();
-		
-		var tab = cast tabnav.addChild(new Tab());
-		tab.init();
+		var container = new Container(this, "Container", 10, 44);
+		container.init({});
 
 		var rect = new haxegui.toys.Rectangle(this);
 		rect.init({width: 300, height: 20});

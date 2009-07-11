@@ -60,6 +60,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	/** Rectangular dimensions **/
 	public var box : Rectangle;
+	public var minimumBox : Rectangle;
 
 	/** The color of this component, which has different meanings per component **/
 	public var color:Int;
@@ -114,6 +115,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 		color = 0xF00FFF;
 		box = new Rectangle();
+		minimumBox = new Rectangle();
 
 		tabEnabled = mouseEnabled = true;
 		buttonMode = false;
@@ -344,19 +346,17 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		dispatchEvent(event);
 	}
 
-	/**
-	* Excecute redrawing script
-	**/
-	public function redraw(opts:Dynamic=null) {
-// 		trace(this.name + " redraw");
-		ScriptManager.exec(this,"redraw", opts);
+	/** move to parent center **/
+	public function center() {
+		moveTo(Std.int((cast parent).box.width-box.width)>>1, Std.int((cast parent).box.height-box.height)>>1);
 	}
+	
 
 	public function iterator() : Iterator<DisplayObject> {
-		var a = [];
+		var l = new List<DisplayObject>();
 		for(i in 0...numChildren)
-			a.push(getChildAt(i));
-		return a.iterator();
+			l.add(getChildAt(i));
+		return l.iterator();
 	}
 	
 	
@@ -456,18 +456,22 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	public function updateColorTween(t : Tween) {
 		var me = this;
 		var colorTrans: ColorTransform  = new ColorTransform();
-
 		if(colorTween != null)
 			colorTween.stop();
 		colorTween = t;
 		colorTween.setTweenHandlers(
 				function(v) {
-					colorTrans.redOffset = v;
-					colorTrans.greenOffset = v;
+					//~ if(me.dirty) return;
+					colorTrans.redOffset = 
+					colorTrans.greenOffset = 
 					colorTrans.blueOffset = v;
 					me.transform.colorTransform = colorTrans;
 				},
-				null);
+				function(v){
+					me.colorTween = null;
+					colorTrans = null;
+				}
+				);
 		colorTween.start();
 	}
 
@@ -622,6 +626,16 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		trace(e);
 		#end
 		if(text!=null) TooltipManager.getInstance().destroy();
+		ScriptManager.exec(this,"mouseClick", {event : e});
+	}
+	
+	/** Mouse Down **/
+	public function onMouseDown(e:MouseEvent) : Void
+	{
+		#if debug
+		trace(e);
+		#end
+
 		if(e.ctrlKey) {
 			e.stopImmediatePropagation();
 			// dont transform transformers
@@ -633,16 +647,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 			// no point in doing the normal action, user wants to transform
 			return;
 			}
-
-		ScriptManager.exec(this,"mouseClick", {event : e});
-	}
-	
-	/** Mouse Down **/
-	public function onMouseDown(e:MouseEvent) : Void
-	{
-		#if debug
-		trace(e);
-		#end
+		
 		if(text!=null) TooltipManager.getInstance().destroy();
 		ScriptManager.exec(this,"mouseDown", {event : e});
 	}
@@ -801,4 +806,47 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		if(p == null) return null;
 		return cast p;
 	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public static function rasterize(content:DisplayObjectContainer,rect:Rectangle=null,precision:Float=1.0) : flash.display.Bitmap {
+		if (rect==null)
+				//~ rect = content.getBounds(content);
+				if(Std.is(content, Component))
+					rect = (cast content).box;
+				
+		if(rect.isEmpty()) return null;
+		var tmp:Rectangle = rect.clone();
+		tmp.inflate((precision - 1) * rect.width, (precision - 1) * rect.height);
+		
+		var data = new flash.display.BitmapData(cast rect.width * precision,cast rect.height * precision, true, 0x00000000);
+		data.draw(content, new flash.geom.Matrix(precision, 0, 0, precision, -rect.x * precision, -rect.y * precision), 
+					  null, null, null,true);
+	   
+		var bitmap = new flash.display.Bitmap(data);
+		bitmap.name ="contentBitmap";
+		//~ bitmap.x = tmp.x;
+		//~ bitmap.y = tmp.y;
+		bitmap.scaleX = bitmap.scaleY = 1 / precision;
+	   
+		//~ for (i in 0...content.numChildren)
+		//~ {
+			//~ content.getChildAt(i).visible = false;
+		//~ }
+		//~ content.addChild(bitmap);
+		
+		return bitmap;
+	}
+
+
+	/**
+	* Excecute redrawing script
+	**/
+	public function redraw(opts:Dynamic=null) {
+		ScriptManager.exec(this,"redraw", opts);
+	}
+		
 }

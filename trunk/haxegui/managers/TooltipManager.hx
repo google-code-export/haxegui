@@ -78,10 +78,11 @@ class Tooltip extends Component {
 			if (this.parent.contains (this))
 				this.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
 
+		dirty = false;
 		var tween = new feffects.Tween(0, .8, 350, this, "alpha", feffects.easing.Expo.easeOut);
 		var self = this;
 		var t = tween;
-		haxe.Timer.delay( function(){ self.visible=true; t.start(); }, 750 );
+		haxe.Timer.delay( function(){ self.dirty=true; self.visible=true; t.start(); }, 750 );
 				
 	}
 

@@ -31,7 +31,9 @@ import haxegui.Opts;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
 import haxegui.Component;
+import haxegui.Window;
 import haxegui.controls.AbstractButton;
+import haxegui.controls.Label;
 
 /**
 *
@@ -128,18 +130,14 @@ class MaximizeButton extends AbstractButton
 class TitleBar extends AbstractButton
 {
 
-	public var title : TextField;
+	public var title 		  : Label;
 	public var closeButton 	  : CloseButton;
 	public var minimizeButton : MinimizeButton;
 	public var maximizeButton : MaximizeButton;
 
-	public function new (parent:DisplayObjectContainer=null, name:String=null, x:Float=0.0, y:Float=0.0)
-	{
-		super(parent, name, x, y);
-	}
-
 	override public function init(?opts:Dynamic) {
-
+		if(!Std.is(parent, Window)) throw parent+" not a Window";
+	
 		box = new flash.geom.Rectangle(0,0, (cast parent).box.width, 32);
 		cursorOver = Cursor.SIZE_ALL;
 
@@ -164,57 +162,25 @@ class TitleBar extends AbstractButton
 
 		//closeButton.useHandCursors = minimizeButton.useHandCursors = maximizeButton.useHandCursors = true;
 
-
-
-		title = new TextField ();
-		title.name = Opts.optString(opts,"title","");
-		title.text = (opts.title==null)?this.name:opts.title;
-		title.border = false;
-		title.x = 40;
-		title.y = 1;
-		title.autoSize = flash.text.TextFieldAutoSize.LEFT;
-		title.height = 18;
-		title.selectable = false;
+		title = new Label(this);
+		var txt = Opts.optString(opts,"title", name);
+		title.init({innerData: txt});
 		title.mouseEnabled = false;
 		title.tabEnabled = false;
-		title.multiline = false;
-		title.embedFonts = true;
-
-		//~ title.antiAliasType = flash.text.AntiAliasType.NORMAL;
-		//~ title.sharpness = 100;
-		//this.quality = flash.display.StageQuality.LOW;
-
-		title.setTextFormat (DefaultStyle.getTextFormat());
-
-		this.addChild (title);
-
-		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
+		title.moveTo(Std.int(box.width-title.width)>>1, 4);
+		
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
 
-	override public function redraw(opts:Dynamic=null):Void
-	{
-		this.box = (cast this.parent).box.clone();
-		if(opts!=null)
-			this.color = opts.color == null ? color : opts.color;
-
-		title.x = Std.int(this.box.width - title.width) >> 1;
-		//title.setTextFormat (DefaultStyle.getTextFormat(8,DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.CENTER));
-
-		super.redraw(opts);
-	}
-
-	override public function onRollOver (e:MouseEvent)
-	{
+	override public function onRollOver (e:MouseEvent) {
 		CursorManager.setCursor(this.cursorOver);
 	}
 
-	override public function onRollOut (e:MouseEvent)
-	{
+	override public function onRollOut (e:MouseEvent) {
 		CursorManager.setCursor(Cursor.ARROW);
 	}
 
-	override public function onMouseDown (e:MouseEvent)
-	{
+	override public function onMouseDown (e:MouseEvent)	{
 		CursorManager.getInstance().lock = true;
 		this.updateColorTween( new feffects.Tween(0, -50, 350, feffects.easing.Linear.easeOut) );
 		var win = this.getParentWindow();
@@ -225,8 +191,7 @@ class TitleBar extends AbstractButton
 		// dispatch(MoveEvent)
 	}
 
-	override public function onMouseUp (e:MouseEvent)
-	{
+	override public function onMouseUp (e:MouseEvent) {
 		CursorManager.getInstance().lock = false;
 		this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
 
@@ -246,6 +211,8 @@ class TitleBar extends AbstractButton
 	}
 
 	public function onParentResize(e:ResizeEvent) {
+		box = new flash.geom.Rectangle(0,0, (cast parent).box.width, 32);
+		title.moveTo(Std.int(box.width-title.width)>>1, 4);
 		redraw();
 	}
 

@@ -1,7 +1,7 @@
 this.titlebar.color = DefaultStyle.ACTIVE_TITLEBAR;
 
 var fmt = DefaultStyle.getTextFormat();
-this.titlebar.title.setTextFormat(fmt);
+this.titlebar.title.tf.setTextFormat(fmt);
 
 //this.frame.color = Math.min(0xFFFFFF, this.color | 0x262626);
 this.titlebar.redraw();

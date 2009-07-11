@@ -19,25 +19,20 @@
 
 package haxegui.events;
 
-import flash.events.Event;
+import haxegui.Component;
 
-class MoveEvent extends Event {
+class DropEvent extends flash.events.MouseEvent {
 
-	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool, ?oldX : Float, ?oldY : Float) : Void
+	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool,
+	// ?dragInitiator : Component, ?dragSource : mx.core.DragSource, ?action : String,
+	?ctrlKey : Bool, ?altKey : Bool, ?shiftKey : Bool) : Void
 	{
-		super(type, bubbles, cancelable);
+		super(type, bubbles, cancelable, 0, 0, null, ctrlKey, altKey, shiftKey);
 	}
 
-	public override function toString():String {
-		return "["+"MoveEvent"+" type=\""+type+"\" bubbles="+bubbles+" cancelable="+cancelable+" oldX="+oldX+" oldY="+oldY+"]";
-	}
-
-	override public function clone():Event {  
-		return new MoveEvent(this.type, this.bubbles, this.cancelable);  
-	}  
-
-	public var relatedObject : flash.display.InteractiveObject;
-	public var oldX : Float;
-	public var oldY : Float;
-	public static var MOVE : String = "Move";
+	var action : String;
+	var dragInitiator : Component;
+	//var dragSource : mx.core.DragSource;
+	var droppedItem : Dynamic;
+	static var DRAG_SOURCE : String;
 }

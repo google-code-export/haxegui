@@ -97,11 +97,11 @@ class Introspector extends Window
 		
 		//
 		list1 = new UiList(scrollpane, "Properties", 210, 0);
-		list1.init({text: "Property"});
+		list1.init({text: null});
 		
 		//
 		list2 = new UiList(scrollpane, "Values", 350, 0);
-		list2.init({text: "Value"});
+		list2.init();
 		
 		//
 		var statusbar = new StatusBar(this, "StatusBar", 10, 360);
@@ -180,6 +180,7 @@ class Introspector extends Window
 
 		list1 = new UiList(scrollpane, "Properties", 210, 0);
 		list2 = new UiList(scrollpane, "Values", 350, 0);
+		list1.text = list2.text = null;
 		
 		list1.data = [];
 		list2.data = [];

@@ -127,7 +127,7 @@ class Stats extends Window
 
         data =
         data2 =
-        data3 = [new Point(240, 140), new Point(240, 140)];
+        data3 = [new Point(240, 180), new Point(240, 180)];
 
         box = new Rectangle (0, 0, 400, 220);
 
@@ -142,17 +142,10 @@ class Stats extends Window
         list.init({color: 0x2A7ACD, width: 70, height: 160});
 
         list2 = new UiList(container, "List2");
-        list2.data =
-        [
-            Std.string(Math.NaN),
-            Std.string(Math.NaN),
-            Std.string(Math.NaN),
-            Std.string(Math.NaN),
-            Std.string(Math.NaN),
-            Std.string(Math.NaN),
-            Std.string(Math.NaN),
-            Std.string(Math.NaN)
-        ];
+        list2.data = [];
+        for(i in 0...list.data.length)
+            list2.data.push(Std.string(Math.NaN));
+            
         list2.init({color: 0x2A7ACD, width: 70, height: 180});
         list2.move(70,0);
 
@@ -212,9 +205,9 @@ class Stats extends Window
                 self.ploter.graphics.clear();
                 self.ploter.x = 0;
 
-                self.data = [new Point(240, 140), new Point(240, 140)];
-                self.data2 = [new Point(240, 140), new Point(240, 140)];
-                self.data3 = [new Point(240, 140), new Point(240, 140)];
+                self.data = [new Point(240, 180), new Point(240, 180)];
+                self.data2 = [new Point(240, 180), new Point(240, 180)];
+                self.data3 = [new Point(240, 180), new Point(240, 180)];
                 self.timer.stop();
                 self.timer = new haxe.Timer(self.interval);
                 self.timer.run = self.update;
@@ -262,13 +255,12 @@ class Stats extends Window
         
         //list.data=["FPS", "minFPS", "maxFPS", "avgFPS", "objs", "dirty", "Mem", "Uptime"];
         list2.data = 
-        [
+        [   "",
             Std.string(fps).substr(0,5),
             Std.string(minFPS).substr(0,5),
             Std.string(maxFPS).substr(0,5),
             Std.string(avg).substr(0,5),
             Std.string(count(flash.Lib.current)),
-            //Std.string(Math.NaN),
             Std.string(Lambda.count(Haxegui.dirtyList)),
             Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5),
 			DateTools.format(new Date(0,0,0,0,0,Std.int(haxe.Timer.stamp())), "%H:%M:%S"),
@@ -282,19 +274,19 @@ class Stats extends Window
         }
 
 
-        var item = cast list.getChildAt(1);
+        var item = cast list.getChildAt(2);
         item.redraw();
 		item.graphics.beginFill (0xFF9300);
 		item.graphics.drawRect (0, 0, Std.int(minFPS), 20);
 		item.graphics.endFill ();
 
-        item = cast list.getChildAt(3);
+        item = cast list.getChildAt(4);
         item.redraw();
 		item.graphics.beginFill (0x9ADF00);
 		item.graphics.drawRect (0, 0, Std.int(avg), 20);
 		item.graphics.endFill ();
 
-        item = cast list.getChildAt(6);
+        item = cast list.getChildAt(7);
         item.redraw();
 		item.graphics.beginFill (0xFF00A8);
 		item.graphics.drawRect (0, 0, Std.int(flash.system.System.totalMemory/Math.pow(10,6)), 20);
@@ -302,9 +294,9 @@ class Stats extends Window
 
 
 
-        data.push( new Point( 240-ploter.x, 140 - minFPS ) );
-        data2.push( new Point( 240-ploter.x, 140 - flash.system.System.totalMemory/Math.pow(10,6) ) );
-        data3.push( new Point( 240-ploter.x, 140 - avg ) );
+        data.push( new Point( 240-ploter.x, 180 - minFPS ) );
+        data2.push( new Point( 240-ploter.x, 180 - flash.system.System.totalMemory/Math.pow(10,6) ) );
+        data3.push( new Point( 240-ploter.x, 180 - avg ) );
 
         ploter.graphics.lineStyle(2,0xFF9300);
         ploter.graphics.moveTo( data[data.length-2].x+gridSpacing, data[data.length-2].y );

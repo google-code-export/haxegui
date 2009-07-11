@@ -136,8 +136,7 @@ class ScrollBar extends Component
 	/**
 	* @param opts.target Object to scroll, either a DisplayObject or TextField
 	*/
-	override public function init(opts:Dynamic=null)
-	{
+	override public function init(opts:Dynamic=null) {
 		color = DefaultStyle.BACKGROUND;
 		scroll = 0;
 		scrollee = null;
@@ -155,7 +154,9 @@ class ScrollBar extends Component
 			this.scrollee = Opts.classInstance(opts, "target", untyped [TextField, DisplayObject]);
 		}
 		catch(s:String) { 
-			trace(s); 
+			//trace(s); 
+			var a = new haxegui.Alert();
+			a.init({label: this+"."+here.methodName+":\n\n\n"+s});
 		}
 
 		// 

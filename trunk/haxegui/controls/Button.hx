@@ -21,7 +21,7 @@ package haxegui.controls;
 
 import flash.geom.Rectangle;
 import haxegui.Opts;
-
+import haxegui.managers.StyleManager;
 import haxegui.Image;
 
 /**
@@ -45,8 +45,10 @@ class Button extends AbstractButton
 	
 	public var selected( __getSelected, __setSelected ) : Bool;
 	
-	override public function init(opts:Dynamic=null)
-	{
+	override public function init(opts:Dynamic=null) {
+		color = DefaultStyle.BACKGROUND;
+		mouseChildren = false;
+		
 		// dont create zero sized buttons
 		if(box==null || box.isEmpty()) 
 			box = new Rectangle(0,0,90,30);
@@ -105,8 +107,7 @@ class Button extends AbstractButton
 		if(disabled) return;
 		if(toggle)
 			selected = !selected;
-		redraw();
-		super.onMouseClick(cast e.clone());
+		super.onMouseClick(e);
 	}
 	
 }
