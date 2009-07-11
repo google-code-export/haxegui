@@ -316,7 +316,7 @@ class Console extends Window, implements ILogger
 
 			var program = parser.parseString(input.text);
 
-			interp.variables.set("pwd", _pwd);
+			interp.variables.set("pwd", getPwd());
 			
 			history.push(input.text);
 			input.text = "";

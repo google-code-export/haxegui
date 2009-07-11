@@ -150,14 +150,13 @@ class ScrollBar extends Component
 			rotation = -90;
 		
 		// Silently notify only when target is missing 	
-		if(scrollee!=null)
 		try {
 			this.scrollee = Opts.classInstance(opts, "target", untyped [TextField, DisplayObject]);
 		}
 		catch(s:String) { 
-			//trace(s); 
-			var a = new haxegui.Alert();
-			a.init({label: this+"."+here.methodName+":\n\n\n"+s});
+			trace(s); 
+			//~ var a = new haxegui.Alert();
+			//~ a.init({label: this+"."+here.methodName+":\n\n\n"+s});
 		}
 
 		// 

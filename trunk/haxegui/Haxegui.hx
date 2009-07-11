@@ -38,12 +38,15 @@ class Haxegui {
 	private static var initializers : List<{c:Class<Dynamic>, f:Void->Void}>;
 
 	/** Public **/
+	public static var baseURL : String = "";
+	
 	public static var dirtyList : List<Component> = new List();
 
 	public static var dirtyTimer : haxe.Timer;
 	public static var dirtyInterval( default, setInterval ) : Int;
 	
 	public static var gridSnapping : Bool = false;
+	
 	
 	public static function init() {
 		for(o in initializers) {

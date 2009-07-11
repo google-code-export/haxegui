@@ -90,7 +90,7 @@ class Image extends Component
 */
 class Icon extends Image
 {
-    public static var iconDirectory : String = "/assets/icons/";
+    public static var iconDirectory : String = Haxegui.baseURL+"/assets/icons/";
     
     public static var STOCK_NEW : String = iconDirectory+"document-new.png";
     public static var STOCK_OPEN : String = iconDirectory+"document-open.png";
