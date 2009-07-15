@@ -86,7 +86,7 @@ import haxegui.controls.ComboBox;
 */
 class RichTextEditor extends Window
 {
-	var tf : TextField;
+	public var tf : TextField;
 	var _color : UInt;
 	var _html : Bool;
 

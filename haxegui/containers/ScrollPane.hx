@@ -72,7 +72,7 @@ class ScrollPane extends Component
 		content.name = "content";
 		//~ content.scrollRect = new Rectangle(0,0,box.width,box.height);
 		content.scrollRect = new Rectangle(0,0, flash.Lib.current.stage.stageWidth, flash.Lib.current.stage.stageHeight);
-		//~ content.scrollRect = new Rectangle();
+		
 		content.cacheAsBitmap = true;
 		this.addChild(content);
 
