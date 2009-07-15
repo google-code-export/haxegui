@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<haxegui:Layout name="Example7">
+<!--
+http://flashexplained.com/actionscript/creating-an-analog-clock-with-actionscript-using-no-design-tools-whatsoever/
+-->
+	<haxegui:controls:AbstractButton name="AnalogClock" x="663" y="58">
+		<events>
+			<script type="text/hscript" action="onLoaded">
+			<![CDATA[
+			this.box = new haxegui.utils.Size(200,200).toRect();
+			this.color = Color.tint(Math.random() * 0xFFFFFF, .5);
+			this.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 8, 8, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];		
+
+			this.getChildByName("hours").rotation = Date.now().getHours()*30 + Date.now().getMinutes()*.5;
+			this.getChildByName("minutes").rotation = Date.now().getMinutes()*6;
+			this.getChildByName("seconds").rotation = Date.now().getSeconds()*6;	
+
+			this.startInterval(1);
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseDown">
+			<![CDATA[
+			this.startDrag();
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseUp">
+			<![CDATA[
+			this.stopDrag();
+			]]>
+			</script>
+			<script type="text/hscript" action="interval">
+			<![CDATA[	
+			this.getChildByName("hours").rotation += 1/(3600) + 1/120;
+			this.getChildByName("minutes").rotation += 1/60;
+			this.getChildByName("seconds").rotation++;			
+			]]>
+			</script>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[	
+			this.graphics.clear();
+			this.graphics.lineStyle(2, Color.darken(this.color, 40), 1, true,
+									flash.display.LineScaleMode.NORMAL,
+									flash.display.CapsStyle.ROUND,
+									flash.display.JointStyle.ROUND);		
+			this.graphics.beginFill(this.color);
+			var r = Math.min( (this.box.width)>>1, (this.box.height)>>1 );
+			this.graphics.drawCircle(r,r,r);
+			this.graphics.drawCircle(r,r,.90*r);
+			this.graphics.endFill();
+		
+			var colors = [this.color, Color.darken(this.color, 60)];
+			var alphas = [.5, .5];
+			var ratios = [0, 0xFF];
+			var matrix = new flash.geom.Matrix ();
+
+			matrix.createGradientBox (r, r, .5*Math.PI, 0, 0);
+
+		
+			this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, 
+					colors,	alphas,	ratios,	matrix);
+				
+			this.graphics.drawCircle(r,r,r);
+			this.graphics.endFill();
+
+			this.graphics.lineStyle(4, Color.darken(this.color, 40), 1, true,
+									flash.display.LineScaleMode.NORMAL,
+									flash.display.CapsStyle.ROUND,
+									flash.display.JointStyle.ROUND);
+			for (h in 0...12) {
+			var hourAngle = h*30;
+			var radHourAngle = hourAngle*Math.PI/180;
+			var xCoord1 = Math.cos(radHourAngle)*(.90*r)+r;
+			var yCoord1 = Math.sin(radHourAngle)*(.90*r)+r;
+			var xCoord2 = Math.cos(radHourAngle)*(.80*r)+r;
+			var yCoord2 = Math.sin(radHourAngle)*(.80*r)+r;
+			this.graphics.moveTo(xCoord1, yCoord1);
+			this.graphics.lineTo(xCoord2, yCoord2);
+			}
+
+			this.graphics.lineStyle(2, Color.darken(this.color, 40), 1, true,
+									flash.display.LineScaleMode.NORMAL,
+									flash.display.CapsStyle.ROUND,
+									flash.display.JointStyle.ROUND);
+			for (m in 0...60) {
+			var minuteAngle = m*6;
+			var radMinuteAngle = minuteAngle*Math.PI/180;
+			var xCoord1 = Math.cos(radMinuteAngle)*(.90*r)+r;
+			var yCoord1 = Math.sin(radMinuteAngle)*(.90*r)+r;
+			var xCoord2 = Math.cos(radMinuteAngle)*(.85*r)+r;
+			var yCoord2 = Math.sin(radMinuteAngle)*(.85*r)+r;
+			this.graphics.moveTo(xCoord1, yCoord1);
+			this.graphics.lineTo(xCoord2, yCoord2);
+			}
+			]]>
+			</script>
+		</events>
+		
+		<haxegui:Component name="hours">
+			<events>
+				<script type="text/hscript" action="redraw">
+				<![CDATA[			
+				this.graphics.clear();
+				this.graphics.lineStyle(4, Math.random() * 0xFFFFFF, 1, true,
+										flash.display.LineScaleMode.NONE,
+										flash.display.CapsStyle.ROUND,
+										flash.display.JointStyle.ROUND);		
+				var r = Math.min( (parent.box.width)>>1, (parent.box.height)>>1 );
+				this.graphics.moveTo(0,0);
+				this.graphics.lineTo(0,-.5*r);
+				this.center();
+				]]>
+				</script>
+			</events>
+		</haxegui:Component>
+
+		<haxegui:Component name="minutes">
+			<events>
+				<script type="text/hscript" action="redraw">
+				<![CDATA[
+				this.graphics.clear();
+				this.graphics.lineStyle(2, Math.random() * 0xFFFFFF, 1, true,
+										flash.display.LineScaleMode.NONE,
+										flash.display.CapsStyle.ROUND,
+										flash.display.JointStyle.ROUND);		
+				var r = Math.min( (parent.box.width)>>1, (parent.box.height)>>1 );
+				this.graphics.moveTo(0,0);
+				this.graphics.lineTo(0,-.75*r);	
+				this.center();					
+				]]>
+				</script>
+			</events>
+		</haxegui:Component>
+
+		<haxegui:Component name="seconds">
+			<events>
+				<script type="text/hscript" action="redraw">
+				<![CDATA[
+				this.graphics.clear();
+				this.graphics.lineStyle(1, Math.random() * 0xFFFFFF, 1, true,
+										flash.display.LineScaleMode.NONE,
+										flash.display.CapsStyle.ROUND,
+										flash.display.JointStyle.ROUND);		
+				var r = Math.min( (parent.box.width)>>1, (parent.box.height)>>1 );
+				this.graphics.moveTo(0,0);
+				this.graphics.lineTo(0,-.85*r);
+				this.center();
+				]]>
+				</script>
+			</events>
+		</haxegui:Component>
+	</haxegui:controls:AbstractButton>
+   
+   
+   <haxegui:Window name="haXe code" x="80" y="310" width="400" height="400">
+		<events>
+			<script type="text/hscript" action="onLoaded">   
+			<![CDATA[
+				var tf = new flash.text.TextField();
+				tf.multiline = true;
+				tf.wordWrap = true;
+				tf.background = true;
+				tf.backgroundColor = 0xFFFFFF;
+				tf.width = stage.stageWidth;
+				tf.height = stage.stageHeight;
+				tf.mouseEnabled = true;
+				tf.tabEnabled = true;
+				tf.embedFonts = true;
+				tf.defaultTextFormat = DefaultStyle.getTextFormat();
+				
+				var scrollpane = this.getChildByName("ScrollPane");
+				scrollpane.addChild(tf);
+		
+				var styles = new flash.text.StyleSheet();
+				styles.parseCSS(".code-line-numbers {    color:#809080;    border-right:1px dotted #809080;    float:left;    text-align:right;    width:2em;    padding-right:3px;    margin-right:12px;}.code-code {}.code-keyword {    font-weight: bold;    color: #000000;}.code-type {    font-weight: bold;    color: #106020;}.code-variable {    color: #004050;}.code-number {    color: #F08000;}.code-comment {    color: #208000;}.code-string {    color: #F00000;}");
+				tf.styleSheet = styles;
+
+				tf.text = CodeHighlighter.highlight( Resource.getString("clock_code"), "haxe") ;
+			]]>
+			</script>
+		</events>
+		<haxegui:containers:ScrollPane name="ScrollPane" x="10" y="20" />		
+   </haxegui:Window>
+   
+   <haxegui:Window name="xml\hscript code" x="540" y="310" width="400" height="400">
+		<events>
+			<script type="text/hscript" action="onLoaded">   
+			<![CDATA[
+				var tf = new flash.text.TextField();
+				tf.multiline = true;
+				tf.wordWrap = true;
+				tf.background = true;
+				tf.backgroundColor = 0xFFFFFF;
+				tf.width = stage.stageWidth;
+				tf.height = stage.stageHeight;
+				tf.mouseEnabled = true;
+				tf.tabEnabled = true;
+				tf.embedFonts = true;
+				tf.defaultTextFormat = DefaultStyle.getTextFormat();
+				
+				var scrollpane = this.getChildByName("ScrollPane");
+				scrollpane.addChild(tf);
+		
+				var styles = new flash.text.StyleSheet();
+				styles.parseCSS(".code-line-numbers {    color:#809080;    border-right:1px dotted #809080;    float:left;    text-align:right;    width:2em;    padding-right:3px;    margin-right:12px;}.code-code {}.code-keyword {    font-weight: bold;    color: #000000;}.code-type {    font-weight: bold;    color: #106020;}.code-variable {    color: #004050;}.code-number {    color: #F08000;}.code-comment {    color: #208000;}.code-string {    color: #F00000;}");
+				tf.styleSheet = styles;
+
+				tf.text = CodeHighlighter.highlight( Resource.getString("xml_clock_code"), "xml") ;
+			]]>
+			</script>
+		</events>
+		<haxegui:containers:ScrollPane name="ScrollPane" x="10" y="20" />		
+   </haxegui:Window>	   
+</haxegui:Layout>
