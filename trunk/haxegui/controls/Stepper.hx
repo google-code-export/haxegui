@@ -37,6 +37,9 @@ import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 import haxegui.IAdjustable;
 
+import haxegui.utils.Color;
+import haxegui.utils.Size;
+
 /**
  *
  * 
@@ -101,7 +104,7 @@ class Stepper extends Component, implements IAdjustable
 	override public function init(opts:Dynamic=null)
 	{
 		adjustment = new Adjustment(0, 0, 100, 1, 10);
-		box = new Rectangle(0, 0, 40, 20);
+		box = new Size(40, 20).toRect();
 		color = DefaultStyle.BACKGROUND;
 
 		input = new Input(this);
@@ -141,7 +144,7 @@ class Stepper extends Component, implements IAdjustable
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 	}
 
-	public function onInput(e:KeyboardEvent) {
+	private function onInput(e:KeyboardEvent) {
 		switch(e.keyCode) {
 		case flash.ui.Keyboard.ENTER:
 			adjustment.value = Std.parseFloat(e.target.text);
@@ -149,7 +152,7 @@ class Stepper extends Component, implements IAdjustable
 		
 	}
 
-	public function onInputMoved(e:MoveEvent) {
+	private function onInputMoved(e:MoveEvent) {
 		move(input.x, input.y);
 		input.removeEventListener (MoveEvent.MOVE, onInputMoved);
 		input.moveTo(0,0);
@@ -157,14 +160,15 @@ class Stepper extends Component, implements IAdjustable
 		
 	}
 
-	public function onInputResized(e:ResizeEvent) {
-		up.resize(new Rectangle(0, 0, .5*box.height, .5*box.height)); 
+	private function onInputResized(e:ResizeEvent) {
+		up.resize(new Size(box.height, box.height).shift(1)); 
 		up.moveTo(box.width-up.box.width,0);
+		down.resize(new Size(box.height, box.height).shift(1)); 
 		down.moveTo(box.width-up.box.width,up.box.height);
 		this.box = input.box.clone();
 	}
 
-	public function onChanged(e:Event)	{
+	private function onChanged(e:Event)	{
 		input.tf.text = Std.string(adjustment.value);
 	}
 	

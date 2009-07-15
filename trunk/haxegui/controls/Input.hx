@@ -48,8 +48,7 @@ class Input extends Component
     public var tf : TextField;
 
 
-	override public function init(?opts:Dynamic) : Void
-	{
+	override public function init(?opts:Dynamic) : Void	{
 	    box = new Rectangle(0, 0, 140, 20);
 
 	    super.init(opts);
@@ -59,8 +58,7 @@ class Input extends Component
 	    mouseEnabled = true;
 	    tabEnabled = true;
 
-	    var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false );
-	    filters = [shadow];
+	    filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false )];
 
 	    tf = new TextField();
 	    tf.name = "tf";

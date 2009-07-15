@@ -257,7 +257,7 @@ class Stats extends Window
             ""
         ];
 
-        for(item in list2.getElementsdByClass(ListItem))
+        for(item in list2.getElementsByClass(ListItem))
            item.label.tf.text = list2.data[list2.getChildIndex(cast item)];
         
 
@@ -321,12 +321,12 @@ class Stats extends Window
     }
 
 
-    public function onStatsEnterFrame(e:Event) {
+    private function onStatsEnterFrame(e:Event) {
         frameCounter++;
     }
 
 
-    public function count(o:DisplayObjectContainer) : Int {
+    private function count(o:DisplayObjectContainer) : Int {
         if(o==null) return 0;
         var c = o.numChildren;
         for(i in 0...o.numChildren)

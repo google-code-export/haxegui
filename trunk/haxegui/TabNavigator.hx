@@ -153,8 +153,9 @@ class TabNavigator extends Component
 
 		// add the drop-shadow filters
 		var shadow1:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false);
-		var shadow2:DropShadowFilter = new DropShadowFilter (4, 235, DefaultStyle.DROPSHADOW, 0.45, 4, 4,0.35,BitmapFilterQuality.HIGH,true,false,false);
-		this.filters = [shadow1,shadow2];
+		//~ var shadow2:DropShadowFilter = new DropShadowFilter (4, 235, DefaultStyle.DROPSHADOW, 0.45, 4, 4,0.35,BitmapFilterQuality.HIGH,true,false,false);
+		//~ this.filters = [shadow1,shadow2];
+		this.filters = [shadow1];
 
 		addEventListener(Event.CHANGE, onChanged, false, 0, true);
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
@@ -176,7 +177,7 @@ class TabNavigator extends Component
 		#if debug
 			trace(this+" tab changed: "+activeTab);
 		#end
-		for(tab in getElementsdByClass(Tab)) {
+		for(tab in getElementsByClass(Tab)) {
 				tab.active = ( getChildIndex(cast tab) == activeTab );
 				tab.redraw();
 				}

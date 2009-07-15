@@ -4,11 +4,16 @@ var colors = [Color.darken(this.color, 30), Color.darken(this.color, 100) ] ;
 var alphas = [1, 1];
 var ratios = [0, 0xFF];
 var matrix = new flash.geom.Matrix ();
-matrix.createGradientBox (this.box.width, this.box.height, .5*Math.PI, 0, 0);
+matrix.createGradientBox (this.box.width, this.box.height, parent.parent.horizontal ? 0 : .5*Math.PI, 0, 0);
 
 
 this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix);			 
-this.graphics.drawRect(.5*(this.box.width-100),0, 100, this.box.height);
+
+if(parent.parent.horizontal)
+	this.graphics.drawRect(0,.5*(this.box.height-100), this.box.width, 100);
+else
+	this.graphics.drawRect(.5*(this.box.width-100),0, 100, this.box.height);
+
 this.graphics.endFill();
 
 

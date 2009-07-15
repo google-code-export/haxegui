@@ -51,6 +51,8 @@ import haxegui.managers.MouseManager;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 
+import haxegui.utils.Color;
+import haxegui.utils.Size;
 
 /**
  * 
@@ -96,7 +98,7 @@ class ToolBar extends Component
 
 	override public function init (? opts : Dynamic) {
 		color = DefaultStyle.BACKGROUND;
-		box = new Rectangle(0,0,502,40);
+		box = new Size(502,40).toRect();
 
 		super.init(opts);
 		
@@ -107,9 +109,7 @@ class ToolBar extends Component
 		handle.move(8,8);
 
 		// inner-drop-shadow filter
-		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4, 0.5, flash.filters.BitmapFilterQuality.LOW,true,false,false);
-		this.filters = [shadow];
-
+		this.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4, 0.5, flash.filters.BitmapFilterQuality.LOW,true,false,false)];
 
 		parent.addEventListener (ResizeEvent.RESIZE, onParentResize);
 	}
@@ -134,8 +134,6 @@ class ToolBar extends Component
 		scrollRect = box.clone();
 
 		redraw();
-
-		e.updateAfterEvent();
 	}
 
 	static function __init__() {

@@ -172,7 +172,5 @@ class Tree extends Component {
 		haxegui.Haxegui.register(Tree);
 	}
 
-
-				
 }
 

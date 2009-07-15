@@ -27,7 +27,7 @@ else
 this.graphics.endFill ();
 
 /* Label text, position and formating */
-if(this.label!=null) {
+if(this.label!=null) { /*
     var fmt = DefaultStyle.getTextFormat (8, DefaultStyle.LABEL_TEXT,
 				  flash.text.TextFormatAlign.LEFT);
     if (this.disabled)
@@ -36,6 +36,9 @@ if(this.label!=null) {
     this.label.tf.setTextFormat (fmt);
     this.label.moveTo (Math.floor (.5 * (this.box.width - this.label.width)),
 		       Math.floor (.5 * (this.box.height - this.label.height)));
+		       */
+	this.label.center();
+		       
 }
 
 /* Drop-Shadow */

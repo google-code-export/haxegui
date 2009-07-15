@@ -65,8 +65,8 @@ import haxegui.utils.Color;
 */
 class ColorPicker extends Window
 {
-	var colMarker : Component;
-	var colSprite : Component;
+	var marker : Component;
+	var swatch : Component;
 	var spectrum  : Image;
 	var currentColor : UInt;
 	var input : Input;
@@ -90,7 +90,7 @@ class ColorPicker extends Window
 
 		//
 		spectrum = new Image(container, "Spectrum", 10, 10);
-		spectrum.init({src: "assets/spectrum.png"});
+		spectrum.init({src: haxegui.Haxegui.baseURL+"assets/spectrum.png"});
 
 		var self = this;
 		var spec = spectrum;
@@ -112,22 +112,22 @@ class ColorPicker extends Window
 		spectrum.addEventListener(MouseEvent.MOUSE_UP, onMouseUpImage, false, 0, true);
 		spectrum.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMoveImage, false, 0, true);
 
-		colMarker = new Component(spec, "marker");
-		colMarker.init();
+		marker = new Component(spec, "marker");
+		marker.init();
 		var shadow:DropShadowFilter = new DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5,2, 2,0.5,BitmapFilterQuality.LOW,false,false,false);
-		colMarker.filters = [shadow];
-		colMarker.mouseEnabled = false;
+		marker.filters = [shadow];
+		marker.mouseEnabled = false;
 		
 		//
-		colSprite =  new Component(container, "colSprite", 180, 10);
-		colSprite.mouseEnabled = false;
-		colSprite.graphics.lineStyle(2, color - 0x141414);
-		colSprite.graphics.beginFill(currentColor);
-		colSprite.graphics.drawRect(0,0,40,30);
-		colSprite.graphics.endFill();
+		swatch =  new Component(container, "swatch", 180, 10);
+		swatch.mouseEnabled = false;
+		swatch.graphics.lineStyle(2, color - 0x141414);
+		swatch.graphics.beginFill(currentColor);
+		swatch.graphics.drawRect(0,0,40,30);
+		swatch.graphics.endFill();
 
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false);
-		//~ colSprite.filters = [shadow];
+		//~ swatch.filters = [shadow];
 
 		// 
 		input = new Input(container, "Input", 230, 10);
@@ -226,15 +226,15 @@ class ColorPicker extends Window
 
 		if(!Std.is(e.target, Image) || !e.buttonDown ) return;
 
-			colMarker.graphics.clear();
-			colMarker.graphics.lineStyle(2,0xFFFFFF);
-			colMarker.graphics.beginFill(0xFFFFFF, .1);
-			colMarker.graphics.drawCircle(e.localX,e.localY,10);
-			colMarker.graphics.endFill();
-			colMarker.graphics.moveTo(e.localX-1, e.localY);
-			colMarker.graphics.lineTo(e.localX+1, e.localY);
-			colMarker.graphics.moveTo(e.localX, e.localY-1);
-			colMarker.graphics.lineTo(e.localX, e.localY+1);
+			marker.graphics.clear();
+			marker.graphics.lineStyle(2,0xFFFFFF);
+			marker.graphics.beginFill(0xFFFFFF, .1);
+			marker.graphics.drawCircle(e.localX,e.localY,10);
+			marker.graphics.endFill();
+			marker.graphics.moveTo(e.localX-1, e.localY);
+			marker.graphics.lineTo(e.localX+1, e.localY);
+			marker.graphics.moveTo(e.localX, e.localY-1);
+			marker.graphics.lineTo(e.localX, e.localY+1);
 		
 			CursorManager.setCursor(Cursor.CROSSHAIR);
 			//~ trace(e.target.getChildAt(0).bitmapData.getPixel(e.localX, e.localY));
@@ -273,17 +273,17 @@ class ColorPicker extends Window
 		bmpd.fillRect(rect3, 0xFFDDDDDD);
 		bmpd.fillRect(rect4, 0xFFBFBFBF);
 
-		colSprite.graphics.clear();
-		colSprite.graphics.lineStyle(2, color - 0x141414);
+		swatch.graphics.clear();
+		swatch.graphics.lineStyle(2, color - 0x141414);
 
-		colSprite.graphics.beginBitmapFill(bmpd, matrix, true, true);
-		colSprite.graphics.drawRect(0,0,40,30);
-		colSprite.graphics.endFill();
+		swatch.graphics.beginBitmapFill(bmpd, matrix, true, true);
+		swatch.graphics.drawRect(0,0,40,30);
+		swatch.graphics.endFill();
 
 
-		colSprite.graphics.beginFill(currentColor, a);
-		colSprite.graphics.drawRect(0,0,40,30);
-		colSprite.graphics.endFill();
+		swatch.graphics.beginFill(currentColor, a);
+		swatch.graphics.drawRect(0,0,40,30);
+		swatch.graphics.endFill();
 
 		updateInput();
 

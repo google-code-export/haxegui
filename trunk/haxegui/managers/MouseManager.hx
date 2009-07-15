@@ -72,13 +72,11 @@ class MouseManager extends EventDispatcher
 		return MouseManager._instance;
 	}
 
-	private function new ()
-	{
+	private function new () {
 		super ();
 	}
 
-	public override function toString () : String
-	{
+	public override function toString () : String {
 		return "MouseManager";
 	}
 

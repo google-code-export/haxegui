@@ -79,50 +79,14 @@ class RadioButton extends AbstractButton
 			label.move(24, 2);
 		}
 
-		if(label!=null && this.disabled) {
+		if(label!=null && disabled) {
 			var fmt = DefaultStyle.getTextFormat();
 			fmt.color = haxegui.utils.Color.darken(DefaultStyle.BACKGROUND, 20);
 			label.tf.setTextFormat(fmt);
 		}
 
-		var shadow = new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.8, 2, 2, 0.65, flash.filters.BitmapFilterQuality.LOW, true, false, false );
-		this.filters = [shadow];
-
-		// Listeners
-		this.addEventListener (Event.ACTIVATE, onEnabled,false,0,true);
-		this.addEventListener (Event.DEACTIVATE, onDisabled,false,0,true);
-
-		if(disabled)
-			dispatchEvent(new Event(Event.DEACTIVATE));
-
-
-		redraw();
-
+		this.filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.8, 2, 2, 0.65, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
 	}
-
-	/**
-	*
-	*
-	*/
-	public function onDisabled(e:Event)	{
-		mouseEnabled = false;
-		buttonMode = false;
-		useHandCursor = false;
-		//~ tabEnabled = false;
-		redraw();
-	}
-
-	/**
-	*
-	*/
-	public function onEnabled(e:Event) {
-		mouseEnabled = true;
-		buttonMode = true;
-		useHandCursor = true;
-		//~ tabEnabled = false;
-		redraw();
-	}
-
 
 
 	/**

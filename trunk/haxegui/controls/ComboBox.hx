@@ -37,6 +37,9 @@ import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 
+import haxegui.utils.Size;
+import haxegui.utils.Color;
+
 import haxegui.DataSource;
 
 
@@ -143,7 +146,8 @@ class ComboBox extends Component
 
 	public override function init(?opts:Dynamic) {
 		color = DefaultStyle.BACKGROUND;
-		box = new Rectangle(0,0,140,20);
+		//box = new Rectangle(0,0,140,20);
+		box = new Size(140,20).toRect();
 		editable = true;
 		list = null;
 		
@@ -174,7 +178,7 @@ class ComboBox extends Component
 		var bOpts = Opts.clone(opts);
 		Opts.removeFields(bOpts, ["x", "y"]);
 		dropButton.init(bOpts);
-		dropButton.box = new Rectangle(0,0,20,20);
+		dropButton.box = new Size(20,20).toRect();
 		dropButton.moveTo(box.width-box.height,-1);
 
 
@@ -187,14 +191,14 @@ class ComboBox extends Component
 		haxegui.Haxegui.register(ComboBox);
 	}
 
-	public function onInputMoved(e:MoveEvent) {
-		this.move(input.x, input.y);
+	private function onInputMoved(e:MoveEvent) {
+		move(input.x, input.y);
 		e.target.removeEventListener(MoveEvent.MOVE, onInputMoved);
 		e.target.moveTo(0,0);
 		e.target.addEventListener(MoveEvent.MOVE, onInputMoved, false, 0, true);		
 	}
 
-	public function onInputResized(e:ResizeEvent) {
+	private function onInputResized(e:ResizeEvent) {
 		this.box = input.box.clone();
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}

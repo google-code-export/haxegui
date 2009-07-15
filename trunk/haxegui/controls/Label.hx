@@ -30,6 +30,9 @@ import haxegui.Opts;
 import haxegui.managers.StyleManager;
 import haxegui.Component;
 
+import haxegui.utils.Size;
+import haxegui.utils.Color;
+
 /**
 *
 * Label class, non-interactive text component.
@@ -40,7 +43,8 @@ import haxegui.Component;
 */
 class Label extends Component
 {
-	public var tf : TextField;
+	public var tf 						: TextField;
+	public var txt (getText, setText)  : String;
 
 	override public function init(opts : Dynamic=null) {
 		super.init(opts);
@@ -66,7 +70,7 @@ class Label extends Component
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 		this.addChild(tf);
 
-		resize(new flash.geom.Rectangle(0,0, tf.width, tf.height));
+		resize(new Size(tf.width, tf.height));
 		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
 
 		dirty = false;
@@ -76,9 +80,10 @@ class Label extends Component
 		return tf.text;
 	}
 
-	public function setText(s:String) {
+	public function setText(s:String) : String {
 		tf.text = s;
-		tf.setTextFormat(DefaultStyle.getTextFormat());
+		//tf.setTextFormat(DefaultStyle.getTextFormat());
+		return tf.text;
 	}
 
 	static function __init__() {

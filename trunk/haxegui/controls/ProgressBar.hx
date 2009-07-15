@@ -119,7 +119,7 @@ class ProgressBar extends Component
 		"
 		);
 		bar.moveTo(0,1);
-		bar.startInterval(12);
+		bar.startInterval(25);
 
 		label = new Label(this);
 		label.init();
@@ -153,14 +153,13 @@ class ProgressBar extends Component
 		haxegui.Haxegui.register(ProgressBar);
 	}
 
-	public function update() {
+	private inline function update() {
 
 		progress = Math.max(0, Math.min(1, progress));
-		
+
 		if(label!=null) 
 			label.tf.text = Math.round(100*progress) + "%";
 
-		
 		if(mask!=null) {
 			mazk = cast addChild(new Shape());
 			mazk.graphics.clear();
@@ -169,8 +168,9 @@ class ProgressBar extends Component
 			mazk.graphics.endFill();
 			bar.mask = mazk;
 		}
+		
 		mazk.width = progress*box.width;
-		mazk.height = box.height;
+		//mazk.height = box.height;
 	
 	}
 	
@@ -180,9 +180,9 @@ class ProgressBar extends Component
 		label.move(0,2);
 		bar.dirty = true;
 		update();
-		super.onResize(cast e.clone());
+		mazk.height = box.height;		
+		super.onResize(e);
 	}
 	
-	
 
-}//ProgressBar
+}

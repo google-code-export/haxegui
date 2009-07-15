@@ -23,6 +23,7 @@ import flash.geom.Rectangle;
 import haxegui.Opts;
 import haxegui.managers.StyleManager;
 import haxegui.Image;
+import haxegui.utils.Size;
 
 /**
 *
@@ -51,7 +52,8 @@ class Button extends AbstractButton
 		
 		// dont create zero sized buttons
 		if(box==null || box.isEmpty()) 
-			box = new Rectangle(0,0,90,30);
+			//box = new Rectangle(0,0,90,30);
+			box = new Size(90,30).toRect();
 		
 		toggle = Opts.optBool(opts, "toggle", false);
 		selected = Opts.optBool(opts, "selected", false);

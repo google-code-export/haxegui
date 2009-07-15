@@ -86,8 +86,8 @@ class Appearance extends Window
 		rect.roundness = 12;
 		rect.move(15, 74);
 		
-		var icon = new haxegui.Image(rect);
-		icon.init({src: "assets/icons/notice.png"});
+		var icon = new haxegui.Icon(rect);
+		icon.init({src: "notice.png"});
 		icon.move(8,2);
 		
 		var label = new haxegui.controls.Label(rect);
