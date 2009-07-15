@@ -37,5 +37,6 @@ interface ITween {
 
 	public function updateColorTween(t : Tween) : Void;
 	public function updatePositionTween(t : Tween, p:Point) : Void;
+
 }
 

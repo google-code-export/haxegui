@@ -56,7 +56,7 @@ class ScriptStandardLibrary
 		interp.variables.set( "Math", Math );
 		interp.variables.set( "Type", Type );
 		interp.variables.set( "Reflect", Reflect );
-		interp.variables.set( "Reflect", Reflect );
+		interp.variables.set( "Resource", haxe.Resource );
 		interp.variables.set( "Timer", haxe.Timer );
 		interp.variables.set( "Xml", Xml );
 		

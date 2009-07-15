@@ -17,60 +17,50 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package haxegui.toys;
+package haxegui.containers;
 
+import flash.display.Sprite;
+import flash.display.DisplayObject;
+import flash.display.MovieClip;
 import flash.geom.Rectangle;
 
+import flash.events.Event;
+import flash.events.MouseEvent;
+
+import haxegui.events.ResizeEvent;
+
+import flash.filters.DropShadowFilter;
+import flash.filters.BitmapFilter;
+import flash.filters.BitmapFilterQuality;
+
+import haxegui.managers.CursorManager;
+import haxegui.managers.ScriptManager;
+import haxegui.managers.MouseManager;
 import haxegui.managers.StyleManager;
-
-import haxegui.utils.Size;
-import haxegui.utils.Color;
-
+import haxegui.controls.AbstractButton;
 import haxegui.Component;
-
-enum ArrowType {
-	LINE;
-	SOLID;
-	CIRCLE;
-	DIAMOND;
-}
+import haxegui.IContainer;
 
 
-class Arrow extends Component
+
+/**
+* Accordion class
+*
+* @version 0.1
+* @author Russell Weir <damonsbane@gmail.com>
+* @author Omer Goshen <gershon@goosemoose.com>
+*/
+class Accordion extends Container
 {
 
-	override public function init(?opts:Dynamic)
-	{
-		box = new Size(12,12).toRect();
-		color = cast Math.random() * 0xFFFFFF;
-			
+	override public function init(opts : Dynamic=null) {
 		super.init(opts);
-					
-		this.setAction("redraw",
-		"
-		var p = new flash.geom.Point(.5*this.box.width, .5*this.box.height);
-		this.graphics.clear();
-		this.graphics.lineStyle(1, Color.darken(this.color, 16), 1, true,
-				    flash.display.LineScaleMode.NONE,
-				    flash.display.CapsStyle.ROUND,
-				    flash.display.JointStyle.ROUND);
-	
-		this.graphics.beginFill( this.color );
-		this.graphics.moveTo(-p.x,-p.y);
-		this.graphics.lineTo(p.x, 0);
-		this.graphics.lineTo(-p.x, p.y);
-		this.graphics.lineTo(-p.x,-p.y);
-		this.graphics.endFill();
-		"
-		);
-
-		move(Std.int(box.width)>>1, Std.int(box.height)>>1);
-		
-
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 	}
 
+
 	static function __init__() {
-		haxegui.Haxegui.register(Arrow);
+		haxegui.Haxegui.register(Accordion);
 	}
 	
 }
