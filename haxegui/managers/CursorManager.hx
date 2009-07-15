@@ -109,18 +109,16 @@ class CursorManager extends EventDispatcher
 		cursor = Cursor.ARROW;
 	}
 
-	public static function setCursor(c:Cursor) : Void
-	{
+	public static function setCursor(c:Cursor) : Void {
 		if(getInstance().lock) return;
 		getInstance().cursor = c;
 	}
 
-	private function getCursor() : MovieClip
-	{
+	private inline function getCursor() : MovieClip	{
 		return _mc;
 	}
 
-	public function inject(e:MouseEvent) {
+	public inline function inject(e:MouseEvent) {
 
 		_mc.visible = false;
 
@@ -135,19 +133,16 @@ class CursorManager extends EventDispatcher
 	}//inject
 
 
-	public inline function toTop() : Void
-	{
+	public inline function toTop() : Void {
 		flash.Lib.current.setChildIndex(_mc, flash.Lib.current.numChildren - 1 );
 	}//toTop
 
 
-	public inline function hideCursor() : Void
-	{
+	public inline function hideCursor() : Void	{
 		_mc.visible = false;
 	}
 
-	public inline function showCursor() : Void
-	{
+	public inline function showCursor() : Void	{
 		_mc.visible = true;
 	}
 

@@ -99,8 +99,7 @@ class AbstractButton extends Component, implements IRepeater
 		mouseChildren = true;
 	}
 
-	override public function init(?opts:Dynamic)
-	{
+	override public function init(?opts:Dynamic) {
 		color = DefaultStyle.BACKGROUND;
 		super.init(opts);
 		autoRepeat = Opts.optBool(opts,"autoRepeat", true);

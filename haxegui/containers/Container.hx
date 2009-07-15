@@ -19,10 +19,10 @@
 
 package haxegui.containers;
 
+import flash.geom.Rectangle;
+
 import flash.display.Sprite;
 import flash.display.DisplayObject;
-import flash.display.MovieClip;
-import flash.geom.Rectangle;
 
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -33,6 +33,7 @@ import haxegui.managers.ScriptManager;
 import haxegui.managers.MouseManager;
 import haxegui.managers.StyleManager;
 import haxegui.Component;
+import haxegui.controls.ScrollBar;
 import haxegui.IContainer;
 
 
@@ -66,30 +67,30 @@ class Container extends Component, implements IContainer
 	}
 
 
-	public function onParentResize(e:ResizeEvent) {
+	private function onParentResize(e:ResizeEvent) {
 		
-		if(Std.is(parent, Component))
-		{
-			box = untyped parent.box.clone();
-			box.width -= x;
-			box.height -= y;
-		}
-		else
+
 		if(Std.is(parent, Divider)) untyped {
+		/*
 			var b = parent.box.clone();
 			b.height = parent.handle.y;
 			box = b;
+		*/
 		}
 		else
 		if(Std.is(parent.parent, ScrollPane)) {
 			box = untyped parent.parent.box.clone();
 		}
+		else
+		if(Std.is(parent, Component))
+		{
+			box = untyped parent.box.clone();
+			box.width -= x;
+			box.height -= y;
+		}		
 		
-		for(i in 0...numChildren)
-			if(Std.is( getChildAt(i), haxegui.controls.ScrollBar ))
-			{
-				this.box.width -= 20;
-			}
+		if(getElementsByClass(ScrollBar).hasNext())
+			this.box.width -= 20;
 
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));

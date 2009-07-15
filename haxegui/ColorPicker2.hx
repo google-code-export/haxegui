@@ -112,7 +112,7 @@ class ColorPicker2 extends Window
 
 	
 		var wheel = new Image(container, "wheel", -4, 10);
-		wheel.init({src: "assets/colorwheel.jpg"});
+		wheel.init({src: haxegui.Haxegui.baseURL+"assets/colorwheel.jpg"});
 		wheel.scaleX = wheel.scaleY = .5;
 		
 

@@ -57,8 +57,7 @@ class FocusManager extends EventDispatcher, implements Dynamic
 
 
 
-  public function new ()
-  {
+  public function new () {
     super ();
     this.addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged);
     this.addEventListener (FocusEvent.KEY_FOCUS_CHANGE, onFocusChanged);
@@ -66,13 +65,11 @@ class FocusManager extends EventDispatcher, implements Dynamic
     this.addEventListener (FocusEvent.FOCUS_OUT, onFocusChanged);
   }
 
-  public override function toString () : String
-  {
+  public override function toString () : String {
     return "FocusManager";
   }
 
-  public function setFocus (o:DisplayObject)
-  {
+  public function setFocus (o:DisplayObject) {
 		//~ return;
 	if(o==null || !Std.is(o, Component)) return;
     else
@@ -101,8 +98,7 @@ class FocusManager extends EventDispatcher, implements Dynamic
 
 
 
-  public function getFocus ():DisplayObject
-  {
+  public function getFocus ():DisplayObject {
     return _focus;
   }
 

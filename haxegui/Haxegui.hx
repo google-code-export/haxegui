@@ -86,7 +86,6 @@ class Haxegui {
 			}
 			dirtyList.remove(c);
 		}
-		//~ MouseManager.getInstance().delta = new flash.geom.Point();
 	}
 
 	/**

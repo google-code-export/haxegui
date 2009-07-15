@@ -109,7 +109,7 @@ class ListItem extends AbstractButton
 
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, UiList)) throw parent+" not a UiList";
-		
+		box = new Rectangle(0,0, 140, 100);
 		color = DefaultStyle.INPUT_BACK;
 		
 		super.init(opts);
@@ -138,7 +138,7 @@ class ListItem extends AbstractButton
 	}
 	
 	public function onParentResize(e:ResizeEvent) {
-		this.box = (cast parent).box.clone();
+		this.box.width = (cast parent).box.width;
 		dirty = true;
 	}
 
@@ -254,10 +254,12 @@ class UiList extends Component, implements IData
 	public function __setDataSource(d:DataSource) : DataSource {
 		dataSource = d;
 		dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
-		trace(this.dataSource+" => "+this);
+
 		#if debug
+			trace(this.dataSource+" => "+this);
 			trace(this.dataSource+": "+dataSource.data);
 		#end
+
 		if(Std.is(dataSource.data, List)) {
 			var j=0;
 			data = cast(dataSource.data, List<Dynamic>);
@@ -277,14 +279,17 @@ class UiList extends Component, implements IData
 	}
 
 
-	public function onData(e:Event) {
-		trace(e);
+	private  function onData(e:Event) {
+		#if debug
+			trace(e);
+		#end
+		
 		data = dataSource.data;
 		dirty = true;
 	}
 	
 	
-	public function onParentResize(e:ResizeEvent) : Void {
+	private function onParentResize(e:ResizeEvent) : Void {
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	
@@ -296,14 +301,13 @@ class UiList extends Component, implements IData
 		//~ e.target.y = 20 + e.target.x % 20;
 		e.target.y = dragItem * 20;
 		setChildIndex(e.target, dragItem);
-
 	}
 
 
 
 	override public function redraw(opts:Dynamic=null) {
-		super.redraw();
-
+		super.redraw(opts);
+		
 		/* Draw the frame */
 		this.graphics.clear();
 		this.graphics.lineStyle(1, haxegui.utils.Color.darken(DefaultStyle.BACKGROUND, 20), 1);

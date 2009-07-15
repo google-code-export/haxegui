@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <haxegui:Layout name="Example1">
 <!-- Non-visual -->
-    <String name="hello">Hello World</String>/>
+    <String name="hello">Hello World</String>
     <Float name="aNumber">3.45</Float>
 	<haxegui:DataSource>
 		<Array name="StringArray">
@@ -55,6 +55,9 @@
 									for( i in 0...stack.numChildren)
 										stack.getChildAt(i).visible = false;
 									stack.getChildAt(this.activeTab).visible = true;
+									this.removeEventListener(flash.events.Event.CHANGE, changeStack);
+									this.getChildByName("TabStepper").adjustment.__setValue(this.activeTab);
+									this.addEventListener(flash.events.Event.CHANGE, changeStack, false, 0, true);
 								}
 								this.addEventListener(flash.events.Event.CHANGE, changeStack, false, 0, true);
 							]]>
@@ -69,23 +72,20 @@
 							<events>
 								<script type="text/hscript" action="onLoaded">
 								<![CDATA[
-				/*
-								this.adjustment.addEventListener(flash.events.Event.CHANGE,
-								function(e) {
-									this.parent.__setActive( this.adjustment.value );
-								});
-								
-								this.parent.addEventListener(flash.events.Event.CHANGE,
-								function(e) {
-									this.adjustment.__setValue ( this.parent.activeTab );
-								});
-				*/				
+									function changeStack(e) {
+										var stack = parent.parent.getChildByName("Stack");
+										for( i in 0...stack.numChildren)
+											stack.getChildAt(i).visible = false;
+										parent.__setActive(this.adjustment.value);
+										stack.getChildAt(this.adjustment.value).visible = true;
+									}
+									this.adjustment.addEventListener(flash.events.Event.CHANGE, changeStack, false, 0, true);
 								]]>
 								</script>
 							</events>
 						</haxegui:controls:Stepper>
 					</haxegui:TabNavigator>
-					<haxegui:containers:Stack name="Stack" y="20" width="512" height="512" selectedIndex="0">
+					<haxegui:containers:Stack name="Stack" y="24" width="512" height="512" selectedIndex="0">
 						<!-- First stack child -->
 						<haxegui:containers:Container width="512" height="512" >
 							<haxegui:controls:Label x="14" y="14" >This window and it's content are dynamically generated from xml, Some events are also defined in hscript. </haxegui:controls:Label>
@@ -186,9 +186,12 @@
 						</haxegui:containers:Container>
 						<!-- Second stack child -->
 						<haxegui:containers:Divider width="512" height="512">
-							<haxegui:containers:Container color="0xFFFFFF">
+							<haxegui:containers:Container width="512" color="0xFFFFFF">
 								<haxegui:controls:Label x="20" y="20" >Second TabChild</haxegui:controls:Label>
 							</haxegui:containers:Container>
+							<haxegui:containers:Divider horizontal="true" width="512" height="256">
+								<haxegui:containers:Container width="512" color="0xFF00FF"/>
+							</haxegui:containers:Divider>
 						</haxegui:containers:Divider>
 						<!-- Third stack child -->
 						<haxegui:containers:Container width="512" height="512"  >

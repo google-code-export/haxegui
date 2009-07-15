@@ -293,9 +293,6 @@ class Console extends Window, implements ILogger
 			vert.box.height = box.height - 20;
 		}
 
-		if(container!=null)
-			container.onParentResize(e);
-
 	}
 
 	public function onInputKeyDown(e:KeyboardEvent) : Void

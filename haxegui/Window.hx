@@ -43,6 +43,9 @@ import haxegui.Opts;
 import haxegui.windowClasses.TitleBar;
 import haxegui.windowClasses.WindowFrame;
 import haxegui.windowClasses.StatusBar;
+import haxegui.utils.Color;
+import haxegui.utils.Size;
+
 
 enum WindowType
 {
@@ -109,12 +112,12 @@ class Window extends Component
 			parent = flash.Lib.current;
 		
 		/** Check name with WindowManager **/
-		if( WindowManager.getInstance().windows.exists( this.name ) )
+		if( WindowManager.getInstance().windows.exists( name ) )
 			this.name += Std.string(haxe.Timer.stamp()*1000).substr(0,2);
 
 		super (parent, name, x, y);
 
-		WindowManager.getInstance().windows.set( this.name, this );
+		WindowManager.getInstance().windows.set( name, this );
 		
 	}
 
@@ -124,7 +127,7 @@ class Window extends Component
 
 	override public function init(opts : Dynamic=null) {
 		
-		box = new Rectangle (0, 0, 320, 240);
+		box = new Size (320, 240).toRect();
 		color = DefaultStyle.BACKGROUND;
 		text = null;
 		
@@ -136,7 +139,7 @@ class Window extends Component
 		
 		// options
 		sizeable = Opts.optBool(opts, "sizeable", true);
-		lazyResize = Opts.optBool(opts, "lazyResize", true);
+		lazyResize = Opts.optBool(opts, "lazyResize", false);
 
 		// frame
 		frame = new WindowFrame(this, "frame");

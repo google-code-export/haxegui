@@ -59,6 +59,8 @@ class ScriptStandardLibrary
 		interp.variables.set( "Reflect", Reflect );
 		interp.variables.set( "Timer", haxe.Timer );
 		interp.variables.set( "Xml", Xml );
+		
+		interp.variables.set( "baseURL", haxegui.Haxegui.baseURL );
 	
 
 		interp.variables.set("feffects",
@@ -244,6 +246,7 @@ class ScriptStandardLibrary
 		interp.variables.set("ScrollPane", haxegui.containers.ScrollPane);
 		interp.variables.set("ScriptManager", haxegui.managers.ScriptManager);
 		interp.variables.set("ScriptStandardLibrary", ScriptStandardLibrary);
+		interp.variables.set("Size", haxegui.utils.Size);
 		interp.variables.set("Stack", haxegui.containers.Stack);
 		interp.variables.set("Stats", haxegui.Stats);
 		interp.variables.set("StyleManager", StyleManager);

@@ -41,20 +41,30 @@ import haxegui.controls.AbstractButton;
 import haxegui.Component;
 import haxegui.IContainer;
 
+import haxegui.Opts;
 
 
 class DividerHandleButton extends AbstractButton {
 
 	override public function init(opts : Dynamic=null)
 	{
-		box = new Rectangle(0,0,100,10);
+		if(untyped parent.parent.horizontal)  
+			box = new Rectangle(0,0,10,100);
+		else
+			box = new Rectangle(0,0,100,10);
+			
 		color = DefaultStyle.BACKGROUND;
 		super.init(opts);
 		
 		var arrow = new haxegui.toys.Arrow(this);
 		arrow.init({width: 6, height: 8, color: this.color});
-		arrow.rotation = 90;
-		arrow.moveTo(.5*(this.box.width-8), 5);
+		if(untyped parent.parent.horizontal)  {
+			arrow.moveTo(5, .5*(this.box.height-8));
+		}
+		else {
+			arrow.rotation = 90;
+			arrow.moveTo(.5*(this.box.width-8), 5);
+		}
 				
 	}
 
@@ -70,7 +80,10 @@ class DividerHandle extends AbstractButton {
 	
 	override public function init(opts : Dynamic=null)
 	{
-		box = new Rectangle(0,0,512,10);
+		if((cast parent).horizontal)	
+			box = new Rectangle(0,0,10,512);
+		else
+			box = new Rectangle(0,0,512,10);
 		
 		color = DefaultStyle.BACKGROUND;
 		cursorOver = Cursor.NS;
@@ -80,7 +93,10 @@ class DividerHandle extends AbstractButton {
 
 		button = new DividerHandleButton(this);
 		button.init();
-		button.moveTo(.5*(512-100),0);
+		if((cast parent).horizontal)	
+			button.moveTo(0, .5*(512-100));
+		else
+			button.moveTo(.5*(512-100),0);
 		
 		var p = Component.getParentComponent(this);
 		while(p!=null) {
@@ -93,8 +109,15 @@ class DividerHandle extends AbstractButton {
 	public function onParentResize(e:ResizeEvent) {
 		//box.width = (cast parent).box.width;
 		var b = untyped parent.parent.parent.box;
-		box.width = b.width;
-		button.moveTo(.5*(box.width-100),0);
+		if((cast parent).horizontal) {
+			box.height = b.height;
+			button.moveTo(0, .5*(box.height-100));
+		}
+		else {
+			box.width = b.width;
+			button.moveTo(.5*(box.width-100),0);
+		}
+		
 		//dirty = true;
 		redraw();
 	}
@@ -107,32 +130,57 @@ class DividerHandle extends AbstractButton {
 
 
 /**
- *
- *
- *
- *
- */
+* Divider is a split pane containers.
+*
+* @version 0.1
+* @author Russell Weir <damonsbane@gmail.com>
+* @author Omer Goshen <gershon@goosemoose.com>
+*/
 class Divider extends Container
 {
 	
 	var handle : DividerHandle;
+
+	var horizontal : Bool;
 	
 	override public function init(opts : Dynamic=null)
 	{
-		
+		horizontal = Opts.optBool(opts, "horizontal", false);
+
 		super.init(opts);
 		
 		handle = new DividerHandle(this);
 		handle.init();
-		handle.moveTo(0, 250);
+		if(horizontal)
+			handle.moveTo(250, 0);
+		else
+			handle.moveTo(0, 250);
+		
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 
 	}
 
+	public override function addChild(o:DisplayObject) {
+	/*
+		if(handle!=null) {
+				if(Std.is(o, Component)) {
+				(cast o).box.height = handle.y - 1;
+				(cast o).redraw();
+				}
+			}
+	*/
+		return super.addChild(o);
+	}
+
 	public override function onMouseDown(e:MouseEvent) {
-		handle.startDrag(false, new Rectangle(0,-this.stage.stageHeight,0,2*this.stage.stageHeight));
-		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		if(e.target==handle) {
+			if(horizontal)
+				e.target.startDrag(false, new Rectangle(-this.stage.stageWidth,0,2*this.stage.stageWidth,0));
+			else
+				e.target.startDrag(false, new Rectangle(0,-this.stage.stageHeight,0,2*this.stage.stageHeight));
+			this.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		}
 		super.onMouseDown(e);
 	}
 
@@ -149,12 +197,26 @@ class Divider extends Container
 	public function onMouseMove(e:MouseEvent) {
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		//dirty = true;
-		redraw();
+		if(numChildren>0) {
+		if(getChildAt(1)!=null)
+			untyped	getChildAt(1).box.height = handle.y - 1;
+		}
+		//redraw();
 	}
 
-	public override function onParentResize(e:ResizeEvent) {
+
+	private override function onParentResize(e:ResizeEvent) {
+		if(Std.is(parent, Divider)) {
+			if((cast parent).horizontal)
+				box.width = (cast parent).handle.x;
+			else
+				box.height = (cast parent).handle.y;
+		}
 		if(handle!=null) {
-			handle.box.width = this.box.width;
+			if(horizontal)
+				handle.box.height = this.box.height;
+			else
+				handle.box.width = this.box.width;
 			handle.dirty = true;
 		}
 		

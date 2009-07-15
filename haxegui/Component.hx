@@ -27,6 +27,7 @@ import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.ColorTransform;
+import flash.geom.Point;
 import flash.geom.Rectangle;
 
 import haxegui.events.MoveEvent;
@@ -38,6 +39,9 @@ import haxegui.managers.ScriptManager;
 import haxegui.managers.TooltipManager;
 import haxegui.Opts;
 import haxegui.Window;
+
+import haxegui.utils.Size;
+import haxegui.utils.Color;
 
 import feffects.Tween;
 
@@ -53,7 +57,7 @@ import feffects.Tween;
  * 
  * 
  **/
-class Component extends Sprite, implements haxegui.IMovable, implements haxegui.IToolTip
+class Component extends Sprite, implements haxegui.IMovable, implements haxegui.IToolTip, implements haxegui.ITween
 {
 	////////////////////////////////////////////////////////////////////////////
 	// Static members
@@ -66,11 +70,11 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	// Private members
 	////////////////////////////////////////////////////////////////////////////
 
+	public var isTweening : Bool;
+	
 	/** Current color tween in effect **/
 	private var colorTween : Tween;
-
-	/** Current position tween in effect **/
-	//~ private var positionTween : Tween;
+	private var positionTween : Tween;
 
 
 	/** The initial opts **/
@@ -88,7 +92,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	/** Rectangular dimensions **/
 	public var box : Rectangle;
-	//~ public var minimumBox : Rectangle;
+	public var minSize : Size;
 
 	/** The color of this component, which has different meanings per component **/
 	public var color:Int;
@@ -217,6 +221,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 		this.initOpts = Opts.clone(opts);
 		this.dirty = true;
+		
 	}
 
 /*
@@ -385,12 +390,12 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* resize box
 	* @return Rectangle new size
 	**/
-	public function resize(b:Rectangle) : Rectangle
+	public function resize(b:Size) : Rectangle
 	{
 		var event = new ResizeEvent(ResizeEvent.RESIZE);
 		event.oldWidth = box.width;
 		event.oldHeight = box.height;
-		box = b.clone();
+		box = b.toRect();
 		dispatchEvent(event);
 		return box;
 	}
@@ -467,7 +472,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 			}
 		return l.iterator();
 	}
-	
+
+
 	/** returns a child by given id number **/
 	public function getChildById(id:Int) : DisplayObject {
 		for(i in this)
@@ -477,7 +483,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	/** returns all children of type **/
-	public function getElementsdByClass(c:Class<Dynamic>) : Iterator<Dynamic> {
+	public function getElementsByClass(c:Class<Dynamic>) : Iterator<Dynamic> {
 		var l = new List<Dynamic>();
 		for(i in this)
 		if(Std.is(i, c))
@@ -530,12 +536,11 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		this.removeEventListener(flash.events.Event.ENTER_FRAME, onEnterFrame);
 	}
 
-	override public function toString() : String
-	{
+	override public function toString() : String {
 		return this.name + "[" + Type.getClassName(Type.getClass(this)) + "]";
 	}
 
-	public function updateColorTween(t : Tween) {
+	public function updateColorTween(t : Tween) : Void {
 		var me = this;
 		var colorTrans: ColorTransform  = new ColorTransform();
 		if(colorTween != null)
@@ -557,6 +562,24 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		colorTween.start();
 	}
 
+
+	public function updatePositionTween(t : Tween, p:Point) : Void {
+		var me = this;
+		var colorTrans: ColorTransform  = new ColorTransform();
+		if(positionTween != null)
+			positionTween.stop();
+		positionTween = t;
+		positionTween.setTweenHandlers(
+				function(v) {
+				var pos = Point.interpolate(new Point(), p, v);
+				me.move(pos.x, pos.y);
+				},
+				function(v){
+					me.positionTween = null;
+				}
+				);
+		positionTween.start();
+	}
 
 	//////////////////////////////////////////////////
 	////               Events                     ////
@@ -756,8 +779,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Overiden in sub-classes **/
 	public function onResize(e:ResizeEvent) : Void {}
 
-	private function onEnterFrame(e:Event) : Void
-	{
+	private function onEnterFrame(e:Event) : Void {
 		var now = haxe.Timer.stamp();
 		var stepsF : Float  = (now - lastInterval) * intervalUpdatesPerSec;
 		var steps : Int = Math.floor( stepsF );

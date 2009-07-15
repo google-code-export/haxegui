@@ -465,20 +465,14 @@ class RichTextEditor extends Window
 	}
 	
 
-
-
-	public override function onRollOver(e:MouseEvent)  : Void
-	{
+	public override function onRollOver(e:MouseEvent)  : Void {
 		CursorManager.setCursor(Cursor.HAND);
 	}
 
-	public override function onRollOut(e:MouseEvent)
-	{
-	}
+	public override function onRollOut(e:MouseEvent) {}
 
 
-	public function onMouseUpImage(e:MouseEvent)  : Void
-	{
+	public function onMouseUpImage(e:MouseEvent)  : Void {
 		if(e.target.hitTestObject( CursorManager.getInstance()._mc ))
 			CursorManager.setCursor(Cursor.HAND);
 	}

@@ -144,8 +144,6 @@ class Introspector extends Window
 			height					: "height",
 			visible					: "visible",
 			alpha					: "alpha",
-			//~ width					: function() { return (cast e.target).box.width; },
-			//~ height					: function() { return (cast e.target).box.height; },
 			type 					: function() { return Type.typeof(e.target); },
 			globalX					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
 			globalY					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; },
@@ -202,7 +200,7 @@ class Introspector extends Window
 
 		list1.init({text: "Property"});
 		list2.init({text: "Value"});		
-		for(item in list2.getElementsdByClass(ListItem)) {
+		for(item in list2.getElementsByClass(ListItem)) {
 			item.label.tf.selectable = true;
 			item.label.tf.mouseEnabled = true;
 			}
