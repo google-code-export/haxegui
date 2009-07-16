@@ -38,6 +38,13 @@ import haxegui.IContainer;
 import haxegui.Opts;
 
 
+/**
+* Stack container, a simple container for layering components, the active layer can be controled
+* by a TabNavigator for ex.
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+**/
 class Stack extends Component, implements IContainer
 {
 	public var selectedIndex : Int;

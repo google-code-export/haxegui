@@ -63,7 +63,7 @@ import haxegui.windowClasses.StatusBar;
 
 /**
  *
- *
+ * Some textual and chart performance statistics
  *
  */
 class Stats extends Window

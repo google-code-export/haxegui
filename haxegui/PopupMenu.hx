@@ -65,7 +65,7 @@ import feffects.easing.Quart;
 
 /**
 *
-* ListItem Class
+* PopupMenuItem Class
 *
 * @version 0.1
 * @author <gershon@goosemoose.com>
@@ -111,7 +111,7 @@ class PopupMenuItem extends AbstractButton
 
 /**
 *
-*
+* Popup Menu managers 
 *
 *
 */
@@ -124,13 +124,8 @@ class PopupMenu extends AbstractButton
 	private static var _instance:PopupMenu = null;
 
 
-	private function new(parent:DisplayObjectContainer=null, name:String=null, ?x:Float, ?y:Float)
-	{
-		super(parent,name,x,y);
-	}
 
-	public static function getInstance ():PopupMenu
-	{
+	public static function getInstance ():PopupMenu	{
 		if (PopupMenu._instance == null)
 		{
 		PopupMenu._instance = new PopupMenu ();
@@ -140,10 +135,7 @@ class PopupMenu extends AbstractButton
 
 
 
-
-
-	override public function init(opts:Dynamic=null) : Void
-	{
+	override public function init(opts:Dynamic=null) : Void	{
 		close();
 
 		if(Reflect.hasField(opts,"parent"))

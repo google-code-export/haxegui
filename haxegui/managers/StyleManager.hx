@@ -73,6 +73,14 @@ class StyleManager implements Dynamic
 	}
 }
 
+/**
+*
+* DefaultStyle defines common look & feel
+*
+* @version 0.1
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*/
 class DefaultStyle {
 	public static var BACKGROUND 		: UInt   = 0xADD8E6;
 	public static var ACTIVE_TITLEBAR 	: UInt   = 0xB3EEFF;
@@ -89,6 +97,7 @@ class DefaultStyle {
 
 	public static var FONT_SIZE			:	UInt = 8;
 	public static var FONT				:	String = "FFF_Harmony";
+	
 	public static function getTextFormat(?size:Dynamic, ?color:UInt, ?align:flash.text.TextFormatAlign) : TextFormat
 	{
 		var fmt = new TextFormat ();

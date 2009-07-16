@@ -39,6 +39,8 @@ import haxegui.Opts;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 import haxegui.IAdjustable;
+import haxegui.utils.Size;
+import haxegui.utils.Color;
 
 
 /**
@@ -140,7 +142,7 @@ class ScrollBar extends Component
 		color = DefaultStyle.BACKGROUND;
 		scroll = 0;
 		scrollee = null;
-		box = new Rectangle(0,0,20,80);	
+		box = new Size(20,80).toRect();	
 		horizontal = false;
 		
 		super.init(opts);

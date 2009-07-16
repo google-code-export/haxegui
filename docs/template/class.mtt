@@ -195,17 +195,32 @@ function windowTitle()
 	&lt;haxegui:Layout name=&quot;ExampleLayout&quot;&gt;
 	&lt;/haxegui:Layout&gt;
 	</pre>
+	<textarea>
+	</textarea>
 	</div>
 	<div class="example-embed">
+<!--
 		<object type="application/x-shockwave-flash" data="main.swf" width="100%" height="400">
-			<param name="movie" value="main.swf"/>
+			<param name="movie" value="http://haxegui.googlecode.com/svn/trunk/samples/main.swf"/>
 			<param name="play" value="true"/>
 			<param name="loop" value="false"/>
 			<param name="quality" value="high"/>
 			<param name="loop" value="false"/>
 			<param name="loop" value="false"/>
-			<param name="FlashVars" value="layout=samples/Example1.xml" />
+			<param name="FlashVars" value="baseURL=http://haxegui.googlecode.com/svn/trunk&layout=samples/Example1.xml" />
 		</object>
+-->
+		
+		<embed src="http://haxegui.googlecode.com/svn/trunk/samples/minimal.swf" 
+		flashvars="baseURL=http://haxegui.googlecode.com/svn/trunk/&layout=samples/Example7.xml" 
+		quality="high" 
+		allowscriptaccess="always" 
+		type="application/x-shockwave-flash" 
+		pluginspage="http://www.macromedia.com/go/getflashplayer" 
+		align="middle" 
+		width="994"
+		height="400">
+		</embed>
 	</div>
 	::end::
 	</div>

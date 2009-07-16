@@ -90,10 +90,10 @@ class Introspector extends Window
 
 		//
 		tree = new Tree(scrollpane2);
-		var o = { root : reflectDisplayObjectContainer(cast flash.Lib.current) };
-		tree.data = o;
+		//tree.data = { root : reflectDisplayObjectContainer(cast flash.Lib.current) };
+		tree.data = { root : reflectDisplayObjectContainer(cast flash.Lib.current) };
 		tree.init({width: 250});
-		
+
 		
 		//
 		list1 = new UiList(scrollpane, "Properties", 210, 0);

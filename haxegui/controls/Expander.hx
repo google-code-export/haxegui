@@ -43,6 +43,7 @@ import haxegui.events.ResizeEvent;
 
 import haxegui.toys.Arrow;
 import haxegui.utils.Color;
+import haxegui.utils.Size;
 
 import feffects.Tween;
 
@@ -69,8 +70,8 @@ class Expander extends AbstractButton
 
 	override public function init(opts:Dynamic=null)
 	{
-		box = new Rectangle(0, 0, 140, 15);
-		color = cast Math.max(0, DefaultStyle.BACKGROUND - 0x202020);
+		box = new Size(40, 15).toRect();
+		color =  Color.darken(DefaultStyle.BACKGROUND, 16);
 		expanded = false;
 
 		expanded = Opts.optBool(opts, "expanded", expanded);
@@ -105,9 +106,9 @@ class Expander extends AbstractButton
 			scrollTween.stop();
 				
 		if(!expanded)  
-			scrollTween = new Tween(box.height, this.stage.stageHeight, 3500, r, "height", feffects.easing.Linear.easeNone);
+			scrollTween = new Tween(box.height, this.stage.stageHeight, 1500, r, "height", feffects.easing.Linear.easeNone);
 		else
-			scrollTween = new Tween(this.stage.stageHeight, box.height, 1500, r, "height", feffects.easing.Expo.easeOut);
+			scrollTween = new Tween(this.stage.stageHeight, box.height, 750, r, "height", feffects.easing.Expo.easeOut);
 		
 		scrollTween.setTweenHandlers( function(v) { self.scrollRect = r; });
 
@@ -118,7 +119,7 @@ class Expander extends AbstractButton
 		if(arrowTween!=null)
 			arrowTween.stop();
 			
-		arrowTween = new Tween(expanded?90:0, expanded?0:90, 500, arrow, "rotation", feffects.easing.Linear.easeNone);
+		arrowTween = new Tween(expanded?90:0, expanded?0:90, 150, arrow, "rotation", feffects.easing.Linear.easeNone);
 			
 		arrowTween.start();
 
