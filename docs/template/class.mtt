@@ -195,7 +195,14 @@ function windowTitle()
 	&lt;haxegui:Layout name=&quot;ExampleLayout&quot;&gt;
 	&lt;/haxegui:Layout&gt;
 	</pre>
-	<textarea>
+	<textarea cols="80" rows="25">
+<?xml version="1.0" encoding="iso-8859-1"?>
+<haxegui:Layout name="Sample">
+	<haxegui:Window >
+		<haxegui:Container>
+		</haxegui:Container>
+	</haxegui:Window>
+</haxegui:Layout>	
 	</textarea>
 	</div>
 	<div class="example-embed">
@@ -211,14 +218,14 @@ function windowTitle()
 		</object>
 -->
 		
-		<embed src="http://haxegui.googlecode.com/svn/trunk/samples/minimal.swf" 
-		flashvars="baseURL=http://haxegui.googlecode.com/svn/trunk/&layout=samples/Example7.xml" 
+		<embed src="/home/gershon/Desktop/haxegui/samples/minimal.swf" 
+		flashvars="baseURL=&layout=samples/Example7.xml" 
 		quality="high" 
 		allowscriptaccess="always" 
 		type="application/x-shockwave-flash" 
 		pluginspage="http://www.macromedia.com/go/getflashplayer" 
 		align="middle" 
-		width="994"
+		width="100%"
 		height="400">
 		</embed>
 	</div>
