@@ -8,6 +8,28 @@
 	<meta name="keywords" content="::kw::" />
 	::end::
 	<link rel="stylesheet" type="text/css" href="::meta.stylesheet::" />
+	<link rel="stylesheet" type="text/css" href="::rootRelative::../green.css" />
+
+<script type="text/javascript">
+
+function getFlashMovie(movieName) { 
+	var isIE = navigator.appName.indexOf("Microsoft") != -1; 
+	return (isIE) ? window[movieName] : document[movieName];
+} 
+
+function send() {
+	var xml = document.getElementById("sample_code").value;
+	getFlashMovie("sample").onChange(xml);	
+}
+
+function update() {
+	var xml = document.getElementById("sample_code").value;
+	document.getElementById("sample_xml").innerHTML = xml;
+	CodeHighlighter.highlightAll();
+	send();
+}
+</script>
+
 <script type="text/javascript">
 function windowTitle()
 {
@@ -19,10 +41,9 @@ function windowTitle()
 <noscript></noscript>
 </head>
 <body onload="windowTitle();">
+
 	<script language="javascript" type="text/javascript" src="::rootRelative::../chxdoc.js"></script>
-	
-	
-	
+
 	<div class="mainheader">
 		
 		<h1>::config.title::</h1>
@@ -189,37 +210,35 @@ function windowTitle()
 	::if packageDots.split(".").pop() == "controls" ::
 	<!-- ============ Class Example ========== -->
 	<div class="example-code">
-	This should have any extra info on the class and its usage, as well as a small xml example and its result below.
-	<pre>
-	&lt;?xml version=&quot;1.0&quot; encoding=&quot;iso-8859-1&quot;?&gt;
-	&lt;haxegui:Layout name=&quot;ExampleLayout&quot;&gt;
-	&lt;/haxegui:Layout&gt;
-	</pre>
-	<textarea cols="80" rows="25">
-<?xml version="1.0" encoding="iso-8859-1"?>
-<haxegui:Layout name="Sample">
-	<haxegui:Window >
-		<haxegui:Container>
-		</haxegui:Container>
+	<p>This should have any extra info on the class and its usage, as well as a small xml example and its result below.</p>
+
+<textarea rows="14" cols="80" id="sample_code" >
+::set sample = nameDots.split(".").pop() + " Sample"::
+<haxegui:Layout name="::sample::">
+	<haxegui:Window>
+		<haxegui:containers:Container>
+		</haxegui:containers:Container>
 	</haxegui:Window>
 </haxegui:Layout>	
-	</textarea>
+</textarea>
+<button onClick="update()">Update</button>
+
+
+	<pre id="sample_xml" class="code xml">
+	</pre>
 	</div>
 	<div class="example-embed">
+	<object id="sample" type="application/x-shockwave-flash" data="::rootRelative::../../samples/minimal.swf" width="100%" height="400">
+		<param name="movie" value="::rootRelative::../../samples/minimal.swf"/>
+		<param name="play" value="true"/>
+		<param name="loop" value="false"/>
+		<param name="quality" value="high"/>
+		<param name="loop" value="false"/>
+		<param name="allowScriptAccess" value="always"/>
+		<param name="FlashVars" value="baseURL=::rootRelative::../../&layout="/>
 <!--
-		<object type="application/x-shockwave-flash" data="main.swf" width="100%" height="400">
-			<param name="movie" value="http://haxegui.googlecode.com/svn/trunk/samples/main.swf"/>
-			<param name="play" value="true"/>
-			<param name="loop" value="false"/>
-			<param name="quality" value="high"/>
-			<param name="loop" value="false"/>
-			<param name="loop" value="false"/>
-			<param name="FlashVars" value="baseURL=http://haxegui.googlecode.com/svn/trunk&layout=samples/Example1.xml" />
-		</object>
--->
-		
-		<embed src="/home/gershon/Desktop/haxegui/samples/minimal.swf" 
-		flashvars="baseURL=&layout=samples/Example7.xml" 
+		<embed name="sample" src="::rootRelative::../../samples/minimal.swf" 
+		flashvars="baseURL=::rootRelative::../../&layout=" 
 		quality="high" 
 		allowscriptaccess="always" 
 		type="application/x-shockwave-flash" 
@@ -228,10 +247,16 @@ function windowTitle()
 		width="100%"
 		height="400">
 		</embed>
+		-->
+	</object>
 	</div>
 	::end::
 	</div>
 <!-- ========= END OF class DATA ========= -->
 	::if config.footerText != null::<div id="footer">::raw config.footerText::</div>::end::
 </body>
+<script type="text/javascript" src="::rootRelative::../CodeHighlighter.js"></script>
+<script type="text/javascript">
+	CodeHighlighter.highlightAll();
+</script>
 </html>

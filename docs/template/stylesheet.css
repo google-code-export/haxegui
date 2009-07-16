@@ -205,14 +205,8 @@ dd {
 }
 
 pre {
-	border-top: 1px dashed #dddddd;
-	border-bottom: 1px dashed #dddddd;
-	background-color: #f9f9f9;
 	font-family: "Courier New", Courier, mono;
-	font-weight: normal;
-	padding: 0.75em 0 0 0;
-	margin: 0.75em 0;
-	font-size: 85%;
+	font-size: 100%;
 }
 
 .members-panel {
@@ -363,18 +357,10 @@ a.showHideLink {
 .example-code {
 	padding: 1em;
 	margin: 0 0 0.75em 0;
-	color: black;
 	background: white;
 	border: 1px solid gray;
 }
 
-
-.example-code pre {
-	padding: 1em;
-	margin-bottom: 10x;
-	border: 1px dashed #9E7416;
-	background: lightyellow;
-}
 
 .example-embed {
 	height: 400px;
