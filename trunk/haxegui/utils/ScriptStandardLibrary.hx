@@ -125,6 +125,9 @@ class ScriptStandardLibrary
 					Shape : flash.display.Shape,
 					Sprite : flash.display.Sprite
 				},
+				external : {
+					ExternalInterface : flash.external.ExternalInterface
+				},
 				filters : {
 					BevelFilter : flash.filters.BevelFilter,
 					BitmapFilter : flash.filters.BitmapFilter,

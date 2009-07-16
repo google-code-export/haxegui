@@ -41,7 +41,8 @@ import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
-import haxegui.events.MenuEvent;
+
+import flash.external.ExternalInterface;
 
 import flash.net.URLLoader;
 import flash.net.URLRequest;
@@ -83,11 +84,14 @@ import haxegui.controls.ComboBox;
 import haxegui.controls.UiList;
 import haxegui.controls.Expander;
 
+import haxegui.events.MenuEvent;
+
 import feffects.Tween;
 
 import haxegui.containers.Container;
 import haxegui.containers.Divider;
 import haxegui.containers.ScrollPane;
+
 
 
 /**
@@ -224,8 +228,6 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		
 
 
-
-
 //~ var imageTypes:FileFilter = new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg; *.jpeg; *.gif; *.png");
 //~ var textTypes:FileFilter = new FileFilter("Text Files (*.txt, *.rtf)", "*.txt; *.rtf");
 //~ var allTypes = [imageTypes, textTypes];
@@ -309,7 +311,9 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		log("Registered scripts: " + Std.string(a));
 	#end
 
-
+flash.system.Security.allowDomain("*");
+flash.external.ExternalInterface.addCallback( "onChange", onChange );
+	
 	
  
 	}//main
@@ -347,6 +351,22 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		info += "\tThis console can exeute hscript in the textfield below,\n\ttype <I>help</I> to display a list of a few special commands.\n\n";
 		log(welcome+info);
 		log("");
+
+	
+	}
+
+
+	static function onChange(str: String) {
+		//trace("Javascript Return: " + str);
+
+		//str = str.split("\n").join("").split("\t").join("");
+		//str = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>"+str;
+		//trace(Xml.parse(str).firstElement().get("name"));
+
+		LayoutManager.loadLayouts(Xml.parse(str));
+		for(k in LayoutManager.layouts.keys())
+			trace("Loaded layout : " + k);			 
+		LayoutManager.setLayout(Xml.parse(str).firstElement().get("name"));		
 		
 	}
 
