@@ -45,7 +45,7 @@ import haxegui.windowClasses.StatusBar;
 
 /**
 *
-* Appearance class
+* Appearance is a modal dialog, for changing the common look&feel 
 * 
 *
 *

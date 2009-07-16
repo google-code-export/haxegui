@@ -215,12 +215,12 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 
 		// Statistics
-		//var stats = new Stats (flash.Lib.current, 540, 80);
-		//stats.init();
+//		var stats = new Stats (flash.Lib.current, 540, 80);
+//		stats.init();
 
 		// Color Picker
-		//~ var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
-		//~ colorpicker.init();
+//		var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
+//		colorpicker.init();
 		
 
 
@@ -256,7 +256,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
   	layout = Reflect.field(l, "layout");
 	if(layout==null) 
-		layout="samples/Example7.xml";
+		layout="samples/Example1.xml";
 		
       for (f in Reflect.fields(l)) {
           trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
@@ -267,21 +267,21 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 
 		// rte
-		//var rte = new RichTextEditor(flash.Lib.current, 120,120);
-		//rte.init();
+//		var rte = new RichTextEditor(flash.Lib.current, 120,120);
+//		rte.init();
 		
 
 		// style
-		//var appearance = new Appearance(flash.Lib.current, 180,180);
-		//appearance.init();
+//		var appearance = new Appearance(flash.Lib.current, 180,180);
+//		appearance.init();
 			
 		// debugger
-		//var introspect = new Introspector(flash.Lib.current, 150,150);
-		//introspect.init();
+//		var introspect = new Introspector(flash.Lib.current, 150,150);
+//		introspect.init();
 		
 		// Analog Clock
-		var clock = new haxegui.toys.AnalogClock(flash.Lib.current, 210,88);
-		clock.init();
+//		var clock = new haxegui.toys.AnalogClock(flash.Lib.current, 210,88);
+//		clock.init();
 		
 				
 		loader.load(new URLRequest(Haxegui.baseURL+layout));

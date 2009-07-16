@@ -35,7 +35,12 @@ import haxegui.managers.StyleManager;
 
 import haxegui.Opts;
 
-
+/**
+* ScrollPane masks his children, and allows to expose the hidden parts using ScrollBars.
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+**/
 class ScrollPane extends Component
 {
 	public var content : Sprite;

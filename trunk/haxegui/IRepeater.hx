@@ -19,7 +19,11 @@
 
 package haxegui;
 
-
+/**
+*
+* Interface for interval-repeating components.
+*
+*/
 interface IRepeater {
 	public var autoRepeat : Bool;
 	/** number of [interval] actions per second on auto repeat **/

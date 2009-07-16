@@ -19,7 +19,11 @@
 
 package haxegui;
 
-
+/**
+*
+* Interface for tooltip'ed components
+*
+*/
 interface IToolTip {
 	var text : String;
 }

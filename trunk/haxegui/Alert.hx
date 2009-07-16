@@ -33,8 +33,7 @@ import hscript.Expr;
 
 /**
 *
-* Console for debugging, contains two TextFields, one output for tracing messages
-* and another hscript-parsing input field.
+* A Dialog to show errors
 *
 *
 * @author <gershon@goosemoose.com>
