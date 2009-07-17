@@ -1,0 +1,3 @@
+<map id="uml" name="uml">
+<area shape="rect" href="#" title="{ExternalInterface|+ available : Bool\l+ objectID : String\l+ marshallExceptions : Bool\l|+ addCallback (functionName : String, closure : Dynamic) : Void\l+ call (functionName : String, ?p1 : Dynamic, ?p2 : Dynamic, ?p3 : Dynamic, ?p4 : Dynamic, ?p5 : Dynamic) : null\l}" alt="" coords="5,5,667,117"/>
+</map>

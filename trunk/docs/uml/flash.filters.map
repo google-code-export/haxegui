@@ -1,0 +1,13 @@
+<map id="uml" name="uml">
+<area shape="rect" href="#" title="{BitmapFilter||+ clone () : flash.filters.BitmapFilter\l+ new () : Void\l}" alt="" coords="633,375,857,460"/>
+<area shape="rect" href="#" title="{GlowFilter|+ alpha : Float\l+ blurX : Float\l+ blurY : Float\l+ color : UInt\l+ inner : Bool\l+ knockout : Bool\l+ quality : Int\l+ strength : Float\l|}" alt="" coords="536,32,656,197"/>
+<area shape="rect" href="#" title="{DropShadowFilter|+ alpha : Float\l+ angle : Float\l+ blurX : Float\l+ blurY : Float\l+ color : UInt\l+ distance : Float\l+ hideObject : Bool\l+ inner : Bool\l+ knockout : Bool\l+ quality : Int\l+ strength : Float\l|}" alt="" coords="680,12,811,217"/>
+<area shape="rect" href="#" title="{ConvolutionFilter|+ alpha : Float\l+ bias : Float\l+ clamp : Bool\l+ color : UInt\l+ divisor : Float\l+ matrix : Array\&lt;Dynamic\&gt;\l+ matrixX : Int\l+ matrixY : Int\l+ preserveAlpha : Bool\l|}" alt="" coords="5,25,184,204"/>
+<area shape="rect" href="#" title="{ColorMatrixFilter|+ matrix : Array\&lt;Dynamic\&gt;\l|}" alt="" coords="1021,79,1200,151"/>
+<area shape="rect" href="#" title="{BlurFilter|+ blurX : Float\l+ blurY : Float\l+ quality : Int\l|}" alt="" coords="208,65,309,164"/>
+<area shape="rect" href="#" title="{BevelFilter|+ angle : Float\l+ blurX : Float\l+ blurY : Float\l+ distance : Float\l+ highlightAlpha : Float\l+ highlightColor : UInt\l+ knockout : Bool\l+ quality : Int\l+ shadowAlpha : Float\l+ shadowColor : UInt\l+ strength : Float\l+ type : BitmapFilterType\l|}" alt="" coords="835,5,997,224"/>
+<area shape="rect" href="#" title="{BitmapFilterQuality|+ HIGH : Int\l+ LOW : Int\l+ MEDIUM : Int\l|}" alt="" coords="1701,65,1829,164"/>
+<area shape="rect" href="#" title="{GradientBevelFilter|+ alphas : Array\&lt;Dynamic\&gt;\l+ angle : Float\l+ blurX : Float\l+ blurY : Float\l+ colors : Array\&lt;Dynamic\&gt;\l+ distance : Float\l+ knockout : Bool\l+ quality : Int\l+ ratios : Array\&lt;Dynamic\&gt;\l+ strength : Float\l+ type : String\l|}" alt="" coords="333,12,512,217"/>
+<area shape="rect" href="#" title="{GradientGlowFilter|+ alphas : Array\&lt;Dynamic\&gt;\l+ angle : Float\l+ blurX : Float\l+ blurY : Float\l+ colors : Array\&lt;Dynamic\&gt;\l+ distance : Float\l+ knockout : Bool\l+ quality : Int\l+ ratios : Array\&lt;Dynamic\&gt;\l+ strength : Float\l+ type : BitmapFilterType\l|}" alt="" coords="1224,12,1403,217"/>
+<area shape="rect" href="#" title="{DisplacementMapFilter|+ alpha : Float\l+ color : UInt\l+ componentX : UInt\l+ componentY : UInt\l+ mapBitmap : flash.display.BitmapData\l+ mapPoint : flash.geom.Point\l+ mode : DisplacementMapFilterMode\l+ scaleX : Float\l+ scaleY : Float\l|}" alt="" coords="1427,25,1677,204"/>
+</map>

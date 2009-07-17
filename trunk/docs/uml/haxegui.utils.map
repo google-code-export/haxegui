@@ -1,0 +1,5 @@
+<map id="uml" name="uml">
+<area shape="rect" href="#" title="{ScriptStandardLibrary||+ set (interp : hscript.Interp) : Void\l&#45; keyboard () : null\l}" alt="" coords="5,65,224,151"/>
+<area shape="rect" href="#" title="{Size|+ width : Int\l+ height : Int\l|+ equal (s1 : Anonymous, s2 : Anonymous) : Bool\l+ clone () : haxegui.utils.Size\l+ setAtLeastZero () : haxegui.utils.Size\l+ toString () : String\l+ empty () : Bool\l+ add (s : Size) : haxegui.utils.Size\l+ subtract (s : Size) : haxegui.utils.Size\l+ shift (s : Int) : haxegui.utils.Size\l+ toRect () : flash.geom.Rectangle\l+ new (?w : Float, ?h : Float) : Void\l}" alt="" coords="248,5,555,211"/>
+<area shape="rect" href="#" title="{Color||+ darken (color : UInt, v : UInt) : UInt\l+ grayHex (v : UInt) : UInt\l+ clamp (color : UInt) : UInt\l+ tint (color : UInt, tint : Float) : UInt\l+ toRGB (color : UInt) : null\l}" alt="" coords="603,45,832,171"/>
+</map>

@@ -11,6 +11,32 @@
 	<link rel="stylesheet" type="text/css" href="::rootRelative::../green.css" />
 
 <script type="text/javascript">
+//
+// Parse the XML document contained in the string argument and return
+// a Document object that represents it.
+//
+XML.parse = function(text) {
+    if (typeof DOMParser != "undefined") {
+        // Mozilla, Firefox, and related browsers
+        return (new DOMParser()).parseFromString(text, "text/xml");
+    }
+    else if (typeof ActiveXObject != "undefined") {
+        // Internet Explorer.
+        var doc = XML.newDocument( );   // Create an empty document
+        doc.loadXML(text);              //  Parse text into it
+        return doc;                     // Return it
+    }
+    else {
+        // As a last resort, try loading the document from a data: URL
+        // This is supposed to work in Safari. Thanks to Manos Batsis and
+        // his Sarissa library (sarissa.sourceforge.net) for this technique.
+        var url = "data:text/xml;charset=utf-8," + encodeURIComponent(text);
+        var request = new XMLHttpRequest();
+        request.open("GET", url, false);
+        request.send(null);
+        return request.responseXML;
+    }
+};
 
 function getFlashMovie(movieName) { 
 	var isIE = navigator.appName.indexOf("Microsoft") != -1; 
@@ -20,6 +46,22 @@ function getFlashMovie(movieName) {
 function send() {
 	var xml = document.getElementById("sample_code").value;
 	getFlashMovie("sample").onChange(xml);	
+}
+
+
+
+function add() {
+	var xml = document.getElementById("sample_code").value;
+	xml = xml.split(":").join(".");
+
+	var doc = XML.parse(xml);
+
+	var node = doc.createElement("haxegui.controls.::name::");
+	doc.getElementsByTagName("haxegui.containers.Container")[0].appendChild(node);
+
+	xml = (new XMLSerializer()).serializeToString(doc);
+	xml = xml.split(".").join(":")
+	document.getElementById("sample_code").value = xml;
 }
 
 function update() {
@@ -40,7 +82,7 @@ function windowTitle()
 </script>
 <noscript></noscript>
 </head>
-<body onload="windowTitle();">
+<body onload="windowTitle();add();">
 
 	<script language="javascript" type="text/javascript" src="::rootRelative::../chxdoc.js"></script>
 
@@ -213,7 +255,7 @@ function windowTitle()
 	<p>This should have any extra info on the class and its usage, as well as a small xml example and its result below.</p>
 
 <textarea rows="14" cols="80" id="sample_code" >
-::set sample = nameDots.split(".").pop() + " Sample"::
+::set sample = nameDots.split(".").pop() + " Example"::
 <haxegui:Layout name="::sample::">
 	<haxegui:Window>
 		<haxegui:containers:Container>

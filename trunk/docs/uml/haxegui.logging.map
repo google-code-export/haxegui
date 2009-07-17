@@ -1,0 +1,3 @@
+<map id="uml" name="uml">
+<area shape="rect" href="#" title="{\&lt;interface\&gt;\nILogger||+ log (e : Dynamic, ?inf : haxe.PosInfos, ?error : ErrorType) : Void\l}" alt="" coords="5,20,400,105"/>
+</map>
