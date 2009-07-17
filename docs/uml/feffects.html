@@ -2,7 +2,10 @@
 <head><title>Class Diagram for feffects Package</title></head>
 <body bgcolor="#88B3C1">
   <center>
-		<A HREF="feffects.map"><IMG SRC="feffects.png" USEMAP="uml" style="border:none;"/></A>
+		<img src="feffects.png" usemap="#uml" style="border:none;"/>
   </center>
+<map id="uml" name="uml">
+<area shape="rect" href="../types/feffects/Tween.html" title="{Tween|&#45; aTweens : haxe.FastList_feffects_Tween\l&#45; aPaused : haxe.FastList_feffects_Tween\l&#45; jsDate : Float\l&#45; interval : Int\l&#45; timer : haxe.Timer\l+ duration : Int\l+ position : Int\l+ reversed : Bool\l+ isPlaying : Bool\l&#45; initVal : Float\l&#45; endVal : Float\l&#45; startTime : Int\l&#45; pauseTime : Int\l&#45; offsetTime : Int\l&#45; reverseTime : Int\l&#45; easingF : Easing\l&#45; obj : Dynamic\l&#45; prop : String\l|&#45; AddTween (tween : Tween) : Void\l&#45; RemoveTween (tween : Tween) : Void\l+ getActiveTweens () : haxe.FastList_feffects_Tween\l+ getPausedTweens () : haxe.FastList_feffects_Tween\l&#45; setTweenPaused (tween : Tween) : Void\l&#45; setTweenActive (tween : Tween) : Void\l&#45; DispatchTweens () : Void\l&#45; updateFunc () : Float\l&#45; endFunc () : Float\l+ start () : Void\l+ pause () : Void\l+ resume () : Void\l+ seek (ms : Int) : Void\l+ reverse () : Void\l+ stop () : Void\l&#45; doInterval () : Void\l&#45; getCurVal (curTime : Int) : Float\l&#45; endTween () : Void\l+ setTweenHandlers (update () : Float, ?end () : Float) : Void\l+ setEasing (easingFunc : Easing) : Void\l&#45; easingEquation (t : Float, b : Float, c : Float, d : Float) : Float\l+ new (init : Float, end : Float, dur : Int, ?obj : Dynamic, ?prop : String, ?easing : Easing) : Void\l}" alt="" coords="5,5,565,584"/>
+</map>
 </body>
 </html>

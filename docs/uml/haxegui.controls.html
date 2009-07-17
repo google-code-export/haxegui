@@ -2,7 +2,38 @@
 <head><title>Class Diagram for haxegui.controls Package</title></head>
 <body bgcolor="#88B3C1">
   <center>
-		<A HREF="haxegui.controls.map"><IMG SRC="haxegui.controls.png" USEMAP="uml" style="border:none;"/></A>
+		<img src="haxegui.controls.png" usemap="#uml" style="border:none;"/>
   </center>
+<map id="uml" name="uml">
+<area shape="rect" href="../types/haxegui/controls/AbstractButton.html" title="{AbstractButton|+ useHandCursors : Bool\l+ defaultCursorOver : haxegui.managers.Cursor\l+ defaultCursorPress : haxegui.managers.Cursor\l+ cursorOver : haxegui.managers.Cursor\l+ cursorPress : haxegui.managers.Cursor\l|&#45; __setHandCursors (v : Bool) : Bool\l}" alt="" coords="2735,1171,3041,1296"/>
+<area shape="rect" href="../types/haxegui/controls/SliderHandle.html" title="{SliderHandle||}" alt="" coords="2836,847,2929,919"/>
+<area shape="rect" href="../types/haxegui/controls/Slider.html" title="{Slider|+ handle : SliderHandle\l+ ticks : Int\l|+ onChanged (e : flash.events.Event) : Void\l&#45; onHandleMouseDown (e : flash.events.MouseEvent) : Void\l+ onMouseMove (e : flash.events.MouseEvent) : Void\l}" alt="" coords="653,367,1011,479"/>
+<area shape="rect" href="../types/haxegui/controls/Expander.html" title="{Expander|+ expanded : Bool\l+ arrow : haxegui.toys.Arrow\l+ label : Label\l+ scrollTween : feffects.Tween\l+ arrowTween : feffects.Tween\l|&#45; __getExpanded () : Bool\l&#45; __setExpanded (v : Bool) : Bool\l}" alt="" coords="2953,813,3159,952"/>
+<area shape="rect" href="../types/haxegui/controls/Label.html" title="{Label|+ tf : flash.text.TextField\l+ txt : String\l|&#45; initialize () : Void\l+ getText () : String\l+ setText (s : String) : String\l}" alt="" coords="1367,1177,1551,1289"/>
+<area shape="rect" href="../types/haxegui/controls/Input.html" title="{Input|+ tf : flash.text.TextField\l|}" alt="" coords="5,847,163,919"/>
+<area shape="rect" href="../types/haxegui/controls/ListHeader.html" title="{ListHeader|+ label : Label\l+ arrow : haxegui.toys.Arrow\l|+ onParentResize (e : haxegui.events.ResizeEvent) : Void\l}" alt="" coords="2417,840,2761,925"/>
+<area shape="rect" href="../types/haxegui/controls/ListItem.html" title="{ListItem|+ label : Label\l+ selected : Bool\l|+ onParentResize (e : haxegui.events.ResizeEvent) : Void\l}" alt="" coords="1031,840,1375,925"/>
+<area shape="rect" href="../types/haxegui/controls/UiList.html" title="{UiList|+ header : ListHeader\l+ dataSource : haxegui.DataSource\l+ sortReverse : Bool\l&#45; dragItem : Int\l|+ __setDataSource (d : haxegui.DataSource) : haxegui.DataSource\l&#45; onData (e : flash.events.Event) : Void\l&#45; onParentResize (e : haxegui.events.ResizeEvent) : Void\l+ onItemMouseUp (e : flash.events.MouseEvent) : Void\l}" alt="" coords="1589,347,1989,499"/>
+<area shape="rect" href="../types/haxegui/controls/StepperUpButton.html" title="{StepperUpButton||}" alt="" coords="1767,847,1884,919"/>
+<area shape="rect" href="../types/haxegui/controls/StepperDownButton.html" title="{StepperDownButton||}" alt="" coords="2137,847,2271,919"/>
+<area shape="rect" href="../types/haxegui/controls/Stepper.html" title="{Stepper|+ up : StepperUpButton\l+ down : StepperDownButton\l+ input : Input\l|&#45; onInput (e : flash.events.KeyboardEvent) : Void\l&#45; onInputMoved (e : haxegui.events.MoveEvent) : Void\l&#45; onInputResized (e : haxegui.events.ResizeEvent) : Void\l&#45; onChanged (e : flash.events.Event) : Void\l}" alt="" coords="293,353,629,492"/>
+<area shape="rect" href="../types/haxegui/controls/Button.html" title="{Button|+ label : Label\l+ icon : haxegui.Icon\l+ toggle : Bool\l+ selected : Bool\l|+ __getSelected () : Bool\l+ __setSelected (v : Bool) : Bool\l}" alt="" coords="1908,820,2113,945"/>
+<area shape="rect" href="../types/haxegui/controls/ProgressBarIndicator.html" title="{ProgressBarIndicator||}" alt="" coords="612,1197,753,1269"/>
+<area shape="rect" href="../types/haxegui/controls/ProgressBar.html" title="{ProgressBar|+ bar : ProgressBarIndicator\l+ mazk : flash.display.Shape\l+ label : Label\l+ progress : Float\l|&#45; update () : Void\l}" alt="" coords="609,827,796,939"/>
+<area shape="rect" href="../types/haxegui/controls/CheckBox.html" title="{CheckBox|+ checked : Bool\l+ label : Label\l|&#45; __getChecked () : Bool\l&#45; __setChecked (v : Bool) : Bool\l}" alt="" coords="1543,833,1743,932"/>
+<area shape="rect" href="../types/haxegui/controls/ScrollBarUpButton.html" title="{ScrollBarUpButton||}" alt="" coords="3484,847,3609,919"/>
+<area shape="rect" href="../types/haxegui/controls/ScrollBarDownButton.html" title="{ScrollBarDownButton||}" alt="" coords="3183,847,3324,919"/>
+<area shape="rect" href="../types/haxegui/controls/ScrollBarHandle.html" title="{ScrollBarHandle||}" alt="" coords="3348,847,3460,919"/>
+<area shape="rect" href="../types/haxegui/controls/ScrollBarFrame.html" title="{ScrollBarFrame||}" alt="" coords="3716,1000,3823,1072"/>
+<area shape="rect" href="../types/haxegui/controls/ScrollBar.html" title="{ScrollBar|+ frame : ScrollBarFrame\l+ handle : ScrollBarHandle\l+ up : ScrollBarUpButton\l+ down : ScrollBarDownButton\l+ scrollee : Dynamic\l+ scroll : Float\l+ horizontal : Bool\l+ handleMotionTween : feffects.Tween\l|&#45; initialize () : Void\l+ onParentResize (e : haxegui.events.ResizeEvent) : Void\l+ onMouseMove (e : flash.events.MouseEvent) : Void\l+ adjust (?e : Dynamic) : Void\l}" alt="" coords="3375,320,3719,525"/>
+<area shape="rect" href="../types/haxegui/controls/TreeLeaf.html" title="{TreeLeaf|&#45; icon : haxegui.Icon\l&#45; label : Label\l|}" alt="" coords="820,840,956,925"/>
+<area shape="rect" href="../types/haxegui/controls/TreeNode.html" title="{TreeNode|+ expander : Expander\l|}" alt="" coords="2817,387,2969,459"/>
+<area shape="rect" href="../types/haxegui/controls/Tree.html" title="{Tree|+ dataSource : haxegui.DataSource\l+ data : Dynamic\l|}" alt="" coords="3897,1191,4121,1276"/>
+<area shape="rect" href="../types/haxegui/controls/ComboBoxDropButton.html" title="{ComboBoxDropButton|+ arrow : haxegui.toys.Arrow\l|+ onParentResize (e : haxegui.events.ResizeEvent) : Void\l}" alt="" coords="3897,573,4241,645"/>
+<area shape="rect" href="../types/haxegui/controls/ComboBoxBackground.html" title="{ComboBoxBackground||}" alt="" coords="233,693,383,765"/>
+<area shape="rect" href="../types/haxegui/controls/ComboBox.html" title="{ComboBox|+ background : ComboBoxBackground\l+ dropButton : ComboBoxDropButton\l+ input : Input\l+ list : UiList\l+ dataSource : haxegui.DataSource\l&#45; editable : Bool\l|&#45; onInputMoved (e : haxegui.events.MoveEvent) : Void\l&#45; onInputResized (e : haxegui.events.ResizeEvent) : Void\l+ __setDataSource (d : haxegui.DataSource) : haxegui.DataSource\l}" alt="" coords="47,5,447,171"/>
+<area shape="rect" href="../types/haxegui/controls/RadioGroup.html" title="{RadioGroup||}" alt="" coords="3633,847,3721,919"/>
+<area shape="rect" href="../types/haxegui/controls/RadioButton.html" title="{RadioButton|+ selected : Bool\l+ label : Label\l|}" alt="" coords="1399,840,1519,925"/>
+</map>
 </body>
 </html>
