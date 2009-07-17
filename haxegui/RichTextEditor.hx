@@ -99,14 +99,14 @@ class RichTextEditor extends Window
 		box = new Rectangle (0, 0, 512, 380);
 
 		//
-		var menubar = new MenuBar (this, "MenuBar", 10,20);
-		menubar.init ();
+		//var menubar = new MenuBar (this, "MenuBar", 10,20);
+		//menubar.init ();
 
 		//~ var scrollpane = new ScrollPane(this, "ScrollPane", 10, 44);
 		//~ scrollpane.init({width: 502, height: 12});
 		
 		//
-		var toolbar = new ToolBar(this, "Toolbar", 10, 44);
+		var toolbar = new ToolBar(this, "Toolbar", 10, 20);
 		toolbar.init();
 		
 		

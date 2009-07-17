@@ -10,3 +10,5 @@ chxdoc -o docs 					\
 --subtitle="http://code.google.com/p/haxegui/"	\
 --templateDir=docs/template		\
 output.xml,flash9
+
+haxeumlgen -b "#88B3C1" -c -o docs/uml/ output.xml

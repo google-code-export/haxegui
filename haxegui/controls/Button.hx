@@ -37,7 +37,7 @@ import haxegui.utils.Size;
 */
 class Button extends AbstractButton
 {
-
+	/** Optional label for the button **/
 	public var label : Label;
 	public var icon  : Icon;
 	//~ public var fmt : TextFormat;

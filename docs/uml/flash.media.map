@@ -1,0 +1,3 @@
+<map id="uml" name="uml">
+<area shape="rect" href="#" title="{SoundTransform|+ leftToLeft : Float\l+ leftToRight : Float\l+ pan : Float\l+ rightToLeft : Float\l+ rightToRight : Float\l+ volume : Float\l|+ new (?vol : Float, ?panning : Float) : Void\l}" alt="" coords="5,5,269,144"/>
+</map>
