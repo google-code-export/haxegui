@@ -86,91 +86,6 @@
 		</events>
 	</haxegui:containers:DividerHandle>
 
-	<haxegui:ToolBarHandle>
-		<events>
-			<script type="text/hscript" action="redraw">
-			<![CDATA[
-				this.graphics.clear();
-				this.graphics.lineStyle(1, Color.darken(this.parent.color, 20));
-				this.graphics.beginFill(Color.darken(this.parent.color, 10));
-				this.graphics.drawRoundRect(0, 0, 8, this.parent.box.height - 16, 4, 4);
-				this.graphics.endFill();
-			]]>
-			</script>
-		</events>
-	</haxegui:ToolBarHandle>
-
-	<haxegui:MenuBarItem>
-		<events>
-			<script type="text/hscript" action="mouseOut">
-			<![CDATA[
-				/*
-				this.graphics.clear();
-				var colors = [ this.color - 0x141414, this.color | 0x323232 ];
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRect (0, 0, 40, 24);
-				this.graphics.endFill();
-				*/
-			]]>
-			</script>
-			<script type="text/hscript" action="redraw">
-			<![CDATA[
-				this.graphics.clear();
-				
-				var colors = [ Color.darken(this.color, 8), Color.tint(this.color, .8) ];
-				var alphas = [ 1, 1 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(40, 24, .5*Math.PI, 0, 0);
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRect (0, 0, this.box.width, this.box.height-1);
-				this.graphics.endFill();
-				
-				
-				this.graphics.lineStyle(2, Color.darken(this.color, 10));
-				this.graphics.moveTo(0, this.box.height);
-				this.graphics.lineTo(this.box.width, this.box.height);
-			]]>
-			</script>
-			<script type="text/hscript" action="mouseOver">
-			<![CDATA[
-				/*
-				this.graphics.clear();
-				
-				var colors = [ this.color, 0xFFFFFF ];
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRect (0, 0, 40, 24);
-				this.graphics.endFill();
-				*/
-			]]>
-			</script>
-			<script type="text/hscript" action="mouseDown">
-			<![CDATA[
-				/*
-				this.graphics.clear();
-				
-				var colors = [ this.color, Math.min(0xFFFFFF, this.color - 0x282828) ];
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRect (0, 0, 40, 24);
-				this.graphics.endFill();
-				*/
-			]]>
-			</script>
-		</events>
-	</haxegui:MenuBarItem>
-
 	<haxegui:Window>
 		<events>
 			<script type="text/hscript" action="focusIn">
@@ -397,26 +312,6 @@
 		</events>
 	</haxegui:windowClasses:MinimizeButton>
 
-	<haxegui:PopupMenuItem>
-		<events>
-			<script type="text/hscript" action="redraw">
-			<![CDATA[
-				this.graphics.clear();
-				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
-				var alphas = [ 100, 100 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
-				this.graphics.lineStyle(1);
-				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ this.color, this.color - 0x202020 ], alphas, ratios, matrix);
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
-				this.graphics.endFill ();
-			]]>
-			</script>
-		</events>
-	</haxegui:PopupMenuItem>
-
 	<haxegui:managers:Tooltip>
 		<events>
 			<script type="text/hscript" action="redraw">
@@ -443,75 +338,6 @@
 			</script>
 		</events>
 	</haxegui:Alert>
-
-	<haxegui:ToolBar>
-		<events>
-			<script type="text/hscript" action="redraw">
-			<![CDATA[
-				this.graphics.clear ();
-				
-				var colors = [ this.color - 0x141414, Color.tint(this.color, .8), this.color];
-				var alphas = [ 1, 1, 1 ];
-				var ratios = [ 0, 0x80, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(this.box.width, this.box.height, .5*Math.PI, 0, 0);
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				
-				this.graphics.drawRect (0, 0, this.box.width, this.box.height);
-				this.graphics.endFill ();
-			]]>
-			</script>
-		</events>
-	</haxegui:ToolBar>
-
-	<haxegui:MenuBar>
-		<events>
-			<script type="text/hscript" action="redraw">
-			<![CDATA[
-				this.graphics.clear();
-				var colors = [ Color.darken(this.color, 10), Color.tint(this.color, .8) ];
-				var alphas = [ 1, 1 ];
-				var ratios = [ 0, 0xFF ];
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(this.box.width, 24, .5*Math.PI, 0, 0);
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-				this.graphics.drawRect (0, 0, this.box.width, this.box.height-1);
-				this.graphics.endFill();
-				
-				
-				this.graphics.lineStyle(2, Color.darken(this.color, 20));
-				this.graphics.moveTo(0, this.box.height);
-				this.graphics.lineTo(this.box.width, this.box.height);
-			]]>
-			</script>
-		</events>
-	</haxegui:MenuBar>
-
-	<haxegui:TabNavigator>
-		<events>
-			<script type="text/hscript" action="redraw">
-			<![CDATA[
-				this.graphics.clear();
-				
-				var matrix = new flash.geom.Matrix();
-				matrix.createGradientBox(this.box.width, this.box.height, .5*Math.PI, 0, 0);
-				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR,
-												[ Color.tint(this.color, .8), Color.darken(this.color, 20) ],
-												[1,1], [0, 0xFF], matrix );
-				
-				this.graphics.drawRect (0, 0, this.box.width, this.box.height);
-				
-				/*
-				this.graphics.lineStyle(1, Color.darken(this.color, 8) );
-				this.graphics.beginFill( this.color );
-				this.graphics.drawRect( 0, 24, this.box.width, this.box.height );
-				*/
-				
-				this.graphics.endFill();
-			]]>
-			</script>
-		</events>
-	</haxegui:TabNavigator>
 
 	<haxegui:controls:StepperDownButton>
 		<events>
@@ -742,6 +568,91 @@
 			</script>
 		</events>
 	</haxegui:controls:Input>
+
+	<haxegui:controls:ToolBarHandle>
+		<events>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.graphics.clear();
+				this.graphics.lineStyle(1, Color.darken(this.parent.color, 20));
+				this.graphics.beginFill(Color.darken(this.parent.color, 10));
+				this.graphics.drawRoundRect(0, 0, 8, this.parent.box.height - 16, 4, 4);
+				this.graphics.endFill();
+			]]>
+			</script>
+		</events>
+	</haxegui:controls:ToolBarHandle>
+
+	<haxegui:controls:MenuBarItem>
+		<events>
+			<script type="text/hscript" action="mouseOut">
+			<![CDATA[
+				/*
+				this.graphics.clear();
+				var colors = [ this.color - 0x141414, this.color | 0x323232 ];
+				var alphas = [ 100, 100 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawRect (0, 0, 40, 24);
+				this.graphics.endFill();
+				*/
+			]]>
+			</script>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.graphics.clear();
+				
+				var colors = [ Color.darken(this.color, 8), Color.tint(this.color, .8) ];
+				var alphas = [ 1, 1 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(40, 24, .5*Math.PI, 0, 0);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawRect (0, 0, this.box.width, this.box.height-1);
+				this.graphics.endFill();
+				
+				
+				this.graphics.lineStyle(2, Color.darken(this.color, 10));
+				this.graphics.moveTo(0, this.box.height);
+				this.graphics.lineTo(this.box.width, this.box.height);
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseOver">
+			<![CDATA[
+				/*
+				this.graphics.clear();
+				
+				var colors = [ this.color, 0xFFFFFF ];
+				var alphas = [ 100, 100 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawRect (0, 0, 40, 24);
+				this.graphics.endFill();
+				*/
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseDown">
+			<![CDATA[
+				/*
+				this.graphics.clear();
+				
+				var colors = [ this.color, Math.min(0xFFFFFF, this.color - 0x282828) ];
+				var alphas = [ 100, 100 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(40, 24, Math.PI/2, 0, 0);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawRect (0, 0, 40, 24);
+				this.graphics.endFill();
+				*/
+			]]>
+			</script>
+		</events>
+	</haxegui:controls:MenuBarItem>
 
 	<haxegui:controls:ComboBox>
 		<events>
@@ -1113,6 +1024,26 @@
 			</script>
 		</events>
 	</haxegui:controls:Button>
+
+	<haxegui:controls:PopupMenuItem>
+		<events>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.graphics.clear();
+				var colors = [ this.color | 0x323232, this.color - 0x141414 ];
+				var alphas = [ 100, 100 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(this.box.width, this.box.height, Math.PI/2, 0, 0);
+				this.graphics.lineStyle(1);
+				this.graphics.lineGradientStyle (flash.display.GradientType.LINEAR, [ this.color, this.color - 0x202020 ], alphas, ratios, matrix);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawRoundRect (0, 0, this.box.width, this.box.height, 8, 8 );
+				this.graphics.endFill ();
+			]]>
+			</script>
+		</events>
+	</haxegui:controls:PopupMenuItem>
 
 	<haxegui:controls:ProgressBar>
 		<events>
@@ -1709,6 +1640,26 @@
 		</events>
 	</haxegui:controls:ProgressBarIndicator>
 
+	<haxegui:controls:ToolBar>
+		<events>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.graphics.clear ();
+				
+				var colors = [ this.color - 0x141414, Color.tint(this.color, .8), this.color];
+				var alphas = [ 1, 1, 1 ];
+				var ratios = [ 0, 0x80, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(this.box.width, this.box.height, .5*Math.PI, 0, 0);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				
+				this.graphics.drawRect (0, 0, this.box.width, this.box.height);
+				this.graphics.endFill ();
+			]]>
+			</script>
+		</events>
+	</haxegui:controls:ToolBar>
+
 	<haxegui:controls:ComboBoxDropButton>
 		<events>
 			<script type="text/hscript" action="mouseClick">
@@ -1861,6 +1812,55 @@
 		</events>
 	</haxegui:controls:ScrollBarFrame>
 
+	<haxegui:controls:MenuBar>
+		<events>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.graphics.clear();
+				var colors = [ Color.darken(this.color, 10), Color.tint(this.color, .8) ];
+				var alphas = [ 1, 1 ];
+				var ratios = [ 0, 0xFF ];
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(this.box.width, 24, .5*Math.PI, 0, 0);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+				this.graphics.drawRect (0, 0, this.box.width, this.box.height-1);
+				this.graphics.endFill();
+				
+				
+				this.graphics.lineStyle(2, Color.darken(this.color, 20));
+				this.graphics.moveTo(0, this.box.height);
+				this.graphics.lineTo(this.box.width, this.box.height);
+			]]>
+			</script>
+		</events>
+	</haxegui:controls:MenuBar>
+
+	<haxegui:controls:TabNavigator>
+		<events>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.graphics.clear();
+				
+				var matrix = new flash.geom.Matrix();
+				matrix.createGradientBox(this.box.width, this.box.height, .5*Math.PI, 0, 0);
+				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR,
+												[ Color.tint(this.color, .8), Color.darken(this.color, 20) ],
+												[1,1], [0, 0xFF], matrix );
+				
+				this.graphics.drawRect (0, 0, this.box.width, this.box.height);
+				
+				/*
+				this.graphics.lineStyle(1, Color.darken(this.color, 8) );
+				this.graphics.beginFill( this.color );
+				this.graphics.drawRect( 0, 24, this.box.width, this.box.height );
+				*/
+				
+				this.graphics.endFill();
+			]]>
+			</script>
+		</events>
+	</haxegui:controls:TabNavigator>
+
 	<haxegui:controls:TreeNode>
 		<events>
 			<script type="text/hscript" action="redraw">
@@ -1954,7 +1954,7 @@
 		</events>
 	</haxegui:controls:RadioButton>
 
-	<haxegui:Tab>
+	<haxegui:controls:Tab>
 		<events>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
@@ -2012,6 +2012,6 @@
 			]]>
 			</script>
 		</events>
-	</haxegui:Tab>
+	</haxegui:controls:Tab>
 </haxegui:Style>
 

@@ -27,7 +27,8 @@ import flash.events.KeyboardEvent;
 import flash.events.TextEvent;
 import flash.events.FocusEvent;
 
-import haxegui.Component;
+import haxegui.controls.Component;
+import haxegui.controls.Component;
 import haxegui.controls.Input;
 import haxegui.managers.CursorManager;
 import haxegui.Opts;
@@ -35,7 +36,7 @@ import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
-import haxegui.IAdjustable;
+import haxegui.controls.IAdjustable;
 
 import haxegui.utils.Color;
 import haxegui.utils.Size;

@@ -8,6 +8,11 @@
 		::end::
 	</macro>
 
+	<macro name="linkMethodHeader(m)">
+	<!--<a name="::raw m.name::()"></a>$$showAccess(::m::)$$showDynamic(::m::)<span class="name">::raw m.name::</span>::m.params::(::if m.args != null::::raw m.args::::end::) : ::raw m.returns::-->
+			<a href="#::raw m.name::()"><span class="name">::m.name::</span>::m.params::(::if m.args != null::::raw m.args::::end::) : ::raw m.returns::</a>
+	</macro>
+	
 	<macro name="methodHeader(m)">
 		<h3>
 			<a name="::raw m.name::()"></a>$$showAccess(::m::)$$showDynamic(::m::)<span class="name">::raw m.name::</span>::m.params::(::if m.args != null::::raw m.args::::end::) : ::raw m.returns::
@@ -18,6 +23,8 @@
 				<div class="inherited">inherited from <a href="::raw m.inheritance.link.href::#::m.name::()">::raw m.inheritance.link.text::</a></div>
 			::end::
 	</macro>
+	
+	
 
 	<macro name="methodDocs(m)">
 		::if m.docs != null || m.platforms != null::
@@ -100,6 +107,9 @@
 		::end::
 	</macro>
 
+	<macro name="linkVarHeader(f)">
+		<a href="#::f.name::"><span class="name">::f.name::</span></a> : ::raw f.returns::
+	</macro>
 
 	<macro name="varHeader(f)">
 		<h3>

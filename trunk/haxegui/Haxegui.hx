@@ -22,7 +22,9 @@ package haxegui;
 import haxegui.managers.MouseManager;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
-import haxegui.Component;
+import haxegui.controls.Component;
+
+import haxe.Timer;
 
 /**
 * Haxegui Class
@@ -37,17 +39,20 @@ class Haxegui {
 	/** Private **/
 	private static var initializers : List<{c:Class<Dynamic>, f:Void->Void}>;
 
-	/** Public **/
+	/** the absolute root url **/
 	public static var baseURL : String = "";
 	
+	/** List of dirty components **/
 	public static var dirtyList : List<Component> = new List();
-
-	public static var dirtyTimer : haxe.Timer;
+	/** Timer to watch dirty components **/
+	public static var dirtyTimer : Timer;
+	/** Timer interval **/
 	public static var dirtyInterval( default, setInterval ) : Int;
-	
+	/** **/
 	public static var gridSnapping : Bool = false;
 	
-	
+	/**
+	**/
 	public static function init() {
 		for(o in initializers) {
 			#if debug
@@ -67,7 +72,7 @@ class Haxegui {
 		StyleManager.setStyle("default");
 		trace("complete");
 		
-		dirtyInterval = 300;
+		dirtyInterval = 20;
 	}
 
 	public static function setInterval(v:Int) : Int {
@@ -92,8 +97,8 @@ class Haxegui {
 	* Component registration. Used during the boot process to register
 	* all components.
 	*
-	* @param c Component class
-	* @param f Initialization function called when Haxegui is initialized
+	* @param Component class
+	* @param Initialization function called when Haxegui is initialized
 	*/
 	public static function register(c:Class<Dynamic>, f:Void->Void=null) : Void {
 		if(initializers == null)
@@ -104,7 +109,7 @@ class Haxegui {
 	/**
 	* Mark a component for redrawing
 	*
-	* @param c Component
+	* @param Component
 	**/
 	public static inline function setDirty(c : Component) : Void {
 		dirtyList.add(c);

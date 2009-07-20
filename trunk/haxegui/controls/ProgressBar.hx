@@ -27,7 +27,7 @@ import flash.display.Shape;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.managers.CursorManager;
 import haxegui.Opts;
 import haxegui.managers.StyleManager;
@@ -153,7 +153,7 @@ class ProgressBar extends Component
 		haxegui.Haxegui.register(ProgressBar);
 	}
 
-	private inline function update() {
+	public function update() {
 
 		progress = Math.max(0, Math.min(1, progress));
 

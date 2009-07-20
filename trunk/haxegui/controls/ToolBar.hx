@@ -17,7 +17,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package haxegui;
+package haxegui.controls;
 
 import Type;
 
@@ -44,7 +44,7 @@ import haxegui.events.DragEvent;
 import flash.ui.Mouse;
 import flash.ui.Keyboard;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
 import haxegui.managers.WindowManager;
 import haxegui.managers.MouseManager;
@@ -92,9 +92,7 @@ class ToolBarHandle extends AbstractButton {
 */
 class ToolBar extends Component
 {
-
 	public var handle : ToolBarHandle;
-
 
 	override public function init (? opts : Dynamic) {
 		color = DefaultStyle.BACKGROUND;

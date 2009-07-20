@@ -30,8 +30,8 @@ import haxegui.managers.StyleManager;
 import haxegui.managers.CursorManager;
 import haxegui.events.MoveEvent;
 import haxegui.Opts;
-import haxegui.Component;
-import haxegui.IRepeater;
+import haxegui.controls.Component;
+import haxegui.controls.IRepeater;
 
 
 
@@ -53,7 +53,7 @@ class AbstractButton extends Component, implements IRepeater
 	public static var defaultCursorOver : Cursor;
 	/** The cursor to use when a button is pressed **/
 	public static var defaultCursorPress : Cursor;
-
+	/** Setter for using hand cursors **/
 	static function __setHandCursors(v:Bool) : Bool
 	{
 		if(v == useHandCursors)
@@ -81,13 +81,12 @@ class AbstractButton extends Component, implements IRepeater
 
 	/**
 	*
-	* @param parent  Parent object
-	* @param name    Name of new instance
-	* @param x       Horizontal location
-	* @param y       Vertical location
+	* @param Parent object
+	* @param Name of new instance
+	* @param Horizontal location
+	* @param Vertical location
 	*/
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
 		cursorOver = defaultCursorOver;
 		cursorPress = defaultCursorPress;
@@ -98,7 +97,8 @@ class AbstractButton extends Component, implements IRepeater
 		focusRect = true;
 		mouseChildren = true;
 	}
-
+	
+	/** @see Component.init **/
 	override public function init(?opts:Dynamic) {
 		color = DefaultStyle.BACKGROUND;
 		super.init(opts);

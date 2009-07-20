@@ -1,3 +1,3 @@
 <map id="uml" name="uml">
-<area shape="rect" href="../types/haxegui/logging/ILogger.html" title="{\&lt;interface\&gt;\nILogger||+ log (e : Dynamic, ?inf : haxe.PosInfos, ?error : ErrorType) : Void\l}" alt="" coords="5,20,400,105"/>
+<area shape="rect" href="../types/haxegui/logging/ILogger.html" title="ILogger" alt="" coords="5,27,400,99"/>
 </map>

@@ -19,12 +19,14 @@
 
 package haxegui.events;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 
 class MenuEvent extends flash.events.Event {
 
 
-	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool,
+	public function new(type : String, 
+						?bubbles : Bool,
+						?cancelable : Bool,
 						?menuBar : flash.display.DisplayObject,
 						?menu : Component,
 						?item : flash.display.DisplayObject,
@@ -39,7 +41,7 @@ class MenuEvent extends flash.events.Event {
 	public var item : Dynamic;
 	var label : String;
 	public var menu : Component;
-	public var menuBar : haxegui.MenuBar;
+	public var menuBar : haxegui.controls.MenuBar;
 	static var CHANGE : String;
 	public static var ITEM_CLICK : String = "itemClick";
 	static var ITEM_ROLL_OUT : String;

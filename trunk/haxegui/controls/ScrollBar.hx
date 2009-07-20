@@ -32,13 +32,14 @@ import flash.events.MouseEvent;
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
-import haxegui.Component;
+import haxegui.controls.AbstractButton;
+import haxegui.controls.Component;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 import haxegui.Opts;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
-import haxegui.IAdjustable;
+import haxegui.controls.IAdjustable;
 import haxegui.utils.Size;
 import haxegui.utils.Color;
 

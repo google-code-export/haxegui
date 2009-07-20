@@ -19,7 +19,7 @@
 
 package haxegui.containers;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.controls.ScrollBar;
 
 import flash.geom.Rectangle;

@@ -24,9 +24,9 @@ import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import flash.utils.TypedDictionary;
 
-import haxegui.managers.CursorManager;
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.utils.ScriptStandardLibrary;
+import haxegui.managers.CursorManager;
 
 import hscript.Expr;
 import hscript.Interp;

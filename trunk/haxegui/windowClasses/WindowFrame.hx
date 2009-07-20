@@ -40,9 +40,9 @@ import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
-import haxegui.Component;
-import haxegui.Opts;
+import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
+import haxegui.Opts;
 import haxegui.windowClasses.TitleBar;
 import haxegui.windowClasses.WindowFrame;
 

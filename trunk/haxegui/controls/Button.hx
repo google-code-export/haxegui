@@ -24,12 +24,10 @@ import haxegui.Opts;
 import haxegui.managers.StyleManager;
 import haxegui.Image;
 import haxegui.utils.Size;
+import haxegui.controls.AbstractButton;
 
 /**
-*
-* Button Class
-*
-* A chromed button.
+* A chromed button, with optional label and icon.<br>
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
@@ -37,13 +35,72 @@ import haxegui.utils.Size;
 */
 class Button extends AbstractButton
 {
-	/** Optional label for the button **/
-	public var label : Label;
-	public var icon  : Icon;
-	//~ public var fmt : TextFormat;
 
+	/** 
+	* Optional label for the button
+	*
+	* The are several ways to create a button with a label:
+	* <ul>
+	* <li>Using xml: 
+	* <pre class="code xml">
+	* <haxegui:controls:Button label="button"/></li>
+	* </pre>
+	* <li>Passing a label to init():
+	* <pre class="code haxe">
+	* var btn = new Button();
+	* btn.init({label: "button"});
+	* </pre>
+	* </li>
+	* <li>Manual creation:
+	* <pre class="code haxe">
+	* var btn = new Button().init();
+	* btn.label = new Label(btn);
+	* label.init({innerData: "button"});
+	* </pre>
+	* </li>
+	*</ul>			
+	*	@see Label
+	**/
+	public var label : Label;
+	
+	/** 
+	* Optional icon for the button
+	*
+	* The are several ways to create a button with an icon:
+	* <ul>
+	* <li>Using xml: 
+	* <pre class="code xml"><haxegui:controls:Button icon="STOCK_NEW"/></pre>
+	* </li>
+	* <li>Passing an icon to init():
+	* <code><pre class="code haxe">
+	* var btn = new Button();
+	* btn.init({icon: Icon.STOCK_NEW});</pre></code>
+	* </li>
+	* <li>Manual creation:
+	* <pre class="code haxe">var btn = new Button().init();
+	* btn.icon = new Icon(btn);
+	* icon.init({src: Icon.STOCK_NEW});</pre>
+	* </li>
+	* </ul>			
+	**/
+	public var icon  : Icon;
+	
+	/** 
+	* when true button will stay pressed when clicked and raise back on the next click.<br>
+	*
+	* use the [selected] property to tell if it is pressed or not. 
+	*
+	* @see selected
+	**/
 	public var toggle : Bool;
 	
+	/** 
+	 * true when is pressed.<br>
+	 *
+	 * Notice when using hscript, selected is not available in direct access, use the getter and setter.
+	 *
+	 * @see selected
+	 **/
 	public var selected( __getSelected, __setSelected ) : Bool;
 	
 	override public function init(opts:Dynamic=null) {
@@ -79,14 +136,14 @@ class Button extends AbstractButton
 		// check for STOCK_ type icon
 		if(Reflect.field(Icon, src)!=null)
 			src = Reflect.field(Icon, src);
-		
+			
 		icon.init({src: src});
 		icon.mouseEnabled = false;
 		icon.tabEnabled = false;
 		icon.move(4,4);
 		}
 		
-		if(Std.is(parent, haxegui.ToolBar)) {
+		if(Std.is(parent, haxegui.controls.ToolBar)) {
 			redraw();
 			dirty = false;
 			this.graphics.clear();
@@ -100,10 +157,12 @@ class Button extends AbstractButton
 		haxegui.Haxegui.register(Button);
 	}
 	
+	/** Getter for toggle button state **/
 	public function __getSelected() : Bool {
 		return selected;
 	}
 
+	/** Setter for toggle button state **/
 	public function __setSelected(v:Bool) {
 		selected = v;
 		redraw();

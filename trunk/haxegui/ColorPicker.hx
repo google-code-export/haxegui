@@ -51,7 +51,8 @@ import haxegui.controls.Button;
 import haxegui.controls.Slider;
 import haxegui.controls.Stepper;
 import haxegui.controls.Input;
-
+import haxegui.controls.MenuBar;
+import haxegui.controls.Component;
 import haxegui.utils.Color;
 
 /**

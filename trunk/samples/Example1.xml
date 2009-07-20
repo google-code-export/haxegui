@@ -23,19 +23,19 @@
 	</haxegui:DataSource>
 <!-- Visual -->
 	<haxegui:Window name="Widgets" x="100" y="30" width="800" height="600" sizeable="true" >		
-		<haxegui:MenuBar name="menubar" width="512" x="10" y="20">
-			<haxegui:Menu type="Object" name="menu1">
+		<haxegui:controls:MenuBar name="menubar" width="512" x="10" y="20">
+			<haxegui:controls:Menu type="Object" name="menu1">
 				<Item type="String">a</Item>
 				<Item type="String">b</Item>
 				<Item type="String">c</Item>
-			</haxegui:Menu>
-			<haxegui:Menu type="Object" name="menu2">
+			</haxegui:controls:Menu>
+			<haxegui:controls:Menu type="Object" name="menu2">
 				<Item type="String">a2</Item>
 				<Item type="String">b2</Item>
 				<Item type="String">c2</Item>
-			</haxegui:Menu>
-		</haxegui:MenuBar>
-		<haxegui:ToolBar name="Toolbar" width="400" x="10" y="44" >
+			</haxegui:controls:Menu>
+		</haxegui:controls:MenuBar>
+		<haxegui:controls:ToolBar name="Toolbar" width="400" x="10" y="44" >
 			<haxegui:controls:Button name="Btn1" x="30" y="4" width="30" icon="STOCK_NEW" />
 			<haxegui:controls:Button name="Btn2" x="60" y="4" width="30" icon="STOCK_OPEN"/>
 			<haxegui:controls:Button name="Btn3" x="90" y="4" width="30" icon="STOCK_SAVE"/>
@@ -43,11 +43,11 @@
 			<haxegui:controls:Button name="Btn5" x="150" y="4" width="30" icon="STOCK_CUT"/>
 			<haxegui:controls:Button name="Btn6" x="180" y="4" width="30" icon="STOCK_PASTE"/>
 			<haxegui:controls:Button name="Btn7" x="210" y="4" width="30" icon="STOCK_FIND"/>
-		</haxegui:ToolBar>
+		</haxegui:controls:ToolBar>
 			<haxegui:containers:ScrollPane name="ScrollPane1" x="10" y="84" >
 				<haxegui:containers:Container width="512" height="512" >
-					<haxegui:TabNavigator name="TabNavigator" x="0" y="0" width="512">
-						<events>
+					<haxegui:controls:TabNavigator name="TabNavigator" x="0" y="0" width="512">
+					<events>
 							<script type="text/hscript" action="onLoaded">
 							<![CDATA[
 								function changeStack(e) {
@@ -62,11 +62,10 @@
 								this.addEventListener(flash.events.Event.CHANGE, changeStack, false, 0, true);
 							]]>
 							</script>
-						</events>					
-						<haxegui:Tab x="0" width="60" />
-						<haxegui:Tab x="60" width="60"/>
-						<haxegui:Tab x="120" width="60"/>
-
+						</events>
+						<haxegui:controls:Tab x="0" width="60"/>
+						<haxegui:controls:Tab x="60" width="60"/>
+						<haxegui:controls:Tab x="120" width="60"/>
 						<haxegui:controls:Label x="120" y="3" >Active tab: </haxegui:controls:Label>
 						<haxegui:controls:Stepper name="TabStepper" x="300" y="2" value="0" step="1" max="2" autoRepeat="false" >
 							<events>
@@ -84,7 +83,8 @@
 								</script>
 							</events>
 						</haxegui:controls:Stepper>
-					</haxegui:TabNavigator>
+					</haxegui:controls:TabNavigator>
+					
 					<haxegui:containers:Stack name="Stack" y="24" width="512" height="512" selectedIndex="0">
 						<!-- First stack child -->
 						<haxegui:containers:Container width="512" height="512" >

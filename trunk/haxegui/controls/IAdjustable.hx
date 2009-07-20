@@ -17,13 +17,24 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package haxegui;
+package haxegui.controls;
 
 import flash.events.Event;
 
 /**
+* Adjustment class allows reuse \ sharing of values for "range widgets".
+* It clamps to min&max, and dispatches an event when one of the values has changed.
 *
-* Adjustment class
+* Notice when using hscript use must use the getters and setters:
+* <pre class="code xml">
+* <haxegui:controls:Slider value="0">
+* <events>
+* 	<script type="text/hscript" action="onLoaded">
+* 		this.adjustment.__setValue(50);
+* 	</script>
+* </events>
+* </haxegui:controls:Slider>
+* </pre>
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
@@ -31,20 +42,25 @@ import flash.events.Event;
 */
 class Adjustment extends flash.events.EventDispatcher {
     
-    public var value    (default, __setValue)   : Float;
-    public var min      (default, __setMin)     : Float;
-    public var max      (default, __setMax)     : Float;
-    public var step     (default, __setStep)    : Float;
-    public var page     (default, __setPage)    : Float;
+    public var value    (default, __setValue) : Float;
+    public var min      (default, __setMin)   : Float;
+    public var max      (default, __setMax)   : Float;
+    public var step     (default, __setStep)  : Float;
+    public var page     (default, __setPage)  : Float;
     
-    public function new(?value:Float, ?min:Float, ?max:Float, ?step:Float, ?page:Float) {
-        super();
-        this.value = value;
-        this.min = min;
-        this.max = max;
-        this.step = step;
-        this.page = page;
-        notifyChanged();       
+    public function 
+    new(?value  : Float,
+    	?min	: Float,
+    	?max	: Float,
+    	?step	: Float,
+    	?page	: Float) { 
+		super();
+		this.value = value;
+		this.min = min;
+		this.max = max;
+		this.step = step;
+		this.page = page;
+		notifyChanged();       
     }
     
     public function notifyChanged() {
@@ -60,6 +76,7 @@ class Adjustment extends flash.events.EventDispatcher {
 	//////////////////////////////////////////////////
 	////           Getters/Setters                ////
 	//////////////////////////////////////////////////
+	/** Set value **/
     public function __setValue(v:Float) : Float {
         value = v;
         value = Math.min(max, Math.max(min, value));       
@@ -67,24 +84,28 @@ class Adjustment extends flash.events.EventDispatcher {
         return v;
     }
     
+	/** Set the minimum value **/
     public function __setMin(v:Float) : Float {
         min = v;
         notifyChanged();
         return v;
     }
 
+	/** Set the maximum value **/
     public function __setMax(v:Float) : Float {
         max = v;
         notifyChanged();
         return v;
     }
 
+	/** Set the step value **/
     public function __setStep(v:Float) : Float {
         step = v;
         notifyChanged();
         return v;
     }
 
+	/** Set the page value **/
     public function __setPage(v:Float) : Float {
         page = v;
         notifyChanged();
@@ -96,7 +117,6 @@ class Adjustment extends flash.events.EventDispatcher {
 
 
 /**
-*
 * Interface for adjustable widgets.
 *
 */

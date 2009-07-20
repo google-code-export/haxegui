@@ -41,6 +41,8 @@ import haxegui.Component;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Label;
 
+import haxegui.utils.Color;
+import haxegui.utils.Size;
 
 /**
 *
@@ -60,7 +62,7 @@ class Tab extends AbstractButton
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, TabNavigator)) throw parent+" not a TabNavigator";
 		
-		box = new Rectangle(0, 0, 40, 24);
+		box = new Size(40, 24).toRect();
 		color = DefaultStyle.BACKGROUND;
 		active = false;
 
@@ -113,18 +115,36 @@ class Tab extends AbstractButton
 
 
 
-
 enum TabPosition {
 	TOP;
 	BOTTOM;
+	LEFT;
+	RIGHT;
 }
 
 
 /**
+* Tab Navigator bar for switching visible content.
+* Add child Tabs, and connect it to a [Stack] container like this:
+* <pre class="code haxe">
+* // add a tabnav with 2 tabs
+* var tabnav = new TabNavigator();
+* tabnav.init();
+* 
+* var tab = new Tab(tabnav);
+* tab.init();
+* 
+* // 40 is the default tab width, and is passed as horizotal offset
+* tab = new Tab(tabnav, 40);
+* tab.init();
 *
-* TabNavigator class
+* // prepare a stack container
+* var stack = getChildByName("Stack");
+* var onTabChanged = function(e:Event) { stack.getChildAt(tabnav.activeTab).toFront(); }
 *
-*
+* // connect to the stack container
+* tabnav.addEventListener(Event.CHANGE, onTabChanged, false, 0, true);
+* </pre>
 *
 * @author <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
@@ -132,11 +152,13 @@ enum TabPosition {
 */
 class TabNavigator extends Component
 {
+	/** Tab position **/
 	public var tabPosition : TabPosition;
+
+	/** The index of the selected tab **/
 	public var activeTab(default, __setActive) : Int;
 
-	public override function addChild(o : DisplayObject) : DisplayObject
-	{
+	public override function addChild(o : DisplayObject) : DisplayObject {
 		//if(Std.is(o, Tab)) for(i in 0...numChildren) if(Std.is(getChildAt(i), Tab)) getChildAt(i).active = false;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		return super.addChild(o);
@@ -144,7 +166,7 @@ class TabNavigator extends Component
 
 
 	override public function init(opts : Dynamic=null) {
-		box = new Rectangle(0, 0, 200, 24);
+		box = new Size(200, 24).toRect();
 		color = DefaultStyle.BACKGROUND;
 		text = null;
 		tabPosition = TabPosition.TOP;
@@ -152,10 +174,9 @@ class TabNavigator extends Component
 		super.init(opts);
 
 		// add the drop-shadow filters
-		var shadow1:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false);
 		//~ var shadow2:DropShadowFilter = new DropShadowFilter (4, 235, DefaultStyle.DROPSHADOW, 0.45, 4, 4,0.35,BitmapFilterQuality.HIGH,true,false,false);
 		//~ this.filters = [shadow1,shadow2];
-		this.filters = [shadow1];
+		this.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false)];
 
 		addEventListener(Event.CHANGE, onChanged, false, 0, true);
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
@@ -166,13 +187,15 @@ class TabNavigator extends Component
 
 
 	}
-
+	
+	/** Setter for the active tab **/
 	public function __setActive(v:Int) : Int {
 		activeTab = v;
         dispatchEvent(new Event(Event.CHANGE));
 		return activeTab;	
 	}
 
+	/** Callback for a tab change, updates all child Tabs **/
 	public function onChanged(e:Event) {
 		#if debug
 			trace(this+" tab changed: "+activeTab);
@@ -192,7 +215,6 @@ class TabNavigator extends Component
 		if(Std.is(parent, Component)) {
 			box.width = untyped parent.box.width - x;
 		}
-
 
 		if(Std.is(parent.parent, haxegui.containers.ScrollPane)) {
 			box.width = untyped parent.parent.box.width;

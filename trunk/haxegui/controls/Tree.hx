@@ -31,7 +31,7 @@ import haxegui.managers.DragManager;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 import haxegui.Image;
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.Opts;
 import haxegui.controls.Expander;
 import haxegui.events.ResizeEvent;
@@ -78,9 +78,9 @@ class TreeLeaf extends Component
 
 
 /**
-*
 * TreeNode class
 * 
+* @todo expand(), collapse()
 *
 *
 * @version 0.1
@@ -91,10 +91,18 @@ class TreeNode extends Component
 {
 	
 	public var expander : Expander;
+	public var depth : Int;
 
+	public var expanded : Bool;
+	public var selected : Bool;
+	
 	override public function init(opts:Dynamic=null) {
+		color = DefaultStyle.INPUT_BACK;
 		box = new Size(140,20).toRect();
-		
+		depth = 0;
+
+		depth = Opts.optInt(opts, "depth", depth);
+						
 		super.init(opts);
 
 		expander = new Expander(this, name);
@@ -102,17 +110,21 @@ class TreeNode extends Component
 
 		expander.setAction("mouseClick",
 		"
-		for(i in parent.getChildIndex(parent)+1...parent.numChildren) {
-			var node = tree.getChildAt(i);
-			node.y += 20*(this.expanded?1:-1);				
-		}
-		
-
 		"
 		);
 
 
 	}
+	
+	
+	public function expand() {
+	
+	}
+	
+	public function collapse() {
+	
+	}
+
 	static function __init__() {
 		haxegui.Haxegui.register(TreeNode);
 	}
@@ -125,6 +137,8 @@ class TreeNode extends Component
 *
 * Tree Class
 *
+* @todo all
+*
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
@@ -134,44 +148,39 @@ class Tree extends Component {
 	
 	public var dataSource : DataSource;
 	public var data : Dynamic;
+
+	public var selected : List<DisplayObject>;
 	
 	override public function init(opts:Dynamic=null) {
 		
 		color = DefaultStyle.INPUT_BACK;
 		box = new Size(140,20).toRect();
-
+	
 	if(!Std.is(parent, Expander)) { 
-		var o = { lvl1_1: { lvl1_2: { lvl1_3_1: "string", lvl1_3_2: "string", lvl1_3_3: "string"}}};
-		data = { lvl0_1: o, lvl0_2: o, lvl0_3: o};
+		var o = { 
+			node1: { 
+				leaf1: "string",
+				leaf2: "string"
+				}
+		};
+		data = { node1: o, node2: o, node3: o};
 		}
 
-				
 		super.init(opts);
 
-		for(key in Reflect.fields(data)) {
 
-			var yOffset = 20;
-			var node = new TreeNode(this, key, 0, yOffset);
-			node.init({width: this.box.width, color: this.color});				
+		//process(data);
+		for(i in 0...3) {
+			var treenode = new TreeNode(this);
+			treenode.init({width: box.width});
+			addNode(treenode);
+			for(j in 0...3) {
 
-			if(Reflect.isObject(Reflect.field(data, key))) {
-				if(Std.is(Reflect.field(data, key), String)) {
-					var leaf = new TreeLeaf(node.expander);
-					leaf.init({ width: this.box.width, visible: true });
-					leaf.move(16,yOffset);
-				}
-				else {
-					var subtree = new Tree(node.expander);
-					subtree.data = Reflect.field(data, key);
-					subtree.init({width: this.box.width, visible: true});
-					subtree.move(16,0);
-
-					subtree.setAction("redraw", "");
-				}
+				var leaf = new TreeLeaf(treenode);
+				leaf.init({width: box.width});
+				addLeaf(leaf, treenode);
 			}
 		}
-
-
 		
 		this.setAction("redraw",
 		"
@@ -185,6 +194,48 @@ class Tree extends Component {
 
 	}
 
+	public function process(o:Dynamic, ?node:Dynamic=null) {
+		if(o==null) return;
+		if(node==null) node=this;
+		for(f in Reflect.fields(o)) {
+				//var node = new TreeNode(this, key, 0, yOffset+d*yOffset);
+				//node.init({depth: d++, width: this.box.width, color: this.color});				
+				if(Reflect.isObject(Reflect.field(o, f))) {
+					if(Std.is(Reflect.field(o, f), String))  {
+						var leaf = new TreeLeaf(node, f);
+						leaf.init({ width: this.box.width, visible: true});
+						//addLeaf(leaf);
+					}
+					else {
+						var treenode = new TreeNode(node, f);
+						treenode.init({width: box.width});
+						addNode(treenode);
+						process(Reflect.field(o,f), treenode);
+					}
+
+				}
+			
+		}
+	
+	}
+	
+	public function addLeaf(leaf: TreeLeaf, node:TreeNode) {
+		var n = 0;
+		for(l in node)
+			if(Std.is(l, TreeLeaf)) n++;
+		leaf.move(16,20*n);
+	}
+	
+	public function addNode(node: TreeNode) {
+		var n = 0;
+		for(t in this)
+			if(Std.is(t, TreeNode)) {
+				for(l in cast(t,Component))
+					if(Std.is(l, TreeLeaf)) n++;
+			n++;		
+			}
+		node.move(0,20*n);
+	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(Tree);

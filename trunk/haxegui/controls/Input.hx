@@ -31,7 +31,7 @@ import flash.text.TextFieldAutoSize;
 
 import haxegui.Opts;
 import haxegui.managers.StyleManager;
-import haxegui.Component;
+import haxegui.controls.Component;
 
 
 /**

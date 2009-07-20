@@ -21,7 +21,7 @@ package haxegui.toys;
 
 import flash.geom.Rectangle;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
 
 import haxegui.utils.Size;

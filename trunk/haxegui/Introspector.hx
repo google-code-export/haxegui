@@ -25,7 +25,7 @@ import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 
 import haxegui.Window;
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.Image;
 import haxegui.controls.Label;
 import haxegui.controls.UiList;
@@ -33,6 +33,7 @@ import haxegui.controls.CheckBox;
 import haxegui.controls.Stepper;
 import haxegui.controls.Input;
 import haxegui.controls.Tree;
+import haxegui.controls.MenuBar;
 import haxegui.containers.Container;
 import haxegui.containers.ScrollPane;
 

@@ -29,7 +29,8 @@ import flash.geom.Rectangle;
 import flash.text.TextField;
 import flash.text.TextFormat;
 
-import haxegui.Component;
+import haxegui.controls.Component;
+import haxegui.controls.Component;
 import haxegui.Opts;
 import haxegui.managers.DragManager;
 import haxegui.managers.CursorManager;
@@ -42,7 +43,7 @@ import haxegui.events.ResizeEvent;
 import haxegui.toys.Arrow;
 
 import haxegui.DataSource;
-import haxegui.IData;
+import haxegui.controls.IData;
 
 /**
 *

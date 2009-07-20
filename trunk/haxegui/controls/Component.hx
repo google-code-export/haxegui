@@ -17,7 +17,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package haxegui;
+package haxegui.controls;
 
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
@@ -48,8 +48,15 @@ import feffects.Tween;
 
 /**
  * 
- * Component Class
+ * Component is the basic protoype for all components.<br>
+ * It is not an abstract class, in a sense, it is amorphic, its visual appearance can easily and dynamically change at runtime.<br>
+ * It derives from [Sprite], so all the flash api drawing functions apply, but take a look at [redraw()] for what you more you can do.<br>
  * 
+ * Each component carries around not only an id, but also a [box], its the [Rectangle] that will be used for drawing calculations.<br>
+ *
+ * Likewise, the following actions can be used along with normal event listeners:<br>
+ * validate, interval, mouseClick, mouseOver, mouseOut, mouseDown, mouseUp, gainingFocus, losingFocus, focusIn, focusOut<br>
+ *
  *
  * @author Omer Goshen <gershon@goosemoose.com>
  * @author Russell Weir <damonsbane@gmail.com>
@@ -57,7 +64,7 @@ import feffects.Tween;
  * 
  * 
  **/
-class Component extends Sprite, implements haxegui.IMovable, implements haxegui.IToolTip, implements haxegui.ITween
+class Component extends Sprite, implements IMovable, implements IToolTip, implements ITween
 {
 	////////////////////////////////////////////////////////////////////////////
 	// Static members
@@ -70,10 +77,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	// Private members
 	////////////////////////////////////////////////////////////////////////////
 
-	public var isTweening : Bool;
 	
 	/** Current color tween in effect **/
 	private var colorTween : Tween;
+	/** Current position tween in effect **/
 	private var positionTween : Tween;
 
 
@@ -90,6 +97,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	// Public members
 	////////////////////////////////////////////////////////////////////////////
 
+	public var isTweening : Bool;
+	
 	/** Rectangular dimensions **/
 	public var box : Rectangle;
 	public var minSize : Size;
@@ -100,6 +109,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Disabled \ Enabled **/
 	public var disabled(__getDisabled, __setDisabled) : Bool;
 
+	/** Flag for when component needs a redraw **/
 	public var dirty(__getDirty,__setDirty) : Bool;
 
 	/** Whether the component can gain focus **/
@@ -120,19 +130,19 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/** Fit verticaly to parent **/
 	public var fitV : Bool;
 
-//~ public var margin : Rectangle;
-//~ public var padding : Array<Float>;
-//~ public var getBox : Void -> Rectangle;
-
-
-
-
 	
 	/**
-	* @param parent DisplayObjectContainer to attach to
-	* @param name	Component's name
-	* @param x		Horizontal position relative to parent
-	* @param y		Vertical position relative to parent
+	* The common constructor for all components.<br>
+	*
+	* Each component is given a unique id, it then gets his name either by parameter, or by its class name.<br>
+	*
+	* Next the constructor sets some variables to default, like disabled to false, and focusable to true,
+	* and registers all event listeners, component is moved to position, and is waiting to get more properties at init().
+	*
+	* @param DisplayObjectContainer to attach to, will default to root
+	* @param Component's name
+	* @param Horizontal position relative to parent
+	* @param Vertical position relative to parent
 	**/
 	public function new (parent:DisplayObjectContainer=null, name:String=null, ?x:Float, ?y:Float) {
 		super ();
@@ -152,8 +162,10 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		else
 			this.name = Type.getClassName(Type.getClass(this)).split(".").pop() + id;
 
+		// tooltip text
 		text = this.name;	
-		
+
+		// attach to parent		
 		if(parent!=null)
 			parent.addChild(this);
 		else
@@ -184,9 +196,32 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	/**
-	 * Initialize a component 
+	 * Initialize a component<br>
 	 * 
+	 * When init() is called, the component overrides any default properties, and sets any new, it is ready draw to screen,
+	 * and sets the dirty flag to true.
+	 *
+	 * Writing in haxe, it is true to assume that the component and all his children have finished initializing and are on screen by the next line of code,
+	 * in xml that is not the case, please use the onLoaded action for that.
+	 *
+	 * <pre class="code haxe">
+	 * var c = new Component();
+	 * c.init({});
+	 * </pre>
+	 *
+	 * The function does'nt return anything, but it's still possible in haxe to do:
+	 * <pre class="code haxe">
+	 * var c = new Component().init({});
+	 * </pre>
 	 * 
+	 * Note that hscript does'nt support dynamic objects, so just set any needed property manually:
+	 * <pre class="code haxe">
+	 * var c = new Component();
+	 * c.box = new Size(100,40).toRect();
+	 * c.color = 0xff00ff;
+	 * c.init();
+	 * </pre>
+	 *
 	 * @param opts Initial options object
 	 */
 	public function init(opts:Dynamic=null) {
@@ -297,7 +332,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/**
 	* Returns the window this component is contained in, if any
 	*
-	* @return Parent window or null
+	* @return Parent [Window] or null
 	**/
 	public function getParentWindow() : Window
 	{
@@ -335,7 +370,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 	/**
-	* @todo recurse
+	* @todo 
 	**/
 	public function hasFocus ():Bool {
 		return FocusManager.getInstance().getFocus() == this ? true : false;
@@ -354,6 +389,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	/**
 	* Move relative to current location.
+	* @param x Horizontal offset relative to current position
+	* @param y Vertical offset relative to current position
 	**/
 	public function move(x : Float, y : Float) : Void
 	{
@@ -368,6 +405,8 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	/**
 	* Move to specific location.
+	* @param x Horizontal offset relative to parent
+	* @param y Vertical offset relative to parent
 	**/
 	public function moveTo(x : Float, y : Float) : Void
 	{
@@ -432,7 +471,11 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		return parent.numChildren-1;
 	}
 	
-	public function toBack() {
+	/**
+	* Lower to bottom
+	* @return Void
+	**/
+	public function toBack() : Void {
 		parent.setChildIndex(this, 0);
 	}
 	
@@ -444,9 +487,11 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	
 	/** 
 	 * Returns iterator of all children.
-	 * Example:
-	 * 	for(child in component)
-	 * 
+	 * <pre class="code haxe">
+	 * if(this.haxeNext())
+	 *	for(child in this) 
+	 *	 ...
+	 * </pre>
  	 * @return Iterator<DisplayObject> Iterator for children
 	 */
 	public function iterator() : Iterator<DisplayObject> {
@@ -491,9 +536,6 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		return l.iterator();
 	}
 	
-
-
-
 
 	/**
 	* Sets the action code for the specified action name for this component.
@@ -540,6 +582,14 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 		return this.name + "[" + Type.getClassName(Type.getClass(this)) + "]";
 	}
 
+	/** 
+	* Stops the current(if there is one), and creates a new color tween 
+	* <pre class="code haxe">
+	* this.updateColorTween( new feffects.Tween(0, 100, 1000, feffects.easing.Expo.easeOut ) );
+	* </pre>
+	* @param t The [Tween] to use
+	* @todo rgb color transformation
+	**/
 	public function updateColorTween(t : Tween) : Void {
 		var me = this;
 		var colorTrans: ColorTransform  = new ColorTransform();
@@ -563,16 +613,17 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 
 
-	public function updatePositionTween(t : Tween, p:Point) : Void {
+	public function updatePositionTween(t : Tween, targetPos:Point) : Void {
 		var me = this;
-		var colorTrans: ColorTransform  = new ColorTransform();
+		var oldPos = new Point(x,y);
 		if(positionTween != null)
 			positionTween.stop();
 		positionTween = t;
 		positionTween.setTweenHandlers(
 				function(v) {
-				var pos = Point.interpolate(new Point(), p, v);
-				me.move(pos.x, pos.y);
+				var pos = Point.interpolate(targetPos, new Point(), v);
+				pos = pos.add(oldPos);
+				me.moveTo(pos.x, pos.y);
 				},
 				function(v){
 					me.positionTween = null;
@@ -584,6 +635,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	//////////////////////////////////////////////////
 	////               Events                     ////
 	//////////////////////////////////////////////////
+	
 	/** Triggered by addChild() or addChildAt() **/
 	public function onAdded(e:Event) {}
 
@@ -638,6 +690,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	*
 	* The second time, [focusFrom == this] which shows that all parents
 	* have been notified of the focus change.
+	* @param e the [FocusEvent]
 	**/
 	public function onFocusIn(e:FocusEvent) {
 		if(disabled) return;
@@ -660,6 +713,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	*
 	* [focusTo] is set to the object gaining focus.
 	*
+	* @param e the [FocusEvent]	
 	**/
 	private function onFocusOut(e:FocusEvent) : Void {
 		if(disabled) return;
@@ -676,6 +730,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	* If the component will not take focus, return false from this handler
 	* which will cancel the focus transfer.
 	* 
+	* @param from the [InteractiveObject] who lost focus
 	* @return Bool wheter the component will take focus
 	**/
 	public function onGainingFocus(from : flash.display.InteractiveObject) : Bool {
@@ -689,6 +744,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	/**
 	* Dispatched to this object when it is about to lose focus
 	*
+	* @param losingTo the [InteractiveObject] who is currently getting focused
 	* @return Bool true to allow change, false to prevent focus change
 	**/
 	public function onLosingFocus(losingTo : flash.display.InteractiveObject) : Bool {
@@ -913,9 +969,7 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 	}
 	
 	/**
-	 * 
-	 * 
-	 * 
+	 * @return Bitmap a [Bitmap] copy of the component
 	 */
 	public static function rasterize(content:DisplayObjectContainer,rect:Rectangle=null,precision:Float=1.0) : flash.display.Bitmap {
 		if (rect==null)
@@ -949,6 +1003,18 @@ class Component extends Sprite, implements haxegui.IMovable, implements haxegui.
 
 	/**
 	* Excecute redrawing script
+	* <pre class="code haxe">
+	* // example of sending variables to hscript redraw action
+	* var com = new Component();
+	* var opts = { color: Color.RED, size: new Size(100,40) };
+	* com.setAction("redraw", "
+	* 	this.graphics.beginFill(color);
+	*	this.graphics.drawRect(0,0,size.width,size.height);
+	*	this.graphics.endFill();
+	* ");
+	* com.redraw(opts);
+	* </pre>
+	* @param opts An [Opts] object to pass the redrawing script
 	**/
 	public function redraw(opts:Dynamic=null) {
 		ScriptManager.exec(this,"redraw", opts);

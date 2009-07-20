@@ -17,7 +17,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package haxegui;
+package haxegui.controls;
 
 import flash.geom.Rectangle;
 
@@ -36,12 +36,13 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.ui.Keyboard;
 
-import haxegui.controls.AbstractButton;
+
 import haxegui.controls.Label;
 import haxegui.managers.FocusManager;
 import haxegui.Opts;
 import haxegui.managers.StyleManager;
-import haxegui.Component;
+import haxegui.controls.AbstractButton;
+import haxegui.controls.Component;
 import haxegui.events.ResizeEvent;
 import haxegui.events.MenuEvent;
 

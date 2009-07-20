@@ -17,15 +17,26 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package haxegui;
+package haxegui.controls;
+
+import flash.geom.Point;
+
+import feffects.Tween;
 
 /**
 *
-* Interface for moveable widgets.
+* Interface for tweening widgets.
 *
 */
-interface IMovable {
-  //~ public function move (x : Float, y : Float) : Void;
-  public function move (x : Float, y : Float) : Void;
+interface ITween {
+	/** true if is currently tweening **/
+	public var isTweening : Bool;
+ 
+	private var colorTween  : Tween;
+	private var positionTween  : Tween;
+
+	public function updateColorTween(t : Tween) : Void;
+	public function updatePositionTween(t : Tween, p:Point) : Void;
+
 }
 

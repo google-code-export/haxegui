@@ -34,7 +34,7 @@ import flash.events.FocusEvent;
 import haxegui.managers.StyleManager;
 import haxegui.Opts;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 
 
 class Rectangle extends Component

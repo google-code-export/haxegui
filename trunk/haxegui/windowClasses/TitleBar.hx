@@ -30,9 +30,9 @@ import haxegui.managers.CursorManager;
 import haxegui.Opts;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
-import haxegui.Component;
-import haxegui.Window;
+import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
+import haxegui.Window;
 import haxegui.controls.Label;
 
 /**

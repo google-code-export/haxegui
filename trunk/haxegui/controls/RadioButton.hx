@@ -25,8 +25,8 @@ import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
 
-import haxegui.Component;
-import haxegui.controls.AbstractButton;
+import haxegui.controls.Component;
+import haxegui.controls.Component;
 import haxegui.events.MoveEvent;
 import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;

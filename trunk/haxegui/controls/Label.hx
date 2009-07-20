@@ -28,7 +28,7 @@ import flash.text.TextFormatAlign;
 
 import haxegui.Opts;
 import haxegui.managers.StyleManager;
-import haxegui.Component;
+import haxegui.controls.Component;
 
 import haxegui.utils.Size;
 import haxegui.utils.Color;

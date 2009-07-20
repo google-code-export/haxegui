@@ -40,7 +40,7 @@ import haxegui.Opts;
 import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
-
+import haxegui.controls.AbstractButton;
 import haxegui.toys.Arrow;
 import haxegui.utils.Color;
 import haxegui.utils.Size;
@@ -51,7 +51,7 @@ import feffects.Tween;
 
 
 /**
-* Expander class, may be expanded or collapsed by the user to reveal or hide child widgets.
+* Expander class, may be expanded or collapsed by the user to reveal or hide child widgets.<br<
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
@@ -60,7 +60,6 @@ class Expander extends AbstractButton
 {
 	public var expanded(__getExpanded,__setExpanded) : Bool;
 
-	
 	public var arrow : Arrow;
 	public var label : Label;
 

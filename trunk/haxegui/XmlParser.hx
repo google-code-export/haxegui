@@ -19,10 +19,11 @@
 
 package haxegui;
 
+import haxegui.controls.Component;
+import haxegui.controls.Component;
 import haxegui.managers.ScriptManager;
 
 /**
-*
 * Style and Layout parser
 *
 * @version 0.1
