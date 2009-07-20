@@ -212,7 +212,7 @@ class ScriptStandardLibrary
 		/** haxegui exported with haxegui package stripped **/
 		interp.variables.set("ColorPicker", haxegui.ColorPicker);
 		interp.variables.set("ColorPicker2", haxegui.ColorPicker2);
-		interp.variables.set("Component", haxegui.Component);
+		interp.variables.set("Component", haxegui.controls.Component);
 		interp.variables.set("Console", haxegui.Console);
 		interp.variables.set("Container", haxegui.containers.Container);
 
@@ -241,10 +241,10 @@ class ScriptStandardLibrary
 		interp.variables.set("Image", haxegui.Image);
 		interp.variables.set("Introspector", haxegui.Introspector);
 		interp.variables.set("LayoutManager", haxegui.managers.LayoutManager);
-		interp.variables.set("MenuBar", haxegui.MenuBar);
+		interp.variables.set("MenuBar", haxegui.controls.MenuBar);
 		interp.variables.set("MouseManager", haxegui.managers.MouseManager);
 		interp.variables.set("Opts", haxegui.Opts);
-		interp.variables.set("PopupMenu", haxegui.PopupMenu);
+		interp.variables.set("PopupMenu", haxegui.controls.PopupMenu);
 		interp.variables.set("RichTextEditor", haxegui.RichTextEditor);
 		interp.variables.set("ScrollPane", haxegui.containers.ScrollPane);
 		interp.variables.set("ScriptManager", haxegui.managers.ScriptManager);
@@ -253,7 +253,7 @@ class ScriptStandardLibrary
 		interp.variables.set("Stack", haxegui.containers.Stack);
 		interp.variables.set("Stats", haxegui.Stats);
 		interp.variables.set("StyleManager", StyleManager);
-		interp.variables.set("ToolBar", haxegui.ToolBar);
+		interp.variables.set("ToolBar", haxegui.controls.ToolBar);
 		interp.variables.set("TooltipManager", haxegui.managers.TooltipManager);
 		interp.variables.set("Utils", haxegui.Utils);
 		interp.variables.set("Window", haxegui.Window);
@@ -274,10 +274,14 @@ class ScriptStandardLibrary
 				WindowEvent			: haxegui.events.WindowEvent,
 			}
 			);
-
+		interp.variables.set("core",
+			{
+				Component			: haxegui.controls.Component,
+				AbstractButton		: haxegui.controls.AbstractButton,
+			}
+			);
 		interp.variables.set("controls",
 			{
-				AbstractButton		: haxegui.controls.AbstractButton,
 				Button				: haxegui.controls.Button,
 				CheckBox			: haxegui.controls.CheckBox,
 				ComboBox			: haxegui.controls.ComboBox,

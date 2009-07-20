@@ -26,7 +26,7 @@ import flash.events.MouseEvent;
 import flash.events.FocusEvent;
 import flash.ui.Mouse;
 import flash.ui.Keyboard;
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
@@ -56,10 +56,7 @@ enum WindowType
 
 
 /**
-*
-* Window class
-*
-* Dragable & Resizable  window.
+* Dragable & Resizable window.
 *
 *
 * @author <gershon@goosemoose.com>
@@ -121,7 +118,7 @@ class Window extends Component
 		
 	}
 
-	public function getInnerRectangle() : Rectangle {
+	public function getClientRect() : Rectangle {
 		return new Rectangle();
 	}
 

@@ -19,7 +19,7 @@
 
 package haxegui;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 
 import flash.display.Loader;
 import flash.net.URLRequest;
@@ -30,8 +30,17 @@ import flash.display.BitmapData;
 
 /**
 *
-* Image Class
+* Component wrapper for bitmaps.
 *
+* used in xml like this:
+* <pre class="code xml">
+* <haxegui:Image src="http://www..."/>
+* </pre>
+* or in haxe:
+* <pre class="code haxe">
+* var img = new Image();
+* image.init({src: "http://www..."});
+* </pre>
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
@@ -39,61 +48,70 @@ import flash.display.BitmapData;
 */
 class Image extends Component
 {
+    /** url **/
     public var src : String;
+    
+    /** loader for the bitmap **/
     public var loader : Loader;
 
+	/** the bitmap itself **/
     public var bitmap : Bitmap;
 
+	/** aspect ratio **/
     public var aspect(default, null) : Float;
 	
-    override public function init(opts:Dynamic=null) : Void	{
+	override public function init(opts:Dynamic=null) : Void	{
 	
-	super.init(opts);
+		super.init(opts);
 	
-	src = Opts.optString(opts, "src", src);
+		src = Opts.optString(opts, "src", src);
 	
-	if(loader==null)
-	    loader = new Loader();
+		if(loader==null)
+			loader = new Loader();
 	
-	var urlReq:URLRequest = new URLRequest(this.src);
+		var urlReq = new URLRequest(this.src);
 	
-	try {
-	    loader.load(urlReq);
-	}
-	catch(e:Dynamic) {
-	    trace(e);
-	}
+		try {
+			loader.load(urlReq);
+		}
+		catch(e:Dynamic) {
+			trace(e);
+		}
 
-	loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
-	loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
+		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
+		loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
     }
     
     function onComplete(e:Event) {
-	bitmap = e.currentTarget.content ;
-	aspect = bitmap.width / bitmap.height;
-	addChild(bitmap);
-	dispatchEvent(e);
+		bitmap = e.currentTarget.content ;
+		aspect = bitmap.width / bitmap.height;
+		addChild(bitmap);
+		dispatchEvent(e);
     }
 
     function onError(e:IOErrorEvent) {
-	trace(e);
+		trace(e);
     }
     
     static function __init__() {
-	haxegui.Haxegui.register(Image);
+		haxegui	.Haxegui.register(Image);
     }
     
 
 }
 
 /**
+* Image helper class, defines stock icons.
 *
-* Icon Class
-*
-* Defines stock icons, used like this:
-* 
-* 	var icon = new Icon();
-* 	icon.init({src: STOCK_NEW});
+* used in xml like this:
+* <pre class="code xml">
+* <haxegui:Icon src="STOCK_CLEAR"/>
+* </pre>
+* or in haxe:
+* <pre class="code haxe">
+* var icon = new Icon();
+* icon.init({src: Icon.STOCK_NEW});
+* </pre>
 * 
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
@@ -101,8 +119,12 @@ class Image extends Component
 */
 class Icon extends Image
 {
+	/** baseURL relative icon path **/
     public static var iconDirectory : String = "assets/icons/";
     
+    //////////////////////////////////////////////////////////////////
+    // 						Stock icons								//
+    //////////////////////////////////////////////////////////////////
     public static var STOCK_NEW : String = "document-new.png";
     public static var STOCK_OPEN : String = "document-open.png";
     public static var STOCK_SAVE : String = "document-save.png";
@@ -119,12 +141,12 @@ class Icon extends Image
     public static var DIALOG_WARNING : String = "dialog-warning.png";
 
     override public function init(opts:Dynamic=null) : Void {
-	src = Opts.optString(opts, "src", src);
-	src = Haxegui.baseURL + iconDirectory + src;
-	super.init({src: src});
+		src = Opts.optString(opts, "src", src);
+		src = Haxegui.baseURL + iconDirectory + src;
+		super.init({src: src});
     }
     
     static function __init__() {
-	haxegui.Haxegui.register(Image);
+		haxegui.Haxegui.register(Image);
     }  
 }

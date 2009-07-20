@@ -18,7 +18,7 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-package haxegui;
+package haxegui.controls;
 
 import flash.geom.Rectangle;
 
@@ -43,25 +43,14 @@ import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 
 import feffects.Tween;
-import feffects.easing.Quint;
-import feffects.easing.Sine;
-import feffects.easing.Back;
-import feffects.easing.Bounce;
-import feffects.easing.Circ;
-import feffects.easing.Cubic;
-import feffects.easing.Elastic;
-import feffects.easing.Expo;
-import feffects.easing.Linear;
-import feffects.easing.Quad;
-import feffects.easing.Quart;
 
-
+import haxegui.Opts;
 
 /**
 *
@@ -168,7 +157,7 @@ class PopupMenu extends AbstractButton
 		item.filters = [shadow];
 
 		//~ var t = new Tween( 0, item.y, 150 + 150*i, item, "y", Back.easeInOut );
-		var t2 = new Tween( 0, 1, 350, item, "alpha", Linear.easeNone );
+		var t2 = new Tween( 0, 1, 350, item, "alpha", feffects.easing.Linear.easeNone );
 
 		//~ item.y = 0 ;
 		item.alpha = 0 ;

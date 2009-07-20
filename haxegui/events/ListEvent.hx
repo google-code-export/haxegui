@@ -21,7 +21,7 @@ package haxegui.events;
 
 import flash.events.Event;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.controls.UiList;
 
 class ListEvent extends Event {

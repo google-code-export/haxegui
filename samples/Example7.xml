@@ -95,7 +95,7 @@ http://flashexplained.com/actionscript/creating-an-analog-clock-with-actionscrip
 			</script>
 		</events>
 		
-		<haxegui:Component name="hours">
+		<haxegui:controls:Component name="hours">
 			<events>
 				<script type="text/hscript" action="redraw">
 				<![CDATA[			
@@ -111,9 +111,9 @@ http://flashexplained.com/actionscript/creating-an-analog-clock-with-actionscrip
 				]]>
 				</script>
 			</events>
-		</haxegui:Component>
+		</haxegui:controls:Component>
 
-		<haxegui:Component name="minutes">
+		<haxegui:controls:Component name="minutes">
 			<events>
 				<script type="text/hscript" action="redraw">
 				<![CDATA[
@@ -129,9 +129,9 @@ http://flashexplained.com/actionscript/creating-an-analog-clock-with-actionscrip
 				]]>
 				</script>
 			</events>
-		</haxegui:Component>
+		</haxegui:controls:Component>
 
-		<haxegui:Component name="seconds">
+		<haxegui:controls:Component name="seconds">
 			<events>
 				<script type="text/hscript" action="redraw">
 				<![CDATA[
@@ -147,7 +147,7 @@ http://flashexplained.com/actionscript/creating-an-analog-clock-with-actionscrip
 				]]>
 				</script>
 			</events>
-		</haxegui:Component>
+		</haxegui:controls:Component>
 	</haxegui:controls:AbstractButton>
    
    

@@ -30,7 +30,7 @@ import haxegui.managers.CursorManager;
 import haxegui.Opts;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
 
 /**

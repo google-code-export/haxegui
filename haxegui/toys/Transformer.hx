@@ -33,34 +33,32 @@ import haxegui.events.ResizeEvent;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 
-
-
-
 /**
- * 
- * 
- * 
+ * A Transformation widget, pass it a target on creation and use it's 8 square handles on the 
+ * corners and edges for resizing, and the center circle for moving it.
+ * It listens for focus events from the target, if target has lost focus for anyone else but the 
+ * transformer, it will automatically self-destruct.
  * 
  */
 class Transformer extends Component
 {
+	/** Component to transform **/
 	public var target  : Component;
-	public var pivot   : AbstractButton;
-	public var handles : Array<AbstractButton>;
 
-	public function new (trgt:Component)
-	{
+	private var pivot   : AbstractButton;
+	private var handles : Array<AbstractButton>;
+
+	public function new (trgt:Component) {
 		target = trgt;
 		super(flash.Lib.current, "Transformer_"+target.name, target.x, target.y);
 	}
 
-	override public function init(?opts:Dynamic)
-	{
+	override public function init(?opts:Dynamic) {
 		color = cast Math.random() * 0xFFFFFF;
 		handles = [];
 		//~ this.text = null;

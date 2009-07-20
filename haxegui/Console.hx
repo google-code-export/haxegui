@@ -66,12 +66,44 @@ import haxegui.logging.LogLevel;
 */
 class Console extends Window, implements ILogger
 {
+	/** hscript parser **/
 	var parser : hscript.Parser;
+
+	/** 
+	* hscript interpreter 
+	*	
+	* can be used in the console like this:
+	* <pre class="code haxe">
+	* // returns [object Interp]
+	* this.interp
+	*
+	* // returns the interpreter's variables hash, where objects are packages and fields are classes
+	* this.interp.variables
+	* </pre>
+	**/
 	var interp : hscript.Interp;
 
-	
+	/** the console's input history, press up to pop a command **/
 	var history : Array<String>;
+
+	/**
+	* the current console "working directory"
+	* the [_pwd] variable is for internal use, use "pwd" in the console:
+	* <pre class="code haxe">
+	* pwd.move(20,20);
+	* </pre>
+	**/
 	var _pwd : DisplayObjectContainer;
+
+	/**
+	* the current console "working directory", in its array form.
+	* you can use it with commands like:
+	* <pre class="code haxe">
+	* this.pwd.push("Container20");
+	* this.pwd.pop();
+	* this.pwd = "root.Window13.ScrollPane18.Container20.Button24".split(".");
+	* </pre>
+	**/
 	var pwd : Array<String>;
 
 	var container : Container;
@@ -124,10 +156,6 @@ class Console extends Window, implements ILogger
 		input.height = 20;
 		input.addEventListener (KeyboardEvent.KEY_DOWN, onInputKeyDown);
 
-		// Vertical Scrollbar
-		vert = new ScrollBar(container, "vscrollbar");
-		vert.init({target : output, color: this.color});
-
 		// Container
 		container.init({
 			color: Opts.optInt(opts,"bgcolor", 0x222222),
@@ -136,6 +164,11 @@ class Console extends Window, implements ILogger
 
 		container.addChild(output);
 		container.addChild(input);
+
+		// Vertical Scrollbar
+		vert = new ScrollBar(container, "vscrollbar");
+		vert.init({target : output, color: this.color});
+
 
 		// if(isSizeable())
 		// {
@@ -196,13 +229,16 @@ class Console extends Window, implements ILogger
 				});
 	
 
-		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+
 	}
 
-/*
-*
-*
-*/
+	/*
+	* Log a message to console
+	*
+	* @param Object to log, can be text, events and errors.
+	* @param here
+	* @param Optional error level
+	*/
 	public function log( msg : Dynamic, ?inf : haxe.PosInfos, ?error:ErrorType ) : Void {
 		if(msg==null) return;
 		// var text:String =  "";
@@ -221,6 +257,7 @@ class Console extends Window, implements ILogger
 
 		switch(Type.typeof(msg)) {
 			case TClass(c):
+/*
 				switch(Type.getClassName(c).split(".").pop()) {
 					case "Event":
 						text += "<FONT COLOR=\"#00FF00\">EVENT</FONT>: ";
@@ -241,7 +278,10 @@ class Console extends Window, implements ILogger
 						var act =  msg.type;
 						text += " hasOwnAction(" + act + "): " + msg.target.hasOwnAction(act) + "\n";
 						}
+					case "LoaderInfo":
+					default:
 					}
+*/					
 			case TEnum(e):
 				switch(Type.getEnumName(e)) {
 				case "hscript.Error":
@@ -272,34 +312,27 @@ class Console extends Window, implements ILogger
 		output.scrollV = output.maxScrollV + 1;
 	}
 
-	override public function onResize (e:ResizeEvent) : Void
-	{
+	override public function onResize (e:ResizeEvent) : Void {
+		// we get asked for a resize when the scrollbar is added to container, but we're not ready yet.
+		if(vert==null) return;
+				
 		super.onResize(e);
 
-		if(output!=null)
-		{
-			output.width = box.width - 30;
-			output.height = box.height - 40;
-		}
+		output.width = box.width - 30;
+		output.height = box.height - 40;
 
-		if(input!=null)
-		{
-			input.width = box.width - 30;
-			input.y = box.height - 40;
-		}
+		input.width = box.width - 30;
+		input.y = box.height - 40;
 
-		if(vert!=null)
-		{
-			vert.box.height = box.height - 20;
-		}
+		vert.box.height = box.height - 20;
 
 	}
 
-	public function onInputKeyDown(e:KeyboardEvent) : Void
-	{
+	/** Process keyboard input **/
+	public function onInputKeyDown(e:KeyboardEvent) : Void {
 
-		switch(e.keyCode)
-		{
+		switch(e.keyCode) {
+
 		case Keyboard.ENTER :
 			if(input.text=="")	{
 				trace("");
@@ -311,10 +344,13 @@ class Console extends Window, implements ILogger
 			if(input.text=="cd") input.text="cd()";
 			if(input.text=="clear") input.text="clear()";
 
+			// set the program
 			var program = parser.parseString(input.text);
 
+			// set the current pwd
 			interp.variables.set("pwd", getPwd());
 			
+			// clear the command and push to history
 			history.push(input.text);
 			input.text = "";
 
@@ -349,6 +385,10 @@ class Console extends Window, implements ILogger
 		}
 	}
 	
+	/**
+	* Traverses the display list according to the current path 
+	* @return The DisplayObject of the current "working directory"
+	**/
 	public function getPwd() : Dynamic {
 		var o = cast flash.Lib.current;
 		for(i in 1...pwd.length)
@@ -357,12 +397,15 @@ class Console extends Window, implements ILogger
 		return _pwd;
 	}
 	
-
+	/** Clear the output **/
 	public function clear() : Void {
 		this.output.text = "";
 		trace("");
 	}
 
+	/**
+	* @return Short help for available console commands
+	**/
 	public function help() : String {
 		var text = "\n";
 		var commands = {

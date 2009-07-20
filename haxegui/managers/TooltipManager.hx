@@ -28,7 +28,7 @@ import flash.events.MouseEvent;
 import flash.events.FocusEvent;
 import flash.geom.Rectangle;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.managers.StyleManager;
 import haxegui.controls.Label;
 

@@ -73,6 +73,7 @@ import haxegui.controls.Slider;
 import haxegui.controls.Stepper;
 import haxegui.controls.Input;
 import haxegui.controls.ComboBox;
+import haxegui.controls.ToolBar;
 
 /**
 *
@@ -378,7 +379,7 @@ class RichTextEditor extends Window
 		//~ flash.system.System.useCodePage = false;
 
 		//
-		var container = new haxegui.containers.Container (this, "Container1", 10, 84);
+		var container = new haxegui.containers.Container (this, "Container1", 10, 60);
 		container.init({width: 502, height: 310});
 
 		tf = new TextField();

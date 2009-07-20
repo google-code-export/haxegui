@@ -25,10 +25,11 @@ import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 
 import haxegui.Window;
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.Image;
 import haxegui.containers.Container;
 import haxegui.containers.ScrollPane;
+import haxegui.controls.MenuBar;
 import haxegui.controls.Label;
 import haxegui.controls.UiList;
 import haxegui.controls.CheckBox;

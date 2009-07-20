@@ -23,7 +23,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
 import flash.geom.Rectangle;
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
@@ -32,7 +32,8 @@ import haxegui.managers.FocusManager;
 import haxegui.managers.StyleManager;
 import haxegui.managers.TooltipManager;
 import haxegui.Opts;
-import haxegui.IAdjustable;
+import haxegui.controls.IAdjustable;
+import haxegui.controls.Component;
 
 /**
 *
@@ -63,7 +64,7 @@ class SliderHandle extends AbstractButton
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class Slider extends Component, implements haxegui.IAdjustable
+class Slider extends Component, implements IAdjustable
 {
 	/** Slider handle **/
 	public var handle : SliderHandle;

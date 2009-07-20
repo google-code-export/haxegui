@@ -30,7 +30,7 @@ import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 
 
 class FocusManager extends EventDispatcher, implements Dynamic

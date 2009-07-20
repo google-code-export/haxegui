@@ -1,8 +1,8 @@
 <map id="uml" name="uml">
-<area shape="rect" href="../types/haxe/io/Bytes.html" title="{Bytes|+ length : Int\l&#45; b : BytesData\l|+ alloc (length : Int) : haxe.io.Bytes\l+ ofString (s : String) : haxe.io.Bytes\l+ ofData (b : BytesData) : haxe.io.Bytes\l+ get (pos : Int) : Int\l+ set (pos : Int, v : Int) : Void\l+ blit (pos : Int, src : Bytes, srcpos : Int, len : Int) : Void\l+ sub (pos : Int, len : Int) : haxe.io.Bytes\l+ compare (other : Bytes) : Int\l+ readString (pos : Int, len : Int) : String\l+ toString () : String\l+ getData () : haxe.io.BytesData\l&#45; new (length : Int, b : BytesData) : Void\l}" alt="" coords="267,939,605,1171"/>
-<area shape="rect" href="../types/haxe/io/BytesBuffer.html" title="{BytesBuffer|&#45; b : flash.utils.ByteArray\l|+ addByte (byte : Int) : Void\l+ add (src : Bytes) : Void\l+ addBytes (src : Bytes, pos : Int, len : Int) : Void\l+ getBytes () : haxe.io.Bytes\l+ new () : Void\l}" alt="" coords="381,564,683,689"/>
-<area shape="rect" href="../types/haxe/io/Input.html" title="{Input|+ bigEndian : Bool\l|+ readByte () : Int\l+ readBytes (s : Bytes, pos : Int, len : Int) : Int\l+ close () : Void\l&#45; setEndian (b : Bool) : Bool\l+ readAll (?bufsize : Int) : haxe.io.Bytes\l+ readFullBytes (s : Bytes, pos : Int, len : Int) : Void\l+ read (nbytes : Int) : haxe.io.Bytes\l+ readUntil (end : Int) : String\l+ readLine () : String\l+ readFloat () : Float\l+ readDouble () : Float\l+ readInt8 () : Int\l+ readInt16 () : Int\l+ readUInt16 () : Int\l+ readInt24 () : Int\l+ readUInt24 () : Int\l+ readInt31 () : Int\l+ readUInt30 () : Int\l+ readInt32 () : haxe.Int32\l+ readString (len : Int) : String\l}" alt="" coords="43,464,357,789"/>
-<area shape="rect" href="../types/haxe/io/BytesInput.html" title="{BytesInput|&#45; b : BytesData\l|+ new (b : Bytes, ?pos : Int, ?len : Int) : Void\l}" alt="" coords="64,243,336,315"/>
-<area shape="rect" href="../types/haxe/io/Eof.html" title="{Eof||&#45; toString () : String\l+ new () : Void\l}" alt="" coords="265,7,396,92"/>
-<area shape="rect" href="../types/haxe/io/StringInput.html" title="{StringInput||}" alt="" coords="159,13,241,85"/>
+<area shape="rect" href="../types/haxe/io/Bytes.html" title="Bytes" alt="" coords="267,939,605,1171"/>
+<area shape="rect" href="../types/haxe/io/BytesBuffer.html" title="BytesBuffer" alt="" coords="381,564,683,689"/>
+<area shape="rect" href="../types/haxe/io/Input.html" title="Input" alt="" coords="43,464,357,789"/>
+<area shape="rect" href="../types/haxe/io/BytesInput.html" title="BytesInput" alt="" coords="64,243,336,315"/>
+<area shape="rect" href="../types/haxe/io/Eof.html" title="Eof" alt="" coords="265,7,396,92"/>
+<area shape="rect" href="../types/haxe/io/StringInput.html" title="StringInput" alt="" coords="159,13,241,85"/>
 </map>

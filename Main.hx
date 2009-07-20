@@ -57,13 +57,9 @@ import haxegui.managers.FocusManager;
 import haxegui.managers.LayoutManager;
 import haxegui.managers.CursorManager;
 import haxegui.managers.MouseManager;
-import haxegui.PopupMenu;
 
 import haxegui.Console;
-import haxegui.TabNavigator;
-import haxegui.MenuBar;
 import haxegui.Stats;
-import haxegui.ToolBar;
 import haxegui.ColorPicker;
 import haxegui.ColorPicker2;
 import haxegui.RichTextEditor;
@@ -82,7 +78,11 @@ import haxegui.controls.RadioButton;
 import haxegui.controls.CheckBox;
 import haxegui.controls.ComboBox;
 import haxegui.controls.UiList;
+import haxegui.controls.MenuBar;
 import haxegui.controls.Expander;
+import haxegui.controls.TabNavigator;
+import haxegui.controls.ToolBar;
+import haxegui.controls.PopupMenu;
 
 import haxegui.events.MenuEvent;
 
@@ -136,25 +136,17 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 
 		// Logos
-/*		
-		var logo = flash.Lib.current.addChild(flash.Lib.attach("Logo"));
+/*
+		var logo = cast flash.Lib.current.addChild(flash.Lib.attach("Logo"));
 		logo.name = "Logo";
 		logo.x = cast (stage.stageWidth - logo.width) >> 1;
 		logo.y = cast (stage.stageHeight - logo.height) >> 1;
+		logo.mouseEnabled = false;
+*/	
 
-		var t = new Tween(0,1,2000,feffects.easing.Bounce.easeOut);
-		t.setTweenHandlers( function(v) {
-			logo.alpha = v;
-			var trans = new flash.geom.Matrix();
-			trans.translate(cast (stage.stageWidth - logo.width) >> 1, cast (stage.stageHeight - logo.height) >> 1);
-			trans.scale(v,v);
-			logo.transform.matrix = trans;
-		});		
-		haxe.Timer.delay( t.start, 75);
-		haxe.Timer.delay( init, 2200);
-*/		
+		// init
 		haxe.Timer.delay( init, 50);
-		
+
 	}
 
 	public static function init ()	{
@@ -162,15 +154,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		// Setup Haxegui
 		haxegui.Haxegui.init();
 
-		/*
-		var t = new Tween(1,0,300,flash.Lib.current.getChildByName("Logo"),"alpha",feffects.easing.Linear.easeNone);
-		t.setTweenHandlers(null,
-		function(v) {
-		flash.Lib.current.removeChild(flash.Lib.current.getChildByName("Logo"));	
-		});
-		t.start();
-		*/
-		
+
 		var bootupMessages = new Array<{v:Dynamic, inf:haxe.PosInfos}>();
 		var bootupHandler = function(v : Dynamic, ?inf:haxe.PosInfos) {
 			bootupMessages.push({v:v, inf:inf});
@@ -236,7 +220,6 @@ class Main extends Sprite, implements haxe.rtti.Infos
 //~ var xmlType = [new FileFilter("Xml Files (*.xml)", "*.xml;")];
 //~ fileRef.browse(xmlType);
 
-
 		/////////////////////////////////////////////////////////////////////////
 		// Load XML
 		/////////////////////////////////////////////////////////////////////////
@@ -286,7 +269,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 //		clock.init();
 		
 				
-		loader.load(new URLRequest(Haxegui.baseURL+layout));
+//		loader.load(new URLRequest(Haxegui.baseURL+layout));
 
 		//~ stage.addEventListener(MouseEvent.MOUSE_DOWN,
 		//~ function(e)
@@ -387,26 +370,24 @@ flash.external.ExternalInterface.addCallback( "onChange", onChange );
 	*/
 	public static function onStageResize(e:Event) {
 
-	var stage = e.target;
-	haxe.Timer.delay( function() {
-	if(desktop!=null) {
-		desktop.graphics.clear();
-		  var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND,40) ];
-		  var alphas = [ 1, 1 ];
-		  var ratios = [ 0, 0xFF ];
-		  var matrix = new flash.geom.Matrix();
-		  matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
-		  desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+		var stage = e.target;
+		if(desktop!=null) {
+			desktop.graphics.clear();
+			  var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND,40) ];
+			  var alphas = [ 1, 1 ];
+			  var ratios = [ 0, 0xFF ];
+			  var matrix = new flash.geom.Matrix();
+			  matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
+			  desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
-		desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
-		desktop.graphics.endFill();
-	}
-
+			desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
+			desktop.graphics.endFill();
+			}
+		/*
 		var logo = cast flash.Lib.current.getChildByName("Logo");
 		logo.x = Std.int(stage.stageWidth - logo.width) >> 1;
 		logo.y = Std.int(stage.stageHeight - logo.height) >> 1;
-	},300);
-	
+		*/
 	}
 
 	public static dynamic function log(v:Dynamic) {

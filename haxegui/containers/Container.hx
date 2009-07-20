@@ -32,11 +32,14 @@ import haxegui.events.ResizeEvent;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.MouseManager;
 import haxegui.managers.StyleManager;
-import haxegui.Component;
+import haxegui.controls.Component;
 import haxegui.controls.ScrollBar;
-import haxegui.IContainer;
+import haxegui.containers.IContainer;
 
-
+/**
+* Generic "canvas" to put components in.
+* It listens for and streches when receives resize events from it's parent,.
+*/
 class Container extends Component, implements IContainer
 {
 
@@ -67,9 +70,7 @@ class Container extends Component, implements IContainer
 	}
 
 
-	private function onParentResize(e:ResizeEvent) {
-		
-
+	private function onParentResize(e:ResizeEvent) {		
 		if(Std.is(parent, Divider)) untyped {
 		/*
 			var b = parent.box.clone();
@@ -94,7 +95,6 @@ class Container extends Component, implements IContainer
 
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-	
 	}
 
 	static function __init__() {

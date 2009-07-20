@@ -26,24 +26,49 @@ import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
 import haxegui.managers.StyleManager;
 import haxegui.Opts;
+import haxegui.controls.AbstractButton;
 
+import haxegui.utils.Color;
+import haxegui.utils.Size;
 
 /**
-* An on \ off CheckBox, with composited Label. use the member variable <i>checked</i>
-* to get it's state.
+* An on\off CheckBox, with composited Label.<br>
+* use the member variable [checked] to get it's state.<br>
+* You can use the dispatched event:
+* <pre class="code haxe">
+* var chkbox = new CheckBox();
+* chkbox.init();
+* chkbox.addEventListener(Event.CHANGE, function(e){...});
+* </pre>
+* Or you could override the default action:
+* <pre class="code haxe">
+* var chkbox = new CheckBox();
+* chkbox.init();
+* chkbox.setAction("mouseClick",
+* "// this is the default code
+* if(!this.disabled) {
+*	this.checked = !this.checked;
+*	this.redraw();
+*	this.updateColorTween( new feffects.Tween(50, 0, 150, feffects.easing.Linear.easeNone) );
+*   // your code here...
+* }
+* ");
+* </pre>
+* 
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
 class CheckBox extends AbstractButton
 {
+
 	public var checked(__getChecked,__setChecked) : Bool;
+
+	/** label (on by default) **/
 	public var label : Label;
 
-
-	override public function init(opts:Dynamic=null)
-	{
-		box = new Rectangle(0, 0, 20, 20);
+	override public function init(opts:Dynamic=null) {
+		box = new Size(20, 20).toRect();
 		color = DefaultStyle.BACKGROUND;
 		
 		super.init(opts);
@@ -69,6 +94,7 @@ class CheckBox extends AbstractButton
 	//////////////////////////////////////////////////
 	////           Getters/Setters                ////
 	//////////////////////////////////////////////////
+	
 	private function __getChecked() : Bool {
 		return this.checked;
 	}

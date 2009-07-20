@@ -61,11 +61,12 @@ import flash.display.BitmapData;
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
-
+import haxegui.controls.Component;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 import haxegui.Window;
 import haxegui.controls.Button;
+import haxegui.controls.MenuBar;
 import haxegui.controls.Slider;
 import haxegui.controls.Stepper;
 import haxegui.controls.ComboBox;

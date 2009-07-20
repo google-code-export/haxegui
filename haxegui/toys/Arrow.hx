@@ -26,7 +26,7 @@ import haxegui.managers.StyleManager;
 import haxegui.utils.Size;
 import haxegui.utils.Color;
 
-import haxegui.Component;
+import haxegui.controls.Component;
 
 enum ArrowType {
 	LINE;
@@ -35,12 +35,13 @@ enum ArrowType {
 	DIAMOND;
 }
 
-
+/**
+* Simple arrowhead used by many widgets
+*/
 class Arrow extends Component
 {
 
-	override public function init(?opts:Dynamic)
-	{
+	override public function init(?opts:Dynamic) {
 		box = new Size(12,12).toRect();
 		color = cast Math.random() * 0xFFFFFF;
 			
@@ -48,18 +49,21 @@ class Arrow extends Component
 					
 		this.setAction("redraw",
 		"
-		var p = new flash.geom.Point(.5*this.box.width, .5*this.box.height);
+		var s = Size.fromRect(this.box).shift(1);
+		var p = new flash.geom.Point(s.width, s.height);
 		this.graphics.clear();
 		this.graphics.lineStyle(1, Color.darken(this.color, 16), 1, true,
 				    flash.display.LineScaleMode.NONE,
 				    flash.display.CapsStyle.ROUND,
 				    flash.display.JointStyle.ROUND);
-	
+
 		this.graphics.beginFill( this.color );
+
 		this.graphics.moveTo(-p.x,-p.y);
 		this.graphics.lineTo(p.x, 0);
 		this.graphics.lineTo(-p.x, p.y);
 		this.graphics.lineTo(-p.x,-p.y);
+
 		this.graphics.endFill();
 		"
 		);

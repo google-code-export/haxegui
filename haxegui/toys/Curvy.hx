@@ -34,7 +34,7 @@ import flash.events.FocusEvent;
 import haxegui.managers.StyleManager;
 
 
-import haxegui.Component;
+import haxegui.controls.Component;
 
 
 class Curvy extends Component

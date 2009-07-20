@@ -58,7 +58,7 @@ import haxegui.controls.UiList;
 
 import haxegui.Window;
 import haxegui.windowClasses.StatusBar;
-
+import haxegui.controls.Component;
 
 
 /**

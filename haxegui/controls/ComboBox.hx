@@ -29,8 +29,8 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-
-import haxegui.Component;
+import haxegui.controls.Component;
+import haxegui.controls.Component;
 import haxegui.Opts;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
@@ -124,8 +124,7 @@ class ComboBoxBackground extends Component
 
 /**
 *
-* ComboBox composited of a button for the pull-down menu, and an optional Input
-* for custom values.
+* ComboBox is composited of a button for the pull-down menu, and an optional Input for custom values.
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>

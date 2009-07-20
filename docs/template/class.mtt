@@ -56,9 +56,13 @@ function add() {
 
 	var doc = XML.parse(xml);
 
-	var node = doc.createElement("haxegui.controls.::name::");
+	var node = doc.createElement("::nameDots::");
+::if packageDots.split(".").pop() == "controls" ::
 	doc.getElementsByTagName("haxegui.containers.Container")[0].appendChild(node);
-
+::else::
+	doc.getElementsByTagName("haxegui.Layout")[0].appendChild(node);
+::end::
+	
 	xml = (new XMLSerializer()).serializeToString(doc);
 	xml = xml.split(".").join(":")
 	document.getElementById("sample_code").value = xml;
@@ -130,7 +134,6 @@ function windowTitle()
 
 	<div class="doc">$$typeDocs()</div>
 
-
 	::if staticVars.length > 0::
 	<!-- ============ STATIC VAR DETAIL =========== -->
 	<div class="members-panel">
@@ -138,8 +141,7 @@ function windowTitle()
 		<div class="members">
 			::foreach f staticVars::
 			<div class="member">
-				<div class="header">$$varHeader(::f::)</div>
-				<div class="body">$$varDocs(::f::)</div>
+				<div class="header">$$linkVarHeader(::f::)</div>
 			</div>
 			::end::
 		</div>
@@ -153,31 +155,15 @@ function windowTitle()
 		<div class="members">
 			::foreach m staticMethods::
 			<div class="member">
-				<div class="header">$$methodHeader(::m::)</div>
-				<div class="body">$$methodDocs(::m::)</div>
+				<div class="header">$$linkMethodHeader(::m::)</div>
 			</div>
 			::end::
 		</div>
 	</div>
 	::end::
 
-	::if constructor != null::
-	<!-- ========= CONSTRUCTOR DETAIL ======== -->
-	<div class="members-panel">
-		<h2><a name="constructor_detail"></a>Constructor</h2>
-		<div class="members">
-			<div class="member">
-				<div class="header">
-					<a name="::raw constructor.name::()"></a>$$showAccess(::constructor::)<span class="name">::raw constructor.name::</span>(::if constructor.args != null::::raw constructor.args::::end::)
-				</div>
-				<div class="body">$$methodDocs(::constructor::)</div>
-			</div>
-		</div>
-	</div>
-	::end::
-
 	::if vars.length > 0::
-	<!-- ============ FIELD field_detail =========== -->
+	<!-- ============ FIELD =========== -->
 	<div class="members-panel">
 		<h2><a name="member_var_detail"></a>Instance Variables
 			::if superClasses.length > 0::
@@ -202,20 +188,22 @@ function windowTitle()
 			::end::
 			<span class="::spanClass::">
 				<div class="member">
-					<div class="header">$$varHeader(::f::)</div>
-					<div class="body">$$varDocs(::f::)</div>
+					::if repeat.f.even == true::
+						::set zebra = "zebra"::
+					::else::
+						::set zebra = ""::						
+					::end::
+					<div class="header ::zebra::">$$linkVarHeader(::f::)</div>
 				</div>
 			</span>
 			::end::
 		</div>
-		
-		
-		
+
 	</div>
 	::end::
 
 	::if methods.length > 0::
-	<!-- ============ METHOD DETAIL ========== -->
+	<!-- ============ METHOD  ========== -->
 	<div class="members-panel">
 		<h2><a name="method_detail"></a>Instance Methods
 			::if superClasses.length > 0::
@@ -240,7 +228,134 @@ function windowTitle()
 			::end::
 			<span class="::spanClass::">
 				<div class="member">
-					<div class="header">$$methodHeader(::m::)</div>
+					::if repeat.m.even == true::
+						::set zebra = "zebra"::
+					::else::
+						::set zebra = ""::						
+					::end::
+					<div class="header ::zebra::">$$linkMethodHeader(::m::)</div>
+				</div>
+			</span>
+			::end::
+		</div>
+	</div>
+	::end::
+	
+	::if constructor != null::
+	<!-- ========= CONSTRUCTOR DETAIL ======== -->
+	<div class="members-panel">
+		<h2><a name="constructor_detail"></a>Constructor</h2>
+		<div class="members">
+			<div class="member">
+				<div class="header">
+					<a name="::raw constructor.name::()"></a>$$showAccess(::constructor::)<span class="name">::raw constructor.name::</span>(::if constructor.args != null::::raw constructor.args::::end::)
+				</div>		
+				<div class="body">$$methodDocs(::constructor::)</div>
+			</div>
+		</div>
+	</div>
+	::end::
+
+
+	::if staticVars.length > 0::
+	<!-- ============ STATIC VAR DETAIL =========== -->
+	<div class="members-panel">
+		<h2><a name="static_var_detail"></a>Static Variables Details</h2>
+		<div class="members">
+			::foreach f staticVars::
+			<div class="member">
+				<div class="header_detail">$$varHeader(::f::)</div>
+				::if f.docs::
+				<div class="body">$$varDocs(::f::)</div>
+				::end::
+			</div>
+			::end::
+		</div>
+	</div>
+	::end::
+
+	::if staticMethods.length > 0::
+	<!-- ============ STATIC METHOD DETAIL ========== -->
+	<div class="members-panel">
+		<h2><a name="function_detail"></a>Static Methods Details</h2>
+		<div class="members">
+			::foreach m staticMethods::
+			<div class="member">
+				<div class="header_detail">$$methodHeader(::m::)</div>
+				::if m.docs::
+				<div class="body">$$methodDocs(::m::)</div>
+				::end::
+			</div>
+			::end::
+		</div>
+	</div>
+	::end::
+	
+	::if vars.length > 0::
+	<!-- ============ FIELD DETAIL =========== -->
+	<div class="members-panel">
+		<h2><a name="member_var_detail"></a>Instance Variables Details
+			::if superClasses.length > 0::
+			<span id="hideInheritedVar" class="hideInheritedVar">
+				<a class="showHideLink" href="#member_var_detail" onclick="javascript:showInherited('Var', false);">
+				hide inherited
+				</a>
+			</span>
+			<span id="showInheritedVar" class="showInheritedVar">
+				<a class="showHideLink" href="#member_var_detail" onclick="javascript:showInherited('Var', true);">
+				show inherited
+				</a>
+			</span>
+			::end::
+		</h2>
+		<div class="members">
+			::foreach f vars::
+			::if f.isInherited == true::
+				::set spanClass = "hideInheritedVar"::
+			::else::
+				::set spanClass = "showVar"::
+			::end::
+			<span class="::spanClass::">
+				<div class="member"><a name="::f.name::"></a>
+					<div class="header_detail">$$varHeader(::f::)</div>
+					::if f.docs::
+					<div class="body">$$varDocs(::f::)</div>
+					::end::
+				</div>
+			</span>
+			::end::
+		</div>
+
+	</div>
+	::end::
+
+	::if methods.length > 0::
+	<!-- ============ METHOD DETAIL ========== -->
+	<div class="members-panel">
+		<h2><a name="method_detail"></a>Instance Methods Details
+			::if superClasses.length > 0::
+			<span id="hideInheritedMethod" class="hideInheritedMethod">
+				<a class="showHideLink" href="#method_detail" onclick="javascript:showInherited('Method', false);">
+				hide inherited
+				</a>
+			</span>
+			<span id="showInheritedMethod" class="showInheritedMethod">
+				<a class="showHideLink" href="#method_detail" onclick="javascript:showInherited('Method', true);">
+				show inherited
+				</a>
+			</span>
+			::end::
+		</h2>
+		<div class="members">
+			::foreach m methods::
+			::if m.isInherited == true::
+				::set spanClass = "hideInheritedMethod"::
+			::else::
+				::set spanClass = "showMethod"::
+			::end::
+			<span class="::spanClass::">
+				<div class="member">
+					<div class="header_detail">$$methodHeader(::m::)</div>
 					<div class="body">$$methodDocs(::m::)</div>
 				</div>
 			</span>
@@ -249,18 +364,23 @@ function windowTitle()
 	</div>
 	::end::
 	
-	::if packageDots.split(".").pop() == "controls" ::
 	<!-- ============ Class Example ========== -->
+	<div class="members-panel">
+		<h2><a name="example"></a>Example</h2>
+	</div>	
 	<div class="example-code">
+	
 	<p>This should have any extra info on the class and its usage, as well as a small xml example and its result below.</p>
 
 <textarea rows="14" cols="80" id="sample_code" >
 ::set sample = nameDots.split(".").pop() + " Example"::
 <haxegui:Layout name="::sample::">
+	::if packageDots.split(".").pop() == "controls" ::
 	<haxegui:Window>
 		<haxegui:containers:Container>
 		</haxegui:containers:Container>
 	</haxegui:Window>
+	::end::
 </haxegui:Layout>	
 </textarea>
 <button onClick="update()">Update</button>
@@ -270,7 +390,7 @@ function windowTitle()
 	</pre>
 	</div>
 	<div class="example-embed">
-	<object id="sample" type="application/x-shockwave-flash" data="::rootRelative::../../samples/minimal.swf" width="100%" height="400">
+	<object id="sample" type="application/x-shockwave-flash" data="::rootRelative::../../samples/minimal.swf" width="100%" height="600">
 		<param name="movie" value="::rootRelative::../../samples/minimal.swf"/>
 		<param name="play" value="true"/>
 		<param name="loop" value="false"/>
@@ -292,13 +412,12 @@ function windowTitle()
 		-->
 	</object>
 	</div>
-	::end::
 	</div>
 <!-- ========= END OF class DATA ========= -->
 	::if config.footerText != null::<div id="footer">::raw config.footerText::</div>::end::
 </body>
 <script type="text/javascript" src="::rootRelative::../CodeHighlighter.js"></script>
 <script type="text/javascript">
-	CodeHighlighter.highlightAll();
+	CodeHighlighter.highlightAll(true);
 </script>
 </html>
