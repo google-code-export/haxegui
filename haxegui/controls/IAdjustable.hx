@@ -20,9 +20,21 @@
 package haxegui.controls;
 
 import flash.events.Event;
+import flash.events.EventDispatcher;
 
 /**
-* Adjustment class allows reuse \ sharing of values for "range widgets".
+ * AdjustmentObject
+ */
+typedef AdjustmentObject<Dynamic> = {
+    var value : Dynamic;
+    var min   : Dynamic;
+    var max   : Dynamic;
+    var step  : Dynamic;
+    var page  : Dynamic;
+}
+
+/**
+* Adjustment class allows reuse \ sharing of values for "range widgets".<br/>
 * It clamps to min&max, and dispatches an event when one of the values has changed.
 *
 * Notice when using hscript use must use the getters and setters:
@@ -30,7 +42,7 @@ import flash.events.Event;
 * <haxegui:controls:Slider value="0">
 * <events>
 * 	<script type="text/hscript" action="onLoaded">
-* 		this.adjustment.__setValue(50);
+* 		this.adjustment.setValue(50);
 * 	</script>
 * </events>
 * </haxegui:controls:Slider>
@@ -40,78 +52,43 @@ import flash.events.Event;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class Adjustment extends flash.events.EventDispatcher {
+class Adjustment extends EventDispatcher {
     
-    public var value    (default, __setValue) : Float;
-    public var min      (default, __setMin)   : Float;
-    public var max      (default, __setMax)   : Float;
-    public var step     (default, __setStep)  : Float;
-    public var page     (default, __setPage)  : Float;
+    public var object(default, adjust) : AdjustmentObject<Dynamic>;
     
-    public function 
-    new(?value  : Float,
-    	?min	: Float,
-    	?max	: Float,
-    	?step	: Float,
-    	?page	: Float) { 
-		super();
-		this.value = value;
-		this.min = min;
-		this.max = max;
-		this.step = step;
-		this.page = page;
-		notifyChanged();       
-    }
-    
-    public function notifyChanged() {
-        dispatchEvent(new Event(Event.CHANGE));
-    }
-    
-    
-    public override function toString() : String {
-        return "[Adjustment]"+Std.string({value: value, min: min, max: max, step: step, page: page});
-    }
-       
+    public function new(?a:AdjustmentObject<Dynamic>) {
+	super();
+	
+	object = { value: null, min:null, max:null, step:null, page:null};
+	
+	if(a!=null)
+	    object = a;
 
-	//////////////////////////////////////////////////
-	////           Getters/Setters                ////
-	//////////////////////////////////////////////////
-	/** Set value **/
-    public function __setValue(v:Float) : Float {
-        value = v;
-        value = Math.min(max, Math.max(min, value));       
-        notifyChanged();
-        return v;
-    }
-    
-	/** Set the minimum value **/
-    public function __setMin(v:Float) : Float {
-        min = v;
-        notifyChanged();
-        return v;
     }
 
-	/** Set the maximum value **/
-    public function __setMax(v:Float) : Float {
-        max = v;
-        notifyChanged();
-        return v;
-    }
-
-	/** Set the step value **/
-    public function __setStep(v:Float) : Float {
-        step = v;
-        notifyChanged();
-        return v;
-    }
-
-	/** Set the page value **/
-    public function __setPage(v:Float) : Float {
-        page = v;
-        notifyChanged();
-        return v;
+    public function adjust(?a:AdjustmentObject<Dynamic>) : AdjustmentObject<Dynamic> {
+	object = a;
+	dispatchEvent(new Event(Event.CHANGE));
+	return object;
     }
     
+    public function setValue(v:Float) : Float {
+	object.value = v;
+	adjust(object);
+	return v;
+    }
+        
+    public function getValue() : Float {
+	return object.value;
+    }
+
+    public function getStep() : Float {
+	return object.step;
+    }
+    
+    public function valueAsString() : String {
+	return Std.string(getValue());
+    }
     
 }
 

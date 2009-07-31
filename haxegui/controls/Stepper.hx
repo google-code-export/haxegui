@@ -17,6 +17,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+// Imports {{{
 package haxegui.controls;
 
 import flash.geom.Rectangle;
@@ -31,32 +32,37 @@ import haxegui.controls.Component;
 import haxegui.controls.Component;
 import haxegui.controls.Input;
 import haxegui.managers.CursorManager;
-import haxegui.Opts;
+import haxegui.utils.Opts;
 import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 import haxegui.controls.IAdjustable;
 
+import haxegui.toys.Arrow;
+import haxegui.toys.Socket;
+
 import haxegui.utils.Color;
 import haxegui.utils.Size;
+//}}}
 
 /**
- *
- * 
- */
-class StepperUpButton extends AbstractButton
+* A Button with an arrow pointing up.
+*/
+class StepperUpButton extends Button
 {
+	public var arrow : Arrow;
+
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, Stepper)) throw parent+" not a Stepper";
 		mouseChildren = false;
 		super.init(opts);
-		var arrow = new haxegui.toys.Arrow(this);
+		arrow = new haxegui.toys.Arrow(this);
 		arrow.init({ color: haxegui.utils.Color.darken(this.color, 20), width: .5*(cast this.parent).box.height-6, height: 8 });
 		arrow.rotation = -90;
 		arrow.move(6,1);
 	}
-	
+
 	static function __init__() {
 		haxegui.Haxegui.register(StepperUpButton);
 
@@ -64,30 +70,30 @@ class StepperUpButton extends AbstractButton
 }
 
 /**
- *
- * 
- */
-class StepperDownButton extends AbstractButton {
+* A Button with an arrow pointing down.
+*/
+class StepperDownButton extends Button {
+
+	public var arrow : Arrow;
+
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, Stepper)) throw parent+" not a Stepper";
-		mouseChildren = false;	
+		mouseChildren = false;
 		super.init(opts);
-		var arrow = new haxegui.toys.Arrow(this);
+		arrow = new haxegui.toys.Arrow(this);
 		arrow.init({ color: haxegui.utils.Color.darken(this.color, 20), width: .5*(cast this.parent).box.height-6, height: 8 });
 		arrow.rotation = 90;
 		arrow.move(6,1);
 	}
-		
+
 	static function __init__() {
 		haxegui.Haxegui.register(StepperDownButton);
 	}
 }
 
 
-
 /**
-*
-* Stepper Class
+* Stepper for numeric values, has an input and up\down buttons.<br/>
 *
 *
 * @author Omer Goshen <gershon@goosemoose.com>
@@ -99,12 +105,11 @@ class Stepper extends Component, implements IAdjustable
 	public var up : StepperUpButton;
 	public var down : StepperDownButton;
 	public var input : Input;
-
 	public var adjustment : Adjustment;
+	public var slot : Socket;
 
-	override public function init(opts:Dynamic=null)
-	{
-		adjustment = new Adjustment(0, 0, 100, 1, 10);
+	override public function init(opts:Dynamic=null) {
+		adjustment = new Adjustment({ value: 0, min: 0, max: 100, step: 1, page: 10 });
 		box = new Size(40, 20).toRect();
 		color = DefaultStyle.BACKGROUND;
 
@@ -113,15 +118,17 @@ class Stepper extends Component, implements IAdjustable
 		down = new StepperDownButton(this);
 
 		var aOpts = Opts.clone(opts);
-		adjustment.value = Opts.optFloat(opts,"value", adjustment.value);
-		adjustment.min = Opts.optFloat(opts,"min", adjustment.min);
-		adjustment.max = Opts.optFloat(opts,"max", adjustment.max);
-		adjustment.step = Opts.optFloat(opts,"step", adjustment.step);
-		adjustment.page = Opts.optFloat(opts,"page", adjustment.page);
-		Opts.removeFields(aOpts, ["value","step","min","max"]);
+
+		adjustment.object.value = Opts.optFloat(opts,"value", adjustment.object.value);
+		adjustment.object.min = Opts.optFloat(opts,"min", adjustment.object.min);
+		adjustment.object.max = Opts.optFloat(opts,"max", adjustment.object.max);
+		adjustment.object.step = Opts.optFloat(opts,"step", adjustment.object.step);
+		adjustment.object.page = Opts.optFloat(opts,"page", adjustment.object.page);
+
+		Opts.removeFields(aOpts, ["value","step", "page", "min","max"]);
 
 		super.init(aOpts);
-		
+
 		// since we removed fields, reset the initOpts
 		this.initOpts = Opts.clone(opts);
 
@@ -131,26 +138,33 @@ class Stepper extends Component, implements IAdjustable
 		Opts.optFloat(bOpts, "repeatWaitTime", .75);
 
 		// init children
-		input.init({width: box.width, height: box.height, text: Std.string(adjustment.value), disabled: this.disabled });
+		input.init({text: adjustment.object.value, width: box.width, height: box.height, disabled: this.disabled });
 		up.init(bOpts);
 		down.init(bOpts);
 
 		input.setAction("focusIn", "");
 		input.setAction("focusOut", "");
-		
+
 		input.tf.addEventListener (KeyboardEvent.KEY_DOWN, onInput, false, 0, true);
 		input.addEventListener (MoveEvent.MOVE, onInputMoved, false, 0, true);
 		input.addEventListener (ResizeEvent.RESIZE, onInputResized, false, 0, true);
 
+		if(!disabled) {
+			slot = new haxegui.toys.Socket(this);
+			slot.init({radius: 6});
+			slot.moveTo(-14,Std.int(this.box.height)>>1);
+
+		}
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 	}
 
 	private function onInput(e:KeyboardEvent) {
 		switch(e.keyCode) {
-		case flash.ui.Keyboard.ENTER:
-			adjustment.value = Std.parseFloat(e.target.text);
+			case flash.ui.Keyboard.ENTER:
+			adjustment.setValue(Std.parseFloat(e.target.text));
+			//adjustment.value = Std.parseFloat(e.target.text);
 		}
-		
+
 	}
 
 	private function onInputMoved(e:MoveEvent) {
@@ -158,21 +172,21 @@ class Stepper extends Component, implements IAdjustable
 		input.removeEventListener (MoveEvent.MOVE, onInputMoved);
 		input.moveTo(0,0);
 		input.addEventListener (MoveEvent.MOVE, onInputMoved, false, 0, true);
-		
+
 	}
 
 	private function onInputResized(e:ResizeEvent) {
-		up.resize(new Size(box.height, box.height).shift(1)); 
+		up.resize(new Size(box.height, box.height).shift(1));
 		up.moveTo(box.width-up.box.width,0);
-		down.resize(new Size(box.height, box.height).shift(1)); 
+		down.resize(new Size(box.height, box.height).shift(1));
 		down.moveTo(box.width-up.box.width,up.box.height);
 		this.box = input.box.clone();
 	}
 
 	private function onChanged(e:Event)	{
-		input.tf.text = Std.string(adjustment.value);
+		input.setText(adjustment.valueAsString());
 	}
-	
+
 	static function __init__() {
 		haxegui.Haxegui.register(Stepper);
 	}

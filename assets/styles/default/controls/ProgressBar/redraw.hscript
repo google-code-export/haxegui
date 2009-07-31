@@ -4,7 +4,7 @@ this.graphics.lineStyle (1,
 	this.disabled ? Color.darken(this.color, 5) : Color.darken(this.color, 16),
 	1, false, 
 	flash.display.LineScaleMode.NONE,
-	flash.display.CapsStyle.ROUND,
+	flash.display.CapsStyle.NONE,
 	flash.display.JointStyle.ROUND
 	);
 	

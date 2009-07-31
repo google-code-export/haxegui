@@ -1,0 +1,18 @@
+digraph uml {
+	graph [label="Package: flash.net Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="291,10",
+		bb="0,0,582,709"];
+	"flash.net.URLRequestHeader" [label="{URLRequestHeader}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/URLRequestHeader.html", tooltip=URLRequestHeader, portPos=URLRequestHeader, pos="533,49", rects="485,31,582,67", width="1.33", height="0.50"];
+	"flash.net.URLRequest" [label="{URLRequest}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/URLRequest.html", tooltip=URLRequest, portPos=URLRequest, pos="286,49", rects="253,31,319,67", width="0.92", height="0.50"];
+	"flash.net.URLLoader" [label="{URLLoader}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/URLLoader.html", tooltip=URLLoader, portPos=URLLoader, pos="44,104", rects="14,86,75,122", width="0.83", height="0.50"];
+	"flash.net.URLLoaderDataFormat" [label="{URLLoaderDataFormat|VARIABLES\lTEXT\lBINARY\l}", style="rounded,filled", fillcolor=white, pos="286,115", rects="201,96,312,134 312,96,372,134", width="2.36", height="0.53"];
+	"flash.net.FileReferenceList" [label="{FileReferenceList}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/FileReferenceList.html", tooltip=FileReferenceList, portPos=FileReferenceList, pos="44,477", rects="1,459,88,495", width="1.19", height="0.50"];
+	"flash.net.FileFilter" [label="{FileFilter}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/FileFilter.html", tooltip=FileFilter, portPos=FileFilter, pos="44,691", rects="17,673,71,709", width="0.75", height="0.50"];
+	"flash.net.FileReference" [label="{FileReference}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/FileReference.html", tooltip=FileReference, portPos=FileReference, pos="44,39", rects="8,21,80,57", width="1.00", height="0.50"];
+	"flash.net.URLRequest" -> "flash.net.URLRequestHeader" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,485,49 319,49 357,49 422,49 470,49"];
+	"flash.net.URLLoader" -> "flash.net.URLLoaderDataFormat" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,201,111 75,105 103,106 146,108 186,110"];
+	"flash.net.URLLoader" -> "flash.net.URLRequest" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,253,57 75,97 117,88 190,71 238,60"];
+	"flash.net.FileReference" -> "flash.net.URLRequest" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,253,48 80,40 122,42 191,45 238,47"];
+}

@@ -5,6 +5,7 @@
 ### haxelibs Dependencies ###
 -lib feffects
 -lib hscript
+-lib aPath
 ### Resources ###
 -swf-lib assets.swf
 -resource assets/styles/default_style.xml@default_style
@@ -17,10 +18,10 @@
 ### Output ###
 -swf9 main.swf
 -swf-version 9
--swf-header 1024:768:120:3C3C3C
+-swf-header 1024:768:30:3C3C3C
 -xml output.xml
 
---next
 
--main Server
--neko remoting.n
+#--next
+#-main Server
+#-neko remoting.n

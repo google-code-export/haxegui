@@ -41,7 +41,7 @@ import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
 import haxegui.containers.IContainer;
 
-import haxegui.Opts;
+import haxegui.utils.Opts;
 
 
 class DividerHandleButton extends AbstractButton {

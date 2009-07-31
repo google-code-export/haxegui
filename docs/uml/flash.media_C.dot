@@ -1,0 +1,8 @@
+digraph uml {
+	graph [label="Package: flash.media Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="90,10",
+		bb="0,0,180,57"];
+	"flash.media.SoundTransform" [label="{SoundTransform}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/media/SoundTransform.html", tooltip=SoundTransform, portPos=SoundTransform, pos="90,39", rects="47,21,134,57", width="1.19", height="0.50"];
+}

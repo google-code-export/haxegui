@@ -45,52 +45,10 @@
 			<haxegui:controls:Button name="Btn7" x="210" y="4" width="30" icon="STOCK_FIND"/>
 		</haxegui:controls:ToolBar>
 			<haxegui:containers:ScrollPane name="ScrollPane1" x="10" y="84" >
-				<haxegui:containers:Container width="512" height="512" >
-					<haxegui:controls:TabNavigator name="TabNavigator" x="0" y="0" width="512">
-					<events>
-							<script type="text/hscript" action="onLoaded">
-							<![CDATA[
-								function changeStack(e) {
-									var stack = parent.getChildByName("Stack");
-									for( i in 0...stack.numChildren)
-										stack.getChildAt(i).visible = false;
-									stack.getChildAt(this.activeTab).visible = true;
-									this.removeEventListener(flash.events.Event.CHANGE, changeStack);
-									this.getChildByName("TabStepper").adjustment.__setValue(this.activeTab);
-									this.addEventListener(flash.events.Event.CHANGE, changeStack, false, 0, true);
-								}
-								this.addEventListener(flash.events.Event.CHANGE, changeStack, false, 0, true);
-							]]>
-							</script>
-						</events>
-						<haxegui:controls:Tab x="0" width="60"/>
-						<haxegui:controls:Tab x="60" width="60"/>
-						<haxegui:controls:Tab x="120" width="60"/>
-						<haxegui:controls:Label x="120" y="3" >Active tab: </haxegui:controls:Label>
-						<haxegui:controls:Stepper name="TabStepper" x="300" y="2" value="0" step="1" max="2" autoRepeat="false" >
-							<events>
-								<script type="text/hscript" action="onLoaded">
-								<![CDATA[
-									function changeStack(e) {
-										var stack = parent.parent.getChildByName("Stack");
-										for( i in 0...stack.numChildren)
-											stack.getChildAt(i).visible = false;
-										parent.__setActive(this.adjustment.value);
-										stack.getChildAt(this.adjustment.value).visible = true;
-									}
-									this.adjustment.addEventListener(flash.events.Event.CHANGE, changeStack, false, 0, true);
-								]]>
-								</script>
-							</events>
-						</haxegui:controls:Stepper>
-					</haxegui:controls:TabNavigator>
-					
-					<haxegui:containers:Stack name="Stack" y="24" width="512" height="512" selectedIndex="0">
-						<!-- First stack child -->
-						<haxegui:containers:Container width="512" height="512" >
+				<haxegui:containers:Container name="Container1" width="512" height="512" >
 							<haxegui:controls:Label x="14" y="14" >This window and it's content are dynamically generated from xml, Some events are also defined in hscript. </haxegui:controls:Label>
 							<haxegui:controls:Button label="Click" x="30" y="50" width="120" />
-							<haxegui:controls:Button label="Toggle" x="160" y="50" width="60" toggle="true" />
+							<haxegui:controls:PushButton label="Push" x="160" y="50" width="60" />
 							<haxegui:controls:Button label="disabled" x="230" y="50" disabled="true" />
 							<haxegui:controls:Button label="disabled" x="330" y="50" disabled="true" toggle="true" selected="true" />
 							<haxegui:controls:Button name="colorButton" x="430" y="50" label="Red" color="0xB35959">
@@ -98,17 +56,14 @@
 									<script type="text/hscript" action="mouseClick">
 									<![CDATA[
 										if(this.color == 0xB35959) {
-											this.color=0xA1F02A;
-											this.label.tf.text = "Green";
+											this.color = 0xA1F02A;
+											this.label.setText("Green");
 										}
 										else {
-											this.color=0xB35959;
-											this.label.tf.text = "Red";
+											this.color = 0xB35959;
+											this.label.setText("Red");
 										}
-										this.dirty = true;
 										this.redraw();
-										this.label.tf.setTextFormat(DefaultStyle.getTextFormat());
-										
 									]]></script>
 								</events>
 							</haxegui:controls:Button>
@@ -136,7 +91,7 @@
 							<haxegui:controls:Slider x="200" y="190" disabled="true" />
 
 							<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="100" autoRepeat="true" repeatsPerSecond="20" repeatWaitTime=".5" />
-							<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="200" autoRepeat="true" repeatsPerSecond="10" repeatWaitTime=".5" />
+							<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="0.090909091" page="2.5" max="200" autoRepeat="true" repeatsPerSecond="10" repeatWaitTime=".5" />
 							<haxegui:controls:Stepper name="Stepper3" x="360" y="190" value="0" step="10" max="300" disabled="true" />
 
 							<haxegui:controls:Input name="Input1" x="30" y="220" />
@@ -149,7 +104,7 @@
 							<haxegui:controls:RadioButton x="30" y="400" selected="true" disabled="true" />
 
 							<haxegui:controls:Expander x="430" y="90" >
-									<haxegui:controls:UiList x="20" y="20" data="@StringArray" visible="false" />
+									<haxegui:controls:UiList x="24" y="26" data="@StringArray" visible="false" />
 							</haxegui:controls:Expander>
 
 							<haxegui:controls:UiList x="210" y="250">
@@ -179,38 +134,16 @@
 							<haxegui:controls:ProgressBar x="30" y="510" width="300" disabled="true"/>
 
 							<!-- watch this out, if horizontal, set height for width (r220) --> 
-							<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="450" height="300" />
-							<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="480" height="300" />
-							<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="510" height="300" disabled="true"/>
+							<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="550" height="300" />
+							<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="580" height="300" />
+							<haxegui:controls:ScrollBar target="" horizontal="true" x="360" y="610" height="300" disabled="true"/>
 
-						</haxegui:containers:Container>
-						<!-- Second stack child -->
-						<haxegui:containers:Divider width="512" height="512">
-							<haxegui:containers:Container width="512" color="0xFFFFFF">
-								<haxegui:controls:Label x="20" y="20" >Second TabChild</haxegui:controls:Label>
-							</haxegui:containers:Container>
-							<haxegui:containers:Divider horizontal="true" width="512" height="256">
-								<haxegui:containers:Container width="512" color="0xFF00FF"/>
-							</haxegui:containers:Divider>
-						</haxegui:containers:Divider>
-						<!-- Third stack child -->
-						<haxegui:containers:Container width="512" height="512"  >
-							<haxegui:controls:Label x="20" y="20" >Third TabChild</haxegui:controls:Label>
-							<haxegui:controls:RadioButton label="false" x="30" y="110" />
-							<haxegui:controls:RadioButton label="false" x="30" y="140" />
-							<haxegui:controls:RadioButton label="false" x="30" y="170" />
-							<haxegui:controls:RadioButton label="false" x="30" y="200" />
-						</haxegui:containers:Container>
-						<!-- Fourth stack child -->
-						<haxegui:containers:Container name="Container3" width="512" height="512" >
-							<haxegui:Window name="ChildWindow" x="200" y="200" width="180" height="140" color="0xA5DE33">
-								<haxegui:containers:Container name="Container1"  x="10" y="20" width="100%" height="100%" color="0xA5DE33"  >
-									<haxegui:controls:Label x="20" y="4" >I'm a green child window</haxegui:controls:Label>
-									<haxegui:controls:Button label="Click" x="20" y="30" width="120" color="0xA5DE33" />
-						</haxegui:containers:Container>
-					</haxegui:Window>
-				</haxegui:containers:Container>
-					</haxegui:containers:Stack>
+							<haxegui:toys:SevenSegment x="470" y="120" color="0x60181C" digitColor="0xFF0000"/>
+							<haxegui:toys:SevenSegment x="550" y="130" width="50" height="70" color="0x181B60" digitColor="0x0000FF"/>
+
+							<haxegui:toys:Knob x="450" y="440" radius="30"/>
+							<haxegui:toys:Knob x="560" y="440" radius="50"/>
+							<haxegui:toys:Knob x="660" y="440" radius="20"/>
 				</haxegui:containers:Container>
 			</haxegui:containers:ScrollPane>
     </haxegui:Window>

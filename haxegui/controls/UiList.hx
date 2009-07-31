@@ -30,14 +30,14 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 
 import haxegui.controls.Component;
-import haxegui.controls.Component;
-import haxegui.Opts;
+import haxegui.controls.Seperator;
 import haxegui.managers.DragManager;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 
 import haxegui.events.DragEvent;
 import haxegui.events.ListEvent;
+import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 
 import haxegui.toys.Arrow;
@@ -45,10 +45,15 @@ import haxegui.toys.Arrow;
 import haxegui.DataSource;
 import haxegui.controls.IData;
 
+import haxegui.utils.Color;
+import haxegui.utils.Size;
+import haxegui.utils.Opts;
+
 /**
-*
-* ListItem Class
-*
+* List header with labels, seperators and an arrow to show the sort direction.<br/>
+* 
+* @todo Sharing single header among multiple lists, to create a multi-column datagrid like widget...
+* 
 * @version 0.1
 * @author <gershon@goosemoose.com>
 * @author Russell Weir'
@@ -56,73 +61,97 @@ import haxegui.controls.IData;
 */
 class ListHeader extends AbstractButton
 {
-	public var label : Label;
+	public var labels : Array<Label>;
+	public var seperators : Array<Seperator>;
 	public var arrow : Arrow;
 		
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, UiList)) throw parent+" not a UiList";
 
-		mouseChildren = false;
+		//~ mouseChildren = true;
 
 		super.init(opts);
 		
-		label = new Label(this);
-		label.init({innerData : name});
-		label.moveTo(4,4);
-		
+		labels = [new Label(this)];
+		labels[0].init({text : name});
+		labels[0].moveTo(4,4);
+
 		arrow = new Arrow(this);
 		arrow.init({ width: 8, height: 8, color: haxegui.utils.Color.darken(this.color, 20)});
 		arrow.rotation = (cast parent).sortReverse ? -90 : 90;
-		arrow.moveTo((cast parent).box.width - 10, 10);
+		//~ arrow.moveTo((cast parent).box.width - 10, 10);
+		arrow.moveTo( labels[0].x + labels[0].width + 10, 10);
+
 		
+		seperators = [new Seperator(this)];
+		seperators[0].init({});
+		seperators[0].moveTo(labels[0].x + labels[0].width + 18, 4);
+		
+				
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
 
+	override public function onMouseDown(e:MouseEvent) : Void {
+		if(Std.is(e.target, Label)) {
+			e.target.startDrag(false, new Rectangle(0, e.target.y, box.width - e.target.box.width, 0));
+			//~ e.stopImmediatePropagation();
+			CursorManager.getInstance().lock = true;
+			return;
+		}
+		super.onMouseDown(e);
+	}
+
+	override public function onMouseUp(e:MouseEvent) : Void {
+		if(Std.is(e.target, Label)) {
+			e.target.stopDrag();
+			//~ e.stopImmediatePropagation();
+			CursorManager.getInstance().lock = false;
+			return;
+		}
+		super.onMouseUp(e);
+	}
+	
+	public function onParentResize(e:ResizeEvent) {
+		box = (cast parent).box.clone();
+		dirty = true;
+	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(ListHeader);
 	}
 	
-	public function onParentResize(e:ResizeEvent) {
-		this.box = (cast parent).box.clone();
-		dirty = true;
-	}
-	
 }
-
-
 
 
 /**
 *
 * ListItem Class
 *
+* @todo Add an ICellRenderer interface maybe?
+* 
 * @version 0.1
 * @author <gershon@goosemoose.com>
 * @author Russell Weir'
 *
 */
-class ListItem extends AbstractButton
+class ListItem extends AbstractButton, implements IRubberBand
 {
-
 	public var label : Label;
 	public var selected : Bool;
 
 	override public function init(opts:Dynamic=null) {
-		if(!Std.is(parent, UiList)) throw parent+" not a UiList";
-		box = new Rectangle(0,0, 140, 100);
+		if(!Std.is(parent, UiList) && !Std.is(parent, PopupMenu)) throw parent+" not a UiList";
+		box = new Size(140, 20).toRect();
 		color = DefaultStyle.INPUT_BACK;
 		
 		super.init(opts);
 
 		label = new Label(this);
-		var txt = Opts.optString(opts, "label", name);
-		label.init({innerData: txt, color: DefaultStyle.INPUT_TEXT });
-		label.text = null;
+		label.init({text: Opts.optString(opts, "label", name), color: DefaultStyle.INPUT_TEXT });
 		label.move(4,4);
 		label.mouseEnabled = false;
 		
-		text = null;
+		description = null;
 		
 		// add the drop-shadow filter
 		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, true, false, false );
@@ -139,7 +168,7 @@ class ListItem extends AbstractButton
 	}
 	
 	public function onParentResize(e:ResizeEvent) {
-		this.box.width = (cast parent).box.width;
+		box.width = (cast parent).box.width;
 		dirty = true;
 	}
 
@@ -147,33 +176,48 @@ class ListItem extends AbstractButton
 }
 
 
-
-
 /**
 *
-* Sortable List Class
+* Sortable List Class.<br/>
 *
+* The list will follow it's header it moved.
+*
+* @todo ScrollBar, or maybe leave it out, and keep lists in a ScrollPane...
+*  
 * @version 0.1
 * @author <gershon@goosemoose.com>
 * @author Russell Weir'
 *
 */
-class UiList extends Component, implements IData
+class UiList extends Component, implements IData, implements ArrayAccess<ListItem>
 {
-
+	/** Header for this list **/
 	public var header : ListHeader;
+	
+	/** [Array] of items **/
+	public var items  : List<ListItem>;
+
+	/** **/
+	public var scrollbar : ScrollBar;
 
 	public var data : Dynamic;
 	public var dataSource( default, __setDataSource ) : DataSource;
 	
+	/** sort direction, default (false) is ascending **/
 	public var sortReverse : Bool;
+	
+	/** true to enable dragging of items **/
+	public var dragEnabled : Bool;
+	
+	/** index of the dragged item **/
 	var dragItem : Int;
 
 
 	public override function init(opts : Dynamic=null) {
-		box = new Rectangle(0,0, 140, 100);
+		box = new Size(140, 100).toRect();
 		color = DefaultStyle.BACKGROUND;
 		sortReverse = false;
+		items = new List<ListItem>();
 		
 		if(Std.is(parent, Component))
 			color = (cast parent).color;
@@ -223,11 +267,12 @@ class UiList extends Component, implements IData
 		}
 
 		for(i in this) {
-			untyped box.width = i.box.width = Math.max(box.width, i.label.tf.width);
+			//untyped box.width = i.box.width = Math.max(box.width, i.label.tf.width);
 			(cast i).dirty=true;
 		}
 		
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
+		header.addEventListener(MoveEvent.MOVE, onHeaderMove, false, 0, true);
 /*
 		setAction("mouseClick",
 		"
@@ -251,6 +296,13 @@ class UiList extends Component, implements IData
 		);
 */		
 	}
+
+	public function onHeaderMove(e:MoveEvent) {
+		this.move(header.x, header.y);
+		header.x = 0;
+		header.y = 0;
+	}
+	
 
 	public function __setDataSource(d:DataSource) : DataSource {
 		dataSource = d;
@@ -279,10 +331,16 @@ class UiList extends Component, implements IData
 		return dataSource;
 	}
 
+	override function addChild(child : flash.display.DisplayObject) : flash.display.DisplayObject {
+		if(Std.is(child, ListItem)) 
+			items.push(cast child);
+		return super.addChild(child);
+	}
+	
 
 	private  function onData(e:Event) {
 		#if debug
-			trace(e);
+		trace(e);
 		#end
 		
 		data = dataSource.data;
@@ -332,7 +390,5 @@ class UiList extends Component, implements IData
 	static function __init__() {
 		haxegui.Haxegui.register(UiList);
 	}
-
-
 
 }

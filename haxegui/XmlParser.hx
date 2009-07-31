@@ -201,7 +201,7 @@ class XmlParser {
 					if(Std.string(node.firstChild().nodeValue).charAt(0)!="\t") {
 						var str : String = node.firstChild().nodeValue;
 						str = str.split("\t").join("");
-						Reflect.setField(args, "innerData", str );
+						Reflect.setField(args, "text", str );
 					}
 				}
 			}

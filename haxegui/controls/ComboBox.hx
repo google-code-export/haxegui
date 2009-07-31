@@ -22,7 +22,6 @@ package haxegui.controls;
 import flash.geom.Rectangle;
 
 import flash.display.Sprite;
-import flash.display.MovieClip;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.events.Event;
@@ -30,12 +29,18 @@ import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
 import haxegui.controls.Component;
-import haxegui.controls.Component;
-import haxegui.Opts;
+import haxegui.controls.IAdjustable;
+import haxegui.controls.Button;
+import haxegui.controls.PopupMenu;
+import haxegui.utils.Opts;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
+import haxegui.events.MenuEvent;
+
+import haxegui.toys.Socket;
+import haxegui.toys.Arrow;
 
 import haxegui.utils.Size;
 import haxegui.utils.Color;
@@ -54,13 +59,13 @@ import haxegui.DataSource;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ComboBoxDropButton extends AbstractButton {
-
-	public var arrow : haxegui.toys.Arrow;
+class ComboBoxDropButton extends PushButton
+{    
+	public var arrow : Arrow;
 	
 	public override function init(opts:Dynamic=null) {
 		if(!Std.is(parent, ComboBox)) throw parent+" not a ComboBox";
-		
+		selected = false;
 		mouseChildren = false;
 		
 		super.init(opts);
@@ -72,8 +77,55 @@ class ComboBoxDropButton extends AbstractButton {
 		arrow.mouseEnabled = false;
 		
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
+		
+	}
+	
+
+	public override function onMouseClick(e:MouseEvent) {
+		if(this.disabled) return;
+		
+		var p = new flash.geom.Point( parent.x, parent.y );		 	
+		p = parent.parent.localToGlobal(p);
+
+
+		(cast parent).menu = new PopupMenu();
+
+		var menu = (cast parent).menu;
+		
+		menu.data = (cast parent).data;
+		menu.addEventListener(MenuEvent.MENU_SHOW, (cast parent).onMenuShow, false, 0, true);
+		menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
+				
+		menu.init({color: DefaultStyle.INPUT_BACK});
+		
+		menu.x = p.x + 1;
+		menu.y = p.y + 20;
+		menu.box.width = (cast parent).box.width - 22;
+		//parent.list.box.height = 200;
+		//parent.list.. = [];
+
+		//menu.__setDataSource( parent.dataSource );
+		//for(i in 1...10)
+		//parent.list.data.push("List Item "+i);
+		//parent.list.data = parent.data;
+
+		//~ menu.dispatchEvent(new MenuEvent(MenuEvent.MENU_SHOW));
+
+		super.onMouseClick(e);
+	}
+	
+	public function onMenuShow(e:MenuEvent) {
+		parent.dispatchEvent(e);
+//		(cast parent).menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
 	}
 
+	public function onMenuHide(e:MenuEvent) {
+		selected = false;
+		//dirty = true;	
+		redraw();	
+		//trace(selected);
+	}
+	
 	public function onParentResize(e:ResizeEvent) {
 		untyped moveTo(parent.box.width - box.width, -1);
 		untyped box  = parent.box.clone();
@@ -85,7 +137,7 @@ class ComboBoxDropButton extends AbstractButton {
 	public override function onResize(e:ResizeEvent) {
 		arrow.box = box.clone();
 		arrow.box.inflate(-6,-6);
-		arrow.moveTo(.5*box.width, .5*box.height+1);
+		arrow.center();
 		arrow.dirty = true;
 		super.onResize(e);
 	}
@@ -104,8 +156,10 @@ class ComboBoxDropButton extends AbstractButton {
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class ComboBoxBackground extends Component
+class ComboBoxBackground extends AbstractButton
 {
+	public var label : Label;
+	
 	static function __init__() {
 		haxegui.Haxegui.register(ComboBoxBackground);
 	}
@@ -130,26 +184,35 @@ class ComboBoxBackground extends Component
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ComboBox extends Component
+class ComboBox extends Component, implements IData, implements IAdjustable
 {
 	public var background : ComboBoxBackground;
 	public var dropButton : ComboBoxDropButton;
 	
 	public var input	  : Input;
 	
-	public var list 	  : UiList;
+	public var menu 	  : PopupMenu;
 	
-	public var  dataSource( default, __setDataSource ) : DataSource;
+	public var dataSource( default, __setDataSource ) : DataSource;
+
+	public var data : Dynamic;
 
 	private var editable : Bool;
+
+	public var slot : Socket;
+	public var adjustment : Adjustment;
+
 
 	public override function init(?opts:Dynamic) {
 		color = DefaultStyle.BACKGROUND;
 		//box = new Rectangle(0,0,140,20);
 		box = new Size(140,20).toRect();
 		editable = true;
-		list = null;
+		//~ menu = null;
+		adjustment = new Adjustment({ value: 0, min: 0, max: 1, step:null, page: null});
+		menu = new PopupMenu();
 		
+
 		super.init(opts);
 
 		editable = Opts.optBool(opts, "editable", editable);
@@ -163,7 +226,7 @@ class ComboBox extends Component
 			if(input != null && input.parent == this)
 				removeChild(input);
 			input = new Input(this);
-			input.init({width: this.box.width, text: this.name, disabled: this.disabled});
+			input.init({width: this.box.width, text: Opts.optString(opts, "text", this.name), disabled: this.disabled});
 			input.redraw();
 		}
 		else {
@@ -180,16 +243,33 @@ class ComboBox extends Component
 		dropButton.box = new Size(20,20).toRect();
 		dropButton.moveTo(box.width-box.height,-1);
 
-
+		
+		if(!disabled) {
+			slot = new haxegui.toys.Socket(this);
+			slot.init();
+			slot.moveTo(-14,Std.int(this.box.height)>>1);
+	
+			slot.color = Color.tint(slot.color, .5);
+		}	
+		
 		input.addEventListener(MoveEvent.MOVE, onInputMoved, false, 0, true);
 		input.addEventListener(ResizeEvent.RESIZE, onInputResized, false, 0, true);
-
+		input.addEventListener(Event.CHANGE, onInputChanged, false, 0, true);		
 	}
-
-	static function __init__() {
-		haxegui.Haxegui.register(ComboBox);
+	
+	public function onInputChanged(e:Event) {
+		dispatchEvent(e);
 	}
-
+	
+	public function onMenuItemSelected(e:MouseEvent) {
+		input.setText(e.target.getChildAt(0).tf.text);
+	}
+	
+	public function onMenuShow(e:MenuEvent) {
+		menu.addEventListener(MouseEvent.MOUSE_DOWN, onMenuItemSelected, false, 0, true);
+	}
+		
+	
 	private function onInputMoved(e:MoveEvent) {
 		move(input.x, input.y);
 		e.target.removeEventListener(MoveEvent.MOVE, onInputMoved);
@@ -201,7 +281,7 @@ class ComboBox extends Component
 		this.box = input.box.clone();
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
-	
+
 
 	public function __setDataSource(d:DataSource) : DataSource {
 		dataSource = d;
@@ -214,6 +294,10 @@ class ComboBox extends Component
 	public override function onResize(e:ResizeEvent) {
 		if(box.width<input.tf.width) return;
 		super.onResize(e);
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(ComboBox);
 	}
 	
 }

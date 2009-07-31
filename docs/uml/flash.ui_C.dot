@@ -1,0 +1,13 @@
+digraph uml {
+	graph [label="Package: flash.ui Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="180,10",
+		bb="0,0,360,510"];
+	"flash.ui.Mouse" [label="{Mouse}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/ui/Mouse.html", tooltip=Mouse, portPos=Mouse, pos="63,39", rects="36,21,90,57", width="0.75", height="0.50"];
+	"flash.ui.ContextMenu" [label="{ContextMenu}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/ui/ContextMenu.html", tooltip=ContextMenu, portPos=ContextMenu, pos="63,252", rects="28,234,99,270", width="0.97", height="0.50"];
+	"flash.ui.ContextMenuBuiltInItems" [label="{ContextMenuBuiltInItems}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/ui/ContextMenuBuiltInItems.html", tooltip=ContextMenuBuiltInItems, portPos=ContextMenuBuiltInItems, pos="299,252", rects="239,234,360,270", width="1.67", height="0.50"];
+	"flash.ui.Keyboard" [label="{Keyboard}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/ui/Keyboard.html", tooltip=Keyboard, portPos=Keyboard, pos="63,386", rects="36,368,91,404", width="0.75", height="0.50"];
+	"flash.ui.KeyLocation" [label="{KeyLocation|STANDARD\lRIGHT\lNUM_PAD\lLEFT\l}", style="rounded,filled", fillcolor=white, pos="63,486", rects="0,462,66,510 66,462,126,510", width="1.75", height="0.67"];
+	"flash.ui.ContextMenu" -> "flash.ui.ContextMenuBuiltInItems" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,239,252 99,252 132,252 182,252 224,252"];
+}

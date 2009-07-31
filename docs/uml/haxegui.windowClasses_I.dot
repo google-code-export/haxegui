@@ -1,0 +1,22 @@
+digraph uml {
+	graph [label="Package: haxegui.windowClasses Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{StatusBar}",
+		lp="180,10",
+		bb="0,0,360,462"];
+	"haxegui.windowClasses.WindowFrame" [label="{WindowFrame}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/WindowFrame.html", tooltip=WindowFrame, portPos=e, pos="47,93", rects="7,75,88,111", width="1.11", height="0.50"];
+	"haxegui.controls.Component" [pos="283,66", rects="214,48,352,84", width="1.92", height="0.50"];
+	"haxegui.windowClasses.CloseButton" [label="{CloseButton}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/CloseButton.html", tooltip=CloseButton, portPos=e, pos="47,444", rects="10,426,85,462", width="1.03", height="0.50"];
+	"haxegui.controls.AbstractButton" [pos="283,363", rects="207,345,360,381", width="2.11", height="0.50"];
+	"haxegui.windowClasses.MinimizeButton" [label="{MinimizeButton}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/MinimizeButton.html", tooltip=MinimizeButton, portPos=e, pos="47,390", rects="2,372,92,408", width="1.25", height="0.50"];
+	"haxegui.windowClasses.MaximizeButton" [label="{MaximizeButton}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/MaximizeButton.html", tooltip=MaximizeButton, portPos=e, pos="47,336", rects="1,318,94,354", width="1.28", height="0.50"];
+	"haxegui.windowClasses.TitleBar" [label="{TitleBar}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/TitleBar.html", tooltip=TitleBar, portPos=e, pos="47,282", rects="20,264,74,300", width="0.75", height="0.50"];
+	"haxegui.windowClasses.StatusBar" [label="{StatusBar}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/StatusBar.html", tooltip=StatusBar, portPos=e, pos="47,39", rects="15,21,79,57", width="0.89", height="0.50"];
+	"haxegui.windowClasses.WindowFrame" -> "haxegui.controls.Component" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,214,74 88,88 120,84 165,80 204,75"];
+	"haxegui.windowClasses.CloseButton" -> "haxegui.controls.AbstractButton" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,230,381 85,431 122,418 178,399 220,384"];
+	"haxegui.windowClasses.MinimizeButton" -> "haxegui.controls.AbstractButton" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,207,372 92,385 122,381 161,377 197,373"];
+	"haxegui.windowClasses.MaximizeButton" -> "haxegui.controls.AbstractButton" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,207,354 94,341 123,345 162,349 197,353"];
+	"haxegui.windowClasses.TitleBar" -> "haxegui.controls.AbstractButton" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,230,345 74,291 110,303 173,325 220,342"];
+	"haxegui.windowClasses.StatusBar" -> "haxegui.controls.Component" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,214,58 79,43 111,47 161,52 204,57"];
+}

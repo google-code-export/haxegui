@@ -35,6 +35,7 @@ import haxegui.managers.StyleManager;
 import haxegui.controls.Component;
 import haxegui.controls.ScrollBar;
 import haxegui.containers.IContainer;
+import haxegui.utils.Size;
 
 /**
 * Generic "canvas" to put components in.
@@ -59,11 +60,13 @@ class Container extends Component, implements IContainer
 
 	override public function init(opts : Dynamic=null) {
 		super.init(opts);
-		text = null;
+		description = null;
 		
 		if(Std.is(parent, haxegui.Window))
 			if(x==0 && y==0)
 				move(10,20);
+	
+		//~ filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8,0.5,flash.filters.BitmapFilterQuality.HIGH,true,false,false)];
 		
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
@@ -71,29 +74,20 @@ class Container extends Component, implements IContainer
 
 
 	private function onParentResize(e:ResizeEvent) {		
-		if(Std.is(parent, Divider)) untyped {
-		/*
-			var b = parent.box.clone();
-			b.height = parent.handle.y;
-			box = b;
-		*/
-		}
-		else
-		if(Std.is(parent.parent, ScrollPane)) {
-			box = untyped parent.parent.box.clone();
-		}
-		else
-		if(Std.is(parent, Component))
-		{
-			box = untyped parent.box.clone();
-			box.width -= x;
-			box.height -= y;
-		}		
+		var size = new Size();
 		
-		if(getElementsByClass(ScrollBar).hasNext())
-			this.box.width -= 20;
+		if(Std.is(parent, Component)) 
+			size = new Size((cast parent).box.width - x, (cast parent).box.height - y);
+		else
+			size = new Size(parent.width, parent.height);
+			
+		//~ if(getElementsByClass(ScrollBar).hasNext())
+			//~ size.width -= 20;
 
-		dirty = true;
+		box = size.toRect();
+redraw();		
+dirty = false;
+		//~ dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 

@@ -1,17 +1,18 @@
 if(!this.disabled) {
 
-	if(parent.handleMotionTween!=null)
-		parent.handleMotionTween.stop();
+	if(this.positionTween!=null)
+		this.positionTween.stop();
 	
 	if(parent.up!=null)
 		parent.up.stopInterval();
+		
 	if(parent.down!=null)
 		parent.down.stopInterval();
 		
 	this.startDrag(false, 
 		new flash.geom.Rectangle(
-		0, .5*parent.up.height-2,
-		0, .5*parent.box.height - 2*parent.down.height + 14)
+		0, 20-2,
+		0, this.parent.box.height - this.box.height + 4 - 40)
 		);
 
 	this.stage.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove, false, 0, true);

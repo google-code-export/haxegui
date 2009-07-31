@@ -100,6 +100,8 @@ class WindowManager extends EventDispatcher
 		if(wnd.parent == null) return;
 		wnd.parent.addChild(wnd);
         current = wnd;
+   		if(flash.Lib.current.getChildByName("patchLayer")!=null)
+			flash.Lib.current.setChildIndex(flash.Lib.current.getChildByName("patchLayer"), flash.Lib.current.numChildren-1);
 	}
 
 

@@ -1,0 +1,30 @@
+digraph uml {
+	graph [label="Package: flash.filters Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{GradientGlowFilter}",
+		lp="184,10",
+		bb="0,0,368,754"];
+	"flash.filters.BitmapFilterQuality" [label="{BitmapFilterQuality}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/filters/BitmapFilterQuality.html", tooltip=BitmapFilterQuality, portPos=e, pos="91,39", rects="38,21,144,57", width="1.47", height="0.50"];
+	"flash.filters.BitmapFilter" [label="{BitmapFilter}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/filters/BitmapFilter.html", tooltip=BitmapFilter, portPos=e, pos="331,360", rects="295,342,368,378", width="1.00", height="0.50"];
+	"flash.filters.GlowFilter" [label="{GlowFilter}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/filters/GlowFilter.html", tooltip=GlowFilter, portPos=e, pos="91,576", rects="61,558,122,594", width="0.83", height="0.50"];
+	"flash.filters.BlurFilter" [label="{BlurFilter}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/filters/BlurFilter.html", tooltip=BlurFilter, portPos=e, pos="91,522", rects="63,504,120,540", width="0.78", height="0.50"];
+	"flash.filters.DisplacementMapFilter" [label="{DisplacementMapFilter}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/filters/DisplacementMapFilter.html", tooltip=DisplacementMapFilter, portPos=e, pos="91,468", rects="29,450,154,486", width="1.72", height="0.50"];
+	"flash.filters.BevelFilter" [label="{BevelFilter}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/filters/BevelFilter.html", tooltip=BevelFilter, portPos=e, pos="91,414", rects="59,396,124,432", width="0.89", height="0.50"];
+	"flash.filters.ColorMatrixFilter" [label="{ColorMatrixFilter}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/filters/ColorMatrixFilter.html", tooltip=ColorMatrixFilter, portPos=e, pos="91,360", rects="45,342,138,378", width="1.28", height="0.50"];
+	"flash.filters.BitmapFilterType" [label="{BitmapFilterType|OUTER\lINNER\lFULL\l}", style="rounded,filled", fillcolor=white, pos="91,656", rects="26,637,111,675 111,637,156,675", width="1.81", height="0.53"];
+	"flash.filters.ConvolutionFilter" [label="{ConvolutionFilter}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/filters/ConvolutionFilter.html", tooltip=ConvolutionFilter, portPos=e, pos="91,306", rects="44,288,139,324", width="1.31", height="0.50"];
+	"flash.filters.GradientBevelFilter" [label="{GradientBevelFilter}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/filters/GradientBevelFilter.html", tooltip=GradientBevelFilter, portPos=e, pos="91,252", rects="38,234,144,270", width="1.47", height="0.50"];
+	"flash.filters.DisplacementMapFilterMode" [label="{DisplacementMapFilterMode|WRAP\lIGNORE\lCOLOR\lCLAMP\l}", style="rounded,filled", fillcolor=white, pos="91,730", rects="0,706,134,754 134,706,182,754", width="2.53", height="0.67"];
+	"flash.filters.DropShadowFilter" [label="{DropShadowFilter}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/filters/DropShadowFilter.html", tooltip=DropShadowFilter, portPos=e, pos="91,198", rects="42,180,141,216", width="1.36", height="0.50"];
+	"flash.filters.GradientGlowFilter" [label="{GradientGlowFilter}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/filters/GradientGlowFilter.html", tooltip=GradientGlowFilter, portPos=e, pos="91,144", rects="40,126,142,162", width="1.42", height="0.50"];
+	"flash.filters.GlowFilter" -> "flash.filters.BitmapFilter" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,322,378 122,571 141,568 164,561 182,549 245,506 294,428 317,387"];
+	"flash.filters.BlurFilter" -> "flash.filters.BitmapFilter" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,316,378 120,517 139,512 163,506 182,495 233,466 282,416 309,386"];
+	"flash.filters.DisplacementMapFilter" -> "flash.filters.BitmapFilter" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,302,378 154,451 164,448 173,445 182,441 222,425 264,401 293,383"];
+	"flash.filters.BevelFilter" -> "flash.filters.BitmapFilter" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,295,368 124,407 166,398 238,381 285,370"];
+	"flash.filters.ColorMatrixFilter" -> "flash.filters.BitmapFilter" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,295,360 138,360 180,360 243,360 285,360"];
+	"flash.filters.ConvolutionFilter" -> "flash.filters.BitmapFilter" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,295,352 139,317 181,327 243,341 285,350"];
+	"flash.filters.GradientBevelFilter" -> "flash.filters.BitmapFilter" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,303,342 144,265 157,269 170,274 182,279 222,295 264,319 294,337"];
+	"flash.filters.DropShadowFilter" -> "flash.filters.BitmapFilter" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,316,342 141,209 155,213 170,218 182,225 233,253 282,304 309,334"];
+	"flash.filters.GradientGlowFilter" -> "flash.filters.BitmapFilter" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,322,342 142,153 156,157 170,163 182,171 245,215 294,293 317,333"];
+}

@@ -62,7 +62,6 @@ class ScriptStandardLibrary
 		
 		interp.variables.set( "baseURL", haxegui.Haxegui.baseURL );
 	
-
 		interp.variables.set("feffects",
 			{
 				Tween : feffects.Tween,
@@ -235,15 +234,16 @@ class ScriptStandardLibrary
 		interp.variables.set("Color", haxegui.utils.Color);
 		interp.variables.set("DataSource", haxegui.DataSource);
 		interp.variables.set("DefaultStyle", DefaultStyle);
+		interp.variables.set("Dialog", haxegui.Dialog);
 		interp.variables.set("DragManager", haxegui.managers.DragManager);
 		interp.variables.set("FocusManager", haxegui.managers.FocusManager);
 		interp.variables.set("Haxegui", haxegui.Haxegui);
-		interp.variables.set("Image", haxegui.Image);
+		interp.variables.set("Image", haxegui.controls.Image);
 		interp.variables.set("Introspector", haxegui.Introspector);
 		interp.variables.set("LayoutManager", haxegui.managers.LayoutManager);
 		interp.variables.set("MenuBar", haxegui.controls.MenuBar);
 		interp.variables.set("MouseManager", haxegui.managers.MouseManager);
-		interp.variables.set("Opts", haxegui.Opts);
+		interp.variables.set("Opts", haxegui.utils.Opts);
 		interp.variables.set("PopupMenu", haxegui.controls.PopupMenu);
 		interp.variables.set("RichTextEditor", haxegui.RichTextEditor);
 		interp.variables.set("ScrollPane", haxegui.containers.ScrollPane);
@@ -255,7 +255,7 @@ class ScriptStandardLibrary
 		interp.variables.set("StyleManager", StyleManager);
 		interp.variables.set("ToolBar", haxegui.controls.ToolBar);
 		interp.variables.set("TooltipManager", haxegui.managers.TooltipManager);
-		interp.variables.set("Utils", haxegui.Utils);
+		interp.variables.set("Printing", haxegui.utils.Printing);
 		interp.variables.set("Window", haxegui.Window);
 		interp.variables.set("WindowManager", haxegui.managers.WindowManager);
 		interp.variables.set("XmlParser", haxegui.XmlParser);
@@ -299,9 +299,16 @@ class ScriptStandardLibrary
 
 		interp.variables.set("toys",
 			{
+				AnalogCloc			: haxegui.toys.AnalogClock,
 				Arrow				: haxegui.toys.Arrow,
+				Circle				: haxegui.toys.Circle,
 				Curvy				: haxegui.toys.Curvy,
+				Knob				: haxegui.toys.Knob,
+				Line				: haxegui.toys.Line,
+				Patch				: haxegui.toys.Patch,
 				Rectangle			: haxegui.toys.Rectangle,
+				SevenSegment		: haxegui.toys.SevenSegment,
+				Socket				: haxegui.toys.Socket,
 				Transformer			: haxegui.toys.Transformer
 			}
 			);

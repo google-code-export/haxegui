@@ -21,19 +21,20 @@ package haxegui.windowClasses;
 
 import flash.display.DisplayObjectContainer;
 import flash.events.MouseEvent;
-import flash.text.TextField;
-import flash.text.TextFormat;
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilterQuality;
+import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.CursorManager;
-import haxegui.Opts;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
 import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
-import haxegui.Window;
+import haxegui.controls.Image;
 import haxegui.controls.Label;
+import haxegui.Window;
+
+import haxegui.utils.Size;
+import haxegui.utils.Color;
+import haxegui.utils.Opts;
 
 /**
 *
@@ -47,13 +48,13 @@ class CloseButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		text = "Close Window";
+		description = "Close Window";
 	}
 
-// 	override public function onMouseClick(e:MouseEvent) : Void	{
-// 		trace("Close clicked on " + parent.parent.toString());
-// 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
-// 	}
+ 	override public function onMouseClick(e:MouseEvent) : Void	{
+ 		trace("Close clicked on " + parent.parent.toString());
+		this.getParentWindow().destroy();
+ 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(CloseButton);
@@ -74,9 +75,8 @@ class MinimizeButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		text = "Minimize Window";
+		description = "Minimize Window";
 	}
-
 
 	override public function onMouseClick(e:MouseEvent) : Void
 	{
@@ -104,7 +104,7 @@ class MaximizeButton extends AbstractButton
 {
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		text = "Maximize Window";
+		description = "Maximize Window";
 	}
 
 	override public function onMouseClick(e:MouseEvent) : Void
@@ -129,12 +129,14 @@ class MaximizeButton extends AbstractButton
 */
 class TitleBar extends AbstractButton
 {
-
 	public var title 		  : Label;
 	public var closeButton 	  : CloseButton;
 	public var minimizeButton : MinimizeButton;
 	public var maximizeButton : MaximizeButton;
-
+	public var icon			  : Icon;
+	
+	static inline var titleOffset : Int = -4;
+	
 	override public function init(?opts:Dynamic) {
 		if(!Std.is(parent, Window)) throw parent+" not a Window";
 	
@@ -146,38 +148,38 @@ class TitleBar extends AbstractButton
 		closeButton = new CloseButton(this, "closeButton");
 		closeButton.init({color: this.color });
 		closeButton.moveTo(4,4);
-		var shadow:DropShadowFilter = new DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, BitmapFilterQuality.LOW, true, false, false );
-		closeButton.filters = [shadow];
+		closeButton.filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
 		closeButton.redraw();
 
 		minimizeButton = new MinimizeButton(this, "minimizeButton");
 		minimizeButton.init({color: this.color });
 		minimizeButton.moveTo(20,4);
-		minimizeButton.filters = [shadow];
+		minimizeButton.filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
 
 		maximizeButton = new MaximizeButton(this, "maximizeButton");
 		maximizeButton.init({color: this.color });
 		maximizeButton.moveTo(36,4);
-		maximizeButton.filters = [shadow];
+		maximizeButton.filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
 
 		//closeButton.useHandCursors = minimizeButton.useHandCursors = maximizeButton.useHandCursors = true;
 
 		title = new Label(this);
-		var txt = Opts.optString(opts,"title", name);
-		title.init({innerData: txt});
+		title.init({text: Opts.optString(opts,"title", name)});
 		title.mouseEnabled = false;
 		title.tabEnabled = false;
-		title.moveTo(Std.int(box.width-title.width)>>1, 4);
-		
+		title.center();
+		title.move(0, titleOffset);
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
 
 	override public function onRollOver (e:MouseEvent) {
 		CursorManager.setCursor(this.cursorOver);
+		super.onRollOver(e);
 	}
 
 	override public function onRollOut (e:MouseEvent) {
 		CursorManager.setCursor(Cursor.ARROW);
+		super.onRollOut(e);
 	}
 
 	override public function onMouseDown (e:MouseEvent)	{
@@ -187,8 +189,10 @@ class TitleBar extends AbstractButton
 		if(win != null) {
 			win.startDrag();
 			win.addEventListener(flash.events.MouseEvent.MOUSE_UP, function(e){ win.stopDrag(); });
+			win.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, function(e){ win.dispatchEvent(new MoveEvent(MoveEvent.MOVE)); });
 		}
 		// dispatch(MoveEvent)
+		super.onMouseDown(e);
 	}
 
 	override public function onMouseUp (e:MouseEvent) {
@@ -204,16 +208,18 @@ class TitleBar extends AbstractButton
 			CursorManager.setCursor(this.cursorOver);
 		else
 			CursorManager.setCursor(Cursor.ARROW);
+
+		super.onMouseUp(e);
+	}
+
+	public function onParentResize(e:ResizeEvent) {
+		box = new Size((cast parent).box.width, 32).toRect();
+		redraw();
+		title.center();
+		title.move(0, titleOffset);
 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(TitleBar);
 	}
-
-	public function onParentResize(e:ResizeEvent) {
-		box = new flash.geom.Rectangle(0,0, (cast parent).box.width, 32);
-		title.moveTo(Std.int(box.width-title.width)>>1, 4);
-		redraw();
-	}
-
 }

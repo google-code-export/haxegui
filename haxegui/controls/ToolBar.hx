@@ -54,26 +54,27 @@ import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
 import haxegui.utils.Size;
 
+
 /**
  * 
  * 
  * 
  */
-class Seperator extends Component {
-	
-	static function __init__() {
-		haxegui.Haxegui.register(Seperator);
-
+class ToolBarHandle extends AbstractButton
+{	
+	override public function init (? opts : Dynamic) {
+		super.init();
 	}
-}
+	
+	override public function onMouseDown(e:MouseEvent) {
+		untyped parent.startDrag();
+		stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
+	}
 
-
-/**
- * 
- * 
- * 
- */
-class ToolBarHandle extends AbstractButton {
+	override public function onMouseUp(e:MouseEvent) {
+		untyped parent.stopDrag();
+		stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp, false);
+	}
 	
 	static function __init__() {
 		haxegui.Haxegui.register(ToolBarHandle);
@@ -90,9 +91,10 @@ class ToolBarHandle extends AbstractButton {
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.2
 */
-class ToolBar extends Component
+class ToolBar extends Component, implements IRubberBand
 {
-	public var handle : ToolBarHandle;
+	public var handle 	  : ToolBarHandle;
+	public var seperators : Array<Seperator>;
 
 	override public function init (? opts : Dynamic) {
 		color = DefaultStyle.BACKGROUND;
@@ -100,7 +102,7 @@ class ToolBar extends Component
 
 		super.init(opts);
 		
-		text = null;
+		description = null;
 
 		handle = new ToolBarHandle(this);
 		handle.init();

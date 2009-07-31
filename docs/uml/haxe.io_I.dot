@@ -1,0 +1,17 @@
+digraph uml {
+	graph [label="Package: haxe.io Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{StringInput}",
+		lp="233,10",
+		bb="0,0,466,558"];
+	"haxe.io.Bytes" [label="{Bytes}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/Bytes.html", tooltip=Bytes, portPos=e, pos="60,39", rects="33,21,87,57", width="0.75", height="0.50"];
+	"haxe.io.Error" [label="{Error|Overflow\lOutsideBounds\lCustom\lBlocked\l}", style="rounded,filled", fillcolor=white, pos="60,245", rects="1,221,39,269 39,221,120,269", width="1.64", height="0.67"];
+	"haxe.io.Eof" [label="{Eof}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/Eof.html", tooltip=Eof, portPos=e, pos="60,378", rects="33,360,87,396", width="0.75", height="0.50"];
+	"haxe.io.Input" [label="{Input}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/Input.html", tooltip=Input, portPos=e, pos="439,468", rects="412,450,466,486", width="0.75", height="0.50"];
+	"haxe.io.BytesInput" [label="{BytesInput}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/BytesInput.html", tooltip=BytesInput, portPos=e, pos="266,468", rects="233,450,300,486", width="0.92", height="0.50"];
+	"haxe.io.BytesBuffer" [label="{BytesBuffer}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/BytesBuffer.html", tooltip=BytesBuffer, portPos=e, pos="60,540", rects="24,522,96,558", width="1.00", height="0.50"];
+	"haxe.io.StringInput" [label="{StringInput}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/StringInput.html", tooltip=StringInput, portPos=e, pos="60,468", rects="26,450,95,486", width="0.94", height="0.50"];
+	"haxe.io.BytesInput" -> "haxe.io.Input" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,412,468 300,468 330,468 372,468 402,468"];
+	"haxe.io.StringInput" -> "haxe.io.BytesInput" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,233,468 95,468 131,468 185,468 223,468"];
+}

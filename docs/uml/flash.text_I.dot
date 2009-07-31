@@ -1,0 +1,23 @@
+digraph uml {
+	graph [label="Package: flash.text Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{TextSnapshot}",
+		lp="197,10",
+		bb="0,0,394,868"];
+	"flash.text.StyleSheet" [label="{StyleSheet}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/StyleSheet.html", tooltip=StyleSheet, portPos=e, pos="69,39", rects="35,21,104,57", width="0.94", height="0.50"];
+	"flash.events.EventDispatcher" [pos="322,39", rects="252,21,393,57", width="1.94", height="0.50"];
+	"flash.text.TextFormatAlign" [label="{TextFormatAlign|RIGHT\lLEFT\lJUSTIFY\lCENTER\l}", style="rounded,filled", fillcolor=white, pos="69,222", rects="3,198,86,246 86,198,135,246", width="1.83", height="0.67"];
+	"flash.text.TextFormat" [label="{TextFormat}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextFormat.html", tooltip=TextFormat, portPos=e, pos="69,343", rects="35,325,104,361", width="0.94", height="0.50"];
+	"flash.text.TextFieldAutoSize" [label="{TextFieldAutoSize|RIGHT\lNONE\lLEFT\lCENTER\l}", style="rounded,filled", fillcolor=white, pos="69,434", rects="1,410,88,458 88,410,137,458", width="1.89", height="0.67"];
+	"flash.text.GridFitType" [label="{GridFitType|SUBPIXEL\lPIXEL\lNONE\l}", style="rounded,filled", fillcolor=white, pos="69,510", rects="10,491,72,529 72,491,129,529", width="1.64", height="0.53"];
+	"flash.text.TextField" [label="{TextField}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextField.html", tooltip=TextField, portPos=e, pos="69,573", rects="41,555,97,591", width="0.78", height="0.50"];
+	"flash.display.InteractiveObject" [pos="322,573", rects="251,555,394,591", width="1.97", height="0.50"];
+	"flash.text.TextLineMetrics" [label="{TextLineMetrics}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextLineMetrics.html", tooltip=TextLineMetrics, portPos=e, pos="69,631", rects="25,613,114,649", width="1.22", height="0.50"];
+	"flash.text.TextFieldType" [label="{TextFieldType|INPUT\lDYNAMIC\l}", style="rounded,filled", fillcolor=white, pos="69,687", rects="8,669,78,705 78,669,131,705", width="1.69", height="0.50"];
+	"flash.text.TextSnapshot" [label="{TextSnapshot}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextSnapshot.html", tooltip=TextSnapshot, portPos=e, pos="69,742", rects="29,724,110,760", width="1.11", height="0.50"];
+	"flash.text.TextFormatDisplay" [label="{TextFormatDisplay|INLINE\lBLOCK\l}", style="rounded,filled", fillcolor=white, pos="69,796", rects="0,778,93,814 93,778,138,814", width="1.92", height="0.50"];
+	"flash.text.AntiAliasType" [label="{AntiAliasType|NORMAL\lADVANCED\l}", style="rounded,filled", fillcolor=white, pos="69,850", rects="4,832,75,868 75,832,135,868", width="1.81", height="0.50"];
+	"flash.text.StyleSheet" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,252,39 104,39 139,39 196,39 242,39"];
+	"flash.text.TextField" -> "flash.display.InteractiveObject" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,251,573 97,573 132,573 192,573 241,573"];
+}

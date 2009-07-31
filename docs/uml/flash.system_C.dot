@@ -1,0 +1,24 @@
+digraph uml {
+	graph [label="Package: flash.system Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="354,10",
+		bb="0,0,708,804"];
+	"flash.system.IMEConversionMode" [label="{IMEConversionMode|UNKNOWN\lKOREAN\lJAPANESE_KATAKANA_HALF\lJAPANESE_KATAKANA_FULL\lJAPANESE_HIRAGANA\lCHINESE\lALPHANUMERIC_HAL\
+F\lALPHANUMERIC_FULL\l}", style="rounded,filled", fillcolor=white, pos="594,65", rects="481,21,582,109 582,21,708,109", width="3.14", height="1.22"];
+	"flash.system.ApplicationDomain" [label="{ApplicationDomain}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/ApplicationDomain.html", tooltip=ApplicationDomain, portPos=ApplicationDomain, pos="279,319", rects="232,301,326,337", width="1.31", height="0.50"];
+	"flash.system.SecurityDomain" [label="{SecurityDomain}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/SecurityDomain.html", tooltip=SecurityDomain, portPos=SecurityDomain, pos="279,247", rects="238,229,321,265", width="1.14", height="0.50"];
+	"flash.system.Security" [label="{Security}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/Security.html", tooltip=Security, portPos=Security, pos="39,476", rects="12,458,66,494", width="0.75", height="0.50"];
+	"flash.system.SecurityPanel" [label="{SecurityPanel|SETTINGS_MANAGER\lPRIVACY\lMICROPHONE\lLOCAL_STORAGE\lDISPLAY\lDEFAULT\lCAMERA\l}", style="rounded,filled", fillcolor=white, pos="279,476", rects="190,437,264,515 264,437,368,515", width="2.47", height="1.08"];
+	"flash.system.IME" [label="{IME}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/IME.html", tooltip=IME, portPos=IME, pos="279,65", rects="252,47,306,83", width="0.75", height="0.50"];
+	"flash.system.System" [label="{System}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/System.html", tooltip=System, portPos=System, pos="39,65", rects="12,47,66,83", width="0.75", height="0.50"];
+	"flash.system.Capabilities" [label="{Capabilities}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/Capabilities.html", tooltip=Capabilities, portPos=Capabilities, pos="39,786", rects="6,768,72,804", width="0.92", height="0.50"];
+	"flash.system.LoaderContext" [label="{LoaderContext}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/LoaderContext.html", tooltip=LoaderContext, portPos=LoaderContext, pos="39,291", rects="0,273,78,309", width="1.08", height="0.50"];
+	"flash.system.ApplicationDomain" -> "flash.system.ApplicationDomain" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,301,337 257,337 253,347 261,355 279,355 286,355 292,354 296,351"];
+	"flash.system.SecurityDomain" -> "flash.system.SecurityDomain" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,301,265 257,265 253,275 261,283 279,283 286,283 292,282 296,279"];
+	"flash.system.Security" -> "flash.system.SecurityPanel" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,190,476 66,476 93,476 135,476 175,476"];
+	"flash.system.IME" -> "flash.system.IMEConversionMode" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,481,65 306,65 342,65 407,65 466,65"];
+	"flash.system.System" -> "flash.system.IME" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,252,65 66,65 107,65 187,65 237,65"];
+	"flash.system.LoaderContext" -> "flash.system.ApplicationDomain" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,232,313 78,296 116,300 173,306 217,311"];
+	"flash.system.LoaderContext" -> "flash.system.SecurityDomain" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,238,254 78,284 117,277 179,266 223,257"];
+}

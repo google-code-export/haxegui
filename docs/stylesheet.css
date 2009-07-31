@@ -105,11 +105,9 @@ ul.types, ul.packages, #packages-header ul{
 }
 
 #types-frame h1, #packages-frame h1 {
-	font-size: 77%;
 	font-weight: bold;
 	padding: 2px;
 	color: #ffffff;
-	/*background-color: #608B99;*/
 	text-align: center;
 }
 
@@ -122,13 +120,19 @@ ul.types, ul.packages, #packages-header ul{
 }
 
 .type-frame h1 {
-	font-size: 117%;
+	font-size: 1.5em;
+	line-height: 1.5em;
+	height: 1.5em;
+	background: url(images/header.png) repeat-x ;
 	font-weight: bold;
-	margin-bottom: 0.75em;
-	padding-left: 20px;
-	background-repeat: no-repeat;
-	border: 1px solid 455459;
-	min-height: 16px;
+	border: 1px solid #6B96A4;
+	border-top: 1px solid #C7F1FF;
+	padding-left: 10px;
+}
+
+.type-frame li {
+	margin-left: 20px;
+	line-height: 2.5em;
 }
 
 ul.types li {
@@ -136,6 +140,7 @@ ul.types li {
 	min-height: 18px;
 	padding-left: 18px;
 }
+
 
 .class {
 	background-image: url(images/class.png);
@@ -429,7 +434,9 @@ a.showHideLink {
 }
 .type-frame th {
 	height: 18px;
-	background: #638E9C;
+	border-top: 1px solid #AEE5F7;
+	border-bottom: 1px solid #5A7780;
+	background: url(images/gradient.png) repeat-x center center;
 	color: white;
 	font-weight: bold;
 	text-align: center;

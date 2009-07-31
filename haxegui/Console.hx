@@ -48,11 +48,14 @@ import haxegui.containers.Container;
 import haxegui.controls.ScrollBar;
 
 import hscript.Expr;
+import hscript.Parser;
 
 import haxegui.logging.ILogger;
 import haxegui.logging.ErrorType;
 import haxegui.logging.LogLevel;
 
+import haxegui.utils.Printing;
+import haxegui.utils.Opts;
 
 /**
 *
@@ -168,7 +171,7 @@ class Console extends Window, implements ILogger
 		// Vertical Scrollbar
 		vert = new ScrollBar(container, "vscrollbar");
 		vert.init({target : output, color: this.color});
-
+		vert.removeEventListener(ResizeEvent.RESIZE, vert.onParentResize);
 
 		// if(isSizeable())
 		// {
@@ -194,19 +197,26 @@ class Console extends Window, implements ILogger
 
 			interp.variables.set( "help", help() );
 			interp.variables.set( "clear", function(){ self.clear(); } );
-			interp.variables.set( "print_r", Utils.print_r );
+			interp.variables.set( "print_r", Printing.print_r );
 			interp.variables.set( "history", history );
 			interp.variables.set( "interp", interp );
+			interp.variables.set( "dir", function() { trace( self.interp.variables); } );
+			interp.variables.set( "get", function() { self.getPwdOnNextClick(); } );
+			interp.variables.set( "tree", function() { Printing.print_r(self._pwd); } );
+		
+			interp.variables.set("where", function() { trace(untyped self._pwd.name+" "+self._pwd.box.toString().substr(1).split("=").join("=\"").split(",").join("\"").split(")").join("\"").split("h").join("height").split("w").join("width")); });
+			
 		
 			interp.variables.set( "cd", function(?v) { 
 				if(v==null) return "";
 					switch(v) {
+						case ".":
 						case "..":
 							self.pwd.pop();
 						case "/":
 							self.pwd = ["root"];
 						default:
-						self.pwd.push(v);
+							self.pwd.push(v);
 					}
 
 				var o = cast flash.Lib.current;
@@ -217,19 +227,30 @@ class Console extends Window, implements ILogger
 				return self.pwd.join(".");
 				});
 
-			interp.variables.set( "ls", function(?v) {
-				if(Std.is(v, DisplayObjectContainer))
-					return "ls "+v + Utils.print_r(v);	
+			interp.variables.set( "ls", function(?v,?h) {
+				/*
+				if(Std.is(v, DisplayObjectContainer)) 
+					return "ls "+v + Printing.print_r(v);	
 				else {
 					var o = cast flash.Lib.current;
 					for(i in 1...self.pwd.length)
 						o = cast(o.getChildByName(self.pwd[i]), flash.display.DisplayObjectContainer);
-					return "ls "+self.pwd.join(".") + Utils.print_r(o);	
+					return "ls "+self.pwd.join(".") + Printing.print_r(o);	
 				}
+				*/
+					var o = cast flash.Lib.current;
+					for(i in 1...self.pwd.length)
+						o = untyped o.getChildByName(self.pwd[i]);
+				var txt="";
+				for(i in 0...o.numChildren) {
+					var c = o.getChildAt(i);
+					txt += c.name + "\t";
+					//~ txt += Std.string(Type.typeof((cast o).getChildAt(i)));
+					txt += "\t";
+				}
+				trace(txt);
 				});
 	
-
-
 	}
 
 	/*
@@ -313,7 +334,6 @@ class Console extends Window, implements ILogger
 	}
 
 	override public function onResize (e:ResizeEvent) : Void {
-		// we get asked for a resize when the scrollbar is added to container, but we're not ready yet.
 		if(vert==null) return;
 				
 		super.onResize(e);
@@ -325,14 +345,21 @@ class Console extends Window, implements ILogger
 		input.y = box.height - 40;
 
 		vert.box.height = box.height - 20;
-
+		vert.x = box.width - 30;
+		vert.down.y = Math.max( 20, box.height - 40);	
+		vert.dirty = true;
+		vert.frame.dirty = true;
 	}
 
 	/** Process keyboard input **/
 	public function onInputKeyDown(e:KeyboardEvent) : Void {
 
+		//~ vert.handle.y = box.height - vert.handle.y - 20;
+		//~ vert.scroll=1;
+		//~ vert.adjust();
+		
 		switch(e.keyCode) {
-
+		
 		case Keyboard.ENTER :
 			if(input.text=="")	{
 				trace("");
@@ -340,16 +367,29 @@ class Console extends Window, implements ILogger
 			}
 				
 			// text replacement for shell functions 
-			if(input.text=="ls") input.text="ls()";
-			if(input.text=="cd") input.text="cd()";
+			if(input.text.substr(0,2)=="ls") {
+				var args = input.text.split(" ");
+				var dir = args.pop();
+				//for(a in args)
+				input.text="ls(\""+dir+"\","+Lambda.has(args, "-l")+")";
+			}
+			
+			if(input.text.substr(0,2)=="cd") {
+				var dir=input.text.split(" ").pop();
+				if(dir!="cd")
+				input.text="cd(\""+dir+"\")";
+			}			
+			
 			if(input.text=="clear") input.text="clear()";
+			if(input.text=="dir") input.text="dir()";
+			if(input.text=="get") input.text="get()";
 
 			// set the program
 			var program = parser.parseString(input.text);
 
 			// set the current pwd
 			interp.variables.set("pwd", getPwd());
-			
+
 			// clear the command and push to history
 			history.push(input.text);
 			input.text = "";
@@ -359,7 +399,7 @@ class Console extends Window, implements ILogger
 				if(rv!=null)
 					trace(rv);
 			}
-			catch(e : hscript.Error) {
+			catch(e:hscript.Error) {
 				switch(e) {
 					case EUnknownVariable(v):
 						switch(v) {
@@ -368,14 +408,20 @@ class Console extends Window, implements ILogger
 						}
 					case EUnexpected(s):
 						switch(s) {
+						case "<eof>":
+							log("Unexpected: "+"<B>"+s+"</B>", ErrorType.ERROR);
+							
 						default:
 							log("Unexpected: "+"<B>"+s+"</B>", ErrorType.ERROR);
 						}
+					case EUnterminatedString:
+						trace(e);
 					default:
 						trace(e);
 				}
 			}
 			catch(e : Dynamic) {
+				
 				trace(e);
 			}
 
@@ -384,6 +430,27 @@ class Console extends Window, implements ILogger
 			input.text = history.pop();
 		}
 	}
+	
+	public function getPwdOnNextClick() {
+		stage.addEventListener(MouseEvent.MOUSE_DOWN, getPwdFromClick, false, 0, true);
+		trace("Waiting for click event....");
+	}
+
+	public function getPwdFromClick(e:MouseEvent) {
+		stage.removeEventListener(MouseEvent.MOUSE_DOWN, getPwdFromClick);
+		_pwd = e.target;
+		//pwd = e.target.ancestors().join(".");
+		var o = _pwd;
+		pwd = [];
+		while(o!=flash.Lib.current) {
+			pwd.push(o.name);
+			o = o.parent;
+		}
+		pwd.push("root");
+		pwd.reverse();
+		trace(e.target);
+	}
+
 	
 	/**
 	* Traverses the display list according to the current path 
@@ -412,6 +479,8 @@ class Console extends Window, implements ILogger
 			pwd 	 : "\tcurrent path",
 			cd 		 : "\tpush an object name to current path, ex. cd(\"Component\"), cd(\"..\"), cd(\"/\") ",
 			ls		 : "\tprints current object",
+			get 	 : "\tgrab the path target from next mouse click",
+			dir		 : "\tprints the interpreter's variables list",
 			clear 	 : "clear the console",
 			help 	 : "display this help",
 			

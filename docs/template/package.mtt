@@ -19,7 +19,8 @@
 ::end::
 			<div id="packages-header">
 				<ul>
-					<li class="overview"><a href="::rootRelative::../uml/::packageName::.html" title="::full::" target="classFrame">Class Diagram</a></li>
+					<li class="overview"><a href="::rootRelative::../uml/::packageName::_Inheritance.html" title="::full::" target="classFrame">Inheritance Diagram</a></li>
+					<li class="overview"><a href="::rootRelative::../uml/::packageName::_Composition.html" title="::full::" target="classFrame">Composition Diagram</a></li>
 				</ul>
 			</div>
 

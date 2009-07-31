@@ -32,7 +32,7 @@ import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
-import haxegui.Opts;
+import haxegui.utils.Opts;
 
 
 
@@ -42,8 +42,10 @@ import haxegui.Opts;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class RadioGroup extends AbstractButton
+class RadioGroup extends Component
 {
+	public var buttons : Array<RadioButton>;
+	
 	static function __init__() {
 		haxegui.Haxegui.register(RadioGroup);
 	}
@@ -74,8 +76,8 @@ class RadioButton extends AbstractButton
 		// label on by default
 		if(Opts.optString(opts, "label", name)!="false") {
 			label = new Label(this);
-			label.text = Opts.optString(opts, "label", name);
 			label.init();
+			label.text = Opts.optString(opts, "label", name);
 			label.move(24, 2);
 		}
 

@@ -31,9 +31,12 @@ import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
 import haxegui.managers.StyleManager;
 import haxegui.managers.TooltipManager;
-import haxegui.Opts;
 import haxegui.controls.IAdjustable;
 import haxegui.controls.Component;
+import haxegui.toys.Socket;
+import haxegui.utils.Size;
+import haxegui.utils.Color;
+import haxegui.utils.Opts;
 
 /**
 *
@@ -44,10 +47,10 @@ import haxegui.controls.Component;
 * @author Russell Weir <damonsbane@gmail.com>
 */
 class SliderHandle extends AbstractButton
-{
+{	
 	override public function init(opts:Dynamic=null) {
 		box = new Rectangle(0, 0, 24, 10);
-		super.init(opts);
+		super.init(opts);		
 	}
 	
 	static function __init__() {
@@ -75,19 +78,29 @@ class Slider extends Component, implements IAdjustable
 	/** Number of ticks **/
 	public var ticks : Int;
 
+	/** slot **/
+	public var slot : Socket;
 
+	/** true to show value in tooltip while dragging the handle **/
+	public var showToolTip: Bool;
+	
 	override public function init(opts:Dynamic=null) {
-		adjustment = new Adjustment( 0, 0, Math.POSITIVE_INFINITY, 5, 10 );
-		box = new Rectangle(0, 0, 140, 20);
+		//adjustment = new Adjustment( 0, 0, Math.POSITIVE_INFINITY, 5, 10 );
+		adjustment = new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 5., page: 10.});
+		box = new Size(140, 20).toRect();
 		color = DefaultStyle.BACKGROUND;
 		ticks = 25;
+		description = null;
+		showToolTip = true;
 		
-		adjustment.value = Opts.optFloat(opts,"value", adjustment.value);
-		adjustment.min = Opts.optFloat(opts,"min", adjustment.min);
-		adjustment.max = Opts.optFloat(opts,"max", adjustment.max);
-		adjustment.step = Opts.optFloat(opts,"step", adjustment.step);
-		adjustment.page = Opts.optFloat(opts,"page", adjustment.page);
-
+		adjustment.object.value = Opts.optFloat(opts,"value", adjustment.object.value);
+		adjustment.object.min = Opts.optFloat(opts,"min", adjustment.object.min);
+		adjustment.object.max = Opts.optFloat(opts,"max", adjustment.object.max);
+		adjustment.object.step = Opts.optFloat(opts,"step", adjustment.object.step);
+		adjustment.object.page = Opts.optFloat(opts,"page", adjustment.object.page);
+		
+		showToolTip = Opts.optBool(opts,"showToolTip", showToolTip);
+		
 		super.init(opts);
 
 		handle = new SliderHandle(this);
@@ -98,37 +111,45 @@ class Slider extends Component, implements IAdjustable
 		var shadow = new flash.filters.DropShadowFilter (disabled ? 1 : 2, 45, DefaultStyle.DROPSHADOW, disabled ? 0.25 : 0.5, 4, 4, disabled ?  0.25 : 0.5, flash.filters.BitmapFilterQuality.LOW, false, false, false );
 		handle.filters = [shadow];
 
-
+		if(!disabled) {
+			slot = new haxegui.toys.Socket(this);
+			slot.init();
+			slot.moveTo(-14,Std.int(this.box.height)>>1);
+	
+			slot.color = Color.tint(slot.color, .5);
+		}
+		
 		//addEventListener (MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 
 		handle.addEventListener (MouseEvent.MOUSE_DOWN, onHandleMouseDown, false, 0, true);
-		handle.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
-		handle.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
+		//~ handle.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
+		//~ handle.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 
 		//~ this.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 
 	}
+	
+
+
 
 	public override function destroy() {
-		if(handle!=null) {
-			handle.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			handle.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+	/*		
+		handle.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+		handle.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 
-			if(handle.stage.hasEventListener (MouseEvent.MOUSE_UP))
-				handle.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+		if(handle.stage.hasEventListener (MouseEvent.MOUSE_UP))
+			handle.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 
-			if(handle.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
-				handle.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
-		}
-				
+		if(handle.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
+			handle.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
+	*/					
 		super.destroy();
 	}
 
 	public function onChanged(e:Event) {
-		handle.x = adjustment.value;
+		handle.x = Math.max(0, Math.min( box.width- handle.box.width, adjustment.getValue()));
 	}
-
 
 	function onHandleMouseDown (e:MouseEvent) : Void {
 		if(this.disabled) return;
@@ -136,13 +157,30 @@ class Slider extends Component, implements IAdjustable
 		CursorManager.setCursor (Cursor.DRAG);
 		CursorManager.getInstance().lock = true;
 		handle.startDrag(false,new Rectangle(0, e.target.y, box.width - handle.box.width ,0));
-		e.target.stage.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+		e.target.stage.addEventListener (MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);	
+
+		handle.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
+		handle.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
+
+		if(!showToolTip) return;
+		tooltip = new Tooltip(handle);
+		tooltip.label.setText(adjustment.valueAsString().substr(0,5));	
+		tooltip.balloon.box.width = tooltip.label.width + 24;
+		tooltip.label.move(4,0);
+		tooltip.balloon.redraw();
+		tooltip.alpha=.8;
+		tooltip.fadeTween.stop();
+		tooltip.visible = true;
+		tooltip.alpha = 1;
+		tooltip.redraw();
 	}
+
 
 	override public function onMouseUp (e:MouseEvent) : Void {
 		if(this.disabled) return;	
 
-		e.target.removeEventListener (MouseEvent.MOUSE_UP, onMouseUp);
+		if(e.target.stage.hasEventListener (MouseEvent.MOUSE_UP))
+			e.target.removeEventListener (MouseEvent.MOUSE_UP, onMouseUp);
 
 		if(e.target.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
 			e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
@@ -153,31 +191,38 @@ class Slider extends Component, implements IAdjustable
 
 		handle.stopDrag();
 		
+		if(tooltip!=null)
+			tooltip.destroy();
+		
 		super.onMouseUp(e);
 	}
 
-
 	public function onMouseMove (e:MouseEvent) {
-		adjustment.value = handle.x;
+		adjustment.object.value = handle.x;
+		adjustment.adjust(adjustment.object);
+		if(tooltip!=null) {
+			tooltip.label.setText(adjustment.valueAsString());	
+			tooltip.box.width = tooltip.label.width + 8;
+			tooltip.redraw();
+		}
 	}
-
-
-	static function __init__() {
-		haxegui.Haxegui.register(Slider);
-	}
-
 	
 	public override function onResize(e:ResizeEvent) {
 		
 		//~ handle.dirty = true;
-		handle.box.height = .5*box.height;
+		handle.box.height = Std.int(box.height)>>1;
 		
 		handle.redraw();
 		
-		handle.y = .5*( this.box.height - handle.height );
+		handle.y = Std.int( this.box.height - handle.height )>>1;
 		handle.x = Math.max(0, Math.min( box.width - handle.box.width, handle.x ));
 		
-		super.onResize(cast e.clone());
+		if(slot!=null)
+			slot.y = Std.int( this.box.height - slot.box.height )>>1;
+		super.onResize(e);
 	}
-	
+
+	static function __init__() {
+		haxegui.Haxegui.register(Slider);
+	}
 }

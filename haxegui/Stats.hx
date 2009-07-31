@@ -60,10 +60,15 @@ import haxegui.Window;
 import haxegui.windowClasses.StatusBar;
 import haxegui.controls.Component;
 
+import feffects.Tween;
+
+import haxegui.utils.Size;
+import haxegui.utils.Color;
+import haxegui.utils.Opts;
 
 /**
  *
- * Some textual and chart performance statistics
+ * Some textual and chart performance statistics.<br/>
  *
  */
 class Stats extends Window
@@ -73,7 +78,7 @@ class Stats extends Window
   var list2 : UiList;
 
   var gridSpacing : UInt;
-  var graph : Sprite;
+  var graph : Component;
   var grid : Sprite;
   var ploter : Sprite;
 
@@ -104,14 +109,14 @@ class Stats extends Window
      */
     public override function init(?initObj:Dynamic) {
 
-        super.init({name: "Stats", type: WindowType.MODAL, sizeable:false,
-                    x:x, y:y, width:width, height:height, color: 0x2A7ACD});
+        super.init({name: "Stats", type: WindowType.MODAL, sizeable:false, color: 0x2A7ACD});
+        box = new Size(400, 220).toRect();
         type = WindowType.MODAL;
         frameCounter = 0;
         delta = 0;
         maxFPS = Math.NEGATIVE_INFINITY;
         minFPS = Math.POSITIVE_INFINITY;
-        avgFPS = [.0];
+        avgFPS = [Math.NaN];
         interval = 750;
         gridSpacing = 20;
 
@@ -119,7 +124,6 @@ class Stats extends Window
         data2 =
         data3 = [new Point(240, 180), new Point(240, 180)];
 
-        box = new Rectangle (0, 0, 400, 220);
 
         //
         var container = new haxegui.containers.Container (this, "container", 10, 20);
@@ -139,7 +143,12 @@ class Stats extends Window
         list2.init({color: 0x2A7ACD, width: 70, height: 180});
         list2.move(70,0);
 
+        //
         graph = new Component(container);
+        graph.init();
+        graph.moveTo(141, 0);
+        graph.scrollRect = new Size(250,180).toRect();
+                
         grid = new Component(graph);
 
         grid.graphics.lineStyle(0,0,0);
@@ -147,29 +156,22 @@ class Stats extends Window
         grid.graphics.drawRect(0,0,240+gridSpacing*4,180);
         grid.graphics.endFill();
 
-        for(i in 0...Std.int(240/(gridSpacing-4)))
-        {
+        for(i in 0...Std.int(240/(gridSpacing-4))) {
         grid.graphics.lineStyle(1,0xCCCCCC);
         grid.graphics.moveTo(gridSpacing*i,0);
         grid.graphics.lineTo(gridSpacing*i,180);
         }
 
-        for(i in 0...Std.int(180/gridSpacing))
-        {
+        for(i in 0...Std.int(180/gridSpacing)) {
         grid.graphics.lineStyle(1,0xCCCCCC);
         grid.graphics.moveTo(0,gridSpacing*i);
         grid.graphics.lineTo(250+4*gridSpacing,gridSpacing*i);
         }
 
-
         ploter = new Sprite();
         graph.addChild(ploter);
 
-		//
-        (cast graph).moveTo(141, 0);
-        graph.scrollRect = new Rectangle(0,0,250,180);
 
-       
         var statusbar = new StatusBar(this, "StatusBar", 10);
         statusbar.init();
 
@@ -178,47 +180,44 @@ class Stats extends Window
         label.init();
         
         var stepper = new Stepper(statusbar, "Stepper", 346, 0);
-        stepper.init({value: interval, step: 10, min: 20, max: 5000, color: 0x2A7ACD});
-        stepper.adjustment.value = interval;
+        stepper.init({color: 0x2A7ACD, min: 20, step: 5, page: 20, value: interval});
+        //stepper.adjustment.value = interval;
         stepper.input.tf.text = Std.string(interval);
         
         var self = this;
-		stepper.adjustment.addEventListener(Event.CHANGE,
+		
+        stepper.adjustment.addEventListener(Event.CHANGE,
             function(e:Event) {
-                self.frameCounter = 0;
-                self.delta = 0;
-                self.maxFPS = Math.NEGATIVE_INFINITY;
-                self.minFPS = Math.POSITIVE_INFINITY;
-                self.avgFPS = [.0];
-                self.interval = e.target.value;
-
-                self.ploter.graphics.clear();
-                self.ploter.x = 0;
-
-                self.data = [new Point(240, 180), new Point(240, 180)];
-                self.data2 = [new Point(240, 180), new Point(240, 180)];
-                self.data3 = [new Point(240, 180), new Point(240, 180)];
-                self.timer.stop();
-                self.timer = new haxe.Timer(self.interval);
-                self.timer.run = self.update;
-
+                self.interval = Std.int(Math.max(20, e.target.getValue()));
+                self.reset();
                 });
-        
 
+        reset();
 
+        this.addEventListener (Event.ENTER_FRAME, onStatsEnterFrame);
 
-        timer = new haxe.Timer(interval);
-        timer.run = update;
-
-       this.addEventListener (Event.ENTER_FRAME, onStatsEnterFrame);
-       //~ this.setAction("interval", "this.frameCounter++;" );
-       //~ this.startInterval(30);
-
-        //~ redraw(null);
         dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
-
     }
+    
+    public function reset() {
+        frameCounter = 0;
+        delta = 0;
+        maxFPS = Math.NEGATIVE_INFINITY;
+        minFPS = Math.POSITIVE_INFINITY;
+        avgFPS = [Math.NaN];
+
+        ploter.graphics.clear();
+        ploter.x = 0;
+
+        data = [new Point(240, 180), new Point(240, 180)];
+        data2 = [new Point(240, 180), new Point(240, 180)];
+        data3 = [new Point(240, 180), new Point(240, 180)];
+        if(timer!=null) timer.stop();
+        timer = new haxe.Timer(interval);
+        timer.run = update;   
+    }
+    
 
     /**
      *
@@ -236,12 +235,13 @@ class Stats extends Window
         if(fps > maxFPS) maxFPS = fps;
         if(fps < minFPS) minFPS = fps;
 
+        if(Math.isNaN(avgFPS[0])) avgFPS.pop();
         avgFPS.push(fps);
         var avg : Float = 0;
         for(i in avgFPS)
             avg += i;
         avg /= avgFPS.length;
-        if(avgFPS.length > 10 ) avgFPS.shift();
+        if(avgFPS.length > 50 ) avgFPS.shift();
         
         //list.data=["FPS", "minFPS", "maxFPS", "avgFPS", "objs", "dirty", "Mem", "Uptime"];
         list2.data = 

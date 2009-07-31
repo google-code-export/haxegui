@@ -40,41 +40,41 @@ enum ArrowType {
 */
 class Arrow extends Component
 {
-
-	override public function init(?opts:Dynamic) {
-		box = new Size(12,12).toRect();
-		color = cast Math.random() * 0xFFFFFF;
-			
-		super.init(opts);
-					
-		this.setAction("redraw",
-		"
-		var s = Size.fromRect(this.box).shift(1);
-		var p = new flash.geom.Point(s.width, s.height);
-		this.graphics.clear();
-		this.graphics.lineStyle(1, Color.darken(this.color, 16), 1, true,
-				    flash.display.LineScaleMode.NONE,
-				    flash.display.CapsStyle.ROUND,
-				    flash.display.JointStyle.ROUND);
-
-		this.graphics.beginFill( this.color );
-
-		this.graphics.moveTo(-p.x,-p.y);
-		this.graphics.lineTo(p.x, 0);
-		this.graphics.lineTo(-p.x, p.y);
-		this.graphics.lineTo(-p.x,-p.y);
-
-		this.graphics.endFill();
-		"
-		);
-
-		move(Std.int(box.width)>>1, Std.int(box.height)>>1);
+    var type : ArrowType;
+    
+    override public function init(?opts:Dynamic) {
+	box = new Size(12,12).toRect();
+	color = cast Math.random() * 0xFFFFFF;
 		
+	super.init(opts);
+				
+	this.setAction("redraw",
+	"
+	var s = Size.fromRect(this.box).shift(1);
+	var p = new flash.geom.Point(s.width, s.height);
+	this.graphics.clear();
+	this.graphics.lineStyle(1, Color.darken(this.color, 16), 1, true,
+			    flash.display.LineScaleMode.NONE,
+			    flash.display.CapsStyle.ROUND,
+			    flash.display.JointStyle.ROUND);
 
-	}
+	this.graphics.beginFill( this.color );
 
-	static function __init__() {
-		haxegui.Haxegui.register(Arrow);
-	}
-	
+	this.graphics.moveTo(-p.x,-p.y);
+	this.graphics.lineTo(p.x, 0);
+	this.graphics.lineTo(-p.x, p.y);
+	this.graphics.lineTo(-p.x,-p.y);
+
+	this.graphics.endFill();
+	"
+	);
+
+	moveToPoint(Size.fromRect(box).shift(1).toPoint());
+
+    }
+
+    static function __init__() {
+	    haxegui.Haxegui.register(Arrow);
+    }
+    
 }

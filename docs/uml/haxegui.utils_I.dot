@@ -1,0 +1,17 @@
+digraph uml {
+	graph [label="Package: haxegui.utils Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{Size}",
+		lp="95,10",
+		bb="0,0,190,685"];
+	"haxegui.utils.Color" [label="{Color}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/Color.html", tooltip=Color, portPos=e, pos="95,39", rects="68,21,122,57", width="0.75", height="0.50"];
+	"haxegui.utils.Printing" [label="{Printing}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/Printing.html", tooltip=Printing, portPos=e, pos="95,184", rects="68,166,122,202", width="0.75", height="0.50"];
+	"haxegui.utils.HorizontalAlign" [label="{HorizontalAlign|RIGHT\lLEFT\lJUSTIFY\lCENTER\l}", style="rounded,filled", fillcolor=white, pos="95,290", rects="32,266,110,314 110,266,159,314", width="1.75", height="0.67"];
+	"haxegui.utils.VerticalAlign" [label="{VerticalAlign|TOP\lCENTER\lBOTTOM\l}", style="rounded,filled", fillcolor=white, pos="95,374", rects="35,355,102,393 102,355,155,393", width="1.67", height="0.53"];
+	"haxegui.utils.Alignment" [label="{\<typedef\>\nAlignment|vertical : VerticalAlign\lhorizontal : HorizontalAlign\l}", style="rounded,filled", fillcolor=white, pos="95,440", rects="0,422,61,458 61,422,190,458", width="2.64", height="0.50"];
+	"haxegui.utils.ScriptStandardLibrary" [label="{ScriptStandardLibrary}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/ScriptStandardLibrary.html", tooltip=ScriptStandardLibrary, portPos=e, pos="95,500", rects="35,482,155,518", width="1.67", height="0.50"];
+	"haxegui.utils.Opts" [label="{Opts}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/Opts.html", tooltip=Opts, portPos=e, pos="95,557", rects="68,539,122,575", width="0.75", height="0.50"];
+	"haxegui.utils.ScaleMode" [label="{ScaleMode|KEEP_ASPECT\lIGNORE_ASPECT\l}", style="rounded,filled", fillcolor=white, pos="95,612", rects="21,594,83,630 83,594,169,630", width="2.06", height="0.50"];
+	"haxegui.utils.Size" [label="{Size}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/Size.html", tooltip=Size, portPos=e, pos="95,667", rects="68,649,122,685", width="0.75", height="0.50"];
+}

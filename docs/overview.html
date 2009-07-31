@@ -18,8 +18,33 @@
 
 							<p>There are <a href="todo.html">TODO tasks</a> to be done.</p>
 							</div>
+
 		
 		<div class="type-frame">
+
+		<h1>Info</h1>
+		<div class="doc">
+		<p>for the haxe API help see <a href="http://haxe.org/api">http://haxe.org/api</a></p>
+		
+		<p>External dependencies for the project:</p>
+		<ul style="list-style:circle;">
+		<li>swfmill for asset compilation</li>
+		<li>neko for the StyleCompiler</li>
+		<li>feffects and hscript libraries from haxelib for haxe compilation</li>
+		<li>chxdoc and HaxeUmlGen for the documentation and diagrams</li>
+		<li>CodeHighlighter is external but included for being a single file</li>
+		</ul>	
+		<br/>
+		<p>Some notes about using <a href="http://code.google.com/p/hscript/">hscript</a>, hscript is not haxe and that means:</p>
+		<ul style="list-style:circle;">
+		<li>no typing or classes declarations</li>
+		<li>no object declaration such as { x : 0, y : -1 }</li>
+		<li>no switch construct</li>
+		<li>only one variable declaration is allowed in var</li>
+		<li>no getter \ setter magic, let C be a class with member A(get_A, set_A), use explicitly C.get_A()\c.set_A(), and not A\A= </li>
+		</ul>
+		</div>
+    
 		<h1>Classes</h1>
 			<table width="100%">
 			<th>Class</th><th>Description</th>
@@ -31,9 +56,6 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/Appearance.html" target="classFrame" title="Appearance">Appearance</a></td>					
 					<td class="line-comment">&nbsp;
@@ -43,9 +65,6 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/ColorPicker.html" target="classFrame" title="ColorPicker">ColorPicker</a></td>					
 					<td class="line-comment">&nbsp;
@@ -53,9 +72,6 @@
  ColorPicker class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/ColorPicker2.html" target="classFrame" title="ColorPicker2">ColorPicker2</a></td>					
 					<td class="line-comment">&nbsp;
@@ -63,9 +79,6 @@
  Advanced color picker.
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/Console.html" target="classFrame" title="Console">Console</a></td>					
 					<td class="line-comment">&nbsp;
@@ -75,9 +88,6 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/DataSource.html" target="classFrame" title="DataSource">DataSource</a></td>					
 					<td class="line-comment">&nbsp;
@@ -85,20 +95,266 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/Dialog.html" target="classFrame" title="Dialog">Dialog</a></td>					
+					<td class="line-comment">&nbsp;
+
+ Dialog
+
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/Haxegui.html" target="classFrame" title="Haxegui">Haxegui</a></td>					
 					<td class="line-comment">&nbsp;
  Haxegui Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/Introspector.html" target="classFrame" title="Introspector">Introspector</a></td>					
+					<td class="line-comment">&nbsp;
+
+ Introspector class
+&nbsp;</td>
+				</tr>
 				<tr class="eventrue">
-					<td class="class"><a href="types/haxegui/Icon.html" target="classFrame" title="Icon">Icon</a></td>					
+					<td class="class"><a href="types/haxegui/Node.html" target="classFrame" title="Node">Node</a></td>					
+					<td class="line-comment">&nbsp;
+ Signal\Slot Matrix node.&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/RichTextEditor.html" target="classFrame" title="RichTextEditor">RichTextEditor</a></td>					
+					<td class="line-comment">&nbsp;
+
+ Rich Text Editor with controls for selecting font-face, font-size, alignment and color.&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/Stats.html" target="classFrame" title="Stats">Stats</a></td>					
+					<td class="line-comment">&nbsp;
+
+  Some textual and chart performance statistics.&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/Window.html" target="classFrame" title="Window">Window</a></td>					
+					<td class="line-comment">&nbsp;
+ Dragable &amp; Resizable window.
+
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="enum"><a href="types/haxegui/WindowType.html" target="classFrame" title="WindowType">WindowType</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/XmlParser.html" target="classFrame" title="XmlParser">XmlParser</a></td>					
+					<td class="line-comment">&nbsp;
+ Style and Layout parser
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/containers/Accordion.html" target="classFrame" title="Accordion">Accordion</a></td>					
+					<td class="line-comment">&nbsp;
+ Accordion class
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/containers/Container.html" target="classFrame" title="Container">Container</a></td>					
+					<td class="line-comment">&nbsp;
+ Generic &quot;canvas&quot; to put components in.
+ It listens for and streches when receives resize events from it's parent,.
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/containers/Divider.html" target="classFrame" title="Divider">Divider</a></td>					
+					<td class="line-comment">&nbsp;
+ Divider is a split pane containers.
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/containers/DividerHandle.html" target="classFrame" title="DividerHandle">DividerHandle</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/containers/DividerHandleButton.html" target="classFrame" title="DividerHandleButton">DividerHandleButton</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="interface"><a href="types/haxegui/containers/IContainer.html" target="classFrame" title="IContainer">IContainer</a></td>					
+					<td class="line-comment">&nbsp;
+
+ Interface for containers.
+
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/containers/ScrollPane.html" target="classFrame" title="ScrollPane">ScrollPane</a></td>					
+					<td class="line-comment">&nbsp;
+ ScrollPane masks his children, and allows to expose the hidden parts using ScrollBars.
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/containers/Stack.html" target="classFrame" title="Stack">Stack</a></td>					
+					<td class="line-comment">&nbsp;
+ Stack container, a simple container for layering components, the active layer can be controled
+ by a TabNavigator for ex.
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/controls/AbstractButton.html" target="classFrame" title="AbstractButton">AbstractButton</a></td>					
+					<td class="line-comment">&nbsp;
+
+  A chromeless button, containing default actions for mouse events.
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/controls/Adjustment.html" target="classFrame" title="Adjustment">Adjustment</a></td>					
+					<td class="line-comment">&nbsp;
+ Adjustment class allows reuse \ sharing of values for &quot;range widgets&quot;.&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="typedef"><a href="types/haxegui/controls/AdjustmentObject.html" target="classFrame" title="AdjustmentObject">AdjustmentObject</a></td>					
+					<td class="line-comment">&nbsp;
+  AdjustmentObject
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/controls/Button.html" target="classFrame" title="Button">Button</a></td>					
+					<td class="line-comment">&nbsp;
+ A chromed button, with optional label and icon.&lt;br&gt;
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/controls/CheckBox.html" target="classFrame" title="CheckBox">CheckBox</a></td>					
+					<td class="line-comment">&nbsp;
+ An on\off CheckBox, with composited Label.&lt;br&gt;
+ use the member variable &lt;code&gt;checked&lt;/code&gt; to get it's state.&lt;br&gt;
+ You can use the dispatched event:
+ &lt;pre class=&quot;code haxe&quot;&gt;
+ var chkbox = new CheckBox();
+ chkbox.init();
+ chkbox.addEventListener(Event.CHANGE, function(e){...});
+ &lt;/pre&gt;
+ Or you could override the default action:
+ &lt;pre class=&quot;code haxe&quot;&gt;
+ var chkbox = new CheckBox();
+ chkbox.init();
+ chkbox.setAction(&quot;mouseClick&quot;,
+ &quot;// this is the default code
+ if(!this.disabled) {
+	this.checked = !this.checked;
+	this.redraw();
+	this.updateColorTween( new feffects.Tween(50, 0, 150, feffects.easing.Linear.easeNone) );
+   // your code here...
+ }
+ &quot;);
+ &lt;/pre&gt;
+
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/controls/ComboBox.html" target="classFrame" title="ComboBox">ComboBox</a></td>					
+					<td class="line-comment">&nbsp;
+
+ ComboBox is composited of a button for the pull-down menu, and an optional Input for custom values.
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/controls/ComboBoxBackground.html" target="classFrame" title="ComboBoxBackground">ComboBoxBackground</a></td>					
+					<td class="line-comment">&nbsp;
+ The background of a ComboBox.
+
+ This is a child of the ComboBox, so any calculations regarding the
+ box should refer to parent.box
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/controls/ComboBoxDropButton.html" target="classFrame" title="ComboBoxDropButton">ComboBoxDropButton</a></td>					
+					<td class="line-comment">&nbsp;
+
+ The pulldown button for a ComboBox.
+
+ This is a child of the ComboBox, so any calculations regarding the
+ box should refer to parent.box
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/controls/Component.html" target="classFrame" title="Component">Component</a></td>					
+					<td class="line-comment">&nbsp;
+
+ Component is the basic protoype for all components.&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/controls/Expander.html" target="classFrame" title="Expander">Expander</a></td>					
+					<td class="line-comment">&nbsp;
+ Expander class, may be expanded or collapsed by the user to reveal or hide child widgets.&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/controls/ExpanderButton.html" target="classFrame" title="ExpanderButton">ExpanderButton</a></td>					
+					<td class="line-comment">&nbsp;
+ ExpanderButton
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="enum"><a href="types/haxegui/controls/ExpanderStyle.html" target="classFrame" title="ExpanderStyle">ExpanderStyle</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="eventrue">
+					<td class="interface"><a href="types/haxegui/controls/IAdjustable.html" target="classFrame" title="IAdjustable">IAdjustable</a></td>					
+					<td class="line-comment">&nbsp;
+ Interface for adjustable widgets.
+
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="interface"><a href="types/haxegui/controls/IComposite.html" target="classFrame" title="IComposite">IComposite</a></td>					
+					<td class="line-comment">&nbsp;
+
+ Interface for compositing widgets.
+
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="interface"><a href="types/haxegui/controls/IData.html" target="classFrame" title="IData">IData</a></td>					
+					<td class="line-comment">&nbsp;
+  Interface for data-rendering components.
+
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="interface"><a href="types/haxegui/controls/IMovable.html" target="classFrame" title="IMovable">IMovable</a></td>					
+					<td class="line-comment">&nbsp;
+
+ Interface for moveable widgets.
+
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="interface"><a href="types/haxegui/controls/IRepeater.html" target="classFrame" title="IRepeater">IRepeater</a></td>					
+					<td class="line-comment">&nbsp;
+
+ Interface for interval-repeating components.
+
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="interface"><a href="types/haxegui/controls/IRubberBand.html" target="classFrame" title="IRubberBand">IRubberBand</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="eventrue">
+					<td class="interface"><a href="types/haxegui/controls/IToolTip.html" target="classFrame" title="IToolTip">IToolTip</a></td>					
+					<td class="line-comment">&nbsp;
+ Interface for tooltip'd components
+
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="interface"><a href="types/haxegui/controls/ITween.html" target="classFrame" title="ITween">ITween</a></td>					
+					<td class="line-comment">&nbsp;
+
+ Interface for tweening widgets.
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/controls/Icon.html" target="classFrame" title="Icon">Icon</a></td>					
 					<td class="line-comment">&nbsp;
  Image helper class, defines stock icons.
 
@@ -113,356 +369,17 @@
  &lt;/pre&gt;
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/Image.html" target="classFrame" title="Image">Image</a></td>					
+					<td class="class"><a href="types/haxegui/controls/Image.html" target="classFrame" title="Image">Image</a></td>					
 					<td class="line-comment">&nbsp;
 
- Component wrapper for bitmaps.
-
- used in xml like this:
- &lt;pre class=&quot;code xml&quot;&gt;
- &lt;haxegui:Image src=&quot;http://www...&quot;/&gt;
- &lt;/pre&gt;
- or in haxe:
- &lt;pre class=&quot;code haxe&quot;&gt;
- var img = new Image();
- image.init({src: &quot;http://www...&quot;});
- &lt;/pre&gt;
-&nbsp;</td>
+ Component wrapper for bitmaps.&nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="class"><a href="types/haxegui/Introspector.html" target="classFrame" title="Introspector">Introspector</a></td>					
-					<td class="line-comment">&nbsp;
-
- Introspector class
-
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/Opts.html" target="classFrame" title="Opts">Opts</a></td>					
-					<td class="line-comment">&nbsp;
-
- Options handler
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="class"><a href="types/haxegui/RichTextEditor.html" target="classFrame" title="RichTextEditor">RichTextEditor</a></td>					
-					<td class="line-comment">&nbsp;
-
- RTE class
-
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/Stats.html" target="classFrame" title="Stats">Stats</a></td>					
-					<td class="line-comment">&nbsp;
-
-  Some textual and chart performance statistics
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="class"><a href="types/haxegui/Utils.html" target="classFrame" title="Utils">Utils</a></td>					
-					<td class="line-comment"></td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/Window.html" target="classFrame" title="Window">Window</a></td>					
-					<td class="line-comment">&nbsp;
- Dragable &amp; Resizable window.
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="enum"><a href="types/haxegui/WindowType.html" target="classFrame" title="WindowType">WindowType</a></td>					
-					<td class="line-comment"></td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/XmlParser.html" target="classFrame" title="XmlParser">XmlParser</a></td>					
-					<td class="line-comment">&nbsp;
- Style and Layout parser
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="class"><a href="types/haxegui/containers/Container.html" target="classFrame" title="Container">Container</a></td>					
-					<td class="line-comment">&nbsp;
- Generic &quot;canvas&quot; to put components in.
- It listens for and streches when receives resize events from it's parent,.
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/containers/Divider.html" target="classFrame" title="Divider">Divider</a></td>					
-					<td class="line-comment">&nbsp;
- Divider is a split pane containers.
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="class"><a href="types/haxegui/containers/DividerHandle.html" target="classFrame" title="DividerHandle">DividerHandle</a></td>					
-					<td class="line-comment"></td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/containers/DividerHandleButton.html" target="classFrame" title="DividerHandleButton">DividerHandleButton</a></td>					
-					<td class="line-comment"></td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="interface"><a href="types/haxegui/containers/IContainer.html" target="classFrame" title="IContainer">IContainer</a></td>					
-					<td class="line-comment">&nbsp;
-
- Interface for containers.
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/containers/ScrollPane.html" target="classFrame" title="ScrollPane">ScrollPane</a></td>					
-					<td class="line-comment">&nbsp;
- ScrollPane masks his children, and allows to expose the hidden parts using ScrollBars.
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="class"><a href="types/haxegui/containers/Stack.html" target="classFrame" title="Stack">Stack</a></td>					
-					<td class="line-comment">&nbsp;
- Stack container, a simple container for layering components, the active layer can be controled
- by a TabNavigator for ex.
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/controls/AbstractButton.html" target="classFrame" title="AbstractButton">AbstractButton</a></td>					
-					<td class="line-comment">&nbsp;
-
-  A chromeless button, containing default actions for mouse events.
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="class"><a href="types/haxegui/controls/Adjustment.html" target="classFrame" title="Adjustment">Adjustment</a></td>					
-					<td class="line-comment">&nbsp;
- Adjustment class allows reuse \ sharing of values for &quot;range widgets&quot;.
- It clamps to min&amp;max, and dispatches an event when one of the values has changed.
-
- Notice when using hscript use must use the getters and setters:
- &lt;pre class=&quot;code xml&quot;&gt;
- &lt;haxegui:controls:Slider value=&quot;0&quot;&gt;
- &lt;events&gt;
- 	&lt;script type=&quot;text/hscript&quot; action=&quot;onLoaded&quot;&gt;
- 		this.adjustment.__setValue(50);
- 	&lt;/script&gt;
- &lt;/events&gt;
- &lt;/haxegui:controls:Slider&gt;
- &lt;/pre&gt;
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/controls/Button.html" target="classFrame" title="Button">Button</a></td>					
-					<td class="line-comment">&nbsp;
- A chromed button, with optional label and icon.
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="class"><a href="types/haxegui/controls/CheckBox.html" target="classFrame" title="CheckBox">CheckBox</a></td>					
-					<td class="line-comment">&nbsp;
- An on \ off CheckBox, with composited Label. use the member variable &lt;i&gt;checked&lt;/i&gt;
- to get it's state.
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/controls/ComboBox.html" target="classFrame" title="ComboBox">ComboBox</a></td>					
-					<td class="line-comment">&nbsp;
-
- ComboBox is composited of a button for the pull-down menu, and an optional Input for custom values.
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="class"><a href="types/haxegui/controls/ComboBoxBackground.html" target="classFrame" title="ComboBoxBackground">ComboBoxBackground</a></td>					
-					<td class="line-comment">&nbsp;
- The background of a ComboBox.
-
- This is a child of the ComboBox, so any calculations regarding the
- box should refer to parent.box
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/controls/ComboBoxDropButton.html" target="classFrame" title="ComboBoxDropButton">ComboBoxDropButton</a></td>					
-					<td class="line-comment">&nbsp;
-
- The pulldown button for a ComboBox.
-
- This is a child of the ComboBox, so any calculations regarding the
- box should refer to parent.box
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="class"><a href="types/haxegui/controls/Component.html" target="classFrame" title="Component">Component</a></td>					
-					<td class="line-comment">&nbsp;
-
-  Component is the basic protoype for all components.&lt;br&gt;
-  It is not an abstract class, in a sense, it is amorphic, its visual appearance can easily and dynamically change at runtime.
-  It derives from &lt;code&gt;Sprite&lt;/code&gt;, so all drawing functions apply, but take a look at &lt;code&gt;redraw()&lt;/code&gt; for more
-
-  Each component carries around not only an id, but also a &lt;code&gt;box&lt;/code&gt;, its the &lt;code&gt;Rectangle&lt;/code&gt; that will be used for drawing calculations.
-
-  Likewise, the following actions can be used along with normal event listeners:
- 	validate, interval, mouseClick, mouseOver, mouseOut, mouseDown, mouseUp, gainingFocus, losingFocus, focusIn, focusOut
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/controls/Expander.html" target="classFrame" title="Expander">Expander</a></td>					
-					<td class="line-comment">&nbsp;
- Expander class, may be expanded or collapsed by the user to reveal or hide child widgets.
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="interface"><a href="types/haxegui/controls/IAdjustable.html" target="classFrame" title="IAdjustable">IAdjustable</a></td>					
-					<td class="line-comment">&nbsp;
- Interface for adjustable widgets.
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="interface"><a href="types/haxegui/controls/IData.html" target="classFrame" title="IData">IData</a></td>					
-					<td class="line-comment">&nbsp;
-  Interface for data-rendering components.
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="interface"><a href="types/haxegui/controls/IMovable.html" target="classFrame" title="IMovable">IMovable</a></td>					
-					<td class="line-comment">&nbsp;
-
- Interface for moveable widgets.
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="interface"><a href="types/haxegui/controls/IRepeater.html" target="classFrame" title="IRepeater">IRepeater</a></td>					
-					<td class="line-comment">&nbsp;
-
- Interface for interval-repeating components.
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
-					<td class="interface"><a href="types/haxegui/controls/IToolTip.html" target="classFrame" title="IToolTip">IToolTip</a></td>					
-					<td class="line-comment">&nbsp;
-
- Interface for tooltip'ed components
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
-					<td class="interface"><a href="types/haxegui/controls/ITween.html" target="classFrame" title="ITween">ITween</a></td>					
-					<td class="line-comment">&nbsp;
-
- Interface for tweening widgets.
-
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/Input.html" target="classFrame" title="Input">Input</a></td>					
 					<td class="line-comment">&nbsp;
- Input Class
-
-&nbsp;</td>
+ Input class wraps an editable &lt;code&gt;TextField&lt;/code&gt;.&nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/Label.html" target="classFrame" title="Label">Label</a></td>					
 					<td class="line-comment">&nbsp;
@@ -470,19 +387,11 @@
  Label class, non-interactive text component.
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/ListHeader.html" target="classFrame" title="ListHeader">ListHeader</a></td>					
 					<td class="line-comment">&nbsp;
-
- ListItem Class
-&nbsp;</td>
+ List header with labels, seperators and an arrow to show the sort direction.&nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/ListItem.html" target="classFrame" title="ListItem">ListItem</a></td>					
 					<td class="line-comment">&nbsp;
@@ -490,27 +399,18 @@
  ListItem Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/MenuBar.html" target="classFrame" title="MenuBar">MenuBar</a></td>					
 					<td class="line-comment">&nbsp;
  MenuBar Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/MenuBarItem.html" target="classFrame" title="MenuBarItem">MenuBarItem</a></td>					
 					<td class="line-comment">&nbsp;
  MenuBarItem Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/PopupMenu.html" target="classFrame" title="PopupMenu">PopupMenu</a></td>					
 					<td class="line-comment">&nbsp;
@@ -520,67 +420,44 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
-					<td class="class"><a href="types/haxegui/controls/PopupMenuItem.html" target="classFrame" title="PopupMenuItem">PopupMenuItem</a></td>					
-					<td class="line-comment">&nbsp;
-
- PopupMenuItem Class
-&nbsp;</td>
-				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/ProgressBar.html" target="classFrame" title="ProgressBar">ProgressBar</a></td>					
 					<td class="line-comment">&nbsp;
 
  ProgressBar class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
+				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/ProgressBarIndicator.html" target="classFrame" title="ProgressBarIndicator">ProgressBarIndicator</a></td>					
 					<td class="line-comment">&nbsp;
 
  ProgressBarIndicator class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/controls/PushButton.html" target="classFrame" title="PushButton">PushButton</a></td>					
+					<td class="line-comment">&nbsp;
+  Alias for a &lt;code&gt;Button&lt;/code&gt; with toggle=true
+&nbsp;</td>
+				</tr>
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/RadioButton.html" target="classFrame" title="RadioButton">RadioButton</a></td>					
 					<td class="line-comment">&nbsp;
  RadioButton allows the user to select only one of the predefined set of similar widgets.
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/RadioGroup.html" target="classFrame" title="RadioGroup">RadioGroup</a></td>					
 					<td class="line-comment">&nbsp;
  RadioGroup Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/ScrollBar.html" target="classFrame" title="ScrollBar">ScrollBar</a></td>					
 					<td class="line-comment">&nbsp;
 
- ScrollBar class
-&nbsp;</td>
+ ScrollBar with handle and buttons.&nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/ScrollBarDownButton.html" target="classFrame" title="ScrollBarDownButton">ScrollBarDownButton</a></td>					
 					<td class="line-comment">&nbsp;
@@ -588,9 +465,6 @@
  ScrollBarDownButton Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/ScrollBarFrame.html" target="classFrame" title="ScrollBarFrame">ScrollBarFrame</a></td>					
 					<td class="line-comment">&nbsp;
@@ -598,9 +472,6 @@
  ScrollBarFrame Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/ScrollBarHandle.html" target="classFrame" title="ScrollBarHandle">ScrollBarHandle</a></td>					
 					<td class="line-comment">&nbsp;
@@ -608,9 +479,6 @@
  ScrollBarHandle Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/ScrollBarUpButton.html" target="classFrame" title="ScrollBarUpButton">ScrollBarUpButton</a></td>					
 					<td class="line-comment">&nbsp;
@@ -618,9 +486,6 @@
  ScrollBarUpButton Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/Seperator.html" target="classFrame" title="Seperator">Seperator</a></td>					
 					<td class="line-comment">&nbsp;
@@ -629,9 +494,6 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/Slider.html" target="classFrame" title="Slider">Slider</a></td>					
 					<td class="line-comment">&nbsp;
@@ -640,9 +502,6 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/SliderHandle.html" target="classFrame" title="SliderHandle">SliderHandle</a></td>					
 					<td class="line-comment">&nbsp;
@@ -650,86 +509,37 @@
  Draggable handle to slide values.
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/Stepper.html" target="classFrame" title="Stepper">Stepper</a></td>					
 					<td class="line-comment">&nbsp;
-
- Stepper Class
-
-&nbsp;</td>
+ Stepper for numeric values, has an input and up\down buttons.&nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/StepperDownButton.html" target="classFrame" title="StepperDownButton">StepperDownButton</a></td>					
 					<td class="line-comment">&nbsp;
-
-
+ A Button with an arrow pointing down.
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/StepperUpButton.html" target="classFrame" title="StepperUpButton">StepperUpButton</a></td>					
 					<td class="line-comment">&nbsp;
-
-
+ A Button with an arrow pointing up.
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/Tab.html" target="classFrame" title="Tab">Tab</a></td>					
 					<td class="line-comment">&nbsp;
-
- Tab Class
-&nbsp;</td>
+ Tab Class&nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/TabNavigator.html" target="classFrame" title="TabNavigator">TabNavigator</a></td>					
 					<td class="line-comment">&nbsp;
- Tab Navigator bar for switching visible content.&lt;br&gt;
- Add child Tabs to the bar, and connect it to a &lt;code&gt;Stack&lt;/code&gt; container like this:
- &lt;pre class=&quot;code haxe&quot;&gt;
- // add a tabnav with 2 tabs
- var tabnav = new TabNavigator();
- tabnav.init();
-
- var tab = new Tab(tabnav);
- tab.init();
-
- // 40 is the default tab width, and is passed as horizotal offset
- tab = new Tab(tabnav, 40);
- tab.init();
-
- // prepare a stack container
- var stack = getChildByName(&quot;Stack&quot;);
- var onTabChanged = function(e:Event) { stack.getChildAt(tabnav.activeTab).toFront(); }
-
- // connect to the stack container
- tabnav.addEventListener(Event.CHANGE, onTabChanged, false, 0, true);
- &lt;/pre&gt;
-&nbsp;</td>
+ Tab Navigator bar for switching visible content.&nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="enum"><a href="types/haxegui/controls/TabPosition.html" target="classFrame" title="TabPosition">TabPosition</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/ToolBar.html" target="classFrame" title="ToolBar">ToolBar</a></td>					
 					<td class="line-comment">&nbsp;
@@ -737,9 +547,6 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/ToolBarHandle.html" target="classFrame" title="ToolBarHandle">ToolBarHandle</a></td>					
 					<td class="line-comment">&nbsp;
@@ -748,9 +555,6 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/Tree.html" target="classFrame" title="Tree">Tree</a></td>					
 					<td class="line-comment">&nbsp;
@@ -758,9 +562,6 @@
  Tree Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/TreeLeaf.html" target="classFrame" title="TreeLeaf">TreeLeaf</a></td>					
 					<td class="line-comment">&nbsp;
@@ -770,98 +571,58 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/controls/TreeNode.html" target="classFrame" title="TreeNode">TreeNode</a></td>					
 					<td class="line-comment">&nbsp;
  TreeNode class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/controls/UiList.html" target="classFrame" title="UiList">UiList</a></td>					
 					<td class="line-comment">&nbsp;
 
- Sortable List Class
-&nbsp;</td>
+ Sortable List Class.&nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/events/DragEvent.html" target="classFrame" title="DragEvent">DragEvent</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/events/ListEvent.html" target="classFrame" title="ListEvent">ListEvent</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/events/MenuEvent.html" target="classFrame" title="MenuEvent">MenuEvent</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/events/MoveEvent.html" target="classFrame" title="MoveEvent">MoveEvent</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/events/ResizeEvent.html" target="classFrame" title="ResizeEvent">ResizeEvent</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/events/WindowEvent.html" target="classFrame" title="WindowEvent">WindowEvent</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="enum"><a href="types/haxegui/logging/ErrorType.html" target="classFrame" title="ErrorType">ErrorType</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="interface"><a href="types/haxegui/logging/ILogger.html" target="classFrame" title="ILogger">ILogger</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="enum"><a href="types/haxegui/logging/LogLevel.html" target="classFrame" title="LogLevel">LogLevel</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="enum"><a href="types/haxegui/managers/Cursor.html" target="classFrame" title="Cursor">Cursor</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/managers/CursorManager.html" target="classFrame" title="CursorManager">CursorManager</a></td>					
 					<td class="line-comment">&nbsp;
@@ -869,9 +630,6 @@
  Cursor Manager Class (Singleton)
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/managers/DefaultStyle.html" target="classFrame" title="DefaultStyle">DefaultStyle</a></td>					
 					<td class="line-comment">&nbsp;
@@ -879,32 +637,23 @@
  DefaultStyle defines common look &amp; feel
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/managers/DragManager.html" target="classFrame" title="DragManager">DragManager</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/managers/FocusManager.html" target="classFrame" title="FocusManager">FocusManager</a></td>					
-					<td class="line-comment"></td>
+					<td class="line-comment">&nbsp;
+
+
+&nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/managers/LayoutManager.html" target="classFrame" title="LayoutManager">LayoutManager</a></td>					
 					<td class="line-comment">&nbsp;
  LayoutManager handles loading layouts from XML files, and setting a layout.
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/managers/MouseManager.html" target="classFrame" title="MouseManager">MouseManager</a></td>					
 					<td class="line-comment">&nbsp;
@@ -916,9 +665,6 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/managers/ScriptManager.html" target="classFrame" title="ScriptManager">ScriptManager</a></td>					
 					<td class="line-comment">&nbsp;
@@ -926,16 +672,10 @@
  ScriptManager handles running scripts for styling controls
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="typedef"><a href="types/haxegui/managers/ScriptObject.html" target="classFrame" title="ScriptObject">ScriptObject</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/managers/StyleManager.html" target="classFrame" title="StyleManager">StyleManager</a></td>					
 					<td class="line-comment">&nbsp;
@@ -943,9 +683,6 @@
  StyleManager handles running scripts for styling controls
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/managers/Tooltip.html" target="classFrame" title="Tooltip">Tooltip</a></td>					
 					<td class="line-comment">&nbsp;
@@ -954,9 +691,6 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/managers/TooltipManager.html" target="classFrame" title="TooltipManager">TooltipManager</a></td>					
 					<td class="line-comment">&nbsp;
@@ -965,79 +699,119 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/managers/WindowManager.html" target="classFrame" title="WindowManager">WindowManager</a></td>					
 					<td class="line-comment">&nbsp;
  Haxegui Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/toys/AnalogClock.html" target="classFrame" title="AnalogClock">AnalogClock</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/toys/Arrow.html" target="classFrame" title="Arrow">Arrow</a></td>					
 					<td class="line-comment">&nbsp;
  Simple arrowhead used by many widgets
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
+				<tr class="eventrue">
 					<td class="enum"><a href="types/haxegui/toys/ArrowType.html" target="classFrame" title="ArrowType">ArrowType</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/toys/Balloon.html" target="classFrame" title="Balloon">Balloon</a></td>					
+					<td class="line-comment"></td>
+				</tr>
 				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/toys/Circle.html" target="classFrame" title="Circle">Circle</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/toys/Curvy.html" target="classFrame" title="Curvy">Curvy</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/toys/HoursHand.html" target="classFrame" title="HoursHand">HoursHand</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/toys/Knob.html" target="classFrame" title="Knob">Knob</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/toys/Line.html" target="classFrame" title="Line">Line</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/toys/MinutesHand.html" target="classFrame" title="MinutesHand">MinutesHand</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/toys/Patch.html" target="classFrame" title="Patch">Patch</a></td>					
+					<td class="line-comment">&nbsp;
+ Patch cable to visually connect signals and slots.&nbsp;</td>
+				</tr>
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/toys/Rectangle.html" target="classFrame" title="Rectangle">Rectangle</a></td>					
 					<td class="line-comment"></td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/toys/SecondsHand.html" target="classFrame" title="SecondsHand">SecondsHand</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/toys/SevenSegment.html" target="classFrame" title="SevenSegment">SevenSegment</a></td>					
+					<td class="line-comment">&nbsp;
+  A LCD 7-Segment like digit box widget.&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/toys/Socket.html" target="classFrame" title="Socket">Socket</a></td>					
+					<td class="line-comment">&nbsp;
+  Socket.&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/toys/Transformer.html" target="classFrame" title="Transformer">Transformer</a></td>					
 					<td class="line-comment">&nbsp;
-  A Transformation widget, pass it a target on creation and use it's 8 square handles on the
-  corners and edges for resizing, and the center circle for moving it.
-  It listens for focus events from the target, if target has lost focus for anyone else but the
-  transformer, it will automatically self-destruct.
-
-&nbsp;</td>
+  A Transformation widget, visual translate and scale a component.&nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
+				<tr class="eventrue">
+					<td class="typedef"><a href="types/haxegui/utils/Alignment.html" target="classFrame" title="Alignment">Alignment</a></td>					
+					<td class="line-comment"></td>
+				</tr>
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/utils/Color.html" target="classFrame" title="Color">Color</a></td>					
 					<td class="line-comment">&nbsp;
  Functions to ease dealing with hex color triplets
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
+				<tr class="eventrue">
+					<td class="enum"><a href="types/haxegui/utils/HorizontalAlign.html" target="classFrame" title="HorizontalAlign">HorizontalAlign</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="class"><a href="types/haxegui/utils/Opts.html" target="classFrame" title="Opts">Opts</a></td>					
+					<td class="line-comment">&nbsp;
+
+ Options handler
+&nbsp;</td>
+				</tr>
+				<tr class="eventrue">
+					<td class="class"><a href="types/haxegui/utils/Printing.html" target="classFrame" title="Printing">Printing</a></td>					
+					<td class="line-comment">&nbsp;
+  Printing functions, PHP-Styled printing, mostly used by &lt;code&gt;Console&lt;/code&gt;
+&nbsp;</td>
+				</tr>
+				<tr class="evenfalse">
+					<td class="enum"><a href="types/haxegui/utils/ScaleMode.html" target="classFrame" title="ScaleMode">ScaleMode</a></td>					
+					<td class="line-comment"></td>
+				</tr>
 				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/utils/ScriptStandardLibrary.html" target="classFrame" title="ScriptStandardLibrary">ScriptStandardLibrary</a></td>					
 					<td class="line-comment">&nbsp;
  Functions for setting up a scripting environment with standard libraries.
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/utils/Size.html" target="classFrame" title="Size">Size</a></td>					
 					<td class="line-comment">&nbsp;
@@ -1045,72 +819,79 @@
 
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 				<tr class="eventrue">
+					<td class="enum"><a href="types/haxegui/utils/VerticalAlign.html" target="classFrame" title="VerticalAlign">VerticalAlign</a></td>					
+					<td class="line-comment"></td>
+				</tr>
+				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/windowClasses/CloseButton.html" target="classFrame" title="CloseButton">CloseButton</a></td>					
 					<td class="line-comment">&nbsp;
 
  Close CloseButton Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
+				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/windowClasses/MaximizeButton.html" target="classFrame" title="MaximizeButton">MaximizeButton</a></td>					
 					<td class="line-comment">&nbsp;
 
  MaximizeButton Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
+				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/windowClasses/MinimizeButton.html" target="classFrame" title="MinimizeButton">MinimizeButton</a></td>					
 					<td class="line-comment">&nbsp;
 
  MinimizeButton Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
+				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/windowClasses/StatusBar.html" target="classFrame" title="StatusBar">StatusBar</a></td>					
 					<td class="line-comment">&nbsp;
 
  StatusBar Class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="eventrue">
+				<tr class="evenfalse">
 					<td class="class"><a href="types/haxegui/windowClasses/TitleBar.html" target="classFrame" title="TitleBar">TitleBar</a></td>					
 					<td class="line-comment">&nbsp;
 
  Titlebar class
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
-				<tr class="evenfalse">
+				<tr class="eventrue">
 					<td class="class"><a href="types/haxegui/windowClasses/WindowFrame.html" target="classFrame" title="WindowFrame">WindowFrame</a></td>					
 					<td class="line-comment">&nbsp;
 
  WidowFrame optionaly resizing window frame.
 &nbsp;</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 			</table>
-		</div>
 
+		<h1>License</h1>
+		<div class="doc">
+			<p>The MIT License</p><p>
+			Copyright (c) 2009 The haxegui developers
+			</p><p>
+			Permission is hereby granted, free of charge, to any person obtaining a copy
+			of this software and associated documentation files (the "Software"), to deal
+			in the Software without restriction, including without limitation the rights
+			to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+			copies of the Software, and to permit persons to whom the Software is
+			furnished to do so, subject to the following conditions:
+			</p><p>
+			The above copyright notice and this permission notice shall be included in
+			all copies or substantial portions of the Software.
+			</p><p>
+			THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+			IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+			FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+			AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+			LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+			OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+			THE SOFTWARE.	
+			</p>
+		</div>
+		</div>
 		</div>
 	</body>
 </html>

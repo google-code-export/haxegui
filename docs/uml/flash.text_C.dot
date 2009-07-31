@@ -1,0 +1,26 @@
+digraph uml {
+	graph [label="Package: flash.text Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="290,10",
+		bb="0,0,580,750"];
+	"flash.text.StyleSheet" [label="{StyleSheet}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/StyleSheet.html", tooltip=StyleSheet, portPos=StyleSheet, pos="262,323", rects="231,305,293,341", width="0.86", height="0.50"];
+	"flash.text.TextFormatAlign" [label="{TextFormatAlign|RIGHT\lLEFT\lJUSTIFY\lCENTER\l}", style="rounded,filled", fillcolor=white, pos="511,299", rects="445,275,528,323 528,275,577,323", width="1.83", height="0.67"];
+	"flash.text.TextFormat" [label="{TextFormat}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextFormat.html", tooltip=TextFormat, portPos=TextFormat, pos="262,269", rects="231,251,294,287", width="0.86", height="0.50"];
+	"flash.text.TextFormatDisplay" [label="{TextFormatDisplay|INLINE\lBLOCK\l}", style="rounded,filled", fillcolor=white, pos="511,239", rects="442,221,535,257 535,221,580,257", width="1.92", height="0.50"];
+	"flash.text.TextFieldAutoSize" [label="{TextFieldAutoSize|RIGHT\lNONE\lLEFT\lCENTER\l}", style="rounded,filled", fillcolor=white, pos="262,209", rects="194,185,281,233 281,185,330,233", width="1.89", height="0.67"];
+	"flash.text.GridFitType" [label="{GridFitType|SUBPIXEL\lPIXEL\lNONE\l}", style="rounded,filled", fillcolor=white, pos="262,148", rects="203,129,265,167 265,129,322,167", width="1.64", height="0.53"];
+	"flash.text.TextField" [label="{TextField}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextField.html", tooltip=TextField, portPos=TextField, pos="41,178", rects="14,160,68,196", width="0.75", height="0.50"];
+	"flash.text.AntiAliasType" [label="{AntiAliasType|NORMAL\lADVANCED\l}", style="rounded,filled", fillcolor=white, pos="262,93", rects="197,75,268,111 268,75,328,111", width="1.81", height="0.50"];
+	"flash.text.TextFieldType" [label="{TextFieldType|INPUT\lDYNAMIC\l}", style="rounded,filled", fillcolor=white, pos="262,39", rects="201,21,271,57 271,21,324,57", width="1.69", height="0.50"];
+	"flash.text.TextLineMetrics" [label="{TextLineMetrics}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextLineMetrics.html", tooltip=TextLineMetrics, portPos=TextLineMetrics, pos="41,529", rects="1,511,82,547", width="1.11", height="0.50"];
+	"flash.text.TextSnapshot" [label="{TextSnapshot}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextSnapshot.html", tooltip=TextSnapshot, portPos=TextSnapshot, pos="41,732", rects="5,714,78,750", width="1.00", height="0.50"];
+	"flash.text.TextFormat" -> "flash.text.TextFormatAlign" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,445,291 294,273 328,278 384,284 430,289"];
+	"flash.text.TextFormat" -> "flash.text.TextFormatDisplay" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,442,247 294,265 327,261 381,255 427,249"];
+	"flash.text.TextField" -> "flash.text.AntiAliasType" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,215,111 68,168 101,155 157,133 201,116"];
+	"flash.text.TextField" -> "flash.text.TextFieldAutoSize" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,194,199 68,182 95,186 139,191 179,197"];
+	"flash.text.TextField" -> "flash.text.TextFormat" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,231,256 68,189 99,202 150,224 194,242 201,245 209,248 217,251"];
+	"flash.text.TextField" -> "flash.text.GridFitType" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,203,156 68,174 97,170 147,164 188,158"];
+	"flash.text.TextField" -> "flash.text.StyleSheet" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,231,312 61,196 89,221 143,266 194,296 201,300 209,303 217,307"];
+	"flash.text.TextField" -> "flash.text.TextFieldType" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,213,57 62,160 91,136 144,94 194,66 196,65 198,64 199,63"];
+}

@@ -7,17 +7,12 @@ import flash.geom.Rectangle;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 
-import flash.text.TextField;
-import flash.text.TextFormat;
 
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
 import flash.events.EventDispatcher;
-
-import flash.ui.Keyboard;
-import flash.ui.Mouse;
 
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
@@ -27,9 +22,11 @@ import haxegui.Window;
 
 import haxegui.containers.Container;
 import haxegui.controls.Label;
-import haxegui.Image;
+import haxegui.controls.Image;
+import haxegui.utils.Color;
+import haxegui.utils.Size;
+import haxegui.utils.Opts;
 
-import hscript.Expr;
 
 /**
 *
@@ -46,28 +43,28 @@ class Alert extends Window
 	public var label : Label;
 	
 	public override function init(opts:Dynamic=null) {
+		box = new Size(320,160).toRect();
+		type = WindowType.MODAL;
+	
+		if(flash.Lib.current.getChildByName("bitmap")==null) {
+			var bmpd = new flash.display.BitmapData(this.stage.stageWidth, this.stage.stageHeight);
+			bmpd.draw(this.stage);
+			bmpd.applyFilter(bmpd,
+			new Rectangle(0,0,this.stage.stageWidth, this.stage.stageHeight),
+			new flash.geom.Point(),
+			new flash.filters.BlurFilter(20, 20, 5));
 
-if(flash.Lib.current.getChildByName("bitmap")==null) {
-		var bmpd = new flash.display.BitmapData(this.stage.stageWidth, this.stage.stageHeight);
-		bmpd.draw(this.stage);
-		bmpd.applyFilter(bmpd,
-		new Rectangle(0,0,this.stage.stageWidth, this.stage.stageHeight),
-		new flash.geom.Point(),
-		new flash.filters.BlurFilter(20, 20, 5));
-
-		var bmp = new flash.display.Bitmap(bmpd);
-		bmp.name="bitmap";
-		bmp.alpha=0;
-		flash.Lib.current.addChild(bmp);
-		
-		
-		var t = new feffects.Tween(0,1,500,bmp,"alpha",feffects.easing.Linear.easeNone);
-		//t.start();
-		haxe.Timer.delay(t.start, 150);
-}
+			var bmp = new flash.display.Bitmap(bmpd);
+			bmp.name="bitmap";
+			bmp.alpha=0;
+			flash.Lib.current.addChild(bmp);
+			
+			
+			var t = new feffects.Tween(0,1,500,bmp,"alpha",feffects.easing.Linear.easeNone);
+			//t.start();
+			haxe.Timer.delay(t.start, 150);
+		}
 		super.init(opts);
-
-		box = new Rectangle(0,0,320,160);
 
 		moveTo(.5*(this.stage.stageWidth-box.width), .5*(this.stage.stageHeight-box.height));
 		type = WindowType.MODAL;
@@ -77,12 +74,11 @@ if(flash.Lib.current.getChildByName("bitmap")==null) {
 
 		
 		label = new haxegui.controls.Label(container);
-		var txt = Opts.optString(opts, "label", name);
-		label.init({innerData: txt});
+		label.init({text: Opts.optString(opts, "label", name)});
 		label.center();
 		label.move(0, -20);
 
-		icon = new haxegui.Icon(container);
+		icon = new Icon(container);
 		icon.init({src: Icon.DIALOG_WARNING});
 		icon.moveTo(14, label.y-6);
 

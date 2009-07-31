@@ -45,27 +45,23 @@ class DragManager extends EventDispatcher
 	}
 
 
-	public function new ()
-	{
+	public function new() {
 		super ();
 	}
 
-	public override function toString () : String
-	{
+	public override function toString () : String {
 		return "DragManager";
 	}
 
 
-	public function onStartDrag(e:DragEvent)
-	{
+	public function onStartDrag(e:DragEvent) {
 		//~ trace(e);
 		//~ e.stopImmediatePropagation();
 
 		e.target.startDrag();
 	}
 
-	public function onStopDrag(e:DragEvent)
-	{
+	public function onStopDrag(e:DragEvent) {
 		//~ trace(e);
 		//~ e.stopImmediatePropagation();
 

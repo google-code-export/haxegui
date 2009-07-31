@@ -28,12 +28,19 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 
 import haxegui.controls.Component;
+import haxegui.controls.IAdjustable;
+
 import haxegui.managers.CursorManager;
-import haxegui.Opts;
 import haxegui.managers.StyleManager;
+
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 
+import haxegui.utils.Color;
+import haxegui.utils.Size;
+import haxegui.utils.Opts;
+
+import haxegui.toys.Socket;
 
 /**
 *
@@ -67,7 +74,7 @@ class ProgressBarIndicator extends Component
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class ProgressBar extends Component
+class ProgressBar extends Component, implements IAdjustable
 {
 	public var bar : ProgressBarIndicator;
 	public var mazk : Shape;
@@ -75,16 +82,24 @@ class ProgressBar extends Component
 	
 	public var progress : Float;
 
+	public var adjustment : Adjustment;
 
+	public var slot : Socket;
+
+	public var animate : Bool;
+	
 	override public function init(opts:Dynamic=null)
 	{
+		adjustment = new Adjustment({ value: .0, min: .0, max: 100., step: 1., page: Math.NaN });
 		progress = .5;
 		color = DefaultStyle.BACKGROUND;
-		box = new Rectangle(0,0,140,20);	
+		box = new Size(140,20).toRect();	
+		animate = true;
 		
 		super.init(opts);
 
 	    progress = Opts.optFloat(opts, "progress", progress);
+	    animate = Opts.optBool(opts, "animate", animate);
 	    
 		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, disabled ? .35 : .75, flash.filters.BitmapFilterQuality.HIGH, true, false, false);
 		this.filters = [shadow];
@@ -119,14 +134,13 @@ class ProgressBar extends Component
 		"
 		);
 		bar.moveTo(0,1);
-		bar.startInterval(25);
+		if(animate)
+			bar.startInterval(25);
 
 		label = new Label(this);
-		label.init();
-		label.text = null;
-		label.tf.text = Math.round(100*progress) + "%";
+		label.init({ text: Math.round(100*progress) + "%" });
 		label.center();
-		label.move(0,2);
+		label.move(0,1);
 		
 		//TODO: move to xml
 		/*
@@ -146,8 +160,19 @@ class ProgressBar extends Component
 		}
 		*/
 
+		slot = new Socket(this);
+		slot.init({radius: 6});
+		slot.moveTo(-14, Std.int(this.box.height)>>1);
+
+		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 	}
 
+
+	private function onChanged(e:Event)	{
+		progress = adjustment.getValue()/100;
+		update();
+	}
+	
 
 	static function __init__() {
 		haxegui.Haxegui.register(ProgressBar);

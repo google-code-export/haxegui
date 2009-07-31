@@ -29,7 +29,7 @@ import flash.text.TextFormat;
 import haxegui.managers.StyleManager;
 import haxegui.managers.CursorManager;
 import haxegui.events.MoveEvent;
-import haxegui.Opts;
+import haxegui.utils.Opts;
 import haxegui.controls.Component;
 import haxegui.controls.IRepeater;
 
@@ -53,21 +53,6 @@ class AbstractButton extends Component, implements IRepeater
 	public static var defaultCursorOver : Cursor;
 	/** The cursor to use when a button is pressed **/
 	public static var defaultCursorPress : Cursor;
-	/** Setter for using hand cursors **/
-	static function __setHandCursors(v:Bool) : Bool
-	{
-		if(v == useHandCursors)
-			return v;
-		if(v) {
-			defaultCursorOver = Cursor.HAND;
-			defaultCursorPress = Cursor.HAND2;
-		} else {
-			defaultCursorOver = Cursor.ARROW;
-			defaultCursorPress = Cursor.ARROW;
-		}
-		return v;
-	}
-
 	/** The cursor to use when the mouse is over this button **/
 	public var cursorOver : Cursor;
 	/** The cursor to use when this button is pressed **/
@@ -80,7 +65,7 @@ class AbstractButton extends Component, implements IRepeater
 	public var repeatWaitTime : Float;
 
 	/**
-	*
+	* Sets the default button behaviour.
 	* @param Parent object
 	* @param Name of new instance
 	* @param Horizontal location
@@ -97,8 +82,22 @@ class AbstractButton extends Component, implements IRepeater
 		focusRect = true;
 		mouseChildren = true;
 	}
+
+	/** Setter for using hand cursors **/
+	static function __setHandCursors(v:Bool) : Bool
+	{
+		if(v == useHandCursors)
+			return v;
+		if(v) {
+			defaultCursorOver = Cursor.HAND;
+			defaultCursorPress = Cursor.HAND2;
+		} else {
+			defaultCursorOver = Cursor.ARROW;
+			defaultCursorPress = Cursor.ARROW;
+		}
+		return v;
+	}
 	
-	/** @see Component.init **/
 	override public function init(?opts:Dynamic) {
 		color = DefaultStyle.BACKGROUND;
 		super.init(opts);

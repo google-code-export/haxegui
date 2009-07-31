@@ -19,33 +19,42 @@
 
 package haxegui.events;
 
+import flash.events.Event;
 import haxegui.controls.Component;
 
-class MenuEvent extends flash.events.Event {
-
+class MenuEvent extends Event {
 
 	public function new(type : String, 
 						?bubbles : Bool,
-						?cancelable : Bool,
-						?menuBar : flash.display.DisplayObject,
-						?menu : Component,
-						?item : flash.display.DisplayObject,
+						?cancelable : Bool
+						//~ ?menuBar : flash.display.DisplayObject,
+						//~ ?menu : Component,
+						//~ ?item : flash.display.DisplayObject,
 						// ?itemRenderer : mx.controls.listClasses.IListItemRenderer,
-						?label : String, ?index : Int)
-						: Void
-	{
+						//~ ?label : String,
+						//~ ?index : Int
+						) : Void {
 		super(type,bubbles,cancelable);
 	}
 
-	var index : Int;
-	public var item : Dynamic;
-	var label : String;
-	public var menu : Component;
-	public var menuBar : haxegui.controls.MenuBar;
-	static var CHANGE : String;
+	public override function toString():String {
+		return "["+"MenuEvent"+" type=\""+type+"\" bubbles="+bubbles+" cancelable="+cancelable+"]";
+	}
+
+	override public function clone():Event {  
+		return new MenuEvent(this.type, this.bubbles, this.cancelable);  
+	}  
+	
+	//~ var index : Int;
+	//~ public var item : Dynamic;
+	//~ var label : String;
+	//~ public var menu : Component;
+	//~ public var menuBar : haxegui.controls.MenuBar;
+	
+	public static var CHANGE : String = "change";
 	public static var ITEM_CLICK : String = "itemClick";
-	static var ITEM_ROLL_OUT : String;
-	static var ITEM_ROLL_OVER : String;
+	//~ public static var ITEM_ROLL_OUT : String;
+	//~ public static var ITEM_ROLL_OVER : String;
 	public static var MENU_HIDE : String = "MenuHide";
 	public static var MENU_SHOW : String = "MenuShow";
 }

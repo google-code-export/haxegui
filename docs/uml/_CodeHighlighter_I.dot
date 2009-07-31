@@ -1,0 +1,9 @@
+digraph uml {
+	graph [label="Package: _CodeHighlighter Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="100,10",
+		bb="0,0,200,302"];
+	"_CodeHighlighter.Rule" [label="{Rule|Nested\lFlat\l}", style="rounded,filled", fillcolor=white, pos="100,39", rects="60,21,94,57 94,21,140,57", width="1.11", height="0.50"];
+	"_CodeHighlighter.Match" [label="{Match|NotMatched\lMatched\lDone\l}", style="rounded,filled", fillcolor=white, pos="100,283", rects="47,264,88,302 88,264,154,302", width="1.47", height="0.53"];
+}
