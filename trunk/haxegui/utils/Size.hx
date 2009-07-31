@@ -23,6 +23,13 @@ package haxegui.utils;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
+
+enum ScaleMode {
+	IGNORE_ASPECT;
+	KEEP_ASPECT;
+}
+
+
 /**
 * R^2 Dimensional class, rounds floats to integers.
 *
@@ -32,6 +39,7 @@ import flash.geom.Rectangle;
 * @version 0.1
 */
 class Size {
+	
 	public var width : Int;
 	public var height : Int;
 
@@ -40,22 +48,37 @@ class Size {
 		this.height = Std.int(h);
 	}
 
-	public function clone() {
+	public function toString() : String {
+		return "["+Std.string(width)+"x"+Std.string(height)+"]";
+	}
+	
+	public function clone() : Size {
 		return new Size(width,height);
 	}
-
-	public function setAtLeastZero() {
+	
+	public static function isNull(s) : Bool {
+		return s == null;
+	}
+	
+	public function empty() : Bool {
+		return equal(this, new Size());
+	}
+		
+	public function valid() : Bool {
+		if (isNull(this) || width < 0 || height < 0) return false;
+		return true;
+	}
+	
+	public function setAtLeastZero() : Size {
+		if(empty() || valid()) return this;
 		width = Std.int(Math.max(0, width));
 		height = Std.int(Math.max(0, height));
 		return this;
 	}
 
-	public function toString() : String {
-		return "["+Std.string(width)+"x"+Std.string(height)+"]";
-	}
-
+		
 	public static function equal(s1, s2) : Bool {
-		if(s1 == null || s2 == null) {
+		if(isNull(s1) || isNull(s2) ) {
 			if(s1 == s2)
 				return true;
 			return false;
@@ -65,23 +88,39 @@ class Size {
 		return false;
 	}
 	
-	public function empty() : Bool {
-		return equal(this, new Size());
-	}
 	
 	public function add(s:Size) : Size {
 		if(s.empty()) return this;
-		this.width += s.width;
-		this.height += s.height;
+		width += s.width;
+		height += s.height;
 		return this;
 	}
 
 	public function subtract(s:Size) : Size {
-		this.width -= s.width;
-		this.height -= s.height;
+		width -= s.width;
+		height -= s.height;
 		return this;
 	}
 
+	public function scale(x:Float, y:Float) : Size {
+		width = Std.int(width*x);
+		height = Std.int(height*y);
+		return this;
+	}
+
+	public function scaleTo(w:Float, h:Float, scaleMode:ScaleMode) : Size {
+		switch(scaleMode) {
+		case ScaleMode.IGNORE_ASPECT:
+			width = Std.int(w);
+			height = Std.int(h);
+		case ScaleMode.KEEP_ASPECT:
+			var r = width / height;
+			//width = w;
+			//height = h;
+		}
+		return this;
+	}
+	
 	/**
 	* Bit-shift both components of input size
 	* <pre class="code haxe">
@@ -100,7 +139,20 @@ class Size {
 		return new Size(r.width,r.height);
 	}
 
+	public static function fromPoint(p:Point) : Size {
+		return new Size(p.x, p.y);
+	}
+		
+	public static function square(l:Int) : Size {
+		return new Size(l,l);
+	}
+
 	public function toRect() : Rectangle {
 		return new Rectangle(0,0,width,height);
 	}
+
+	public function toPoint() : Point {
+		return new Point(width,height);
+	}
+
 }

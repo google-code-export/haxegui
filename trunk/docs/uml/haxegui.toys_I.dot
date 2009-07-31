@@ -1,0 +1,44 @@
+digraph uml {
+	graph [label="Package: haxegui.toys Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{Balloon}",
+		lp="292,10",
+		bb="0,0,584,699"];
+	"haxegui.toys.Line" [label="{Line}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/Line.html", tooltip=Line, portPos=e, pos="273,120", rects="246,102,300,138", width="0.75", height="0.50"];
+	"haxegui.controls.AbstractButton" [pos="507,201", rects="431,183,584,219", width="2.11", height="0.50"];
+	"haxegui.toys.HoursHand" [label="{HoursHand}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/HoursHand.html", tooltip=HoursHand, portPos=e, pos="58,201", rects="23,183,93,219", width="0.97", height="0.50"];
+	"haxegui.toys.MinutesHand" [label="{MinutesHand}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/MinutesHand.html", tooltip=MinutesHand, portPos=e, pos="58,147", rects="19,129,98,165", width="1.08", height="0.50"];
+	"haxegui.toys.SecondsHand" [label="{SecondsHand}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/SecondsHand.html", tooltip=SecondsHand, portPos=e, pos="58,93", rects="17,75,100,111", width="1.14", height="0.50"];
+	"haxegui.toys.AnalogClock" [label="{AnalogClock}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/AnalogClock.html", tooltip=AnalogClock, portPos=e, pos="273,282", rects="236,264,311,300", width="1.03", height="0.50"];
+	"haxegui.toys.Patch" [label="{Patch}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/Patch.html", tooltip=Patch, portPos=e, pos="273,228", rects="246,210,300,246", width="0.75", height="0.50"];
+	"haxegui.toys.Knob" [label="{Knob}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/Knob.html", tooltip=Knob, portPos=e, pos="273,681", rects="246,663,300,699", width="0.75", height="0.50"];
+	"haxegui.controls.Component" [pos="507,524", rects="438,506,576,542", width="1.92", height="0.50"];
+	"haxegui.controls.IAdjustable" [pos="507,657", rects="439,639,575,675", width="1.89", height="0.50"];
+	"haxegui.toys.Circle" [label="{Circle}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/Circle.html", tooltip=Circle, portPos=e, pos="273,451", rects="246,433,300,469", width="0.75", height="0.50"];
+	"haxegui.toys.Transformer" [label="{Transformer}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/Transformer.html", tooltip=Transformer, portPos=e, pos="273,505", rects="237,487,310,523", width="1.00", height="0.50"];
+	"haxegui.toys.SevenSegment" [label="{SevenSegment}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/SevenSegment.html", tooltip=SevenSegment, portPos=e, pos="273,559", rects="228,541,318,577", width="1.25", height="0.50"];
+	"haxegui.toys.Rectangle" [label="{Rectangle}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/Rectangle.html", tooltip=Rectangle, portPos=e, pos="273,397", rects="242,379,305,415", width="0.86", height="0.50"];
+	"haxegui.toys.ArrowType" [label="{ArrowType|SOLID\lLINE\lDIAMOND\lCIRCLE\l}", style="rounded,filled", fillcolor=white, pos="58,634", rects="1,610,61,658 61,610,116,658", width="1.58", height="0.67"];
+	"haxegui.toys.Arrow" [label="{Arrow}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/Arrow.html", tooltip=Arrow, portPos=e, pos="273,613", rects="246,595,300,631", width="0.75", height="0.50"];
+	"haxegui.toys.Socket" [label="{Socket}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/Socket.html", tooltip=Socket, portPos=e, pos="273,174", rects="246,156,300,192", width="0.75", height="0.50"];
+	"haxegui.toys.Curvy" [label="{Curvy}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/Curvy.html", tooltip=Curvy, portPos=e, pos="58,39", rects="31,21,85,57", width="0.75", height="0.50"];
+	"haxegui.toys.Balloon" [label="{Balloon}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/toys/Balloon.html", tooltip=Balloon, portPos=e, pos="58,397", rects="31,379,85,415", width="0.75", height="0.50"];
+	"haxegui.toys.Line" -> "haxegui.controls.AbstractButton" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,455,183 300,129 336,141 398,163 445,180"];
+	"haxegui.toys.HoursHand" -> "haxegui.toys.Line" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,246,130 93,188 133,173 196,149 237,134"];
+	"haxegui.toys.MinutesHand" -> "haxegui.toys.Line" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,246,123 98,142 137,137 197,129 236,124"];
+	"haxegui.toys.SecondsHand" -> "haxegui.toys.Line" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,246,117 100,98 139,103 198,111 236,116"];
+	"haxegui.toys.AnalogClock" -> "haxegui.controls.AbstractButton" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,455,219 311,269 347,256 403,237 445,222"];
+	"haxegui.toys.Patch" -> "haxegui.controls.AbstractButton" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,431,210 300,225 330,221 378,216 421,211"];
+	"haxegui.toys.Knob" -> "haxegui.controls.Component" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,480,542 300,663 342,635 425,579 472,548"];
+	"haxegui.toys.Knob" -> "haxegui.controls.IAdjustable" [color=gray, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,439,666 300,679 325,677 362,674 394,671 406,669 417,668 429,667"];
+	"haxegui.toys.Circle" -> "haxegui.controls.Component" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,449,506 300,460 334,470 392,488 439,503"];
+	"haxegui.toys.Transformer" -> "haxegui.controls.Component" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,438,518 310,508 341,511 388,514 428,517"];
+	"haxegui.toys.SevenSegment" -> "haxegui.controls.Component" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,438,534 318,552 349,547 391,541 428,536"];
+	"haxegui.toys.SevenSegment" -> "haxegui.controls.IAdjustable" [color=gray, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,464,639 316,577 355,593 413,617 455,635"];
+	"haxegui.toys.Rectangle" -> "haxegui.controls.Component" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,474,506 305,414 346,437 419,477 465,501"];
+	"haxegui.toys.Arrow" -> "haxegui.controls.Component" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,459,542 300,603 336,589 402,564 449,546"];
+	"haxegui.toys.Socket" -> "haxegui.controls.AbstractButton" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,431,192 300,177 330,181 378,186 421,191"];
+	"haxegui.toys.Curvy" -> "haxegui.toys.Line" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,246,110 85,49 123,64 194,90 237,106"];
+	"haxegui.toys.Balloon" -> "haxegui.toys.Rectangle" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,242,397 85,397 122,397 189,397 232,397"];
+}

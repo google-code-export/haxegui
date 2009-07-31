@@ -35,7 +35,7 @@ import haxegui.managers.StyleManager;
 import haxegui.controls.Component;
 import haxegui.containers.IContainer;
 
-import haxegui.Opts;
+import haxegui.utils.Opts;
 
 
 /**
@@ -57,15 +57,11 @@ class Stack extends Component, implements IContainer
 		this.tabEnabled = false;
 	}
 
-	public override function addChild(o : DisplayObject) : DisplayObject {
-		dirty = true;
-		return super.addChild(o);
-	}
 
-
-	override public function init(opts : Dynamic=null) {
+	override public function init(?opts:Dynamic=null) {
 		super.init(opts);
-		text = null;
+		
+		description = null;
 		
 		selectedIndex = Opts.optInt(opts, "selectedIndex", 0);
 		
@@ -80,21 +76,21 @@ class Stack extends Component, implements IContainer
 
 	public function onParentResize(e:ResizeEvent) {
 		
-		if(Std.is(parent, Component)) {
-			box = untyped parent.box.clone();
-			box.width -= x;
-			box.height -= y;
-		}
-		else
-		if(Std.is(parent, Divider)) untyped {
-			var b = parent.box.clone();
-			b.height = parent.handle.y;
-			box = b;
-		}
-		else
-		if(Std.is(parent.parent, ScrollPane)) {
-			box = untyped parent.parent.box.clone();
-		}
+		//~ if(Std.is(parent, Component)) {
+			//~ box = untyped parent.box.clone();
+			//~ box.width -= x;
+			//~ box.height -= y;
+		//~ }
+		//~ else
+		//~ if(Std.is(parent, Divider)) untyped {
+			//~ var b = parent.box.clone();
+			//~ b.height = parent.handle.y;
+			//~ box = b;
+		//~ }
+		//~ else
+		//~ if(Std.is(parent.parent, ScrollPane)) {
+			//~ box = untyped parent.parent.box.clone();
+		//~ }
 
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
@@ -104,11 +100,6 @@ class Stack extends Component, implements IContainer
 	static function __init__() {
 		haxegui.Haxegui.register(Stack);
 	}
-	
-	public override function onAdded(e:Event) {
-		for(i in this)
-			i.visible = false;
-		getChildAt(selectedIndex).visible = true;
-	}
+
 	
 }

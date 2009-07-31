@@ -9,7 +9,7 @@ var ratios = [ 0, 0xFF ];
 var matrix = new flash.geom.Matrix();
 matrix.createGradientBox(parent.box.width, parent.box.height, .5*Math.PI, 0, 0);			
 this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-this.graphics.drawRect(0, 0, parent.box.width-1, parent.box.height-1 );
+this.graphics.drawRect(0, 0, parent.box.width*1.2-1, parent.box.height-1 );
 this.graphics.endFill();
 
 colors = this.disabled ? 
@@ -19,7 +19,7 @@ colors = this.disabled ?
 alphas = [ 1, .5, 0 ];
 ratios = [ 0, 0x80, 0xFF ];
 
-for(i in 0...10) {
+for(i in 0...12) {
 	this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 	this.graphics.moveTo(.1*i*parent.box.width + .05*parent.box.width, 0);
 	this.graphics.lineTo(.1*i*parent.box.width + .1*parent.box.width, 0);

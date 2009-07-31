@@ -19,6 +19,7 @@
 
 package haxegui.toys;
 
+import flash.geom.Point;
 import flash.geom.Rectangle;
 
 import haxegui.controls.Component;
@@ -27,30 +28,22 @@ import haxegui.controls.AbstractButton;
 import haxegui.utils.Size;
 import haxegui.utils.Color;
 
+import haxegui.toys.Circle;
+
 import haxegui.managers.StyleManager;
 
+using haxegui.utils.Color;
 
-class HoursHand extends Component {
+class HoursHand extends Line {
 
 	public override function init(?opts:Dynamic) {
 		super.init(opts);
-		
+		var r = -.45*Math.min( .5*(cast parent).box.width, .5*(cast parent).box.height );
+		end = new Point(0,r);
 		rotation = Date.now().getHours()*30 + Date.now().getMinutes()*.5;
-		filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.8, 2, 2, 0.65, flash.filters.BitmapFilterQuality.LOW, false, false, false )];		
-	}
-	
-	public override function redraw(?opt:Dynamic=null) {
-		this.graphics.clear();
-		this.graphics.lineStyle(4, Std.int(Math.random() * 0xFFFFFF), 1, true,
-								flash.display.LineScaleMode.NONE,
-								flash.display.CapsStyle.ROUND,
-								flash.display.JointStyle.ROUND);		
-		var r = Math.min( Std.int((cast parent).box.width)>>1, Std.int((cast parent).box.height)>>1 );
-		this.graphics.moveTo(0,0);
-		this.graphics.lineTo(0,-.5*r);
-
 		center();
 	}
+
 
 	static function __init__() {
 		haxegui.Haxegui.register(HoursHand);
@@ -58,55 +51,34 @@ class HoursHand extends Component {
 }
 
 
-class MinutesHand extends Component {
+class MinutesHand extends Line {
 
 	public override function init(?opts:Dynamic) {
-		super.init(opts);
-		
+		super.init(opts);		
+		thickness = 3;
+		var r = -.65*Math.min( .5*(cast parent).box.width, .5*(cast parent).box.height );
+		end = new Point(r,r);
 		rotation = Date.now().getMinutes()*6;
-		filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.8, 2, 2, 0.65, flash.filters.BitmapFilterQuality.LOW, false, false, false )];		
-	}
-	
-	public override function redraw(?opt:Dynamic=null) {
-		this.graphics.clear();
-		this.graphics.lineStyle(2, Std.int(Math.random() * 0xFFFFFF), 1, true,
-								flash.display.LineScaleMode.NONE,
-								flash.display.CapsStyle.ROUND,
-								flash.display.JointStyle.ROUND);		
-		var r = Math.min( Std.int((cast parent).box.width)>>1, Std.int((cast parent).box.height)>>1 );
-		this.graphics.moveTo(0,0);
-		this.graphics.lineTo(0,-.75*r);
-
 		center();
 	}
-
+	
 	static function __init__() {
 		haxegui.Haxegui.register(MinutesHand);
 	}
 }
 
 
-class SecondsHand extends Component {
+class SecondsHand extends Line {
 
 	public override function init(?opts:Dynamic) {
-		super.init(opts);
-		
+		super.init(opts);		
+		thickness = 1;
+		var r = -.85*Math.min( .5*(cast parent).box.width, .5*(cast parent).box.height );
+		end = new Point(0,r);
 		rotation = Date.now().getMinutes()*6;
-		filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.8, 2, 2, 0.65, flash.filters.BitmapFilterQuality.LOW, false, false, false )];		
-	}
-	
-	public override function redraw(?opt:Dynamic=null) {
-		this.graphics.clear();
-		this.graphics.lineStyle(1, Std.int(Math.random() * 0xFFFFFF), 1, true,
-								flash.display.LineScaleMode.NONE,
-								flash.display.CapsStyle.ROUND,
-								flash.display.JointStyle.ROUND);		
-		var r = Math.min( Std.int((cast parent).box.width)>>1, Std.int((cast parent).box.height)>>1 );
-		this.graphics.moveTo(0,0);
-		this.graphics.lineTo(0,-.85*r);
-
 		center();
 	}
+	
 
 	static function __init__() {
 		haxegui.Haxegui.register(SecondsHand);
@@ -116,6 +88,7 @@ class SecondsHand extends Component {
 class AnalogClock extends AbstractButton
 {
 
+	var face : Circle;
 	var hours : HoursHand;
 	var minutes : MinutesHand;
 	var seconds : Component;
@@ -124,7 +97,7 @@ class AnalogClock extends AbstractButton
 	
 	override public function init(?opts:Dynamic) {
 		box = new Size(128, 128).toRect();
-		color = Color.tint(cast Math.random() * 0xFFFFFF, .5);
+		color = Color.tint(Color.random(), .5);
 	
 		mouseChildren = false;
 		

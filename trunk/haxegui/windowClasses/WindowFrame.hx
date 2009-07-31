@@ -42,7 +42,7 @@ import haxegui.events.DragEvent;
 
 import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
-import haxegui.Opts;
+import haxegui.utils.Opts;
 import haxegui.windowClasses.TitleBar;
 import haxegui.windowClasses.WindowFrame;
 
@@ -71,7 +71,7 @@ class WindowFrame extends Component
 		this.box = (cast parent).box.clone();
 		
 		super.init(opts);
-		text = null;
+		description = null;
 		
 		// Exclude modal windows from resizing
 		if(!(cast parent).isModal())

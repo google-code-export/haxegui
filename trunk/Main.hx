@@ -17,9 +17,10 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
+//{{{ Imports
 import flash.Lib;
 
+import flash.accessibility.Accessibility;
 import flash.system.Capabilities;
 
 import flash.geom.Point;
@@ -66,9 +67,10 @@ import haxegui.RichTextEditor;
 import haxegui.Haxegui;
 import haxegui.Introspector;
 import haxegui.Appearance;
-import haxegui.Utils;
+import haxegui.utils.Printing;
 import haxegui.utils.Color;
 
+import haxegui.controls.Component;
 import haxegui.controls.Button;
 import haxegui.controls.Label;
 import haxegui.controls.Input;
@@ -88,9 +90,11 @@ import haxegui.events.MenuEvent;
 
 import feffects.Tween;
 
+import haxegui.containers.Accordion;
 import haxegui.containers.Container;
 import haxegui.containers.Divider;
 import haxegui.containers.ScrollPane;
+//}}}
 
 
 
@@ -104,18 +108,19 @@ import haxegui.containers.ScrollPane;
 */
 class Main extends Sprite, implements haxe.rtti.Infos
 {
+
+
 	static var desktop : Sprite;
 	static var root = flash.Lib.current;
 	static var stage = root.stage;
 
-	
 	public static function main () {
 
 		// Set stage propeties
 		stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
 		stage.align = flash.display.StageAlign.TOP_LEFT;
 		stage.stageFocusRect = true;
-        stage.frameRate = 120;
+		stage.frameRate = 120;
 
 		// Assign a stage resize listener
 		stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
@@ -134,15 +139,30 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
 		desktop.graphics.endFill();
 
+		// Draw a grid ontop of the desktop
+		var grid = new Sprite();
+		grid.graphics.lineStyle(1, Color.tint(DefaultStyle.BACKGROUND, .95));
+		for(i in 0...Std.int(stage.stageWidth/Haxegui.gridSpacing)+1) {
+			grid.graphics.moveTo(Haxegui.gridSpacing*i, 0);
+			grid.graphics.lineTo(Haxegui.gridSpacing*i, stage.stageHeight);
+		}
+
+		for(j in 0...Std.int(stage.stageHeight/Haxegui.gridSpacing)+1) {
+			grid.graphics.moveTo(0, Haxegui.gridSpacing*j);
+			grid.graphics.lineTo(stage.stageWidth, Haxegui.gridSpacing*j);
+		}
+		grid.mouseEnabled = false;
+		root.addChild(grid);
+
 
 		// Logos
-/*
+		/*
 		var logo = cast flash.Lib.current.addChild(flash.Lib.attach("Logo"));
 		logo.name = "Logo";
 		logo.x = cast (stage.stageWidth - logo.width) >> 1;
 		logo.y = cast (stage.stageHeight - logo.height) >> 1;
 		logo.mouseEnabled = false;
-*/	
+		*/
 
 		// init
 		haxe.Timer.delay( init, 50);
@@ -150,7 +170,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 	}
 
 	public static function init ()	{
-		
+
 		// Setup Haxegui
 		haxegui.Haxegui.init();
 
@@ -174,51 +194,43 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 		log("*** Bootup messages:");
 		for(e in bootupMessages)
-			console.log(e.v, e.inf);
+		console.log(e.v, e.inf);
 
+		trace("Capabilities.hasAccessibility: " + Capabilities.hasAccessibility);
+		if (Capabilities.hasAccessibility) {
+			Accessibility.updateProperties();
+		}
 
-		stage.addEventListener(KeyboardEvent.KEY_DOWN, 
-			function(e){ 
-				switch(e.charCode) {
-					case "`".code:
-						console.visible = !console.visible; 
-						/*
-						WindowManager.toFront(console);
-						if(!console.visible) { 
-							var t = new feffects.Tween( 0, 1, 1000, console, "alpha", feffects.easing.Linear.easeNone);
-							var ty = new feffects.Tween( -console.height, console.y, 1000+Std.int(console.y*1.5), console, "y", feffects.easing.Back.easeOut);
-							console.y = -console.height;
-							console.visible = true; 
-							t.start(); 
-							ty.start(); 
-							}
-						else {
-							var t = new feffects.Tween( 1, 0, 350, console, "alpha", feffects.easing.Linear.easeNone);
-							t.start();
-							t.setTweenHandlers(null, function(v){ console.visible = false; } );
-							}
-						*/
-					}
-				});
+		trace("Accessibility.active: " + Accessibility.active);
+		if(Accessibility.active) {
+			Accessibility.updateProperties();
+		}
+
+		stage.addEventListener(KeyboardEvent.KEY_DOWN,
+		function(e){
+			switch(e.charCode) {
+				case "`".code:
+				console.visible = !console.visible;
+			}
+		});
 
 
 		// Statistics
-//		var stats = new Stats (flash.Lib.current, 540, 80);
-//		stats.init();
+		var stats = new Stats (flash.Lib.current, 540, 80);
+		stats.init();
 
 		// Color Picker
-//		var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
-//		colorpicker.init();
-		
+		var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
+		colorpicker.init();
 
 
-//~ var imageTypes:FileFilter = new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg; *.jpeg; *.gif; *.png");
-//~ var textTypes:FileFilter = new FileFilter("Text Files (*.txt, *.rtf)", "*.txt; *.rtf");
-//~ var allTypes = [imageTypes, textTypes];
-//~ var fileRef:FileReference = new FileReference();
-//~ fileRef.browse(allTypes);
-//~ var xmlType = [new FileFilter("Xml Files (*.xml)", "*.xml;")];
-//~ fileRef.browse(xmlType);
+		//~ var imageTypes:FileFilter = new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg; *.jpeg; *.gif; *.png");
+		//~ var textTypes:FileFilter = new FileFilter("Text Files (*.txt, *.rtf)", "*.txt; *.rtf");
+		//~ var allTypes = [imageTypes, textTypes];
+		//~ var fileRef:FileReference = new FileReference();
+		//~ fileRef.browse(allTypes);
+		//~ var xmlType = [new FileFilter("Xml Files (*.xml)", "*.xml;")];
+		//~ fileRef.browse(xmlType);
 
 		/////////////////////////////////////////////////////////////////////////
 		// Load XML
@@ -227,78 +239,74 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
 		//~ loader.load(new URLRequest("samples/Example1.xml"));
 
-/////////////////////////////////////////////////////////////////////////
-// Load XML, try by input flashvars first
-/////////////////////////////////////////////////////////////////////////
-  var layout = "";
-  try {
-    var l = flash.Lib.current.loaderInfo.parameters;
-  	trace(here.methodName + " " + Utils.print_r(l));
+		/////////////////////////////////////////////////////////////////////////
+		// Load XML, try by input flashvars first
+		/////////////////////////////////////////////////////////////////////////
+		var layout = "";
+		try {
+			var l = flash.Lib.current.loaderInfo.parameters;
+			trace(here.methodName + " " + Printing.print_r(l));
 
-  	var baseURL = Reflect.field(l, "baseURL");
-	if(baseURL==null)  baseURL = "";
-	haxegui.Haxegui.baseURL = baseURL;
+			var baseURL = Reflect.field(l, "baseURL");
+			if(baseURL==null)  baseURL = "";
+			haxegui.Haxegui.baseURL = baseURL;
 
-  	layout = Reflect.field(l, "layout");
-	if(layout==null) 
-		layout="samples/Example1.xml";
-		
-      for (f in Reflect.fields(l)) {
-          trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
-      }
-  } catch (e:Dynamic) {
-      trace(here.methodName + " " + e);
-  }
+			layout = Reflect.field(l, "layout");
+			if(layout==null)
+			layout="samples/Example1.xml";
+
+			for (f in Reflect.fields(l)) {
+				trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
+			}
+		} catch (e:Dynamic) {
+			trace(here.methodName + " " + e);
+		}
 
 
 		// rte
-//		var rte = new RichTextEditor(flash.Lib.current, 120,120);
-//		rte.init();
-		
+		var rte = new RichTextEditor(flash.Lib.current, 120,120);
+		rte.init();
 
 		// style
-//		var appearance = new Appearance(flash.Lib.current, 180,180);
-//		appearance.init();
-			
+		var appearance = new Appearance(flash.Lib.current, 180,180);
+		appearance.init();
+
 		// debugger
-//		var introspect = new Introspector(flash.Lib.current, 150,150);
-//		introspect.init();
-		
+		var introspect = new Introspector(flash.Lib.current, 150,150);
+		introspect.init();
+
 		// Analog Clock
-//		var clock = new haxegui.toys.AnalogClock(flash.Lib.current, 210,88);
-//		clock.init();
-		
-				
-//		loader.load(new URLRequest(Haxegui.baseURL+layout));
+		var clock = new haxegui.toys.AnalogClock(flash.Lib.current, 210,88);
+		clock.init();
 
-		//~ stage.addEventListener(MouseEvent.MOUSE_DOWN,
-		//~ function(e)
-		//~ {
-		//~ var c = new haxegui.toys.Curvy(flash.Lib.current, "curvy"+haxe.Timer.stamp(), e.stageX, e.stageY);
-		//~ c.init();
-		//~ }
-		//~ );
-
-    //~ var URL = "http://localhost:2000/remoting.n";
-    //~ var cnx = haxe.remoting.HttpAsyncConnection.urlConnect(URL);
-    //~ cnx.setErrorHandler( function(err) trace("Error : "+Std.string(err)) );
-	//~ 
+		loader.load(new URLRequest(Haxegui.baseURL+layout));
 
 
-	#if debug
+
+		//~ var URL = "http://localhost:2000/remoting.n";
+		//~ var cnx = haxe.remoting.HttpAsyncConnection.urlConnect(URL);
+		//~ cnx.setErrorHandler( function(err) trace("Error : "+Std.string(err)) );
+		//~
+
+		var patchLayer = new Component(flash.Lib.current, "patchLayer");
+		patchLayer.init();
+		patchLayer.description = null;
+		patchLayer.mouseEnabled = false;
+
+
+		#if debug
 		var a = new Array<String>();
 		var keys : Iterator<String> = untyped ScriptManager.defaultActions.keys();
 		for(k in keys)
-			a.push( k.split('.').slice(-2,-1).join('.') + "." + k.split('.').pop() );
+		a.push( k.split('.').slice(-2,-1).join('.') + "." + k.split('.').pop() );
 		a.sort(function(a,b) { if(a==b) return 0; if(a < b) return -1; return 1;});
 		log("Registered scripts: " + Std.string(a));
-	#end
+		#end
 
-flash.system.Security.allowDomain("*");
-flash.external.ExternalInterface.addCallback( "onChange", onChange );
-	
-	
- 
+		//flash.system.Security.allowDomain("*");
+		//flash.external.ExternalInterface.addCallback( "onChange", onChange );
+
+
 	}//main
 
 
@@ -312,22 +320,47 @@ flash.external.ExternalInterface.addCallback( "onChange", onChange );
 		var str = e.target.data;
 		LayoutManager.loadLayouts(Xml.parse(str));
 		for(k in LayoutManager.layouts.keys())
-			trace("Loaded layout : " + k);
+		trace("Loaded layout : " + k);
 		LayoutManager.setLayout(Xml.parse(str).firstElement().get("name"));
 
-//~ LayoutManager.fetchLayout("samples/Example6.xml");
-//~ LayoutManager.setLayout("Example6");
+		//~ LayoutManager.fetchLayout("samples/Example6.xml");
+		//~ LayoutManager.setLayout("Example6");
 
-	trace("Finished Initialization in "+ haxe.Timer.stamp() +" sec.");
+		var win = cast root.getChildByName("Widgets");
+		var sp = win.getChildByName("ScrollPane1");
+		var cnt = sp.content.getChildByName("Container1");
+
+		var digital = new Component(cast cnt);
+		digital.init();
+		digital.setAction("redraw", "this.graphics.beginFill(Color.BLACK); this.graphics.drawRect(0,0,70*4+10*3,101); this.graphics.endFill();");
+		digital.scaleX=digital.scaleY=.5;
+		for(i in 0...4) {
+			var digit = new haxegui.toys.SevenSegment(digital, 80*i);
+			digit.init();
+			digit.mouseEnabled = false;
+			if(i==0) digit.startInterval(.1);
+			if(i==1) digit.startInterval(1);
+			if(i==2) digit.startInterval(10);
+			if(i==3) digit.startInterval(100);
+		}
+
+
+		var node = new haxegui.Node(cast sp);
+		node.init();
+		var node = new haxegui.Node(cast sp);
+		node.init();
+		node.move(20,20);
+
+		trace("Finished Initialization in "+ haxe.Timer.stamp() +" sec.");
 
 		//~ var welcome = "\n<FONT SIZE='24'>Hello and welcome to <B>haxegui</B>.</FONT>\n";
 		var welcome = "\n
-	 _                       _ 
-	| |_ ___ _ _ ___ ___ _ _|_|
-	|   | .'|_'_| -_| . | | | |
-	|_|_|__,|_,_|___|_  |___|_| Copyright (c) 2009 The haxegui developers
-	                |___|\n\n\t";
-		
+		_                       _
+		| |_ ___ _ _ ___ ___ _ _|_|
+		|   | .'|_'_| -_| . | | | |
+		|_|_|__,|_,_|___|_  |___|_| Copyright (c) 2009 The haxegui developers
+		|___|\n\n\t";
+
 		var info = "<FONT SIZE='8'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+" "+(flash.system.Capabilities.isDebugger ? "Debug" : "")+".</FONT>\n";
 		info += "\n\t<U><A HREF=\"http://haxe.org/\">haXe</A></U> (pronounced as hex) is an open source programming language.\n";
 		info += "\tHaxe Graphical User Interface for the flash9 platform, is a set of classes\n\tworking as widgets like flash/flex's components and windows.\n\n";
@@ -335,7 +368,7 @@ flash.external.ExternalInterface.addCallback( "onChange", onChange );
 		log(welcome+info);
 		log("");
 
-	
+
 	}
 
 
@@ -348,9 +381,9 @@ flash.external.ExternalInterface.addCallback( "onChange", onChange );
 
 		LayoutManager.loadLayouts(Xml.parse(str));
 		for(k in LayoutManager.layouts.keys())
-			trace("Loaded layout : " + k);			 
-		LayoutManager.setLayout(Xml.parse(str).firstElement().get("name"));		
-		
+		trace("Loaded layout : " + k);
+		LayoutManager.setLayout(Xml.parse(str).firstElement().get("name"));
+
 	}
 
 
@@ -373,16 +406,16 @@ flash.external.ExternalInterface.addCallback( "onChange", onChange );
 		var stage = e.target;
 		if(desktop!=null) {
 			desktop.graphics.clear();
-			  var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND,40) ];
-			  var alphas = [ 1, 1 ];
-			  var ratios = [ 0, 0xFF ];
-			  var matrix = new flash.geom.Matrix();
-			  matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
-			  desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+			var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND,40) ];
+			var alphas = [ 1, 1 ];
+			var ratios = [ 0, 0xFF ];
+			var matrix = new flash.geom.Matrix();
+			matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
+			desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
 			desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
 			desktop.graphics.endFill();
-			}
+		}
 		/*
 		var logo = cast flash.Lib.current.getChildByName("Logo");
 		logo.x = Std.int(stage.stageWidth - logo.width) >> 1;

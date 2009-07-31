@@ -33,7 +33,7 @@ import haxegui.events.ResizeEvent;
 
 import haxegui.managers.StyleManager;
 
-import haxegui.Opts;
+import haxegui.utils.Opts;
 
 /**
 * ScrollPane masks his children, and allows to expose the hidden parts using ScrollBars.
@@ -67,7 +67,7 @@ class ScrollPane extends Component
 
 		super.init(opts);
 
-		text = null;
+		description = null;
 		
 		fitH = Opts.optBool(opts,"fitH", true);
 		fitV = Opts.optBool(opts,"fitV", true);
@@ -101,16 +101,12 @@ class ScrollPane extends Component
 
 	public override function onMouseWheel(e:MouseEvent) {
 		if(vert==null) return;
-		var y = vert.handle.y + 50 * -e.delta;
-
-		if(vert.handleMotionTween!=null)
-			vert.handleMotionTween.stop();
-
-		vert.handleMotionTween = new feffects.Tween( vert.handle.y, y, 1000, vert.handle, "y", feffects.easing.Expo.easeOut );
-		var scrollbar = vert;
-		vert.handleMotionTween.setTweenHandlers( function(v) { scrollbar.adjust(); } );
-		vert.handleMotionTween.start();
-
+		var handleMotionTween = new feffects.Tween( 0, 1, 1000, feffects.easing.Expo.easeOut );
+/*
+		vert.handle.updatePositionTween( handleMotionTween, 
+									new flash.geom.Point(0, e.delta * (vert.horizontal ? 1 : -1)* vert.adjustment.page),
+									null );
+	*/	
 		super.onMouseWheel(e);
 	}
 	

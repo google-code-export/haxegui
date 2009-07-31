@@ -1,0 +1,23 @@
+digraph uml {
+	graph [label="Package: haxegui Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="170,10",
+		bb="0,0,340,813"];
+	"haxegui.Haxegui" [label="{Haxegui}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Haxegui.html", tooltip=Haxegui, portPos=Haxegui, pos="38,39", rects="11,21,65,57", width="0.75", height="0.50"];
+	"haxegui.Window" [label="{Window}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Window.html", tooltip=Window, portPos=Window, pos="38,120", rects="11,102,65,138", width="0.75", height="0.50"];
+	"haxegui.WindowType" [label="{WindowType|NORMAL\lMODAL\lALWAYS_ON_TOP\l}", style="rounded,filled", fillcolor=white, pos="264,120", rects="188,101,254,139 254,101,340,139", width="2.11", height="0.53"];
+	"haxegui.Dialog" [label="{Dialog}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Dialog.html", tooltip=Dialog, portPos=Dialog, pos="38,188", rects="11,170,65,206", width="0.75", height="0.50"];
+	"haxegui.Console" [label="{Console}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Console.html", tooltip=Console, portPos=Console, pos="38,249", rects="11,231,65,267", width="0.75", height="0.50"];
+	"haxegui.RichTextEditor" [label="{RichTextEditor}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/RichTextEditor.html", tooltip=RichTextEditor, portPos=RichTextEditor, pos="38,306", rects="1,288,76,324", width="1.03", height="0.50"];
+	"haxegui.DataSource" [label="{DataSource}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/DataSource.html", tooltip=DataSource, portPos=DataSource, pos="38,362", rects="5,344,71,380", width="0.92", height="0.50"];
+	"haxegui.ColorPicker" [label="{ColorPicker}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/ColorPicker.html", tooltip=ColorPicker, portPos=ColorPicker, pos="38,417", rects="6,399,70,435", width="0.89", height="0.50"];
+	"haxegui.XmlParser" [label="{XmlParser}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/XmlParser.html", tooltip=XmlParser, portPos=XmlParser, pos="38,471", rects="8,453,68,489", width="0.83", height="0.50"];
+	"haxegui.Node" [label="{Node}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Node.html", tooltip="Node", portPos="Node", pos="38,525", rects="11,507,65,543", width="0.75", height="0.50"];
+	"haxegui.Introspector" [label="{Introspector}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Introspector.html", tooltip=Introspector, portPos=Introspector, pos="38,579", rects="4,561,72,597", width="0.94", height="0.50"];
+	"haxegui.Appearance" [label="{Appearance}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Appearance.html", tooltip=Appearance, portPos=Appearance, pos="38,633", rects="5,615,71,651", width="0.92", height="0.50"];
+	"haxegui.Stats" [label="{Stats}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Stats.html", tooltip=Stats, portPos=Stats, pos="38,687", rects="11,669,65,705", width="0.75", height="0.50"];
+	"haxegui.Alert" [label="{Alert}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Alert.html", tooltip=Alert, portPos=Alert, pos="38,741", rects="11,723,65,759", width="0.75", height="0.50"];
+	"haxegui.ColorPicker2" [label="{ColorPicker2}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/ColorPicker2.html", tooltip=ColorPicker2, portPos=ColorPicker2, pos="38,795", rects="4,777,73,813", width="0.94", height="0.50"];
+	"haxegui.Window" -> "haxegui.WindowType" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,188,120 65,120 91,120 134,120 173,120"];
+}

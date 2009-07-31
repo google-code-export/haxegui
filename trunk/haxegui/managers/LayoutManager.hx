@@ -36,7 +36,7 @@ class LayoutManager
 {
 	public static var layouts : Hash<Xml> = new Hash<Xml>();
 	public static var lastLoaded : String;
-	
+
 	/**
 	* Convenience method for loading a style from a url.
 	*
@@ -44,7 +44,7 @@ class LayoutManager
 	* @param cb Function callback which gets a true (success) or false (fail)
 	**/
 	public static function fetchLayout(url : String, cb:Bool->Void=null) {
-		var loader:URLLoader = new URLLoader();
+		var loader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, callback(onXmlLoaded,cb), false, 0, true);
 		loader.load(new URLRequest(url));
 	}

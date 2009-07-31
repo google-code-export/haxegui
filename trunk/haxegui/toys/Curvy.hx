@@ -33,82 +33,119 @@ import flash.events.FocusEvent;
 
 import haxegui.managers.StyleManager;
 
+import haxegui.utils.Color;
 
 import haxegui.controls.Component;
 
 
-class Curvy extends Component
+class Curvy extends Line
 {
 	var points : Array<Point>;
+	var cp : Array<Point>;
+
 	var k : Float;
 	var kmax : Int;
 	var kTween : feffects.Tween;
-	
-	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float)
-	{
-		super(parent, name, x, y);
-	}
 
-	override public function init(?opts:Dynamic)
-	{
+
+
+	override public function init(?opts:Dynamic) {
+		color = Color.random();
 		super.init();
-		this.color = cast Math.random() * 0xFFFFFF;
-		mouseEnabled = false;
 
-		kmax = 4;
-		k = .25*Math.PI;
+		//~ mouseEnabled = false;
 
-		points = [new Point(x,y)];
-		x=0;
-		y=0;
-	
-		setAction("interval",
+		//~ kmax = 4;
+		//~ k = .25*Math.PI;
+
+		start = new Point(stage.mouseX, stage.mouseY);
+		end = new Point(stage.mouseX, stage.mouseY);
+		points = [start, end];
+		cp = [Point.interpolate( start, end.add(new Point(0,50)), .5 )];
+
+
+
+		setAction("redraw",
 		"
 		this.graphics.clear();
 		var n = this.points.length;
 		for(i in 0...n-1) {
-			var mid = flash.geom.Point.interpolate(this.points[i], this.points[i+1], .5);			
-
 			this.graphics.lineStyle(9,this.color);
 			this.graphics.moveTo( this.points[i].x, this.points[i].y );
-			this.graphics.curveTo(mid.x, mid.y, this.points[i+1].x, this.points[i+1].y);
+			this.graphics.curveTo(this.cp[i].x, this.cp[i].y, this.points[i+1].x, this.points[i+1].y);
 			}
 		"
 		);
-	
 
-		var shadow = new flash.filters.DropShadowFilter (8, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
-		this.filters = [shadow];
-			
-			
-	this.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
-	this.stage.addEventListener(MouseEvent.MOUSE_UP, onRelease);
-	//~ this.stage.addEventListener(Event.ENTER_FRAME, redraw);
-	this.startInterval(25);
+		this.filters = [new flash.filters.DropShadowFilter (8, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
 
-	
+
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
+		stage.addEventListener(MouseEvent.MOUSE_UP, onRelease);
+
+
+
+	}
+
+	override function onMouseDown(e:MouseEvent) {
+		for(i in getElementsByClass(Circle))
+			i.visible = true;
+		super.onMouseDown(e);
 	}
 
 
-	function onMove(e) {
-				var p1 = points[0];
-				points = [p1];
-				
-				var p2 = new Point(e.stageX, e.stageY);
-				p2.y = Math.max( p1.y, p2.y )*2 + 20;
-				//~ points.push( flash.geom.Point.interpolate( p1, p2, .5 ));
-				//~ for(i in 1...4)	 
-					//~ points.push( flash.geom.Point.interpolate( p1, p2, 1/i ) );
-				p2 = new Point(e.stageX, e.stageY);
-				points.push( p2 );
+	override function onMove(e) {
+
+		var p1 = points[0];
+		//var p2 = new Point(e.stageX-x, e.stageY-y);
+		var p2 = new Point(e.stageX, e.stageY);
+
+		points = [p1, p2];
+		cp = [Point.interpolate( p1, p2.add(new Point(0,200)), .5 )];
+		//~ cp = [new Point(2*p2.x - (p1.x+p2.x)/2 , 2*p2.y - (p1.y+p2.y)/2 )];
+
+		var self = this;
+
+		if(numChildren<1) {
+			var c = new haxegui.toys.Circle(this);
+			c.visible = false;
+			c.moveTo(cp[0].x, cp[0].y);
+			c.init({radius:10});
+			c.addEventListener(MouseEvent.MOUSE_DOWN, function(e) {
+				self.stage.addEventListener(MouseEvent.MOUSE_MOVE, self.updateControlPoints, false, 0, true);
+				c.startDrag();
+				self.updateControlPoints();
+				self.stage.addEventListener(MouseEvent.MOUSE_UP, function(e) {
+				c.stopDrag();
+				self.stage.removeEventListener(MouseEvent.MOUSE_MOVE, self.updateControlPoints);
+				self.updateControlPoints();
+			}, false, 0, true);
+			});
+
+		}
+		else
+		(cast getChildAt(0)).moveTo(cp[0].x, cp[0].y);
+
+
+			updateControlPoints();
+				redraw();
 	}
-	
-	function onRelease(e)
-	{
-	this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
-	haxe.Timer.delay( stopInterval, 5000 );
-	var t = new feffects.Tween( k, 0, 2500, this, "k", feffects.easing.Linear.easeNone );
-	t.start();
+
+	function updateControlPoints(?e:Dynamic) {
+
+		for(i in 0...cp.length)
+			if(numChildren>i)
+			if(this.getChildAt(i)!=null) {
+				//~ cp[i] = new Point(this.getChildAt(i).x, this.getChildAt(i).y);
+				//cp[i].add(cp[i]);
+				//~ cp[i].x = 2*(this.mouseX) - (points[0].x+points[1].x)/2;
+				//~ cp[i].y = 2*(this.mouseY) - (points[0].y+points[1].y)/2;
+				cp = [Point.interpolate( start, new Point(stage.mouseX, stage.mouseY).add(new Point(0,200)), .5 )];
+
+				}
+	//~ dirty = true;
+		redraw();
+
 	}
 
 

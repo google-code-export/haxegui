@@ -20,10 +20,9 @@
 package haxegui.controls;
 
 /**
-*
-* Interface for tooltip'ed components
+* Interface for tooltip'd components
 *
 */
 interface IToolTip {
-	var text : String;
+	var description : String;
 }

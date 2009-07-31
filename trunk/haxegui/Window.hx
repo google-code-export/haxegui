@@ -39,7 +39,7 @@ import haxegui.managers.WindowManager;
 import haxegui.managers.DragManager;
 import haxegui.managers.FocusManager;
 import haxegui.managers.ScriptManager;
-import haxegui.Opts;
+import haxegui.utils.Opts;
 import haxegui.windowClasses.TitleBar;
 import haxegui.windowClasses.WindowFrame;
 import haxegui.windowClasses.StatusBar;
@@ -126,14 +126,13 @@ class Window extends Component
 		
 		box = new Size (320, 240).toRect();
 		color = DefaultStyle.BACKGROUND;
-		text = null;
+		description = null;
 		
 		type = Opts.getField(opts, "type");
 		if(type==null) type = WindowType.NORMAL;
 
 		super.init(opts);
 
-		
 		// options
 		sizeable = Opts.optBool(opts, "sizeable", true);
 		lazyResize = Opts.optBool(opts, "lazyResize", false);
@@ -142,7 +141,7 @@ class Window extends Component
 		frame = new WindowFrame(this, "frame");
 		frame.init({color: this.color});
 		
-		// add a titlebar
+		// titlebar
 		titlebar = new TitleBar(this, "titlebar");
 		titlebar.init({title:this.name, color: this.color });
 
@@ -170,46 +169,16 @@ class Window extends Component
 	* Returns true if the window is modal
 	**/
 	public function isModal() : Bool {
-		return switch(type) {
-		case MODAL: true;
-		default : false;
-		}
-	}
-
-	static function __init__() {
-		haxegui.Haxegui.register(Window,initialize);
-	}
-
-	static function initialize() {
+		return type == MODAL;
 	}
 
 
-	override public function destroy() {
-	
-		//var t = new feffects.Tween(1, 0, 750, this, "alpha", feffects.easing.Linear.easeNone);
-		//t.start();
-		
-		var self = this;
-		/*
-		haxe.Timer.delay(
-		function()
-		{
-		*/
-		var idx : Int = 0;
-		for(i in 0...self.numChildren) {
-			var c = self.getChildAt(idx);
-			if(Std.is(c,Component))
-				(cast c).destroy();
-			else
-				idx++;
-		}
-		for(i in 0...self.numChildren)
-			self.removeChildAt(0);
-		if(self.parent != null)
-			self.parent.removeChild(self);
-		//}, 750 );
-		
+
+	public override function destroy() {
+		dispatchEvent(new WindowEvent(WindowEvent.CLOSE));
+		super.destroy();
 	}
+
 	
 	public override function onMouseDoubleClick(e:MouseEvent) : Void {
 		/*
@@ -236,5 +205,11 @@ class Window extends Component
 	}
 	
 
+	static function __init__() {
+		haxegui.Haxegui.register(Window,initialize);
+	}
+
+	static function initialize() {
+	}
 	
 }

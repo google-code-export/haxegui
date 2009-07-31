@@ -1,0 +1,11 @@
+digraph uml {
+	graph [label="Package: flash.accessibility Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{AccessibilityProperties}",
+		lp="75,10",
+		bb="0,0,150,429"];
+	"flash.accessibility.AccessibilityImplementation" [label="{AccessibilityImplementation}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/accessibility/AccessibilityImplementation.html", tooltip=AccessibilityImplementation, portPos=e, pos="75,39", rects="0,21,150,57", width="2.08", height="0.50"];
+	"flash.accessibility.Accessibility" [label="{Accessibility}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/accessibility/Accessibility.html", tooltip=Accessibility, portPos=e, pos="75,269", rects="38,251,112,287", width="1.03", height="0.50"];
+	"flash.accessibility.AccessibilityProperties" [label="{AccessibilityProperties}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/accessibility/AccessibilityProperties.html", tooltip=AccessibilityProperties, portPos=e, pos="75,411", rects="14,393,137,429", width="1.69", height="0.50"];
+}

@@ -17,51 +17,77 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+//Imports {{{
 package haxegui.controls;
 
-import flash.display.Sprite;
-import flash.display.MovieClip;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-import flash.filters.DropShadowFilter;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.geom.Rectangle;
-import flash.text.TextField;
-import flash.text.TextFormat;
 
 import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
-import haxegui.Opts;
+import haxegui.utils.Opts;
 import haxegui.managers.StyleManager;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
+import haxegui.controls.Image;
 import haxegui.controls.AbstractButton;
 import haxegui.toys.Arrow;
 import haxegui.utils.Color;
 import haxegui.utils.Size;
 
 import feffects.Tween;
+//}}}
 
 
+enum ExpanderStyle {
+	ARROW;
+	ICON;
+	BOX;
+}
 
 
 /**
-* Expander class, may be expanded or collapsed by the user to reveal or hide child widgets.<br<
+* ExpanderButton
+*
+* @author Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+**/
+class ExpanderButton extends Button
+{
+	/** **/
+	public var arrow 		 : Arrow;
+
+	/** Expanded state icon **/
+	public var expandedIcon  : Icon;
+
+	/** Collapsed state icon **/
+	public var collapsedIcon : Icon;
+
+	static function __init__() {
+		haxegui.Haxegui.register(ExpanderButton);
+	}
+}
+
+
+/**
+* Expander class, may be expanded or collapsed by the user to reveal or hide child widgets.<br/>
+* <p></p>
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
 class Expander extends AbstractButton
 {
+	public var style : ExpanderStyle;
+
 	public var expanded(__getExpanded,__setExpanded) : Bool;
 
-	public var arrow : Arrow;
-	public var label : Label;
+	public var button : ExpanderButton;
+	public var label  : Label;
 
 	public var scrollTween : Tween;
 	public var arrowTween : Tween;
@@ -69,20 +95,35 @@ class Expander extends AbstractButton
 
 	override public function init(opts:Dynamic=null)
 	{
-		box = new Size(40, 15).toRect();
+		style = ExpanderStyle.ICON;
+		box = new Size(100, 24).toRect();
 		color =  Color.darken(DefaultStyle.BACKGROUND, 16);
 		expanded = false;
 
 		expanded = Opts.optBool(opts, "expanded", expanded);
 
-		arrow = new Arrow(this);
-		arrow.init({color: Color.darken(DefaultStyle.BACKGROUND, 16)});
-		//arrow.move(arrow.box.width,arrow.box.height);
-		
+		button = new ExpanderButton(this);
+
+		switch(style) {
+			case ExpanderStyle.ARROW:
+			button.arrow = new Arrow(button);
+			button.arrow.init({color: Color.darken(DefaultStyle.BACKGROUND, 16)});
+
+			case ExpanderStyle.ICON:
+			button.expandedIcon = new Icon(button);
+			button.expandedIcon.init({src: Icon.STOCK_FOLDER_OPEN});
+
+			button.collapsedIcon = new Icon(button);
+			button.collapsedIcon.init({src: Icon.STOCK_FOLDER});
+
+			button.expandedIcon.visible = expanded;
+			button.collapsedIcon.visible = !expanded;
+		}
+
 		label = new Label(this);
-		//~ label.text = Opts.optString(opts, "label", name);
-		label.init({innerData: this.name});
-		label.move(20,0);
+		label.init({text: this.name});
+		label.center();
+		label.x = Math.max(24, label.x);
 		label.mouseEnabled = false;
 		label.tf.mouseEnabled = false;
 
@@ -99,44 +140,45 @@ class Expander extends AbstractButton
 		if(disabled) return;
 
 		var self = this;
-		var r = new Rectangle(0,0,this.stage.stageWidth,expanded?this.stage.stageHeight:0);
-			
+		var r = new Size(this.stage.stageWidth,expanded?this.stage.stageHeight:0).toRect();
+
 		if(scrollTween!=null)
-			scrollTween.stop();
-				
-		if(!expanded)  
-			scrollTween = new Tween(box.height, this.stage.stageHeight, 1500, r, "height", feffects.easing.Linear.easeNone);
+		scrollTween.stop();
+
+		if(!expanded)
+		scrollTween = new Tween(box.height, this.stage.stageHeight, 1500, r, "height", feffects.easing.Linear.easeNone);
 		else
-			scrollTween = new Tween(this.stage.stageHeight, box.height, 750, r, "height", feffects.easing.Expo.easeOut);
-		
+		scrollTween = new Tween(this.stage.stageHeight, box.height, 750, r, "height", feffects.easing.Expo.easeOut);
+
 		scrollTween.setTweenHandlers( function(v) { self.scrollRect = r; });
-
 		scrollTween.start();
-	
 
 
-		if(arrowTween!=null)
+		switch(style) {
+			case ExpanderStyle.ARROW:
+			if(arrowTween!=null)
 			arrowTween.stop();
-			
-		arrowTween = new Tween(expanded?90:0, expanded?0:90, 150, arrow, "rotation", feffects.easing.Linear.easeNone);
-			
-		arrowTween.start();
 
-		
+			arrowTween = new Tween(expanded?90:0, expanded?0:90, 150, button.firstChild(), "rotation", feffects.easing.Linear.easeNone);
+
+			arrowTween.start();
+			case ExpanderStyle.ICON:
+			button.expandedIcon.visible = !expanded;
+			button.collapsedIcon.visible = expanded;
+
+		}
+
 		e.stopImmediatePropagation();
-		
+
 		expanded = !expanded;
 
 		for(i in 2...numChildren)
-//			this.getChildAt(i).visible = expanded;
 			this.getChildAt(i).visible = true;
-		
+
 		//~ dirty = true;
 		dispatchEvent(new Event(Event.CHANGE));
-		
 
-				
-		super.onMouseClick(cast e.clone());
+		super.onMouseClick(e);
 	}
 
 
@@ -167,10 +209,6 @@ class Expander extends AbstractButton
 		return v;
 	}
 
-
-	//////////////////////////////////////////////////
-	////           Initialization                 ////
-	//////////////////////////////////////////////////
 	static function __init__() {
 		haxegui.Haxegui.register(Expander);
 	}

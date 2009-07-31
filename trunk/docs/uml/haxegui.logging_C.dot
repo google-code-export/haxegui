@@ -1,0 +1,11 @@
+digraph uml {
+	graph [label="Package: haxegui.logging Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="171,10",
+		bb="0,0,342,511"];
+	"haxegui.logging.ILogger" [label="{ILogger}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/logging/ILogger.html", tooltip=ILogger, portPos=ILogger, pos="56,50", rects="29,32,83,68", width="0.75", height="0.50"];
+	"haxegui.logging.ErrorType" [label="{ErrorType|WARNNING\lNOTICE\lINFO\lFATAL\lERROR\l}", style="rounded,filled", fillcolor=white, pos="283,50", rects="225,21,282,79 282,21,342,79", width="1.61", height="0.81"];
+	"haxegui.logging.LogLevel" [label="{LogLevel|WARRNING\lVERBOSE\lOFF\lNOTICE\lINFO\lERROR\l}", style="rounded,filled", fillcolor=white, pos="56,477", rects="0,443,53,511 53,443,112,511", width="1.56", height="0.94"];
+	"haxegui.logging.ILogger" -> "haxegui.logging.ErrorType" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,225,50 83,50 114,50 166,50 210,50"];
+}

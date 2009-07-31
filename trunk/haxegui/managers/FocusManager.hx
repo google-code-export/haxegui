@@ -32,7 +32,14 @@ import flash.events.FocusEvent;
 
 import haxegui.controls.Component;
 
-
+/**
+ * 
+ * 
+ * 
+ * @version 0.1
+ * @author Russell Weir <damonsbane@gmail.com>
+ * @author Omer Goshen <gershon@goosemoose.com>
+ */
 class FocusManager extends EventDispatcher, implements Dynamic
 {
 
@@ -40,6 +47,7 @@ class FocusManager extends EventDispatcher, implements Dynamic
   private static var _instance:FocusManager = null;
 
   private static var _focus: DisplayObject;
+  
   private static var _oldFocus: DisplayObject;
 
   private static var _showFocus : Bool;
@@ -77,14 +85,11 @@ class FocusManager extends EventDispatcher, implements Dynamic
 	
     if( _focus!=o )
     {
-        if(_focus!=null)
-        //~ _focus.dispatchEvent (new FocusEvent (FocusEvent.FOCUS_OUT, false, true));
         _focus.dispatchEvent (new FocusEvent (FocusEvent.FOCUS_OUT));
 
         _oldFocus = _focus;
         _focus = o;
 
-        //~ this.dispatchEvent (new FocusEvent (FocusEvent.MOUSE_FOCUS_CHANGE, false, false, cast(o,flash.display.InteractiveObject)));
         this.dispatchEvent (new FocusEvent (FocusEvent.MOUSE_FOCUS_CHANGE));
         this.dispatchEvent (new FocusEvent (FocusEvent.KEY_FOCUS_CHANGE));
 

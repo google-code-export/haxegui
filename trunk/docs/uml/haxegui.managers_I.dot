@@ -1,0 +1,30 @@
+digraph uml {
+	graph [label="Package: haxegui.managers Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{LayoutManager}",
+		lp="219,10",
+		bb="0,0,438,833"];
+	"haxegui.managers.WindowManager" [label="{WindowManager}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/managers/WindowManager.html", tooltip=WindowManager, portPos=e, pos="92,309", rects="46,291,139,327", width="1.28", height="0.50"];
+	"flash.events.EventDispatcher" [pos="367,174", rects="297,156,438,192", width="1.94", height="0.50"];
+	"haxegui.managers.DragManager" [label="{DragManager}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/managers/DragManager.html", tooltip=DragManager, portPos=e, pos="92,255", rects="52,237,133,273", width="1.11", height="0.50"];
+	"haxegui.managers.Cursor" [label="{Cursor|WE\lSIZE_ALL\lNWSE\lNS\lNESW\lIBEAM\lHAND2\lHAND\lDRAG\lCROSSHAIR\lARROW\l}", style="rounded,filled", fillcolor=white, pos="92,421", rects="37,362,82,480 82,362,147,480", width="1.53", height="1.64"];
+	"haxegui.managers.CursorManager" [label="{CursorManager}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/managers/CursorManager.html", tooltip=CursorManager, portPos=e, pos="92,201", rects="47,183,137,219", width="1.25", height="0.50"];
+	"haxegui.managers.FocusManager" [label="{FocusManager}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/managers/FocusManager.html", tooltip=FocusManager, portPos=e, pos="92,147", rects="49,129,135,165", width="1.19", height="0.50"];
+	"haxegui.managers.MouseManager" [label="{MouseManager}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/managers/MouseManager.html", tooltip=MouseManager, portPos=e, pos="92,93", rects="47,75,137,111", width="1.25", height="0.50"];
+	"haxegui.managers.StyleManager" [label="{StyleManager}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/managers/StyleManager.html", tooltip=StyleManager, portPos=e, pos="92,525", rects="51,507,133,543", width="1.14", height="0.50"];
+	"haxegui.managers.DefaultStyle" [label="{DefaultStyle}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/managers/DefaultStyle.html", tooltip=DefaultStyle, portPos=e, pos="92,583", rects="55,565,130,601", width="1.03", height="0.50"];
+	"haxegui.managers.ScriptObject" [label="{\<typedef\>\nScriptObject|setup () : hscript.Interp\lprogram : hscript.Expr\linterp : hscript.Interp\lcode : String\l}", style="rounded,filled", fillcolor=white, pos="92,645", rects="1,621,69,669 69,621,184,669", width="2.53", height="0.67"];
+	"haxegui.managers.ScriptManager" [label="{ScriptManager}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/managers/ScriptManager.html", tooltip=ScriptManager, portPos=e, pos="92,706", rects="49,688,135,724", width="1.19", height="0.50"];
+	"haxegui.managers.Tooltip" [label="{Tooltip}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/managers/Tooltip.html", tooltip=Tooltip, portPos=e, pos="92,761", rects="65,743,119,779", width="0.75", height="0.50"];
+	"haxegui.controls.Component" [pos="367,761", rects="298,743,436,779", width="1.92", height="0.50"];
+	"haxegui.managers.TooltipManager" [label="{TooltipManager}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/managers/TooltipManager.html", tooltip=TooltipManager, portPos=e, pos="92,39", rects="48,21,136,57", width="1.22", height="0.50"];
+	"haxegui.managers.LayoutManager" [label="{LayoutManager}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/managers/LayoutManager.html", tooltip=LayoutManager, portPos=e, pos="92,815", rects="47,797,137,833", width="1.25", height="0.50"];
+	"haxegui.managers.WindowManager" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,341,192 139,297 154,293 170,288 184,282 238,258 296,222 332,198"];
+	"haxegui.managers.DragManager" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,307,192 133,243 149,238 168,233 184,228 221,217 264,205 297,195"];
+	"haxegui.managers.CursorManager" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,297,181 137,197 177,193 238,187 287,182"];
+	"haxegui.managers.FocusManager" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,297,167 135,151 176,155 237,161 287,166"];
+	"haxegui.managers.MouseManager" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,306,156 137,106 152,111 169,115 184,120 221,131 262,143 296,153"];
+	"haxegui.managers.Tooltip" -> "haxegui.controls.Component" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,298,761 119,761 158,761 231,761 288,761"];
+	"haxegui.managers.TooltipManager" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,341,156 136,50 152,54 169,60 184,66 238,90 296,126 332,150"];
+}

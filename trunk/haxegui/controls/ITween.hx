@@ -26,6 +26,8 @@ import feffects.Tween;
 /**
 *
 * Interface for tweening widgets.
+* 
+* @todo updateSizeTween
 *
 */
 interface ITween {
@@ -35,8 +37,8 @@ interface ITween {
 	private var colorTween  : Tween;
 	private var positionTween  : Tween;
 
-	public function updateColorTween(t : Tween) : Void;
-	public function updatePositionTween(t : Tween, p:Point) : Void;
+	public function updateColorTween(?t : Tween) : Void;
+	public function updatePositionTween(?t : Tween, ?p:Point, ?f:Float->Void) : Void;
 
 }
 

@@ -21,13 +21,15 @@ package haxegui.controls;
 
 import flash.display.DisplayObjectContainer;
 import flash.geom.Rectangle;
-
+import flash.events.Event;
 import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
 import haxegui.managers.StyleManager;
-import haxegui.Opts;
+import haxegui.utils.Opts;
 import haxegui.controls.AbstractButton;
-
+import haxegui.controls.IAdjustable;
+import haxegui.controls.Button;
+import haxegui.toys.Socket;
 import haxegui.utils.Color;
 import haxegui.utils.Size;
 
@@ -59,53 +61,38 @@ import haxegui.utils.Size;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class CheckBox extends AbstractButton
+class CheckBox extends PushButton
 {
-
-	public var checked(__getChecked,__setChecked) : Bool;
-
-	/** label (on by default) **/
-	public var label : Label;
 
 	override public function init(opts:Dynamic=null) {
 		box = new Size(20, 20).toRect();
 		color = DefaultStyle.BACKGROUND;
-		
+		adjustment = new Adjustment({ value: false, min: false, max: true, step:null, page: null});
+		//~ adjustment = new Adjustment({ value: 1, min: 0, max: 1, step:1, page: 1});
 		super.init(opts);
-		text = name;
+		mouseChildren = true;
 		
-		checked = Opts.optBool(opts, "checked", false);
-
-		// Default to a no-label checkbox
-		if(Opts.optString(opts, "label", null)!=null) {
-		label = new Label(this, "label", 24, 3);
-		label.text = Opts.optString(opts, "label", name);
-		label.init();
-		}
-
-	}
-
-// 	override public function onMouseClick(e:MouseEvent) {
-// 		if(disabled) return;
-// 		checked = !checked;
-// 	}
-
-
-	//////////////////////////////////////////////////
-	////           Getters/Setters                ////
-	//////////////////////////////////////////////////
+		label.box.width -= 30;
+		label.center();
+		label.move(30,0);
+		
+		if(!disabled) {
+			slot = new haxegui.toys.Socket(this);
+			slot.init();
+			slot.moveTo(-14,Std.int(this.box.height)>>1);
 	
-	private function __getChecked() : Bool {
-		return this.checked;
+			slot.color = Color.tint(slot.color, .5);
+		}	
+
+		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 	}
 
-	private function __setChecked(v:Bool) : Bool {
-		if(v == this.checked) return v;
-		this.checked = v;
-		this.dirty = true;
-		return v;
+	public function onChanged(e:Event) {
+		trace(e+"\t"+adjustment.valueAsString());
+		selected = cast adjustment.getValue();
+		redraw();
 	}
-
+	
 	override private function __setDisabled(v:Bool) : Bool {
 		super.__setDisabled(v);
 		if(this.disabled) {

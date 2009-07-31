@@ -20,11 +20,15 @@
 package haxegui.controls;
 
 import flash.geom.Rectangle;
-import haxegui.Opts;
-import haxegui.managers.StyleManager;
-import haxegui.Image;
-import haxegui.utils.Size;
 import haxegui.controls.AbstractButton;
+import haxegui.managers.StyleManager;
+import haxegui.controls.Image;
+import haxegui.utils.Size;
+import haxegui.utils.Color;
+import haxegui.utils.Opts;
+import haxegui.controls.IAdjustable;
+import haxegui.toys.Socket;
+
 
 /**
 * A chromed button, with optional label and icon.<br>
@@ -33,15 +37,15 @@ import haxegui.controls.AbstractButton;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class Button extends AbstractButton
+class Button extends AbstractButton, implements IAdjustable
 {
 
-	/** 
+	/**
 	* Optional label for the button
 	*
 	* The are several ways to create a button with a label:
 	* <ul>
-	* <li>Using xml: 
+	* <li>Using xml:
 	* <pre class="code xml">
 	* <haxegui:controls:Button label="button"/></li>
 	* </pre>
@@ -58,17 +62,17 @@ class Button extends AbstractButton
 	* label.init({innerData: "button"});
 	* </pre>
 	* </li>
-	*</ul>			
-	*	@see Label
-	**/
+	*</ul>
+	* @see Label
+	*/
 	public var label : Label;
-	
-	/** 
+
+	/**
 	* Optional icon for the button
 	*
 	* The are several ways to create a button with an icon:
 	* <ul>
-	* <li>Using xml: 
+	* <li>Using xml:
 	* <pre class="code xml"><haxegui:controls:Button icon="STOCK_NEW"/></pre>
 	* </li>
 	* <li>Passing an icon to init():
@@ -81,20 +85,20 @@ class Button extends AbstractButton
 	* btn.icon = new Icon(btn);
 	* icon.init({src: Icon.STOCK_NEW});</pre>
 	* </li>
-	* </ul>			
-	**/
+	* </ul>
+	*/
 	public var icon  : Icon;
-	
-	/** 
+
+	/**
 	* when true button will stay pressed when clicked and raise back on the next click.<br>
 	*
-	* use the [selected] property to tell if it is pressed or not. 
+	* use the [selected] property to tell if it is pressed or not.
 	*
 	* @see selected
 	**/
 	public var toggle : Bool;
-	
-	/** 
+
+	/**
 	 * true when is pressed.<br>
 	 *
 	 * Notice when using hscript, selected is not available in direct access, use the getter and setter.
@@ -102,47 +106,49 @@ class Button extends AbstractButton
 	 * @see selected
 	 **/
 	public var selected( __getSelected, __setSelected ) : Bool;
-	
+
+	/** slot **/
+	public var slot : Socket;
+	public var adjustment : Adjustment;
+
+	/**
+	 * @see [Component.init]
+	 */
 	override public function init(opts:Dynamic=null) {
 		color = DefaultStyle.BACKGROUND;
 		mouseChildren = false;
-		
+
 		// dont create zero sized buttons
-		if(box==null || box.isEmpty()) 
-			//box = new Rectangle(0,0,90,30);
+		if(box==null || box.isEmpty())
 			box = new Size(90,30).toRect();
-		
+
 		toggle = Opts.optBool(opts, "toggle", false);
 		selected = Opts.optBool(opts, "selected", false);
-		
+
 		super.init(opts);
-		text = name;
-		
+
+		description = name;
+
 		// Default to a no-label simple button
 		if(Opts.optString(opts, "label", null)!=null) {
-		//~ label = cast this.addChild(new Label());
-		label = new Label(this);
-		label.text = Opts.optString(opts, "label", name);
-		label.init();
-		label.mouseEnabled = false;
-		label.tabEnabled = false;
+			label = new Label(this);
+			label.init({text : Opts.optString(opts, "label", name)});
 		}
-		
+
+		// Default to a no-icon simple button
 		if(Opts.optString(opts, "icon", null)!=null) {
-		
-		icon = new Icon(this);
-		var src = Opts.optString(opts, "icon", null);
-		
-		// check for STOCK_ type icon
-		if(Reflect.field(Icon, src)!=null)
-			src = Reflect.field(Icon, src);
-			
-		icon.init({src: src});
-		icon.mouseEnabled = false;
-		icon.tabEnabled = false;
-		icon.move(4,4);
+			icon = new Icon(this);
+			var src = Opts.optString(opts, "icon", null);
+
+			// check for STOCK_ type icon
+			if(Reflect.field(Icon, src)!=null)
+				src = Reflect.field(Icon, src);
+
+			icon.init({src: src});
+			icon.move(4,4);
 		}
-		
+
+		// Flat-look for toolbar buttons
 		if(Std.is(parent, haxegui.controls.ToolBar)) {
 			redraw();
 			dirty = false;
@@ -151,12 +157,11 @@ class Button extends AbstractButton
 			setAction("mouseUp", "event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
 			setAction("mouseOver","this.redraw();");
 			}
+					
+	
 	}
 
-	static function __init__() {
-		haxegui.Haxegui.register(Button);
-	}
-	
+
 	/** Getter for toggle button state **/
 	public function __getSelected() : Bool {
 		return selected;
@@ -169,13 +174,33 @@ class Button extends AbstractButton
 		return selected;
 	}
 
-
+	/** Click handler, ignores disabled, push\pulls toggles, and clicks normal buttons **/
 	public override function onMouseClick(e:flash.events.MouseEvent) {
 		if(disabled) return;
 		if(toggle)
 			selected = !selected;
 		super.onMouseClick(e);
 	}
-	
+
+	static function __init__() {
+		haxegui.Haxegui.register(Button);
+	}
+
+}
+
+/**
+ * Alias for a [Button] with toggle=true
+ **/
+class PushButton extends Button {
+	override public function init(opts:Dynamic=null) {
+		if(opts==null) opts = {};
+		Reflect.setField(opts, "toggle", true);
+		super.init(opts);
+	}
+
+	static function __init__() {
+		haxegui.Haxegui.register(PushButton);
+	}
+
 }
 

@@ -14,4 +14,4 @@ this.graphics.lineStyle(1, Color.darken(this.color, 20));
 this.graphics.moveTo(0, 20);
 this.graphics.lineTo(this.box.width, 20);
 
-this.arrow.moveTo( this.box.width-10, 10 );
+//this.arrow.moveTo( this.box.width-10, 10 );

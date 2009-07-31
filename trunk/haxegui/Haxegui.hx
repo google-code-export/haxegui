@@ -44,15 +44,24 @@ class Haxegui {
 	
 	/** List of dirty components **/
 	public static var dirtyList : List<Component> = new List();
+	
 	/** Timer to watch dirty components **/
 	public static var dirtyTimer : Timer;
+	
 	/** Timer interval **/
 	public static var dirtyInterval( default, setInterval ) : Int;
-	/** **/
-	public static var gridSnapping : Bool = false;
 	
+	/** Grid spacing in pixels **/
+	public static var gridSpacing : Int = 15;
+	
+	/** Whether to snap to grid on move operations **/
+	public static var gridSnapping : Bool = false;
+
 	/**
-	**/
+	 * Initialize the haxegui system<br/>
+	 * It calls the initializing function for all [Component]s in the the [initializers] list,
+	 * starts the dirty timer, and sets up the mouse & cursor managers.
+	 **/
 	public static function init() {
 		for(o in initializers) {
 			#if debug
@@ -72,13 +81,13 @@ class Haxegui {
 		StyleManager.setStyle("default");
 		trace("complete");
 		
-		dirtyInterval = 20;
+		dirtyInterval = 300;
 	}
 
 	public static function setInterval(v:Int) : Int {
 		dirtyInterval = v;
 		dirtyTimer = new haxe.Timer(dirtyInterval);
-		dirtyTimer.run = onInterval;	
+		dirtyTimer.run = onInterval;
 		return dirtyInterval;
 	}
 	
@@ -115,6 +124,10 @@ class Haxegui {
 		dirtyList.add(c);
 	}
 
-
+	/** Toggle the [gridSnapping] on and off. **/
+	public static function toggleSnapping() : Bool {
+		return gridSnapping = !gridSnapping;
+	}
+	
 
 }

@@ -23,23 +23,69 @@
 				::end::
 			::end::
 			</div>
+
 		
 		<div class="type-frame">
+
+		<h1>Info</h1>
+		<div class="doc">
+		<p>for the haxe API help see <a href="http://haxe.org/api">http://haxe.org/api</a></p>
+		
+		<p>External dependencies for the project:</p>
+		<ul style="list-style:circle;">
+		<li>swfmill for asset compilation</li>
+		<li>neko for the StyleCompiler</li>
+		<li>feffects and hscript libraries from haxelib for haxe compilation</li>
+		<li>chxdoc and HaxeUmlGen for the documentation and diagrams</li>
+		<li>CodeHighlighter is external but included for being a single file</li>
+		</ul>	
+		<br/>
+		<p>Some notes about using <a href="http://code.google.com/p/hscript/">hscript</a>, hscript is not haxe and that means:</p>
+		<ul style="list-style:circle;">
+		<li>no typing or classes declarations</li>
+		<li>no object declaration such as { x : 0, y : -1 }</li>
+		<li>no switch construct</li>
+		<li>only one variable declaration is allowed in var</li>
+		<li>no getter \ setter magic, let C be a class with member A(get_A, set_A), use explicitly C.get_A()\c.set_A(), and not A\A= </li>
+		</ul>
+		</div>
+    
 		<h1>Classes</h1>
 			<table width="100%">
 			<th>Class</th><th>Description</th>
 			::foreach i config.allTypes::
 				<tr class="even::repeat.i.even::">
 					<td class="::i.type::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></td>					
-					<td class="line-comment">::if i.docs::&nbsp;::i.docs.comments::&nbsp;::end::</td>
+					<td class="line-comment" >::if i.docs::&nbsp;::i.docs.comments.split("<br/>").shift()::&nbsp;::end::</td>
 				</tr>
-<!--
-			<li class="::i.type:: even::repeat.i.even::"><a href="types/::i.subdir::::i.name::::config.htmlFileExtension::" title="::i.name::" target="classFrame">::i.name::</a></li>
--->
 			::end::
 			</table>
-		</div>
 
+		<h1>License</h1>
+		<div class="doc">
+			<p>The MIT License</p><p>
+			Copyright (c) 2009 The haxegui developers
+			</p><p>
+			Permission is hereby granted, free of charge, to any person obtaining a copy
+			of this software and associated documentation files (the "Software"), to deal
+			in the Software without restriction, including without limitation the rights
+			to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+			copies of the Software, and to permit persons to whom the Software is
+			furnished to do so, subject to the following conditions:
+			</p><p>
+			The above copyright notice and this permission notice shall be included in
+			all copies or substantial portions of the Software.
+			</p><p>
+			THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+			IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+			FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+			AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+			LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+			OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+			THE SOFTWARE.	
+			</p>
+		</div>
+		</div>
 		</div>
 	</body>
 </html>

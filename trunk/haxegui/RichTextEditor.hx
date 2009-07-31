@@ -25,11 +25,6 @@ import flash.geom.Rectangle;
 
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-import flash.display.MovieClip;
-import flash.display.Graphics;
-import flash.display.Shape;
-import flash.display.Sprite;
-import flash.display.LineScaleMode;
 
 import flash.text.TextField;
 import flash.text.TextFormat;
@@ -58,15 +53,17 @@ import flash.display.Bitmap;
 import flash.display.BitmapData;
 
 
-
 import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
 
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
+
 import haxegui.Window;
 import haxegui.windowClasses.StatusBar;
+
+import haxegui.controls.Component;
 import haxegui.controls.Label;
 import haxegui.controls.Button;
 import haxegui.controls.Slider;
@@ -75,10 +72,13 @@ import haxegui.controls.Input;
 import haxegui.controls.ComboBox;
 import haxegui.controls.ToolBar;
 
+import haxegui.utils.Color;
+import haxegui.utils.Size;
+
 /**
 *
-* RTE class
-* 
+* Rich Text Editor with controls for selecting font-face, font-size, alignment and color.<br/>
+*
 *
 *
 * @author <gershon@goosemoose.com>
@@ -88,16 +88,15 @@ import haxegui.controls.ToolBar;
 class RichTextEditor extends Window
 {
 	public var tf : TextField;
+
 	var _color : UInt;
 	var _html : Bool;
 
-
-	public override function init(?opts:Dynamic)
-	{
+	public override function init(?opts:Dynamic=null) {
 		super.init();
-		_color = 0x000000;
+		_color = Color.BLACK;
 		_html = true;
-		box = new Rectangle (0, 0, 512, 380);
+		box = new Size(512, 380).toRect();
 
 		//
 		//var menubar = new MenuBar (this, "MenuBar", 10,20);
@@ -105,115 +104,66 @@ class RichTextEditor extends Window
 
 		//~ var scrollpane = new ScrollPane(this, "ScrollPane", 10, 44);
 		//~ scrollpane.init({width: 502, height: 12});
-		
-		//
+
+		// toolbar with comboboxes and buttons
 		var toolbar = new ToolBar(this, "Toolbar", 10, 20);
 		toolbar.init();
-		
-		
-		
 
+		// font face selection combobox
 		var fontbox = new ComboBox(toolbar, "FontBox", 14, 10);
-		fontbox.init({width: 100});
-		fontbox.dropButton.setAction("mouseClick",
-		"
-			parent.list = new haxegui.controls.UiList(root);
-			parent.list.color = parent.color;
-			var p = new flash.geom.Point( parent.x, parent.y );		 	
-			p = parent.parent.localToGlobal(p);
-			parent.list.data = ['Arial', 'Arial Black', 'Bitstream Vera Sans', 'Courier', 'Georgia', 'Comic Sans MS', 'Impact', 'Times New Roman', 'Trebuchet MS', 'Verdana'];
-			parent.list.init();
-			parent.list.move(p.x+1, p.y+20);
-			parent.list.box.width = parent.box.width - 22;
-			parent.list.box.height = 20*parent.list.data.length;
-			parent.list.removeChild(parent.list.header);
-			parent.list.redraw();
-			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
-			parent.list.filters = [shadow];
+		fontbox.init({text: "Sans", width: 100});
+		fontbox.data = ["Arial", "Arial Black", "Bitstream Vera Sans", "Courier", "Georgia", "Comic Sans MS", "Impact", "Times New Roman", "Trebuchet MS", "Verdana"];
 
+		var self = this;
 
-			function click(e) {
-			parent.input.tf.text = e.target.getChildAt(0).tf.text;
-			
-			var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
-			var text = tf.selectedText;
-			tf.replaceSelectedText( \"[replace]\" );
+		var onFontChanged = function(e) {
+			var font = fontbox.input.getText();
+			var text = self.tf.selectedText;
+			self.tf.replaceSelectedText( "[replace]" );
 
 			var htmlText  = new flash.text.TextField();
-			htmlText.text = tf.htmlText;
-					
-			var start = htmlText.text.indexOf(\"[replace]\", 0);
-			var end = start + \"[replace]\".length;
-			
-			htmlText.replaceText(start, end, \"<FONT FACE='\"+parent.input.tf.text+\"'>\"+ text + \"</FONT>\" );
+			htmlText.text = self.tf.htmlText;
 
-			tf.htmlText = htmlText.text;			
-			}
+			var start = htmlText.text.indexOf("[replace]", 0);
+			var end = start + "[replace]".length;
 
-			for(child in parent.list)
-				child.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, click);
+			htmlText.replaceText(start, end, "<FONT FACE='"+font+"'>"+ text + "</FONT>" );
 
-			function down(e) { 
-			  trace(e); 
-			  if(parent.list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
-				  parent.list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
-			  parent.list.parent.removeChild(parent.list);
-			  parent.list = null;
-			  }
-			parent.list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);			
-		"
-		);
-		
-		/** Font size ComboBox **/
+			self.tf.htmlText = htmlText.text;
+		}
+		fontbox.addEventListener(Event.CHANGE, onFontChanged);
+
+		// font size selection combobox
 		var sizebox = new ComboBox(toolbar, "SizeBox", 124, 10);
-		sizebox.init({width: 50});
-		sizebox.dropButton.setAction("mouseClick",
-		"
-			parent.list = new haxegui.controls.UiList(root);
-			parent.list.color = parent.color;
-			var p = new flash.geom.Point( parent.x, parent.y );		 	
-			p = parent.parent.localToGlobal(p);
-			parent.list.data = [7,8,12,14,16,18,20,22,24,32,48,72,96];
-			parent.list.init();
-			parent.list.move(p.x+1, p.y+20);
-			parent.list.box.width = parent.box.width - 22;
-			parent.list.box.height = 20*parent.list.data.length;
-			parent.list.removeChild(parent.list.header);
-			parent.list.redraw();
-			var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
-			parent.list.filters = [shadow];
+		sizebox.init({text: "10", width: 50});
+		sizebox.data = [7,8,12,14,16,18,20,22,24,32,48,72,96];
 
-			function click(e) {
-			parent.input.tf.text = e.target.getChildAt(0).tf.text;
-			
-			var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
-			var text = tf.selectedText;
-			tf.replaceSelectedText( \"[replace]\" );
+		var onMenuShow = function(e) {
+			trace(e);
+			trace(e.target);
+			e.target.color = Color.random();
+			e.target.redraw();
+		}
+
+		var onSizeChanged = function(e) {
+			var size = sizebox.input.getText();
+
+			var text = self.tf.selectedText;
+			self.tf.replaceSelectedText( "[replace]" );
 
 			var htmlText  = new flash.text.TextField();
-			htmlText.text = tf.htmlText;
-					
-			var start = htmlText.text.indexOf(\"[replace]\", 0);
-			var end = start + \"[replace]\".length;
-			
-			htmlText.replaceText(start, end, \"<FONT SIZE='\"+parent.input.tf.text+\"'>\"+ text + \"</FONT>\" );
+			htmlText.text = self.tf.htmlText;
 
-			tf.htmlText = htmlText.text;
-			}
+			var start = htmlText.text.indexOf("[replace]", 0);
+			var end = start + "[replace]".length;
 
-			for(child in parent.list)
-				child.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, click);
+			htmlText.replaceText(start, end, "<FONT SIZE='"+ size +"'>"+ text + "</FONT>" );
 
-			function down(e) { 
-			  trace(e); 
-			  if(parent.list.stage.hasEventListener(flash.events.MouseEvent.MOUSE_DOWN))
-				  parent.list.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
-			  parent.list.parent.removeChild(parent.list);
-			  parent.list = null;
-			  }
-			parent.list.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, down);
-		"
-		);
+			self.tf.htmlText = htmlText.text;
+		}
+
+		sizebox.addEventListener(Event.CHANGE, onSizeChanged);
+
 
 		var btn = new Button(toolbar, "Bold", 180, 8);
 		btn.init({width: 24, height: 24, label: null, icon: "format-text-bold.png" });
@@ -225,10 +175,10 @@ class RichTextEditor extends Window
 
 		var htmlText  = new flash.text.TextField();
 		htmlText.text = tf.htmlText;
-				
+
 		var start = htmlText.text.indexOf(\"[replace]\", 0);
 		var end = start + \"[replace]\".length;
-		
+
 		htmlText.replaceText(start, end, \"<B>\" + text + \"</B>\" );
 
 		tf.htmlText = htmlText.text;
@@ -245,10 +195,10 @@ class RichTextEditor extends Window
 
 		var htmlText  = new flash.text.TextField();
 		htmlText.text = tf.htmlText;
-				
+
 		var start = htmlText.text.indexOf(\"[replace]\", 0);
 		var end = start + \"[replace]\".length;
-		
+
 		htmlText.replaceText(start, end, \"<I>\" + text + \"</I>\" );
 
 		tf.htmlText = htmlText.text;
@@ -265,10 +215,10 @@ class RichTextEditor extends Window
 
 		var htmlText  = new flash.text.TextField();
 		htmlText.text = tf.htmlText;
-				
+
 		var start = htmlText.text.indexOf(\"[replace]\", 0);
 		var end = start + \"[replace]\".length;
-		
+
 		htmlText.replaceText(start, end, \"<U>\" + text + \"</U>\" );
 
 		tf.htmlText = htmlText.text;
@@ -285,63 +235,62 @@ class RichTextEditor extends Window
 
 		btn = new Button(toolbar, "AlignRight", 300, 8);
 		btn.init({width: 24, height: 24, label: null, icon: "format-justify-right.png" });
-	
+
 		btn = new Button(toolbar, "AlignFill", 324, 8);
 		btn.init({width: 24, height: 24, label: null, icon: "format-justify-fill.png" });
 
 		btn = new Button(toolbar, "Color", 400, 8);
 		btn.init({width: 32, height: 24, label: null });
-		var col = new Sprite();
-		col.mouseEnabled = false;
-		col.graphics.lineStyle(1, DefaultStyle.BACKGROUND - 0x141414, 1);
-		col.graphics.beginFill(_color);
-		col.graphics.drawRect(4,4,24,16);
-		col.graphics.endFill();
-		var shadow = new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,true,false,false);
-		col.filters = [shadow];
+		var swatch = new Component(btn);
+		swatch.mouseEnabled = false;
+		swatch.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,10));
+		swatch.graphics.beginFill(_color);
+		swatch.graphics.drawRect(4,4,24,16);
+		swatch.graphics.endFill();
+		swatch.filters = [new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,true,false,false)];
 
-		btn.addChild(col);
 		btn.setAction("mouseClick",
-			"
-				var win = this.getParentWindow();
-				var tf = win.getChildByName(\"Container1\").getChildByName(\"tf\");
-				var spr = this.getChildAt(0);
-				
-				var c = new haxegui.ColorPicker();
-				c.currentColor = win._color;
-				c.init();
-				var container = c.getChildByName(\"Container\");
-				var ok = container.getChildByName(\"Ok\");
-				var cancel = container.getChildByName(\"Cancel\");
-				
-				cancel.setAction(\"mouseClick\",\"this.getParentWindow().destroy();\");
-				ok.addEventListener(flash.events.MouseEvent.MOUSE_UP,
-				function(e) {
-					win._color = c.currentColor;
-					c.destroy();
-					spr.graphics.clear();
-					spr.graphics.beginFill(win._color);
-					spr.graphics.drawRect(4,4,24,16);
-					spr.graphics.endFill();
-					var hex = StringTools.hex(win._color);
-					//tf.replaceSelectedText( \"<FONT COLOR='#\"+hex+\"' >\" + tf.selectedText + \"</FONT>\" );
-						
-					var text = tf.selectedText;
-					tf.replaceSelectedText( \"[replace]\" );
+		"
+		var win = this.getParentWindow();
+		var tf = win.getChildByName(\"Container1\").getChildByName(\"tf\");
+		var swatch = this.getChildAt(0);
 
-					var htmlText  = new flash.text.TextField();
-					htmlText.text = tf.htmlText;
-							
-					var start = htmlText.text.indexOf(\"[replace]\", 0);
-					var end = start + \"[replace]\".length;
-					
-					htmlText.replaceText(start, end, \"<FONT COLOR='#\"+hex+\"' >\" + text + \"</FONT>\" );
 
-					tf.htmlText = htmlText.text;
-					});
-			"
+		// Color picking
+		var c = new haxegui.ColorPicker();
+		c.currentColor = win._color;
+		c.init();
+		var container = c.getChildByName(\"Container\");
+		var ok = container.getChildByName(\"Ok\");
+		var cancel = container.getChildByName(\"Cancel\");
+
+		cancel.setAction(\"mouseClick\",\"this.getParentWindow().destroy();\");
+		ok.addEventListener(flash.events.MouseEvent.MOUSE_UP,
+		function(e) {
+			win._color = c.currentColor;
+			c.destroy();
+			swatch.graphics.clear();
+			swatch.graphics.beginFill(win._color);
+			swatch.graphics.drawRect(4,4,24,16);
+			swatch.graphics.endFill();
+			var hex = StringTools.hex(win._color);
+			//tf.replaceSelectedText( \"<FONT COLOR='#\"+hex+\"' >\" + tf.selectedText + \"</FONT>\" );
+
+			var text = tf.selectedText;
+			tf.replaceSelectedText( \"[replace]\" );
+
+			var htmlText  = new flash.text.TextField();
+			htmlText.text = tf.htmlText;
+
+			var start = htmlText.text.indexOf(\"[replace]\", 0);
+			var end = start + \"[replace]\".length;
+
+			htmlText.replaceText(start, end, \"<FONT COLOR='#\"+hex+\"' >\" + text + \"</FONT>\" );
+
+			tf.htmlText = htmlText.text;
+			});
+		"
 		);
-		
 
 
 		btn = new Button(toolbar, "Html", 432, 8);
@@ -355,19 +304,19 @@ class RichTextEditor extends Window
 		else
 			tf.htmlText = tf.text;
 			/*tf.htmlText = StringTools.htmlUnescape(tf.text);*/
-		
+
 		tf.setSelection(0,tf.htmlText.length);
 		tf.scrollV = 0;
-		
+
 		this.removeChild(this.getChildByName(\"icon\"));
-		
+
 		var icn = new Icon(this, \"icon\", 4, 4);
 		if(html)
 			icn.src = \"text-html.png\";
 		else
 			icn.src = \"text-x-generic.png\";
 		icn.init();
-		
+
 		this.getParentWindow()._html = !this.getParentWindow()._html;
 		"
 		);
@@ -375,7 +324,7 @@ class RichTextEditor extends Window
 		btn.icon.name = "icon";
 
 
-		
+
 		//~ flash.system.System.useCodePage = false;
 
 		//
@@ -394,32 +343,26 @@ class RichTextEditor extends Window
 		tf.border = true;
 		tf.borderColor = DefaultStyle.BACKGROUND - 0x141414;
 		tf.autoSize = flash.text.TextFieldAutoSize.NONE;
-		/*tf.embedFonts = true;*/
 		tf.multiline = true;
 		tf.wordWrap = true;
 		tf.alwaysShowSelection = true;
-		
-		
-		//~ tf.htmlText = "<FONT SIZE=\"14\" FACE=\"Times\" COLOR=\"#000000\">";	
+
 		tf.htmlText += "<p>Lorem ipsum dolor sit amet.</p><p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>";
-		//~ tf.htmlText += "<br><ul><li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li><li>Aliquam tincidunt mauris eu risus.</li><li>Vestibulum auctor dapibus neque.</li></ul><ul><li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li><li>Aliquam tincidunt mauris eu risus.</li><li>Vestibulum auctor dapibus neque.</li></ul>";
-		//~ tf.htmlText += "</FONT>";
-		
+
 		container.addChild(tf);
 
-		var shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,false,false,false);
-		tf.filters = [shadow];
+		// outer dropshadow
+		tf.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,false,false,false)];
 
-
-		shadow = new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,true,false,false);
-		container.filters = [shadow];
-
-		//
-		var statusbar = new StatusBar(this, "StatusBar", 10, 360);
-		statusbar.init();
+		// inner dropshadow
+		container.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,true,false,false)];
 
 		//
-		var info = new Label(statusbar, "Info", 4, 4);
+		statusbar = new StatusBar(this, "StatusBar", 10, box.height-20);
+		statusbar.init({width: box.width});
+
+		//
+		var info = new Label(statusbar, 4, 4);
 		info.init();
 
 		tf.addEventListener(TextEvent.TEXT_INPUT, updateInfo);
@@ -434,12 +377,7 @@ class RichTextEditor extends Window
 
 
 	public function updateInfo(e:Dynamic) {
-		var container = cast this.getChildByName("Container1");
-		var tf = cast container.getChildByName("tf");
-		
-		
-		var status = cast this.getChildByName("StatusBar");
-		var info = cast status.getChildByName("Info");
+		var info = cast statusbar.getChildAt(0);
 
 		var l = 0;
 		var c = 0;
@@ -450,7 +388,7 @@ class RichTextEditor extends Window
 		if(Std.is(e, KeyboardEvent)) {
 			l = tf.getLineIndexOfChar( tf.caretIndex );
 			}
-		
+
 		var o = {
 			line: l,
 			col: c,
@@ -462,9 +400,9 @@ class RichTextEditor extends Window
 		txt = txt.substr(1, txt.length-2);
 		txt = txt.split(",").join("\t ");
 		info.tf.text = txt;
-		
+
 	}
-	
+
 
 	public override function onRollOver(e:MouseEvent)  : Void {
 		CursorManager.setCursor(Cursor.HAND);
@@ -487,8 +425,10 @@ class RichTextEditor extends Window
 			tf.width = this.box.width - 30;
 			tf.height = this.box.height - 124;
 		}
-		
-		
+
+		//(cast statusbar.getChildAt(0)).box.width = this.box.width - 20;
+		//(cast statusbar.getChildAt(0)).tf.width = this.box.width - 20;
+
 	}
 
 

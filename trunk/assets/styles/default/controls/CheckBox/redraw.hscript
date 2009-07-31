@@ -2,34 +2,24 @@ this.graphics.clear();
 
 /* Label */
 if(this.label!=null) {
-
 	var fmt = DefaultStyle.getTextFormat();
-	if( this.disabled )
-	{
+	if( this.disabled ) {
 		fmt.color = Color.darken(this.color, 16);
-
-		var shadow = new flash.filters.DropShadowFilter(
-				4, 45, DefaultStyle.DROPSHADOW,
-				0.2, 4, 4, 0.65,
-				flash.filters.BitmapFilterQuality.HIGH,
-				true, false, false );
-		this.filters = [shadow];
+		this.filters = [new flash.filters.DropShadowFilter(4, 45, DefaultStyle.DROPSHADOW, 0.2, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false )];
 	}
-
-		this.label.tf.setTextFormat(fmt);
+	this.label.tf.setTextFormat(fmt);
 }
-
 
 this.graphics.lineStyle (1,
 	Color.darken(this.color, 16),
 	2, true, 
 	flash.display.LineScaleMode.NONE,
-	flash.display.CapsStyle.ROUND,
+	flash.display.CapsStyle.NONE,
 	flash.display.JointStyle.ROUND
 	);
 	
 /* CheckMark */	
-if(this.checked) {
+if(this.selected) {
 	var colors = [ Color.tint(this.color, .8), Color.darken(this.color, 8) ];
 	var alphas = [ 1, 1 ];
 	var ratios = [ 0, 0xFF ];

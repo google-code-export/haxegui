@@ -1,0 +1,14 @@
+digraph uml {
+	graph [label="Package: flash Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{Boot}",
+		lp="147,10",
+		bb="0,0,294,503"];
+	"flash.Lib" [label="{Lib}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/Lib.html", tooltip=Lib, portPos=e, pos="35,39", rects="8,21,62,57", width="0.75", height="0.50"];
+	"flash.FlashXml__" [label="{FlashXml__}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/FlashXml__.html", tooltip=FlashXml__, portPos=e, pos="35,255", rects="1,237,70,273", width="0.94", height="0.50"];
+	"flash.Error" [label="{Error}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/Error.html", tooltip=Error, portPos=e, pos="35,390", rects="8,372,62,408", width="0.75", height="0.50"];
+	"flash.Boot" [label="{Boot}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/Boot.html", tooltip=Boot, portPos=e, pos="35,485", rects="8,467,62,503", width="0.75", height="0.50"];
+	"flash.display.MovieClip" [pos="238,485", rects="183,467,294,503", width="1.53", height="0.50"];
+	"flash.Boot" -> "flash.display.MovieClip" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,183,485 62,485 90,485 135,485 173,485"];
+}

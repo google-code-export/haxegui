@@ -19,8 +19,7 @@
 
 package haxegui.controls;
 
-import feffects.Tween;
-
+import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.geom.Transform;
 import flash.text.TextField;
@@ -36,12 +35,14 @@ import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
-import haxegui.Opts;
+import haxegui.utils.Opts;
+import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
 import haxegui.controls.IAdjustable;
 import haxegui.utils.Size;
 import haxegui.utils.Color;
+import feffects.Tween;
 
 
 /**
@@ -86,6 +87,17 @@ class ScrollBarDownButton extends AbstractButton
 */
 class ScrollBarHandle extends AbstractButton
 {
+	override public function onResize(e:ResizeEvent) : Void {
+		this.box.width = (cast parent).box.width;
+		this.box.height = Math.max(20, this.box.height);
+		this.box.height = Math.min(this.box.height, (cast parent).box.height - this.y);
+	}
+
+
+	public function onMouseMove(e:MouseEvent) {
+		this.x=parent.x;
+	}
+	
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBarHandle);
 	}
@@ -100,8 +112,17 @@ class ScrollBarHandle extends AbstractButton
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ScrollBarFrame extends Component
-{
+class ScrollBarFrame extends AbstractButton
+{	
+	override public function init(opts:Dynamic=null) {
+		super.init(opts);
+		setAction("mouseOver","");
+		setAction("mouseOut","");
+		setAction("mouseDown","");
+		setAction("mouseUp","");
+		
+	}
+	
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBarFrame);
 	}
@@ -111,13 +132,20 @@ class ScrollBarFrame extends Component
 
 /**
 *
-* ScrollBar class
+* ScrollBar with handle and buttons.<br/>
+* <p></p>
+* <pre class="code haxe">
+* var scrollbar = new ScrollBar();
+* scrollbar.init();
+* </pre>
+* 
+* <i>note: When parented to an [IContainer], it does not resize.</i>
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class ScrollBar extends Component
+class ScrollBar extends Component, implements IAdjustable
 {
 
 	public var frame	 			: 	ScrollBarFrame;
@@ -129,12 +157,10 @@ class ScrollBar extends Component
 	public var scrollee	 			:	Dynamic;
 	/** Percent of scroll **/
 	public var scroll	  			:	Float;
-	//public var adjustment			:	Adjustment;
-	
+	/** the adjustment for this scrollbar **/
+	public var adjustment	:	Adjustment;
+	/** true for horizontal scrollbar **/
 	public var horizontal			:	Bool;
-
-	public var handleMotionTween 	:	Tween;
-
 
 	/**
 	* @param opts.target Object to scroll, either a DisplayObject or TextField
@@ -143,6 +169,7 @@ class ScrollBar extends Component
 		color = DefaultStyle.BACKGROUND;
 		scroll = 0;
 		scrollee = null;
+		adjustment = new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 50., page: 100.});
 		box = new Size(20,80).toRect();	
 		horizontal = false;
 		
@@ -167,18 +194,13 @@ class ScrollBar extends Component
 		frame.init({color: this.color});
 		frame.focusRect = false;
 		frame.tabEnabled = false;
-		frame.text = null;
-
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, disabled ? .35 : .75, BitmapFilterQuality.HIGH, true, false, false);
-		frame.filters = [shadow];
+		frame.description = null;
+		frame.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, disabled ? .35 : .75, BitmapFilterQuality.HIGH, true, false, false)];
 
 		//
 		handle = new ScrollBarHandle(this);
-		handle.init({y: 20, color: this.color, disabled: this.disabled});
-		handle.redraw({h : 20, horizontal: this.horizontal });
-
-		shadow = new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, disabled ? .35 : .75, BitmapFilterQuality.LOW, false, false, false);
-		handle.filters = [shadow];
+		handle.init({y: 20, color: this.color, disabled: this.disabled, horizontal: this.horizontal , width: this.box.width, height : 40});
+		handle.filters = [new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, disabled ? .35 : .75, BitmapFilterQuality.LOW, false, false, false)];
 
 		//
 		up = new ScrollBarUpButton(this);
@@ -190,11 +212,19 @@ class ScrollBar extends Component
 		down.move(0, box.height - 20);
 
 		//
+		frame.addEventListener(MoveEvent.MOVE, onFrameMoved, false, 0, true);
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 		this.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 
 	}
 
+	private function onFrameMoved(e:MoveEvent) {
+		move(frame.x, frame.y);
+		e.target.removeEventListener(MoveEvent.MOVE, onFrameMoved);
+		e.target.moveTo(0,0);
+		e.target.addEventListener(MoveEvent.MOVE, onFrameMoved, false, 0, true);		
+			
+	}
 
 
 	/**
@@ -204,7 +234,8 @@ class ScrollBar extends Component
 	*/
 	public function onParentResize(e:ResizeEvent)
 	{
-
+		if(Std.is(parent, haxegui.containers.IContainer)) return;
+		
 		if(Std.is(parent, Component)) untyped {
 			if(horizontal) {
 				box.height = parent.box.width;
@@ -216,39 +247,25 @@ class ScrollBar extends Component
 			}
 		}
 		down.y = Math.max( 20, box.height - 20);
+		//handle.box = new Size(20, 40).toRect();
+		handle.y = Math.max( 20, Math.min( handle.y, this.box.height - handle.box.height - 20));
 		
 		dirty = true;
 		frame.dirty = true;
 		handle.dirty = true;
 
-			//~ if(Std.is(scrollee, DisplayObject))
-			//~ {
-				//~ if(handle.y>20)
-					//~ handle.y = scroll * ( frame.height - handle.height + 2) + 20;
-			//~ }
-
-
 	}
 
 
 	public override function onMouseWheel(e:MouseEvent)	{
-
-		//~ var y = handle.y + 50 * e.delta;
-		var y = handle.y + 50 * -e.delta;
-		if( y < 20 ) y = 20;
-		if( y > box.height - handle.height + 20) y = box.height - handle.height + 20;
-
-		if(handleMotionTween!=null)
-			handleMotionTween.stop();
-
-		handleMotionTween = new Tween( handle.y, y, 1000, handle, "y", feffects.easing.Expo.easeOut );
 		var self = this;
-		handleMotionTween.setTweenHandlers( function(v) { self.adjust(); } );
-		handleMotionTween.start();
-		
+		var handleMotionTween = new Tween( 0, 1, 1000, feffects.easing.Expo.easeOut );
+		handle.updatePositionTween( handleMotionTween, 
+									new Point(0, e.delta * (horizontal ? 1 : -1)* adjustment.object.page),
+									function(v) { self.adjust(); } );
+
 		super.onMouseWheel(e);
 	}
-
 
 
 
@@ -262,34 +279,36 @@ class ScrollBar extends Component
 	*
 	*
 	*/
-	public function adjust(?e:Dynamic) {
-		if(!scrollee) return;
+	public function adjust(?v:Float) : Float {
+		if(!scrollee) return scroll;
 
 		if(scroll<0 || handle.y < 20) {
 			scroll=0;
-			handle.y = 20;
-			return;
+			handle.updatePositionTween();
+			handle.moveTo(0,20);
+			return scroll;
 		}
 
-		if(scroll>1 || handle.y > (frame.height - handle.height + 20)) {
+		if(scroll>1 || handle.y > (box.height - handle.box.height - 20)) {
 			scroll=1;
-			handle.y = frame.height - handle.height + 20;
-			return;
+			handle.updatePositionTween();		
+			handle.moveTo(0, box.height - handle.box.height - 20);
+			adjustment.setValue(scroll);
+			return scroll;
 		}
 
 
 		if(Std.is(scrollee, TextField))	{
-			scroll = (handle.y-20) / (frame.height - handle.height + 2) ;
+			scroll = (handle.y-20) / (frame.box.height - handle.box.height + 2) ;
 			if(horizontal)
 				scrollee.scrollH = scrollee.maxScrollH * scroll;
 			else
 				scrollee.scrollV = scrollee.maxScrollV * scroll;
-
-			return;
+			return scroll;
 		}
 
-		if(Std.is(scrollee, DisplayObject))	{
-			if(scrollee.scrollRect==null || scrollee.scrollRect.isEmpty()) return;
+		//~ if(Std.is(scrollee, DisplayObject))	{
+			if(scrollee.scrollRect==null || scrollee.scrollRect.isEmpty()) return scroll;
 
 			var rect = scrollee.scrollRect.clone();
 
@@ -305,8 +324,10 @@ class ScrollBar extends Component
 
 			scrollee.scrollRect = rect;
 			//~ trace(Std.int(scrollee.scrollRect.y)+"/"+(bounds.height)+" "+Std.int(100*scroll)+"% "+rect);
-		}
+		//~ }
 
+		return scroll;
+		
 	}
 
 	static function __init__() {

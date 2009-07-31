@@ -1,0 +1,13 @@
+digraph uml {
+	graph [label="Package: flash.geom Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{Point}",
+		lp="44,10",
+		bb="0,0,88,552"];
+	"flash.geom.Matrix" [label="{Matrix}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Matrix.html", tooltip=Matrix, portPos=e, pos="44,39", rects="17,21,71,57", width="0.75", height="0.50"];
+	"flash.geom.Transform" [label="{Transform}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Transform.html", tooltip=Transform, portPos=e, pos="44,242", rects="13,224,76,260", width="0.86", height="0.50"];
+	"flash.geom.ColorTransform" [label="{ColorTransform}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/ColorTransform.html", tooltip=ColorTransform, portPos=e, pos="44,370", rects="0,352,88,388", width="1.22", height="0.50"];
+	"flash.geom.Rectangle" [label="{Rectangle}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Rectangle.html", tooltip=Rectangle, portPos=e, pos="44,461", rects="13,443,76,479", width="0.86", height="0.50"];
+	"flash.geom.Point" [label="{Point}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Point.html", tooltip=Point, portPos=e, pos="44,534", rects="17,516,71,552", width="0.75", height="0.50"];
+}

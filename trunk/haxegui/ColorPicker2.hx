@@ -70,6 +70,7 @@ import haxegui.controls.MenuBar;
 import haxegui.controls.Slider;
 import haxegui.controls.Stepper;
 import haxegui.controls.ComboBox;
+import haxegui.controls.Image;
 
 /**
 *

@@ -17,6 +17,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+//{{{ Imports
 package haxegui.controls;
 
 import flash.geom.Rectangle;
@@ -29,13 +30,15 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFieldAutoSize;
 
-import haxegui.Opts;
+import haxegui.utils.Size;
+import haxegui.utils.Opts;
 import haxegui.managers.StyleManager;
 import haxegui.controls.Component;
+//}}}
 
 
 /**
-* Input Class
+* Input class wraps an editable [TextField].<br/>
 *
 *
 * @author <gershon@goosemoose.com>
@@ -45,77 +48,88 @@ import haxegui.controls.Component;
 class Input extends Component
 {
 
-    public var tf : TextField;
-
+	public var tf : TextField;
+	public var text(getText, setText) : String;
 
 	override public function init(?opts:Dynamic) : Void	{
-	    box = new Rectangle(0, 0, 140, 20);
+		box = new Size(140, 20).toRect();
 
-	    super.init(opts);
+		super.init(opts);
 
-	    //~ buttonMode = false;
-	    mouseChildren = true;
-	    mouseEnabled = true;
-	    tabEnabled = true;
+		//~ buttonMode = false;
+		mouseChildren = true;
+		mouseEnabled = true;
+		tabEnabled = true;
 
-	    filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false )];
+		filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false )];
 
-	    tf = new TextField();
-	    tf.name = "tf";
-	    tf.type = disabled ? flash.text.TextFieldType.DYNAMIC : flash.text.TextFieldType.INPUT;
-	    tf.text = name;
-	    tf.text = Opts.optString(opts, "text", tf.text);
-	    tf.selectable = disabled ? false : true;
-	    tf.background = false;
-	    tf.border = false;
-	    tf.mouseEnabled = true;
-	    tf.tabEnabled = false;
-	    //~ tf.width = box.width - 4;
-	    //~ tf.height = box.height - 3;
-	    tf.autoSize =  TextFieldAutoSize.LEFT;
-	    tf.x = tf.y = 4;
-	    tf.embedFonts = true;
-	    tf.defaultTextFormat = DefaultStyle.getTextFormat();
-	    tf.setTextFormat(DefaultStyle.getTextFormat());
-	    addChild(tf);
-	    
+		tf = new TextField();
+		tf.name = "tf";
+		tf.type = disabled ? flash.text.TextFieldType.DYNAMIC : flash.text.TextFieldType.INPUT;
+		tf.text = name;
+		tf.text = Opts.optString(opts, "text", tf.text);
+		tf.selectable = disabled ? false : true;
+		tf.background = false;
+		tf.border = false;
+		tf.mouseEnabled = true;
+		tf.tabEnabled = false;
+		tf.autoSize =  TextFieldAutoSize.NONE;
+		tf.x = tf.y = 4;
+		tf.embedFonts = true;
+		tf.defaultTextFormat = DefaultStyle.getTextFormat();
+		tf.setTextFormat(DefaultStyle.getTextFormat());
+		addChild(tf);
+
+		//addEventListener(TextEvent.TEXT_INPUT, onChanged, false, 0, true);
 
 	}
-	
+
 	override private function __setDisabled(v:Bool) : Bool {
 		super.__setDisabled(v);
 		if(this.disabled) {
 			mouseEnabled = false;
 			buttonMode = false;
 			if(tf!=null) {
-			    tf.mouseEnabled = false;
-			    tf.selectable = false;
+				tf.mouseEnabled = false;
+				tf.selectable = false;
 			}
 		}
 		else {
 			mouseEnabled = Opts.optBool(initOpts,"mouseEnabled",true);
 			buttonMode = Opts.optBool(initOpts,"buttonMode",true);
 			if(tf!=null) {
-			    tf.mouseEnabled = false;
-			    tf.selectable = true;
+				tf.mouseEnabled = false;
+				tf.selectable = true;
 			}
 		}
 		return v;
 	}
 
+	//~ public function onChanged(e:Event) {}
+
+	public function getText() : String {
+	    return tf.text;
+	}
+
+	public function setText(s:String) : String {
+	    tf.text = s;
+	    dispatchEvent(new Event(Event.CHANGE));
+	    return s;
+	}
+	
 	static function __init__() {
 		haxegui.Haxegui.register(Input);
 	}
 
-    
-    //public override function onMouseClick(e:MouseEvent) {
+
+	//public override function onMouseClick(e:MouseEvent) {
 	//tf.setSelection(0,tf.text.length);
 	//super.onMouseClick(e);
-    //}
+	//}
 
-    //private override function onFocusOut(e:FocusEvent) {
+	//private override function onFocusOut(e:FocusEvent) {
 	//tf.setSelection(0,0);
 	//super.onFocusOut(e);
-    //}    
+	//}
 }
 

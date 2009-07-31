@@ -32,36 +32,42 @@ import flash.events.MouseEvent;
 import flash.events.FocusEvent;
 
 import haxegui.managers.StyleManager;
-import haxegui.Opts;
+import haxegui.utils.Color;
+import haxegui.utils.Size;
+import haxegui.utils.Opts;
 
 import haxegui.controls.Component;
 
+using haxegui.utils.Color;
 
 class Rectangle extends Component
 {
 	public var roundness : Float;
+	public var stroke : UInt;
+	public var thickness : Float;
 	public var pivot : Point;
 
 
-	override public function init(?opts:Dynamic)
-	{
-		box = new flash.geom.Rectangle(0,0,100,100);
-		color = cast Math.random() * 0xFFFFFF;
+	override public function init(?opts:Dynamic=null) {
+		box = new Size(100,100).toRect();
+		color = Color.random().tint(.5);
+		stroke = color.darken(20);
+		thickness = 1;
 		roundness = 20;
 		pivot = new Point();
 		
 		super.init(opts);
 
-		//roundness = Opts.optFloat(opts, "roundness", roundness);
-		
-
-		//~ var shadow = new flash.filters.DropShadowFilter (8, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
-		//~ this.filters = [shadow];
-			
+		roundness = Opts.optFloat(opts, "roundness", roundness);
+		thickness = Opts.optFloat(opts, "thickness", thickness);
+		stroke = Opts.optInt(opts, "stroke", stroke);
+				
+		//this.filters = [new flash.filters.DropShadowFilter (8, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
 	
 		setAction("redraw",
 		"
 		this.graphics.clear();
+		this.graphics.lineStyle(this.thickness, this.stroke, 1, true, flash.display.LineScaleMode.NONE);
 		this.graphics.beginFill(this.color);
 		this.graphics.drawRoundRect(this.pivot.x,this.pivot.y,this.box.width,this.box.height, this.roundness, this.roundness);
 		this.graphics.endFill();

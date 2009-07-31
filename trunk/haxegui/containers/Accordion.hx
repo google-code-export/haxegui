@@ -38,8 +38,8 @@ import haxegui.managers.ScriptManager;
 import haxegui.managers.MouseManager;
 import haxegui.managers.StyleManager;
 import haxegui.controls.AbstractButton;
-import haxegui.Component;
-import haxegui.IContainer;
+import haxegui.controls.Component;
+import haxegui.containers.IContainer;
 
 
 

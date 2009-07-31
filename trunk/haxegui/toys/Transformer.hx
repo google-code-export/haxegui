@@ -22,268 +22,395 @@ package haxegui.toys;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
-import flash.display.Sprite;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-import haxegui.events.ResizeEvent;
-import haxegui.managers.ScriptManager;
-import haxegui.managers.StyleManager;
 
 import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 
+import haxegui.managers.StyleManager;
+import haxegui.managers.CursorManager;
+
+import haxegui.toys.Circle;
+import haxegui.toys.Rectangle;
+
+import haxegui.utils.Color;
+import haxegui.utils.Size;
+import haxegui.utils.Opts;
+
+import haxegui.Haxegui;
+
+
+
 /**
- * A Transformation widget, pass it a target on creation and use it's 8 square handles on the 
- * corners and edges for resizing, and the center circle for moving it.
- * It listens for focus events from the target, if target has lost focus for anyone else but the 
- * transformer, it will automatically self-destruct.
- * 
+ * A Transformation widget, visual translate and scale a component.<br/>
+ * pass it a target on creation and use it's 8 square handles on the corners and edges for resizing, and the center circle for moving.
+ * It listens for focus events from the target, if target has lost focus for anyone else but the transformer, it will automatically self-destruct.
  */
 class Transformer extends Component
 {
 	/** Component to transform **/
 	public var target  : Component;
 
-	private var pivot   : AbstractButton;
-	private var handles : Array<AbstractButton>;
+	/** Transformer uses [Size] for its operations and not [Rectangle] **/
+	public var size : Size;
 
-	public function new (trgt:Component) {
-		target = trgt;
+	/** handle size in square pixels **/
+	public var handleSize : Int;
+
+	/** circular pivot **/
+	private var pivot   : Circle;
+
+	/** square handles **/
+	private var handles : Array<AbstractButton>;
+	
+	/** the currently dragged object, either a handle or the pivot **/
+	private var dragging : Dynamic;
+
+	/** true to resize the [box], false to resize width & height **/
+	public static var transformBoxes : Bool = true;
+
+	/**
+	 * @param target [Component] to transform.
+	 */
+	public function new (target:Component) {
+		this.target = target;
 		super(flash.Lib.current, "Transformer_"+target.name, target.x, target.y);
 	}
 
-	override public function init(?opts:Dynamic) {
+	override public function init(?opts:Dynamic=null) {
 		color = cast Math.random() * 0xFFFFFF;
 		handles = [];
-		//~ this.text = null;
+		handleSize = 10;
+	
 		if(target.box==null || target.box.isEmpty()) 
-			box = target.getBounds(this);
+			size = Size.fromRect(target.getBounds(this));
 		else
-			box = target.box.clone();
-		box.inflate(8,8);
+			size = Size.fromRect(target.box.clone());
+
+		// make room for handles
+		size.add(Size.square(2*handleSize));
+		var mid = size.clone().shift(1).toPoint();
 			
 		super.init(opts);
 	
+		description = null;
+	
+		// XOR like display, as not to hide the transformee
 		blendMode = flash.display.BlendMode.DIFFERENCE;
+		
+		// register event for closing
 		if(Std.is(target, Component))
 			target.addEventListener(FocusEvent.FOCUS_OUT, onTargetFocusOut, false, 0, true);
 		stage.addEventListener(MouseEvent.MOUSE_DOWN, onClose, false, 0, true);
 		 
-			
+		// create the 8 square handles
 		for(i in 0...8) {
 			handles.push(new AbstractButton(this, "handle"+i));
-			handles[i].init();
-			handles[i].text = null;
+			handles[i].init({color: this.color});
+			handles[i].description = null;
 			handles[i].setAction("redraw",
 			"
 			this.graphics.clear();
-			this.graphics.lineStyle (1, Math.min(0xFFFFFF, this.color | 0x4D4D4D), .5, true,
-				 flash.display.LineScaleMode.NONE,
-				 flash.display.CapsStyle.ROUND,
-				 flash.display.JointStyle.ROUND);		
-			this.graphics.beginFill( this.color, .35);
-			this.graphics.drawRect(0,0,8,8);
+			this.graphics.beginFill(this.color);
+			this.graphics.drawRect(0,0,this.parent.handleSize,this.parent.handleSize);
 			this.graphics.endFill();
 			"
 			);
-			handles[i].setAction("mouseDown",
-			"
-			this.startDrag();
-			this.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove, false, 0, true);
-			"
-			);
-
-			handles[i].setAction("mouseUp",
-			"
-			this.stopDrag();
-			this.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);
-			"
-			);
-
-			var mid = new Point(Std.int(this.box.width) >> 1,Std.int(this.box.height) >> 1);
+			handles[i].addEventListener(MouseEvent.MOUSE_DOWN, onHandleMouseDown, false, 0, true);
+			
+			var midHandle = Std.int(handleSize)>>1;
 
 			switch(i) {
 				case 0:
 				case 1:
-					handles[i].moveTo( mid.x - 4, 0 );
+					handles[i].x = mid.x - midHandle;
 				case 2:
-					handles[i].moveTo( this.box.width - 8, 0 );
+					handles[i].x = size.width - handleSize;
 				case 3:
-					handles[i].moveTo( this.box.width - 8, mid.y - 4 );
+					handles[i].x = size.width - handleSize;
+					handles[i].y = mid.y - midHandle;
 				case 4:
-					handles[i].moveTo( this.box.width - 8, this.box.height - 8 );
+					handles[i].x = size.width - handleSize;
+					handles[i].y = size.height - handleSize;
 				case 5:
-					handles[i].moveTo( mid.x - 4, this.box.height - 8 );
+					handles[i].x = mid.x - midHandle;
+					handles[i].y = size.height - handleSize;
 				case 6:
-					handles[i].moveTo( 0,  this.box.height - 8 );
+					handles[i].y = size.height - handleSize;
 				case 7:
-					handles[i].moveTo( 0,  mid.y - 4 );
+					handles[i].y = mid.y - midHandle;
 			}
 			
 		}
 
 
-	
 		// center pivot
-		pivot = new AbstractButton(this, "pivot") ;
-		pivot.init();
-		pivot.text = null;
-		pivot.setAction("redraw",
-		"
-		this.graphics.clear();
-		this.graphics.lineStyle (1, Math.min(0xFFFFFF, this.color | 0x4D4D4D), 1, true,
-			 flash.display.LineScaleMode.NONE,
-			 flash.display.CapsStyle.ROUND,
-			 flash.display.JointStyle.ROUND);		
-		this.graphics.beginFill(0xFFFFFF, .5);
-		this.graphics.drawCircle(0,0,4);
-		this.graphics.endFill();
-		"
-		);
-		pivot.setAction("mouseClick", "");
-
-		pivot.setAction("mouseDown",
-		"
-		parent.startDrag();
-		this.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove, false, 0, true);	
-		"
-		);
-		pivot.setAction("mouseUp",
-		"
-		parent.stopDrag();
-		this.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);		
-		"
-		);	
-		pivot.moveTo( Std.int(this.box.width)>>1, Std.int(this.box.height)>>1 );
+		pivot = new Circle(this, "pivot") ;
+		pivot.init({color: Color.WHITE, radius: Math.max(4, handleSize - 4) });
+		pivot.description = null;
+		pivot.addEventListener(MouseEvent.MOUSE_DOWN, onHandleMouseDown, false, 0, true);
+		pivot.x = mid.x;
+		pivot.y = mid.y;
 
 	
 		// draw the frame
 		this.setAction("redraw",
 		"
 		this.graphics.clear();
-		this.graphics.lineStyle (1, Math.min(0xFFFFFF, this.color | 0x4D4D4D), .35, true,
-			 flash.display.LineScaleMode.NONE,
-			 flash.display.CapsStyle.ROUND,
-			 flash.display.JointStyle.ROUND);		
+		this.graphics.lineStyle (1, Color.darken(this.color, 30), .4, false, flash.display.LineScaleMode.NONE);
 		this.graphics.beginFill(this.color, .15);
-		this.graphics.drawRect(0,0,this.box.width,this.box.height);
-		this.graphics.drawRect(8,8,this.box.width-16,this.box.height-16);
+		this.graphics.drawRect(0,0,this.size.width,this.size.height);
+		this.graphics.drawRect(this.handleSize,this.handleSize,this.size.width-this.handleSize*2,this.size.height-this.handleSize*2);
 		this.graphics.endFill();
 		"
 		);
-		
-		
-
 	}
 
-	static function __init__() {
-		haxegui.Haxegui.register(Transformer);
+	public function onHandleMouseDown(e:MouseEvent) {
+		dragging = e.target;
+		CursorManager.getInstance().lock = true;
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);		
+		stage.addEventListener(MouseEvent.MOUSE_UP, onHandleMouseUp, false, 0, true);
 	}
 	
+	public function onHandleMouseUp(e:MouseEvent) {
+		dragging = null;
+		CursorManager.getInstance().lock = false;
+		stage.removeEventListener(MouseEvent.MOUSE_UP, onHandleMouseUp);
+		stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove); 
+	}
+
 	public function onTargetFocusOut(e:FocusEvent) {
 		if(!Std.is(e.relatedObject, Component)) return;
 		if(e.relatedObject==this || this.contains(e.relatedObject)) return;
-		trace(e);
+		//~ trace(e);
 		this.destroy();
 	}
 
-	public function onMouseMove(e:MouseEvent) {
-		if(!this.contains(e.target)) return;
-		var p = target.parent.globalToLocal(new Point(this.x, this.y));
-		var i = this.getChildIndex(e.target);
-		var mid = new Point(Std.int(this.box.width) >> 1,Std.int(this.box.height) >> 1);
-		switch(i) {
-			case 0:
-				this.move( e.target.x, e.target.y );
-				target.moveTo( p.x + 8, p.y + 8 );
-				this.box.width -= e.target.x;
-				this.box.height -= e.target.y;
-				e.target.moveTo(0,0);
-				handles[2].x = handles[3].x = handles[4].x = this.box.width - 8;
-				handles[1].x = handles[5].x = mid.x - 4;
-				handles[3].y = handles[7].y = mid.y - 4;
-				handles[4].y = handles[5].y = handles[6].y = this.box.height - 8;
-			case 1:
-				this.y += e.target.y;
-				this.box.height -= e.target.y;
-				e.target.y = 0;
-				handles[3].y = handles[7].y = mid.y - 4;
-				handles[4].y = handles[5].y = handles[6].y = this.box.height - 8;
-				target.moveTo( p.x + 8, p.y + 8 );
-			case 2:
-				this.move( 0, e.target.y );
-				this.box.width = e.target.x + 8;
-				this.box.height -= e.target.y ;
-				e.target.y = 0;
-				handles[3].x = handles[4].x = e.target.x;
-				handles[1].x = handles[5].x = mid.x - 4;
-				handles[3].y = handles[7].y = mid.y - 4;
-				handles[4].y = handles[5].y = handles[6].y = this.box.height - 8;
-				target.moveTo( p.x + 8, p.y + 8 );				
-			case 3:
-				this.box.width = e.target.x + 8;
-				handles[1].x = handles[5].x = mid.x - 4;
-				handles[2].x = handles[4].x = e.target.x;
-			case 4:
-				this.box.width = e.target.x + 8;
-				this.box.height = e.target.y + 8;
-				handles[1].x = handles[5].x = mid.x - 4;
-				handles[2].x = handles[3].x = e.target.x;
-				handles[3].y = handles[7].y = mid.y - 4;
-				handles[5].y = handles[6].y = e.target.y;
-			case 5:
-				this.box.height = e.target.y + 8;
-				handles[3].y = handles[7].y = mid.y - 4;
-				handles[4].y = handles[6].y = e.target.y;
-			case 6:
-				this.x += e.target.x;
-				this.box.width -= e.target.x;
-				this.box.height = e.target.y + 8;
-				e.target.moveTo(0, this.box.height - 8);
-				handles[1].x = handles[5].x = mid.x - 4;
-				handles[2].x = handles[3].x = handles[4].x = this.box.width - 8;
-				handles[3].y = handles[7].y = mid.y - 4;
-				handles[4].y = handles[5].y = e.target.y;
-				target.moveTo( p.x + 8, p.y + 8 );
-			case 7:
-				this.x += e.target.x;
-				this.box.width -= e.target.x;
-				e.target.moveTo(0, mid.y - 4);
-				handles[1].x = handles[5].x = mid.x - 4;
-				handles[2].x = handles[3].x = handles[4].x = this.box.width - 8;
-				target.moveTo( p.x + 8, p.y + 8 );
-			case 8: //pivot
-				target.moveTo( p.x + 8, p.y + 8 );
-				
-		}
-		pivot.moveTo( mid.x, mid.y );
-		//~ dirty = true;
-		redraw();
 
-		target.box = this.box.clone();
-		target.box.inflate(-8,-8);
-		if(i==8)
-			target.dispatchEvent(new MoveEvent(MoveEvent.MOVE));
-		else
-			target.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-		//~ target.dispatchEvent(new Event(Event.CHANGE));
-		target.redraw();
-		//~ target.dirty = true;
+	public function onMouseMove(e:MouseEvent) {
+		
+		// Mouse Position
+		var mp = new Point(this.mouseX, this.mouseY);
+		var smp = mp.subtract(new Point(mp.x%Haxegui.gridSpacing, mp.y%Haxegui.gridSpacing));
+
+		// absolute coordinates
+		var p = target.parent.globalToLocal(new Point(this.x, this.y));
+		
+		// the box's center
+		var mid = size.clone().shift(1).toPoint();
+		
+		// handle's half-size for centering handles
+		var midHandle = Std.int(handleSize)>>1;
+
+
+		//
+		switch(dragging) {
+			// TopLeft
+			case handles[0]:
+				dragging.x = mp.x;
+				dragging.y = mp.y;
+				
+				if(Haxegui.gridSnapping) {
+					dragging.x -= smp.x;
+					dragging.y -= smp.y;
+				}
+				
+				size.subtract(new Size(dragging.x, dragging.y));
+				
+				x += dragging.x;
+				y += dragging.y;
+
+				dragging.x = dragging.y = 0;
+				
+
+				handles[2].x = handles[3].x = handles[4].x = size.width - handleSize;
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[4].y = handles[5].y = handles[6].y = size.height - handleSize;
+			// Top
+			case handles[1]:
+				dragging.y = mp.y;
+
+				if(Haxegui.gridSnapping) 
+					dragging.y -= smp.y;
+					
+				y += dragging.y;
+				size.height -= Std.int(dragging.y);
+				dragging.y = 0;
+
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[4].y = handles[5].y = handles[6].y = size.height - handleSize;
+				
+			// TopRight
+			case handles[2]:
+				dragging.x = mp.x + handleSize;
+				dragging.y = mp.y;
+
+				if(Haxegui.gridSnapping) {
+					dragging.x -= mp.x % Haxegui.gridSpacing;
+					dragging.y -= mp.y % Haxegui.gridSpacing;			
+				}
+				
+				y += dragging.y;
+				
+				size.width = dragging.x + handleSize;
+				size.height -= Std.int(dragging.y);
+				
+				dragging.y = 0;
+								
+				handles[3].x = handles[4].x = dragging.x;
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[4].y = handles[5].y = handles[6].y = size.height - handleSize;
+
+			// Right
+			case handles[3]:
+				dragging.x = mp.x - mp.x % Haxegui.gridSpacing + handleSize;
+				size.width = dragging.x + handleSize;
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[2].x = handles[4].x = dragging.x;
+				
+			// BottomRight
+			case handles[4]:
+				dragging.x = mp.x - handleSize + Haxegui.gridSpacing;
+				dragging.y = mp.y - handleSize + Haxegui.gridSpacing;			
+
+				if(Haxegui.gridSnapping) {
+					dragging.x -= mp.x % Haxegui.gridSpacing;
+					dragging.y -= mp.y % Haxegui.gridSpacing;			
+				}
+
+				size = new Size(dragging.x, dragging.y);
+
+				dragging.x = size.width - handleSize;
+				dragging.y = size.height - handleSize;
+	
+	
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[2].x = handles[3].x = dragging.x;
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[5].y = handles[6].y = dragging.y;
+				
+			// Bottom
+			case handles[5]:
+				dragging.y = mp.y - mp.y % Haxegui.gridSpacing - handleSize + Haxegui.gridSpacing;			
+				size.height = dragging.y;
+				dragging.y = size.height - handleSize;
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[4].y = handles[6].y = dragging.y;
+			// BottomLeft
+			case handles[6]:
+				dragging.x = mp.x;
+				dragging.y = mp.y - handleSize + Haxegui.gridSpacing;
+
+				if(Haxegui.gridSnapping) {
+					dragging.x -= smp.x;
+					dragging.y -= smp.y;
+				}
+				
+				x += dragging.x;
+				size.width -= Std.int(dragging.x);
+				size.height = Std.int(dragging.y);
+
+
+				dragging.x = 0;
+				dragging.y = size.height - handleSize;
+				
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[2].x = handles[3].x = handles[4].x = size.width - midHandle;
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[4].y = handles[5].y = dragging.y;
+			// Left
+			case handles[7]:
+				dragging.x = mp.x;
+
+				if(Haxegui.gridSnapping) 
+					dragging.x -= smp.x;
+				
+				x += dragging.x;
+				size.width -= Std.int(dragging.x);
+								
+				dragging.x = 0;
+				dragging.y = mid.y - midHandle;
+
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[2].x = handles[3].x = handles[4].x = size.width - handleSize;
+
+			// Center
+			case pivot: 
+				// move the transformer
+				x += mp.x - mid.x;
+				y += mp.y - mid.y;
+
+				
+				pivot.x = mid.x;
+				pivot.y = mid.y;
+				// snapping without snap() to avoid dispatching MoveEvent.
+				if(Haxegui.gridSnapping) {
+					x -= (x-handleSize) % Haxegui.gridSpacing;
+					y -= (y-handleSize-midHandle) % Haxegui.gridSpacing;
+				}					
+		}
+		
+		// resize
+		if(dragging!=pivot) {
+
+			if(transformBoxes) 
+			// resize the target, also dispatches a ResizeEvent
+			target.resize(size.clone().subtract(Size.square(2*handleSize)));
+			else {
+			target.width = size.width;
+			target.height = size.height;
+			}
+			
+			//~ target.dirty = true;
+			// redraw immediately 
+			target.redraw();
+
+			// redraw the transformer
+			redraw();
+
+			// re-center the pivot
+			pivot.x = mid.x;
+			pivot.y = mid.y;
+		}
+
+		// move target
+		p.offset(handleSize, handleSize);
+		target.moveToPoint(p);
+		//~ target.snap();
+			
+		
+		e.updateAfterEvent();		
 	}
 
+	override public function onMouseDown(e:MouseEvent) {}
+	override public function onMouseUp(e:MouseEvent) {}
+	
 	function onClose(e:Dynamic) {
 		if(Std.is(e, MouseEvent))
 			if(e.target==this || this.contains(e.target)) return;
 		this.destroy();
 	}
 	
+	override function destroy() {
+		for(h in handles)
+			h.removeEventListener(MouseEvent.MOUSE_DOWN, onHandleMouseDown);
+		pivot.removeEventListener(MouseEvent.MOUSE_DOWN, onHandleMouseDown);
 
+		super.destroy();
+	}
 
-		
+	static function __init__() {
+		haxegui.Haxegui.register(Transformer);
+	}
+	
 }

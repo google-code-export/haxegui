@@ -1,0 +1,19 @@
+digraph uml {
+	graph [label="Package: flash.utils Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="244,10",
+		bb="0,0,488,711"];
+	"flash.utils.Endian" [label="{Endian|LITTLE_ENDIAN\lBIG_ENDIAN\l}", style="rounded,filled", fillcolor=white, pos="426,69", rects="365,51,410,87 410,51,488,87", width="1.69", height="0.50"];
+	"flash.utils.Dictionary" [label="{Dictionary}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/utils/Dictionary.html", tooltip=Dictionary, portPos=Dictionary, pos="41,480", rects="12,462,70,498", width="0.81", height="0.50"];
+	"flash.utils.TypedDictionary" [label="{TypedDictionary}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/utils/TypedDictionary.html", tooltip=TypedDictionary, portPos=TypedDictionary, pos="41,693", rects="0,675,82,711", width="1.14", height="0.50"];
+	"flash.utils.IDataInput" [label="{IDataInput}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/utils/IDataInput.html", tooltip=IDataInput, portPos=IDataInput, pos="41,108", rects="12,90,71,126", width="0.81", height="0.50"];
+	"flash.utils.ByteArray" [label="{ByteArray}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/utils/ByteArray.html", tooltip=ByteArray, portPos=ByteArray, pos="223,69", rects="195,51,252,87", width="0.78", height="0.50"];
+	"flash.utils.IDataOutput" [label="{IDataOutput}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/utils/IDataOutput.html", tooltip=IDataOutput, portPos=IDataOutput, pos="41,47", rects="8,29,74,65", width="0.92", height="0.50"];
+	"flash.utils.IDataInput" -> "flash.utils.Endian" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,404,87 71,119 95,126 128,135 157,135 157,135 157,135 289,135 327,135 366,115 392,96"];
+	"flash.utils.IDataInput" -> "flash.utils.ByteArray" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,195,75 71,102 101,95 146,85 180,78"];
+	"flash.utils.IDataOutput" -> "flash.utils.Endian" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,393,51 74,36 97,29 129,21 157,21 157,21 157,21 289,21 321,22 354,33 379,45"];
+	"flash.utils.IDataOutput" -> "flash.utils.ByteArray" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,195,66 74,51 104,54 147,59 180,64"];
+	"flash.utils.ByteArray" -> "flash.utils.Endian" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,365,69 252,69 277,69 315,69 350,69"];
+	"flash.utils.ByteArray" -> "flash.utils.ByteArray" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,235,87 211,87 210,97 213,105 223,105 227,105 229,104 231,102"];
+}

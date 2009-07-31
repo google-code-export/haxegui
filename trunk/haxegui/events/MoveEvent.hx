@@ -26,6 +26,10 @@ class MoveEvent extends Event {
 	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool, ?oldX : Float, ?oldY : Float) : Void
 	{
 		super(type, bubbles, cancelable);
+		this.oldX = oldX;
+		this.oldY = oldY;
+		//~ if(this.target!=null)
+			//~ this.position = new flash.geom.Point(this.target.x, this.target.y);
 	}
 
 	public override function toString():String {
@@ -33,11 +37,13 @@ class MoveEvent extends Event {
 	}
 
 	override public function clone():Event {  
-		return new MoveEvent(this.type, this.bubbles, this.cancelable);  
+		return new MoveEvent(this.type, this.bubbles, this.cancelable, this.oldX, this.oldY);  
 	}  
 
 	public var relatedObject : flash.display.InteractiveObject;
 	public var oldX : Float;
 	public var oldY : Float;
+	//~ public var position : flash.geom.Point;
+	
 	public static var MOVE : String = "Move";
 }

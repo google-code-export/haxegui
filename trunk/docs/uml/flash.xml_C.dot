@@ -1,0 +1,10 @@
+digraph uml {
+	graph [label="Package: flash.xml Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="110,10",
+		bb="0,0,220,57"];
+	"flash.xml.XML" [label="{XML}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/xml/XML.html", tooltip=XML, portPos=XML, pos="27,39", rects="0,21,54,57", width="0.75", height="0.50"];
+	"flash.xml.XMLList" [label="{XMLList}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/xml/XMLList.html", tooltip=XMLList, portPos=XMLList, pos="193,39", rects="166,21,220,57", width="0.75", height="0.50"];
+	"flash.xml.XML" -> "flash.xml.XMLList" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,166,39 54,39 80,39 120,39 151,39"];
+}

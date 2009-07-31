@@ -19,6 +19,7 @@
 
 package haxegui.windowClasses;
 
+import flash.geom.Rectangle;
 import flash.display.DisplayObjectContainer;
 import flash.events.MouseEvent;
 import flash.text.TextField;
@@ -27,7 +28,7 @@ import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilterQuality;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.CursorManager;
-import haxegui.Opts;
+import haxegui.utils.Opts;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
 import haxegui.controls.Component;
@@ -43,21 +44,16 @@ import haxegui.controls.AbstractButton;
 */
 class StatusBar extends Component
 {
-	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
-		super (parent, name, x, y);
-	}
 	
 	override public function init(?opts:Dynamic) {
-
-		this.box = (cast parent).box.clone();
-		this.color = (cast parent).color;
+		box = (cast parent).box.clone();
+		color = (cast parent).color;
 		
 		super.init(opts);
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5,BitmapFilterQuality.HIGH,true,false,false);
-		this.filters = [shadow];
+		this.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5,BitmapFilterQuality.HIGH,true,false,false)];
 		
 	}	
 
@@ -66,22 +62,8 @@ class StatusBar extends Component
 	}
 	
 
-	public function onParentResize(e:ResizeEvent)
-	{
-		/*
-		var mazk = new flash.display.Sprite();
-		mazk.graphics.beginFill(0xf0);
-		mazk.graphics.drawRect(0,0,(cast parent).box.width,20);
-		mazk.graphics.endFill();
-		this.mask = mazk;
-		*/
-		untyped {
-			var b = parent.box.clone();
-			b.width -= 10;
-			b.height = 20;
-			this.scrollRect = b;
-		}
-		
+	public function onParentResize(e:ResizeEvent) {
+		this.scrollRect = untyped new Rectangle(0,0,parent.box.width-10, parent.box.height+20);
 		redraw();
 	}
 

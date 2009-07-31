@@ -19,6 +19,7 @@
 
 package haxegui.controls;
 
+import flash.geom.Rectangle;
 import flash.display.DisplayObjectContainer;
 import flash.text.TextField;
 import flash.text.TextFieldType;
@@ -26,12 +27,19 @@ import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
-import haxegui.Opts;
+import flash.events.Event;
+import flash.events.TextEvent;
+
+import haxegui.events.ResizeEvent;
 import haxegui.managers.StyleManager;
 import haxegui.controls.Component;
 
+import haxegui.utils.Align;
 import haxegui.utils.Size;
 import haxegui.utils.Color;
+import haxegui.utils.Opts;
+
+
 
 /**
 *
@@ -44,9 +52,17 @@ import haxegui.utils.Color;
 class Label extends Component
 {
 	public var tf 						: TextField;
-	public var txt (getText, setText)  : String;
+	public var text (getText, setText)  : String;
 
+	public var align : Alignment;
+	
 	override public function init(opts : Dynamic=null) {
+
+		if(text==null)
+			text = name;
+		
+		description = null;
+		
 		super.init(opts);
 		
 		tf = new TextField();
@@ -55,34 +71,55 @@ class Label extends Component
 		tf.type = TextFieldType.DYNAMIC;
 		tf.embedFonts = true;
 		tf.multiline = true;
-		tf.autoSize =  TextFieldAutoSize.LEFT;
+		tf.wordWrap = Opts.optBool(opts, "wordWrap", false);
+		tf.autoSize = TextFieldAutoSize.LEFT;
 		tf.selectable = false;
 		tf.mouseEnabled = false;
 		tf.tabEnabled = false;
 		tf.focusRect = false;
 
+		if(!box.isEmpty()) {
+		tf.width = box.width;
+		tf.height = box.height;
+		}
+		
 		//~ this.mouseEnabled = false;
 		this.tabEnabled = false;
 		this.focusRect = false;
 
-		tf.text = Opts.optString(opts, "innerData", text);
+		tf.text = Opts.optString(opts, "text", text);
 		tf.defaultTextFormat = DefaultStyle.getTextFormat();
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 		this.addChild(tf);
 
+		if(box.isEmpty())
 		resize(new Size(tf.width, tf.height));
+		else {
+		tf.width = box.width;
+		tf.height = box.height;
+		}
 		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
 
 		dirty = false;
 	}
 
+	public override function onResize(e:ResizeEvent) {
+		tf.width = box.width;
+		tf.height = box.height;
+		super.onResize(e);
+	}
+	
 	public function getText() : String {
+		if(tf==null) return null;
 		return tf.text;
 	}
 
 	public function setText(s:String) : String {
+		if(tf==null || s==null) return null;
 		tf.text = s;
 		//tf.setTextFormat(DefaultStyle.getTextFormat());
+		//dispatchEvent(new Event(Event.CHANGE));
+		resize(new Size(tf.width, tf.height));
 		return tf.text;
 	}
 
@@ -96,10 +133,10 @@ class Label extends Component
 
 	public override function redraw(opts:Dynamic=null) {
 		
-		tf.x = Math.round(tf.x);
-		tf.y = Math.round(tf.y);
+		tf.x = Std.int(tf.x);
+		tf.y = Std.int(tf.y);
 		
-		super.redraw(Opts.clone(opts));
+		super.redraw(opts);
 	}
 	
 }

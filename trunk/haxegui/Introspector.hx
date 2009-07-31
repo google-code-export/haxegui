@@ -17,16 +17,16 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+//{{{ Imports
 package haxegui;
 
-import flash.geom.Rectangle;
 
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 
 import haxegui.Window;
 import haxegui.controls.Component;
-import haxegui.Image;
+import haxegui.controls.Image;
 import haxegui.controls.Label;
 import haxegui.controls.UiList;
 import haxegui.controls.CheckBox;
@@ -43,12 +43,12 @@ import haxegui.managers.FocusManager;
 import haxegui.managers.StyleManager;
 import flash.events.FocusEvent;
 import haxegui.windowClasses.StatusBar;
+import haxegui.utils.Size;
+//}}}
 
 /**
 *
 * Introspector class
-* 
-*
 *
 * @author <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
@@ -63,15 +63,15 @@ class Introspector extends Window
 	public var list2 : UiList;
 
 	public var target : Component;
-	
+
 
 	public override function init(?opts:Dynamic) {
 		//~ o = flash.Lib.current;
 
 		super.init(opts);
-		box = new Rectangle (0, 0, 640, 320);
+		box = new Size(640, 320).toRect();
 
-			
+
 		//
 		var menubar = new MenuBar (this, "MenuBar", 10,20);
 		menubar.init ();
@@ -79,7 +79,7 @@ class Introspector extends Window
 		//
 		container = new Container(this, "Container", 10, 44);
 		container.init({});
-		
+
 		//
 		scrollpane = new ScrollPane(container, "ScrollPane1", 210, 0);
 		scrollpane.init({width: 400, fitH: false, fitV: false});
@@ -95,23 +95,23 @@ class Introspector extends Window
 		tree.data = { root : reflectDisplayObjectContainer(cast flash.Lib.current) };
 		tree.init({width: 250});
 
-		
+
 		//
 		list1 = new UiList(scrollpane, "Properties", 210, 0);
 		list1.init({text: null});
-		
+
 		//
 		list2 = new UiList(scrollpane, "Values", 350, 0);
 		list2.init();
-		
+
 		//
 		var statusbar = new StatusBar(this, "StatusBar", 10, 360);
 		statusbar.init();
 
-	
-	
+
+
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-		
+
 		//FocusManager.getInstance().addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged, false, 0, true);
 		this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged, false, 0, true);
 
@@ -124,7 +124,7 @@ class Introspector extends Window
 		if(this.contains(e.target)) return;
 		if(e.target==target) return;
 		target = e.target;
-		
+
 		//~ var scrollpane = tree.parent;
 		//~ scrollpane.removeChild(tree);
 		//~ tree = new Tree(scrollpane, "Tree", 0, 0);
@@ -132,10 +132,10 @@ class Introspector extends Window
 		//~ tree.data = o;
 		//~ tree.init({width: 250});
 		//~ untyped tree.getChildAt(0).getChildAt(0).expanded = true;
-		//~ 
+		//~
 		var self = this;
-		
-		
+
+
 		var props = {
 			name 					: "name",
 			parent 					: "parent",
@@ -164,7 +164,7 @@ class Introspector extends Window
 
 		if(Std.is(e.target, UiList)) {
 			Reflect.setField(props, "dataSource", "dataSource");
-		}		
+		}
 		//~ if(Std.is(e.target, haxegui.controls.AbstractButton)) {
 			//~ Reflect.setField(props, "autoRepeat", "autoRepeat");
 			//~ Reflect.setField(props, "repeatWaitTime", "repeatWaitTime");
@@ -179,20 +179,20 @@ class Introspector extends Window
 
 		list1 = new UiList(scrollpane, "Properties", 210, 0);
 		list2 = new UiList(scrollpane, "Values", 350, 0);
-		list1.text = list2.text = null;
-		
+		list1.description = list2.description = null;
+
 		list1.data = [];
 		list2.data = [];
 		// fill the lists
 		for(key in Reflect.fields(props)) {
-				
+
 				//
 				list1.data.push(key);
 
 				//
 				if(Reflect.isFunction(Reflect.field(props, key)))
 					list2.data.push( Reflect.callMethod(props, Reflect.field(props, key), []) );
-				
+
 				else {
 				var value = Reflect.field( target, Reflect.field(props, key));
 					list2.data.push( value );
@@ -200,24 +200,24 @@ class Introspector extends Window
 		}
 
 		list1.init({text: "Property"});
-		list2.init({text: "Value"});		
+		list2.init({text: "Value"});
 		for(item in list2.getElementsByClass(ListItem)) {
 			item.label.tf.selectable = true;
 			item.label.tf.mouseEnabled = true;
 			}
-		
-		
+
+
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
 	}
-	
-	
-	
+
+
+
 	public override function onResize(e:ResizeEvent) {
 
 		var container = cast this.getChildByName("Container");
 		if(container==null) return;
-		
+
 		var scrollpane = cast container.getChildByName("ScrollPane1");
 		if(scrollpane!=null) {
 			scrollpane.box.height = this.box.height - 65;
@@ -225,16 +225,16 @@ class Introspector extends Window
 			scrollpane.dirty = true;
 			}
 		scrollpane = cast container.getChildByName("ScrollPane2");
-		if(scrollpane!=null) 
+		if(scrollpane!=null)
 			scrollpane.box.height = this.box.height - 85;
-				
-		
+
+
 		if(tree!=null) {
 			tree.box.height = this.box.height - 85;
 			tree.dirty = true;
 		}
-		
-		
+
+
 		if(list1!=null) {
 			list1.x = 0;
 			list1.box.width = .5*(this.box.width - list1.parent.parent.x - 30) ;
@@ -251,7 +251,7 @@ class Introspector extends Window
 
 		super.onResize(e);
 	}
-	
+
 
 	public override function destroy() {
 		this.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged);
@@ -271,7 +271,7 @@ class Introspector extends Window
 		}
 		return o;
 	}
-		
-		
-	
+
+
+
 }

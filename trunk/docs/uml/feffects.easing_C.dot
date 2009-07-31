@@ -1,0 +1,18 @@
+digraph uml {
+	graph [label="Package: feffects.easing Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="97,10",
+		bb="0,0,194,732"];
+	"feffects.easing.Linear" [label="{Linear}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/easing/Linear.html", tooltip=Linear, portPos=Linear, pos="97,39", rects="70,21,124,57", width="0.75", height="0.50"];
+	"feffects.easing.Bounce" [label="{Bounce}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/easing/Bounce.html", tooltip=Bounce, portPos=Bounce, pos="97,161", rects="70,143,124,179", width="0.75", height="0.50"];
+	"feffects.easing.Quart" [label="{Quart}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/easing/Quart.html", tooltip=Quart, portPos=Quart, pos="97,249", rects="70,231,124,267", width="0.75", height="0.50"];
+	"feffects.easing.Elastic" [label="{Elastic}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/easing/Elastic.html", tooltip=Elastic, portPos=Elastic, pos="97,320", rects="70,302,124,338", width="0.75", height="0.50"];
+	"feffects.easing.Cubic" [label="{Cubic}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/easing/Cubic.html", tooltip=Cubic, portPos=Cubic, pos="97,382", rects="70,364,124,400", width="0.75", height="0.50"];
+	"feffects.easing.Sine" [label="{Sine}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/easing/Sine.html", tooltip=Sine, portPos=Sine, pos="97,440", rects="70,422,124,458", width="0.75", height="0.50"];
+	"feffects.easing.Quad" [label="{Quad}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/easing/Quad.html", tooltip=Quad, portPos=Quad, pos="97,496", rects="70,478,124,514", width="0.75", height="0.50"];
+	"feffects.easing.Quint" [label="{Quint}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/easing/Quint.html", tooltip=Quint, portPos=Quint, pos="97,551", rects="70,533,124,569", width="0.75", height="0.50"];
+	"feffects.easing.Expo" [label="{Expo}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/easing/Expo.html", tooltip=Expo, portPos=Expo, pos="97,606", rects="70,588,124,624", width="0.75", height="0.50"];
+	"feffects.easing.Circ" [label="{Circ}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/easing/Circ.html", tooltip=Circ, portPos=Circ, pos="97,660", rects="70,642,124,678", width="0.75", height="0.50"];
+	"feffects.easing.Back" [label="{Back}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/easing/Back.html", tooltip=Back, portPos=Back, pos="97,714", rects="70,696,124,732", width="0.75", height="0.50"];
+}

@@ -1,0 +1,21 @@
+digraph uml {
+	graph [label="Package: haxe.io Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="246,10",
+		bb="0,0,492,572"];
+	"haxe.io.Bytes" [label="{Bytes}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/Bytes.html", tooltip=Bytes, portPos=Bytes, pos="259,99", rects="232,81,286,117", width="0.75", height="0.50"];
+	"haxe.io.BytesData" [pos="445,147", rects="399,129,492,165", width="1.28", height="0.50"];
+	"haxe.io.Error" [label="{Error|Overflow\lOutsideBounds\lCustom\lBlocked\l}", style="rounded,filled", fillcolor=white, pos="60,345", rects="1,321,39,369 39,321,120,369", width="1.64", height="0.67"];
+	"haxe.io.Eof" [label="{Eof}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/Eof.html", tooltip=Eof, portPos=Eof, pos="60,468", rects="33,450,87,486", width="0.75", height="0.50"];
+	"haxe.io.Input" [label="{Input}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/Input.html", tooltip=Input, portPos=Input, pos="60,39", rects="33,21,87,57", width="0.75", height="0.50"];
+	"haxe.io.BytesInput" [label="{BytesInput}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/BytesInput.html", tooltip=BytesInput, portPos=BytesInput, pos="60,158", rects="30,140,91,176", width="0.83", height="0.50"];
+	"haxe.io.BytesBuffer" [label="{BytesBuffer}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/BytesBuffer.html", tooltip=BytesBuffer, portPos=BytesBuffer, pos="60,93", rects="27,75,93,111", width="0.92", height="0.50"];
+	"haxe.io.StringInput" [label="{StringInput}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/io/StringInput.html", tooltip=StringInput, portPos=StringInput, pos="60,554", rects="29,536,92,572", width="0.86", height="0.50"];
+	"haxe.io.Bytes" -> "haxe.io.BytesData" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,399,135 286,106 312,112 352,123 384,131"];
+	"haxe.io.Bytes" -> "haxe.io.Bytes" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,271,117 247,117 246,127 249,135 259,135 263,135 265,134 267,132"];
+	"haxe.io.Input" -> "haxe.io.Bytes" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,232,91 87,47 121,58 178,74 217,86"];
+	"haxe.io.BytesInput" -> "haxe.io.BytesData" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,399,159 91,162 118,165 159,169 195,169 195,169 195,169 323,169 344,169 365,166 384,162"];
+	"haxe.io.BytesInput" -> "haxe.io.Bytes" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,232,107 91,149 125,138 180,122 217,111"];
+	"haxe.io.BytesBuffer" -> "haxe.io.Bytes" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,232,98 93,94 127,95 180,97 217,98"];
+}

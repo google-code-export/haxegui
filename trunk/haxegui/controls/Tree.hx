@@ -30,9 +30,9 @@ import flash.events.MouseEvent;
 import haxegui.managers.DragManager;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
-import haxegui.Image;
+import haxegui.controls.Image;
 import haxegui.controls.Component;
-import haxegui.Opts;
+import haxegui.utils.Opts;
 import haxegui.controls.Expander;
 import haxegui.events.ResizeEvent;
 import haxegui.events.DragEvent;
@@ -61,11 +61,11 @@ class TreeLeaf extends Component
 		super.init(opts);
 
 		label = new Label(this);
-		label.init({innerData: this.name});
+		label.init({text: this.name});
 		label.move(24, 4);
 		
 		icon = new Icon(this);
-		icon.init ({src: Icon.STOCK_NEW});
+		icon.init ({src: Icon.STOCK_DOCUMENT});
 	
 	}
 
@@ -98,7 +98,7 @@ class TreeNode extends Component
 	
 	override public function init(opts:Dynamic=null) {
 		color = DefaultStyle.INPUT_BACK;
-		box = new Size(140,20).toRect();
+		box = new Size(140, 24).toRect();
 		depth = 0;
 
 		depth = Opts.optInt(opts, "depth", depth);
@@ -144,7 +144,7 @@ class TreeNode extends Component
 * @author Russell Weir <damonsbane@gmail.com>
 *
 */
-class Tree extends Component {
+class Tree extends Component, implements IData {
 	
 	public var dataSource : DataSource;
 	public var data : Dynamic;
@@ -223,7 +223,7 @@ class Tree extends Component {
 		var n = 0;
 		for(l in node)
 			if(Std.is(l, TreeLeaf)) n++;
-		leaf.move(16,20*n);
+		leaf.move(16,24*n);
 	}
 	
 	public function addNode(node: TreeNode) {
@@ -234,7 +234,7 @@ class Tree extends Component {
 					if(Std.is(l, TreeLeaf)) n++;
 			n++;		
 			}
-		node.move(0,20*n);
+		node.move(0,24*n);
 	}
 
 	static function __init__() {

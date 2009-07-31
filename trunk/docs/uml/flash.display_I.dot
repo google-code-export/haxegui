@@ -1,0 +1,51 @@
+digraph uml {
+	graph [label="Package: flash.display Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{Stage}",
+		lp="623,10",
+		bb="0,0,1246,1245"];
+	"flash.display.IBitmapDrawable" [label="{IBitmapDrawable}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/IBitmapDrawable.html", tooltip=IBitmapDrawable, portPos=e, pos="1175,63", rects="1127,45,1224,81", width="1.33", height="0.50"];
+	"flash.display.DisplayObject" [label="{DisplayObject}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/DisplayObject.html", tooltip=DisplayObject, portPos=e, pos="951,93", rects="911,75,992,111", width="1.11", height="0.50"];
+	"flash.events.EventDispatcher" [pos="1175,128", rects="1105,110,1246,146", width="1.94", height="0.50"];
+	"flash.display.InteractiveObject" [label="{InteractiveObject}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/InteractiveObject.html", tooltip=InteractiveObject, portPos=e, pos="749,147", rects="701,129,798,165", width="1.33", height="0.50"];
+	"flash.display.DisplayObjectContainer" [label="{DisplayObjectContainer}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/DisplayObjectContainer.html", tooltip=DisplayObjectContainer, portPos=e, pos="524,133", rects="460,115,588,151", width="1.78", height="0.50"];
+	"flash.display.Sprite" [label="{Sprite}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Sprite.html", tooltip=Sprite, portPos=e, pos="321,174", rects="294,156,348,192", width="0.75", height="0.50"];
+	"flash.display.Graphics" [label="{Graphics}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Graphics.html", tooltip=Graphics, portPos=e, pos="91,93", rects="62,75,120,111", width="0.81", height="0.50"];
+	"flash.display.InterpolationMethod" [label="{InterpolationMethod|RGB\lLINEAR_RGB\l}", style="rounded,filled", fillcolor=white, pos="91,147", rects="8,129,108,165 108,129,175,165", width="2.31", height="0.50"];
+	"flash.display.FrameLabel" [label="{FrameLabel}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/FrameLabel.html", tooltip=FrameLabel, portPos=e, pos="91,201", rects="55,183,127,219", width="1.00", height="0.50"];
+	"flash.display.SWFVersion" [label="{SWFVersion|FLASH9\lFLASH8\lFLASH7\lFLASH6\lFLASH5\lFLASH4\lFLASH3\lFLASH2\lFLASH1\l}", style="rounded,filled", fillcolor=white, pos="91,286", rects="35,237,100,335 100,237,148,335", width="1.56", height="1.36"];
+	"flash.display.StageAlign" [label="{StageAlign|TOP_RIGHT\lTOP_LEFT\lTOP\lRIGHT\lLEFT\lBOTTOM_RIGHT\lBOTTOM_LEFT\lBOTTOM\l}", style="rounded,filled", fillcolor=white, pos="91,397", rects="19,353,80,441 80,353,163,441", width="2.00", height="1.22"];
+	"flash.display.CapsStyle" [label="{CapsStyle|SQUARE\lROUND\lNONE\l}", style="rounded,filled", fillcolor=white, pos="91,478", rects="36,459,95,497 95,459,146,497", width="1.53", height="0.53"];
+	"flash.display.JointStyle" [label="{JointStyle|ROUND\lMITER\lBEVEL\l}", style="rounded,filled", fillcolor=white, pos="91,534", rects="41,515,96,553 96,515,142,553", width="1.39", height="0.53"];
+	"flash.display.Scene" [label="{Scene}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Scene.html", tooltip=Scene, portPos=e, pos="91,589", rects="64,571,118,607", width="0.75", height="0.50"];
+	"flash.display.ActionScriptVersion" [label="{ActionScriptVersion|ACTIONSCRIPT3\lACTIONSCRIPT2\l}", style="rounded,filled", fillcolor=white, pos="91,643", rects="1,625,99,661 99,625,182,661", width="2.50", height="0.50"];
+	"flash.display.LineScaleMode" [label="{LineScaleMode|VERTICAL\lNORMAL\lNONE\lHORIZONTAL\l}", style="rounded,filled", fillcolor=white, pos="91,703", rects="17,679,96,727 96,679,166,727", width="2.06", height="0.67"];
+	"flash.display.GradientType" [label="{GradientType|RADIAL\lLINEAR\l}", style="rounded,filled", fillcolor=white, pos="91,763", rects="33,745,105,781 105,745,150,781", width="1.61", height="0.50"];
+	"flash.display.StageQuality" [label="{StageQuality|MEDIUM\lLOW\lHIGH\lBEST\l}", style="rounded,filled", fillcolor=white, pos="91,823", rects="32,799,102,847 102,799,151,847", width="1.64", height="0.67"];
+	"flash.display.LoaderInfo" [label="{LoaderInfo}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/LoaderInfo.html", tooltip=LoaderInfo, portPos=e, pos="951,153", rects="918,135,984,171", width="0.92", height="0.50"];
+	"flash.display.BlendMode" [label="{BlendMode|SUBTRACT\lSCREEN\lOVERLAY\lNORMAL\lMULTIPLY\lLIGHTEN\lLAYER\lINVERT\lHARDLIGHT\lERASE\lDIFFERENCE\lDARKEN\lALPHA\lADD\
+\l}", style="rounded,filled", fillcolor=white, pos="91,939", rects="27,865,90,1013 90,865,156,1013", width="1.78", height="2.06"];
+	"flash.display.Shape" [label="{Shape}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Shape.html", tooltip=Shape, portPos=e, pos="749,93", rects="722,75,776,111", width="0.75", height="0.50"];
+	"flash.display.StageDisplayState" [label="{StageDisplayState|NORMAL\lFULL_SCREEN\l}", style="rounded,filled", fillcolor=white, pos="91,1049", rects="7,1031,101,1067 101,1031,175,1067", width="2.33", height="0.50"];
+	"flash.display.StageScaleMode" [label="{StageScaleMode|SHOW_ALL\lNO_SCALE\lNO_BORDER\lEXACT_FIT\l}", style="rounded,filled", fillcolor=white, pos="91,1109", rects="14,1085,101,1133 101,1085,169,1133", width="2.14", height="0.67"];
+	"flash.display.Bitmap" [label="{Bitmap}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Bitmap.html", tooltip=Bitmap, portPos=e, pos="749,39", rects="722,21,776,57", width="0.75", height="0.50"];
+	"flash.display.SpreadMethod" [label="{SpreadMethod|REPEAT\lREFLECT\lPAD\l}", style="rounded,filled", fillcolor=white, pos="91,1170", rects="26,1151,104,1189 104,1151,156,1189", width="1.81", height="0.53"];
+	"flash.display.MovieClip" [label="{MovieClip}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/MovieClip.html", tooltip=MovieClip, portPos=e, pos="91,39", rects="61,21,122,57", width="0.83", height="0.50"];
+	"flash.display.BitmapData" [label="{BitmapData}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/BitmapData.html", tooltip=BitmapData, portPos=e, pos="951,39", rects="914,21,988,57", width="1.03", height="0.50"];
+	"flash.display.PixelSnapping" [label="{PixelSnapping|NEVER\lAUTO\lALWAYS\l}", style="rounded,filled", fillcolor=white, pos="91,1226", rects="30,1207,105,1245 105,1207,152,1245", width="1.69", height="0.53"];
+	"flash.display.Loader" [label="{Loader}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Loader.html", tooltip=Loader, portPos=e, pos="321,120", rects="294,102,348,138", width="0.75", height="0.50"];
+	"flash.display.Stage" [label="{Stage}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Stage.html", tooltip=Stage, portPos=e, pos="321,66", rects="294,48,348,84", width="0.75", height="0.50"];
+	"flash.display.DisplayObject" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,1105,117 992,99 1021,104 1060,110 1095,115"];
+	"flash.display.DisplayObject" -> "flash.display.IBitmapDrawable" [color=gray, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,1127,69 992,87 1027,82 1078,76 1117,70"];
+	"flash.display.InteractiveObject" -> "flash.display.DisplayObject" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,911,104 798,134 830,126 869,115 901,106"];
+	"flash.display.DisplayObjectContainer" -> "flash.display.InteractiveObject" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,701,144 588,137 620,139 659,141 691,143"];
+	"flash.display.Sprite" -> "flash.display.DisplayObjectContainer" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,460,146 348,168 375,163 414,155 450,148"];
+	"flash.display.LoaderInfo" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,1105,136 984,149 1012,145 1056,141 1095,137"];
+	"flash.display.Shape" -> "flash.display.DisplayObject" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,911,93 776,93 808,93 861,93 901,93"];
+	"flash.display.Bitmap" -> "flash.display.DisplayObject" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,911,82 776,46 808,54 862,69 901,80"];
+	"flash.display.MovieClip" -> "flash.display.Sprite" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,302,156 122,45 140,50 163,56 182,66 225,89 268,124 294,149"];
+	"flash.display.BitmapData" -> "flash.display.IBitmapDrawable" [color=gray, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,1127,58 988,43 1023,47 1076,52 1117,57"];
+	"flash.display.Loader" -> "flash.display.DisplayObjectContainer" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,460,129 348,122 374,124 414,126 450,128"];
+	"flash.display.Stage" -> "flash.display.DisplayObjectContainer" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,470,115 348,75 376,84 423,99 460,112"];
+}

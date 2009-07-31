@@ -17,6 +17,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+//{{{ Imports
 package haxegui.controls;
 
 import flash.display.Sprite;
@@ -40,14 +41,14 @@ import haxegui.controls.Component;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Label;
 
-import haxegui.Opts;
+import haxegui.utils.Opts;
 
 import haxegui.utils.Color;
 import haxegui.utils.Size;
+//}}}
 
 /**
-*
-* Tab Class
+* Tab Class<br/>
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
@@ -62,7 +63,7 @@ class Tab extends AbstractButton
 
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, TabNavigator)) throw parent+" not a TabNavigator";
-		
+
 		box = new Size(40, 24).toRect();
 		color = DefaultStyle.BACKGROUND;
 		active = false;
@@ -72,19 +73,14 @@ class Tab extends AbstractButton
 		active = Opts.optBool(opts, "active", active);
 
 		label = new Label(this, "label");
-		label.text = Opts.optString(opts, "label", name);
-		label.init({text: name});
+		label.init({text : Opts.optString(opts, "label", name)});
 		label.mouseEnabled = false;
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
-		//~ parent.dispatchEvent(new Event(Event.CHANGE));
-		//~ addEventListener(FocusEvent.FOCUS_IN, (cast parent).onChanged, false, 0, true);
-
 	}
 
 	/** Mouse click **/
-	public override function onMouseClick(e:MouseEvent) : Void
-	{
+	public override function onMouseClick(e:MouseEvent) {
 		var tabnav = cast(parent, TabNavigator);
 		tabnav.activeTab = tabnav.getChildIndex(this);
 		//parent.dispatchEvent(new Event(Event.CHANGE));
@@ -92,15 +88,15 @@ class Tab extends AbstractButton
 	}
 /*
 	public override function onMouseDown(e:MouseEvent) : Void {
-	
-		this.startDrag(false, new Rectangle(0,0,untyped parent.box.width,0));		
+
+		this.startDrag(false, new Rectangle(0,0,untyped parent.box.width,0));
 
 		super.onMouseDown(e);
 	}
 
 	public override function onMouseUp(e:MouseEvent) : Void {
-	
-		this.stopDrag();		
+
+		this.stopDrag();
 
 		super.onMouseUp(e);
 	}
@@ -125,16 +121,16 @@ enum TabPosition {
 
 
 /**
-* Tab Navigator bar for switching visible content.<br>
-* Add child Tabs to the bar, and connect it to a [Stack] container like this:
+* Tab Navigator bar for switching visible content.<br/>
+* Add child [Tab]s to the bar, and connect it to a [Stack] container like this:
 * <pre class="code haxe">
 * // add a tabnav with 2 tabs
 * var tabnav = new TabNavigator();
 * tabnav.init();
-* 
+*
 * var tab = new Tab(tabnav);
 * tab.init();
-* 
+*
 * // 40 is the default tab width, and is passed as horizotal offset
 * tab = new Tab(tabnav, 40);
 * tab.init();
@@ -156,11 +152,16 @@ class TabNavigator extends Component
 	/** Tab position **/
 	public var tabPosition : TabPosition;
 
+	/** A list of references for easy access to tabs **/
+	public var tabs : List<Tab>;
+
 	/** The index of the selected tab **/
 	public var activeTab(default, __setActive) : Int;
 
+	/** Override for addchild, if its a [Tab] its added to the [tabs] list **/
 	public override function addChild(o : DisplayObject) : DisplayObject {
 		//if(Std.is(o, Tab)) for(i in 0...numChildren) if(Std.is(getChildAt(i), Tab)) getChildAt(i).active = false;
+		//if(Std.is(o, Tab)) tabs.add(cast(o, Tab));
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		return super.addChild(o);
 	}
@@ -169,7 +170,7 @@ class TabNavigator extends Component
 	override public function init(opts : Dynamic=null) {
 		box = new Size(200, 24).toRect();
 		color = DefaultStyle.BACKGROUND;
-		text = null;
+		description = null;
 		tabPosition = TabPosition.TOP;
 
 		super.init(opts);
@@ -188,12 +189,12 @@ class TabNavigator extends Component
 
 
 	}
-	
+
 	/** Setter for the active tab **/
 	public function __setActive(v:Int) : Int {
 		activeTab = v;
-        dispatchEvent(new Event(Event.CHANGE));
-		return activeTab;	
+		dispatchEvent(new Event(Event.CHANGE));
+		return activeTab;
 	}
 
 	/** Callback for a tab change, updates all child Tabs **/
@@ -212,7 +213,7 @@ class TabNavigator extends Component
 	}
 
 	public function onParentResize(e:ResizeEvent) {
-		
+
 		if(Std.is(parent, Component)) {
 			box.width = untyped parent.box.width - x;
 		}
@@ -223,5 +224,5 @@ class TabNavigator extends Component
 
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-	}	
+	}
 }

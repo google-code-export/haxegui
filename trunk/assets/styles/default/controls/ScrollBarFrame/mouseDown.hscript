@@ -1,21 +1,15 @@
 CursorManager.setCursor (Cursor.HAND2);
 
-var y = e.target.mouseY ;
-if(y+handle.height+20 > box.height ) y = box.height - handle.height + 20;
 
-if(parent.handleMotionTween!=null)
-	parent.handleMotionTween.stop();
+//var t = new feffects.Tween( 0, 1, 750, feffects.easing.Back.easeInOut );
+var t = new feffects.Tween( 0, 1, 750, feffects.easing.Quad.easeInOut );
+parent.handle.updatePositionTween( t, new flash.geom.Point(0, event.target.mouseY-parent.handle.y), parent.adjust );
 
-
-parent.handleMotionTween = new Tween( handle.y, y, 750, handle, "y", feffects.easing.Back.easeInOut );
-handleMotionTween.setTweenHandlers( function ( e ) { parent.adjust(e); } );
-handleMotionTween.start();
-
-Timer.delay( function(){CursorManager.setCursor (Cursor.DRAG);}, 750 );
-
+/*
 if(parent.horizontal)
 	handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
 else
 	handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.height - 2*down.height - handle.height + 4));
 
 root.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+*/

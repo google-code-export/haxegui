@@ -385,6 +385,8 @@ function windowTitle()
 </textarea>
 <button onClick="update()">Update</button>
 
+	<span class="notice">Javascript must be enabled in the browser.</span>
+
 
 	<pre id="sample_xml" class="code xml">
 	</pre>

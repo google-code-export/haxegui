@@ -1,0 +1,16 @@
+digraph uml {
+	graph [label="Package: haxegui.windowClasses Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [lp="134,10",
+		bb="0,0,268,517"];
+	"haxegui.windowClasses.WindowFrame" [label="{WindowFrame}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/WindowFrame.html", tooltip=WindowFrame, portPos=WindowFrame, pos="37,39", rects="0,21,74,57", width="1.03", height="0.50"];
+	"haxegui.windowClasses.CloseButton" [label="{CloseButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/CloseButton.html", tooltip=CloseButton, portPos=CloseButton, pos="227,147", rects="193,129,261,165", width="0.94", height="0.50"];
+	"haxegui.windowClasses.MinimizeButton" [label="{MinimizeButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/MinimizeButton.html", tooltip=MinimizeButton, portPos=MinimizeButton, pos="227,93", rects="187,75,267,111", width="1.11", height="0.50"];
+	"haxegui.windowClasses.MaximizeButton" [label="{MaximizeButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/MaximizeButton.html", tooltip=MaximizeButton, portPos=MaximizeButton, pos="227,39", rects="186,21,268,57", width="1.14", height="0.50"];
+	"haxegui.windowClasses.TitleBar" [label="{TitleBar}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/TitleBar.html", tooltip=TitleBar, portPos=TitleBar, pos="37,93", rects="10,75,64,111", width="0.75", height="0.50"];
+	"haxegui.windowClasses.StatusBar" [label="{StatusBar}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/StatusBar.html", tooltip=StatusBar, portPos=StatusBar, pos="37,499", rects="8,481,67,517", width="0.81", height="0.50"];
+	"haxegui.windowClasses.TitleBar" -> "haxegui.windowClasses.CloseButton" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,193,137 64,101 94,110 142,123 178,133"];
+	"haxegui.windowClasses.TitleBar" -> "haxegui.windowClasses.MinimizeButton" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,187,93 64,93 92,93 136,93 172,93"];
+	"haxegui.windowClasses.TitleBar" -> "haxegui.windowClasses.MaximizeButton" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,186,51 64,85 92,77 136,65 171,55"];
+}

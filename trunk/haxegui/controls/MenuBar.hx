@@ -17,6 +17,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+//{{{ Imports
 package haxegui.controls;
 
 import flash.geom.Rectangle;
@@ -39,12 +40,17 @@ import flash.ui.Keyboard;
 
 import haxegui.controls.Label;
 import haxegui.managers.FocusManager;
-import haxegui.Opts;
+
 import haxegui.managers.StyleManager;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
 import haxegui.events.ResizeEvent;
 import haxegui.events.MenuEvent;
+
+import haxegui.utils.Color;
+import haxegui.utils.Size;
+import haxegui.utils.Opts;
+//}}}
 
 /**
 * MenuBarItem Class
@@ -55,29 +61,27 @@ import haxegui.events.MenuEvent;
 */
 class MenuBarItem extends AbstractButton
 {
-
 	public var label : Label;
+
+	public var menu : PopupMenu;
 
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, MenuBar)) throw parent+" not a MenuBar";
 
-		box = new Rectangle(0,0,40,24);
-		
+		box = new Size(40,24).toRect();
+
 		super.init(opts);
 
 		label = new Label(this);
-		label.text = this.name;
-		label.init();
+		label.init({text: name});
 		label.move(4,4);
-		label.mouseEnabled = false;
-		label.text = null;
-		
+
 	}
 
 	public override function onMouseClick(e:MouseEvent) {
-			var a = new haxegui.Alert();
-			a.init({label: this+"."+here.methodName+":\n\n\n"+"Not implemented yet..."});
-			
+		var a = new haxegui.Alert();
+		a.init({label: this+"."+here.methodName+":\n\n\n"+"Not implemented yet..."});
+
 		super.onMouseClick(e);
 	}
 
@@ -85,8 +89,6 @@ class MenuBarItem extends AbstractButton
 		haxegui.Haxegui.register(MenuBarItem);
 	}
 }
-
-
 
 
 /**
@@ -98,17 +100,19 @@ class MenuBarItem extends AbstractButton
 */
 class MenuBar extends Component
 {
+	public var items : Array<MenuBarItem>;
+
 	public var numMenus : Int;
 	private var _menu:Int;
 
 
-	override public function init(opts : Dynamic=null)
-	{
-		if(Std.is(parent, Component))
-			color = untyped parent.color;
-
+	override public function init(opts : Dynamic=null) {
 		// assuming parent is a window
-		box = new Rectangle(0,0, untyped parent.box.width - 10, 24);
+		box = new Size((cast parent).box.width - 10, 24).toRect();
+
+		color = (cast parent).color;
+		items = [];
+
 
 		super.init(opts);
 
@@ -136,6 +140,13 @@ class MenuBar extends Component
 
 	}
 
+	override function addChild(child : flash.display.DisplayObject) : flash.display.DisplayObject {
+		if(Std.is(child, MenuBarItem))
+		items.push(cast child);
+		return super.addChild(child);
+	}
+
+
 	/**
 	*
 	*/
@@ -153,10 +164,8 @@ class MenuBar extends Component
 	}
 
 
-	override public function onKeyDown (e:KeyboardEvent)
-	{
+	override public function onKeyDown (e:KeyboardEvent) {
 	}
-
 
 
 	/**
@@ -171,8 +180,8 @@ class MenuBar extends Component
 	*/
 	function openMenuAt (i:UInt) {
 		var menu = this.getChildAt (i);
-		var popup = PopupMenu.getInstance();
-		popup.init ({parent:this.parent, x:menu.x, y:menu.y + 20});
+		//~ var popup = PopupMenu.getInstance();
+		//~ popup.init ({parent:this.parent, x:menu.x, y:menu.y + 20});
 		//register new popups for close
 	}
 
@@ -180,4 +189,5 @@ class MenuBar extends Component
 		haxegui.Haxegui.register(MenuBar);
 	}
 
-}//MenuBar
+}
+

@@ -1,0 +1,20 @@
+digraph uml {
+	graph [label="Package: flash.system Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
+	graph [label="{LoaderContext}",
+		lp="241,10",
+		bb="0,0,482,725"];
+	"flash.system.IMEConversionMode" [label="{IMEConversionMode|UNKNOWN\lKOREAN\lJAPANESE_KATAKANA_HALF\lJAPANESE_KATAKANA_FULL\lJAPANESE_HIRAGANA\lCHINESE\lALPHANUMERIC_HAL\
+F\lALPHANUMERIC_FULL\l}", style="rounded,filled", fillcolor=white, pos="114,65", rects="1,21,102,109 102,21,228,109", width="3.14", height="1.22"];
+	"flash.system.ApplicationDomain" [label="{ApplicationDomain}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/ApplicationDomain.html", tooltip=ApplicationDomain, portPos=e, pos="114,216", rects="61,198,167,234", width="1.47", height="0.50"];
+	"flash.system.SecurityDomain" [label="{SecurityDomain}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/SecurityDomain.html", tooltip=SecurityDomain, portPos=e, pos="114,306", rects="68,288,161,324", width="1.28", height="0.50"];
+	"flash.system.Security" [label="{Security}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/Security.html", tooltip=Security, portPos=e, pos="114,378", rects="87,360,142,396", width="0.75", height="0.50"];
+	"flash.system.SecurityPanel" [label="{SecurityPanel|SETTINGS_MANAGER\lPRIVACY\lMICROPHONE\lLOCAL_STORAGE\lDISPLAY\lDEFAULT\lCAMERA\l}", style="rounded,filled", fillcolor=white, pos="114,462", rects="25,423,99,501 99,423,203,501", width="2.47", height="1.08"];
+	"flash.system.IME" [label="{IME}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/IME.html", tooltip=IME, portPos=e, pos="114,541", rects="87,523,141,559", width="0.75", height="0.50"];
+	"flash.events.EventDispatcher" [pos="411,541", rects="341,523,482,559", width="1.94", height="0.50"];
+	"flash.system.System" [label="{System}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/System.html", tooltip=System, portPos=e, pos="114,597", rects="87,579,141,615", width="0.75", height="0.50"];
+	"flash.system.Capabilities" [label="{Capabilities}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/Capabilities.html", tooltip=Capabilities, portPos=e, pos="114,652", rects="79,634,150,670", width="0.97", height="0.50"];
+	"flash.system.LoaderContext" [label="{LoaderContext}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/system/LoaderContext.html", tooltip=LoaderContext, portPos=e, pos="114,707", rects="71,689,158,725", width="1.19", height="0.50"];
+	"flash.system.IME" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,341,541 141,541 184,541 268,541 331,541"];
+}

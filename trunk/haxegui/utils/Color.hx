@@ -33,23 +33,23 @@ import flash.geom.Transform;
 */
 class Color
 {
-	public static inline var BLACK : UInt = 0x000000;
-	public static inline var WHITE : UInt = 0xFFFFFF;
-	public static inline var RED   : UInt = 0xFF0000;
-	public static inline var GREEN : UInt = 0x00FF00;
-	public static inline var BLUE  : UInt = 0x0000FF;
+	public static inline var BLACK 	  : UInt = 0x000000;
+	public static inline var WHITE 	  : UInt = 0xFFFFFF;
+	public static inline var RED   	  : UInt = 0xFF0000;
+	public static inline var GREEN 	  : UInt = 0x00FF00;
+	public static inline var BLUE 	  : UInt = 0x0000FF;
+	public static inline var CYAN  	  : UInt = 0x00FFFF;
+	public static inline var MAGENTA  : UInt = 0xFF00FF;
+	public static inline var YELLOW   : UInt = 0xFFFF00;
 	
+	/**
+	 * @return Flash formatted hex string (0xRRGGBB)
+	 */
+	public static inline function toHex(color:UInt) : String {
+		return "0x"+StringTools.hex(color, 6);
+	}	
 	
-	/** 
-	* Darken color by value
-	* @param input color
-	* @param value (integer)
-	* @return output color
-	*/
-	public static inline function darken(color:UInt, v:UInt ) : UInt {
-		return clamp(color - grayHex(v));
-	}
-	
+
 	/** 
 	* Single int to gray rgb triplet 
 	* <pre class="code haxe">
@@ -73,9 +73,19 @@ class Color
 	* </pre>
 	**/
 	public static inline function clamp( color:UInt ) : UInt {
-		return cast Math.max(BLACK, Math.min(WHITE, color));
+		return cast (Math.max(BLACK, Math.min(WHITE, color)));
 	}
 	
+	/** 
+	* Darken color by value
+	* @param input color
+	* @param value (integer)
+	* @return output color
+	*/
+	public static inline function darken(color:UInt, v:UInt ) : UInt {
+		return clamp(color - grayHex(v));
+	}
+
 	/** 
 	* Tint color by percentage
 	* <pre class="code haxe">
@@ -126,10 +136,14 @@ class Color
 	* @return Dynamic object with r,g,b fields
 	*/	
 	public static inline function toRGB(color:UInt) : Dynamic {
-		var r = color >> 16 ;
-		var g = color >> 8 & 0xFF ;
+		var r = (color >> 16) & 0xFF ;
+		var g = (color >> 8) & 0xFF ;
 		var b = color & 0xFF ;
 		return { r: r, g: g, b: b };
 	}
-	
+
+	public static inline function random() : UInt {
+		return Std.int(Math.random()*Color.WHITE);
+	}
+
 }
