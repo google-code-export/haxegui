@@ -320,7 +320,7 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 			for(i in items) {
 				var item = new ListItem(this);
 				item.init({ color: DefaultStyle.INPUT_BACK,
-							text: i
+							label: i
 							});
 				box.width = item.box.width = Math.max(box.width, item.label.tf.width);
 				item.label.mouseEnabled = false;
