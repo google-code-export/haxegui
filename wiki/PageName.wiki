@@ -1,5 +1,5 @@
+#summary Coding style for haxegui
 #labels Phase-Implementation
-#Coding style
 
 = This describes the preferred style for writing haxegui code =
 
@@ -37,6 +37,4 @@ Use explicit folding around imports and also sorting.
 Same-line brackets for functions, for\while-loops, and if-else blocks.
 
 Prefer to use single quotes "'" inside strings and not escaped doubles "\""
-
-
 
