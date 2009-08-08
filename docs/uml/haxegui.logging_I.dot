@@ -1,11 +1,11 @@
 digraph uml {
-	graph [label="Package: haxegui.logging Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [label="{ILogger}",
-		lp="59,10",
-		bb="0,0,118,462"];
-	"haxegui.logging.ILogger" [label="{ILogger}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/logging/ILogger.html", tooltip=ILogger, portPos=e, pos="59,39", rects="32,21,86,57", width="0.75", height="0.50"];
-	"haxegui.logging.LogLevel" [label="{LogLevel|WARRNING\lVERBOSE\lOFF\lNOTICE\lINFO\lERROR\l}", style="rounded,filled", fillcolor=white, pos="59,271", rects="3,237,56,305 56,237,115,305", width="1.56", height="0.94"];
-	"haxegui.logging.ErrorType" [label="{ErrorType|WARNNING\lNOTICE\lINFO\lFATAL\lERROR\l}", style="rounded,filled", fillcolor=white, pos="59,433", rects="1,404,58,462 58,404,118,462", width="1.61", height="0.81"];
+	graph [label="Package: haxegui.logging Inheritance", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=compress, packMode="graph", labelloc=c, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
+	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
+	graph [lp="136,12",
+		bb="0,0,272,259"];
+	"haxegui.logging.LogEntry" [label="{\nLogEntry|pos : haxe.PosInfos\lmessage : Dynamic\llevel : LogLevel\lerror : ErrorType\l}", fillcolor="#ffffbf", fontcolor=black, pos="136,45", rects="68,25,119,65 119,25,205,65", width="1.89", height="0.56"];
+	"haxegui.logging.ILogger" [label="{\nILogger}", fillcolor="#88c2b3", fontcolor="#496962", URL="../types/haxegui/logging/ILogger.html", tooltip="\nILogger", portPos=w, pos="136,101", rects="109,83,163,119", width="0.75", height="0.50"];
+	"haxegui.logging.LogLevel" [label="{\nLogLevel|WARRNING\lVERBOSE\lOFF\lNOTICE\lINFO\lERROR\l}", fillcolor="#af8dc3", fontcolor=black, pos="136,165", rects="83,137,132,193 132,137,189,193", width="1.47", height="0.78"];
+	"haxegui.logging.ErrorType" [label="{\nErrorType|WARNNING\lNOTICE\lINFO\lFATAL\lERROR\l}", fillcolor="#af8dc3", fontcolor=black, pos="136,235", rects="80,211,135,259 135,211,192,259", width="1.56", height="0.67"];
 }

@@ -19,23 +19,26 @@
 
 package haxegui.windowClasses;
 
+//{{{ Imports
 import flash.display.DisplayObjectContainer;
 import flash.events.MouseEvent;
+import flash.geom.Point;
+import haxegui.Window;
+import haxegui.controls.AbstractButton;
+import haxegui.controls.Component;
+import haxegui.controls.Image;
+import haxegui.controls.Label;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.CursorManager;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
-import haxegui.controls.Component;
-import haxegui.controls.AbstractButton;
-import haxegui.controls.Image;
-import haxegui.controls.Label;
-import haxegui.Window;
-
-import haxegui.utils.Size;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
+import haxegui.utils.Size;
+//}}}
 
+//{{{ CloseButton
 /**
 *
 * Close CloseButton Class
@@ -46,26 +49,33 @@ import haxegui.utils.Opts;
 */
 class CloseButton extends AbstractButton
 {
+	//{{{ Constructor
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
 		description = "Close Window";
 	}
+	//}}}
 
- 	override public function onMouseClick(e:MouseEvent) : Void	{
- 		trace("Close clicked on " + parent.parent.toString());
+	///{{{ Functions
+	//{{{ onMouseClick
+	override public function onMouseClick(e:MouseEvent) : Void	{
+		trace("Close clicked on " + parent.parent.toString());
 		this.getParentWindow().destroy();
- 	}
+	}
+	//}}}
 
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(CloseButton);
 	}
+	//}}}
+	//}}}
 }
+//}}}
 
-
-
+//{{{ MinimizeButton
 /**
-*
-* MinimizeButton Class
+* A TitleBar Button to minimize the window
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
@@ -73,25 +83,30 @@ class CloseButton extends AbstractButton
 */
 class MinimizeButton extends AbstractButton
 {
+	//{{{ Constructor
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
 		description = "Minimize Window";
 	}
+	//}}}
 
+	//{{{ onMouseClick
 	override public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Minimized clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
 	}
+	//}}}
 
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(MinimizeButton);
 	}
+	//}}}
 }
+//}}}
 
-
-
-
+//{{{ MaximizeButton
 /**
 *
 * MaximizeButton Class
@@ -102,124 +117,217 @@ class MinimizeButton extends AbstractButton
 */
 class MaximizeButton extends AbstractButton
 {
+	//{{{ Constructor
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
 		description = "Maximize Window";
 	}
+	//}}}
 
+	//{{{ Functions
+	//{{{ onMouseClick
 	override public function onMouseClick(e:MouseEvent) : Void
 	{
 		trace("Maximize clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
 	}
+	//}}}
 
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(MaximizeButton);
 	}
+	//}}}
+	//}}}
 }
+//}}}
 
-
+//{{{ Titlebar
 /**
 *
 * Titlebar class
 *
-* @author <gershon@goosemoose.com>
+* @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
 class TitleBar extends AbstractButton
 {
+	//{{{ Members
+	//{{{ Public
 	public var title 		  : Label;
 	public var closeButton 	  : CloseButton;
 	public var minimizeButton : MinimizeButton;
 	public var maximizeButton : MaximizeButton;
 	public var icon			  : Icon;
-	
-	static inline var titleOffset : Int = -4;
-	
+	//}}}
+
+
+	//{{{ Static
+	/** Title offset from center titlebar **/
+	static inline var titleOffset : Point = new Point(0,-4);
+	//}}}
+	//}}}
+
+
+	//{{{ Functions
+	//{{{ init
+	/**
+	* @throws String warning when not attached to a window
+	*/
 	override public function init(?opts:Dynamic) {
 		if(!Std.is(parent, Window)) throw parent+" not a Window";
-	
+
+
 		box = new flash.geom.Rectangle(0,0, (cast parent).box.width, 32);
 		cursorOver = Cursor.SIZE_ALL;
 
+
 		super.init(opts);
 
+
+		// closeButton
 		closeButton = new CloseButton(this, "closeButton");
 		closeButton.init({color: this.color });
 		closeButton.moveTo(4,4);
-		closeButton.filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
 		closeButton.redraw();
 
+
+		// minimizeButton
 		minimizeButton = new MinimizeButton(this, "minimizeButton");
 		minimizeButton.init({color: this.color });
 		minimizeButton.moveTo(20,4);
-		minimizeButton.filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
 
+
+		// maximizeButton
 		maximizeButton = new MaximizeButton(this, "maximizeButton");
 		maximizeButton.init({color: this.color });
 		maximizeButton.moveTo(36,4);
-		maximizeButton.filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
 
+
+		// filters
+		closeButton.filters = minimizeButton.filters = maximizeButton.filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
 		//closeButton.useHandCursors = minimizeButton.useHandCursors = maximizeButton.useHandCursors = true;
 
+
+		// title
 		title = new Label(this);
 		title.init({text: Opts.optString(opts,"title", name)});
 		title.mouseEnabled = false;
 		title.tabEnabled = false;
 		title.center();
-		title.move(0, titleOffset);
+		title.movePoint(titleOffset);
+
+
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
+	//}}}
 
+	//{{{ onRollOver
 	override public function onRollOver (e:MouseEvent) {
 		CursorManager.setCursor(this.cursorOver);
 		super.onRollOver(e);
 	}
+	//}}}
 
+	//{{{ onRollOut
 	override public function onRollOut (e:MouseEvent) {
 		CursorManager.setCursor(Cursor.ARROW);
 		super.onRollOut(e);
 	}
+	//}}}
 
+	//{{{ onMouseDown
 	override public function onMouseDown (e:MouseEvent)	{
+		#if debug
+		trace(e);
+		#end
+
 		CursorManager.getInstance().lock = true;
+
+
 		this.updateColorTween( new feffects.Tween(0, -50, 350, feffects.easing.Linear.easeOut) );
+
+
 		var win = this.getParentWindow();
-		if(win != null) {
-			win.startDrag();
-			win.addEventListener(flash.events.MouseEvent.MOUSE_UP, function(e){ win.stopDrag(); });
-			win.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, function(e){ win.dispatchEvent(new MoveEvent(MoveEvent.MOVE)); });
-		}
-		// dispatch(MoveEvent)
+		if(win==null) return;
+
+
+		win.startDrag();
+		win.addEventListener(MouseEvent.MOUSE_UP, onStopDrag, false, 0, true);
+		win.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+
+
 		super.onMouseDown(e);
 	}
+	//}}}
 
+
+	//{{{ onMouseMove
+	public function onMouseMove(e:MouseEvent) {
+		var win = this.getParentWindow();
+		if(win==null) return;
+		win.dispatchEvent(new MoveEvent(MoveEvent.MOVE));
+	}
+	//}}}
+
+
+	//{{{ onStopDrag
+	public function onStopDrag(e:MouseEvent) {
+		var win = this.getParentWindow();
+		if(win==null) return;
+
+		win.stopDrag();
+	}
+	//}}}
+
+
+	//{{{ onMouseUp
 	override public function onMouseUp (e:MouseEvent) {
+		#if debug
+		trace(e);
+		#end
+
 		CursorManager.getInstance().lock = false;
+
+
 		this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
 
+
 		var win = this.getParentWindow();
-		if(win != null) {
-			win.stopDrag();
-		}
+		if(win== null) return;
+
+
+		win.stopDrag();
+		win.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		win.removeEventListener(MouseEvent.MOUSE_UP, onStopDrag);
+
 
 		if(this.hitTestObject( CursorManager.getInstance()._mc ))
-			CursorManager.setCursor(this.cursorOver);
+		CursorManager.setCursor(this.cursorOver);
 		else
-			CursorManager.setCursor(Cursor.ARROW);
+		CursorManager.setCursor(Cursor.ARROW);
+
 
 		super.onMouseUp(e);
 	}
+	//}}}
 
+	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
 		box = new Size((cast parent).box.width, 32).toRect();
 		redraw();
 		title.center();
-		title.move(0, titleOffset);
+		title.movePoint(titleOffset);
 	}
+	//}}}
 
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(TitleBar);
 	}
+	//}}}
+	//}}}
 }
+//}}}
+

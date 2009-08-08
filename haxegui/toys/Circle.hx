@@ -19,25 +19,22 @@
 
 package haxegui.toys;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
-import flash.display.Sprite;
+//{{{ Import
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
+import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.geom.Rectangle;
+import haxegui.controls.Component;
 import haxegui.managers.StyleManager;
-import haxegui.utils.Size;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
-
-import haxegui.controls.Component;
-
+import haxegui.utils.Size;
+//}}}
 
 class Circle extends Component
 {

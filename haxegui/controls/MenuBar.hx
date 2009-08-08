@@ -17,80 +17,116 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-//{{{ Imports
 package haxegui.controls;
 
-import flash.geom.Rectangle;
 
-import flash.display.DisplayObjectContainer;
+//{{{ Imports
 import flash.display.DisplayObject;
+import flash.display.DisplayObjectContainer;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.FocusEvent;
-import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
-import flash.filters.DropShadowFilter;
+import flash.events.MouseEvent;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
+import flash.filters.DropShadowFilter;
+import flash.geom.Rectangle;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.ui.Keyboard;
-
-
-import haxegui.controls.Label;
-import haxegui.managers.FocusManager;
-
-import haxegui.managers.StyleManager;
+import haxegui.DataSource;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
-import haxegui.events.ResizeEvent;
+import haxegui.controls.Image;
+import haxegui.controls.Label;
 import haxegui.events.MenuEvent;
-
+import haxegui.events.ResizeEvent;
+import haxegui.managers.FocusManager;
+import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
-import haxegui.utils.Size;
 import haxegui.utils.Opts;
+import haxegui.utils.Size;
 //}}}
 
+
+using haxegui.controls.Component;
+using haxegui.utils.Color;
+
+
+//{{{ MenuBarItem
 /**
 * MenuBarItem Class
 *
-* @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
+* @version 0.2
 */
-class MenuBarItem extends AbstractButton
-{
+class MenuBarItem extends AbstractButton, implements IAggregate {
+
 	public var label : Label;
+	public var icon  : Icon;
+	public var menu  : PopupMenu;
 
-	public var menu : PopupMenu;
 
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, MenuBar)) throw parent+" not a MenuBar";
-
 		box = new Size(40,24).toRect();
+		menu = new PopupMenu();
+
 
 		super.init(opts);
+
 
 		label = new Label(this);
 		label.init({text: name});
 		label.move(4,4);
+		label.mouseEnabled = false;
 
 	}
+	//}}}
 
+
+	//{{{ onMouseClick
 	public override function onMouseClick(e:MouseEvent) {
-		var a = new haxegui.Alert();
-		a.init({label: this+"."+here.methodName+":\n\n\n"+"Not implemented yet..."});
+		// var a = new haxegui.Alert();
+		// a.init({label: this+"."+here.methodName+":\n\n\n"+"Not implemented yet..."});
+
+		var p = parent.localToGlobal(new flash.geom.Point(x, y));
+		trace(p);
+
+		if(menu!=null)
+		menu.destroy();
+		menu = new PopupMenu(flash.Lib.current);
+		// menu = new PopupMenu(getParentWindow());
+
+		menu.dataSource = new DataSource();
+		menu.dataSource.data = ["MenuItem", "MenuItem", "MenuItem", "MenuItem", "MenuItem"];
+		menu.init ({color: this.color});
+
+		// menu.init ({x: p.x, y: p.y, color: this.color});
+		menu.toFront();
+
+		menu.x = p.x;
+		menu.y = p.y + 20;
 
 		super.onMouseClick(e);
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(MenuBarItem);
 	}
+	//}}}
 }
+//}}}
 
 
+//{{{ MenuBar
 /**
 * MenuBar Class
 *
@@ -98,17 +134,20 @@ class MenuBarItem extends AbstractButton
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class MenuBar extends Component
-{
+class MenuBar extends Component, implements IRubberBand {
+	//{{{ Members
 	public var items : Array<MenuBarItem>;
 
 	public var numMenus : Int;
+
 	private var _menu:Int;
+	//}}} Members
 
 
+	//{{{ init
 	override public function init(opts : Dynamic=null) {
 		// assuming parent is a window
-		box = new Size((cast parent).box.width - 10, 24).toRect();
+		box = new Size(parent.asComponent().box.width - 10, 24).toRect();
 
 		color = (cast parent).color;
 		items = [];
@@ -116,13 +155,14 @@ class MenuBar extends Component
 
 		super.init(opts);
 
+
 		redraw({box: this.box});
 
-		//this.name = "MenuBar";
 		buttonMode = false;
 		tabEnabled = false;
 		focusRect = false;
 		mouseEnabled = false;
+
 
 		_menu = 0;
 		numMenus = 1+Math.round( Math.random() * 4 );
@@ -139,17 +179,19 @@ class MenuBar extends Component
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 
 	}
+	//}}}
 
+
+	//{{{ addChild
 	override function addChild(child : flash.display.DisplayObject) : flash.display.DisplayObject {
 		if(Std.is(child, MenuBarItem))
 		items.push(cast child);
 		return super.addChild(child);
 	}
+	//}}}
 
 
-	/**
-	*
-	*/
+	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
 		box.width = untyped parent.box.width - 10;
 
@@ -162,11 +204,16 @@ class MenuBar extends Component
 
 		//e.updateAfterEvent();
 	}
+	//}}}
 
 
-	override public function onKeyDown (e:KeyboardEvent) {
-	}
+	//{{{ onKeyDown
+	override public function onKeyDown (e:KeyboardEvent) {}
 
+	//}}}
+
+
+	//{{{ openMenuByName
 
 	/**
 	*
@@ -175,6 +222,10 @@ class MenuBar extends Component
 		openMenuAt (this.getChildIndex (this.getChildByName (name)));
 	}
 
+	//}}}
+
+
+	//{{{ openMenuAt
 	/**
 	*
 	*/
@@ -184,10 +235,13 @@ class MenuBar extends Component
 		//~ popup.init ({parent:this.parent, x:menu.x, y:menu.y + 20});
 		//register new popups for close
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(MenuBar);
 	}
-
+	//}}}
 }
-
+//}}}

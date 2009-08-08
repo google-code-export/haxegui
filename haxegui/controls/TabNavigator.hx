@@ -17,33 +17,27 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-//{{{ Imports
 package haxegui.controls;
 
-import flash.display.Sprite;
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.MovieClip;
-import flash.geom.Rectangle;
-
+import flash.display.Sprite;
 import flash.events.Event;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
-import haxegui.events.ResizeEvent;
-
-import flash.filters.DropShadowFilter;
+import flash.events.MouseEvent;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
-
-import haxegui.managers.StyleManager;
-import haxegui.controls.Component;
+import flash.filters.DropShadowFilter;
+import flash.geom.Rectangle;
 import haxegui.controls.AbstractButton;
+import haxegui.controls.Component;
 import haxegui.controls.Label;
-
-import haxegui.utils.Opts;
-
+import haxegui.events.ResizeEvent;
+import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
+import haxegui.utils.Opts;
 import haxegui.utils.Size;
 //}}}
 
@@ -55,12 +49,12 @@ import haxegui.utils.Size;
 * @author Russell Weir <damonsbane@gmail.com>
 *
 */
-class Tab extends AbstractButton
+class Tab extends AbstractButton, implements IAggregate
 {
-	public var label : Label;
+	public var label  : Label;
 	public var active : Bool;
 
-
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, TabNavigator)) throw parent+" not a TabNavigator";
 
@@ -78,47 +72,38 @@ class Tab extends AbstractButton
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
+	//}}}
 
-	/** Mouse click **/
-	public override function onMouseClick(e:MouseEvent) {
+	//{{{ onMouseClick
+	/** Mouse click **/public override function onMouseClick(e:MouseEvent) {
 		var tabnav = cast(parent, TabNavigator);
 		tabnav.activeTab = tabnav.getChildIndex(this);
 		//parent.dispatchEvent(new Event(Event.CHANGE));
 		super.onMouseClick(e);
 	}
-/*
-	public override function onMouseDown(e:MouseEvent) : Void {
+	//}}}
 
-		this.startDrag(false, new Rectangle(0,0,untyped parent.box.width,0));
-
-		super.onMouseDown(e);
-	}
-
-	public override function onMouseUp(e:MouseEvent) : Void {
-
-		this.stopDrag();
-
-		super.onMouseUp(e);
-	}
-*/
+	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
 		moveTo(x, (cast parent).box.height-box.height);
 	}
+	//}}}
 
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Tab);
 	}
+	//}}}
 }
 
-
-
+//{{{ TabPosition
 enum TabPosition {
 	TOP;
 	BOTTOM;
 	LEFT;
 	RIGHT;
 }
-
+//}}}
 
 /**
 * Tab Navigator bar for switching visible content.<br/>
@@ -143,12 +128,13 @@ enum TabPosition {
 * tabnav.addEventListener(Event.CHANGE, onTabChanged, false, 0, true);
 * </pre>
 *
-* @author <gershon@goosemoose.com>
+* @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
 class TabNavigator extends Component
 {
+	//{{{ Members
 	/** Tab position **/
 	public var tabPosition : TabPosition;
 
@@ -157,7 +143,9 @@ class TabNavigator extends Component
 
 	/** The index of the selected tab **/
 	public var activeTab(default, __setActive) : Int;
+	//}}}
 
+	//{{{ addChild
 	/** Override for addchild, if its a [Tab] its added to the [tabs] list **/
 	public override function addChild(o : DisplayObject) : DisplayObject {
 		//if(Std.is(o, Tab)) for(i in 0...numChildren) if(Std.is(getChildAt(i), Tab)) getChildAt(i).active = false;
@@ -165,8 +153,9 @@ class TabNavigator extends Component
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		return super.addChild(o);
 	}
+	//}}}
 
-
+	//{{{ init
 	override public function init(opts : Dynamic=null) {
 		box = new Size(200, 24).toRect();
 		color = DefaultStyle.BACKGROUND;
@@ -188,32 +177,31 @@ class TabNavigator extends Component
 		//~ parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
 
-	}
+	} //}}}
 
+	//{{{ __setActive
 	/** Setter for the active tab **/
 	public function __setActive(v:Int) : Int {
 		activeTab = v;
 		dispatchEvent(new Event(Event.CHANGE));
 		return activeTab;
-	}
+	} //}}}
 
+	//{{{ onChanged
 	/** Callback for a tab change, updates all child Tabs **/
 	public function onChanged(e:Event) {
 		#if debug
-			trace(this+" tab changed: "+activeTab);
+		trace(this+" tab changed: "+activeTab);
 		#end
 		for(tab in getElementsByClass(Tab)) {
-				tab.active = ( getChildIndex(cast tab) == activeTab );
-				tab.redraw();
-				}
+			tab.active = ( getChildIndex(cast tab) == activeTab );
+			tab.redraw();
+		}
 	}
+	//}}}
 
-	static function __init__() {
-		haxegui.Haxegui.register(TabNavigator);
-	}
-
+	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
-
 		if(Std.is(parent, Component)) {
 			box.width = untyped parent.box.width - x;
 		}
@@ -224,5 +212,11 @@ class TabNavigator extends Component
 
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+	} //}}}
+
+	//{{{ __init__
+	static function __init__() {
+		haxegui.Haxegui.register(TabNavigator);
 	}
+	//}}}
 }

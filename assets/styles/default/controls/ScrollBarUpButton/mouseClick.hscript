@@ -1,10 +1,11 @@
-this.updateColorTween( new feffects.Tween(50, -50, 500, feffects.easing.Expo.easeOut) );
-CursorManager.setCursor(this.cursorPress);
+if(!this.disabled) {
 
-var t = new feffects.Tween(0, 1, 500, feffects.easing.Linear.easeOut );
-t.setTweenHandlers(parent.adjust);
+	this.updateColorTween( new feffects.Tween(50, -50, 500, feffects.easing.Expo.easeOut) );
+	CursorManager.setCursor(this.cursorPress);
 
-parent.handle.updatePositionTween( t, new flash.geom.Point(0, -parent.adjustment.getStep()), parent.adjust);
+	var t = new feffects.Tween(0, 1, 500, feffects.easing.Linear.easeOut );
+	t.setTweenHandlers(parent.adjust);
 
+	parent.handle.updatePositionTween( t, new flash.geom.Point(0, -parent.adjustment.getStep()), parent.adjust);
 
-
+}

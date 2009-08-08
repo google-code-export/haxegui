@@ -1,9 +1,8 @@
 digraph uml {
-	graph [label="Package: flash.media Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [label="{SoundTransform}",
-		lp="53,10",
-		bb="0,0,106,57"];
-	"flash.media.SoundTransform" [label="{SoundTransform}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/media/SoundTransform.html", tooltip=SoundTransform, portPos=e, pos="53,39", rects="6,21,100,57", width="1.31", height="0.50"];
+	graph [label="Package: flash.media Inheritance", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=compress, packMode="graph", labelloc=c, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
+	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
+	graph [lp="121,12",
+		bb="0,0,242,61"];
+	"flash.media.SoundTransform" [label="{\nSoundTransform}", fillcolor=white, URL="../types/flash/media/SoundTransform.html", tooltip="\nSoundTransform", portPos=w, pos="121,43", rects="82,25,160,61", width="1.08", height="0.50"];
 }

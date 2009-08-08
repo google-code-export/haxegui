@@ -20,7 +20,6 @@
 package haxegui.controls;
 
 import flash.geom.Point;
-
 import feffects.Tween;
 
 /**
@@ -35,6 +34,7 @@ interface ITween {
 	public var isTweening : Bool;
  
 	private var colorTween  : Tween;
+	
 	private var positionTween  : Tween;
 
 	public function updateColorTween(?t : Tween) : Void;

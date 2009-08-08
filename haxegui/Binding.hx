@@ -25,7 +25,7 @@ import flash.events.Event;
 /**
 *
 * Binding Class
-* 
+*
 * @author <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.2
@@ -36,31 +36,31 @@ class Binding extends EventDispatcher
 	/** The static binding id counter **/
 	private static var nextId : Int = 0;
 
-	public var data( default, __setData ): Dynamic;
-	
+	public var data( default, default ): Dynamic;
+
 	public var id : Int;
 	public var name : String;
 
 	public function new(?name:String) {
 		super();
-		this.id = DataSource.nextId++;
-		
+		this.id = Binding.nextId++;
+
 		if(name!=null)
 			this.name = name;
 		else
 			this.name = Type.getClassName(Type.getClass(this)).split(".").pop() + id;
 
-			
+
 	}
-	
+
 	override public function toString() : String
 	{
 		return this.name + "[" + Type.getClassName(Type.getClass(this)) + "]";
-	}	
-	
+	}
+
 	static function __init__() {
 		haxegui.Haxegui.register(Binding);
 	}
 
-	
+
 }

@@ -17,12 +17,14 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-//{{{ Imports
 package haxegui.controls;
 
+
+//{{{ Imports
+import feffects.Tween;
 import flash.accessibility.Accessibility;
-import flash.accessibility.AccessibilityProperties;
 import flash.accessibility.AccessibilityImplementation;
+import flash.accessibility.AccessibilityProperties;
 import flash.display.BitmapData;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
@@ -34,56 +36,59 @@ import flash.events.MouseEvent;
 import flash.geom.ColorTransform;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-
+import haxegui.Haxegui;
+import haxegui.Window;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
-import haxegui.Haxegui;
 import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.TooltipManager;
-import haxegui.Window;
-
-import haxegui.utils.Size;
+import haxegui.toys.Transformer;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
-
-import feffects.Tween;
+import haxegui.utils.Size;
 //}}}
 
 
 /**
 *
 * Component is the basic protoype for all components.<br/>
-* <p>It is not an abstract class, in a sense, it is amorphic, its visual appearance can easily and dynamically change at runtime.</p>
-* <p>It derives from [Sprite], so all the flash api drawing functions apply, but take a look at [redraw()] for what you more you can do.</p>
-* <p>Each component carries around not only an id, but also a [box], its the [Rectangle] that will be used for drawing calculations.</p>
-* <p>Likewise, the following actions can be used along with normal event listeners:
+* <p>It is not an abstract class, in a sense, it is amorphic, its visual appearance can easily and dynamically change at runtime.
+* It derives from [Sprite] so all the flash api drawing functions apply, but take a look at [redraw] function for what you more you can do.</p>
+* <p>More than being just the parent class, handing down all widgets with properties and functions (and having some static functions of its own),
+* the class abstracts some of its functionality to script. This is similar to how 3D engines pass the handling of material rendering to various script files and shaders</p>
+* <p>Some widgets have hard-coded actions, the default event listener callback of this class is overriden in the those cases, but still after that code executes the script action is fired.
+* This is because of the untyped nature of hscript, that code is better written in haxe. Most widgets just have default scripts loaded into them, which is easier to customize.</p>
+* <p>Controling how the component looks is just one action, the following can be used along with normal event listeners:
 * validate, interval, mouseClick, mouseOver, mouseOut, mouseDown, mouseUp, gainingFocus, losingFocus, focusIn, focusOut</p>
-*
+* <p>Notice that even disabled components execute actions, its up for the script to respond properly.</p>
+* <p>Each component carries around not only an [id], but also a [box], its the [Rectangle] that will be used for drawing calculations.
+* This is due to several reasons, the vector rather than bitmap nature of the graphics, it prevents errors that might result when drawing transparent regions (but still allows you to do that),
+* its a good union of visual properites to pass around between components, has some handy functions as a class, and leaves you free to scale the result.</p>
+* <p>When a [ResizeEvent] is fired the listener's response typicaly uses that [box].</p>
+* <p>One more thing to note, is that a [MoveEvent] only fires when using the functions from this class, when manually moving a component with its inherited [x] and [y] properties, dispatch as needed.
+* </p>
+
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
-* @version 0.2
+* @version 0.26
 *
 *
 */
-class Component extends Sprite, implements IMovable, implements IToolTip, implements ITween, implements IComposite
+class Component extends Sprite, implements IAccessible, implements IMovable, implements IToolTip, implements ITween, implements IValidate
 {
-	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//{{{ Members
-
-	// Static members
-	/** The static component id counter **/
-	private static var nextId : Int = 0;
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-	// Private members
+	//{{{ Private
 	/** Current color tween in effect **/
 	private var colorTween : Tween;
 
 	/** Current position tween in effect **/
 	private var positionTween : Tween;
-
 
 	/** The initial opts **/
 	private var initOpts : Dynamic;
@@ -93,14 +98,21 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 
 	/** Last timestamp when an interval occured **/
 	private var lastInterval : Float;
+	//}}}
 
 
-	// Public members
+	//{{{ Public
+	/** A flag raised while tweening **/
 	public var isTweening : Bool;
 
 	/** Rectangular dimensions **/
 	public var box : Rectangle;
+
+	/** Minimum size **/
 	public var minSize : Size;
+
+	/** Maximum size **/
+	public var maxSize : Size;
 
 	/** The color of this component, which has different meanings per component **/
 	public var color : UInt;
@@ -134,11 +146,22 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 
 	public var allowedParents : Array<Class<Dynamic>>;
 	//}}}
-	////////////////////////////////////////////////////////////////////////////
 
 
-	////////////////////////////////////////////////////////////////////////////
+	//{{{ Static
+	/** The static component id counter **/
+	private static var nextId : Int = 0;
+	//}}}
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//}}}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//{{{ Constructor
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/**
 	* The common constructor for all components.<br>
 	*
@@ -154,63 +177,79 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 	**/
 	public function new (parent:DisplayObjectContainer=null, name:String=null, ?x:Float, ?y:Float) {
 		super ();
+
+
+		// id from static
 		this.id = Component.nextId++;
 
+		//
 		color = Color.MAGENTA;
 		box = new Rectangle();
 
+		//
 		tabEnabled = mouseEnabled = true;
 		buttonMode = false;
 		focusable = true;
 		doubleClickEnabled = true;
 		disabled = false;
 
-		// name from given parameter or classname and id
+		// Name from given parameter or classname and id
 		if(name!=null)
 		this.name = name;
 		else
 		this.name = Type.getClassName(Type.getClass(this)).split(".").pop() + id;
 
-		// tooltip text
+		// Tooltip text
 		description = this.name;
 
-		// attach to parent
+		// Attach to parent
 		if(parent!=null)
 		parent.addChild(this);
 		else
 		flash.Lib.current.addChild(this);
 
-		//
+		// Move
 		move(x,y);
 
 		// Listeners
-		this.addEventListener (Event.ADDED, onAdded, false, 0, true);
-		this.addEventListener (ResizeEvent.RESIZE, onResize, false, 0, true);
-		this.addEventListener (MouseEvent.CLICK, onMouseClick, false, 0, true);
-		this.addEventListener (MouseEvent.DOUBLE_CLICK, onMouseDoubleClick, false, 0, true);
-		this.addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
-		this.addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
+		addEventListener (Event.ADDED, onAdded, false, 0, true);
+		addEventListener (FocusEvent.FOCUS_IN, onFocusIn, false, 0, true);
+		addEventListener (FocusEvent.FOCUS_OUT, onFocusOut, false, 0, true);
+		addEventListener (FocusEvent.KEY_FOCUS_CHANGE, __focusHandler, false, 0, true);
+		addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, __focusHandler, false, 0, true);
 
-		this.addEventListener (MouseEvent.MOUSE_OVER, onRollOver, false, 0, true);
-		this.addEventListener (MouseEvent.MOUSE_OUT,  onRollOut, false, 0, true);
+		addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
+		addEventListener (KeyboardEvent.KEY_UP, onKeyUp, false, 0, true);
 
-		this.addEventListener (MouseEvent.MOUSE_WHEEL,  onMouseWheel, false, 0, true);
-		this.addEventListener (KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
-		this.addEventListener (KeyboardEvent.KEY_UP, onKeyUp, false, 0, true);
-		this.addEventListener (FocusEvent.KEY_FOCUS_CHANGE, __focusHandler, false, 0, true);
-		this.addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, __focusHandler, false, 0, true);
-		this.addEventListener (FocusEvent.FOCUS_IN, onFocusIn, false, 0, true);
-		this.addEventListener (FocusEvent.FOCUS_OUT, onFocusOut, false, 0, true);
+		addEventListener (MouseEvent.CLICK, onMouseClick, false, 0, true);
+		addEventListener (MouseEvent.DOUBLE_CLICK, onMouseDoubleClick, false, 0, true);
+		addEventListener (MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
+		addEventListener (MouseEvent.MOUSE_OUT,  onRollOut, false, 0, true);
+		addEventListener (MouseEvent.MOUSE_OVER, onRollOver, false, 0, true);
+		addEventListener (MouseEvent.MOUSE_UP,   onMouseUp, false, 0, true);
+		addEventListener (MouseEvent.MOUSE_WHEEL,  onMouseWheel, false, 0, true);
 
+		addEventListener (ResizeEvent.RESIZE, onResize, false, 0, true);
 	}
 	//}}}
-	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//{{{ Functions
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	//{{{ Public
+	//{{{ toString
+	override public function toString() : String {
+		return this.name + "[" + Type.getClassName(Type.getClass(this)) + "]";
+	}
+	//}}}
+
+
+	//{{{ init
 	/**
-	* Initialize a component<br>
+	* Initialize a component<br/>
 	*
 	* When init() is called, the component overrides any default properties, and sets any new, it is ready draw to screen,
 	* and sets the dirty flag to true.
@@ -240,82 +279,37 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 	*/
 	public function init(opts:Dynamic=null) {
 		if(opts == null || !Reflect.isObject(opts)) opts = {};
-		this.name = Opts.optString(opts, "name", this.name);
-		this.description = Opts.optString(opts, "description", this.description);
-		this.disabled = Opts.optBool(opts, "disabled", false);
-		this.box.width = Opts.optFloat(opts, "width", this.box.width);
-		this.box.height = Opts.optFloat(opts, "height", this.box.height);
-		this.x = Opts.optFloat(opts, "x", this.x);
-		this.y = Opts.optFloat(opts, "y", this.y);
-		this.color = Opts.optInt(opts, "color", this.color);
-		this.alpha = Opts.optFloat(opts, "alpha", this.alpha);
-		this.buttonMode = Opts.optBool(opts, "buttonMode", false);
-		this.visible = Opts.optBool(opts, "visible", true);
-		this.fitH = Opts.optBool(opts,"fitH", false);
-		this.fitV = Opts.optBool(opts,"fitV", false);
 
+		alpha		= Opts.optFloat (opts, "alpha", 	  alpha);
+		box.height  = Opts.optFloat (opts, "height", 	  box.height);
+		box.width 	= Opts.optFloat (opts, "width", 	  box.width);
+		buttonMode  = Opts.optBool	(opts, "buttonMode",  false);
+		color 		= Opts.optInt	(opts, "color",		  color);
+		description = Opts.optString(opts, "description", description);
+		disabled 	= Opts.optBool	(opts, "disabled",	  false);
+		fitH 		= Opts.optBool	(opts, "fitH", 		  false);
+		fitV 		= Opts.optBool	(opts, "fitV", 		  false);
+		name 		= Opts.optString(opts, "name", 		  name);
+		visible 	= Opts.optBool	(opts, "visible", 	  true);
+		x 			= Opts.optFloat	(opts, "x", 		  x);
+		y 			= Opts.optFloat	(opts, "y", 		  y);
 
-		var aOps = Opts.clone(opts);
-		Opts.removeFields(aOps, ["name","disabled","width","height","x","y","color","alpha","buttonMode","visible"]);
-		/*
-		for(f in Reflect.fields(aOps)) {
-		if(Reflect.hasField(this, f)) {
-		try {
-		Reflect.setField(this, f, Reflect.field(aOps, f));
-		} catch(e:Dynamic) {
-		trace("Error on field " + f + " (type " + Std.string(Type.typeof(Reflect.field(aOps, f))) + "): " + e);
-		}
-		}
-		}
-		*/
-
+		//
 		var accessProps = new AccessibilityProperties();
 		accessProps.name = name;
 		accessProps.description = description;
-		this.accessibilityProperties = accessProps;
+		accessibilityProperties = accessProps;
 
-		this.initOpts = Opts.clone(opts);
-		this.dirty = true;
+		// keep the opts in a member
+		initOpts = Opts.clone(opts);
 
+		// request a redraw
+		dirty = true;
 	}
+	//}}}
 
-	/*
-	override public function addChild(o : DisplayObject) : DisplayObject {
-	addDisplayObjectEvents(o);
-	return super.addChild(o);
-	}
 
-	override public function addChildAt(o : DisplayObject, index:Int) : DisplayObject {
-	addDisplayObjectEvents(o);
-	return super.addChildAt(o, index);
-	}
-	*/
-
-	/**
-	* Remove all children
-	*/
-	public function removeChildren() : Void {
-		for(child in this)
-		if(Std.is(child, Component))
-		(cast child).destroy();
-		else
-		removeChild(child);
-	}
-
-	public function swapParent(np:DisplayObjectContainer) : Void {
-		if(np==null) throw "new parent is null";
-		np.addChild(this);
-		parent.removeChild(this);
-	}
-
-	public function swapChildrenVisible(c:DisplayObject, d:DisplayObject) {
-		c.visible = !c.visible;
-		d.visible = !d.visible;
-	}
-	
-	public function swapChildrenVisibleAt(i:Int, j:Int) {
-		swapChildrenVisible(getChildAt(i), getChildAt(j));
-	}
+	//{{{ destroy
 	/**
 	* Destroy this component and all children
 	*/
@@ -325,7 +319,26 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		this.parent.removeChild(this);
 		//~ flash.system.System.gc();
 	}
+	//}}}
 
+
+	//{{{ clone
+	/**
+	* @todo check this works for everything, should probably write a test...
+	*/
+	public function clone() : Dynamic {
+		var type = Type.getClass(this);
+		var inst = Type.createInstance(type, [parent, name+"_clone", x, y]);
+		Reflect.callMethod( inst, inst.init, [Opts.clone(initOpts)] );
+		trace(inst);
+
+		return inst;
+	}
+	//}}}
+
+
+	//{{{ Actions & Script
+	//{{{ getAction
 	/**
 	* Returns the code associated with the specified action. If this instance
 	* does not have a script, the default from the upstyle is returned.
@@ -342,7 +355,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 			return null;
 		}
 	}
+	//}}}
 
+
+	//{{{ getOwnAction
 	/**
 	* Returns the code associated with this instance for the specified action.
 	*
@@ -353,7 +369,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		return try ScriptManager.getInstanceOwnActionObject(this, action).code
 		catch(e:Dynamic) null;
 	}
+	//}}}
 
+
+	//{{{ getParentWindow
 	/**
 	* Returns the window this component is contained in, if any
 	*
@@ -366,13 +385,19 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		}
 		return cast p;
 	}
+	//}}}
 
+
+	//{{{ getParentContainer
 	public function getParentContainer() : Dynamic {
 		for(i in ancestors())
 		if(Std.is(i, haxegui.containers.IContainer)) return i;
 		return null;
 	}
+	//}}}
 
+
+	//{{{ hasAction
 	/**
 	* Returns true if this component has an action
 	* registered for the action type [action]. If this instance
@@ -386,7 +411,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		var c = try ScriptManager.getInstanceActionObject(this, action) catch(e:Dynamic) null;
 		return (c != null);
 	}
+	//}}}
 
+
+	//{{{ hasOwnAction
 	/**
 	* Returns true if this component has an action registered
 	* for the action type [action]. Only returns true if the
@@ -398,15 +426,64 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 	public function hasOwnAction(action:String) : Bool {
 		return (ScriptManager.getInstanceOwnActionObject(this,action) != null);
 	}
+	//}}}
 
+
+	//{{{ setAction
 	/**
-	* @todo
+	* Sets the action code for the specified action name for this component.
+	*
+	* @param action Action name
+	* @param code Action code
 	**/
-	public function hasFocus() : Bool {
-		return FocusManager.getInstance().getFocus() == this ? true : false;
+	public function setAction(action:String, code:String) : Void {
+		ScriptManager.setInstanceScript(this, action, code);
 	}
+	//}}}
 
 
+	//{{{ startInterval
+	/**
+	* Starts an interval timer, which calls the "interval" action.
+	*
+	* @param updatesPerSecond Number of times per second the interval action will be called
+	**/
+	public function startInterval(updatesPerSecond : Float) : Void {
+		startIntervalDelayed(updatesPerSecond, 0.0);
+	}
+	//}}}
+
+
+	//{{{ startIntervalDelayed
+	/**
+	* Starts an interval timer, which calls the "interval" action, after waiting [wait] seconds
+	*
+	* @param updatesPerSecond Number of times per second the interval action will be called
+	* @param wait Number of seconds to wait before the first update.
+	**/
+	public function startIntervalDelayed(updatesPerSecond : Float, wait : Float) : Void {
+		stopInterval();
+		if(updatesPerSecond < 1) return;
+		if(Math.isNaN(wait)) wait = 0.0;
+		lastInterval = haxe.Timer.stamp() + wait;
+		intervalUpdatesPerSec = updatesPerSecond;
+		//~ this.addEventListener(flash.events.Event.ENTER_FRAME, onEnterFrame);
+		this.addEventListener(flash.events.Event.ENTER_FRAME, onEnterFrame, false, 200, true);
+	}
+	//}}}
+
+
+	//{{{ stopInterval
+	/**
+	* Stop the current interval timer
+	**/
+	public function stopInterval() : Void {
+		this.removeEventListener(flash.events.Event.ENTER_FRAME, onEnterFrame);
+	}
+	//}}}
+
+
+	//{{{ isValid
 	/** Returns whether object validates **/
 	public function isValid() : Bool {
 		if(!hasAction("validate"))
@@ -415,26 +492,18 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		if(rv == null) return true;
 		return cast rv;
 	}
+	//}}}
+	//}}}
 
-	/**
-	* @todo
-	*/
-	public function clone() : Dynamic {
-		var type = Type.getClass(this);
-		var inst = Type.createInstance(type, [parent, name+"_clone", x, y]);
-		//inst.init(Opts.clone(initOpts));
-		Reflect.callMethod( inst, inst.init, [Opts.clone(initOpts)] );
-		trace(inst);
 
-		return inst;
-	}
-
+	//{{{ Position & Size
+	//{{{ moveTo
 	/**
 	* Move to specific location.
-	* @param x Horizontal offset relative to parent
-	* @param y Vertical offset relative to parent
+	* @param x offset relative to parent
+	* @param y offset relative to parent
 	**/
-	public function moveTo(x : Float, y : Float) : Void	{
+	public inline function moveTo(x : Float, y : Float) : Void	{
 		var event = new MoveEvent(MoveEvent.MOVE, this.x, this.y);
 
 		this.x = x;
@@ -451,40 +520,56 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		if(!isTweening)
 		dispatchEvent(event);
 	}
+	//}}}
 
 
-
+	//{{{ move
 	/**
 	* Move relative to current location.
 	* @param x Horizontal offset relative to current position
 	* @param y Vertical offset relative to current position
 	**/
-	public function move(x : Float, y : Float) : Void {
+	public inline function move(x : Float, y : Float) : Void {
 		moveTo(this.x + x, this.y + y);
 	}
+	//}}}
 
+
+	//{{{ moveToPoint
 	/** Move to absolute position [Point], relative to parent **/
-	public function moveToPoint(p:Point) : Void {
+	public inline function moveToPoint(p:Point) : Void {
 		moveTo(p.x, p.y);
 	}
+	//}}}
 
+
+	//{{{ movePoint
 	/** Move by [Point], relative to current position **/
-	public function movePoint(p:Point) : Void {
+	public inline function movePoint(p:Point) : Void {
 		moveToPoint(p.add(new Point(x,y)));
 	}
+	//}}}
 
+
+	//{{{ snap
 	/** Snap position to grid
 	* @see [Haxegui.gridSpacing]
 	*/
-	public function snap() {
+	public inline function snap() {
 		move(- x % Haxegui.gridSpacing, - y % Haxegui.gridSpacing);
 	}
+	//}}}
 
+
+	//{{{ center
 	/** Move to parent's center **/
-	public function center() {
+	public inline function center() {
 		moveTo(Std.int((cast parent).box.width-box.width)>>1, Std.int((cast parent).box.height-box.height)>>1);
 	}
+	//}}}
 
+
+	//{{{ resize
 	/**
 	* Resize box to [Size]
 	* @return Rectangle new size
@@ -507,10 +592,12 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 
 		return box;
 	}
+	//}}}
+	//}}}
 
-	////////////////////////////////////////////////////////////////////////////
-	// Layering function
-	////////////////////////////////////////////////////////////////////////////
+
+	//{{{ Layering
+	//{{{ raise
 	/**
 	* Raise one layer
 	* @return Int new depth
@@ -520,7 +607,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		parent.setChildIndex(this, d);
 		return d;
 	}
+	//}}}
 
+
+	//{{{ lower
 	/**
 	* Lower one layer
 	* @return Int new depth
@@ -530,7 +620,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		parent.setChildIndex(this, d);
 		return d;
 	}
+	//}}}
 
+
+	//{{{ toFront
 	/**
 	* Raise to top layer
 	* @return Int new depth
@@ -540,7 +633,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		//return parent.numChildren-1;
 		return parent.getChildIndex(this);
 	}
+	//}}}
 
+
+	//{{{ toBack
 	/**
 	* Lower to bottom
 	* @return Void
@@ -548,13 +644,12 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 	public function toBack() : Void {
 		parent.setChildIndex(this, 0);
 	}
+	//}}}
+	//}}}
 
 
-
-	////////////////////////////////////////////////////////////////////////////
-	// Iterators and child matching functions
-	////////////////////////////////////////////////////////////////////////////
-
+	//{{{ Iterators & DOM
+	//{{{ iterator
 	/**
 	* Returns iterator of all children.
 	* <pre class="code haxe">
@@ -570,7 +665,9 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		l.add(getChildAt(i));
 		return l.iterator();
 	}
+	//}}}
 
+	//{{{ ancestors
 	/**
 	* Returns iterator of all ancestors.
 	* Example:
@@ -587,17 +684,26 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		}
 		return l.iterator();
 	}
+	//}}}
 
+
+	//{{{ firstChild
 	/** @return First child as [DisplayObject] **/
 	public function firstChild() : DisplayObject {
-		return getChildAt(0);
+		return numChildren==0 ? null : getChildAt(0);
 	}
+	//}}}
 
+
+	//{{{ isEmpty
 	/** @return True when component has no children **/
 	public function isEmpty() : Bool {
 		return firstChild() == null;
 	}
+	//}}}
 
+
+	//{{{ prevSibling
 	/** @return The previous sibling in the display list **/
 	public function prevSibling() : DisplayObject {
 		var p = Component.asComponent(parent);
@@ -606,8 +712,11 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		if(p.getChildIndex(this)>0) return p.getChildAt(p.getChildIndex(this)-1);
 		return null;
 	}
+	//}}}
 
-	/** @return Tet next sibling in the display list **/
+
+	//{{{ nextSibling
+	/** @return The next sibling in the display list **/
 	public function nextSibling() : DisplayObject {
 		var p = Component.asComponent(parent);
 		for(i in p)
@@ -615,7 +724,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		if(p.getChildIndex(this)<p.numChildren) return p.getChildAt(p.getChildIndex(this)+1);
 		return null;
 	}
+	//}}}
 
+
+	//{{{ getChildById
 	/** @return Returns a child by given id number **/
 	public function getChildById(id:Int) : DisplayObject {
 		for(i in this)
@@ -623,7 +735,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		if((cast i).id==id) return i;
 		return null;
 	}
+	//}}}
 
+
+	//{{{ getElementsByClass
 	/**
 	* Returns an iterator for all children of type.
 	* @param c Class to match
@@ -636,7 +751,25 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		l.add(i);
 		return l.iterator();
 	}
+	//}}}
 
+
+	//{{{ removeChildren
+	/**
+	* Remove all children
+	*/
+	public function removeChildren() : Void {
+		for(child in this)
+		if(Std.is(child, Component))
+		(cast child).destroy();
+		else
+		removeChild(child);
+	}
+	//}}}
+	//}}}
+
+
+	//{{{ replaceChild
 	/**
 	* @param newChild Child to add
 	* @param oldChild Child to replace
@@ -648,55 +781,46 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		setChildIndex(newChild, i);
 		return newChild;
 	}
+	//}}}
 
 
+	//{{{ swapParent
+	public function swapParent(np:DisplayObjectContainer) : Void {
+		if(np==null) throw "new parent is null";
+		np.addChild(this);
+		parent.removeChild(this);
+	}
+	//}}}
 
+
+	//{{{ hasFocus
 	/**
-	* Sets the action code for the specified action name for this component.
-	*
-	* @param action Action name
-	* @param code Action code
+	* @todo fix this
 	**/
-	public function setAction(action:String, code:String) : Void {
-		ScriptManager.setInstanceScript(this, action, code);
+	public function hasFocus() : Bool {
+		return FocusManager.getInstance().getFocus() == this ? true : false;
 	}
+	//}}}
 
-	/**
-	* Starts an interval timer, which calls the "interval" action.
-	*
-	* @param updatesPerSecond Number of times per second the interval action will be called
-	**/
-	public function startInterval(updatesPerSecond : Float) : Void {
-		startIntervalDelayed(updatesPerSecond, 0.0);
+
+	//{{{ swapChildrenVisible
+	public function swapChildrenVisible(c:DisplayObject, d:DisplayObject) {
+		c.visible = !c.visible;
+		d.visible = !d.visible;
 	}
+	//}}}
 
-	/**
-	* Starts an interval timer, which calls the "interval" action, after waiting [wait] seconds
-	*
-	* @param updatesPerSecond Number of times per second the interval action will be called
-	* @param wait Number of seconds to wait before the first update.
-	**/
-	public function startIntervalDelayed(updatesPerSecond : Float, wait : Float) : Void {
-		stopInterval();
-		if(updatesPerSecond < 1) return;
-		if(Math.isNaN(wait)) wait = 0.0;
-		lastInterval = haxe.Timer.stamp() + wait;
-		intervalUpdatesPerSec = updatesPerSecond;
-		//~ this.addEventListener(flash.events.Event.ENTER_FRAME, onEnterFrame);
-		this.addEventListener(flash.events.Event.ENTER_FRAME, onEnterFrame, false, 200, true);
+
+	//{{{ swapChildrenVisibleAt
+	public function swapChildrenVisibleAt(i:Int, j:Int) {
+		swapChildrenVisible(getChildAt(i), getChildAt(j));
 	}
+	//}}}
 
-	/**
-	* Stop the current interval timer
-	**/
-	public function stopInterval() : Void {
-		this.removeEventListener(flash.events.Event.ENTER_FRAME, onEnterFrame);
-	}
 
-	override public function toString() : String {
-		return this.name + "[" + Type.getClassName(Type.getClass(this)) + "]";
-	}
 
+	//{{{ Tweening
+	//{{{ updateColorTween
 	/**
 	* Stops the current(if there is one), and creates a new color tween
 	* <pre class="code haxe">
@@ -714,20 +838,23 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		if(t==null) return;
 		colorTween.setTweenHandlers(
 		function(v) {
-			//~ if(me.dirty) return;
 			colorTrans.redOffset =
 			colorTrans.greenOffset =
 			colorTrans.blueOffset = v;
 			me.transform.colorTransform = colorTrans;
+			// me.isTweening = true;
 		},
 		function(v){
+			// me.isTweening = false;
 			me.colorTween = null;
 			colorTrans = null;
 		}
 		);
 		colorTween.start();
 	}
+	//}}}
 
+	//{{{ updatePositionTween
 	/**
 	* Stops the old position tween and assign a new one.
 	* <pre class="code haxe">
@@ -749,27 +876,249 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		function(v) {
 			var pos = Point.interpolate(p, new Point(), v);
 			pos = pos.add(oldPos);
-			me.isTweening = true;
-			me.moveTo(pos.x, pos.y);
-			//~ me.x = pos.x;
-			//~ me.y = pos.y;
+			// me.isTweening = true;
+			// me.moveTo(pos.x, pos.y);
+			me.x = pos.x;
+			me.y = pos.y;
 			if(f!=null) f(v);
 		},
 		function(v) {
 			me.positionTween = null;
-			me.isTweening = false;
+			// me.isTweening = false;
 		}
 		);
 		positionTween.start();
 	}
+	//}}}
+	//}}}
 
-	//////////////////////////////////////////////////
-	////               Events                     ////
-	//////////////////////////////////////////////////
-	//{{{
+
+	//{{{ Events
+	//{{{ onAdded
 	/** Triggered by addChild() or addChildAt() **/
 	public function onAdded(e:Event) {}
+	//}}}
 
+
+	//{{{ onClick
+	/** Placeholder for [onMouseClick]
+	* <pre class="code haxe">
+	* trace("Do not use onClick, use onMouseClick");
+	* onMouseClick(e);
+	* </pre>
+	**/
+	private function onClick(e:MouseEvent) {
+		trace("Do not use onClick, use onMouseClick");
+		onMouseClick(e);
+	}
+	//}}}
+
+	//{{{ onFocusIn
+	/**
+	* When a component is gaining focus, this event occurs twice.
+	*
+	* The first time, [focusFrom] is set to the object losing focus.
+	*
+	* The second time, [focusFrom == this] which shows that all parents
+	* have been notified of the focus change.
+	* @param e the [FocusEvent]
+	**/
+	public function onFocusIn(e:FocusEvent) {
+		if(disabled) return;
+		// -- Fired twice: first time --
+		// related == object losing focus
+		// target == object gaining focus
+		// currentTarget == this
+		// -- second time --
+		// related == null
+		// target == currentTarget == this
+		//trace("++++ " + Std.string(this) + " onFocusIn");
+		//trace("onFocusIn relatedObject: " + Std.string(e.relatedObject));
+		//trace("onFocusIn currentTarget: " + Std.string(e.currentTarget));
+		//trace("onFocusIn target: " + Std.string(e.target));
+		ScriptManager.exec(this, "focusIn", {focusFrom : e.target});
+	}
+	//}}}
+
+	//{{{ onFocusOut
+	/**
+	* When a component is losing focus, this event occurs
+	*
+	* [focusTo] is set to the object gaining focus.
+	*
+	* @param e the [FocusEvent]
+	**/
+	private function onFocusOut(e:FocusEvent) : Void {
+		if(disabled) return;
+		//trace("++++ " + Std.string(this) + " onFocusOut");
+		//trace("onFocusOut relatedObject: " + Std.string(e.relatedObject));
+		//trace("onFocusOut currentTarget: " + Std.string(e.currentTarget));
+		//trace("onFocusOut target: " + Std.string(e.target));
+		// -- Fired twice : a real mess... we just need one
+		if(e.relatedObject != null)
+		ScriptManager.exec(this, "focusOut", {focusTo : e.relatedObject});
+	}
+	//}}}
+
+	//{{{ onGainingFocus
+	/**
+	* If the component will not take focus, return false from this handler
+	* which will cancel the focus transfer.
+	*
+	* @param from the [InteractiveObject] who lost focus
+	* @return Bool wheter the component will take focus
+	**/
+	public function onGainingFocus(from : flash.display.InteractiveObject) : Bool {
+		var rv : Dynamic = ScriptManager.exec(this,"gainingFocus", {focusFrom : from});
+		//trace(here.methodName + " " + rv);
+		if(rv == null || rv == true)
+		return true;
+		return false;
+	}
+	//}}}
+
+
+	//{{{ onLosingFocus
+	/**
+	* Dispatched to this object when it is about to lose focus
+	*
+	* @param losingTo the [InteractiveObject] who is currently getting focused
+	* @return Bool true to allow change, false to prevent focus change
+	**/
+	public function onLosingFocus(losingTo : flash.display.InteractiveObject) : Bool {
+		var rv : Dynamic = ScriptManager.exec(this,"losingFocus", {focusTo : losingTo});
+		if(rv == null)
+		return true;
+		return cast rv;
+	}
+	//}}}
+
+
+	//{{{ onRollOver
+	/** onRollOver Event **/
+	public function onRollOver(e:MouseEvent)
+	{
+		if(CursorManager.getInstance().lock) return;
+		if(description!=null) TooltipManager.getInstance().create(this);
+		ScriptManager.exec(this,"mouseOver", {event : e});
+	}
+	//}}}
+
+
+	//{{{ onRollOut
+	/** onRollOut Event **/
+	public function onRollOut(e:MouseEvent) : Void
+	{
+		if(CursorManager.getInstance().lock) return;
+		if(description!=null) TooltipManager.getInstance().destroy();
+		ScriptManager.exec(this,"mouseOut", {event : e});
+	}
+	//}}}
+
+
+	//{{{ onMouseDoubleClick
+	/** Mouse double-click **/
+	public function onMouseDoubleClick(e:MouseEvent) : Void {
+		#if debug
+		if(e.target == this)
+		trace("onMouseDoubleClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDoubleClick"));
+		#end
+		ScriptManager.exec(this,"mouseDoubleClick", {event : e});
+	}
+	//}}}
+
+
+	//{{{ onMouseClick
+	/** Mouse click **/
+	public function onMouseClick(e:MouseEvent) : Void {
+		#if debug
+		trace(e);
+		#end
+
+		if(description!=null) TooltipManager.getInstance().destroy();
+		ScriptManager.exec(this,"mouseClick", {event : e});
+	}
+	//}}}
+
+
+	//{{{ onMouseDown
+	/**
+	* Mouse Down
+	* @todo remove transformer
+	**/
+	public function onMouseDown(e:MouseEvent) : Void {
+		#if debug
+		trace(e);
+		#end
+
+		if(e.ctrlKey) {
+			e.stopImmediatePropagation();
+			// dont transform transformers
+			if(Std.is(this, haxegui.toys.Transformer) || Std.is(this.parent, haxegui.toys.Transformer)) return;
+			var t = new haxegui.toys.Transformer(this);
+			t.init();
+			var p = (cast this).localToGlobal( new flash.geom.Point(this.x, this.y) );
+			t.x = p.x - this.x - Transformer.handleSize;
+			t.y = p.y - this.y - Transformer.handleSize;
+			// no point in doing the normal action, user wants to transform
+			return;
+		}
+
+		if(description!=null) TooltipManager.getInstance().destroy();
+		ScriptManager.exec(this,"mouseDown", {event : e});
+	}
+	//}}}
+
+
+	//{{{ onMouseUp
+	/** Mouse Up **/
+	public function onMouseUp(e:MouseEvent) : Void	{
+		ScriptManager.exec(this,"mouseUp", {event : e});
+	}
+	//}}}
+
+
+	//{{{ onMouseWheel
+	/** Mouse Wheel **/
+	public function onMouseWheel(e:MouseEvent) : Void	{
+		ScriptManager.exec(this,"mouseWheel", {event : e});
+	}
+	//}}}
+
+
+	//{{{ onKeyDown
+	/** Overiden in sub-classes **/
+	public function onKeyDown(e:KeyboardEvent) : Void {}
+	//}}}
+
+
+	//{{{ onKeyUp
+	/** Overiden in sub-classes **/
+	public function onKeyUp(e:KeyboardEvent) : Void {}
+	//}}}
+
+
+	//{{{ onResize
+	/** Overiden in sub-classes **/
+	public function onResize(e:ResizeEvent) : Void {}
+	//}}}
+
+
+	//{{{ onEnterFrame
+	private function onEnterFrame(e:Event) : Void {
+		var now = haxe.Timer.stamp();
+		var stepsF : Float  = (now - lastInterval) * intervalUpdatesPerSec;
+		var steps : Int = Math.floor( stepsF );
+		lastInterval += steps / intervalUpdatesPerSec;
+
+		for(x in 0...steps) {
+			ScriptManager.exec(this,"interval",{event:e});
+		}
+	}
+	//}}}
+
+
+	//{{{ __focusHandler
 	private function __focusHandler(e:FocusEvent) {
 		// relatedObject is one gaining focus
 		// target is object losing focus
@@ -807,184 +1156,11 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 			}
 		}
 	}
-
-	/** Placeholder **/
-	private function onClick(e:MouseEvent) {
-		trace("Do not use onClick, use onMouseClick");
-		onMouseClick(e);
-	}
-
-	/**
-	* When a component is gaining focus, this event occurs twice.
-	*
-	* The first time, [focusFrom] is set to the object losing focus.
-	*
-	* The second time, [focusFrom == this] which shows that all parents
-	* have been notified of the focus change.
-	* @param e the [FocusEvent]
-	**/
-	public function onFocusIn(e:FocusEvent) {
-		if(disabled) return;
-		// -- Fired twice: first time --
-		// related == object losing focus
-		// target == object gaining focus
-		// currentTarget == this
-		// -- second time --
-		// related == null
-		// target == currentTarget == this
-		//trace("++++ " + Std.string(this) + " onFocusIn");
-		//trace("onFocusIn relatedObject: " + Std.string(e.relatedObject));
-		//trace("onFocusIn currentTarget: " + Std.string(e.currentTarget));
-		//trace("onFocusIn target: " + Std.string(e.target));
-		ScriptManager.exec(this, "focusIn", {focusFrom : e.target});
-	}
-
-	/**
-	* When a component is losing focus, this event occurs
-	*
-	* [focusTo] is set to the object gaining focus.
-	*
-	* @param e the [FocusEvent]
-	**/
-	private function onFocusOut(e:FocusEvent) : Void {
-		if(disabled) return;
-		//trace("++++ " + Std.string(this) + " onFocusOut");
-		//trace("onFocusOut relatedObject: " + Std.string(e.relatedObject));
-		//trace("onFocusOut currentTarget: " + Std.string(e.currentTarget));
-		//trace("onFocusOut target: " + Std.string(e.target));
-		// -- Fired twice : a real mess... we just need one
-		if(e.relatedObject != null)
-		ScriptManager.exec(this, "focusOut", {focusTo : e.relatedObject});
-	}
-
-	/**
-	* If the component will not take focus, return false from this handler
-	* which will cancel the focus transfer.
-	*
-	* @param from the [InteractiveObject] who lost focus
-	* @return Bool wheter the component will take focus
-	**/
-	public function onGainingFocus(from : flash.display.InteractiveObject) : Bool {
-		var rv : Dynamic = ScriptManager.exec(this,"gainingFocus", {focusFrom : from});
-		//trace(here.methodName + " " + rv);
-		if(rv == null || rv == true)
-		return true;
-		return false;
-	}
-
-	/**
-	* Dispatched to this object when it is about to lose focus
-	*
-	* @param losingTo the [InteractiveObject] who is currently getting focused
-	* @return Bool true to allow change, false to prevent focus change
-	**/
-	public function onLosingFocus(losingTo : flash.display.InteractiveObject) : Bool {
-		var rv : Dynamic = ScriptManager.exec(this,"losingFocus", {focusTo : losingTo});
-		if(rv == null)
-		return true;
-		return cast rv;
-	}
-
-	/** onRollOver Event **/
-	public function onRollOver(e:MouseEvent)
-	{
-		if(CursorManager.getInstance().lock) return;
-		if(description!=null) TooltipManager.getInstance().create(this);
-		ScriptManager.exec(this,"mouseOver", {event : e});
-	}
-
-	/** onRollOut Event **/
-	public function onRollOut(e:MouseEvent) : Void
-	{
-		if(CursorManager.getInstance().lock) return;
-		if(description!=null) TooltipManager.getInstance().destroy();
-		ScriptManager.exec(this,"mouseOut", {event : e});
-	}
-
-
-	/** Mouse double-click **/
-	public function onMouseDoubleClick(e:MouseEvent) : Void
-	{
-		#if debug
-		if(e.target == this)
-		trace("onMouseDoubleClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDoubleClick"));
-		#end
-		ScriptManager.exec(this,"mouseDoubleClick", {event : e});
-	}
-
-	/** Mouse click **/
-	public function onMouseClick(e:MouseEvent) : Void
-	{
-		#if debug
-		trace(e);
-		#end
-		if(description!=null) TooltipManager.getInstance().destroy();
-		ScriptManager.exec(this,"mouseClick", {event : e});
-	}
-
-	/** Mouse Down **/
-	public function onMouseDown(e:MouseEvent) : Void
-	{
-		#if debug
-		trace(e);
-		#end
-
-		if(e.ctrlKey) {
-			e.stopImmediatePropagation();
-			// dont transform transformers
-			if(Std.is(this, haxegui.toys.Transformer) || Std.is(this.parent, haxegui.toys.Transformer)) return;
-			var t = new haxegui.toys.Transformer(this);
-			t.init();
-			var p = (cast this).localToGlobal( new flash.geom.Point(this.x, this.y) );
-			//~ t.moveTo( p.x - this.x - t.handleSize, p.y - this.y - t.handleSize );
-			t.x = p.x - this.x - t.handleSize;
-			t.y = p.y - this.y - t.handleSize;
-			// no point in doing the normal action, user wants to transform
-			return;
-		}
-
-		if(description!=null) TooltipManager.getInstance().destroy();
-		ScriptManager.exec(this,"mouseDown", {event : e});
-	}
-
-	/** Mouse Up **/
-	public function onMouseUp(e:MouseEvent) : Void	{
-		ScriptManager.exec(this,"mouseUp", {event : e});
-	}
-
-	/** Mouse Wheel **/
-	public function onMouseWheel(e:MouseEvent) : Void	{
-		ScriptManager.exec(this,"mouseWheel", {event : e});
-	}
-
-	/** Overiden in sub-classes **/
-	public function onKeyDown(e:KeyboardEvent) : Void {}
-
-	/** Overiden in sub-classes **/
-	public function onKeyUp(e:KeyboardEvent) : Void {}
-
-	/** Overiden in sub-classes **/
-	public function onResize(e:ResizeEvent) : Void {}
-
-	private function onEnterFrame(e:Event) : Void {
-		var now = haxe.Timer.stamp();
-		var stepsF : Float  = (now - lastInterval) * intervalUpdatesPerSec;
-		var steps : Int = Math.floor( stepsF );
-		lastInterval += steps / intervalUpdatesPerSec;
-
-		for(x in 0...steps) {
-			ScriptManager.exec(this,"interval",{event:e});
-		}
-	}
+	//}}}
 	//}}}
 
-	//////////////////////////////////////////////////
-	////               Actions                    ////
-	//////////////////////////////////////////////////
-	// redraw, validate, interval
-	// mouseClick, mouseOver, mouseOut, mouseDown, mouseUp
-	// gainingFocus, losingFocus, focusIn, focusOut
 
+	//{{{ redraw
 	/**
 	* Excecute redrawing script
 	* <pre class="code haxe">
@@ -998,22 +1174,22 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 	* ");
 	* com.redraw(opts);
 	* </pre>
-	* @param opts An [Opts] object to pass the redrawing script
+	* @param opts to pass the redrawing script
 	**/
 	public function redraw(opts:Dynamic=null) {
 		ScriptManager.exec(this,"redraw", opts);
 	}
-
-	//////////////////////////////////////////////////
-	////           Getters/Setters                ////
-	//////////////////////////////////////////////////
+	//}}}
+	//}}}
 
 
-
+	//{{{ Getters/Setters
+	//{{{ __getDirty
 	private function __getDirty() : Bool {
 		return this.dirty;
 	}
-
+	//}}}
+	//{{{ __setDirty
 	private function __setDirty(v:Bool) : Bool {
 		if(this.dirty == v) return v;
 		this.dirty = v;
@@ -1021,11 +1197,13 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		Haxegui.setDirty(this);
 		return v;
 	}
-
+	//}}}
+	//{{{ __getDisabled
 	private function __getDisabled() : Bool {
 		return this.disabled;
 	}
-
+	//}}}
+	//{{{ __setDisabled
 	private function __setDisabled(v:Bool) : Bool {
 		if(this.disabled == v) return v;
 		this.disabled = v;
@@ -1036,9 +1214,12 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		}
 		return v;
 	}
+	//}}}
+	//}}}
 
-	////////////////////////////////////////////////////////////////////////////
-	//{{{ Privates
+
+	//{{{ Private
+	//{{{ addDisplayObjectEvents
 	/** add the focus events to any child that is not a Component **/
 	private function addDisplayObjectEvents(o : DisplayObject) {
 		if(!Std.is(o, Component)) {
@@ -1049,7 +1230,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 			//o.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut, false, 0, true);
 		}
 	}
+	//}}}
 
+
+	//{{{ removeDisplayObjectEvents
 	private function removeDisplayObjectEvents(o : DisplayObject) {
 		if(!Std.is(o, Component)) {
 			o.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE, __focusHandler);
@@ -1059,11 +1243,11 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		}
 	}
 	//}}}
-	////////////////////////////////////////////////////////////////////////////
+	//}}}
 
 
-	////////////////////////////////////////////////////////////////////////////
-	//{{{ Static Functions
+	//{{{ Static
+	//{{{ asComponent
 	/**
 	* Return the Component the DisplayObject belongs to. If the [obj] DisplayObject
 	* is a Component, then it will be returned. Useful for finding what Component
@@ -1084,7 +1268,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		return null;
 		return cast p;
 	}
+	//}}}
 
+
+	//{{{ asComponentIfIs
 	/**
 	* Return the Component the DisplayObject belongs to. If the [obj] DisplayObject
 	* is a Component, then it will be returned. Useful for finding what Component
@@ -1105,7 +1292,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		return obj;
 		return p;
 	}
+	//}}}
 
+
+	//{{{ getParentComponent
 	/**
 	* Find the containing Component for any DisplayObject, if any.
 	*
@@ -1119,7 +1309,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		if(p == null) return null;
 		return cast p;
 	}
+	//}}}
 
+
+	//{{{ rasterize
 	/**
 	* @return Bitmap a [Bitmap] copy of the component
 	*/
@@ -1152,8 +1345,10 @@ class Component extends Sprite, implements IMovable, implements IToolTip, implem
 		return bitmap;
 	}
 	//}}}
-	////////////////////////////////////////////////////////////////////////////
 
 	//}}}
-	////////////////////////////////////////////////////////////////////////////
+
+
+	//}}}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

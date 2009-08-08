@@ -19,27 +19,32 @@
 
 package haxegui.toys;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
 
-import flash.display.Sprite;
+//{{{ Import
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
+import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.geom.Rectangle;
+import haxegui.controls.Component;
 import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
-import haxegui.utils.Size;
 import haxegui.utils.Opts;
+import haxegui.utils.Size;
+//}}}
 
-import haxegui.controls.Component;
 
 using haxegui.utils.Color;
 
+
+/**
+* Component with basic drawRect script.<br/>
+* <p>Default proprties are set to random colors and some roundess.</p>
+*/
 class Rectangle extends Component
 {
 	public var roundness : Float;
@@ -47,7 +52,7 @@ class Rectangle extends Component
 	public var thickness : Float;
 	public var pivot : Point;
 
-
+	//{{{ init
 	override public function init(?opts:Dynamic=null) {
 		box = new Size(100,100).toRect();
 		color = Color.random().tint(.5);
@@ -55,15 +60,15 @@ class Rectangle extends Component
 		thickness = 1;
 		roundness = 20;
 		pivot = new Point();
-		
+
 		super.init(opts);
 
 		roundness = Opts.optFloat(opts, "roundness", roundness);
 		thickness = Opts.optFloat(opts, "thickness", thickness);
 		stroke = Opts.optInt(opts, "stroke", stroke);
-				
+
 		//this.filters = [new flash.filters.DropShadowFilter (8, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
-	
+
 		setAction("redraw",
 		"
 		this.graphics.clear();
@@ -71,16 +76,16 @@ class Rectangle extends Component
 		this.graphics.beginFill(this.color);
 		this.graphics.drawRoundRect(this.pivot.x,this.pivot.y,this.box.width,this.box.height, this.roundness, this.roundness);
 		this.graphics.endFill();
-		
+
 		"
 		);
-
-	
 	}
+	//}}}
 
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Rectangle);
 	}
-	
-	
+	//}}}
+
 }

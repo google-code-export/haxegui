@@ -17,19 +17,21 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-//{{{ Imports
 package haxegui.controls;
 
-import haxegui.utils.Opts;
 
-import flash.display.Loader;
-import flash.net.URLRequest;
-import flash.events.Event;
-import flash.events.IOErrorEvent;
+//{{{ Imports
 import flash.display.Bitmap;
 import flash.display.BitmapData;
+import flash.display.Loader;
+import flash.events.Event;
+import flash.events.IOErrorEvent;
+import flash.net.URLRequest;
+import haxegui.utils.Opts;
 //}}}
 
+
+//{{{ Image
 /**
 *
 * Component wrapper for bitmaps.<br/>
@@ -50,6 +52,7 @@ import flash.display.BitmapData;
 */
 class Image extends Component
 {
+	//{{{ Members
 	/** url **/
 	public var src : String;
 
@@ -61,20 +64,22 @@ class Image extends Component
 
 	/** aspect ratio **/
 	public var aspect(default, null) : Float;
+	//}}}
 
+	//{{{ Functions
+	//{{{ init
 	override public function init(opts:Dynamic=null) : Void	{
-
 		super.init(opts);
 
+
 		src = Opts.optString(opts, "src", src);
+
 
 		if(loader==null)
 		loader = new Loader();
 
-		var urlReq = new URLRequest(this.src);
-
 		try {
-			loader.load(urlReq);
+			loader.load(new URLRequest(src));
 		}
 		catch(e:Dynamic) {
 			trace(e);
@@ -83,30 +88,39 @@ class Image extends Component
 		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
 		loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
 	}
+	//}}}
 
+	//{{{ onComplete
 	function onComplete(e:Event) {
 		bitmap = e.currentTarget.content ;
 		aspect = bitmap.width / bitmap.height;
 		addChild(bitmap);
 		dispatchEvent(e);
-		if(this.box.isEmpty()) return;
+		if(box.isEmpty()) return;
 		bitmap.width = box.width;
 		bitmap.height = box.height;
 	}
+	//}}}
 
-	function onError(e:IOErrorEvent) {
+	//{{{ onError
+	function onError(e:IOErrorEvent) {trace(e);
 		trace(e);
 	}
+	//}}}
 
-	static function __init__() {
+	//{{{ __init__
+	static function __init__() {haxegui	.Haxegui.register(Image);
 		haxegui	.Haxegui.register(Image);
 	}
-
-
+	//}}}
+	//}}}
 }
+//}}}
 
+
+///{{{ Icon
 /**
-* Image helper class, defines stock icons.
+* Image helper class, defines stock icons.<br/>
 *
 * used in xml like this:
 * <pre class="code xml">
@@ -124,45 +138,56 @@ class Image extends Component
 */
 class Icon extends Image
 {
+	//{{{ Members
+	//{{{ Public
 	/** baseURL relative icon path **/
 	public static var iconDirectory : String = "assets/icons/";
 
 	/** Theme **/
 	public static var iconTheme : String = "tango";
-
-	//////////////////////////////////////////////////////////////////
-	// Stock icons												   {{{
-	public static var STOCK_NEW : String = "document-new.png";
-	public static var STOCK_OPEN : String = "document-open.png";
-	public static var STOCK_SAVE : String = "document-save.png";
-
-	public static var STOCK_COPY : String = "edit-copy.png";
-	public static var STOCK_CUT : String = "edit-cut.png";
-	public static var STOCK_PASTE : String = "edit-paste.png";
-	public static var STOCK_CLEAR : String = "edit-clear.png";
-	public static var STOCK_DELETE : String = "edit-delete.png";
-
-	public static var STOCK_FIND : String = "edit-find.png";
-	public static var STOCK_ADD : String = "list-add.png";
-	public static var STOCK_REMOVE : String = "list-remove.png";
-
-	public static var STOCK_DOCUMENT : String = "text-x-generic.png";
-	public static var STOCK_FOLDER : String = "folder.png";
-	public static var STOCK_FOLDER_OPEN : String = "folder-open.png";
-
-	public static var DIALOG_ERROR : String = "dialog-error.png";
-	public static var DIALOG_WARNING : String = "dialog-warning.png";
-																 //}}}
-	//////////////////////////////////////////////////////////////////
+	//}}}
 
 
+	//{{{ Static
+	public inline static var STOCK_NEW   		 : String = "document-new.png";
+	public inline static var STOCK_OPEN  		 : String = "document-open.png";
+	public inline static var STOCK_SAVE 		 : String = "document-save.png";
+
+	public inline static var STOCK_COPY 		 : String = "edit-copy.png";
+	public inline static var STOCK_CUT  		 : String = "edit-cut.png";
+	public inline static var STOCK_PASTE  		 : String = "edit-paste.png";
+	public inline static var STOCK_CLEAR  		 : String = "edit-clear.png";
+	public inline static var STOCK_DELETE 		 : String = "edit-delete.png";
+
+	public inline static var STOCK_FIND   		 : String = "edit-find.png";
+	public inline static var STOCK_ADD    		 : String = "list-add.png";
+	public inline static var STOCK_REMOVE 		 : String = "list-remove.png";
+
+	public inline static var STOCK_DOCUMENT 	 : String = "text-x-generic.png";
+	public inline static var STOCK_FOLDER  	 	 : String = "folder.png";
+	public inline static var STOCK_FOLDER_OPEN   : String = "folder-open.png";
+
+	public inline static var DIALOG_ERROR 		 : String = "dialog-error.png";
+	public inline static var DIALOG_WARNING	 	 : String = "dialog-warning.png";
+	//}}}
+	//}}}
+
+
+	//{{{ Functions
+	//{{{ init
 	override public function init(opts:Dynamic=null) : Void {
 		src = Opts.optString(opts, "src", src);
 		src = haxegui.Haxegui.baseURL + iconDirectory + src;
 		super.init({src: src});
 	}
+	//}}}
 
-	static function __init__() {
+
+	//{{{ __init__
+	static function __init__() {haxegui.Haxegui.register(Image);
 		haxegui.Haxegui.register(Image);
 	}
+	//}}}
+	//}}}
 }
+//}}}

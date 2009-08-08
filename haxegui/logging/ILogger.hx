@@ -20,6 +20,8 @@
 package haxegui.logging;
 
 import haxegui.logging.ErrorType;
+import haxegui.logging.LogLevel;
+import haxegui.logging.LogEntry;
 
 interface ILogger {
   public  function log( e : Dynamic, ?inf : haxe.PosInfos, ?error:ErrorType ) : Void ;

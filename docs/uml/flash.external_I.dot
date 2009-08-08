@@ -1,9 +1,8 @@
 digraph uml {
-	graph [label="Package: flash.external Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [label="{ExternalInterface}",
-		lp="54,10",
-		bb="0,0,108,57"];
-	"flash.external.ExternalInterface" [label="{ExternalInterface}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/external/ExternalInterface.html", tooltip=ExternalInterface, portPos=e, pos="54,39", rects="6,21,103,57", width="1.33", height="0.50"];
+	graph [label="Package: flash.external Inheritance", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=compress, packMode="graph", labelloc=c, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
+	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
+	graph [lp="130,12",
+		bb="0,0,260,61"];
+	"flash.external.ExternalInterface" [label="{\nExternalInterface}", fillcolor=white, URL="../types/flash/external/ExternalInterface.html", tooltip="\nExternalInterface", portPos=w, pos="130,43", rects="89,25,171,61", width="1.14", height="0.50"];
 }

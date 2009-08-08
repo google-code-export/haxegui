@@ -19,37 +19,37 @@
 
 package haxegui.toys;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
-import flash.display.Sprite;
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
-import haxegui.managers.StyleManager;
-import haxegui.utils.Size;
-import haxegui.utils.Color;
-import haxegui.utils.Opts;
-
+import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 import haxegui.controls.Component;
 import haxegui.controls.IAdjustable;
+import haxegui.managers.StyleManager;
+import haxegui.utils.Color;
+import haxegui.utils.Opts;
+import haxegui.utils.Size;
+//}}}
+
 
 /**
  * A LCD 7-Segment like digit box widget.<br/>
- * 
+ *
  */
 class SevenSegment extends Component, implements IAdjustable
 {
+	//{{{ Members
 	public var digitColor : UInt;
 	public var digit(default, setDigit) : UInt;
 
 	public var slot : Socket;
-	
+
 	/** Adjustment object **/
 	public var adjustment : Adjustment;
 
@@ -78,7 +78,11 @@ class SevenSegment extends Component, implements IAdjustable
 		0x7f,//eight
 		0x7b //nine
 	];
-	
+	//}}}
+
+
+	//{{{ Functions
+	//{{{ init
 	override public function init(?opts:Dynamic=null) {
 		box = new Size(70,100).toRect();
 		color = Color.rgb(0,60,0);
@@ -97,11 +101,11 @@ class SevenSegment extends Component, implements IAdjustable
 		this.graphics.clear();
 
 		var a = this.box.height/7;
-		
+
 		var bit = toys.SevenSegment.pattern[this.digit+1];
-		
+
 		this.graphics.lineStyle(1, Color.darken(this.color, 20));
-		
+
 		this.graphics.beginFill(Color.darken(this.color, 10));
 		this.graphics.drawRoundRect(0,0,this.box.width, this.box.height, a, a);
 		this.graphics.endFill();
@@ -145,7 +149,7 @@ class SevenSegment extends Component, implements IAdjustable
 		);
 
 		this.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.25, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
-	
+
 		setAction("interval", "if(this.digit>=9) this.adjustment.setValue(0) else this.adjustment.setValue(this.digit+1);");
 		setAction("mouseWheel", "if(this.digit>=9 && event.delta>0) this.adjustment.setValue(0) else if(this.digit<=0 && event.delta<0) this.adjustment.setValue(9) else this.adjustment.setValue(this.digit+event.delta);");
 		//~ startInterval(2);
@@ -158,20 +162,29 @@ class SevenSegment extends Component, implements IAdjustable
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 
 	}
+	//}}}
 
+
+	//{{{ setDigit
 	public function setDigit(d:UInt) : UInt {
 		digit = d;
 		redraw();
 		return d;
 	}
-	
+	//}}}
+
+
+	//{{{ onChanged
 	public function onChanged(e:Event) {
 		setDigit(Std.int(adjustment.getValue()));
 	}
-		
+	//}}}
+
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(SevenSegment);
 	}
-	
-	
+	//}}}
+	//}}}
 }

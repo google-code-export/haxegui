@@ -19,24 +19,23 @@
 
 package haxegui.managers;
 
-import flash.geom.Rectangle;
 
-
+//{{{ Imports
 import flash.display.DisplayObject;
-
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
-import haxegui.events.MoveEvent;
-import haxegui.events.DragEvent;
-import haxegui.events.ResizeEvent;
-
+import flash.events.MouseEvent;
+import flash.geom.Rectangle;
 import haxegui.Window;
+import haxegui.events.DragEvent;
+import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
+//}}}
+
 
 /**
-* Haxegui Class
+* Window Manager
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
@@ -44,89 +43,114 @@ import haxegui.Window;
 */
 class WindowManager extends EventDispatcher
 {
-  public var numWindows : UInt;
-  public var windows : Hash<Window>;
-  public static var current : Window;
-  
-  private static var _instance : WindowManager = null;
+	//{{{ Members
+	public var numWindows : UInt;
+	public var windows : Hash<Window>;
+	public var listeners:Array<haxegui.logging.ILogger>;
 
-  public var listeners:Array<haxegui.logging.ILogger>;
+	public static var current : Window;
 
-    
-  public static function getInstance ():WindowManager {
-    if (WindowManager._instance == null)
-      {
-        WindowManager._instance = new WindowManager ();
-      }
-    return WindowManager._instance;
-  }
+	private static var _instance : WindowManager = null;
+	//}}}
 
 
-
-  public function new ()
-  {
-    super ();
-    listeners = new Array();
-    windows = new Hash();
-    numWindows = 0;
-  }
-
-  public override function toString () : String {
-    return "WindowManager";
-  }
+	//{{{ getInstance
+	public static function getInstance ():WindowManager {
+		if (WindowManager._instance == null)
+		{
+			WindowManager._instance = new WindowManager ();
+		}
+		return WindowManager._instance;
+	}
+	//}}}
 
 
-  public static function addWindow(?parent:Dynamic, ?name:String) {
-    getInstance().numWindows++;
+	//{{{ Constructor
+	public function new () {
+		super ();
+		listeners = new Array();
+		windows = new Hash();
+		numWindows = 0;
+	}
+	//}}}
 
-    if(parent==null)
-        parent = flash.Lib.current;
 
-   	if(name==null)
-        name = "Window" + Std.string(haxe.Timer.stamp()*1000).substr(0,2);
-    
-    if( getInstance().windows.exists( name ) )
-        name += Std.string(haxe.Timer.stamp()*1000).substr(0,2);
+	//{{{ toString
+	public override function toString () : String {
+		return "WindowManager";
+	}
+	//}}}
 
-    var window =  new Window(parent, name);
 
-    //~ getInstance().windows.set(name, window);
-    //~ WindowManager.getInstance().register(window);
+	//{{{ addWindow
+	public static function addWindow(?parent:Dynamic, ?name:String, ?x:Float, ?y:Float) {
+		getInstance().numWindows++;
 
-    return window;
-  }
+		if(parent==null)
+		parent = flash.Lib.current;
 
+		if(name==null)
+		name = "Window" + Std.string(haxe.Timer.stamp()*1000).substr(0,2);
+
+		if( getInstance().windows.exists( name ) )
+		name += Std.string(haxe.Timer.stamp()*1000).substr(0,2);
+
+		var window =  new Window(parent, name, x, y);
+
+		//~ getInstance().windows.set(name, window);
+		//~ WindowManager.getInstance().register(window);
+
+		return window;
+	}
+	//}}}
+
+
+	//{{{ toFront
 	public static function toFront(wnd:Window) {
 		if(wnd.parent == null) return;
 		wnd.parent.addChild(wnd);
-        current = wnd;
-   		if(flash.Lib.current.getChildByName("patchLayer")!=null)
-			flash.Lib.current.setChildIndex(flash.Lib.current.getChildByName("patchLayer"), flash.Lib.current.numChildren-1);
+		current = wnd;
+		if(flash.Lib.current.getChildByName("patchLayer")!=null)
+		flash.Lib.current.setChildIndex(flash.Lib.current.getChildByName("patchLayer"), flash.Lib.current.numChildren-1);
 	}
+	//}}}
 
 
-  public function register(w:Window) {
-    w.addEventListener( ResizeEvent.RESIZE, this.proxy );
-    w.addEventListener( MoveEvent.MOVE,  this.proxy );
-    w.addEventListener( FocusEvent.FOCUS_IN,  this.proxy );
-  }
-  
-  public function proxy(e:Dynamic) {
-    		//~ for(i in 0...listeners.length) {
-                //~ var listener = listeners[i];
-				//~ Reflect.callMethod(listener, listener.log, [e]);
-                //~ }
-        //~ trace(e);
-        if(Std.is(e,FocusEvent)) {
-        switch(e.type) {
-            case FocusEvent.FOCUS_IN:
-                var o = e.target;
-                while(o!=null && !Std.is(o, Window))
-                    o = cast o.parent;
-                if(o==null) return;
-                //if(o.isModal()) return;
-                toFront(cast o);
-            }
-        }
-    }
+	//{{{ toBack
+	public static function toBack(wnd:Window) {
+		if(wnd.parent == null) return;
+		wnd.parent.setChildIndex(wnd, 0);
+	}
+	//}}}
+
+
+	//{{{ register
+	public function register(w:Window) {
+		w.addEventListener( ResizeEvent.RESIZE, this.proxy );
+		w.addEventListener( MoveEvent.MOVE,  this.proxy );
+		w.addEventListener( FocusEvent.FOCUS_IN,  this.proxy );
+	}
+	//}}}
+
+
+	//{{{ proxy
+	public function proxy(e:Dynamic) {
+		//~ for(i in 0...listeners.length) {
+		//~ var listener = listeners[i];
+		//~ Reflect.callMethod(listener, listener.log, [e]);
+		//~ }
+		//~ trace(e);
+		if(Std.is(e,FocusEvent)) {
+			switch(e.type) {
+				case FocusEvent.FOCUS_IN:
+				var o = e.target;
+				while(o!=null && !Std.is(o, Window))
+				o = cast o.parent;
+				if(o==null) return;
+				//if(o.isModal()) return;
+				toFront(cast o);
+			}
+		}
+	}
+	//}}}
 }

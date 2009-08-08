@@ -19,26 +19,22 @@
 
 package haxegui.toys;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
-import flash.display.Sprite;
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
-import haxegui.managers.StyleManager;
-
+import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 import haxegui.controls.Component;
-
-import haxegui.utils.Size;
+import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
-
+import haxegui.utils.Size;
+//}}}
 
 class Line extends haxegui.controls.AbstractButton
 {

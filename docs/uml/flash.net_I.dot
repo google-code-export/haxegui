@@ -1,19 +1,18 @@
 digraph uml {
-	graph [label="Package: flash.net Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [label="{FileReference}",
-		lp="213,10",
-		bb="0,0,426,610"];
-	"flash.net.URLRequestHeader" [label="{URLRequestHeader}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/URLRequestHeader.html", tooltip=URLRequestHeader, portPos=e, pos="86,39", rects="32,21,140,57", width="1.50", height="0.50"];
-	"flash.net.URLRequest" [label="{URLRequest}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/URLRequest.html", tooltip=URLRequest, portPos=e, pos="86,214", rects="50,196,123,232", width="1.00", height="0.50"];
-	"flash.net.URLLoader" [label="{URLLoader}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/URLLoader.html", tooltip=URLLoader, portPos=e, pos="86,437", rects="52,419,120,455", width="0.94", height="0.50"];
-	"flash.events.EventDispatcher" [pos="355,383", rects="285,365,426,401", width="1.94", height="0.50"];
-	"flash.net.FileReferenceList" [label="{FileReferenceList}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/FileReferenceList.html", tooltip=FileReferenceList, portPos=e, pos="86,383", rects="39,365,134,401", width="1.31", height="0.50"];
-	"flash.net.URLLoaderDataFormat" [label="{URLLoaderDataFormat|VARIABLES\lTEXT\lBINARY\l}", style="rounded,filled", fillcolor=white, pos="86,522", rects="1,503,112,541 112,503,172,541", width="2.36", height="0.53"];
-	"flash.net.FileFilter" [label="{FileFilter}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/FileFilter.html", tooltip=FileFilter, portPos=e, pos="86,592", rects="59,574,113,610", width="0.75", height="0.50"];
-	"flash.net.FileReference" [label="{FileReference}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/FileReference.html", tooltip=FileReference, portPos=e, pos="86,329", rects="47,311,125,347", width="1.08", height="0.50"];
-	"flash.net.URLLoader" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,285,397 120,430 159,422 224,410 275,399"];
-	"flash.net.FileReferenceList" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,285,383 134,383 173,383 229,383 275,383"];
-	"flash.net.FileReference" -> "flash.events.EventDispatcher" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,285,369 125,337 164,344 225,357 275,367"];
+	graph [label="Package: flash.net Inheritance", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=compress, packMode="graph", labelloc=c, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
+	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
+	graph [lp="161,12",
+		bb="0,0,322,385"];
+	"flash.net.URLRequestHeader" [label="{\nURLRequestHeader}", fillcolor=white, URL="../types/flash/net/URLRequestHeader.html", tooltip="\nURLRequestHeader", portPos=w, pos="241,43", rects="197,25,285,61", width="1.22", height="0.50"];
+	"flash.net.URLRequest" [label="{\nURLRequest}", fillcolor=white, URL="../types/flash/net/URLRequest.html", tooltip="\nURLRequest", portPos=w, pos="241,97", rects="211,79,272,115", width="0.83", height="0.50"];
+	"flash.net.URLLoader" [label="{\nURLLoader}", fillcolor=white, URL="../types/flash/net/URLLoader.html", tooltip="\nURLLoader", portPos=w, pos="241,259", rects="213,241,270,277", width="0.78", height="0.50"];
+	"flash.events.EventDispatcher" [fontcolor=black, pos="62,205", rects="1,187,124,223", width="1.69", height="0.50"];
+	"flash.net.FileReferenceList" [label="{\nFileReferenceList}", fillcolor=white, URL="../types/flash/net/FileReferenceList.html", tooltip="\nFileReferenceList", portPos=w, pos="241,205", rects="201,187,282,223", width="1.11", height="0.50"];
+	"flash.net.URLLoaderDataFormat" [label="{\nURLLoaderDataFormat|VARIABLES\lTEXT\lBINARY\l}", fillcolor="#af8dc3", fontcolor=black, pos="241,313", rects="160,295,262,331 262,295,322,331", width="2.25", height="0.50"];
+	"flash.net.FileFilter" [label="{\nFileFilter}", fillcolor=white, URL="../types/flash/net/FileFilter.html", tooltip="\nFileFilter", portPos=w, pos="241,367", rects="214,349,268,385", width="0.75", height="0.50"];
+	"flash.net.FileReference" [label="{\nFileReference}", fillcolor=white, URL="../types/flash/net/FileReference.html", tooltip="\nFileReference", portPos=w, pos="241,151", rects="207,133,276,169", width="0.94", height="0.50"];
+	"flash.net.URLLoader" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,122,223 213,250 192,244 160,234 132,226"];
+	"flash.net.FileReferenceList" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,124,205 201,205 181,205 157,205 134,205"];
+	"flash.net.FileReference" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,122,187 207,161 186,167 157,176 132,184"];
 }

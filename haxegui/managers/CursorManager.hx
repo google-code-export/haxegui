@@ -19,213 +19,54 @@
 
 package haxegui.managers;
 
-
+//{{{ Imports
+import flash.display.DisplayObject;
+import flash.display.MovieClip;
+import flash.display.Sprite;
+import flash.events.Event;
+import flash.events.EventDispatcher;
+import flash.events.FocusEvent;
+import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.geom.Transform;
-
-import flash.display.DisplayObject;
-import flash.display.Sprite;
-import flash.display.MovieClip;
-
-import flash.events.Event;
-import flash.events.EventDispatcher;
-import flash.events.MouseEvent;
-import flash.events.FocusEvent;
-
-import haxegui.events.MoveEvent;
-import haxegui.events.DragEvent;
-import haxegui.events.ResizeEvent;
-
 import flash.ui.Mouse;
+import haxegui.events.DragEvent;
+import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
+//}}}
 
-
+//{{{ Cursor
 enum Cursor {
 	ARROW;
-	HAND;
-	HAND2;
+	CROSSHAIR;
 	DRAG;
+	HAND2;
+	HAND;
 	IBEAM;
 	NESW;
 	NS;
 	NWSE;
-	WE;
 	SIZE_ALL;
-	CROSSHAIR;
+	WE;
 }
+//}}}
 
-
+//{{{ CursorManager
 /**
 *
 * Cursor Manager Class (Singleton)
-* 
+*
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
 class CursorManager extends EventDispatcher
 {
-
+	//{{{ Members
+	//{{{ Static
+	/** Singelton **/
 	private static var _instance : CursorManager = null;
-
-
-	///////////////////////////////////////////////////
-	////              Public                       ////
-	///////////////////////////////////////////////////
-	public var listeners:Array<haxegui.logging.ILogger>;
-	public var cursor(default,__setCursor) : Cursor;
-	public var visible(__getVisible,__setVisible) : Bool;
-	public var _mc(default,null) : MovieClip;
-	public var lock : Bool;
-	
-	/** Singleton private constructor **/
-	private function new ()
-	{
-		super ();
-	}
-
-	/** Singleton access **/
-	public static function getInstance ():CursorManager
-	{
-		if (CursorManager._instance == null)
-		{
-			CursorManager._instance = new CursorManager ();
-		}
-		return CursorManager._instance;
-	}
-
-
-
-	public override function toString () : String
-	{
-		return "CursorManager";
-	}
-
-	/**
-	*
-	*/
-	public function init() {
-		//Mouse.hide();
-		cursor = Cursor.ARROW;
-	}
-
-	public static function setCursor(c:Cursor) : Void {
-		if(getInstance().lock) return;
-		getInstance().cursor = c;
-	}
-
-	private inline function getCursor() : MovieClip	{
-		return _mc;
-	}
-
-	public inline function inject(e:MouseEvent) {
-
-		_mc.visible = false;
-
-		_mc.x = e.stageX;
-		_mc.y = e.stageY;
-		
-		//showCursor();
-		toTop();
-
-		e.updateAfterEvent();
-
-	}//inject
-
-
-	public inline function toTop() : Void {
-		flash.Lib.current.setChildIndex(_mc, flash.Lib.current.numChildren - 1 );
-	}//toTop
-
-
-	public inline function hideCursor() : Void	{
-		_mc.visible = false;
-	}
-
-	public inline function showCursor() : Void	{
-		_mc.visible = true;
-	}
-
-	///////////////////////////////////////////////////
-	////             Privates                      ////
-	///////////////////////////////////////////////////
-	private function __getVisible() : Bool {
-		return  _mc.visible;
-	}
-
-	/**
-	*
-	*/
-	private function __setCursor(c:Cursor) : Cursor
-	{
-		var point : Point = new Point();
-		cursor = c;
-
-		if(_mc!=null) {
-			point  = new Point(_mc.x, _mc.y);
-			flash.Lib.current.removeChild(_mc);
-		}
-
-		switch(c) {
-			case Cursor.ARROW:
-				_mc = img_arrow;
-
-			case Cursor.HAND:
-				_mc = img_hand;
-
-			case Cursor.HAND2:
-				_mc = img_hand2;
-
-			case Cursor.DRAG:
-				_mc = img_drag;
-
-			case Cursor.SIZE_ALL:
-				_mc = img_sizeall;
-
-			case Cursor.NESW:
-				_mc = img_nesw;
-
-			case Cursor.NS:
-				_mc = img_ns;
-
-			case Cursor.NWSE:
-				_mc = img_nwse;
-
-			case Cursor.WE:
-				_mc = img_we;
-
-			case Cursor.CROSSHAIR:
-				_mc = img_crosshair;
-		}
-
-		_mc.name = "Cursor";
-		_mc.mouseEnabled = false;
-		_mc.focusRect = false;
-		_mc.tabEnabled = false;
-
-		_mc.width = _mc.height = 32;
-		//~ _mc.x = point.x;
-		//~ _mc.y = point.y;
-		//~ inject( new MouseEvent(MouseEvent.MOUSE_MOVE) );
-
-		var toColor = new flash.geom.ColorTransform(.8, 1, .9, 1, 0, 0, 0, 1);
-		var t = new flash.geom.Transform(_mc);
-		t.colorTransform = toColor;
-
-		flash.Lib.current.addChild(_mc);
-
-
-		return c;
-	}
-
-	private function __setVisible(v:Bool) : Bool {
-		_mc.visible = v;
-		return v;
-	}
-
-	//~ public function useDefault() {}
-	//~ public function useCustom() {}
-
 	/** The default arrow cursor image **/
 	public inline static var img_arrow = flash.Lib.attach("Arrow");
 	/** The hand type cursor image **/
@@ -246,4 +87,204 @@ class CursorManager extends EventDispatcher
 	public inline static var img_we = flash.Lib.attach("SizeWE");
 	/** The crosshair cursor image **/
 	public inline static var img_crosshair = flash.Lib.attach("Crosshair");
+	//}}}
+
+	//{{{ Public
+	public var listeners:Array<haxegui.logging.ILogger>;
+	public var cursor(default,__setCursor) : Cursor;
+	public var visible(__getVisible,__setVisible) : Bool;
+	public var _mc(default,null) : MovieClip;
+	public var lock : Bool;
+	//}}}
+	//}}}
+
+
+	//{{{ Constructor
+	/** Singleton private constructor **/
+	private function new ()	{
+		super ();
+	}
+	//}}}
+
+
+	//{{{ Functions
+
+
+	//{{{ Public
+	//{{{ getInstance
+	/** Singleton access **/
+	public static function getInstance ():CursorManager
+	{
+		if (CursorManager._instance == null)
+		{
+			CursorManager._instance = new CursorManager ();
+		}
+		return CursorManager._instance;
+	}
+	//}}}
+
+
+	//{{{ toString
+	public override function toString () : String
+	{
+		return "CursorManager";
+	}
+	//}}}
+
+
+	//{{{ init
+	public function init() {
+		//Mouse.hide();
+		cursor = Cursor.ARROW;
+	}
+	//}}}
+
+
+	//{{{ setCursor
+
+	public static function setCursor(c:Cursor) : Void {
+		if(getInstance().lock) return;
+		getInstance().cursor = c;
+	}
+	//}}}
+
+
+	//{{{ getCursor
+
+	private inline function getCursor() : MovieClip	{
+		return _mc;
+	}
+	//}}}
+
+
+	//{{{ inject
+	public inline function inject(e:MouseEvent) {
+
+		_mc.visible = false;
+
+
+		_mc.x = e.stageX;
+		_mc.y = e.stageY;
+
+
+		showCursor();
+		toTop();
+
+
+		e.updateAfterEvent();
+	}
+	//}}}
+
+
+	//{{{ getPoint
+	public inline function getPoint() : Point {
+		return new Point(_mc.x, _mc.y);
+	}
+	//}}}
+
+
+	//{{{ toTop
+
+	public inline function toTop() : Void {
+		flash.Lib.current.setChildIndex(_mc, flash.Lib.current.numChildren - 1 );
+	}//toTop
+	//}}}
+
+
+	//{{{ hideCursor
+	public inline function hideCursor() : Void	{
+		_mc.visible = false;
+	}
+	//}}}
+
+
+	//{{{ showCursor
+	public inline function showCursor() : Void	{
+		_mc.visible = true;
+	}
+	//}}}
+	//}}}
+
+
+	//{{{ Private
+	private function __getVisible() : Bool {
+		return  _mc.visible;
+	}
+
+
+	//{{{ __setCursor
+	/**
+	*
+	*/
+	private function __setCursor(c:Cursor) : Cursor 	{
+		var point : Point = new Point();
+		cursor = c;
+
+		if(_mc!=null) {
+			point  = new Point(_mc.x, _mc.y);
+			flash.Lib.current.removeChild(_mc);
+		}
+
+		switch(c) {
+			case Cursor.ARROW:
+			_mc = img_arrow;
+
+			case Cursor.HAND:
+			_mc = img_hand;
+
+			case Cursor.HAND2:
+			_mc = img_hand2;
+
+			case Cursor.DRAG:
+			_mc = img_drag;
+
+			case Cursor.SIZE_ALL:
+			_mc = img_sizeall;
+
+			case Cursor.NESW:
+			_mc = img_nesw;
+
+			case Cursor.NS:
+			_mc = img_ns;
+
+			case Cursor.NWSE:
+			_mc = img_nwse;
+
+			case Cursor.WE:
+			_mc = img_we;
+
+			case Cursor.CROSSHAIR:
+			_mc = img_crosshair;
+		}
+
+		_mc.name = "Cursor";
+		_mc.mouseEnabled = false;
+		_mc.focusRect = false;
+		_mc.tabEnabled = false;
+
+		_mc.width = _mc.height = 32;
+		//~ _mc.x = point.x;
+		//~ _mc.y = point.y;
+
+		var toColor = new flash.geom.ColorTransform(.8, 1, .9, 1, 0, 0, 0, 1);
+		var t = new flash.geom.Transform(_mc);
+		t.colorTransform = toColor;
+
+		flash.Lib.current.addChild(_mc);
+
+
+		return c;
+	}
+	//}}}
+
+
+	//{{{ __setVisible
+	private function __setVisible(v:Bool) : Bool {
+		_mc.visible = v;
+		return v;
+	}
+	//}}}
+	//}}}
 }
+//}}}
+

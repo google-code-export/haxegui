@@ -19,12 +19,14 @@
 
 package haxegui.utils;
 
+
+//{{{ Imports
 import flash.ui.Keyboard;
-
-import hscript.Interp;
-
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
+import hscript.Interp;
+//}}}
+
 
 /**
 * Functions for setting up a scripting environment with standard libraries.
@@ -34,209 +36,208 @@ import haxegui.managers.StyleManager;
 */
 class ScriptStandardLibrary
 {
+	//{{{ Functions
+	//{{{ set
 	/**
-	* Sets all the exported library methods to the given interpreter.
-	* <ul>
-	* <li>Math
-	* <li>flash.display.GradientType
-	* <li>flash.geom.Matrix
-	* </ul>
+	* Sets all the exported library methods to the given interpreter.<br/>
+	* <p>The haxegui package is exported without the "haxegui" prefix.</p>
 	**/
 	public static function set(interp:Interp)
 	{
-		interp.variables.set( "trace", haxe.Log.trace );
-		interp.variables.set( "root", flash.Lib.current );
-		interp.variables.set( "stage", flash.Lib.current.stage );
+		//{{{ haxe
 		interp.variables.set( "Date", Date );
-		interp.variables.set( "Std", Std );
 		interp.variables.set( "Lambda", Lambda );
 		interp.variables.set( "List", List );
-		interp.variables.set( "String", String );
-		interp.variables.set( "StringTools", StringTools );
 		interp.variables.set( "Math", Math );
-		interp.variables.set( "Type", Type );
 		interp.variables.set( "Reflect", Reflect );
 		interp.variables.set( "Resource", haxe.Resource );
+		interp.variables.set( "Std", Std );
+		interp.variables.set( "String", String );
+		interp.variables.set( "StringTools", StringTools );
 		interp.variables.set( "Timer", haxe.Timer );
+		interp.variables.set( "Type", Type );
 		interp.variables.set( "Xml", Xml );
-		
+		interp.variables.set( "root", flash.Lib.current );
+		interp.variables.set( "stage", flash.Lib.current.stage );
+		interp.variables.set( "trace", haxe.Log.trace );
+
 		interp.variables.set( "baseURL", haxegui.Haxegui.baseURL );
-	
+		//}}}
+
+
+		//{{{ feffects
 		interp.variables.set("feffects",
-			{
-				Tween : feffects.Tween,
-				easing : {
-					Back : feffects.easing.Back,
-					Bounce : feffects.easing.Bounce,
-					Circ : feffects.easing.Circ,
-					Cubic : feffects.easing.Cubic,
-					Sine : feffects.easing.Sine,
-					Elastic : feffects.easing.Elastic,
-					Expo : feffects.easing.Expo,
-					Linear : feffects.easing.Linear,
-					Quad : feffects.easing.Quad,
-					Quart : feffects.easing.Quart,
-					Quint : feffects.easing.Quint,
-				},
-			});
+		{
+			Tween : feffects.Tween,
+			easing : {
+				Back 	: feffects.easing.Back,
+				Bounce  : feffects.easing.Bounce,
+				Circ 	: feffects.easing.Circ,
+				Cubic 	: feffects.easing.Cubic,
+				Elastic : feffects.easing.Elastic,
+				Expo 	: feffects.easing.Expo,
+				Linear  : feffects.easing.Linear,
+				Quad 	: feffects.easing.Quad,
+				Quart 	: feffects.easing.Quart,
+				Quint 	: feffects.easing.Quint,
+				Sine 	: feffects.easing.Sine,
+			},
+		});
+		//}}}
+
+
+		//{{{ flash
 		interp.variables.set("flash",
-			{
-				display : {
-					Bitmap : flash.display.Bitmap,
-					BitmapData : flash.display.BitmapData,
-					BlendMode : {
-						SUBTRACT : flash.display.BlendMode.SUBTRACT,
-						//~ SHADER : flash.display.BlendMode.SHADER,
-						SCREEN : flash.display.BlendMode.SCREEN,
-						OVERLAY : flash.display.BlendMode.OVERLAY,
-						NORMAL : flash.display.BlendMode.NORMAL,
-						MULTIPLY : flash.display.BlendMode.MULTIPLY,
-						LIGHTEN : flash.display.BlendMode.LIGHTEN,
-						LAYER : flash.display.BlendMode.LAYER,
-						INVERT : flash.display.BlendMode.INVERT,
-						HARDLIGHT : flash.display.BlendMode.HARDLIGHT,
-						ERASE : flash.display.BlendMode.ERASE,
-						DIFFERENCE : flash.display.BlendMode.DIFFERENCE,
-						DARKEN : flash.display.BlendMode.DARKEN,
-						ALPHA : flash.display.BlendMode.ALPHA,
-						ADD : flash.display.BlendMode.ADD,
-					},
-					GradientType : {
-						LINEAR: flash.display.GradientType.LINEAR,
-						RADIAL: flash.display.GradientType.RADIAL,
-					},
-					LineScaleMode : {
-						VERTICAL : flash.display.LineScaleMode.VERTICAL,
-						NORMAL : flash.display.LineScaleMode.NORMAL,
-						NONE : flash.display.LineScaleMode.NONE,
-						HORIZONTAL : flash.display.LineScaleMode.HORIZONTAL,
-					},
-					JointStyle : {
-						ROUND : flash.display.JointStyle.ROUND,
-						MITER : flash.display.JointStyle.MITER,
-						BEVEL : flash.display.JointStyle.BEVEL
-					},
-					CapsStyle : {
-					SQUARE : flash.display.CapsStyle.SQUARE,
+		{
+			display : {
+				Bitmap : flash.display.Bitmap,
+				BitmapData : flash.display.BitmapData,
+				BlendMode : {
+					ADD : flash.display.BlendMode.ADD,
+					ALPHA : flash.display.BlendMode.ALPHA,
+					DARKEN : flash.display.BlendMode.DARKEN,
+					DIFFERENCE : flash.display.BlendMode.DIFFERENCE,
+					ERASE : flash.display.BlendMode.ERASE,
+					HARDLIGHT : flash.display.BlendMode.HARDLIGHT,
+					INVERT : flash.display.BlendMode.INVERT,
+					LAYER : flash.display.BlendMode.LAYER,
+					LIGHTEN : flash.display.BlendMode.LIGHTEN,
+					MULTIPLY : flash.display.BlendMode.MULTIPLY,
+					NORMAL : flash.display.BlendMode.NORMAL,
+					OVERLAY : flash.display.BlendMode.OVERLAY,
+					SCREEN : flash.display.BlendMode.SCREEN,
+					SUBTRACT : flash.display.BlendMode.SUBTRACT,
+				},
+				GradientType : {
+					LINEAR: flash.display.GradientType.LINEAR,
+					RADIAL: flash.display.GradientType.RADIAL,
+				},
+				LineScaleMode : {
+					HORIZONTAL : flash.display.LineScaleMode.HORIZONTAL,
+					NONE : flash.display.LineScaleMode.NONE,
+					NORMAL : flash.display.LineScaleMode.NORMAL,
+					VERTICAL : flash.display.LineScaleMode.VERTICAL,
+				},
+				JointStyle : {
+					BEVEL : flash.display.JointStyle.BEVEL,
+					MITER : flash.display.JointStyle.MITER,
+					ROUND : flash.display.JointStyle.ROUND
+				},
+				CapsStyle : {
+					NONE : flash.display.CapsStyle.NONE,
 					ROUND : flash.display.CapsStyle.ROUND,
-					NONE : flash.display.CapsStyle.NONE
-					},
-					Shape : flash.display.Shape,
-					Sprite : flash.display.Sprite
+					SQUARE : flash.display.CapsStyle.SQUARE
 				},
-				external : {
-					ExternalInterface : flash.external.ExternalInterface
+				Shape : flash.display.Shape,
+				Sprite : flash.display.Sprite
+			},
+			external : {
+				ExternalInterface : flash.external.ExternalInterface
+			},
+			filters : {
+				BevelFilter : flash.filters.BevelFilter,
+				BitmapFilter : flash.filters.BitmapFilter,
+				BitmapFilterQuality : {
+					HIGH : flash.filters.BitmapFilterQuality.HIGH,
+					LOW : flash.filters.BitmapFilterQuality.LOW,
+					MEDIUM : flash.filters.BitmapFilterQuality.MEDIUM,
 				},
-				filters : {
-					BevelFilter : flash.filters.BevelFilter,
-					BitmapFilter : flash.filters.BitmapFilter,
-					BitmapFilterQuality : {
-						HIGH : flash.filters.BitmapFilterQuality.HIGH,
-						LOW : flash.filters.BitmapFilterQuality.LOW,
-						MEDIUM : flash.filters.BitmapFilterQuality.MEDIUM,
-					},
-					BitmapFilterType : {
-						OUTER : flash.filters.BitmapFilterType.OUTER,
-						INNER : flash.filters.BitmapFilterType.INNER,
-						FULL : flash.filters.BitmapFilterType.FULL,
-					},
-					BlurFilter : flash.filters.BlurFilter,
-					ColorMatrixFilter : flash.filters.ColorMatrixFilter,
-					ConvolutionFilter : flash.filters.ConvolutionFilter,
-					DisplacementMapFilter : flash.filters.DisplacementMapFilter,
-					DisplacementMapFilterMode : {
-						WRAP : flash.filters.DisplacementMapFilterMode.WRAP,
-						IGNORE : flash.filters.DisplacementMapFilterMode.IGNORE,
-						COLOR : flash.filters.DisplacementMapFilterMode.COLOR,
-						CLAMP : flash.filters.DisplacementMapFilterMode.CLAMP,
-					},
-					DropShadowFilter : flash.filters.DropShadowFilter,
-					GlowFilter : flash.filters.GlowFilter,
-					GradientBevelFilter : flash.filters.GradientBevelFilter,
-					GradientGlowFilter : flash.filters.GradientGlowFilter,
-// 					ShaderFilter : flash.filters.ShaderFilter,
+				BitmapFilterType : {
+					OUTER : flash.filters.BitmapFilterType.OUTER,
+					INNER : flash.filters.BitmapFilterType.INNER,
+					FULL : flash.filters.BitmapFilterType.FULL,
 				},
-				geom : {
-					Matrix : flash.geom.Matrix,
-					Point : flash.geom.Point,
-					Rectangle : flash.geom.Rectangle,
+				BlurFilter : flash.filters.BlurFilter,
+				ColorMatrixFilter : flash.filters.ColorMatrixFilter,
+				ConvolutionFilter : flash.filters.ConvolutionFilter,
+				DisplacementMapFilter : flash.filters.DisplacementMapFilter,
+				DisplacementMapFilterMode : {
+					CLAMP : flash.filters.DisplacementMapFilterMode.CLAMP,
+					COLOR : flash.filters.DisplacementMapFilterMode.COLOR,
+					IGNORE : flash.filters.DisplacementMapFilterMode.IGNORE,
+					WRAP : flash.filters.DisplacementMapFilterMode.WRAP,
 				},
-				text : {
-					TextField : flash.text.TextField,
-					TextFieldType : flash.text.TextFieldType,
-					TextFormat : flash.text.TextFormat,
-					TextFormatAlign : flash.text.TextFormatAlign,
-					StyleSheet : flash.text.StyleSheet,
-					AntiAliasType: {
-						NORMAL  : flash.text.AntiAliasType.NORMAL,
-						ADVANCED  : flash.text.AntiAliasType.ADVANCED
-					},
-					TextFieldAutoSize: {
-							LEFT  : flash.text.TextFieldAutoSize.LEFT,
-							RIGHT  : flash.text.TextFieldAutoSize.RIGHT,
-							CENTER  : flash.text.TextFieldAutoSize.CENTER,
-							NONE  : flash.text.TextFieldAutoSize.NONE,								
-					}
+				DropShadowFilter : flash.filters.DropShadowFilter,
+				GlowFilter : flash.filters.GlowFilter,
+				GradientBevelFilter : flash.filters.GradientBevelFilter,
+				GradientGlowFilter : flash.filters.GradientGlowFilter,
+			},
+			geom : {
+				Matrix : flash.geom.Matrix,
+				Point : flash.geom.Point,
+				Rectangle : flash.geom.Rectangle,
+			},
+			text : {
+				StyleSheet : flash.text.StyleSheet,
+				TextField : flash.text.TextField,
+				TextFieldType : flash.text.TextFieldType,
+				TextFormat : flash.text.TextFormat,
+				TextFormatAlign : flash.text.TextFormatAlign,
+				AntiAliasType: {
+					NORMAL  : flash.text.AntiAliasType.NORMAL,
+					ADVANCED  : flash.text.AntiAliasType.ADVANCED
 				},
-				events : {
-					Event 		  : flash.events.Event,
-					FocusEvent    : flash.events.FocusEvent,
-					KeyboardEvent : flash.events.KeyboardEvent,
-					MouseEvent    : flash.events.MouseEvent,
-					TextEvent     : flash.events.TextEvent,
-					EventPhase	  : flash.events.EventPhase
-				},
-				net : {
-					URLLoader	: flash.net.URLLoader,
-					URLRequest	: flash.net.URLRequest
-				},
-				ui : {
-					Keyboard : keyboard(),
-					Mouse	 : flash.ui.Mouse
-				},
-				system : {
-					Capabilities : flash.system.Capabilities,
-					Security 	 : flash.system.Security,
-					System 		 : flash.system.System,
+				TextFieldAutoSize: {
+					CENTER  : flash.text.TextFieldAutoSize.CENTER,
+					LEFT  : flash.text.TextFieldAutoSize.LEFT,
+					NONE  : flash.text.TextFieldAutoSize.NONE,
+					RIGHT  : flash.text.TextFieldAutoSize.RIGHT,
 				}
-			});
+			},
+			events : {
+				Event 		  : flash.events.Event,
+				EventPhase	  : flash.events.EventPhase,
+				FocusEvent    : flash.events.FocusEvent,
+				KeyboardEvent : flash.events.KeyboardEvent,
+				MouseEvent    : flash.events.MouseEvent,
+				TextEvent     : flash.events.TextEvent
+			},
+			net : {
+				URLLoader	: flash.net.URLLoader,
+				URLRequest	: flash.net.URLRequest
+			},
+			ui : {
+				Keyboard : keyboard(),
+				Mouse	 : flash.ui.Mouse
+			},
+			system : {
+				Capabilities : flash.system.Capabilities,
+				Security 	 : flash.system.Security,
+				System 		 : flash.system.System,
+			}
+		});
+		//}}}
 
 
+		//{{{ ui
 		interp.variables.set("Keyboard", keyboard());
 		interp.variables.set("Mouse", flash.ui.Mouse);
+		//}}}
 
+
+		//{{{ CodeHighlighter
 		interp.variables.set("CodeHighlighter", CodeHighlighter);
+		//}}}
 
 
+		//{{{ haxegui
 		/** haxegui exported with haxegui package stripped **/
+		interp.variables.set("Alert", haxegui.Alert);
+		interp.variables.set("Appearance", haxegui.Appearance);
+		interp.variables.set("Color", haxegui.utils.Color);
 		interp.variables.set("ColorPicker", haxegui.ColorPicker);
 		interp.variables.set("ColorPicker2", haxegui.ColorPicker2);
 		interp.variables.set("Component", haxegui.controls.Component);
 		interp.variables.set("Console", haxegui.Console);
 		interp.variables.set("Container", haxegui.containers.Container);
-
-		interp.variables.set("Cursor",{
-				ARROW 	  : Cursor.ARROW,
-				HAND 	  : Cursor.HAND,
-				HAND2 	  : Cursor.HAND2,
-				DRAG 	  : Cursor.DRAG,
-				IBEAM 	  : Cursor.IBEAM,
-				SIZE_ALL  : Cursor.SIZE_ALL,
-				NESW 	  : Cursor.NESW,
-				NS 	 	  : Cursor.NS,
-				NWSE 	  : Cursor.NWSE,
-				WE 		  : Cursor.WE,
-				CROSSHAIR : Cursor.CROSSHAIR,
-			});
-		interp.variables.set("Alert", haxegui.Alert);
-		interp.variables.set("Appearance", haxegui.Appearance);
 		interp.variables.set("CursorManager", CursorManager);
-		interp.variables.set("Color", haxegui.utils.Color);
 		interp.variables.set("DataSource", haxegui.DataSource);
 		interp.variables.set("DefaultStyle", DefaultStyle);
 		interp.variables.set("Dialog", haxegui.Dialog);
+		interp.variables.set("Divider", haxegui.containers.Divider);
 		interp.variables.set("DragManager", haxegui.managers.DragManager);
 		interp.variables.set("FocusManager", haxegui.managers.FocusManager);
+		interp.variables.set("Grid", haxegui.containers.Grid);
 		interp.variables.set("Haxegui", haxegui.Haxegui);
 		interp.variables.set("Image", haxegui.controls.Image);
 		interp.variables.set("Introspector", haxegui.Introspector);
@@ -245,76 +246,102 @@ class ScriptStandardLibrary
 		interp.variables.set("MouseManager", haxegui.managers.MouseManager);
 		interp.variables.set("Opts", haxegui.utils.Opts);
 		interp.variables.set("PopupMenu", haxegui.controls.PopupMenu);
+		interp.variables.set("Printing", haxegui.utils.Printing);
 		interp.variables.set("RichTextEditor", haxegui.RichTextEditor);
-		interp.variables.set("ScrollPane", haxegui.containers.ScrollPane);
 		interp.variables.set("ScriptManager", haxegui.managers.ScriptManager);
 		interp.variables.set("ScriptStandardLibrary", ScriptStandardLibrary);
+		interp.variables.set("ScrollPane", haxegui.containers.ScrollPane);
 		interp.variables.set("Size", haxegui.utils.Size);
 		interp.variables.set("Stack", haxegui.containers.Stack);
 		interp.variables.set("Stats", haxegui.Stats);
 		interp.variables.set("StyleManager", StyleManager);
 		interp.variables.set("ToolBar", haxegui.controls.ToolBar);
 		interp.variables.set("TooltipManager", haxegui.managers.TooltipManager);
-		interp.variables.set("Printing", haxegui.utils.Printing);
 		interp.variables.set("Window", haxegui.Window);
 		interp.variables.set("WindowManager", haxegui.managers.WindowManager);
 		interp.variables.set("XmlParser", haxegui.XmlParser);
+		//}}}
 
+
+		//{{{ Cursor
+		interp.variables.set("Cursor",{
+			ARROW 	  : Cursor.ARROW,
+			CROSSHAIR : Cursor.CROSSHAIR,
+			DRAG 	  : Cursor.DRAG,
+			HAND 	  : Cursor.HAND,
+			HAND2 	  : Cursor.HAND2,
+			IBEAM 	  : Cursor.IBEAM,
+			NESW 	  : Cursor.NESW,
+			NS 	 	  : Cursor.NS,
+			NWSE 	  : Cursor.NWSE,
+			SIZE_ALL  : Cursor.SIZE_ALL,
+			WE 		  : Cursor.WE,
+		});
+		//}}}
+
+		//{{{ windowClasses
 		interp.variables.set("windowClasses", {
-				TitleBar			: haxegui.windowClasses.TitleBar,
-				WindowFrame			: haxegui.windowClasses.WindowFrame
-			}
-			);
+			TitleBar			: haxegui.windowClasses.TitleBar,
+			WindowFrame			: haxegui.windowClasses.WindowFrame
+		}
+		);
+		//}}}
 
+
+		//{{{ events
 		interp.variables.set("events",
-			{
-				ResizeEvent			: haxegui.events.ResizeEvent,
-				MoveEvent			: haxegui.events.MoveEvent,
-				MenuEvent			: haxegui.events.MenuEvent,
-				WindowEvent			: haxegui.events.WindowEvent,
-			}
-			);
-		interp.variables.set("core",
-			{
-				Component			: haxegui.controls.Component,
-				AbstractButton		: haxegui.controls.AbstractButton,
-			}
-			);
+		{
+			MenuEvent			: haxegui.events.MenuEvent,
+			MoveEvent			: haxegui.events.MoveEvent,
+			ResizeEvent			: haxegui.events.ResizeEvent,
+			WindowEvent			: haxegui.events.WindowEvent,
+		}
+		);
+		//}}}
+
+
+		//{{{ controls
 		interp.variables.set("controls",
-			{
-				Button				: haxegui.controls.Button,
-				CheckBox			: haxegui.controls.CheckBox,
-				ComboBox			: haxegui.controls.ComboBox,
-				Input				: haxegui.controls.Input,
-				Label				: haxegui.controls.Label,
-				ProgressBar			: haxegui.controls.ProgressBar,
-				RadioButton			: haxegui.controls.RadioButton,
-				ScrollBar			: haxegui.controls.ScrollBar,
-				Slider				: haxegui.controls.Slider,
-				Stepper				: haxegui.controls.Stepper,
-				Tree				: haxegui.controls.Tree,
-				UiList				: haxegui.controls.UiList,
-			});
+		{
+			AbstractButton		: haxegui.controls.AbstractButton,
+			Button				: haxegui.controls.Button,
+			CheckBox			: haxegui.controls.CheckBox,
+			ComboBox			: haxegui.controls.ComboBox,
+			Input				: haxegui.controls.Input,
+			Label				: haxegui.controls.Label,
+			ProgressBar			: haxegui.controls.ProgressBar,
+			RadioButton			: haxegui.controls.RadioButton,
+			ScrollBar			: haxegui.controls.ScrollBar,
+			Slider				: haxegui.controls.Slider,
+			Stepper				: haxegui.controls.Stepper,
+			Tree				: haxegui.controls.Tree,
+			UiList				: haxegui.controls.UiList,
+		});
+		//}}}
 
 
+		//{{{ toys
 		interp.variables.set("toys",
-			{
-				AnalogCloc			: haxegui.toys.AnalogClock,
-				Arrow				: haxegui.toys.Arrow,
-				Circle				: haxegui.toys.Circle,
-				Curvy				: haxegui.toys.Curvy,
-				Knob				: haxegui.toys.Knob,
-				Line				: haxegui.toys.Line,
-				Patch				: haxegui.toys.Patch,
-				Rectangle			: haxegui.toys.Rectangle,
-				SevenSegment		: haxegui.toys.SevenSegment,
-				Socket				: haxegui.toys.Socket,
-				Transformer			: haxegui.toys.Transformer
-			}
-			);
-
+		{
+			AnalogClock			: haxegui.toys.AnalogClock,
+			Arrow				: haxegui.toys.Arrow,
+			Circle				: haxegui.toys.Circle,
+			Curvy				: haxegui.toys.Curvy,
+			Knob				: haxegui.toys.Knob,
+			Line				: haxegui.toys.Line,
+			Patch				: haxegui.toys.Patch,
+			Rectangle			: haxegui.toys.Rectangle,
+			SevenSegment		: haxegui.toys.SevenSegment,
+			Socket				: haxegui.toys.Socket,
+			Transformer			: haxegui.toys.Transformer
+		}
+		);
+		//}}}
 	}
+	//}}}
 
+
+	//{{{ Keyboard
 	//grep -e "static var" /usr/share/haxe/std/flash9/ui/Keyboard.hx | awk '{print "\t\t\t",$3," : Keyboard.",$3,","}' >> haxegui/utils/ScriptStandardLibrary.hx
 	private static function keyboard() : Dynamic {
 		return {
@@ -372,6 +399,6 @@ class ScriptStandardLibrary
 			isAccessible : Keyboard.isAccessible,
 		};
 	}
+	//}}}
+	//}}}
 }
-
-

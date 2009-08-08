@@ -49,22 +49,22 @@ import haxegui.utils.Opts;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class Label extends Component
+class Label extends Component, implements IText
 {
 	public var tf 						: TextField;
 	public var text (getText, setText)  : String;
 
 	public var align : Alignment;
-	
+
 	override public function init(opts : Dynamic=null) {
 
 		if(text==null)
 			text = name;
-		
+
 		description = null;
-		
+
 		super.init(opts);
-		
+
 		tf = new TextField();
 		tf.name = "tf";
 		tf.text = text;
@@ -82,7 +82,7 @@ class Label extends Component
 		tf.width = box.width;
 		tf.height = box.height;
 		}
-		
+
 		//~ this.mouseEnabled = false;
 		this.tabEnabled = false;
 		this.focusRect = false;
@@ -108,7 +108,7 @@ class Label extends Component
 		tf.height = box.height;
 		super.onResize(e);
 	}
-	
+
 	public function getText() : String {
 		if(tf==null) return null;
 		return tf.text;
@@ -132,11 +132,11 @@ class Label extends Component
 
 
 	public override function redraw(opts:Dynamic=null) {
-		
+
 		tf.x = Std.int(tf.x);
 		tf.y = Std.int(tf.y);
-		
+
 		super.redraw(opts);
 	}
-	
+
 }

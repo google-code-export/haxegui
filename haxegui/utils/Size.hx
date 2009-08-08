@@ -24,59 +24,88 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 
 
+//{{{ ScaleMode
 enum ScaleMode {
 	IGNORE_ASPECT;
 	KEEP_ASPECT;
 }
+//}}}
 
 
+//{{{ Size
 /**
-* R^2 Dimensional class, rounds floats to integers.
+* R^2 Dimensional class, uses integers.<br/>
 *
-*
-* @author <gershon@goosemoose.com>
+* @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
 class Size {
-	
+
 	public var width : Int;
 	public var height : Int;
 
+	//{{{ Constructor
 	public function new(?w:Float, ?h:Float) {
 		this.width = Std.int(w);
 		this.height = Std.int(h);
 	}
+	//}}}
 
+	//{{{ toString
 	public function toString() : String {
 		return "["+Std.string(width)+"x"+Std.string(height)+"]";
 	}
-	
+	//}}}
+
+
+	//{{{ clone
 	public function clone() : Size {
 		return new Size(width,height);
 	}
-	
+	//}}}
+
+
+	//{{{ isNull
 	public static function isNull(s) : Bool {
 		return s == null;
 	}
-	
+	//}}}
+
+
+	//{{{ empty
 	public function empty() : Bool {
 		return equal(this, new Size());
 	}
-		
+	//}}}
+
+
+	//{{{ isValid
+	public function isValid() : Bool {
+		return valid();
+	}
+	//}}}
+
+
+	//{{{ valid
 	public function valid() : Bool {
 		if (isNull(this) || width < 0 || height < 0) return false;
 		return true;
 	}
-	
+	//}}}
+
+
+	//{{{ setAtLeastZero
 	public function setAtLeastZero() : Size {
 		if(empty() || valid()) return this;
 		width = Std.int(Math.max(0, width));
 		height = Std.int(Math.max(0, height));
 		return this;
 	}
+	//}}}
 
-		
+
+	//{{{ equal
 	public static function equal(s1, s2) : Bool {
 		if(isNull(s1) || isNull(s2) ) {
 			if(s1 == s2)
@@ -87,27 +116,42 @@ class Size {
 			return true;
 		return false;
 	}
-	
-	
+	//}}}
+
+
+	//{{{ add
 	public function add(s:Size) : Size {
 		if(s.empty()) return this;
 		width += s.width;
 		height += s.height;
 		return this;
 	}
+	//}}}
 
+
+	//{{{ subtract
 	public function subtract(s:Size) : Size {
 		width -= s.width;
 		height -= s.height;
 		return this;
 	}
+	//}}}
 
+
+	//{{{ scale
+	/**
+	* Scalar Multiplication
+	*/
 	public function scale(x:Float, y:Float) : Size {
 		width = Std.int(width*x);
 		height = Std.int(height*y);
 		return this;
 	}
+	//}}}
 
+
+	//{{{ scaleTo
+	/** @todo KEEP_ASPECT **/
 	public function scaleTo(w:Float, h:Float, scaleMode:ScaleMode) : Size {
 		switch(scaleMode) {
 		case ScaleMode.IGNORE_ASPECT:
@@ -120,11 +164,14 @@ class Size {
 		}
 		return this;
 	}
-	
+	//}}}
+
+
+	//{{{ shift
 	/**
 	* Bit-shift both components of input size
 	* <pre class="code haxe">
-	* // returns [50x50]
+	* // returns 50x50
 	* new Size(100,100).shift(1);
 	* </pre>
 	* @return Shifted size
@@ -134,25 +181,41 @@ class Size {
 		this.height >> = s;
 		return this;
 	}
+	//}}}
 
+
+	//{{{ fromRect
 	public static function fromRect(r:Rectangle) : Size {
 		return new Size(r.width,r.height);
 	}
+	//}}}
 
+
+	//{{{ fromPoint
 	public static function fromPoint(p:Point) : Size {
 		return new Size(p.x, p.y);
 	}
-		
+	//}}}
+
+
+	//{{{ square
 	public static function square(l:Int) : Size {
 		return new Size(l,l);
 	}
+	//}}}
 
+
+	//{{{ toRect
 	public function toRect() : Rectangle {
 		return new Rectangle(0,0,width,height);
 	}
+	//}}}
 
+
+	//{{{ toPoint
 	public function toPoint() : Point {
 		return new Point(width,height);
 	}
-
+	//}}}
 }
+//}}}

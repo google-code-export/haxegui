@@ -1,9 +1,9 @@
 digraph uml {
-	graph [label="Package: _CodeHighlighter Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [lp="100,10",
-		bb="0,0,200,302"];
-	"_CodeHighlighter.Rule" [label="{Rule|Nested\lFlat\l}", style="rounded,filled", fillcolor=white, pos="100,39", rects="60,21,94,57 94,21,140,57", width="1.11", height="0.50"];
-	"_CodeHighlighter.Match" [label="{Match|NotMatched\lMatched\lDone\l}", style="rounded,filled", fillcolor=white, pos="100,283", rects="47,264,88,302 88,264,154,302", width="1.47", height="0.53"];
+	graph [label="Package: _CodeHighlighter Inheritance", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=compress, packMode="graph", labelloc=c, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
+	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
+	graph [lp="141,12",
+		bb="0,0,282,115"];
+	"_CodeHighlighter.Rule" [label="{\nRule|Nested\lFlat\l}", fillcolor="#af8dc3", fontcolor=black, pos="141,43", rects="104,25,136,61 136,25,178,61", width="1.03", height="0.50"];
+	"_CodeHighlighter.Match" [label="{\nMatch|NotMatched\lMatched\lDone\l}", fillcolor="#af8dc3", fontcolor=black, pos="141,97", rects="92,79,131,115 131,79,191,115", width="1.36", height="0.50"];
 }

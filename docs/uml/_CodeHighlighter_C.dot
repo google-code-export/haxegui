@@ -1,9 +1,9 @@
 digraph uml {
-	graph [label="Package: _CodeHighlighter Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [lp="103,10",
-		bb="0,0,206,302"];
-	"_CodeHighlighter.Rule" [label="{Rule|Nested\lFlat\l}", style="rounded,filled", fillcolor=white, pos="103,39", rects="63,21,97,57 97,21,143,57", width="1.11", height="0.50"];
-	"_CodeHighlighter.Match" [label="{Match|NotMatched\lMatched\lDone\l}", style="rounded,filled", fillcolor=white, pos="103,283", rects="50,264,91,302 91,264,157,302", width="1.47", height="0.53"];
+	graph [label="Package: _CodeHighlighter Composition", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=false, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
+	graph [lp="144,12",
+		bb="0,0,288,117"];
+	"_CodeHighlighter.Rule" [label="{\nRule|Nested\lFlat\l}", style="rounded,filled", fillcolor="#af8dc3", pos="144,43", rects="104,25,138,61 138,25,184,61", width="1.11", height="0.50"];
+	"_CodeHighlighter.Match" [label="{\nMatch|NotMatched\lMatched\lDone\l}", style="rounded,filled", fillcolor="#af8dc3", pos="144,98", rects="91,79,132,117 132,79,198,117", width="1.47", height="0.53"];
 }

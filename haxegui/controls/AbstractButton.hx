@@ -19,6 +19,7 @@
 
 package haxegui.controls;
 
+//{{{ Imports
 import flash.display.DisplayObjectContainer;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
@@ -32,21 +33,19 @@ import haxegui.events.MoveEvent;
 import haxegui.utils.Opts;
 import haxegui.controls.Component;
 import haxegui.controls.IRepeater;
-
-
-
+//}}}
 
 /**
- *
- * A chromeless button, containing default actions for mouse events.
- *
- * @version 0.1
- * @author Omer Goshen <gershon@goosemoose.com>
- * @author Russell Weir <damonsbane@gmail.com>
- *
- */
+*
+* A chromeless button, containing default actions for mouse events.<br/>
+*
+* @version 0.1
+* @author Omer Goshen Omer Goshen <gershon@goosemoose.com>
+* @author Russell Weir <damonsbane@gmail.com>
+*
+*/
 class AbstractButton extends Component, implements IRepeater
-{
+{	//{{{ Members
 	/** Sets whether mouse events in buttons use hand cursors **/
 	public static var useHandCursors(default,__setHandCursors) : Bool;
 	/** The cursor to use when the mouse is over buttons **/
@@ -63,8 +62,10 @@ class AbstractButton extends Component, implements IRepeater
 	public var repeatsPerSecond : Float;
 	/** Seconds before auto repeat starts **/
 	public var repeatWaitTime : Float;
-
-	/**
+	//}}}
+	
+	//{{{ Constructor
+	/*** Sets the default button behaviour.
 	* Sets the default button behaviour.
 	* @param Parent object
 	* @param Name of new instance
@@ -82,12 +83,14 @@ class AbstractButton extends Component, implements IRepeater
 		focusRect = true;
 		mouseChildren = true;
 	}
-
+	//}}}
+	
+	//{{{ __setHandCursors
 	/** Setter for using hand cursors **/
 	static function __setHandCursors(v:Bool) : Bool
 	{
 		if(v == useHandCursors)
-			return v;
+		return v;
 		if(v) {
 			defaultCursorOver = Cursor.HAND;
 			defaultCursorPress = Cursor.HAND2;
@@ -97,7 +100,9 @@ class AbstractButton extends Component, implements IRepeater
 		}
 		return v;
 	}
+	//}}}
 	
+	//{{{ init
 	override public function init(?opts:Dynamic) {
 		color = DefaultStyle.BACKGROUND;
 		super.init(opts);
@@ -105,9 +110,12 @@ class AbstractButton extends Component, implements IRepeater
 		repeatsPerSecond = Opts.optFloat(opts,"repeatsPerSecond", 25);
 		repeatWaitTime = Opts.optFloat(opts,"repeatWaitTime", .75);
 	}
-
+	//}}}
+	
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(AbstractButton);
-	}
+		haxegui.Haxegui.register(AbstractButton);
+	} //}}}
 }
 

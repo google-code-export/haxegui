@@ -17,11 +17,14 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
 package haxegui;
+
 
 import haxegui.controls.Component;
 import haxegui.controls.Component;
 import haxegui.managers.ScriptManager;
+
 
 /**
 * Style and Layout parser
@@ -31,27 +34,35 @@ import haxegui.managers.ScriptManager;
 * @author Russell Weir <damonsbane@gmail.com>
 */
 class XmlParser {
+
 	private var isStyle : Bool;
 
+	//{{{ Constructor
 	private function new(xml:Xml) {
 		var typeParts = xml.nodeName.split(":");
 		if(typeParts[0] != "haxegui")
-			throw "Not a haxegui node";
+		throw "Not a haxegui node";
 		switch(typeParts[1].toLowerCase()) {
-		case "layout":	isStyle = false;
-		case "style":	isStyle = true;
-		default:		throw "Unhandled xml type: " + typeParts[1];
+			case "layout":	isStyle = false;
+			case "style":	isStyle = true;
+			default:		throw "Unhandled xml type: " + typeParts[1];
 		}
 
 		trace(this+": Setting " + typeParts[1].toLowerCase() + " to " + xml.get("name"));
 		for(x in xml.elements())
-			parseNode(x);
+		parseNode(x);
 	}
+	//}}}
 
+
+	//{{{ toString
 	public function toString() : String {
 		return "XmlParser";
 	}
-	
+	//}}}
+
+
+	//{{{ getLayoutName
 	/**
 	* Gets the name from a layout xml node.
 	*
@@ -60,71 +71,118 @@ class XmlParser {
 	public static function getLayoutName(xml:Xml) : String {
 		var typeParts = xml.nodeName.split(":");
 		if(typeParts[0] != "haxegui")
-			return null;
+		return null;
 		switch(typeParts[1].toLowerCase()) {
-		case "layout":
-		default: return null;
+			case "layout":
+			default: return null;
 		}
 		return xml.get("name");
 	}
+	//}}}
 
+
+	//{{{ getStyleName
 	/**
 	* Gets the name from a style xml node.
-	*
+	* @param xml Xml to parse
 	* @return Null or style name
 	**/
 	public static function getStyleName(xml:Xml) : String {
 		var typeParts = xml.nodeName.split(":");
 		if(typeParts[0] != "haxegui")
-			return null;
+		return null;
 		switch(typeParts[1].toLowerCase()) {
-		case "style":
-		default: return null;
+			case "style":
+			default: return null;
 		}
 		return xml.get("name");
 	}
+	//}}}
 
+
+	//{{{ isLayoutNode
+	/**
+	* @param xml Xml to parse
+	* @return true when parsing a layout node
+	*/
 	public static function isLayoutNode(xml:Xml) : Bool {
 		var typeParts = xml.nodeName.split(":");
 		if(typeParts[0] == "haxegui" && typeParts[1].toLowerCase() == "layout")
-			return true;
+		return true;
 		return false;
 	}
+	//}}}
 
+
+	//{{{ isStyleNode
+	/**
+	* @param xml Xml to parse
+	* @return true when parsing a style node
+	*/
 	public static function isStyleNode(xml:Xml) : Bool {
 		var typeParts = xml.nodeName.split(":");
 		if(typeParts[0] == "haxegui" && typeParts[1].toLowerCase() == "style")
-			return true;
+		return true;
 		return false;
 	}
+	//}}}
 
+
+	//{{{ isDataNode
+	/**
+	* @param xml Xml to parse
+	* @return true when parsing a data node
+	*/
 	public static function isDataNode(xml:Xml) : Bool {
 		if(xml.nodeName == "List" || xml.nodeName == "Array" )
-			return true;
+		return true;
 		return false;
 	}
+	//}}}
 
+
+	//{{{ isDataSourceNode
+	/**
+	* @param xml Xml to parse
+	* @return true when parsing a data source node
+	*/
 	public static function isDataSourceNode(xml:Xml) : Bool {
 		var typeParts = xml.nodeName.split(":");
 		if(typeParts[0] == "haxegui" && typeParts[1].toLowerCase() == "datasource")
-			return true;
+		return true;
 		return false;
 	}
-		
+	//}}}
+
+
+	//{{{ apply
 	/**
 	* Applies the given style or layout from the provided Xml node
 	**/
 	public static function apply(xml:Xml) {
 		var xp = new XmlParser(xml);
 	}
+	//}}}
 
+
+	//{{{ parseNode
+	/**
+	* Parse an xml node, creating a proper class instance, calling init() if needed.<br/>
+	* @param node 	The xml parse
+	* @param parent Parent to attach instance to (needed for component constructors)
+	* @return
+	*/
 	function parseNode(node:Xml, ?parent:Dynamic) : Void {
 		var className = node.nodeName.split(":").join(".");
 
 		// ignore <events> children, processed below.
 		if(className == "events")
-			return;
+		return;
 
+		var ns = "";
+		for(i in node.attributes())
+			if(i.substr(0,7)=="haxegui")
+			className = "haxegui."+className;
 
 		var resolvedClass = Type.resolveClass(className);
 		if(resolvedClass == null) {
@@ -150,30 +208,31 @@ class XmlParser {
 				return;
 			}
 		}
-		
+
 		if(!isStyle)
 		if(isDataSourceNode(node) || isDataNode(node)) {
 			var data : Dynamic = null;
 			if(isDataSourceNode(node))
-				data = Type.createInstance(resolvedClass, [node.get("name")]);
+			data = Type.createInstance(resolvedClass, [node.get("name")]);
 			else
-				data = Type.createInstance(resolvedClass, []);
-				
-			if(Std.is(parent, DataSource)) 
-				parent.data = data;
-				
-			if(node.elements().hasNext())
-				for(i in node.elements())
-					parseNode(i, data);		
+			data = Type.createInstance(resolvedClass, []);
 
-			if(Std.is(parent, Component) && Std.is(data, DataSource)) 
-					//parent.dataSource = data;
-					parent.__setDataSource(data);
-					
-	
-			//trace(haxegui.Utils.print_r(data));			
+			if(Std.is(parent, DataSource))
+			parent.data = data;
+
+			if(node.elements().hasNext())
+			for(i in node.elements())
+			parseNode(i, data);
+
+			if(Std.is(parent, Component) && Std.is(data, DataSource))
+			//parent.dataSource = data;
+			parent.__setDataSource(data);
+
+
+			//trace(haxegui.Utils.print_r(data));
 			return;
-			}
+		}
+
 
 		var inst : Dynamic = null;
 		var comp : Component = null;
@@ -186,13 +245,12 @@ class XmlParser {
 			}
 
 
-			for(attr in node.attributes())
-			{
+			for(attr in node.attributes()) {
 				var val = node.get(attr);
 				if(val.charAt(0) == "@")
-					Reflect.setField(args, attr, Reflect.field(flash.Lib.current, val.substr(1, val.length) ) );
+				Reflect.setField(args, attr, Reflect.field(flash.Lib.current, val.substr(1, val.length) ) );
 				else
-					Reflect.setField(args, attr, val );
+				Reflect.setField(args, attr, val );
 			}
 
 			if(node.firstChild() != null) {
@@ -209,21 +267,22 @@ class XmlParser {
 			// run the init script, if it's a Component or other
 			// type with an Init field
 			if(Reflect.hasField( inst, "init") )
-				if(Reflect.isFunction( Reflect.field(inst, "init") ))
-					Reflect.callMethod( inst, inst.init, [args] );
+			if(Reflect.isFunction( Reflect.field(inst, "init") ))
+			Reflect.callMethod( inst, inst.init, [args] );
 		}
 
 
 		// parse event scripts
 		for(evtSet in node.elementsNamed("events")) {
 			for(x in evtSet.elements())
-				parseScriptNode(className, x, inst, resolvedClass);
+			parseScriptNode(className, x, inst, resolvedClass);
 		}
+
 
 		if(!isStyle) {
 			if(node.elements().hasNext())
-				for(i in node.elements())
-					parseNode(i, inst);
+			for(i in node.elements())
+			parseNode(i, inst);
 			if(comp != null && comp.hasAction("onLoaded")) {
 				trace("Executing onLoaded method for component "+ comp.name);
 				try {
@@ -234,8 +293,20 @@ class XmlParser {
 			}
 		}
 	}
+	//}}}
 
-	//<script type="text/hscript" action="redraw">
+
+	//{{{ parseScriptNode
+	/**
+	* parseScriptNode<br/>
+	* <p>Scripts must go in a CData tag</p>
+	* @param className  	Name of the class
+	* @param node 			Xml to parse
+	* @param inst 			The instance to attach the script to
+	* @param resolvedClass	The class to attach the script to
+	* @throws String 		Error
+	* @return
+	*/
 	function parseScriptNode(className:String, node:Xml, inst:Component, resolvedClass : Class<Dynamic>) {
 		var location = " in "+className+"<events> section";
 		if(node.nodeName != "script") {
@@ -261,18 +332,19 @@ class XmlParser {
 		for(i in node) {
 			if(i.nodeType == Xml.PCData) continue;
 			if(i.nodeType == Xml.CData)
-				code += i.nodeValue;
+			code += i.nodeValue;
 			else
-				trace("XmlParser : warning : Bad node type " + node.firstChild().nodeType + location);
+			trace("XmlParser : warning : Bad node type " + node.firstChild().nodeType + location);
 		}
 
+
 		if(isStyle)
-			ScriptManager.setDefaultScript(resolvedClass,action,code);
+		ScriptManager.setDefaultScript(resolvedClass,action,code);
 		else {
 			inst.setAction(action,code);
 			if(!inst.hasOwnAction(action))
-				throw "instance name " + inst.name + " has no " + action;
+			throw "instance name " + inst.name + " has no " + action;
 		}
 	}
-
+	//}}}
 }

@@ -19,26 +19,33 @@
 
 package haxegui.utils;
 
+
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.text.TextField;
+//}}}
 
+
+//{{{ Printing
 /**
- * Printing functions, PHP-Styled printing, mostly used by [Console]
+ * Printing functions, PHP-Styled printing, mostly used by [Console]<br/>
  */
-class Printing
-{
-
+class Printing {
+	//{{{ print_r
 	/**
-	* 
+	*
 	*
 	*/
 	public static function print_r(obj:Dynamic, ?indent:String="\t") : String
 	{
 		return Std.is(obj, DisplayObjectContainer) ? print_mc(obj, indent) : print_a(obj, indent);
 	}
+	//}}}
 
+
+	//{{{ print_a
 	/**
 	*
 	*
@@ -82,7 +89,10 @@ class Printing
 
 		return str;
 	}
+	//}}}
 
+
+	//{{{ print_mc
 	/**
 	*
 	*
@@ -109,7 +119,6 @@ class Printing
 		}
 		return str;
 	}
-	
-
-		
+	//}}}
 }
+//}}}

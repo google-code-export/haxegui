@@ -19,20 +19,31 @@
 
 package haxegui.utils;
 
+import flash.geom.Point;
+
+//{{{ HorizontalAlign
 enum HorizontalAlign {
 	LEFT;
 	RIGHT;
 	CENTER;
 	JUSTIFY;
 }
+//}}}
 
+
+//{{{ VerticalAlign
 enum VerticalAlign {
 	TOP;
 	CENTER;
 	BOTTOM;
 }
+//}}}
 
+
+//{{{ Alignment
 typedef Alignment = {
 	var horizontal  : HorizontalAlign;
 	var vertical	: VerticalAlign;
+	var offset 		: Point;
 }
+//}}}

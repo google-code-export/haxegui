@@ -19,18 +19,17 @@
 
 package haxegui.managers;
 
-import flash.geom.Rectangle;
-
-import flash.display.Sprite;
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
+import flash.events.MouseEvent;
+import flash.geom.Rectangle;
 import haxegui.controls.Component;
+//}}}
 
 /**
  * 
@@ -136,6 +135,6 @@ class FocusManager extends EventDispatcher, implements Dynamic
     //~ dispatchEvent (new FocusEvent (FocusEvent.MOUSE_FOCUS_CHANGE));
     }
 */
-  }//onFocusChanged
+  }
 
-}//FocusManager
+}

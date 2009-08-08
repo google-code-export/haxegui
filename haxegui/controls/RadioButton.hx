@@ -19,12 +19,12 @@
 
 package haxegui.controls;
 
-import flash.geom.Rectangle;
+//{{{ Imports
 import flash.events.Event;
-import flash.events.MouseEvent;
-import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-
+import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
+import flash.geom.Rectangle;
 import haxegui.controls.Component;
 import haxegui.controls.Component;
 import haxegui.events.MoveEvent;
@@ -33,87 +33,90 @@ import haxegui.managers.FocusManager;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
 import haxegui.utils.Opts;
+import haxegui.utils.Size;
+//}}}
 
 
+using haxegui.utils.Color;
+using haxegui.controls.Component;
 
+
+//{{{ RadioGroup
 /**
-* RadioGroup Class
+* Helper class to group radio buttons.<br/>
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class RadioGroup extends Component
-{
-	public var buttons : Array<RadioButton>;
-	
+class RadioGroup extends Component {
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(RadioGroup);
 	}
+	//}}}
 }
+//}}}
 
 
+//{{{ RadioButton
 /**
 * RadioButton allows the user to select only one of the predefined set of similar widgets.
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class RadioButton extends AbstractButton
-{
-	//~ public var group : Array<RadioButton>
-	public var selected(default, default) : Bool;
-	public var label : Label;
+class RadioButton extends Button {
+	public var group : RadioGroup;
 
 
+	//{{{ init
 	override public function init(?opts:Dynamic) {
-		box = new Rectangle(0,0,20,20);
-		color = DefaultStyle.BACKGROUND;
-
 		super.init(opts);
+
+
+		box = new Size(20,20).toRect();
+
 
 		selected = Opts.optBool(opts, "selected", selected);
 
 		// label on by default
 		if(Opts.optString(opts, "label", name)!="false") {
 			label = new Label(this);
-			label.init();
+			label.init({disabled: this.disabled});
 			label.text = Opts.optString(opts, "label", name);
-			label.move(24, 2);
+			label.move(24, 4);
 		}
 
-		if(label!=null && disabled) {
-			var fmt = DefaultStyle.getTextFormat();
-			fmt.color = haxegui.utils.Color.darken(DefaultStyle.BACKGROUND, 20);
-			label.tf.setTextFormat(fmt);
-		}
-
-		this.filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.8, 2, 2, 0.65, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
+		// dropshadow filter
+		filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.8, 2, 2, 0.65, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
 	}
+	//}}}
 
 
-	/**
-	*
-	*
-	*/
+	//{{{ onMouseClick
 	public override function onMouseClick(e:MouseEvent) {
 		if(disabled) return;
 
-		//~ for(i in 0...parent.numChildren)
-		for(child in cast(parent, Component))
-			{
-				if(Std.is(child, RadioButton))
-					untyped if(child!=this && !child.disabled) {
-							child.selected = false;
-							child.redraw();
-							}
+		for(child in parent.asComponent()) {
+			if(Std.is(child, RadioButton))
+			untyped if(child!=this && !child.disabled) {
+				child.selected = false;
+				child.redraw();
 			}
+		}
 		selected = true;
 		redraw();
-		
-		super.onMouseClick(cast e.clone());
-	}
 
+		super.onMouseClick(e);
+	}
+	//}}}
+
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(RadioButton);
 	}
+	//}}}
+
 }
+//}}}

@@ -19,11 +19,14 @@
 
 package haxegui.managers;
 
+
+//{{{
 import flash.events.Event;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
-
 import haxegui.XmlParser;
+//}}}
+
 
 /**
 * LayoutManager handles loading layouts from XML files, and setting a layout.
@@ -37,6 +40,7 @@ class LayoutManager
 	public static var layouts : Hash<Xml> = new Hash<Xml>();
 	public static var lastLoaded : String;
 
+	//{{{ fetchLayout
 	/**
 	* Convenience method for loading a style from a url.
 	*
@@ -48,7 +52,10 @@ class LayoutManager
 		loader.addEventListener(Event.COMPLETE, callback(onXmlLoaded,cb), false, 0, true);
 		loader.load(new URLRequest(url));
 	}
+	//}}}
 
+
+	//{{{ loadLayouts
 	/**
 	* Load all layouts in an XML document.
 	**/
@@ -63,7 +70,10 @@ class LayoutManager
 			lastLoaded = name;
 		}
 	}
+	//}}}
 
+
+	//{{{ setLayout
 	/**
 	* Set the current layout.
 	**/
@@ -74,7 +84,10 @@ class LayoutManager
 		}
 		XmlParser.apply(layouts.get(name));
 	}
+	//}}}
 
+
+	//{{{ onXmlLoaded
 	/** fetchLayout handler **/
 	private static function onXmlLoaded(cb:Bool->Void, e:Event) : Void
 	{
@@ -91,14 +104,15 @@ class LayoutManager
 		}
 		if(cb != null) cb(rv);
 	}
-	
+	//}}}
 
+
+	//{{{ reload
 	/**
 	* Reload last layout.
 	**/
 	public static function reload() {
 		setLayout(lastLoaded);
 	}
-
-	
+	//}}}
 }

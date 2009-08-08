@@ -1,7 +1,7 @@
 if(!this.disabled) {
-/*
+	/*
 	if(parent.handleMotionTween!=null)
-		parent.handleMotionTween.stop();
+	parent.handleMotionTween.stop();
 
 	*/
 	if(this.hitTestObject( CursorManager.getInstance()._mc )) {

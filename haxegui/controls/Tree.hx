@@ -19,6 +19,7 @@
 
 package haxegui.controls;
 
+//{{{ Imports
 import flash.geom.Rectangle;
 
 import flash.display.DisplayObject;
@@ -39,47 +40,59 @@ import haxegui.events.DragEvent;
 import haxegui.DataSource;
 import haxegui.utils.Size;
 import haxegui.utils.Color;
+//}}}
 
+using haxegui.controls.Component;
+
+
+//{{{ Tree Leaf
 /**
 *
 * TreeLeaf class
-* 
 *
 *
-* @author <gershon@goosemoose.com>
+*
+* @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class TreeLeaf extends Component
+class TreeLeaf extends AbstractButton, implements IAggregate
 {
+	/** Optional icon **/
 	var icon : Icon;
+	/** Default to the name property **/
 	var label : Label;
-	
+
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		box = new Size(140,20).toRect();
-		
+		icon = null;
+
 		super.init(opts);
 
 		label = new Label(this);
 		label.init({text: this.name});
 		label.move(24, 4);
-		
+
 		icon = new Icon(this);
 		icon.init ({src: Icon.STOCK_DOCUMENT});
-	
 	}
+	//}}}
 
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(TreeLeaf);
 	}
-	
+	//}}}
+
 }
+//}}}
 
 
-
+//{{{ TreeNode
 /**
-* TreeNode class
-* 
+* Expandable tree node<br/>
+*
 * @todo expand(), collapse()
 *
 *
@@ -87,52 +100,62 @@ class TreeLeaf extends Component
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class TreeNode extends Component
+class TreeNode extends AbstractButton, implements IAggregate
 {
-	
+
 	public var expander : Expander;
 	public var depth : Int;
 
 	public var expanded : Bool;
 	public var selected : Bool;
-	
+
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		color = DefaultStyle.INPUT_BACK;
 		box = new Size(140, 24).toRect();
-		depth = 0;
+		depth = Opts.optInt(opts, "depth", 0);
 
-		depth = Opts.optInt(opts, "depth", depth);
-						
+
 		super.init(opts);
 
 		expander = new Expander(this, name);
-		expander.init();
+		expander.init({expanded: false});
+		//expander.setAction("mouseClick", "");
 
-		expander.setAction("mouseClick",
-		"
-		"
-		);
-
-
+		// expander.mouseEnabled = false;
+		expander.removeEventListener(MouseEvent.CLICK, expander.onMouseClick);
 	}
-	
-	
-	public function expand() {
-	
-	}
-	
-	public function collapse() {
-	
+	//}}}
+
+	public override function onMouseClick(e:MouseEvent) {
+		for(i in 2...expander.numChildren)
+			expander.getChildAt(i).visible = expander.expanded;
+
+		expander.expanded = !expander.expanded;
+
+		e.stopImmediatePropagation();
+
+		super.onMouseClick(e);
 	}
 
+	//{{{ expand
+	public function expand() {}
+	//}}}
+
+	//{{{ collapse
+	public function collapse() {}
+	//}}}
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(TreeNode);
 	}
-	
+	//}}}
 }
+//}}}
 
 
-
+//{{{ Tree
 /**
 *
 * Tree Class
@@ -144,102 +167,121 @@ class TreeNode extends Component
 * @author Russell Weir <damonsbane@gmail.com>
 *
 */
-class Tree extends Component, implements IData {
-	
+class Tree extends Component, implements IData
+{
 	public var dataSource : DataSource;
 	public var data : Dynamic;
-
+	/** A list of selected items on the tree **/
 	public var selected : List<DisplayObject>;
-	
+	public var rootNode : TreeNode;
+
+	//{{{ Functions
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
-		
-		color = DefaultStyle.INPUT_BACK;
 		box = new Size(140,20).toRect();
-	
-	if(!Std.is(parent, Expander)) { 
-		var o = { 
-			node1: { 
-				leaf1: "string",
-				leaf2: "string"
-				}
-		};
-		data = { node1: o, node2: o, node3: o};
-		}
+		color = DefaultStyle.INPUT_BACK;
+
 
 		super.init(opts);
 
 
-		//process(data);
+		rootNode = new TreeNode(this);
+		rootNode.init({x: 12, width: box.width, color: this.color });
+
+		var node = new TreeNode(rootNode.expander);
+		node.init({x: 24, y:24, color: this.color});
+
 		for(i in 0...3) {
-			var treenode = new TreeNode(this);
-			treenode.init({width: box.width});
-			addNode(treenode);
-			for(j in 0...3) {
-
-				var leaf = new TreeLeaf(treenode);
-				leaf.init({width: box.width});
-				addLeaf(leaf, treenode);
-			}
+			node = new TreeNode(node.expander);
+			node.init({x: 24, y:24, width: box.width, color: this.color });
 		}
-		
-		this.setAction("redraw",
-		"
-			this.graphics.clear();
-			this.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,10), 1);
-			this.graphics.beginFill(this.color);
-			this.graphics.drawRect(0,0, this.box.width, this.box.height);
-			this.graphics.endFill();
-		"
-		);
 
+		node = new TreeNode(rootNode.expander);
+		node.init({x: 24, y: 5*24, color: this.color});
 	}
+	//}}}
 
+	//{{{ redraw
+	public override function redraw(opts:Dynamic=null) {
+		this.graphics.clear();
+		this.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,10), 1);
+		this.graphics.beginFill(this.color);
+		this.graphics.drawRect(0,0, this.box.width, this.box.height);
+		this.graphics.endFill();
+
+		var o = this;
+		var draw = function(x:Float,y:Float) {
+			var h = 24;
+			o.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,30), 1);
+			o.graphics.moveTo(12+x, h+24*y);
+			o.graphics.lineTo(12+x, 12+h+24*y);
+			o.graphics.lineTo(12+x, 12+h+24*y);
+			o.graphics.lineTo(24+x, 12+h+24*y);
+		}
+
+		var node = this.asComponent();
+		for(i in 0...4)
+		draw(12+24*i, i);
+
+
+		super.redraw(opts);
+	}
+	//}}}
+
+
+	//{{{ process
 	public function process(o:Dynamic, ?node:Dynamic=null) {
 		if(o==null) return;
 		if(node==null) node=this;
 		for(f in Reflect.fields(o)) {
-				//var node = new TreeNode(this, key, 0, yOffset+d*yOffset);
-				//node.init({depth: d++, width: this.box.width, color: this.color});				
-				if(Reflect.isObject(Reflect.field(o, f))) {
-					if(Std.is(Reflect.field(o, f), String))  {
-						var leaf = new TreeLeaf(node, f);
-						leaf.init({ width: this.box.width, visible: true});
-						//addLeaf(leaf);
-					}
-					else {
-						var treenode = new TreeNode(node, f);
-						treenode.init({width: box.width});
-						addNode(treenode);
-						process(Reflect.field(o,f), treenode);
-					}
-
+			if(Reflect.isObject(Reflect.field(o, f))) {
+				if(Std.is(Reflect.field(o, f), String))  {
+					var leaf = new TreeLeaf(node, f);
+					leaf.init({ width: this.box.width, visible: true});
 				}
-			
+				else {
+					var treenode = new TreeNode(node, f);
+					treenode.init({x: x+20, width: box.width});
+					addNode(treenode);
+					process(Reflect.field(o,f), treenode);
+				}
+			}
 		}
-	
 	}
-	
+	//}}}
+
+
+	//{{{ addLeaf
 	public function addLeaf(leaf: TreeLeaf, node:TreeNode) {
 		var n = 0;
 		for(l in node)
-			if(Std.is(l, TreeLeaf)) n++;
-		leaf.move(16,24*n);
+		if(Std.is(l, TreeLeaf)) n++;
+		leaf.move(24,24*n);
 	}
-	
-	public function addNode(node: TreeNode) {
+	//}}}
+
+
+	//{{{ addNode
+	public function addNode(node: TreeNode) {var n = 0;
+
 		var n = 0;
 		for(t in this)
-			if(Std.is(t, TreeNode)) {
-				for(l in cast(t,Component))
-					if(Std.is(l, TreeLeaf)) n++;
-			n++;		
-			}
+		if(Std.is(t, TreeNode)) {
+			for(l in cast(t,Component))
+			if(Std.is(l, TreeLeaf)) n++;
+			n++;
+		}
 		node.move(0,24*n);
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Tree);
 	}
-
+	//}}}
+	//}}}
 }
+//}}}
 

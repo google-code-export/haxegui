@@ -17,73 +17,90 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-//{{{ Imports
 package haxegui.controls;
 
-import flash.geom.Rectangle;
+//{{{ Imports
 import flash.events.Event;
+import flash.events.FocusEvent;
 import flash.events.MouseEvent;
 import flash.events.TextEvent;
-import flash.events.FocusEvent;
-
+import flash.geom.Rectangle;
 import flash.text.TextField;
-import flash.text.TextFormat;
 import flash.text.TextFieldAutoSize;
-
-import haxegui.utils.Size;
-import haxegui.utils.Opts;
-import haxegui.managers.StyleManager;
+import flash.text.TextFieldType;
+import flash.text.TextFormat;
 import haxegui.controls.Component;
+import haxegui.managers.StyleManager;
+import haxegui.utils.Opts;
+import haxegui.utils.Size;
+import haxegui.controls.IAdjustable;
 //}}}
 
-
 /**
-* Input class wraps an editable [TextField].<br/>
+* Input wraps an editable [TextField].<br/>
 *
 *
-* @author <gershon@goosemoose.com>
+* @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.2
 */
-class Input extends Component
+class Input extends Component, implements IText
 {
+	//{{{ Members
+	public var password 					: Bool;
+	public var selection(getSelection, null): String;
+	public var text(getText, setText) 		: String;
+	public var tf 							: TextField;
 
-	public var tf : TextField;
-	public var text(getText, setText) : String;
+	//}}}
 
+	//{{{ Functions
+	//{{{ init
 	override public function init(?opts:Dynamic) : Void	{
 		box = new Size(140, 20).toRect();
 
+
 		super.init(opts);
 
-		//~ buttonMode = false;
+
 		mouseChildren = true;
 		mouseEnabled = true;
 		tabEnabled = true;
 
 		filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, true, false, false )];
 
+
 		tf = new TextField();
 		tf.name = "tf";
-		tf.type = disabled ? flash.text.TextFieldType.DYNAMIC : flash.text.TextFieldType.INPUT;
-		tf.text = name;
-		tf.text = Opts.optString(opts, "text", tf.text);
-		tf.selectable = disabled ? false : true;
+		tf.autoSize =  TextFieldAutoSize.NONE;
 		tf.background = false;
 		tf.border = false;
-		tf.mouseEnabled = true;
-		tf.tabEnabled = false;
-		tf.autoSize =  TextFieldAutoSize.NONE;
-		tf.x = tf.y = 4;
 		tf.embedFonts = true;
-		tf.defaultTextFormat = DefaultStyle.getTextFormat();
-		tf.setTextFormat(DefaultStyle.getTextFormat());
+		tf.height = box.height;
+		tf.width = box.width;
+		tf.mouseEnabled = true;
+		tf.selectable = disabled ? false : true;
+		tf.tabEnabled = false;
+		tf.text = Opts.optString(opts, "text", name);
+		tf.type = disabled ? TextFieldType.DYNAMIC : TextFieldType.INPUT;
+
+		tf.y = 4;
+		tf.height -=4;
+
+		var fmt = DefaultStyle.getTextFormat();
+		fmt.leftMargin = 4;
+		fmt.leading = 14;
+		tf.defaultTextFormat = fmt;
+		tf.setTextFormat(fmt);
+
+
 		addChild(tf);
 
 		//addEventListener(TextEvent.TEXT_INPUT, onChanged, false, 0, true);
 
-	}
+	} //}}}
 
+	//{{{ __setDisabled
 	override private function __setDisabled(v:Bool) : Bool {
 		super.__setDisabled(v);
 		if(this.disabled) {
@@ -104,32 +121,42 @@ class Input extends Component
 		}
 		return v;
 	}
+	//}}}
 
-	//~ public function onChanged(e:Event) {}
 
-	public function getText() : String {
-	    return tf.text;
-	}
+	//{{{ getText
+	public function getText() : String {return tf.text;
 
-	public function setText(s:String) : String {
-	    tf.text = s;
-	    dispatchEvent(new Event(Event.CHANGE));
-	    return s;
-	}
-	
-	static function __init__() {
+		return tf.text;
+	} //}}}
+
+
+	//{{{ setText
+	public function setText(s:String) : String {tf.text = s;
+		tf.text = s;
+		this.dispatchEvent(new Event(Event.CHANGE));
+		return s;
+	} //}}}
+
+
+	//{{{ getSelection
+	public function getSelection() : String {
+		return tf.selectedText;
+	} //}}}
+
+
+	//{{{ setSelection
+	public function setSelection(s:String) : String {
+		return selection;
+	} //}}}
+
+
+	//{{{ __init__
+	static function __init__() {haxegui.Haxegui.register(Input);
+
 		haxegui.Haxegui.register(Input);
 	}
-
-
-	//public override function onMouseClick(e:MouseEvent) {
-	//tf.setSelection(0,tf.text.length);
-	//super.onMouseClick(e);
-	//}
-
-	//private override function onFocusOut(e:FocusEvent) {
-	//tf.setSelection(0,0);
-	//super.onFocusOut(e);
-	//}
+	//}}}
+	//}}}
 }
 

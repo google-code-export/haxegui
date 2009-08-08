@@ -64,6 +64,10 @@ a:hover {
 	text-decoration: underline;
 }
 
+code {
+	font-family: Monospace, Courier;
+}
+
 .mainheader {
 	background: url(images/header.png) repeat-x ;
 	height: 100px;
@@ -445,7 +449,8 @@ a.showHideLink {
 .type-frame td {
 	background-repeat: no-repeat;
 	background-position: 4px 4px;
-	height: 18px;
+	height: 20px;
+	line-height: 20px;
 	padding-left: 24px;
 	border-bottom: 1px solid gray;
 }

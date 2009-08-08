@@ -8,50 +8,37 @@ var ratios = [ 0, 0xFF ];
 var matrix = new flash.geom.Matrix();
 matrix.createGradientBox(this.box.width, this.box.height, .5*Math.PI, 0, 0);
 
-if(this.selected)
-{
-
+if(this.selected) {
 	ratios = [ 0x66, 0xFF ];
-	colors = [ Color.tint(this.color, .8), Math.max(0, this.color - 0x333333) ];
+	colors = [ Color.tint(this.color, .8), Color.darken(this.color, 30) ];
 
-	this.graphics.lineStyle (1, this.color - 0x141414, 1, true,
-			 flash.display.LineScaleMode.NONE,
-			 flash.display.CapsStyle.ROUND,
-			 flash.display.JointStyle.ROUND);
-	
+	this.graphics.lineStyle (1, Color.darken(this.color, 20), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND);
+
 	this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-	this.graphics.drawCircle (r, r, r);
-	this.graphics.endFill ();
+	this.graphics.drawCircle(r, r, r);
+	this.graphics.endFill();
 
-	this.graphics.lineStyle(0,0,0);
-	this.graphics.beginFill(0, this.disabled ? .5 : 1 );
-	this.graphics.drawCircle (r, r, .5*r);
-	this.graphics.endFill ();
+	colors = [Color.darken(this.color, 100), Color.BLACK];
+	matrix.createGradientBox(r, r, .5*Math.PI, 0, 0);
 
-
+	this.graphics.lineStyle (1, Color.tint(this.color, .5), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE, flash.display.JointStyle.ROUND);
+	this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+	this.graphics.drawCircle(r, r, .6*r);
+	this.graphics.endFill();
 }
-else
-{
+else {
 	this.graphics.lineStyle (1, Math.max(0, this.color - 0x141414), 1, true,
-			 flash.display.LineScaleMode.NONE,
-			 flash.display.CapsStyle.ROUND,
-			 flash.display.JointStyle.ROUND);
-			 
+	flash.display.LineScaleMode.NONE,
+	flash.display.CapsStyle.ROUND,
+	flash.display.JointStyle.ROUND);
+
 	this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 	this.graphics.drawCircle (r, r, r);
 	this.graphics.endFill ();
-
-
 }
 
-if(this.disabled) {
+if(this.disabled && this.label!=null) {
 	var fmt = DefaultStyle.getTextFormat();
-	fmt.color = DefaultStyle.BACKGROUND - 0x141414;
+	fmt.color = Color.darken(DefaultStyle.BACKGROUND, 20);
 	this.label.tf.setTextFormat(fmt);
 }
-//~ else
-//~ {
-	//~ var shadow = new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.8, 2, 2, 0.65, flash.filters.BitmapFilterQuality.LOW, true, false, false );
-	//~ this.filters = [shadow];
-//~ }
-

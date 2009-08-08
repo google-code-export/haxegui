@@ -19,40 +19,37 @@
 
 package haxegui.toys;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
-import flash.display.Sprite;
+//{{{ Import
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
-import haxegui.managers.StyleManager;
-import haxegui.utils.Size;
-import haxegui.utils.Color;
-import haxegui.utils.Opts;
-
+import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 import haxegui.controls.Component;
 import haxegui.controls.IAdjustable;
-
+import haxegui.managers.StyleManager;
+import haxegui.utils.Color;
+import haxegui.utils.Opts;
+import haxegui.utils.Size;
+//}}}
 
 class Knob extends Component, implements IAdjustable
 {
-	public var radius : Float;
-	public var pot : Sprite;
-	public var marker : Line;
+	public var radius		 : Float;
+	public var pot	 		 : Sprite;
+	public var marker		 : Line;
 	
 	/** Adjustment object **/
-	public var adjustment : Adjustment;
+	public var adjustment	 : Adjustment;
 
 	/** slot **/
-	public var slot : Socket;
+	public var slot			 : Socket;
 
-
+	//{{{ init
 	override public function init(?opts:Dynamic=null) {
 		box = new Size(60,60).toRect();
 		adjustment = new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 10., page: 35.});
@@ -164,7 +161,8 @@ class Knob extends Component, implements IAdjustable
 		this.filters = [new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.75, 4, 4, 0.75, flash.filters.BitmapFilterQuality.HIGH, true, false, false )];
 
 	}
-
+	//}}}
+	
 	override public function onMouseWheel(e:MouseEvent) {
 		adjustment.setValue(adjustment.getValue()+e.delta*(e.ctrlKey ? adjustment.object.page : adjustment.object.step));
 		super.onMouseWheel(e);

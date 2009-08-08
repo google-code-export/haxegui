@@ -20,21 +20,24 @@
 package haxegui.controls;
 
 /**
- * 
- * 
- * 
+ * Draggable seperator<br/>
  */
-class Seperator extends AbstractButton
+class Seperator extends Component, implements IAggregate
 {
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		super.init(opts);
-		
+
 		setAction("mouseDown", "this.startDrag(false, new flash.geom.Rectangle(0, 0, parent.box.width, 0));");
 		setAction("mouseUp", "this.stopDrag();");
 	}
-	
+	//}}}
+
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Seperator);
 
 	}
+	//}}}
 }

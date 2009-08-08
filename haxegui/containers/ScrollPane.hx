@@ -19,29 +19,29 @@
 
 package haxegui.containers;
 
-import haxegui.controls.Component;
-import haxegui.controls.ScrollBar;
 
-import flash.geom.Rectangle;
-
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
+import flash.geom.Rectangle;
+import haxegui.controls.Component;
+import haxegui.controls.ScrollBar;
 import haxegui.events.ResizeEvent;
-
 import haxegui.managers.StyleManager;
-
 import haxegui.utils.Opts;
+//}}}
+
 
 /**
-* ScrollPane masks his children, and allows to expose the hidden parts using ScrollBars.
+* ScrollPane masks his children, and allows to expose the hidden parts using ScrollBars.<br/>
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class ScrollPane extends Component
+class ScrollPane extends Component, implements IContainer
 {
 	public var content : Sprite;
 
@@ -49,75 +49,80 @@ class ScrollPane extends Component
 	public var horz : ScrollBar;
 
 
-	public override function addChild(o : DisplayObject) : DisplayObject
-	{
+	//{{{ addChild
+	/** Children are added to the [content] member **/
+	public override function addChild(o : DisplayObject) : DisplayObject {
 		if(content!=null && vert!=null && horz!=null)
 			return content.addChild(o);
 		return super.addChild(o);
 	}
+	//}}}
 
 
-	override public function init(?opts:Dynamic)
-	{
+	//{{{ init
+	override public function init(?opts:Dynamic) {
 		if(Std.is(parent, Component))
 			color = (cast parent).color;
-		//~ box = untyped parent.box.clone();
 		box = new Rectangle(0, 0, 140, 100);
-		//~ fitH = fitV = true;
+
 
 		super.init(opts);
 
+
 		description = null;
-		
+
 		fitH = Opts.optBool(opts,"fitH", true);
 		fitV = Opts.optBool(opts,"fitV", true);
 
 
 		content = new Sprite();
 		content.name = "content";
-		//~ content.scrollRect = new Rectangle(0,0,box.width,box.height);
 		content.scrollRect = new Rectangle(0,0, flash.Lib.current.stage.stageWidth, flash.Lib.current.stage.stageHeight);
-		
 		content.cacheAsBitmap = true;
-		this.addChild(content);
+
+		addChild(content);
+
 
 		if(Opts.optBool(opts,"vert", true)) {
 		vert = new ScrollBar(this, "vscrollbar", this.box.width - 20, 0);
 		vert.init({target: content, color: this.color});
 		}
 
+
 		if(Opts.optBool(opts,"horz", true)) {
 		horz = new ScrollBar(this, "hscrollbar");
 		horz.init({target: content, horizontal: true, color: this.color});
 		}
 
-		cacheAsBitmap = true;
-		content.cacheAsBitmap = true;
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-
 	}
+	//}}}
 
+
+	//{{{ onMouseWheel
 	public override function onMouseWheel(e:MouseEvent) {
 		if(vert==null) return;
 		var handleMotionTween = new feffects.Tween( 0, 1, 1000, feffects.easing.Expo.easeOut );
 /*
-		vert.handle.updatePositionTween( handleMotionTween, 
+		vert.handle.updatePositionTween( handleMotionTween,
 									new flash.geom.Point(0, e.delta * (vert.horizontal ? 1 : -1)* vert.adjustment.page),
 									null );
-	*/	
+	*/
 		super.onMouseWheel(e);
 	}
-	
+	//}}}
+
+
+	//{{{ onParentResize
 	/**
 	*
 	*
 	*/
-	public function onParentResize(e:ResizeEvent)
-	{
+	public function onParentResize(e:ResizeEvent) {
 		//~ box = untyped parent.box.clone();
-		if(fitH) box.width = (cast parent).box.width - x - ((vert!=null && vert.visible) ? 20 : 0); 
+		if(fitH) box.width = (cast parent).box.width - x - ((vert!=null && vert.visible) ? 20 : 0);
 		if(fitV) box.height = (cast parent).box.height - y - ((horz!=null && horz.visible) ? 20 : 0);
 
 		//~ box.width -= x;
@@ -148,11 +153,12 @@ class ScrollPane extends Component
 		content.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
-		haxegui.Haxegui.register(ScrollPane,initialize);
+		haxegui.Haxegui.register(ScrollPane);
 	}
-	
-	static function initialize() {
-	}
+	//}}}
 }
