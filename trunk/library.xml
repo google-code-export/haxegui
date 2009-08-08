@@ -26,7 +26,7 @@
 			<clip id="Crosshair" import="assets/cursor/Crosshair.png"/>
 			<!-- Images -->
 			<!--<clip id="HaxeLogo" import="assets/logo_haxe.jpg"/>-->
-			<clip id="Logo" import="assets/logo.png"/>
+			<clip id="Logo" import="assets/hgui_logo.png"/>
 			<!-- ICONS -->
 			<textfield id="warning" width="200" height="50" size="10" font="_mono" color="#ffffff" text="Please do not run this file directly."/>
 		</library>
