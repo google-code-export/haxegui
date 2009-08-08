@@ -19,6 +19,7 @@
 
 package haxegui;
 
+//{{{ Imports
 import flash.geom.Rectangle;
 import flash.display.DisplayObjectContainer;
 import flash.events.Event;
@@ -45,171 +46,195 @@ import haxegui.windowClasses.WindowFrame;
 import haxegui.windowClasses.StatusBar;
 import haxegui.utils.Color;
 import haxegui.utils.Size;
+//}}}
 
 
-enum WindowType
-{
+//{{{ WindowType
+enum WindowType {
 	NORMAL;
 	MODAL;
 	ALWAYS_ON_TOP;
 }
+//}}}
 
 
+//{{{ Window
 /**
-* Dragable & Resizable window.
+* Dragable & Resizable window.<br/>
 *
 *
 * @author <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class Window extends Component
-{
-	
-	////////////////////////////////////////////////////////////////////////////
-	// Composition
-	////////////////////////////////////////////////////////////////////////////
+class Window extends Component {
+	//{{{ Members
+
+
+	//{{{ Public
 	public var titlebar 	: TitleBar;
 	public var frame 		: WindowFrame;
 	public var statusbar	: StatusBar;
 	public var type			: WindowType;
+	//}}}
 
-	
-	
-	////////////////////////////////////////////////////////////////////////////
-	// Privates
-	////////////////////////////////////////////////////////////////////////////
-	private var lazyResize:Bool;
-	private var sizeable(isSizeable, setSizeable):Bool;
-	
-	/** 
-	 * Constructor
-	 * 
-	 * @param parent The parent to hold the new window, will default to root.
-	 * @param name	 Window's instance name on stage nad title.
-	 * @param x		 Horizontal offset
-	 * @param y		 Vertical offset
-	 * @param height Window's height, set to member box
-	 * @param width  Window's width, set to member box
-	 * @param sizeable
-	 * 
-	 */
-	public function new (
-				? parent : DisplayObjectContainer, 
-				? name   	: String,
-				? x 	 	: Float, 
-				? y 	 	: Float, 
-				? width  	: Float,
-				? height 	: Float, 
-				? sizeable  : Bool
-				) {
-						
-		/** Default new windows to be children of root **/
-		if (parent == null || !Std.is (parent, DisplayObjectContainer))
-			parent = flash.Lib.current;
-		
-		/** Check name with WindowManager **/
-		if( WindowManager.getInstance().windows.exists( name ) )
-			this.name += Std.string(haxe.Timer.stamp()*1000).substr(0,2);
+
+	//{{{ Private
+	private var sizeable(isSizeable, setSizeable) : Bool;
+	//}}}
+
+
+	//{{{ Static
+	public static var lazyResize : Bool;
+	//}}}
+
+	//}}}
+
+
+	//{{{ Constructor
+	/**
+	* Constructor
+	*
+	* @param parent  	The parent to hold the new window, will default to root.
+	* @param name	 	Window's instance name on stage nad title.
+	* @param x		 	Horizontal offset
+	* @param y		 	Vertical offset
+	* @param height  	Window's height, set to member box
+	* @param width   	Window's width, set to member box
+	* @param sizeable   True to make window sizeable
+	*/
+	public
+	function new (
+	? parent	: DisplayObjectContainer,
+	? name   	: String,
+	? x 	 	: Float,
+	? y 	 	: Float,
+	? width  	: Float,
+	? height 	: Float,
+	? sizeable  : Bool)	{
+
 
 		super (parent, name, x, y);
 
-		WindowManager.getInstance().windows.set( name, this );
-		
-	}
 
+		// register creation with window manager
+		WindowManager.getInstance().windows.set( name, this );
+	}
+	//}}}
+
+
+	//{{{ Functions
+	//{{{ getClientRect
+	/** @todo fix this*/
 	public function getClientRect() : Rectangle {
 		return new Rectangle();
 	}
+	//}}}
 
+
+	//{{{ init
 	override public function init(opts : Dynamic=null) {
-		
 		box = new Size (320, 240).toRect();
 		color = DefaultStyle.BACKGROUND;
 		description = null;
-		
+
+
 		type = Opts.getField(opts, "type");
 		if(type==null) type = WindowType.NORMAL;
 
+
 		super.init(opts);
+
 
 		// options
 		sizeable = Opts.optBool(opts, "sizeable", true);
 		lazyResize = Opts.optBool(opts, "lazyResize", false);
 
+
 		// frame
 		frame = new WindowFrame(this, "frame");
 		frame.init({color: this.color});
-		
+
+
 		// titlebar
 		titlebar = new TitleBar(this, "titlebar");
 		titlebar.init({title:this.name, color: this.color });
 
-		// register with focus manager
-		//~ FocusManager.getInstance ().addEventListener (FocusEvent.MOUSE_FOCUS_CHANGE, redraw, false, 0, true);
-
-		// register with WindowManager
-		//~ this.addEventListener( ResizeEvent.RESIZE, WindowManager.getInstance().proxy );
-		//~ this.addEventListener( MoveEvent.MOVE,  WindowManager.getInstance().proxy );
+		// register events with window manager
 		WindowManager.getInstance().register(this);
-
-
 	}
+	//}}}
 
+
+	//{{{ setSizeable
 	public function setSizeable(s:Bool):Bool {
 		return sizeable = s;
 	}
+	//}}}
 
+
+	//{{{ isSizeable
 	public function isSizeable ():Bool	{
 		return sizeable;
-	}
+	} //}}}
 
 
-	/**
-	* Returns true if the window is modal
-	**/
+	//{{{ isModal
 	public function isModal() : Bool {
 		return type == MODAL;
 	}
+	//}}}
 
 
-
+	//{{{ destroy
 	public override function destroy() {
 		dispatchEvent(new WindowEvent(WindowEvent.CLOSE));
 		super.destroy();
 	}
+	//}}}
 
-	
+
+	//{{{ onMouseDoubleClick
+	/**
+	* @todo fix window shading
+	*/
 	public override function onMouseDoubleClick(e:MouseEvent) : Void {
 		/*
 		var self = this;
 		var t = new feffects.Tween(this.box.height, 40, 1500, feffects.easing.Back.easeInOut);
 		t.setTweenHandlers( function(v) {
-			self.box.height = v;
-			self.redraw();
-			} );
+		self.box.height = v;
+		self.redraw();
+		} );
 		t.start();
-			
+
 		var self = this;
 		haxe.Timer.delay( function() {
-			for(i in 0...self.numChildren)
-			if(self.getChildAt(i)!=self.frame && 
-			self.getChildAt(i)!=self.titlebar && 
-			self.getChildAt(i)!=self.statusbar )
-			self.getChildAt(i).visible = false;
-			
-			}, 1500 );
+		for(i in 0...self.numChildren)
+		if(self.getChildAt(i)!=self.frame &&
+		self.getChildAt(i)!=self.titlebar &&
+		self.getChildAt(i)!=self.statusbar )
+		self.getChildAt(i).visible = false;
+
+		}, 1500 );
 		dispatchEvent(new WindowEvent(WindowEvent.ROLLED));
 		*/
 		super.onMouseDoubleClick(e);
 	}
-	
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Window,initialize);
 	}
+	//}}}
 
+
+	//{{{ initialize
 	static function initialize() {
 	}
-	
+	//}}}
+	//}}}
 }
+//}}}

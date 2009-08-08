@@ -19,75 +19,77 @@
 
 package haxegui.controls;
 
-import Type;
-
-import flash.geom.Rectangle;
-
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-import flash.display.MovieClip;
 import flash.display.Graphics;
+import flash.display.LineScaleMode;
+import flash.display.MovieClip;
 import flash.display.Shape;
 import flash.display.Sprite;
-import flash.display.LineScaleMode;
-
-import flash.text.TextFormat;
-
 import flash.events.Event;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
+import flash.events.MouseEvent;
+import flash.geom.Rectangle;
+import flash.text.TextFormat;
+import flash.ui.Keyboard;
+import flash.ui.Mouse;
+import haxegui.controls.AbstractButton;
+import haxegui.controls.Component;
+import haxegui.events.DragEvent;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
-import haxegui.events.DragEvent;
-
-import flash.ui.Mouse;
-import flash.ui.Keyboard;
-
-import haxegui.controls.Component;
-import haxegui.controls.AbstractButton;
-import haxegui.managers.WindowManager;
-import haxegui.managers.MouseManager;
 import haxegui.managers.CursorManager;
+import haxegui.managers.MouseManager;
 import haxegui.managers.StyleManager;
-
+import haxegui.managers.WindowManager;
 import haxegui.utils.Color;
 import haxegui.utils.Size;
+//}}}
 
 
+//{{{ ToolBarHandle
 /**
- * 
- * 
- * 
- */
-class ToolBarHandle extends AbstractButton
-{	
+* Handle to detach the [ToolBar]<br/>
+*/
+class ToolBarHandle extends AbstractButton, implements IComposite
+{
+	//{{{ init
 	override public function init (? opts : Dynamic) {
 		super.init();
 	}
-	
+	//}}}
+
+	//{{{ onMouseDown
 	override public function onMouseDown(e:MouseEvent) {
 		untyped parent.startDrag();
 		stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 	}
+	//}}}
 
+	//{{{ onMouseUp
 	override public function onMouseUp(e:MouseEvent) {
 		untyped parent.stopDrag();
 		stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp, false);
 	}
-	
-	static function __init__() {
+	//}}}
+
+	//{{{
+	static function __init__() {haxegui.Haxegui.register(ToolBarHandle);
 		haxegui.Haxegui.register(ToolBarHandle);
 
 	}
+	//}}}
 }
+//}}}
 
 
+//{{{ ToolBar
 /**
-* ToolBar Class
+* ToolBar for widgets.<br/>
 *
 *
-* @author <gershon@goosemoose.com>
+* @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.2
 */
@@ -96,12 +98,13 @@ class ToolBar extends Component, implements IRubberBand
 	public var handle 	  : ToolBarHandle;
 	public var seperators : Array<Seperator>;
 
+	//{{{ init
 	override public function init (? opts : Dynamic) {
 		color = DefaultStyle.BACKGROUND;
 		box = new Size(502,40).toRect();
 
 		super.init(opts);
-		
+
 		description = null;
 
 		handle = new ToolBarHandle(this);
@@ -113,8 +116,11 @@ class ToolBar extends Component, implements IRubberBand
 
 		parent.addEventListener (ResizeEvent.RESIZE, onParentResize);
 	}
+	//}}}
 
 
+
+	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
 		var b = untyped parent.box.clone();
 		//~ box = untyped parent.box.clone();
@@ -135,8 +141,13 @@ class ToolBar extends Component, implements IRubberBand
 
 		redraw();
 	}
+	//}}}
 
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(ToolBar);
 	}
+	//}}}
+
 }
+//}}}

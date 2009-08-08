@@ -1,10 +1,9 @@
 digraph uml {
-	graph [label="Package: flash.xml Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [label="{XMLList}",
-		lp="32,10",
-		bb="0,0,64,300"];
-	"flash.xml.XML" [label="{XML}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/xml/XML.html", tooltip=XML, portPos=e, pos="32,39", rects="5,21,59,57", width="0.75", height="0.50"];
-	"flash.xml.XMLList" [label="{XMLList}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/xml/XMLList.html", tooltip=XMLList, portPos=e, pos="32,282", rects="5,264,59,300", width="0.75", height="0.50"];
+	graph [label="Package: flash.xml Inheritance", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=compress, packMode="graph", labelloc=c, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
+	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
+	graph [lp="113,12",
+		bb="0,0,226,115"];
+	"flash.xml.XML" [label="{\nXML}", fillcolor=white, URL="../types/flash/xml/XML.html", tooltip="\nXML", portPos=w, pos="113,43", rects="86,25,140,61", width="0.75", height="0.50"];
+	"flash.xml.XMLList" [label="{\nXMLList}", fillcolor=white, URL="../types/flash/xml/XMLList.html", tooltip="\nXMLList", portPos=w, pos="113,97", rects="86,79,140,115", width="0.75", height="0.50"];
 }

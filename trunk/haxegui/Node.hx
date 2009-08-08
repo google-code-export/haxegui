@@ -17,46 +17,47 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-//{{{ Imports
+
 package haxegui;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
-
 import flash.events.Event;
-import flash.events.MouseEvent;
-import flash.events.KeyboardEvent;
-import flash.events.FocusEvent;
 import flash.events.EventDispatcher;
-
+import flash.events.FocusEvent;
+import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.geom.Rectangle;
+import haxegui.Window;
+import haxegui.containers.Container;
+import haxegui.controls.ComboBox;
+import haxegui.controls.Component;
+import haxegui.controls.IAdjustable;
+import haxegui.controls.Input;
+import haxegui.controls.Label;
+import haxegui.events.DragEvent;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
-import haxegui.events.DragEvent;
 import haxegui.managers.StyleManager;
-import haxegui.Window;
-
-import haxegui.containers.Container;
-import haxegui.controls.Component;
-import haxegui.controls.ComboBox;
-import haxegui.controls.Label;
-import haxegui.controls.Input;
-import haxegui.controls.IAdjustable;
-import haxegui.utils.Color;
-import haxegui.utils.Size;
-import haxegui.utils.Opts;
-
-import haxegui.toys.Socket;
 import haxegui.toys.Patch;
-
-using haxegui.utils.Color;
+import haxegui.toys.Socket;
+import haxegui.utils.Color;
+import haxegui.utils.Opts;
+import haxegui.utils.Size;
 //}}}
 
+
+using haxegui.utils.Color;
+using haxegui.controls.Component;
+
+
 /**
-* Signal\Slot Matrix node.<br/>
+* Signal\Slot Node.<br/>
 *
+* @todo fix the static [DataSource]
 *
 * @author <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
@@ -64,6 +65,7 @@ using haxegui.utils.Color;
 */
 class Node extends Window
 {
+	//{{{ Members
 	public var combos : Array<ComboBox>;
 	public var inputs : Array<Input>;
 	public var sockets : Array<Socket>;
@@ -74,29 +76,49 @@ class Node extends Window
 	var _current : Dynamic ;
 
 	var holders : Array<Component>;
+
+
+	static var dataSource = new DataSource("Node Data Source");
+	//}}}
+
+
+	//{{{ Functions
+	//{{{ init
 	public override function init(opts:Dynamic=null) {
 		super.init(opts);
 
 		color = Color.random().tint(.5);
 		box = new Size(240,80).toRect();
-		type = WindowType.MODAL;
 
-		moveTo(.5*(this.stage.stageWidth-box.width), .5*(this.stage.stageHeight-box.height));
+		dataSource.data = ["Expression", "AND", "OR", "XOR", "NOR", "NAND", "XNOR"];
 
+
+		// moveTo(.5*(this.stage.stageWidth-box.width), .5*(this.stage.stageHeight-box.height));
+
+
+		//{{{ Container
 		container = new Container(this, 10, 21);
 		container.init({color: Color.WHITE});
+		container.setAction("redraw", "");
+		container.graphics.clear();
+
 
 		combos = [];
 		inputs = [];
 		sockets = [];
 		holders = [];
 		adjustments = [];
+
 		for(i in 0...2) {
-			adjustments.push(new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 5., page: 10.}));
+			adjustments.push(new Adjustment({ value: 0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 5, page: 10}));
+
 
 			var j = combos.push(new ComboBox(container));
 			combos[j-1].init({color: this.color, text: "", x: 20, y:10+28*i, width: 90});
-			combos[j-1].data = ["Expression", "AND", "OR", "XOR", "NOR", "NAND", "XNOR"];
+			// combos[j-1].dataSource = new DataSource();
+			// combos[j-1].dataSource.data = ["Expression", "AND", "OR", "XOR", "NOR", "NAND", "XNOR"];
+			combos[j-1].dataSource = dataSource;
+
 
 			var j = inputs.push(new Input(container));
 			inputs[j-1].init({text: "", x: 120, y:10+28*i, width: 90});
@@ -111,7 +133,10 @@ class Node extends Window
 			sockets[i].removeEventListener(MouseEvent.MOUSE_DOWN, sockets[i].onMouseDown);
 			sockets[j-1].removeEventListener(MouseEvent.MOUSE_DOWN, sockets[i].onMouseDown);
 		}
+		//}}}
 
+
+		//{{{ titlebar
 		titlebar.color = this.color;
 		titlebar.dirty = true;
 		titlebar.minimizeButton.destroy();
@@ -128,66 +153,93 @@ class Node extends Window
 		matrix.createGradientBox(this.parent.box.width, 20, .5*Math.PI, 0, 0);
 		this.graphics.lineStyle(1, Color.darken(this.color, 50), 1, true, flash.display.LineScaleMode.NONE);
 		this.graphics.beginGradientFill( grad, colors, alphas, ratios, matrix );
-		this.graphics.drawRoundRectComplex (0, 0, this.parent.box.width + 10, 20, 4, 4, 0, 0);
+		this.graphics.drawRoundRectComplex (2, 0, this.parent.box.width + 8, 20, 0, 20, 0, 0);
 		this.graphics.endFill ();
 		");
+		//}}}
 
+
+		//{{{ frame
 		frame.removeEventListener(MouseEvent.MOUSE_MOVE, frame.onMouseMove);
 		frame.color = this.color;
 		frame.setAction("redraw",
 		"
 		this.graphics.clear ();
 
-		this.graphics.lineStyle (2,
-					 Color.darken(this.color, 50),
-					1, true, flash.display.LineScaleMode.NONE,
-					 flash.display.CapsStyle.NONE,
-					 flash.display.JointStyle.ROUND);
+		this.graphics.lineStyle (1,
+		Color.darken(this.color, 50),1, true,
+		flash.display.LineScaleMode.NONE,
+		flash.display.CapsStyle.NONE,
+		flash.display.JointStyle.ROUND);
 
 		this.graphics.beginFill (Color.WHITE);
-		this.graphics.drawRoundRect (2, 2, this.parent.box.width + 8, this.parent.box.height + 8, 8, 8);
+		this.graphics.drawRoundRectComplex (2, 20, this.parent.box.width + 8, this.parent.box.height - 12, 0, 0, 20, 0);
+		this.graphics.endFill ();
+
+		this.graphics.beginFill (Color.tint(this.color, .5));
+		this.graphics.moveTo(this.parent.box.width+10, this.parent.box.height-10);
+		this.graphics.lineTo(this.parent.box.width+10, this.parent.box.height+8);
+		this.graphics.lineTo(this.parent.box.width-10, this.parent.box.height+8);
+		this.graphics.lineTo(this.parent.box.width+10, this.parent.box.height-10);
 		this.graphics.endFill ();
 		");
+		//}}}
 	}
+	//}}}
 
 
+	//{{{ onMouseMove
 	public function onMouseMove(e:MouseEvent) {
 		var patchLayer = cast flash.Lib.current.getChildByName('patchLayer');
 		patchLayer.getChildAt(patchLayer.numChildren-1).end = new Point(e.stageX, e.stageY);
 		patchLayer.getChildAt(patchLayer.numChildren-1).redraw();
 	}
+	//}}}
 
+
+	//{{{ onMouseUp
 	public override function onMouseUp(e:MouseEvent) {
 		if(_current==null) return;
+
 		stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+
+
 		var oa = stage.getObjectsUnderPoint(new Point(e.stageX, e.stageY));
 		oa.reverse();
+
+
 		var c = false;
 		var self = this;
+
+
 		for(o in oa)
-			if(Std.is(o, Socket)) {
-			if(Std.is(o.parent, IAdjustable)) {
-			trace(_current+"\t"+o.parent);
-			_current.addEventListener(Event.CHANGE, function(e) {
-				var ao = (cast o.parent).adjustment;
-				ao.setValue(Std.parseFloat(self._current.tf.text));
-			}, false, 0, false);
-			//~ }, false, 0, true);
-			c = true;
+		if(Std.is(o, Socket)) {
+			var p = cast(o.parent, IAdjustable);
+			if(Std.is(p, IAdjustable)) {
+				trace(_current+"\t"+p);
+				_current.addEventListener(Event.CHANGE, function(e) {
+					var ao = p.adjustment;
+					ao.setValue(Std.parseFloat(self._current.tf.text));
+				}, false, 0, false);
+				//~ }, false, 0, true);
+				c = true;
 			}
 			else
 			if(Std.is((cast o).getParentWindow(), Node)) {
 				_current.addEventListener(Event.CHANGE, function(e) {
-				var i = (cast o).prevSibling();
-				//i.tf.text = self._current.tf.text;
+					var i = (cast o).prevSibling();
+					//i.tf.text = self._current.tf.text;
 				}, false, 0, false);
 			}
 		}
 
 		super.onMouseUp(e);
 	}
+	//}}}
 
+
+	//{{{ onMouseDown
 	public override function onMouseDown(e:MouseEvent) {
 		if(Std.is(e.target, Socket)) {
 			e.preventDefault();
@@ -206,8 +258,13 @@ class Node extends Window
 
 		super.onMouseDown(e);
 	}
+	//}}}
 
+
+	//{{{ destroy
 	public override function destroy() {
 		super.destroy();
 	}
+	//}}}
+	//}}}
 }

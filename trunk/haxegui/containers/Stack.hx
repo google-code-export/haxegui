@@ -19,28 +19,27 @@
 
 package haxegui.containers;
 
-import flash.display.Sprite;
+
+//{{{ Import
 import flash.display.DisplayObject;
 import flash.display.MovieClip;
-import flash.geom.Rectangle;
-
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-
-import haxegui.events.ResizeEvent;
-
-import haxegui.managers.ScriptManager;
-import haxegui.managers.MouseManager;
-import haxegui.managers.StyleManager;
-import haxegui.controls.Component;
+import flash.geom.Rectangle;
 import haxegui.containers.IContainer;
-
+import haxegui.controls.Component;
+import haxegui.events.ResizeEvent;
+import haxegui.managers.MouseManager;
+import haxegui.managers.ScriptManager;
+import haxegui.managers.StyleManager;
 import haxegui.utils.Opts;
+//}}}
 
 
 /**
-* Stack container, a simple container for layering components, the active layer can be controled
-* by a TabNavigator for ex.
+* Stack container for layering components.<br/>
+* Used in combination with  a [TabNavigator] for example.
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
@@ -49,33 +48,40 @@ class Stack extends Component, implements IContainer
 {
 	public var selectedIndex : Int;
 
+	//{{{ Constructor
 	public function new (?parent : flash.display.DisplayObjectContainer, ?name:String, ?x : Float, ?y: Float) {
+
 		super (parent, name, x, y);
-		this.color = DefaultStyle.BACKGROUND;
-		this.buttonMode = false;
-		this.mouseEnabled = false;
-		this.tabEnabled = false;
+
+		color = DefaultStyle.BACKGROUND;
+		buttonMode = false;
+		mouseEnabled = false;
+		tabEnabled = false;
 	}
+	//}}}
 
 
+	//{{{ init
 	override public function init(?opts:Dynamic=null) {
 		super.init(opts);
-		
+
 		description = null;
-		
+
 		selectedIndex = Opts.optInt(opts, "selectedIndex", 0);
-		
+
 		if(Std.is(parent, haxegui.Window))
 			if(x==0 && y==0)
 				move(10,20);
-		
+
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
+	//}}}
 
 
+	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
-		
+
 		//~ if(Std.is(parent, Component)) {
 			//~ box = untyped parent.box.clone();
 			//~ box.width -= x;
@@ -94,12 +100,14 @@ class Stack extends Component, implements IContainer
 
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-	
-	}
 
+	}
+	//}}}
+
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Stack);
 	}
-
-	
+	//}}}
 }

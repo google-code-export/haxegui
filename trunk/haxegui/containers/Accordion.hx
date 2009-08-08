@@ -19,28 +19,26 @@
 
 package haxegui.containers;
 
-import flash.display.Sprite;
+
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.MovieClip;
-import flash.geom.Rectangle;
-
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-
-import haxegui.events.ResizeEvent;
-
-import flash.filters.DropShadowFilter;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
-
-import haxegui.managers.CursorManager;
-import haxegui.managers.ScriptManager;
-import haxegui.managers.MouseManager;
-import haxegui.managers.StyleManager;
+import flash.filters.DropShadowFilter;
+import flash.geom.Rectangle;
+import haxegui.containers.IContainer;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
-import haxegui.containers.IContainer;
-
+import haxegui.events.ResizeEvent;
+import haxegui.managers.CursorManager;
+import haxegui.managers.MouseManager;
+import haxegui.managers.ScriptManager;
+import haxegui.managers.StyleManager;
+//}}}
 
 
 /**
@@ -62,5 +60,5 @@ class Accordion extends Container
 	static function __init__() {
 		haxegui.Haxegui.register(Accordion);
 	}
-	
+
 }

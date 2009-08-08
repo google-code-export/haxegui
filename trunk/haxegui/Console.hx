@@ -20,61 +20,57 @@
 
 package haxegui;
 
-import flash.geom.Rectangle;
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
+import flash.events.Event;
+import flash.events.EventDispatcher;
+import flash.events.FocusEvent;
+import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
+import flash.geom.Rectangle;
+import flash.system.Capabilities;
 import flash.text.TextField;
 import flash.text.TextFormat;
-
-import flash.events.Event;
-import flash.events.MouseEvent;
-import flash.events.KeyboardEvent;
-import flash.events.FocusEvent;
-import flash.events.EventDispatcher;
-
 import flash.ui.Keyboard;
 import flash.ui.Mouse;
-
-import flash.system.Capabilities;
-
-import haxegui.events.MoveEvent;
-import haxegui.events.ResizeEvent;
-import haxegui.events.DragEvent;
-import haxegui.managers.StyleManager;
 import haxegui.Window;
-
 import haxegui.containers.Container;
 import haxegui.controls.ScrollBar;
-
+import haxegui.events.DragEvent;
+import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
+import haxegui.logging.ErrorType;
+import haxegui.logging.ILogger;
+import haxegui.logging.LogLevel;
+import haxegui.managers.StyleManager;
+import haxegui.utils.Opts;
+import haxegui.utils.Size;
+import haxegui.utils.Printing;
 import hscript.Expr;
 import hscript.Parser;
-
-import haxegui.logging.ILogger;
-import haxegui.logging.ErrorType;
-import haxegui.logging.LogLevel;
-
-import haxegui.utils.Printing;
-import haxegui.utils.Opts;
+//}}}
 
 /**
 *
-* Console for debugging, contains two TextFields, one output for tracing messages
-* and another hscript-parsing input field.
+* Console for debugging, one [TextField] tracing messages and another parsing hscript.<br/>
+* <p>The console implements psuedo-filesystem access to the display list. Type [help] in the console to list commands.</p>
 *
+* @todo update the docs
 *
-* @author <gershon@goosemoose.com>
+* @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
 class Console extends Window, implements ILogger
 {
+	//{{{ Members
 	/** hscript parser **/
 	var parser : hscript.Parser;
 
-	/** 
-	* hscript interpreter 
-	*	
+	/**
+	* hscript interpreter
+	*
 	* can be used in the console like this:
 	* <pre class="code haxe">
 	* // returns [object Interp]
@@ -113,22 +109,30 @@ class Console extends Window, implements ILogger
 	var output : TextField;
 	var input : TextField;
 	var vert : ScrollBar;
+	//}}}
 
+
+	//{{{ Constructor
 	public override function new (parent:DisplayObjectContainer=null, name:String=null, ?x:Float, ?y:Float) {
 		super(parent, "Console", x, y);
 	}
-	
+	//}}}
+
+
+	///{{{ Functions
+	//{{{ init
 	public override function init(?opts:Dynamic) {
-		////////////////////////////////////////////////////////////////////////
-		// Visual 
-		////////////////////////////////////////////////////////////////////////
 		type = WindowType.ALWAYS_ON_TOP;
+
+
 		super.init(opts);
 
-		box = new Rectangle (0, 0, 640, 260);
+		box = new Size(640, 260).toRect();
+
 
 		container = new Container(this, "Container", 10, 20);
 		container.init();
+
 
 		// Output TextField for trace and log messages
 		output = new TextField();
@@ -147,6 +151,7 @@ class Console extends Window, implements ILogger
 		output.tabEnabled = true;
 		output.defaultTextFormat = DefaultStyle.getTextFormat();
 
+
 		// Input TextField for hscript execution
 		input = new TextField();
 		input.name = "input";
@@ -158,6 +163,7 @@ class Console extends Window, implements ILogger
 		input.width = box.width - 40;
 		input.height = 20;
 		input.addEventListener (KeyboardEvent.KEY_DOWN, onInputKeyDown);
+
 
 		// Container
 		container.init({
@@ -173,213 +179,122 @@ class Console extends Window, implements ILogger
 		vert.init({target : output, color: this.color});
 		vert.removeEventListener(ResizeEvent.RESIZE, vert.onParentResize);
 
-		// if(isSizeable())
-		// {
-			// bl.y = frame.height - 32;
-			// br.x = frame.width - 32;
-			// br.y = frame.height - 32;
-		// }
 
-		////////////////////////////////////////////////////////////////////////
-		// Non-visual 
-		////////////////////////////////////////////////////////////////////////
-		pwd = ["root"];
-		_pwd = cast root;
+		// Shell
+		pwd 	= ["root"];
+		_pwd 	= cast root;
 		history = new Array<String>();
+		parser  = new hscript.Parser();
+		interp  = new hscript.Interp();
 
-		parser = new hscript.Parser();
-		interp = new hscript.Interp();
-			var self = this;
-			haxegui.utils.ScriptStandardLibrary.set(interp);
-			interp.variables.set( "this", this );
-			//~ interp.variables.set( "pwd", "root"+this.pwd.slice(1,-1).join("/") );
-			interp.variables.set( "pwd", getPwd() );
 
-			interp.variables.set( "help", help() );
-			interp.variables.set( "clear", function(){ self.clear(); } );
-			interp.variables.set( "print_r", Printing.print_r );
-			interp.variables.set( "history", history );
-			interp.variables.set( "interp", interp );
-			interp.variables.set( "dir", function() { trace( self.interp.variables); } );
-			interp.variables.set( "get", function() { self.getPwdOnNextClick(); } );
-			interp.variables.set( "tree", function() { Printing.print_r(self._pwd); } );
-		
-			interp.variables.set("where", function() { trace(untyped self._pwd.name+" "+self._pwd.box.toString().substr(1).split("=").join("=\"").split(",").join("\"").split(")").join("\"").split("h").join("height").split("w").join("width")); });
-			
-		
-			interp.variables.set( "cd", function(?v) { 
-				if(v==null) return "";
-					switch(v) {
-						case ".":
-						case "..":
-							self.pwd.pop();
-						case "/":
-							self.pwd = ["root"];
-						default:
-							self.pwd.push(v);
-					}
+		var self = this;
+		haxegui.utils.ScriptStandardLibrary.set(interp);
+		interp.variables.set( "console", this );
+		interp.variables.set( "pwd", pwd);
+		interp.variables.set( "this", getPwd() );
 
-				var o = cast flash.Lib.current;
-				for(i in 1...self.pwd.length)
-					o = cast(o.getChildByName(self.pwd[i]), flash.display.DisplayObjectContainer);
-				self._pwd = cast o;
-				
-				return self.pwd.join(".");
-				});
+		interp.variables.set( "help", help() );
+		interp.variables.set( "clear", function(){ self.clear(); } );
+		interp.variables.set( "print_r", Printing.print_r );
+		interp.variables.set( "history", history );
+		interp.variables.set( "interp", interp );
+		interp.variables.set( "dir", function() { trace( self.interp.variables); } );
+		interp.variables.set( "get", function() { self.getPwdOnNextClick(); } );
+		interp.variables.set( "tree", function() { Printing.print_r(self._pwd); } );
+		interp.variables.set( "where", function() { trace(untyped self._pwd.name+" "+self._pwd.box.toString().substr(1).split("=").join("='").split(",").join("'").split(")").join("'").split("h").join("height").split("w").join("width")); });
 
-			interp.variables.set( "ls", function(?v,?h) {
-				/*
-				if(Std.is(v, DisplayObjectContainer)) 
-					return "ls "+v + Printing.print_r(v);	
-				else {
-					var o = cast flash.Lib.current;
-					for(i in 1...self.pwd.length)
-						o = cast(o.getChildByName(self.pwd[i]), flash.display.DisplayObjectContainer);
-					return "ls "+self.pwd.join(".") + Printing.print_r(o);	
-				}
-				*/
-					var o = cast flash.Lib.current;
-					for(i in 1...self.pwd.length)
-						o = untyped o.getChildByName(self.pwd[i]);
-				var txt="";
-				for(i in 0...o.numChildren) {
-					var c = o.getChildAt(i);
-					txt += c.name + "\t";
-					//~ txt += Std.string(Type.typeof((cast o).getChildAt(i)));
-					txt += "\t";
-				}
-				trace(txt);
-				});
-	
-	}
 
-	/*
-	* Log a message to console
-	*
-	* @param Object to log, can be text, events and errors.
-	* @param here
-	* @param Optional error level
-	*/
-	public function log( msg : Dynamic, ?inf : haxe.PosInfos, ?error:ErrorType ) : Void {
-		if(msg==null) return;
-		// var text:String =  "";
-		//~ output.htmlText = output.htmlText.split("#eeeeee").join("#666666");
-		
-		var text:String =  "<FONT FACE=\"MONO\" SIZE=\"10\" COLOR=\"#eeeeee\">";
-		text += DateTools.format (Date.now (), "%H:%M:%S") + " " ;
-
-		#if debug
-			if(inf != null) {
-				text += inf.fileName + ":" + inf.lineNumber + ":";
+		interp.variables.set( "cd", function(?v) {
+			if(v==null) return "";
+			switch(v) {
+				case ".":
+				case "..":
+				self.pwd.pop();
+				case "/":
+				self.pwd = ["root"];
+				default:
+				self.pwd.push(v);
 			}
-		#end
 
-		text += pwd.join(".") + "~> ";
+			var o = cast flash.Lib.current;
+			for(i in 1...self.pwd.length)
+			o = cast(o.getChildByName(self.pwd[i]), flash.display.DisplayObjectContainer);
+			self._pwd = cast o;
 
-		switch(Type.typeof(msg)) {
-			case TClass(c):
-/*
-				switch(Type.getClassName(c).split(".").pop()) {
-					case "Event":
-						text += "<FONT COLOR=\"#00FF00\">EVENT</FONT>: ";
-						text += "<B>"+msg.target.name+"</B>";
-					case "MouseEvent":
-						text += "<FONT COLOR=\"#89FF00\">MOUSEEVENT</FONT>: ";
-						text += "<B>"+msg.target.name+"</B>";
-						if(Std.is(msg.target, Component)) {
-						//~ var act =  "mouse"+e.type.charAt(0).toUpperCase()+e.type.substr(1,e.type.length);
-						var act =  msg.type;
-						text += " hasOwnAction(" + act + "): " + msg.target.hasOwnAction(act) + "\n";
-						}
-					case "FocusEvent":
-						text += "<FONT COLOR=\"#00FF98\">FOCUSEVENT</FONT>: ";
-						text += "<B>"+msg.target.name+"</B>";
-						if(Std.is(msg.target, Component)) {
-						//~ var act =  "mouse"+e.type.charAt(0).toUpperCase()+e.type.substr(1,e.type.length);
-						var act =  msg.type;
-						text += " hasOwnAction(" + act + "): " + msg.target.hasOwnAction(act) + "\n";
-						}
-					case "LoaderInfo":
-					default:
-					}
-*/					
-			case TEnum(e):
-				switch(Type.getEnumName(e)) {
-				case "hscript.Error":
-					//text += "<FONT COLOR=\"#FF0000\">ERROR</FONT>: ";
-					error = ErrorType.ERROR;
-				}
-			case TFunction:
-				text += "<FONT COLOR=\"#FFC600\">FUNCTION</FONT>: ";
-			default:
-				//~ text += Std.string(Type.typeof(e));
-		}
-		
-		switch(error) {
-		case ErrorType.ERROR:
-			text += "<FONT COLOR=\"#FF0000\">ERROR</FONT>: ";
-		case ErrorType.WARNNING:
-			text += "<FONT COLOR=\"#FF7700\">WARNNING</FONT>: ";
-		case ErrorType.NOTICE:
-			text += "<FONT COLOR=\"#FF7700\">NOTICE</FONT>: ";
-		case ErrorType.INFO:
-			text += "<FONT COLOR=\"#FF7700\">INFO</FONT>: ";
-		}
-		
-		text += msg ;
+			return self.pwd.join(".");
+		});
 
-		output.htmlText += text;
-		output.htmlText += "</FONT>";
-		output.scrollV = output.maxScrollV + 1;
+
+		interp.variables.set( "ls", function(?v,?h) {
+			var o = cast flash.Lib.current;
+			for(i in 1...self.pwd.length)
+			o = untyped o.getChildByName(self.pwd[i]);
+			var txt="";
+			for(i in 0...o.numChildren) {
+				var c = o.getChildAt(i);
+				txt += c.name + "\t";
+				txt += "\t";
+			}
+			trace(txt);
+		});
+
 	}
+	//}}}
 
+
+	//{{{ onResize
 	override public function onResize (e:ResizeEvent) : Void {
 		if(vert==null) return;
-				
+
+
 		super.onResize(e);
+
 
 		output.width = box.width - 30;
 		output.height = box.height - 40;
 
+
 		input.width = box.width - 30;
 		input.y = box.height - 40;
 
+
 		vert.box.height = box.height - 20;
 		vert.x = box.width - 30;
-		vert.down.y = Math.max( 20, box.height - 40);	
+		vert.down.y = Math.max( 20, box.height - 40);
 		vert.dirty = true;
 		vert.frame.dirty = true;
 	}
+	//}}}
 
+
+	//{{{ onInputKeyDown
 	/** Process keyboard input **/
 	public function onInputKeyDown(e:KeyboardEvent) : Void {
-
-		//~ vert.handle.y = box.height - vert.handle.y - 20;
-		//~ vert.scroll=1;
-		//~ vert.adjust();
-		
 		switch(e.keyCode) {
-		
-		case Keyboard.ENTER :
+			case Keyboard.ENTER :
 			if(input.text=="")	{
 				trace("");
 				return;
 			}
-				
-			// text replacement for shell functions 
+
+
+			// text replacement for shell functions
 			if(input.text.substr(0,2)=="ls") {
 				var args = input.text.split(" ");
 				var dir = args.pop();
 				//for(a in args)
-				input.text="ls(\""+dir+"\","+Lambda.has(args, "-l")+")";
+				input.text="ls('"+dir+"',"+Lambda.has(args, "-l")+")";
 			}
-			
+
+
 			if(input.text.substr(0,2)=="cd") {
 				var dir=input.text.split(" ").pop();
 				if(dir!="cd")
-				input.text="cd(\""+dir+"\")";
-			}			
-			
+				input.text="cd('"+dir+"')";
+			}
+
+			// convert shell commands to functions
 			if(input.text=="clear") input.text="clear()";
 			if(input.text=="dir") input.text="dir()";
 			if(input.text=="get") input.text="get()";
@@ -388,54 +303,62 @@ class Console extends Window, implements ILogger
 			var program = parser.parseString(input.text);
 
 			// set the current pwd
-			interp.variables.set("pwd", getPwd());
+			interp.variables.set("this", getPwd());
 
 			// clear the command and push to history
 			history.push(input.text);
 			input.text = "";
 
+
 			try {
+				// execute
 				var rv = interp.execute(program);
 				if(rv!=null)
-					trace(rv);
+				trace(rv);
 			}
 			catch(e:hscript.Error) {
 				switch(e) {
 					case EUnknownVariable(v):
-						switch(v) {
+					switch(v) {
 						default:
-							log("Unknown variable: "+"<B>"+v+"</B>", ErrorType.ERROR);
-						}
+						log("Unknown variable: "+"<B>"+v+"</B>", ErrorType.ERROR);
+					}
 					case EUnexpected(s):
-						switch(s) {
+					switch(s) {
 						case "<eof>":
-							log("Unexpected: "+"<B>"+s+"</B>", ErrorType.ERROR);
-							
+						log("Unexpected: "+"<B>"+s+"</B>", ErrorType.ERROR);
+
 						default:
-							log("Unexpected: "+"<B>"+s+"</B>", ErrorType.ERROR);
-						}
+						log("Unexpected: "+"<B>"+s+"</B>", ErrorType.ERROR);
+					}
 					case EUnterminatedString:
-						trace(e);
+					trace(e);
 					default:
-						trace(e);
+					trace(e);
 				}
 			}
 			catch(e : Dynamic) {
-				
+
 				trace(e);
 			}
 
 
-		case Keyboard.UP :
+			case Keyboard.UP :
 			input.text = history.pop();
 		}
 	}
-	
+	//}}}
+
+
+	//{{{ getPwdOnNextClick
 	public function getPwdOnNextClick() {
 		stage.addEventListener(MouseEvent.MOUSE_DOWN, getPwdFromClick, false, 0, true);
 		trace("Waiting for click event....");
 	}
+	//}}}
 
+
+	//{{{ getPwdFromClick
 	public function getPwdFromClick(e:MouseEvent) {
 		stage.removeEventListener(MouseEvent.MOUSE_DOWN, getPwdFromClick);
 		_pwd = e.target;
@@ -450,26 +373,34 @@ class Console extends Window, implements ILogger
 		pwd.reverse();
 		trace(e.target);
 	}
+	//}}}
 
-	
+
+	//{{{ getPwd
 	/**
-	* Traverses the display list according to the current path 
+	* Traverses the display list according to the current path
 	* @return The DisplayObject of the current "working directory"
 	**/
 	public function getPwd() : Dynamic {
 		var o = cast flash.Lib.current;
 		for(i in 1...pwd.length)
-			o = cast(o.getChildByName(pwd[i]), flash.display.DisplayObjectContainer);
+		o = cast(o.getChildByName(pwd[i]), flash.display.DisplayObjectContainer);
 		_pwd = cast o;
 		return _pwd;
 	}
-	
+	//}}}
+
+
+	//{{{ clear
 	/** Clear the output **/
 	public function clear() : Void {
 		this.output.text = "";
 		trace("");
 	}
+	//}}}
 
+
+	//{{{ help
 	/**
 	* @return Short help for available console commands
 	**/
@@ -477,19 +408,74 @@ class Console extends Window, implements ILogger
 		var text = "\n";
 		var commands = {
 			pwd 	 : "\tcurrent path",
-			cd 		 : "\tpush an object name to current path, ex. cd(\"Component\"), cd(\"..\"), cd(\"/\") ",
+			cd 		 : "\tpush an object name to current path, ex. cd('Component'), cd('..'), cd('/') ",
 			ls		 : "\tprints current object",
 			get 	 : "\tgrab the path target from next mouse click",
 			dir		 : "\tprints the interpreter's variables list",
 			clear 	 : "clear the console",
 			help 	 : "display this help",
-			
+
 		}
-		
+
 		for(i in Reflect.fields(commands))
-			text += "\t<I>" + i + "</I>\t\t" + Reflect.field(commands, i) + "\n";
-			
+		text += "\t<I>" + i + "</I>\t\t" + Reflect.field(commands, i) + "\n";
+
 		return text;
 	}
-	
+	//}}}
+
+
+	//{{{ log
+	/**
+	* Log a message to console<br/>
+	*
+	* @param msg	 Object to log, can be text, events and errors.
+	* @param inf	 here
+	* @param error	 Optional error level
+	**/
+	public function log( msg : Dynamic, ?inf : haxe.PosInfos, ?error:ErrorType ) : Void {
+		if(msg==null) return;
+
+		var text:String =  "<FONT FACE='MONO' SIZE='10' COLOR='#eeeeee'>";
+		text += DateTools.format (Date.now (), "%H:%M:%S") + " " ;
+
+		#if debug
+		if(inf != null) {
+			text += inf.fileName + ":" + inf.lineNumber + ":";
+		}
+		#end
+
+		text += pwd.join(".") + "~> ";
+
+		switch(Type.typeof(msg)) {
+			case TClass(c):
+			case TEnum(e):
+			switch(Type.getEnumName(e)) {
+				case "hscript.Error":
+				error = ErrorType.ERROR;
+			}
+			case TFunction:
+			text += "<FONT COLOR='#FFC600'>FUNCTION</FONT>: ";
+			default:
+		}
+
+		switch(error) {
+			case ErrorType.ERROR:
+			text += "<FONT COLOR='#FF0000'>ERROR</FONT>: ";
+			case ErrorType.WARNNING:
+			text += "<FONT COLOR='#FF7700'>WARNNING</FONT>: ";
+			case ErrorType.NOTICE:
+			text += "<FONT COLOR='#FF7700'>NOTICE</FONT>: ";
+			case ErrorType.INFO:
+			text += "<FONT COLOR='#FF7700'>INFO</FONT>: ";
+		}
+
+		text += msg ;
+
+		output.htmlText += text;
+		output.htmlText += "</FONT>";
+		output.scrollV = output.maxScrollV + 1;
+	}
+	//}}}
+	//}}}
 }

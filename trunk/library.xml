@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<movie width="1024" height="768" framerate="12" version="9">
+<movie width="1024" heixght="768" framerate="12" version="9">
 	<background color="#000000"/>
 	<frame>
 		<library>
-			<!-- FONTS -->
+			<!-- Fonts -->
 			<font id="FFF_Forward" name="FFF_Forward" import="assets/fonts/FFFFORWA.TTF"/>
 			<font id="FFF_Manager_Bold" name="FFF_Manager_Bold" import="assets/fonts/FFFMB___.TTF"/>
 			<font id="FFF_Harmony" name="FFF_Harmony" import="assets/fonts/FFFHARMO.TTF"/>
@@ -13,7 +13,9 @@
 			<font id="Silkscreen" name="Silkscreen" import="assets/fonts/slkscr.ttf"/>
 			<font id="04b25" name="04b25" import="assets/fonts/04B_25__.TTF"/>
 			<font id="Pixel_Classic" name="Pixel_Classic" import="assets/fonts/PixelClassic.ttf"/>
-			<!-- CURSORS -->
+
+
+			<!-- Cursors -->
 			<clip id="Arrow" import="assets/cursor/Arrow.png"/>
 			<clip id="Hand" import="assets/cursor/HandPointer.png"/>
 			<clip id="Hand2" import="assets/cursor/Hand.png"/>
@@ -24,12 +26,17 @@
 			<clip id="SizeNWSE" import="assets/cursor/SizeNWSE.png"/>
 			<clip id="SizeWE" import="assets/cursor/SizeWE.png"/>
 			<clip id="Crosshair" import="assets/cursor/Crosshair.png"/>
+
+
 			<!-- Images -->
 			<!--<clip id="HaxeLogo" import="assets/logo_haxe.jpg"/>-->
 			<clip id="Logo" import="assets/hgui_logo.png"/>
-			<!-- ICONS -->
-			<textfield id="warning" width="200" height="50" size="10" font="_mono" color="#ffffff" text="Please do not run this file directly."/>
+
+			<!-- Sounds -->
+			
+			<!-- Text -->
+			<textfield id="notice" width="200" height="50" size="10" font="_mono" color="#ffffff" text="Please do not run this file directly."/>
 		</library>
-		<place id="warning" name="warning" x="400" y="200" depth="10"/>
+		<place id="notice" name="notice" x="400" y="200" depth="10"/>
 	</frame>
 </movie>

@@ -1,21 +1,21 @@
 digraph uml {
-	graph [label="Package: flash.geom Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [lp="210,10",
-		bb="0,0,420,219"];
-	"flash.geom.Matrix" [label="{Matrix}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Matrix.html", tooltip=Matrix, portPos=Matrix, pos="213,183", rects="186,165,240,201", width="0.75", height="0.50"];
-	"flash.geom.Point" [label="{Point}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Point.html", tooltip=Point, portPos=Point, pos="393,84", rects="366,66,420,102", width="0.75", height="0.50"];
-	"flash.geom.Transform" [label="{Transform}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Transform.html", tooltip=Transform, portPos=Transform, pos="30,111", rects="0,93,60,129", width="0.83", height="0.50"];
-	"flash.geom.ColorTransform" [label="{ColorTransform}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/ColorTransform.html", tooltip=ColorTransform, portPos=ColorTransform, pos="213,111", rects="172,93,254,129", width="1.14", height="0.50"];
-	"flash.geom.Rectangle" [label="{Rectangle}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Rectangle.html", tooltip=Rectangle, portPos=Rectangle, pos="213,39", rects="185,21,242,57", width="0.78", height="0.50"];
-	"flash.geom.Matrix" -> "flash.geom.Matrix" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,227,201 199,201 197,211 202,219 213,219 217,219 221,218 223,216"];
-	"flash.geom.Matrix" -> "flash.geom.Point" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,366,99 240,168 270,151 318,125 353,106"];
-	"flash.geom.Transform" -> "flash.geom.ColorTransform" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,172,111 60,111 86,111 125,111 157,111"];
-	"flash.geom.Transform" -> "flash.geom.Matrix" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,186,172 60,123 90,134 138,153 172,167"];
-	"flash.geom.Transform" -> "flash.geom.Rectangle" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,185,50 60,99 90,88 137,69 171,55"];
-	"flash.geom.ColorTransform" -> "flash.geom.ColorTransform" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,227,129 199,129 197,139 202,147 213,147 217,147 221,146 223,144"];
-	"flash.geom.Rectangle" -> "flash.geom.Point" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,366,77 242,46 271,54 318,65 351,73"];
-	"flash.geom.Rectangle" -> "flash.geom.Rectangle" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,227,57 199,57 197,67 202,75 213,75 217,75 221,74 223,72"];
-	"flash.geom.Point" -> "flash.geom.Point" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,405,102 381,102 380,112 383,120 393,120 397,120 399,119 401,117"];
+	graph [label="Package: flash.geom Composition", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=false, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
+	graph [lp="134,12",
+		bb="0,0,268,223"];
+	"flash.geom.Matrix" [label="{\nMatrix}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Matrix.html", tooltip="\nMatrix", pos="131,187", rects="104,169,158,205", width="0.75", height="0.50"];
+	"flash.geom.Point" [label="{\nPoint}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Point.html", tooltip="\nPoint", pos="27,115", rects="0,97,54,133", width="0.75", height="0.50"];
+	"flash.geom.Transform" [label="{\nTransform}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Transform.html", tooltip="\nTransform", pos="238,115", rects="208,97,268,133", width="0.83", height="0.50"];
+	"flash.geom.ColorTransform" [label="{\nColorTransform}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/ColorTransform.html", tooltip="\nColorTransform", pos="131,115", rects="90,97,172,133", width="1.14", height="0.50"];
+	"flash.geom.Rectangle" [label="{\nRectangle}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/geom/Rectangle.html", tooltip="\nRectangle", pos="131,43", rects="103,25,160,61", width="0.78", height="0.50"];
+	"flash.geom.Matrix" -> "flash.geom.Matrix" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,150,205 148,217 145,221 139,223 131,223 116,223 109,215 112,205"];
+	"flash.geom.Matrix" -> "flash.geom.Point" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,104,169 94,163 92,162 91,161 90,160 77,151 63,141 52,133"];
+	"flash.geom.Point" -> "flash.geom.Point" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,46,133 44,145 41,149 35,151 27,151 12,151 5,143 8,133"];
+	"flash.geom.Transform" -> "flash.geom.ColorTransform" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,208,115 196,115 188,115 180,115 172,115"];
+	"flash.geom.Transform" -> "flash.geom.Matrix" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,211,133 201,140 192,146 182,153 172,160 167,163 163,166 158,169"];
+	"flash.geom.Transform" -> "flash.geom.Rectangle" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,211,97 201,90 187,80 171,70 158,61"];
+	"flash.geom.ColorTransform" -> "flash.geom.ColorTransform" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,150,133 148,145 145,149 139,151 131,151 116,151 109,143 112,133"];
+	"flash.geom.Rectangle" -> "flash.geom.Point" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,105,61 95,68 81,78 66,88 53,97"];
+	"flash.geom.Rectangle" -> "flash.geom.Rectangle" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,150,61 148,73 145,77 139,79 131,79 116,79 109,71 112,61"];
 }

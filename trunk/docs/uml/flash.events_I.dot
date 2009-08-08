@@ -1,25 +1,24 @@
 digraph uml {
-	graph [label="Package: flash.events Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [label="{MouseEvent}",
-		lp="369,10",
-		bb="0,0,738,545"];
-	"flash.events.IEventDispatcher" [label="{IEventDispatcher}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/IEventDispatcher.html", tooltip=IEventDispatcher, portPos=e, pos="323,66", rects="275,48,372,84", width="1.33", height="0.50"];
-	"flash.events.EventDispatcher" [label="{EventDispatcher}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/EventDispatcher.html", tooltip=EventDispatcher, portPos=e, pos="81,66", rects="34,48,129,84", width="1.31", height="0.50"];
-	"flash.events.Event" [label="{Event}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/Event.html", tooltip=Event, portPos=e, pos="711,116", rects="684,98,738,134", width="0.75", height="0.50"];
-	"flash.events.KeyboardEvent" [label="{KeyboardEvent}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/KeyboardEvent.html", tooltip=KeyboardEvent, portPos=e, pos="528,201", rects="485,183,572,219", width="1.19", height="0.50"];
-	"flash.events.TextEvent" [label="{TextEvent}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/TextEvent.html", tooltip=TextEvent, portPos=e, pos="528,147", rects="497,129,559,165", width="0.86", height="0.50"];
-	"flash.events.ErrorEvent" [label="{ErrorEvent}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/ErrorEvent.html", tooltip=ErrorEvent, portPos=e, pos="323,147", rects="290,129,356,165", width="0.92", height="0.50"];
-	"flash.events.IOErrorEvent" [label="{IOErrorEvent}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/IOErrorEvent.html", tooltip=IOErrorEvent, portPos=e, pos="81,147", rects="43,129,119,165", width="1.06", height="0.50"];
-	"flash.events.FocusEvent" [label="{FocusEvent}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/FocusEvent.html", tooltip=FocusEvent, portPos=e, pos="528,93", rects="493,75,564,111", width="0.97", height="0.50"];
-	"flash.events.MouseEvent" [label="{MouseEvent}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/MouseEvent.html", tooltip=MouseEvent, portPos=e, pos="528,39", rects="491,21,566,57", width="1.03", height="0.50"];
-	"flash.events.EventPhase" [label="{EventPhase|CAPTURING_PHASE\lBUBBLING_PHASE\lAT_TARGET\l}", style="rounded,filled", fillcolor=white, pos="81,526", rects="0,507,66,545 66,507,162,545", width="2.25", height="0.53"];
-	"flash.events.EventDispatcher" -> "flash.events.IEventDispatcher" [color=gray, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,275,66 129,66 168,66 223,66 265,66"];
-	"flash.events.KeyboardEvent" -> "flash.events.Event" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,684,129 567,183 599,169 644,147 675,133"];
-	"flash.events.TextEvent" -> "flash.events.Event" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,684,121 559,142 591,137 640,128 674,123"];
-	"flash.events.ErrorEvent" -> "flash.events.TextEvent" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,497,147 356,147 392,147 448,147 487,147"];
-	"flash.events.IOErrorEvent" -> "flash.events.ErrorEvent" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,290,147 119,147 163,147 234,147 280,147"];
-	"flash.events.FocusEvent" -> "flash.events.Event" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,684,113 564,98 596,102 642,108 674,112"];
-	"flash.events.MouseEvent" -> "flash.events.Event" [color=white, style="setlinewidth(4)", arrowhead=normal, arrowsize="1.0", pos="e,684,105 566,55 598,69 643,88 675,101"];
+	graph [label="Package: flash.events Inheritance", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=compress, packMode="graph", labelloc=c, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
+	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
+	graph [lp="233,12",
+		bb="0,0,466,223"];
+	"flash.events.IEventDispatcher" [label="{\nIEventDispatcher}", fillcolor="#88c2b3", fontcolor="#496962", URL="../types/flash/events/IEventDispatcher.html", tooltip="\nIEventDispatcher", portPos=w, pos="240,97", rects="201,79,280,115", width="1.08", height="0.50"];
+	"flash.events.EventDispatcher" [label="{\nEventDispatcher}", fillcolor=white, URL="../types/flash/events/EventDispatcher.html", tooltip="\nEventDispatcher", portPos=w, pos="391,97", rects="352,79,430,115", width="1.08", height="0.50"];
+	"flash.events.Event" [label="{\nEvent}", fillcolor=white, URL="../types/flash/events/Event.html", tooltip="\nEvent", portPos=w, pos="27,124", rects="0,106,54,142", width="0.75", height="0.50"];
+	"flash.events.KeyboardEvent" [label="{\nKeyboardEvent}", fillcolor=white, URL="../types/flash/events/KeyboardEvent.html", tooltip="\nKeyboardEvent", portPos=w, pos="127,205", rects="90,187,164,223", width="1.03", height="0.50"];
+	"flash.events.TextEvent" [label="{\nTextEvent}", fillcolor=white, URL="../types/flash/events/TextEvent.html", tooltip="\nTextEvent", portPos=w, pos="127,151", rects="100,133,154,169", width="0.75", height="0.50"];
+	"flash.events.ErrorEvent" [label="{\nErrorEvent}", fillcolor=white, URL="../types/flash/events/ErrorEvent.html", tooltip="\nErrorEvent", portPos=w, pos="240,151", rects="211,133,270,169", width="0.81", height="0.50"];
+	"flash.events.IOErrorEvent" [label="{\nIOErrorEvent}", fillcolor=white, URL="../types/flash/events/IOErrorEvent.html", tooltip="\nIOErrorEvent", portPos=w, pos="391,151", rects="358,133,424,169", width="0.92", height="0.50"];
+	"flash.events.FocusEvent" [label="{\nFocusEvent}", fillcolor=white, URL="../types/flash/events/FocusEvent.html", tooltip="\nFocusEvent", portPos=w, pos="127,97", rects="97,79,157,115", width="0.83", height="0.50"];
+	"flash.events.MouseEvent" [label="{\nMouseEvent}", fillcolor=white, URL="../types/flash/events/MouseEvent.html", tooltip="\nMouseEvent", portPos=w, pos="127,43", rects="97,25,158,61", width="0.83", height="0.50"];
+	"flash.events.EventPhase" [label="{\nEventPhase|CAPTURING_PHASE\lBUBBLING_PHASE\lAT_TARGET\l}", fillcolor="#af8dc3", fontcolor=black, pos="391,205", rects="316,187,376,223 376,187,466,223", width="2.08", height="0.50"];
+	"flash.events.EventDispatcher" -> "flash.events.IEventDispatcher" [color="#ebffb2", style="dashed, bold", arrowhead=normal, arrowsize="0.75", pos="e,280,97 352,97 332,97 308,97 288,97"];
+	"flash.events.KeyboardEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,47,142 102,187 98,184 94,181 90,178 78,168 66,158 55,149"];
+	"flash.events.TextEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,54,132 100,144 89,141 76,137 64,134"];
+	"flash.events.ErrorEvent" -> "flash.events.TextEvent" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,154,151 211,151 196,151 179,151 164,151"];
+	"flash.events.IOErrorEvent" -> "flash.events.ErrorEvent" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,270,151 358,151 335,151 304,151 280,151"];
+	"flash.events.FocusEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,54,117 97,105 87,108 75,111 64,114"];
+	"flash.events.MouseEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,47,106 102,61 98,64 94,67 90,70 78,80 66,90 55,99"];
 }

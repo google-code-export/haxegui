@@ -20,11 +20,12 @@
 package haxegui.controls;
 
 /**
-*
-* Interface for compositing widgets.
+* Interface for compositing widgets<br/>
+* <p>It means that the object implementing this is single of its kind in the parent, and that its lifetime is controled by parent.</p>
 *
 */
 interface IComposite {
-    var allowedParents : Array<Class<Dynamic>>;
+	/** **/
+	var allowedParents : Array<Class<Dynamic>>;
 }
 

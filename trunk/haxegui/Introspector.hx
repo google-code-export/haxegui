@@ -17,58 +17,79 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-//{{{ Imports
 package haxegui;
 
-
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
+import flash.events.FocusEvent;
 import haxegui.Window;
+import haxegui.containers.Container;
+import haxegui.containers.Divider;
+import haxegui.containers.ScrollPane;
+import haxegui.controls.CheckBox;
 import haxegui.controls.Component;
 import haxegui.controls.Image;
-import haxegui.controls.Label;
-import haxegui.controls.UiList;
-import haxegui.controls.CheckBox;
-import haxegui.controls.Stepper;
 import haxegui.controls.Input;
-import haxegui.controls.Tree;
+import haxegui.controls.Label;
 import haxegui.controls.MenuBar;
-import haxegui.containers.Container;
-import haxegui.containers.ScrollPane;
-
+import haxegui.controls.Stepper;
+import haxegui.controls.Tree;
+import haxegui.controls.UiList;
 import haxegui.events.ResizeEvent;
-
 import haxegui.managers.FocusManager;
 import haxegui.managers.StyleManager;
-import flash.events.FocusEvent;
-import haxegui.windowClasses.StatusBar;
 import haxegui.utils.Size;
+import haxegui.windowClasses.StatusBar;
 //}}}
 
 /**
 *
 * Introspector class
 *
-* @author <gershon@goosemoose.com>
+* @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.2
 */
-class Introspector extends Window
-{
+class Introspector extends Window {
+	//{{{ Members
 	public var container : Container;
 	public var scrollpane : ScrollPane;
+	public var divider : Divider;
 	public var tree : Tree;
 	public var list1 : UiList;
 	public var list2 : UiList;
 
+	/** the inspected component **/
 	public var target : Component;
 
+	public static var props = {
+		name 					: "name",
+		parent 					: "parent",
+		x						: "x",
+		y						: "y",
+		width					: "width",
+		height					: "height",
+		visible					: "visible",
+		alpha					: "alpha",
+		box						: "box"
+		// size					: function(o) { return new Size.fromRect(o.box); },
+		// type 					: function() { return Type.typeof(e.target); },
+		// globalX					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
+		// globalY					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; },
+		//~ init					: "init",
+		//~ initOpts				: "initOpts",
+		//~ validate				: "validate"
+		// path					: function(){ var path = []; var p=e.target.parent; while(p!=null) untyped { path.push(p.name); p=p.parent; } path.pop();path.pop(); path.push("root"); path.reverse(); return path.join(".")+"."+e.target.name; },
+	}
+	//}}}
 
+	//{{{ Functions
+	//{{{ init
 	public override function init(?opts:Dynamic) {
-		//~ o = flash.Lib.current;
-
 		super.init(opts);
+
+
 		box = new Size(640, 320).toRect();
 
 
@@ -76,22 +97,30 @@ class Introspector extends Window
 		var menubar = new MenuBar (this, "MenuBar", 10,20);
 		menubar.init ();
 
+
+		//
+		divider = new Divider(this, "Divider", 10, 44);
+		divider.init({horizontal: false});
+
+
 		//
 		container = new Container(this, "Container", 10, 44);
 		container.init({});
+
 
 		//
 		scrollpane = new ScrollPane(container, "ScrollPane1", 210, 0);
 		scrollpane.init({width: 400, fitH: false, fitV: false});
 		scrollpane.removeChild(scrollpane.horz);
 
+
 		//
 		var scrollpane2 = new ScrollPane(container, "ScrollPane2", 0, 0);
 		scrollpane2.init({width: 190, fitH: false, fitV: false});
 
+
 		//
 		tree = new Tree(scrollpane2);
-		//tree.data = { root : reflectDisplayObjectContainer(cast flash.Lib.current) };
 		tree.data = { root : reflectDisplayObjectContainer(cast flash.Lib.current) };
 		tree.init({width: 250});
 
@@ -100,14 +129,16 @@ class Introspector extends Window
 		list1 = new UiList(scrollpane, "Properties", 210, 0);
 		list1.init({text: null});
 
+
 		//
 		list2 = new UiList(scrollpane, "Values", 350, 0);
 		list2.init();
+		// list2.header.destroy();
+
 
 		//
 		var statusbar = new StatusBar(this, "StatusBar", 10, 360);
 		statusbar.init();
-
 
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
@@ -116,7 +147,10 @@ class Introspector extends Window
 		this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged, false, 0, true);
 
 	}
+	//}}}
 
+
+	//{{{ onFocusChanged
 	public function onFocusChanged(e:Dynamic) {
 		if(e == this) return;
 		if(!Std.is(e, flash.events.Event)) return;
@@ -125,34 +159,10 @@ class Introspector extends Window
 		if(e.target==target) return;
 		target = e.target;
 
-		//~ var scrollpane = tree.parent;
-		//~ scrollpane.removeChild(tree);
-		//~ tree = new Tree(scrollpane, "Tree", 0, 0);
-		//~ var o = { root : reflectComponent(cast flash.Lib.current) };
-		//~ tree.data = o;
-		//~ tree.init({width: 250});
-		//~ untyped tree.getChildAt(0).getChildAt(0).expanded = true;
-		//~
 		var self = this;
 
 
-		var props = {
-			name 					: "name",
-			parent 					: "parent",
-			x						: "x",
-			y						: "y",
-			width					: "width",
-			height					: "height",
-			visible					: "visible",
-			alpha					: "alpha",
-			type 					: function() { return Type.typeof(e.target); },
-			globalX					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
-			globalY					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; },
-			//~ init					: "init",
-			//~ initOpts				: "initOpts",
-			//~ validate				: "validate"
-			path					: function(){ var path = []; var p=e.target.parent; while(p!=null) untyped { path.push(p.name); p=p.parent; } path.pop();path.pop(); path.push("root"); path.reverse(); return path.join(".")+"."+e.target.name; },
-			}
+
 		if(Std.is(e.target, Component)) {
 			Reflect.setField(props, "id", "id");
 			Reflect.setField(props, "disabled", "disabled");
@@ -165,20 +175,15 @@ class Introspector extends Window
 		if(Std.is(e.target, UiList)) {
 			Reflect.setField(props, "dataSource", "dataSource");
 		}
-		//~ if(Std.is(e.target, haxegui.controls.AbstractButton)) {
-			//~ Reflect.setField(props, "autoRepeat", "autoRepeat");
-			//~ Reflect.setField(props, "repeatWaitTime", "repeatWaitTime");
-			//~ Reflect.setField(props, "repeatsPerSecond", "repeatsPerSecond");
-		//~ }
 
-
-		if(list1!=null)
-			list1.destroy();
-		if(list2!=null)
-			list2.destroy();
+		//{{{ Lists
+		if(list1!=null) list1.destroy();
+		if(list2!=null) list2.destroy();
 
 		list1 = new UiList(scrollpane, "Properties", 210, 0);
 		list2 = new UiList(scrollpane, "Values", 350, 0);
+		// list2.header.destroy();
+
 		list1.description = list2.description = null;
 
 		list1.data = [];
@@ -186,17 +191,17 @@ class Introspector extends Window
 		// fill the lists
 		for(key in Reflect.fields(props)) {
 
-				//
-				list1.data.push(key);
+			//
+			list1.data.push(key);
 
-				//
-				if(Reflect.isFunction(Reflect.field(props, key)))
-					list2.data.push( Reflect.callMethod(props, Reflect.field(props, key), []) );
+			//
+			if(Reflect.isFunction(Reflect.field(props, key)))
+			list2.data.push( Reflect.callMethod(props, Reflect.field(props, key), []) );
 
-				else {
+			else {
 				var value = Reflect.field( target, Reflect.field(props, key));
-					list2.data.push( value );
-				}
+				list2.data.push( value );
+			}
 		}
 
 		list1.init({text: "Property"});
@@ -204,18 +209,17 @@ class Introspector extends Window
 		for(item in list2.getElementsByClass(ListItem)) {
 			item.label.tf.selectable = true;
 			item.label.tf.mouseEnabled = true;
-			}
-
+		}
+		//}}}
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
 	}
+	//}}}
 
 
-
+	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
-
-		var container = cast this.getChildByName("Container");
 		if(container==null) return;
 
 		var scrollpane = cast container.getChildByName("ScrollPane1");
@@ -223,10 +227,10 @@ class Introspector extends Window
 			scrollpane.box.height = this.box.height - 65;
 			scrollpane.box.width = this.box.width - scrollpane.x - 30;
 			scrollpane.dirty = true;
-			}
+		}
 		scrollpane = cast container.getChildByName("ScrollPane2");
 		if(scrollpane!=null)
-			scrollpane.box.height = this.box.height - 85;
+		scrollpane.box.height = this.box.height - 85;
 
 
 		if(tree!=null) {
@@ -250,15 +254,19 @@ class Introspector extends Window
 		}
 
 		super.onResize(e);
-	}
+	} //}}}
 
 
-	public override function destroy() {
+	//{{{ destroy
+	public override function destroy() {this.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged);
+
 		this.stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged);
 		super.destroy();
 	}
+	//}}}
 
 
+	//{{{ reflectDisplayObjectContainer
 	function reflectDisplayObjectContainer(d:DisplayObjectContainer) : Dynamic {
 		if(d==null) return;
 		var o = {};
@@ -267,11 +275,10 @@ class Introspector extends Window
 			if(Std.is(child, flash.display.BitmapData)) return;
 			if(Std.is(child, flash.display.Bitmap)) return;
 			if(Std.is(child, flash.text.TextField)) return;
-				Reflect.setField( o, child.name, reflectDisplayObjectContainer(cast child) );
+			Reflect.setField( o, child.name, reflectDisplayObjectContainer(cast child) );
 		}
 		return o;
 	}
-
-
-
+	//}}}
+	//}}}
 }

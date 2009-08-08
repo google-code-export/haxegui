@@ -1,26 +1,26 @@
 digraph uml {
-	graph [label="Package: flash.text Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [lp="290,10",
-		bb="0,0,580,750"];
-	"flash.text.StyleSheet" [label="{StyleSheet}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/StyleSheet.html", tooltip=StyleSheet, portPos=StyleSheet, pos="262,323", rects="231,305,293,341", width="0.86", height="0.50"];
-	"flash.text.TextFormatAlign" [label="{TextFormatAlign|RIGHT\lLEFT\lJUSTIFY\lCENTER\l}", style="rounded,filled", fillcolor=white, pos="511,299", rects="445,275,528,323 528,275,577,323", width="1.83", height="0.67"];
-	"flash.text.TextFormat" [label="{TextFormat}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextFormat.html", tooltip=TextFormat, portPos=TextFormat, pos="262,269", rects="231,251,294,287", width="0.86", height="0.50"];
-	"flash.text.TextFormatDisplay" [label="{TextFormatDisplay|INLINE\lBLOCK\l}", style="rounded,filled", fillcolor=white, pos="511,239", rects="442,221,535,257 535,221,580,257", width="1.92", height="0.50"];
-	"flash.text.TextFieldAutoSize" [label="{TextFieldAutoSize|RIGHT\lNONE\lLEFT\lCENTER\l}", style="rounded,filled", fillcolor=white, pos="262,209", rects="194,185,281,233 281,185,330,233", width="1.89", height="0.67"];
-	"flash.text.GridFitType" [label="{GridFitType|SUBPIXEL\lPIXEL\lNONE\l}", style="rounded,filled", fillcolor=white, pos="262,148", rects="203,129,265,167 265,129,322,167", width="1.64", height="0.53"];
-	"flash.text.TextField" [label="{TextField}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextField.html", tooltip=TextField, portPos=TextField, pos="41,178", rects="14,160,68,196", width="0.75", height="0.50"];
-	"flash.text.AntiAliasType" [label="{AntiAliasType|NORMAL\lADVANCED\l}", style="rounded,filled", fillcolor=white, pos="262,93", rects="197,75,268,111 268,75,328,111", width="1.81", height="0.50"];
-	"flash.text.TextFieldType" [label="{TextFieldType|INPUT\lDYNAMIC\l}", style="rounded,filled", fillcolor=white, pos="262,39", rects="201,21,271,57 271,21,324,57", width="1.69", height="0.50"];
-	"flash.text.TextLineMetrics" [label="{TextLineMetrics}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextLineMetrics.html", tooltip=TextLineMetrics, portPos=TextLineMetrics, pos="41,529", rects="1,511,82,547", width="1.11", height="0.50"];
-	"flash.text.TextSnapshot" [label="{TextSnapshot}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextSnapshot.html", tooltip=TextSnapshot, portPos=TextSnapshot, pos="41,732", rects="5,714,78,750", width="1.00", height="0.50"];
-	"flash.text.TextFormat" -> "flash.text.TextFormatAlign" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,445,291 294,273 328,278 384,284 430,289"];
-	"flash.text.TextFormat" -> "flash.text.TextFormatDisplay" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,442,247 294,265 327,261 381,255 427,249"];
-	"flash.text.TextField" -> "flash.text.AntiAliasType" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,215,111 68,168 101,155 157,133 201,116"];
-	"flash.text.TextField" -> "flash.text.TextFieldAutoSize" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,194,199 68,182 95,186 139,191 179,197"];
-	"flash.text.TextField" -> "flash.text.TextFormat" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,231,256 68,189 99,202 150,224 194,242 201,245 209,248 217,251"];
-	"flash.text.TextField" -> "flash.text.GridFitType" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,203,156 68,174 97,170 147,164 188,158"];
-	"flash.text.TextField" -> "flash.text.StyleSheet" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,231,312 61,196 89,221 143,266 194,296 201,300 209,303 217,307"];
-	"flash.text.TextField" -> "flash.text.TextFieldType" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,213,57 62,160 91,136 144,94 194,66 196,65 198,64 199,63"];
+	graph [label="Package: flash.text Composition", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=false, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
+	graph [lp="214,12",
+		bb="0,0,428,345"];
+	"flash.text.StyleSheet" [label="{\nStyleSheet}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/StyleSheet.html", tooltip="\nStyleSheet", pos="242,327", rects="211,309,273,345", width="0.86", height="0.50"];
+	"flash.text.TextFormatAlign" [label="{\nTextFormatAlign|RIGHT\lLEFT\lJUSTIFY\lCENTER\l}", style="rounded,filled", fillcolor="#af8dc3", pos="69,303", rects="3,279,86,327 86,279,135,327", width="1.83", height="0.67"];
+	"flash.text.TextFormat" [label="{\nTextFormat}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextFormat.html", tooltip="\nTextFormat", pos="242,273", rects="211,255,274,291", width="0.86", height="0.50"];
+	"flash.text.TextFormatDisplay" [label="{\nTextFormatDisplay|INLINE\lBLOCK\l}", style="rounded,filled", fillcolor="#af8dc3", pos="69,243", rects="0,225,93,261 93,225,138,261", width="1.92", height="0.50"];
+	"flash.text.TextFieldAutoSize" [label="{\nTextFieldAutoSize|RIGHT\lNONE\lLEFT\lCENTER\l}", style="rounded,filled", fillcolor="#af8dc3", pos="242,213", rects="174,189,261,237 261,189,310,237", width="1.89", height="0.67"];
+	"flash.text.GridFitType" [label="{\nGridFitType|SUBPIXEL\lPIXEL\lNONE\l}", style="rounded,filled", fillcolor="#af8dc3", pos="242,152", rects="183,133,245,171 245,133,302,171", width="1.64", height="0.53"];
+	"flash.text.TextField" [label="{\nTextField}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextField.html", tooltip="\nTextField", pos="387,182", rects="360,164,414,200", width="0.75", height="0.50"];
+	"flash.text.AntiAliasType" [label="{\nAntiAliasType|NORMAL\lADVANCED\l}", style="rounded,filled", fillcolor="#af8dc3", pos="242,97", rects="177,79,248,115 248,79,308,115", width="1.81", height="0.50"];
+	"flash.text.TextFieldType" [label="{\nTextFieldType|INPUT\lDYNAMIC\l}", style="rounded,filled", fillcolor="#af8dc3", pos="242,43", rects="181,25,251,61 251,25,304,61", width="1.69", height="0.50"];
+	"flash.text.TextLineMetrics" [label="{\nTextLineMetrics}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextLineMetrics.html", tooltip="\nTextLineMetrics", pos="387,236", rects="347,218,428,254", width="1.11", height="0.50"];
+	"flash.text.TextSnapshot" [label="{\nTextSnapshot}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/text/TextSnapshot.html", tooltip="\nTextSnapshot", pos="387,290", rects="351,272,424,308", width="1.00", height="0.50"];
+	"flash.text.TextFormat" -> "flash.text.TextFormatAlign" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,211,278 199,280 180,284 156,288 135,291"];
+	"flash.text.TextFormat" -> "flash.text.TextFormatDisplay" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,211,268 199,266 181,262 158,259 138,255"];
+	"flash.text.TextField" -> "flash.text.AntiAliasType" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,366,164 357,156 343,145 326,133 310,124 304,121 298,118 292,115"];
+	"flash.text.TextField" -> "flash.text.TextFieldAutoSize" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,360,188 348,191 336,193 323,196 310,199"];
+	"flash.text.TextField" -> "flash.text.TextFormat" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,360,199 350,206 348,207 347,208 346,209 328,223 329,233 310,246 299,253 286,259 274,263"];
+	"flash.text.TextField" -> "flash.text.GridFitType" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,360,176 348,174 334,171 317,168 302,164"];
+	"flash.text.TextField" -> "flash.text.StyleSheet" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,360,196 350,204 349,206 347,207 346,209 318,242 340,269 310,300 300,310 286,316 273,320"];
+	"flash.text.TextField" -> "flash.text.TextFieldType" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,379,164 374,153 360,128 338,93 310,70 306,67 301,64 296,61"];
 }

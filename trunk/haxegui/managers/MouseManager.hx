@@ -20,49 +20,51 @@
 package haxegui.managers;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
-
+//{{{ Import
 import flash.display.DisplayObject;
 import flash.display.Sprite;
-
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
-import haxegui.events.MoveEvent;
-import haxegui.events.DragEvent;
-import haxegui.events.ResizeEvent;
-
+import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 import flash.ui.Mouse;
-
+import haxegui.events.DragEvent;
+import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
 import haxegui.managers.CursorManager;
+//}}}
 
 
 /**
 *
-* Mouse Manager Class (Singleton)
+* Mouse Manager Class <br/>
 *
-* Injects mouse position to fake cursor, leaving the real one free to drag.
+* <p>Injects mouse position to fake cursor, leaving the real one free to drag.</p>
 *
-*
+* @todo dwell click, delayed click, triple clicks...
 */
 class MouseManager extends EventDispatcher
 {
-
+	//{{{ Members
 	private static var _instance : MouseManager = null;
 
 	public var listeners:Array<haxegui.logging.ILogger>;
-	
+
 	public var lastPosition : Point;
 	public var delta : Point;
 
-	public var moving : Bool;
-	
-	//~ public var lock : Bool;
+	public static var moving    : Bool;
+	public static var automated : Bool;
 
+	public static var stage = flash.Lib.current.stage;
+	//~ public var lock : Bool;
+	//}}}
+
+
+	//{{{ Functions
+	//{{{ getInstance
 	public static function getInstance ():MouseManager
 	{
 		if (MouseManager._instance == null)
@@ -71,22 +73,28 @@ class MouseManager extends EventDispatcher
 		}
 		return MouseManager._instance;
 	}
+	//}}}
 
+
+	//{{{ Constructor
 	private function new () {
 		super ();
 	}
+	//}}}
 
+
+	//{{{ toString
 	public override function toString () : String {
 		return "MouseManager";
 	}
+	//}}}
 
+
+	//{{{ init
 	public function init() {
-
-		var stage = flash.Lib.current.stage;
-
 		lastPosition = new Point();
 		delta = new Point();
-		
+
 		//~ CursorManager.getInstance().showCursor();
 		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseEnter, false, 0, true);
 		stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseEnter, false, 0, true);
@@ -95,30 +103,44 @@ class MouseManager extends EventDispatcher
 		//~ stage.addEventListener(MouseEvent.MOUSE_OUT, function(e){ CursorManager.setCursor(Cursor.ARROW); }, false, 0, true);
 		stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave, false, 0, true);
 	}
+	//}}}
 
-	public inline function onMouseEnter(e:MouseEvent) : Void {
+
+	//{{{ onMouseEnter
+	public function onMouseEnter(e:MouseEvent) : Void {
 		/** Show fake cursor **/
 		//~ CursorManager.getInstance().showCursor();
-		
+
 		/** Calculate new mouse delta **/
-		//~ delta = new Point( e.stageX - lastPosition.x, e.stageY - lastPosition.y );
-		//~ moving = delta.equals(new Point());  
-		
+		// delta = new Point( e.stageX - lastPosition.x, e.stageY - lastPosition.y );
+		//~ moving = delta.equals(new Point());
+
 		/** Inject to fake cursor **/
 		CursorManager.getInstance().inject(e);
-		
+
 		/** Hold to last mouse position **/
 		//lastPosition = new Point( e.stageX, e.stageY );
 
 		//~ e.updateAfterEvent();
 	}
+	//}}} onMouseEnter
 
+
+	//{{{ onMouseLeave
 	public inline function onMouseLeave(e:Event) : Void	{
 		//~ trace(e);
 		CursorManager.getInstance().hideCursor();
 		//~ CursorManager.getInstance()._mc.stopDrag();
 	}
-	
+	//}}}
 
-	
+
+	//{{{ moveToPoint
+	public function moveToPoint(p:Point) : MouseEvent {
+		var e = new MouseEvent(MouseEvent.MOUSE_MOVE, false, true, p.x, p.y);
+		stage.dispatchEvent(e);
+		return e;
+	}
+	//}}}
+	//}}}
 }

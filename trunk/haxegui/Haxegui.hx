@@ -19,46 +19,57 @@
 
 package haxegui;
 
-import haxegui.managers.MouseManager;
-import haxegui.managers.CursorManager;
-import haxegui.managers.StyleManager;
-import haxegui.controls.Component;
-
+//{{{ imports
 import haxe.Timer;
+import haxegui.controls.Component;
+import haxegui.managers.CursorManager;
+import haxegui.managers.MouseManager;
+import haxegui.managers.StyleManager;
+//}}}
 
+
+//{{{ Haxegui
 /**
-* Haxegui Class
+* Haxegui main "bootloader"<br/>
+* Call the static [init] function prior to any other haxegui code.
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
 class Haxegui {
-
-
-	/** Private **/
+	//{{{ members
+	/** List of class to initialize **/
 	private static var initializers : List<{c:Class<Dynamic>, f:Void->Void}>;
 
 	/** the absolute root url **/
 	public static var baseURL : String = "";
-	
+
 	/** List of dirty components **/
 	public static var dirtyList : List<Component> = new List();
-	
+
 	/** Timer to watch dirty components **/
 	public static var dirtyTimer : Timer;
-	
+
 	/** Timer interval **/
 	public static var dirtyInterval( default, setInterval ) : Int;
-	
+
+	/** The xml loader **/
+	public static var loader : Xml = Xml.parse(haxe.Resource.getString("Loader")).firstElement();
+
 	/** Grid spacing in pixels **/
 	public static var gridSpacing : Int = 15;
-	
+
 	/** Whether to snap to grid on move operations **/
 	public static var gridSnapping : Bool = false;
 
+	/** True to show slots on screen **/
+	public static var slots : Bool = false;
+	//}}}
+
+	//{{{ init
 	/**
-	 * Initialize the haxegui system<br/>
+	 * Initialize the haxegui system
 	 * It calls the initializing function for all [Component]s in the the [initializers] list,
 	 * starts the dirty timer, and sets up the mouse & cursor managers.
 	 **/
@@ -77,20 +88,25 @@ class Haxegui {
 
 		// load the default style
 		trace("loading style");
+
 		StyleManager.loadStyles(Xml.parse(haxe.Resource.getString("default_style")));
 		StyleManager.setStyle("default");
 		trace("complete");
-		
+
 		dirtyInterval = 300;
 	}
+	//}}}
 
+	//{{{ setInterval
 	public static function setInterval(v:Int) : Int {
 		dirtyInterval = v;
 		dirtyTimer = new haxe.Timer(dirtyInterval);
 		dirtyTimer.run = onInterval;
 		return dirtyInterval;
 	}
-	
+	//}}}
+
+	//{{{ onInterval
 	private static function onInterval() {
 		if(dirtyList.isEmpty()) return;
 		for(c in dirtyList) {
@@ -101,7 +117,9 @@ class Haxegui {
 			dirtyList.remove(c);
 		}
 	}
+	//}}}
 
+	//{{{ register
 	/**
 	* Component registration. Used during the boot process to register
 	* all components.
@@ -114,20 +132,25 @@ class Haxegui {
 			initializers = new List();
 		initializers.add({c:c, f:f});
 	}
+	//}}}
 
+	//{{{ setDirty
 	/**
 	* Mark a component for redrawing
 	*
-	* @param Component
+	* @param c The disty [Component]
 	**/
 	public static inline function setDirty(c : Component) : Void {
 		dirtyList.add(c);
 	}
+	//}}}
 
+	//{{{ toggleSnapping
 	/** Toggle the [gridSnapping] on and off. **/
 	public static function toggleSnapping() : Bool {
 		return gridSnapping = !gridSnapping;
 	}
-	
+	//}}}
 
 }
+//}}}

@@ -17,103 +17,97 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
 //{{{ Imports
+import feffects.Tween;
 import flash.Lib;
-
 import flash.accessibility.Accessibility;
-import flash.system.Capabilities;
-
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.display.DisplayObject;
+import flash.display.DisplayObjectContainer;
+import flash.display.Loader;
+import flash.display.LoaderInfo;
+import flash.display.MovieClip;
+import flash.display.Sprite;
+import flash.display.Stage;
+import flash.events.Event;
+import flash.events.EventDispatcher;
+import flash.events.FocusEvent;
+import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
+import flash.external.ExternalInterface;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.geom.Transform;
-
-import flash.display.DisplayObject;
-import flash.display.DisplayObjectContainer;
-import flash.display.Sprite;
-import flash.display.MovieClip;
-import flash.display.Loader;
-import flash.display.LoaderInfo;
-
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-
-import flash.events.EventDispatcher;
-import flash.events.Event;
-import flash.events.FocusEvent;
-import flash.events.MouseEvent;
-import flash.events.KeyboardEvent;
-
-import flash.external.ExternalInterface;
-
-import flash.net.URLLoader;
-import flash.net.URLRequest;
 import flash.net.FileFilter;
 import flash.net.FileReference;
 import flash.net.FileReferenceList;
-
-import haxegui.managers.WindowManager;
-import haxegui.managers.StyleManager;
-import haxegui.managers.ScriptManager;
-import haxegui.managers.FocusManager;
-import haxegui.managers.LayoutManager;
-import haxegui.managers.CursorManager;
-import haxegui.managers.MouseManager;
-
-import haxegui.Console;
-import haxegui.Stats;
-import haxegui.ColorPicker;
+import flash.net.URLLoader;
+import flash.net.URLRequest;
+import flash.system.Capabilities;
+import haxegui.Appearance;
+import haxegui.Automator;
+import haxegui.Binding;
 import haxegui.ColorPicker2;
-import haxegui.RichTextEditor;
+import haxegui.ColorPicker;
+import haxegui.Console;
 import haxegui.Haxegui;
 import haxegui.Introspector;
-import haxegui.Appearance;
-import haxegui.utils.Printing;
-import haxegui.utils.Color;
-
-import haxegui.controls.Component;
-import haxegui.controls.Button;
-import haxegui.controls.Label;
-import haxegui.controls.Input;
-import haxegui.controls.Slider;
-import haxegui.controls.Stepper;
-import haxegui.controls.RadioButton;
-import haxegui.controls.CheckBox;
-import haxegui.controls.ComboBox;
-import haxegui.controls.UiList;
-import haxegui.controls.MenuBar;
-import haxegui.controls.Expander;
-import haxegui.controls.TabNavigator;
-import haxegui.controls.ToolBar;
-import haxegui.controls.PopupMenu;
-
-import haxegui.events.MenuEvent;
-
-import feffects.Tween;
-
+import haxegui.RichTextEditor;
+import haxegui.Stats;
 import haxegui.containers.Accordion;
 import haxegui.containers.Container;
 import haxegui.containers.Divider;
+import haxegui.containers.Grid;
 import haxegui.containers.ScrollPane;
+import haxegui.containers.Stack;
+import haxegui.controls.Button;
+import haxegui.controls.CheckBox;
+import haxegui.controls.ComboBox;
+import haxegui.controls.Component;
+import haxegui.controls.Expander;
+import haxegui.controls.Input;
+import haxegui.controls.Label;
+import haxegui.controls.MenuBar;
+import haxegui.controls.PopupMenu;
+import haxegui.controls.RadioButton;
+import haxegui.controls.Slider;
+import haxegui.controls.Stepper;
+import haxegui.controls.TabNavigator;
+import haxegui.controls.ToolBar;
+import haxegui.controls.UiList;
+import haxegui.events.MenuEvent;
+import haxegui.managers.CursorManager;
+import haxegui.managers.FocusManager;
+import haxegui.managers.LayoutManager;
+import haxegui.managers.MouseManager;
+import haxegui.managers.ScriptManager;
+import haxegui.managers.StyleManager;
+import haxegui.managers.WindowManager;
+import haxegui.utils.Color;
+import haxegui.utils.Printing;
 //}}}
-
-
 
 /**
 * Haxegui Demo Application
 *
 *
-* @author <gershon@goosemoose.com>
+* @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
-* @version 0.2
+* @version 0.26
 */
 class Main extends Sprite, implements haxe.rtti.Infos
 {
-
-
+	//{{{ members
+	static var load	   : Xml;
 	static var desktop : Sprite;
-	static var root = flash.Lib.current;
-	static var stage = root.stage;
+	static var root    : MovieClip = flash.Lib.current;
+	static var stage   : Stage = root.stage;
+	//}}}
 
+
+	//{{{ main
 	public static function main () {
 
 		// Set stage propeties
@@ -124,35 +118,6 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 		// Assign a stage resize listener
 		stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
-
-		// Desktop
-		desktop = untyped flash.Lib.current.addChild(new Sprite());
-		desktop.name = "desktop";
-		desktop.mouseEnabled = false;
-
-		var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND, 40) ];
-		var alphas = [ 1, 1 ];
-		var ratios = [ 0, 0xFF ];
-		var matrix = new flash.geom.Matrix();
-		matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
-		desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
-		desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
-		desktop.graphics.endFill();
-
-		// Draw a grid ontop of the desktop
-		var grid = new Sprite();
-		grid.graphics.lineStyle(1, Color.tint(DefaultStyle.BACKGROUND, .95));
-		for(i in 0...Std.int(stage.stageWidth/Haxegui.gridSpacing)+1) {
-			grid.graphics.moveTo(Haxegui.gridSpacing*i, 0);
-			grid.graphics.lineTo(Haxegui.gridSpacing*i, stage.stageHeight);
-		}
-
-		for(j in 0...Std.int(stage.stageHeight/Haxegui.gridSpacing)+1) {
-			grid.graphics.moveTo(0, Haxegui.gridSpacing*j);
-			grid.graphics.lineTo(stage.stageWidth, Haxegui.gridSpacing*j);
-		}
-		grid.mouseEnabled = false;
-		root.addChild(grid);
 
 
 		// Logos
@@ -168,12 +133,163 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		haxe.Timer.delay( init, 50);
 
 	}
+	//}}}
 
+
+	//{{{ makeDekstop
+	/**
+	* Draws a vertical gradient across the stage.
+	*/
+	public static function makeDekstop() {
+
+		desktop = untyped flash.Lib.current.addChild(new Sprite());
+		desktop.name = "desktop";
+		desktop.mouseEnabled = false;
+
+		var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND, 40) ];
+		var alphas = [ 1, 1 ];
+		var ratios = [ 0, 0xFF ];
+		var matrix = new flash.geom.Matrix();
+		matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
+		desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+		desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
+		desktop.graphics.endFill();
+	}
+	//}}}
+
+
+	//{{{ makeWindows
+	/**
+	* Make some top-level windows
+	*/
+	public static function makeWindows() {
+		// Statistics
+		var stats = new Stats (flash.Lib.current, 540, 80);
+		stats.init();
+
+		// Color Picker
+		var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
+		colorpicker.init();
+
+		// rte
+		var rte = new RichTextEditor(flash.Lib.current, 120,120);
+		rte.init();
+
+		// style
+		var appearance = new Appearance(flash.Lib.current, 180,180);
+		appearance.init();
+
+		// debugger
+		var introspect = new Introspector(flash.Lib.current, 150,150);
+		introspect.init();
+
+		// Analog Clock
+		var clock = new haxegui.toys.AnalogClock(flash.Lib.current, 210,88);
+		clock.init();
+
+		//
+		var patchLayer = new Component(flash.Lib.current, "patchLayer");
+		patchLayer.init();
+		patchLayer.description = null;
+		patchLayer.mouseEnabled = false;
+
+	}
+	//}}}
+
+
+	//{{{ setRedirection
+	/**
+	* Redirect tracing to console
+	*/
+	public static function setRedirection(f:Dynamic) {
+		haxe.Log.trace = f;
+		ScriptManager.redirectTraces(f);
+	}
+	//}}}
+
+
+	//{{{ log
+	/**
+	*
+	*/
+	public static dynamic function log(v:Dynamic) {
+		trace(v, null);
+	}
+	//}}}
+
+
+	//{{{ loadXml
+	/**
+	* Loads the layout
+	*/
+	static function loadXML(e:Event) : Void
+	{
+		trace(here.methodName) ;
+		var str = e.target.data;
+		LayoutManager.loadLayouts(Xml.parse(str));
+
+		for(k in LayoutManager.layouts.keys())
+		trace("Loaded layout : " + k);
+
+		LayoutManager.setLayout(Xml.parse(str).firstElement().get("name"));
+
+		//~ LayoutManager.fetchLayout("samples/Example6.xml");
+		//~ LayoutManager.setLayout("Example6");
+
+		var win = cast root.getChildByName("Widgets");
+		var sp = win.getChildByName("ScrollPane1");
+		var cnt = sp.content.getChildByName("Container1");
+
+
+
+		var node = new haxegui.Node(cast sp);
+		node.init();
+		var node = new haxegui.Node(cast sp);
+		node.init();
+		node.move(20,20);
+
+		trace("Finished Initialization in "+ haxe.Timer.stamp() +" sec.");
+
+
+		//~ var welcome = "\n<FONT SIZE='24'>Hello and welcome to <B>haxegui</B>.</FONT>\n";
+		var welcome = "\n
+		_                       _
+		| |_ ___ _ _ ___ ___ _ _|_|
+		|   | .'|_'_| -_| . | | | |
+		|_|_|__,|_,_|___|_  |___|_| Copyright (c) 2009 The haxegui developers
+		|___|\n\n\t";
+
+		var info = "<FONT SIZE='8'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+" "+(flash.system.Capabilities.isDebugger ? "Debug" : "")+".</FONT>\n";
+		info += "\n\t<U><A HREF=\"http://haxe.org/\">haXe</A></U> (pronounced as hex) is an open source programming language.\n";
+		info += "\tHaxe Graphical User Interface for the flash9 platform, is a set of classes\n\tworking as widgets like flash/flex's components and windows.\n\n";
+		info += "\tThis console can exeute hscript in the textfield below,\n\ttype <I>help</I> to display a list of a few special commands.\n\n";
+
+		log(welcome);
+
+		trace("Capabilities.hasAccessibility: " + Capabilities.hasAccessibility);
+		if (Capabilities.hasAccessibility) {
+			Accessibility.updateProperties();
+		}
+
+		trace("Accessibility.active: " + Accessibility.active);
+		if(Accessibility.active) {
+			Accessibility.updateProperties();
+		}
+
+		log(info);
+		log("");
+
+	}
+	//}}}
+
+
+	//{{{ init
 	public static function init ()	{
-
 		// Setup Haxegui
 		haxegui.Haxegui.init();
 
+		// Desktop
+		makeDekstop();
 
 		var bootupMessages = new Array<{v:Dynamic, inf:haxe.PosInfos}>();
 		var bootupHandler = function(v : Dynamic, ?inf:haxe.PosInfos) {
@@ -196,16 +312,6 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		for(e in bootupMessages)
 		console.log(e.v, e.inf);
 
-		trace("Capabilities.hasAccessibility: " + Capabilities.hasAccessibility);
-		if (Capabilities.hasAccessibility) {
-			Accessibility.updateProperties();
-		}
-
-		trace("Accessibility.active: " + Accessibility.active);
-		if(Accessibility.active) {
-			Accessibility.updateProperties();
-		}
-
 		stage.addEventListener(KeyboardEvent.KEY_DOWN,
 		function(e){
 			switch(e.charCode) {
@@ -214,86 +320,47 @@ class Main extends Sprite, implements haxe.rtti.Infos
 			}
 		});
 
-
-		// Statistics
-		var stats = new Stats (flash.Lib.current, 540, 80);
-		stats.init();
-
-		// Color Picker
-		var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
-		colorpicker.init();
-
-
-		//~ var imageTypes:FileFilter = new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg; *.jpeg; *.gif; *.png");
-		//~ var textTypes:FileFilter = new FileFilter("Text Files (*.txt, *.rtf)", "*.txt; *.rtf");
-		//~ var allTypes = [imageTypes, textTypes];
-		//~ var fileRef:FileReference = new FileReference();
-		//~ fileRef.browse(allTypes);
-		//~ var xmlType = [new FileFilter("Xml Files (*.xml)", "*.xml;")];
-		//~ fileRef.browse(xmlType);
+		/////////////////////////////////////////////////////////////////////////
+		// Make some windows
+		/////////////////////////////////////////////////////////////////////////
+		makeWindows();
 
 		/////////////////////////////////////////////////////////////////////////
 		// Load XML
 		/////////////////////////////////////////////////////////////////////////
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, loadXML, false, 0, true);
-		//~ loader.load(new URLRequest("samples/Example1.xml"));
 
-		/////////////////////////////////////////////////////////////////////////
-		// Load XML, try by input flashvars first
-		/////////////////////////////////////////////////////////////////////////
 		var layout = "";
 		try {
-			var l = flash.Lib.current.loaderInfo.parameters;
-			trace(here.methodName + " " + Printing.print_r(l));
+			// get the flashvars from root
+			var fvars = root.loaderInfo.parameters;
+			// trace(here.methodName + " " + Printing.print_r(l));
 
-			var baseURL = Reflect.field(l, "baseURL");
-			if(baseURL==null)  baseURL = "";
-			haxegui.Haxegui.baseURL = baseURL;
+			// try and grab the base url from flashvars first
+			var baseURL = Reflect.field(fvars, "baseURL");
+			if(baseURL==null) Haxegui.loader.elementsNamed("domain").next().get("baseurl");
+			if(baseURL==null) baseURL = "";
+			Haxegui.baseURL = baseURL;
 
-			layout = Reflect.field(l, "layout");
+			// try layout from flash vars
+			layout = Reflect.field(fvars, "layout");
 			if(layout==null)
-			layout="samples/Example1.xml";
+			layout = Haxegui.loader.elementsNamed("layout").next().get("url");
 
-			for (f in Reflect.fields(l)) {
-				trace("\t" + f + ":\t" + Reflect.field(l, f) + "\n");
-			}
 		} catch (e:Dynamic) {
 			trace(here.methodName + " " + e);
 		}
 
-
-		// rte
-		var rte = new RichTextEditor(flash.Lib.current, 120,120);
-		rte.init();
-
-		// style
-		var appearance = new Appearance(flash.Lib.current, 180,180);
-		appearance.init();
-
-		// debugger
-		var introspect = new Introspector(flash.Lib.current, 150,150);
-		introspect.init();
-
-		// Analog Clock
-		var clock = new haxegui.toys.AnalogClock(flash.Lib.current, 210,88);
-		clock.init();
-
 		loader.load(new URLRequest(Haxegui.baseURL+layout));
 
 
+		// remoting
+		// var URL = "http://localhost:2000/remoting.n";
+		// var cnx = haxe.remoting.HttpAsyncConnection.urlConnect(URL);
+		// cnx.setErrorHandler( function(err) trace("Error : "+Std.string(err)) );
 
-		//~ var URL = "http://localhost:2000/remoting.n";
-		//~ var cnx = haxe.remoting.HttpAsyncConnection.urlConnect(URL);
-		//~ cnx.setErrorHandler( function(err) trace("Error : "+Std.string(err)) );
-		//~
-
-		var patchLayer = new Component(flash.Lib.current, "patchLayer");
-		patchLayer.init();
-		patchLayer.description = null;
-		patchLayer.mouseEnabled = false;
-
-
+		// Print known scripts to console
 		#if debug
 		var a = new Array<String>();
 		var keys : Iterator<String> = untyped ScriptManager.defaultActions.keys();
@@ -303,76 +370,19 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		log("Registered scripts: " + Std.string(a));
 		#end
 
+		// ExternalInterface
 		//flash.system.Security.allowDomain("*");
 		//flash.external.ExternalInterface.addCallback( "onChange", onChange );
-
-
-	}//main
-
-
-
-	/**
-	* Loads the layout
-	*/
-	static function loadXML(e:Event) : Void
-	{
-		trace(here.methodName) ;
-		var str = e.target.data;
-		LayoutManager.loadLayouts(Xml.parse(str));
-		for(k in LayoutManager.layouts.keys())
-		trace("Loaded layout : " + k);
-		LayoutManager.setLayout(Xml.parse(str).firstElement().get("name"));
-
-		//~ LayoutManager.fetchLayout("samples/Example6.xml");
-		//~ LayoutManager.setLayout("Example6");
-
-		var win = cast root.getChildByName("Widgets");
-		var sp = win.getChildByName("ScrollPane1");
-		var cnt = sp.content.getChildByName("Container1");
-
-		var digital = new Component(cast cnt);
-		digital.init();
-		digital.setAction("redraw", "this.graphics.beginFill(Color.BLACK); this.graphics.drawRect(0,0,70*4+10*3,101); this.graphics.endFill();");
-		digital.scaleX=digital.scaleY=.5;
-		for(i in 0...4) {
-			var digit = new haxegui.toys.SevenSegment(digital, 80*i);
-			digit.init();
-			digit.mouseEnabled = false;
-			if(i==0) digit.startInterval(.1);
-			if(i==1) digit.startInterval(1);
-			if(i==2) digit.startInterval(10);
-			if(i==3) digit.startInterval(100);
-		}
-
-
-		var node = new haxegui.Node(cast sp);
-		node.init();
-		var node = new haxegui.Node(cast sp);
-		node.init();
-		node.move(20,20);
-
-		trace("Finished Initialization in "+ haxe.Timer.stamp() +" sec.");
-
-		//~ var welcome = "\n<FONT SIZE='24'>Hello and welcome to <B>haxegui</B>.</FONT>\n";
-		var welcome = "\n
-		_                       _
-		| |_ ___ _ _ ___ ___ _ _|_|
-		|   | .'|_'_| -_| . | | | |
-		|_|_|__,|_,_|___|_  |___|_| Copyright (c) 2009 The haxegui developers
-		|___|\n\n\t";
-
-		var info = "<FONT SIZE='8'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+" "+(flash.system.Capabilities.isDebugger ? "Debug" : "")+".</FONT>\n";
-		info += "\n\t<U><A HREF=\"http://haxe.org/\">haXe</A></U> (pronounced as hex) is an open source programming language.\n";
-		info += "\tHaxe Graphical User Interface for the flash9 platform, is a set of classes\n\tworking as widgets like flash/flex's components and windows.\n\n";
-		info += "\tThis console can exeute hscript in the textfield below,\n\ttype <I>help</I> to display a list of a few special commands.\n\n";
-		log(welcome+info);
-		log("");
-
-
 	}
+	//}}}
 
 
-	static function onChange(str: String) {
+	//{{{ onChange
+	/**
+	* Used for [ExternalInterface] communcation
+	* @param str A [String] width new layout to load
+	*/
+	static function onLayoutChange(str: String) {
 		//trace("Javascript Return: " + str);
 
 		//str = str.split("\n").join("").split("\t").join("");
@@ -385,45 +395,34 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		LayoutManager.setLayout(Xml.parse(str).firstElement().get("name"));
 
 	}
+	//}}}
 
 
+	//{{{ onStageResize
 	/**
-	*
-	*
-	*/
-	public static function setRedirection(f:Dynamic) {
-		haxe.Log.trace = f;
-		ScriptManager.redirectTraces(f);
-	}
-
-
-	/**
-	*
-	*
+	* Redraw the desktop background
 	*/
 	public static function onStageResize(e:Event) {
+		if(desktop==null) return;
 
 		var stage = e.target;
-		if(desktop!=null) {
-			desktop.graphics.clear();
-			var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND,40) ];
-			var alphas = [ 1, 1 ];
-			var ratios = [ 0, 0xFF ];
-			var matrix = new flash.geom.Matrix();
-			matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
-			desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
 
-			desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
-			desktop.graphics.endFill();
-		}
+		desktop.graphics.clear();
+		var colors = [ DefaultStyle.BACKGROUND, Color.darken(DefaultStyle.BACKGROUND,40) ];
+		var alphas = [ 1, 1 ];
+		var ratios = [ 0, 0xFF ];
+		var matrix = new flash.geom.Matrix();
+		matrix.createGradientBox(stage.stageWidth, stage.stageHeight, .5*Math.PI, 0, 0);
+		desktop.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, alphas, ratios, matrix );
+
+		desktop.graphics.drawRect( 0, 0, stage.stageWidth, stage.stageHeight );
+		desktop.graphics.endFill();
 		/*
 		var logo = cast flash.Lib.current.getChildByName("Logo");
 		logo.x = Std.int(stage.stageWidth - logo.width) >> 1;
 		logo.y = Std.int(stage.stageHeight - logo.height) >> 1;
 		*/
 	}
+	//}}}
+}
 
-	public static dynamic function log(v:Dynamic) {
-		trace(v, null);
-	}
-}//Main

@@ -20,20 +20,21 @@
 package haxegui.toys;
 
 import flash.geom.Rectangle;
-
-import haxegui.managers.StyleManager;
-
-import haxegui.utils.Size;
-import haxegui.utils.Color;
-
 import haxegui.controls.Component;
+import haxegui.managers.StyleManager;
+import haxegui.utils.Color;
+import haxegui.utils.Size;
 
+//{{{ ArrowType
 enum ArrowType {
 	LINE;
 	SOLID;
 	CIRCLE;
+	FILL_CIRCLE;
 	DIAMOND;
+	FILL_DIAMOND;
 }
+//}}}
 
 /**
 * Simple arrowhead used by many widgets
@@ -41,7 +42,8 @@ enum ArrowType {
 class Arrow extends Component
 {
     var type : ArrowType;
-    
+	
+    //{{{ init
     override public function init(?opts:Dynamic) {
 	box = new Size(12,12).toRect();
 	color = cast Math.random() * 0xFFFFFF;
@@ -72,9 +74,11 @@ class Arrow extends Component
 	moveToPoint(Size.fromRect(box).shift(1).toPoint());
 
     }
+    //}}}
 
+    //{{{ __init__
     static function __init__() {
 	    haxegui.Haxegui.register(Arrow);
     }
-    
+	//}}}
 }

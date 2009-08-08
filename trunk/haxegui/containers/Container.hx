@@ -19,79 +19,93 @@
 
 package haxegui.containers;
 
-import flash.geom.Rectangle;
-
-import flash.display.Sprite;
+//{{{ Imports
 import flash.display.DisplayObject;
-
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-
-import haxegui.events.ResizeEvent;
-
-import haxegui.managers.ScriptManager;
-import haxegui.managers.MouseManager;
-import haxegui.managers.StyleManager;
+import flash.geom.Rectangle;
+import haxegui.containers.IContainer;
 import haxegui.controls.Component;
 import haxegui.controls.ScrollBar;
-import haxegui.containers.IContainer;
+import haxegui.events.ResizeEvent;
+import haxegui.managers.MouseManager;
+import haxegui.managers.ScriptManager;
+import haxegui.managers.StyleManager;
 import haxegui.utils.Size;
+//}}}
+
 
 /**
-* Generic "canvas" to put components in.
-* It listens for and streches when receives resize events from it's parent,.
+* Generic "Canvas" or "Panel" to put components in.<br/>
+* <p>It listens for and streches when receives resize events from it's parent.</p>
 */
 class Container extends Component, implements IContainer
 {
 
+	//{{{ Constructor
 	public function new (?parent : flash.display.DisplayObjectContainer, ?name:String, ?x : Float, ?y: Float) {
 		super (parent, name, x, y);
-		this.color = DefaultStyle.BACKGROUND;
-		this.buttonMode = false;
-		this.mouseEnabled = false;
-		this.tabEnabled = false;
+		buttonMode = false;
+		color = DefaultStyle.BACKGROUND;
+		mouseEnabled = false;
+		tabEnabled = false;
 	}
+	//}}}
 
+
+	//{{{ Functions
+	//{{{ addChild
+	/** @todo probably recalcuate and fire a resize event **/
 	public override function addChild(o : DisplayObject) : DisplayObject {
 		dirty = true;
 		return super.addChild(o);
 	}
+	//}}}
 
 
+	//{{{ init
 	override public function init(opts : Dynamic=null) {
 		super.init(opts);
+
+
 		description = null;
-		
+
+
 		if(Std.is(parent, haxegui.Window))
-			if(x==0 && y==0)
-				move(10,20);
-	
-		//~ filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8,0.5,flash.filters.BitmapFilterQuality.HIGH,true,false,false)];
-		
+		if(x==0 && y==0)
+		move(10,20);
+
+
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
+	//}}}
 
 
-	private function onParentResize(e:ResizeEvent) {		
+	//{{{ onParentResize
+	private function onParentResize(e:ResizeEvent) {
 		var size = new Size();
-		
-		if(Std.is(parent, Component)) 
-			size = new Size((cast parent).box.width - x, (cast parent).box.height - y);
+
+		if(Std.is(parent, Component))
+		size = new Size((cast parent).box.width - x, (cast parent).box.height - y);
 		else
-			size = new Size(parent.width, parent.height);
-			
-		//~ if(getElementsByClass(ScrollBar).hasNext())
-			//~ size.width -= 20;
+		size = new Size(parent.width, parent.height);
 
 		box = size.toRect();
-redraw();		
-dirty = false;
-		//~ dirty = true;
+
+		redraw();
+		dirty = false;
+
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Container);
 	}
+	//}}}
+	//}}}
 }

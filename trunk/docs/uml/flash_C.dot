@@ -1,13 +1,13 @@
 digraph uml {
-	graph [label="Package: flash Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [lp="115,10",
-		bb="0,0,230,440"];
-	"flash.Lib" [label="{Lib}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/Lib.html", tooltip=Lib, portPos=Lib, pos="32,39", rects="5,21,59,57", width="0.75", height="0.50"];
-	"flash.FlashXml__" [label="{FlashXml__}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/FlashXml__.html", tooltip=FlashXml__, portPos=FlashXml__, pos="32,264", rects="1,246,64,282", width="0.86", height="0.50"];
-	"flash.Error" [label="{Error}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/Error.html", tooltip=Error, portPos=Error, pos="203,422", rects="176,404,230,440", width="0.75", height="0.50"];
-	"flash.Boot" [label="{Boot}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/Boot.html", tooltip=Boot, portPos=Boot, pos="32,422", rects="5,404,59,440", width="0.75", height="0.50"];
-	"flash.FlashXml__" -> "flash.FlashXml__" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,44,282 20,282 18,292 22,300 32,300 36,300 39,299 41,297"];
-	"flash.Boot" -> "flash.Error" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,176,422 59,422 86,422 129,422 161,422"];
+	graph [label="Package: flash Composition", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=false, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
+	graph [lp="102,12",
+		bb="0,0,204,187"];
+	"flash.FlashXml__" [label="{\nFlashXml__}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/FlashXml__.html", tooltip="\nFlashXml__", pos="147,43", rects="116,25,179,61", width="0.86", height="0.50"];
+	"flash.Lib" [label="{\nLib}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/Lib.html", tooltip="\nLib", pos="147,115", rects="120,97,174,133", width="0.75", height="0.50"];
+	"flash.Error" [label="{\nError}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/Error.html", tooltip="\nError", pos="52,169", rects="25,151,79,187", width="0.75", height="0.50"];
+	"flash.Boot" [label="{\nBoot}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/Boot.html", tooltip="\nBoot", pos="147,169", rects="120,151,174,187", width="0.75", height="0.50"];
+	"flash.FlashXml__" -> "flash.FlashXml__" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,164,61 162,73 159,77 154,79 147,79 133,79 128,71 130,61"];
+	"flash.Boot" -> "flash.Error" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,120,169 108,169 98,169 88,169 79,169"];
 }

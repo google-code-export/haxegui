@@ -19,20 +19,28 @@
 
 package haxegui.controls;
 
+///{{{ Imports
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import haxegui.events.AdjustmentEvent;
+//}}}
 
+
+//{{{ AdjustmentObject
 /**
- * AdjustmentObject
- */
+* A typed object to hold a value, its mininum and maximum, and the default increasement sizes.
+*/
 typedef AdjustmentObject<Dynamic> = {
-    var value : Dynamic;
-    var min   : Dynamic;
-    var max   : Dynamic;
-    var step  : Dynamic;
-    var page  : Dynamic;
+	var value : Null<Dynamic>;
+	var min   : Null<Dynamic>;
+	var max   : Null<Dynamic>;
+	var step  : Null<Dynamic>;
+	var page  : Null<Dynamic>;
 }
+//}}}
 
+
+//{{{ Adjustment
 /**
 * Adjustment class allows reuse \ sharing of values for "range widgets".<br/>
 * It clamps to min&max, and dispatches an event when one of the values has changed.
@@ -50,55 +58,73 @@ typedef AdjustmentObject<Dynamic> = {
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
-* @version 0.1
+* @version 0.2
 */
 class Adjustment extends EventDispatcher {
-    
-    public var object(default, adjust) : AdjustmentObject<Dynamic>;
-    
-    public function new(?a:AdjustmentObject<Dynamic>) {
-	super();
-	
-	object = { value: null, min:null, max:null, step:null, page:null};
-	
-	if(a!=null)
-	    object = a;
 
-    }
+	public var object(default, adjust) : AdjustmentObject<Dynamic>;
 
-    public function adjust(?a:AdjustmentObject<Dynamic>) : AdjustmentObject<Dynamic> {
-	object = a;
-	dispatchEvent(new Event(Event.CHANGE));
-	return object;
-    }
-    
-    public function setValue(v:Float) : Float {
-	object.value = v;
-	adjust(object);
-	return v;
-    }
-        
-    public function getValue() : Float {
-	return object.value;
-    }
+	//{{{ constructor
+	public function new(?a:AdjustmentObject<Dynamic>) {
+		super();
 
-    public function getStep() : Float {
-	return object.step;
-    }
-    
-    public function valueAsString() : String {
-	return Std.string(getValue());
-    }
-    
+		object = newAdjustmentObject(null);
+
+		if(a!=null)
+		object = a;
+	}
+	//}}}
+
+	//{{{ adjust
+	public function adjust(?a:AdjustmentObject<Dynamic>) : AdjustmentObject<Dynamic> {
+		object = a;
+		dispatchEvent(new Event(Event.CHANGE));
+		return object;
+	}
+	//}}}
+
+	//{{{ setValue
+	public function setValue(v:Float) : Float {object.value = v;
+		object.value = v;
+		adjust(object);
+		return v;
+	}
+	//}}}
+
+	//{{{ getValue
+	public function getValue() : Float {return object.value;
+		return object.value;
+	}
+	//}}}
+
+	//{{{ getStep
+	public function getStep() : Float {return object.step;
+		return object.step;
+	}
+	//}}}
+
+	//{{{ valueAsString
+	public function valueAsString() : String {return Std.string(getValue());
+		return Std.string(getValue());
+	}
+	//}}}
+
+	//{{{ newAdjustmentObject
+	public static function newAdjustmentObject(type:Class<Dynamic>) : AdjustmentObject<Dynamic> {
+		return { value:type, min:type, max:type, step:type, page:type};
+	}
+	//}}}
 }
+//}}}
 
 
+//{{{ IAdjustable
 /**
 * Interface for adjustable widgets.
 *
 */
 interface IAdjustable {
-    public var adjustment : Adjustment;
+	public var adjustment : Adjustment;
 }
-
+//}}}
 

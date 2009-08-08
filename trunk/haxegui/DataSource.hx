@@ -19,8 +19,18 @@
 
 package haxegui;
 
+
+//{{{ Imports
 import flash.events.EventDispatcher;
 import flash.events.Event;
+//}}}
+
+
+//{{{ DataDescriptor
+typedef DataDescriptor = {
+}
+//}}}
+
 
 /**
 * DataSource class
@@ -32,45 +42,61 @@ import flash.events.Event;
 */
 class DataSource extends EventDispatcher
 {
-
+	//{{{ Members
 	/** The static datasource id counter **/
 	private static var nextId : Int = 0;
 
 	public var data( default, __setData ): Dynamic;
-	
-	public var id : Int;
-	public var name : String;
 
+	public var descriptor : DataDescriptor;
+
+	public var id : Int;
+
+	public var name : String;
+	//}}}
+
+
+	//{{{ Constructor
 	public function new(?name:String) {
 		super();
 		this.id = DataSource.nextId++;
-		
+
 		if(name!=null)
 			this.name = name;
 		else
 			this.name = Type.getClassName(Type.getClass(this)).split(".").pop() + id;
-
-			
 	}
+	//}}}
 
 
+	//{{{ Functions
+	//{{{ toString
+	override public function toString() : String {
+		return name + "[" + Type.getClassName(Type.getClass(this)) + "]";
+	}
+	//}}}
+
+
+	//{{{ __setData
 	public function __setData(v:Dynamic) {
 		data = v;
 		dispatchEvent(new Event(Event.CHANGE));
 	}
-	
-	override public function toString() : String
-	{
-		return this.name + "[" + Type.getClassName(Type.getClass(this)) + "]";
-	}	
-	
-	static function __init__() {
-		haxegui.Haxegui.register(DataSource);
-	}
-	
+	//}}}
+
+
+	//{{{ transform
 	public function transform(f:Dynamic->Dynamic) : Dynamic{
 		Lambda.foreach(data, f);
 		return data;
 	}
-	
+	//}}}
+
+
+	//{{{ __init__
+	static function __init__() {
+		haxegui.Haxegui.register(DataSource);
+	}
+	//}}}
+	//}}}
 }

@@ -1,11 +1,11 @@
 digraph uml {
-	graph [label="Package: feffects Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [lp="123,10",
-		bb="0,0,246,75"];
-	"feffects.Tween" [label="{Tween}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/Tween.html", tooltip=Tween, portPos=Tween, pos="27,39", rects="0,21,54,57", width="0.75", height="0.50"];
-	"feffects.Easing" [pos="206,39", rects="166,21,246,57", width="1.11", height="0.50"];
-	"feffects.Tween" -> "feffects.Tween" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,39,57 15,57 14,67 17,75 27,75 31,75 33,74 35,72"];
-	"feffects.Tween" -> "feffects.Easing" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,166,39 54,39 80,39 119,39 151,39"];
+	graph [label="Package: feffects Composition", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=false, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
+	graph [lp="110,12",
+		bb="0,0,220,79"];
+	"feffects.Tween" [label="{\nTween}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/Tween.html", tooltip="\nTween", pos="168,43", rects="141,25,195,61", width="0.75", height="0.50"];
+	"feffects.Easing" [pos="65,43", rects="25,25,105,61", width="1.11", height="0.50"];
+	"feffects.Tween" -> "feffects.Tween" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,186,61 184,73 181,77 176,79 168,79 153,79 147,71 150,61"];
+	"feffects.Tween" -> "feffects.Easing" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,141,43 129,43 121,43 113,43 105,43"];
 }

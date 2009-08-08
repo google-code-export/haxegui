@@ -19,27 +19,30 @@
 
 package haxegui.controls;
 
+//{{{ Imports
+import flash.events.Event;
 import flash.geom.Rectangle;
 import haxegui.controls.AbstractButton;
-import haxegui.managers.StyleManager;
+import haxegui.controls.IAdjustable;
 import haxegui.controls.Image;
-import haxegui.utils.Size;
+import haxegui.managers.StyleManager;
+import haxegui.toys.Socket;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
-import haxegui.controls.IAdjustable;
-import haxegui.toys.Socket;
+import haxegui.utils.Size;
+//}}}
 
 
+//{{{ Button
 /**
-* A chromed button, with optional label and icon.<br>
+* A chromed button, with optional label and icon.<br/>
 *
-* @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
+* @version 0.26
 */
-class Button extends AbstractButton, implements IAdjustable
-{
-
+class Button extends AbstractButton, implements IAdjustable {
+	//{{{ Members
 	/**
 	* Optional label for the button
 	*
@@ -99,41 +102,46 @@ class Button extends AbstractButton, implements IAdjustable
 	public var toggle : Bool;
 
 	/**
-	 * true when is pressed.<br>
-	 *
-	 * Notice when using hscript, selected is not available in direct access, use the getter and setter.
-	 *
-	 * @see selected
-	 **/
+	* true when is pressed.<br/>
+	*
+	* Notice when using hscript, selected is not available in direct access, use the getter and setter.
+	*
+	* @see selected
+	**/
 	public var selected( __getSelected, __setSelected ) : Bool;
 
 	/** slot **/
 	public var slot : Socket;
-	public var adjustment : Adjustment;
 
-	/**
-	 * @see [Component.init]
-	 */
+	/** @todo send binary adjustments**/
+	public var adjustment : Adjustment;
+	//}}}
+
+	//{{{ Functions
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
+		box = new Size(90,30).toRect();
 		color = DefaultStyle.BACKGROUND;
 		mouseChildren = false;
 
-		// dont create zero sized buttons
-		if(box==null || box.isEmpty())
-			box = new Size(90,30).toRect();
 
 		toggle = Opts.optBool(opts, "toggle", false);
 		selected = Opts.optBool(opts, "selected", false);
 
+
 		super.init(opts);
 
-		description = name;
+
+		// tooltip
+		description = Opts.optString(opts, "tooltip", name);
+
 
 		// Default to a no-label simple button
 		if(Opts.optString(opts, "label", null)!=null) {
 			label = new Label(this);
 			label.init({text : Opts.optString(opts, "label", name)});
 		}
+
 
 		// Default to a no-icon simple button
 		if(Opts.optString(opts, "icon", null)!=null) {
@@ -142,65 +150,114 @@ class Button extends AbstractButton, implements IAdjustable
 
 			// check for STOCK_ type icon
 			if(Reflect.field(Icon, src)!=null)
-				src = Reflect.field(Icon, src);
+			src = Reflect.field(Icon, src);
 
 			icon.init({src: src});
 			icon.move(4,4);
 		}
+	}
+	//}}}
 
+
+	//{{{ onAdded
+	/**
+	* This methods makes sure buttons added to a [ToolBar] get a flat look.
+	*/
+	public override function onAdded(e:Event) {
 		// Flat-look for toolbar buttons
-		if(Std.is(parent, haxegui.controls.ToolBar)) {
+		for(a in ancestors())
+		if(Std.is(a, haxegui.controls.ToolBar)) {
 			redraw();
 			dirty = false;
 			this.graphics.clear();
 			setAction("mouseOut", "event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
 			setAction("mouseUp", "event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
 			setAction("mouseOver","this.redraw();");
-			}
-					
-	
+		}
 	}
+	//}}}
 
 
+	//{{{ __getSelected
 	/** Getter for toggle button state **/
 	public function __getSelected() : Bool {
 		return selected;
 	}
+	//}}}
 
+
+	//{{{ __setSelected
 	/** Setter for toggle button state **/
 	public function __setSelected(v:Bool) {
 		selected = v;
 		redraw();
 		return selected;
 	}
+	//}}}
 
+
+	//{{{ onMouseClick
 	/** Click handler, ignores disabled, push\pulls toggles, and clicks normal buttons **/
 	public override function onMouseClick(e:flash.events.MouseEvent) {
 		if(disabled) return;
 		if(toggle)
-			selected = !selected;
+		selected = !selected;
 		super.onMouseClick(e);
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Button);
 	}
-
+	//}}}
+	//}}}
 }
+//}}}
 
+
+//{{{ PushButton
 /**
- * Alias for a [Button] with toggle=true
- **/
+* Alias for a [Button] with toggle=true
+**/
 class PushButton extends Button {
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(opts==null) opts = {};
 		Reflect.setField(opts, "toggle", true);
 		super.init(opts);
 	}
+	//}}}
 
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(PushButton);
 	}
+	//}}}
 
 }
+//}}}
 
+
+//{{{ Swatch
+/**
+* Button with a color sprite, opens a color picked on click<br/>
+**/
+class Swatch extends Button {
+	//{{{ init
+	override public function init(opts:Dynamic=null) {
+		if(opts==null) opts = {};
+		Reflect.setField(opts, "toggle", true);
+		super.init(opts);
+	}
+	//}}}
+
+	//{{{ __init__
+	static function __init__() {
+		haxegui.Haxegui.register(PushButton);
+	}
+	//}}}
+
+}
+//}}}

@@ -1,9 +1,8 @@
 digraph uml {
-	graph [label="Package: feffects Inheritance", ratio=compress, rankdir=LR, size="24,12", overlap=false, fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [label="{Tween}",
-		lp="28,10",
-		bb="0,0,56,57"];
-	"feffects.Tween" [label="{Tween}", fontsize=10, fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/feffects/Tween.html", tooltip=Tween, portPos=e, pos="28,39", rects="1,21,55,57", width="0.75", height="0.50"];
+	graph [label="Package: feffects Inheritance", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=compress, packMode="graph", labelloc=c, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
+	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
+	graph [lp="107,12",
+		bb="0,0,214,61"];
+	"feffects.Tween" [label="{\nTween}", fillcolor=white, URL="../types/feffects/Tween.html", tooltip="\nTween", portPos=w, pos="107,43", rects="80,25,134,61", width="0.75", height="0.50"];
 }

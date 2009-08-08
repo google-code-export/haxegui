@@ -20,8 +20,9 @@
 package haxegui.events;
 
 import flash.events.Event;
+import flash.events.MouseEvent;
 
-class MoveEvent extends Event {
+class MoveEvent extends MouseEvent {
 
 	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool, ?oldX : Float, ?oldY : Float) : Void
 	{
@@ -36,14 +37,13 @@ class MoveEvent extends Event {
 		return "["+"MoveEvent"+" type=\""+type+"\" bubbles="+bubbles+" cancelable="+cancelable+" oldX="+oldX+" oldY="+oldY+"]";
 	}
 
-	override public function clone():Event {  
-		return new MoveEvent(this.type, this.bubbles, this.cancelable, this.oldX, this.oldY);  
-	}  
+	override public function clone():Event {
+		return new MoveEvent(this.type, this.bubbles, this.cancelable, this.oldX, this.oldY);
+	}
 
-	public var relatedObject : flash.display.InteractiveObject;
 	public var oldX : Float;
 	public var oldY : Float;
 	//~ public var position : flash.geom.Point;
-	
+
 	public static var MOVE : String = "Move";
 }

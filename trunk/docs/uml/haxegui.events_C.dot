@@ -1,13 +1,14 @@
 digraph uml {
-	graph [label="Package: haxegui.events Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [lp="99,10",
-		bb="0,0,198,589"];
-	"haxegui.events.WindowEvent" [label="{WindowEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/WindowEvent.html", tooltip=WindowEvent, portPos=WindowEvent, pos="99,39", rects="64,21,135,57", width="0.97", height="0.50"];
-	"haxegui.events.MoveEvent" [label="{MoveEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/MoveEvent.html", tooltip=MoveEvent, portPos=MoveEvent, pos="99,228", rects="69,210,130,246", width="0.83", height="0.50"];
-	"haxegui.events.ListEvent" [label="{ListEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/ListEvent.html", tooltip=ListEvent, portPos=ListEvent, pos="99,350", rects="72,332,126,368", width="0.75", height="0.50"];
-	"haxegui.events.MenuEvent" [label="{MenuEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/MenuEvent.html", tooltip=MenuEvent, portPos=MenuEvent, pos="99,438", rects="68,420,130,456", width="0.86", height="0.50"];
-	"haxegui.events.ResizeEvent" [label="{ResizeEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/ResizeEvent.html", tooltip=ResizeEvent, portPos=ResizeEvent, pos="99,509", rects="66,491,132,527", width="0.92", height="0.50"];
-	"haxegui.events.DragEvent" [label="{DragEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/DragEvent.html", tooltip=DragEvent, portPos=DragEvent, pos="99,571", rects="69,553,129,589", width="0.83", height="0.50"];
+	graph [label="Package: haxegui.events Composition", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=false, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
+	graph [lp="138,12",
+		bb="0,0,276,385"];
+	"haxegui.events.AdjustmentEvent" [label="{\nAdjustmentEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/AdjustmentEvent.html", tooltip="\nAdjustmentEvent", pos="138,43", rects="95,25,182,61", width="1.19", height="0.50"];
+	"haxegui.events.WindowEvent" [label="{\nWindowEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/WindowEvent.html", tooltip="\nWindowEvent", pos="138,97", rects="103,79,174,115", width="0.97", height="0.50"];
+	"haxegui.events.MoveEvent" [label="{\nMoveEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/MoveEvent.html", tooltip="\nMoveEvent", pos="138,151", rects="108,133,169,169", width="0.83", height="0.50"];
+	"haxegui.events.ListEvent" [label="{\nListEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/ListEvent.html", tooltip="\nListEvent", pos="138,205", rects="111,187,165,223", width="0.75", height="0.50"];
+	"haxegui.events.MenuEvent" [label="{\nMenuEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/MenuEvent.html", tooltip="\nMenuEvent", pos="138,259", rects="107,241,169,277", width="0.86", height="0.50"];
+	"haxegui.events.ResizeEvent" [label="{\nResizeEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/ResizeEvent.html", tooltip="\nResizeEvent", pos="138,313", rects="105,295,171,331", width="0.92", height="0.50"];
+	"haxegui.events.DragEvent" [label="{\nDragEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/DragEvent.html", tooltip="\nDragEvent", pos="138,367", rects="108,349,168,385", width="0.83", height="0.50"];
 }

@@ -17,65 +17,77 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// Imports {{{
 package haxegui.controls;
 
-import flash.geom.Rectangle;
+//{{{ Imports
 import flash.display.DisplayObjectContainer;
 import flash.events.Event;
-import flash.events.MouseEvent;
-import flash.events.KeyboardEvent;
-import flash.events.TextEvent;
 import flash.events.FocusEvent;
-
+import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
+import flash.events.TextEvent;
+import flash.geom.Rectangle;
+import haxegui.Haxegui;
 import haxegui.controls.Component;
 import haxegui.controls.Component;
+import haxegui.controls.IAdjustable;
 import haxegui.controls.Input;
-import haxegui.managers.CursorManager;
-import haxegui.utils.Opts;
-import haxegui.managers.StyleManager;
+import haxegui.events.DragEvent;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
-import haxegui.events.DragEvent;
-import haxegui.controls.IAdjustable;
-
+import haxegui.managers.CursorManager;
+import haxegui.managers.StyleManager;
 import haxegui.toys.Arrow;
 import haxegui.toys.Socket;
-
 import haxegui.utils.Color;
+import haxegui.utils.Opts;
 import haxegui.utils.Size;
 //}}}
 
+using haxegui.utils.Color;
+using haxegui.controls.Component;
+
+
+//{{{ StepperUpButton
 /**
 * A Button with an arrow pointing up.
 */
-class StepperUpButton extends Button
+class StepperUpButton extends Button, implements IComposite
+//}}}
 {
 	public var arrow : Arrow;
-
+	//{{{ Functions
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, Stepper)) throw parent+" not a Stepper";
 		mouseChildren = false;
 		super.init(opts);
 		arrow = new haxegui.toys.Arrow(this);
-		arrow.init({ color: haxegui.utils.Color.darken(this.color, 20), width: .5*(cast this.parent).box.height-6, height: 8 });
+		arrow.init({ color: color.darken(20), width: .5*parent.asComponent().box.height-6, height: 8 });
 		arrow.rotation = -90;
 		arrow.move(6,1);
 	}
-
+	//}}}
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(StepperUpButton);
 
 	}
+	//}}}
+	//}}}
 }
+//}}}
 
+//{{{ StepperDownButton
 /**
 * A Button with an arrow pointing down.
 */
-class StepperDownButton extends Button {
+class StepperDownButton extends Button, implements IComposite {
 
 	public var arrow : Arrow;
 
+	//{{{ Functions
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, Stepper)) throw parent+" not a Stepper";
 		mouseChildren = false;
@@ -85,31 +97,40 @@ class StepperDownButton extends Button {
 		arrow.rotation = 90;
 		arrow.move(6,1);
 	}
-
+	//}}}
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(StepperDownButton);
 	}
+	//}}}
+	//}}}
 }
+//}}}
 
-
+//{{{ Stepper
 /**
 * Stepper for numeric values, has an input and up\down buttons.<br/>
 *
 *
-* @author Omer Goshen <gershon@goosemoose.com>
+* @author Omer Goshen Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
 class Stepper extends Component, implements IAdjustable
 {
-	public var up : StepperUpButton;
-	public var down : StepperDownButton;
-	public var input : Input;
-	public var adjustment : Adjustment;
-	public var slot : Socket;
+	//{{{ Members
+	public var up 			: StepperUpButton;
+	public var down 		: StepperDownButton;
+	public var input 		: Input;
+	public var adjustment 	: Adjustment;
+	public var slot 	  	: Socket;
+	//}}}
 
+	//{{{ Functions
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
-		adjustment = new Adjustment({ value: 0, min: 0, max: 100, step: 1, page: 10 });
+		//adjustment = new Adjustment({ value: 0, min: 0, max: 100, step: 1, page: 10 });
+		adjustment = new Adjustment(Adjustment.newAdjustmentObject(Int));
 		box = new Size(40, 20).toRect();
 		color = DefaultStyle.BACKGROUND;
 
@@ -149,7 +170,7 @@ class Stepper extends Component, implements IAdjustable
 		input.addEventListener (MoveEvent.MOVE, onInputMoved, false, 0, true);
 		input.addEventListener (ResizeEvent.RESIZE, onInputResized, false, 0, true);
 
-		if(!disabled) {
+		if(!disabled && Haxegui.slots) {
 			slot = new haxegui.toys.Socket(this);
 			slot.init({radius: 6});
 			slot.moveTo(-14,Std.int(this.box.height)>>1);
@@ -157,16 +178,22 @@ class Stepper extends Component, implements IAdjustable
 		}
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 	}
+	//}}}
 
+	//{{{ onInput
+	/**
+	* @todo handle null and bool too
+	*/
 	private function onInput(e:KeyboardEvent) {
 		switch(e.keyCode) {
 			case flash.ui.Keyboard.ENTER:
 			adjustment.setValue(Std.parseFloat(e.target.text));
 			//adjustment.value = Std.parseFloat(e.target.text);
 		}
-
 	}
+	//}}}
 
+	//{{{ onInputMoved
 	private function onInputMoved(e:MoveEvent) {
 		move(input.x, input.y);
 		input.removeEventListener (MoveEvent.MOVE, onInputMoved);
@@ -174,7 +201,9 @@ class Stepper extends Component, implements IAdjustable
 		input.addEventListener (MoveEvent.MOVE, onInputMoved, false, 0, true);
 
 	}
+	//}}}
 
+	//{{{ onInputResized
 	private function onInputResized(e:ResizeEvent) {
 		up.resize(new Size(box.height, box.height).shift(1));
 		up.moveTo(box.width-up.box.width,0);
@@ -182,13 +211,19 @@ class Stepper extends Component, implements IAdjustable
 		down.moveTo(box.width-up.box.width,up.box.height);
 		this.box = input.box.clone();
 	}
+	//}}}
 
+	//{{{ onChanged
 	private function onChanged(e:Event)	{
 		input.setText(adjustment.valueAsString());
 	}
 
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Stepper);
 	}
-
+	//}}}
+	//}}}
 }
+//}}}
+

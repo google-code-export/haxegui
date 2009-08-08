@@ -17,37 +17,38 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-//Imports {{{
 package haxegui.controls;
 
+
+//Imports {{{
+import feffects.Tween;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.events.Event;
-import flash.events.MouseEvent;
-import flash.events.KeyboardEvent;
 import flash.events.FocusEvent;
-
-import haxegui.managers.CursorManager;
-import haxegui.managers.FocusManager;
-import haxegui.utils.Opts;
-import haxegui.managers.StyleManager;
+import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
+import haxegui.controls.AbstractButton;
+import haxegui.controls.Image;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
-import haxegui.controls.Image;
-import haxegui.controls.AbstractButton;
+import haxegui.managers.CursorManager;
+import haxegui.managers.FocusManager;
+import haxegui.managers.StyleManager;
 import haxegui.toys.Arrow;
 import haxegui.utils.Color;
+import haxegui.utils.Opts;
 import haxegui.utils.Size;
-
-import feffects.Tween;
 //}}}
 
 
+//{{{ ExpanderStyle
 enum ExpanderStyle {
 	ARROW;
 	ICON;
 	BOX;
 }
+//}}}
 
 
 /**
@@ -58,8 +59,8 @@ enum ExpanderStyle {
 **/
 class ExpanderButton extends Button
 {
-	/** **/
-	public var arrow 		 : Arrow;
+	/** Arrow **/
+	public var arrow		 : Arrow;
 
 	/** Expanded state icon **/
 	public var expandedIcon  : Icon;
@@ -73,6 +74,7 @@ class ExpanderButton extends Button
 }
 
 
+//{{{ Expander
 /**
 * Expander class, may be expanded or collapsed by the user to reveal or hide child widgets.<br/>
 * <p></p>
@@ -82,23 +84,28 @@ class ExpanderButton extends Button
 **/
 class Expander extends AbstractButton
 {
+	//{{{ Members
 	public var style : ExpanderStyle;
 
 	public var expanded(__getExpanded,__setExpanded) : Bool;
 
 	public var button : ExpanderButton;
+
 	public var label  : Label;
 
 	public var scrollTween : Tween;
+
 	public var arrowTween : Tween;
+	//}}}
 
 
-	override public function init(opts:Dynamic=null)
-	{
-		style = ExpanderStyle.ICON;
+	//{{{ Functions
+	//{{{ init
+	override public function init(opts:Dynamic=null) {
 		box = new Size(100, 24).toRect();
 		color =  Color.darken(DefaultStyle.BACKGROUND, 16);
 		expanded = false;
+		style = ExpanderStyle.ICON;
 
 		expanded = Opts.optBool(opts, "expanded", expanded);
 
@@ -133,9 +140,10 @@ class Expander extends AbstractButton
 		super.init(opts);
 
 	}
+	//}}}
 
 
-
+	//{{{ onMouseClick
 	override public function onMouseClick(e:MouseEvent) {
 		if(disabled) return;
 
@@ -148,7 +156,7 @@ class Expander extends AbstractButton
 		if(!expanded)
 		scrollTween = new Tween(box.height, this.stage.stageHeight, 1500, r, "height", feffects.easing.Linear.easeNone);
 		else
-		scrollTween = new Tween(this.stage.stageHeight, box.height, 750, r, "height", feffects.easing.Expo.easeOut);
+		scrollTween = new Tween(this.stage.stageHeight, box.height, 500, r, "height", feffects.easing.Expo.easeOut);
 
 		scrollTween.setTweenHandlers( function(v) { self.scrollRect = r; });
 		scrollTween.start();
@@ -173,29 +181,54 @@ class Expander extends AbstractButton
 		expanded = !expanded;
 
 		for(i in 2...numChildren)
-			this.getChildAt(i).visible = true;
+		this.getChildAt(i).visible = true;
 
-		//~ dirty = true;
 		dispatchEvent(new Event(Event.CHANGE));
 
 		super.onMouseClick(e);
 	}
+	//}}}
 
 
 	//////////////////////////////////////////////////
 	////           Getters/Setters                ////
 	//////////////////////////////////////////////////
+	//{{{ __getExpanded
 	private function __getExpanded() : Bool {
 		return this.expanded;
 	}
+	//}}}
 
+
+	//{{{ __setExpanded
 	private function __setExpanded(v:Bool) : Bool {
 		if(v == this.expanded) return v;
 		this.expanded = v;
+
+		switch(style) {
+			case ExpanderStyle.ARROW:
+			if(this.arrowTween!=null)
+			this.arrowTween.stop();
+
+			this.arrowTween = new Tween(expanded?90:0, expanded?0:90, 150, button.firstChild(), "rotation", feffects.easing.Linear.easeNone);
+
+			this.arrowTween.start();
+
+			case ExpanderStyle.ICON:
+			if(this.button!=null) {
+				this.button.expandedIcon.visible = !expanded;
+				this.button.collapsedIcon.visible = expanded;
+			}
+
+		}
+
 		this.dirty = true;
 		return v;
 	}
+	//}}}
 
+
+	//{{{ __setDisabled
 	override private function __setDisabled(v:Bool) : Bool {
 		super.__setDisabled(v);
 		if(this.disabled) {
@@ -208,9 +241,14 @@ class Expander extends AbstractButton
 		}
 		return v;
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Expander);
 	}
-
+	//}}}
+	//}}}
 }
+//}}}

@@ -19,34 +19,35 @@
 
 package haxegui;
 
-import flash.display.Sprite;
+
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.MovieClip;
-import flash.geom.Rectangle;
-
+import flash.display.Sprite;
 import flash.events.Event;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
-import haxegui.events.ResizeEvent;
-
-
-import flash.filters.DropShadowFilter;
+import flash.events.MouseEvent;
 import flash.filters.BitmapFilter;
 import flash.filters.BitmapFilterQuality;
-
-import haxegui.managers.StyleManager;
+import flash.filters.DropShadowFilter;
+import flash.geom.Rectangle;
 import haxegui.Component;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Label;
-
+import haxegui.events.ResizeEvent;
+import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
 import haxegui.utils.Size;
+//}}}
 
+
+//{{{ Tab
 /**
 *
 * Tab Class
+*
+* @todo make draggable
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
@@ -55,13 +56,17 @@ import haxegui.utils.Size;
 */
 class Tab extends AbstractButton
 {
+	//{{{ Members
 	public var label : Label;
 	public var active : Bool;
+	//}}}
 
 
+	//{{{ Functions
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, TabNavigator)) throw parent+" not a TabNavigator";
-		
+
 		box = new Size(40, 24).toRect();
 		color = DefaultStyle.BACKGROUND;
 		active = false;
@@ -80,49 +85,52 @@ class Tab extends AbstractButton
 		//~ addEventListener(FocusEvent.FOCUS_IN, (cast parent).onChanged, false, 0, true);
 
 	}
+	//}}}
 
+
+	//{{{ onMouseClick
 	/** Mouse click **/
-	public override function onMouseClick(e:MouseEvent) : Void
-	{
+	public override function onMouseClick(e:MouseEvent) : Void {
 		var tabnav = cast(parent, TabNavigator);
 		tabnav.activeTab = tabnav.getChildIndex(this);
+
 		//parent.dispatchEvent(new Event(Event.CHANGE));
+
+
 		super.onMouseClick(e);
 	}
-/*
-	public override function onMouseDown(e:MouseEvent) : Void {
-	
-		this.startDrag(false, new Rectangle(0,0,untyped parent.box.width,0));		
+	//}}}
 
-		super.onMouseDown(e);
-	}
 
-	public override function onMouseUp(e:MouseEvent) : Void {
-	
-		this.stopDrag();		
-
-		super.onMouseUp(e);
-	}
-*/
+	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
 		moveTo(x, (cast parent).box.height-box.height);
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Tab);
 	}
+	//}}}
+	//}}}
 }
+//}}}
 
 
-
+//{{{ TabPosition
 enum TabPosition {
 	TOP;
 	BOTTOM;
 	LEFT;
 	RIGHT;
 }
+//}}}
 
 
+
+//{{{ TabNavigator
 /**
 * Tab Navigator bar for switching visible content.
 * Add child Tabs, and connect it to a [Stack] container like this:
@@ -130,10 +138,10 @@ enum TabPosition {
 * // add a tabnav with 2 tabs
 * var tabnav = new TabNavigator();
 * tabnav.init();
-* 
+*
 * var tab = new Tab(tabnav);
 * tab.init();
-* 
+*
 * // 40 is the default tab width, and is passed as horizotal offset
 * tab = new Tab(tabnav, 40);
 * tab.init();
@@ -152,49 +160,56 @@ enum TabPosition {
 */
 class TabNavigator extends Component
 {
+	//{{{ Members
 	/** Tab position **/
 	public var tabPosition : TabPosition;
 
 	/** The index of the selected tab **/
 	public var activeTab(default, __setActive) : Int;
+	//}}}
 
+
+	//{{{ Functions
+	//{{{ addChild
 	public override function addChild(o : DisplayObject) : DisplayObject {
 		//if(Std.is(o, Tab)) for(i in 0...numChildren) if(Std.is(getChildAt(i), Tab)) getChildAt(i).active = false;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		return super.addChild(o);
 	}
+	//}}}
 
 
-	override public function init(opts : Dynamic=null) {
+	//{{{ init
+	override public function init(opts:Dynamic=null) {
 		box = new Size(200, 24).toRect();
 		color = DefaultStyle.BACKGROUND;
 		text = null;
 		tabPosition = TabPosition.TOP;
 
+
 		super.init(opts);
 
-		// add the drop-shadow filters
-		//~ var shadow2:DropShadowFilter = new DropShadowFilter (4, 235, DefaultStyle.DROPSHADOW, 0.45, 4, 4,0.35,BitmapFilterQuality.HIGH,true,false,false);
-		//~ this.filters = [shadow1,shadow2];
-		this.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false)];
+
+		filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false)];
+
 
 		addEventListener(Event.CHANGE, onChanged, false, 0, true);
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
-
-		//~ if(this.parent!=null)
-		//~ parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
-		//~ parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-
-
 	}
-	
+	//}}}
+
+
+	//{{{ __setActive
 	/** Setter for the active tab **/
 	public function __setActive(v:Int) : Int {
 		activeTab = v;
-        dispatchEvent(new Event(Event.CHANGE));
-		return activeTab;	
+		dispatchEvent(new Event(Event.CHANGE));
+		return activeTab;
 	}
+	//}}}
 
+
+	//{{{ onChanged
 	/** Callback for a tab change, updates all child Tabs **/
 	public function onChanged(e:Event) {
 		#if debug
@@ -205,13 +220,12 @@ class TabNavigator extends Component
 				tab.redraw();
 				}
 	}
+	//}}}
 
-	static function __init__() {
-		haxegui.Haxegui.register(TabNavigator);
-	}
 
+	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
-		
+
 		if(Std.is(parent, Component)) {
 			box.width = untyped parent.box.width - x;
 		}
@@ -222,5 +236,15 @@ class TabNavigator extends Component
 
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-	}	
+	}
+	//}}}
+
+
+	//{{{ __init__
+	static function __init__() {
+		haxegui.Haxegui.register(TabNavigator);
+	}
+	//}}}
+	//}}}
 }
+//}}}

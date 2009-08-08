@@ -19,63 +19,54 @@
 
 package haxegui.toys;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
-import flash.display.Sprite;
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.events.MouseEvent;
 import flash.events.FocusEvent;
-
-import haxegui.managers.StyleManager;
-
-import haxegui.utils.Color;
-import haxegui.utils.Size;
-import haxegui.utils.Opts;
-
+import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 import haxegui.controls.Component;
-
+import haxegui.managers.StyleManager;
+import haxegui.utils.Color;
+import haxegui.utils.Opts;
+import haxegui.utils.Size;
+//}}}
 
 class Balloon extends haxegui.toys.Rectangle
 {
 
-
-	override public function init(?opts:Dynamic)
-	{
+	override public function init(?opts:Dynamic) {
 		box = new Size(100,100).toRect();
 		color = Color.random();
-		roundness = 20;
+		roundness = Opts.optFloat(opts, "roundness", 16);
 		pivot = new Point();
-		
-		super.init(opts);
 
-		//roundness = Opts.optFloat(opts, "roundness", roundness);
-		
+		super.init(opts);
 
 		//~ var shadow = new flash.filters.DropShadowFilter (8, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false );
 		//~ this.filters = [shadow];
-			
-	
+
 		setAction("redraw",
 		"
 		this.graphics.clear();
 		this.graphics.beginFill(this.color);
 		this.graphics.drawRoundRect(this.pivot.x,this.pivot.y,this.box.width,this.box.height, this.roundness, this.roundness);
 		this.graphics.endFill();
-		
+		this.graphics.moveTo(10, this.box.height);
+		this.graphics.lineTo(15, this.box.height+8);
+		this.graphics.lineTo(25, this.box.height);
+		this.graphics.endFill();
 		"
 		);
-
-	
 	}
 
 	static function __init__() {
 		haxegui.Haxegui.register(Balloon);
 	}
-	
-	
+
+
 }

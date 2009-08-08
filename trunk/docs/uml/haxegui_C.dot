@@ -1,23 +1,28 @@
 digraph uml {
-	graph [label="Package: haxegui Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [lp="170,10",
-		bb="0,0,340,813"];
-	"haxegui.Haxegui" [label="{Haxegui}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Haxegui.html", tooltip=Haxegui, portPos=Haxegui, pos="38,39", rects="11,21,65,57", width="0.75", height="0.50"];
-	"haxegui.Window" [label="{Window}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Window.html", tooltip=Window, portPos=Window, pos="38,120", rects="11,102,65,138", width="0.75", height="0.50"];
-	"haxegui.WindowType" [label="{WindowType|NORMAL\lMODAL\lALWAYS_ON_TOP\l}", style="rounded,filled", fillcolor=white, pos="264,120", rects="188,101,254,139 254,101,340,139", width="2.11", height="0.53"];
-	"haxegui.Dialog" [label="{Dialog}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Dialog.html", tooltip=Dialog, portPos=Dialog, pos="38,188", rects="11,170,65,206", width="0.75", height="0.50"];
-	"haxegui.Console" [label="{Console}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Console.html", tooltip=Console, portPos=Console, pos="38,249", rects="11,231,65,267", width="0.75", height="0.50"];
-	"haxegui.RichTextEditor" [label="{RichTextEditor}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/RichTextEditor.html", tooltip=RichTextEditor, portPos=RichTextEditor, pos="38,306", rects="1,288,76,324", width="1.03", height="0.50"];
-	"haxegui.DataSource" [label="{DataSource}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/DataSource.html", tooltip=DataSource, portPos=DataSource, pos="38,362", rects="5,344,71,380", width="0.92", height="0.50"];
-	"haxegui.ColorPicker" [label="{ColorPicker}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/ColorPicker.html", tooltip=ColorPicker, portPos=ColorPicker, pos="38,417", rects="6,399,70,435", width="0.89", height="0.50"];
-	"haxegui.XmlParser" [label="{XmlParser}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/XmlParser.html", tooltip=XmlParser, portPos=XmlParser, pos="38,471", rects="8,453,68,489", width="0.83", height="0.50"];
-	"haxegui.Node" [label="{Node}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Node.html", tooltip="Node", portPos="Node", pos="38,525", rects="11,507,65,543", width="0.75", height="0.50"];
-	"haxegui.Introspector" [label="{Introspector}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Introspector.html", tooltip=Introspector, portPos=Introspector, pos="38,579", rects="4,561,72,597", width="0.94", height="0.50"];
-	"haxegui.Appearance" [label="{Appearance}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Appearance.html", tooltip=Appearance, portPos=Appearance, pos="38,633", rects="5,615,71,651", width="0.92", height="0.50"];
-	"haxegui.Stats" [label="{Stats}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Stats.html", tooltip=Stats, portPos=Stats, pos="38,687", rects="11,669,65,705", width="0.75", height="0.50"];
-	"haxegui.Alert" [label="{Alert}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Alert.html", tooltip=Alert, portPos=Alert, pos="38,741", rects="11,723,65,759", width="0.75", height="0.50"];
-	"haxegui.ColorPicker2" [label="{ColorPicker2}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/ColorPicker2.html", tooltip=ColorPicker2, portPos=ColorPicker2, pos="38,795", rects="4,777,73,813", width="0.94", height="0.50"];
-	"haxegui.Window" -> "haxegui.WindowType" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,188,120 65,120 91,120 134,120 173,120"];
+	graph [label="Package: haxegui Composition", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=false, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
+	graph [lp="200,12",
+		bb="0,0,400,817"];
+	"haxegui.Haxegui" [label="{\nHaxegui}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Haxegui.html", tooltip="\nHaxegui", pos="362,43", rects="335,25,389,61", width="0.75", height="0.50"];
+	"haxegui.Window" [label="{\nWindow}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Window.html", tooltip="\nWindow", pos="362,97", rects="335,79,389,115", width="0.75", height="0.50"];
+	"haxegui.WindowType" [label="{\nWindowType|NORMAL\lMODAL\lALWAYS_ON_TOP\l}", style="rounded,filled", fillcolor="#af8dc3", pos="212,97", rects="136,78,202,116 202,78,288,116", width="2.11", height="0.53"];
+	"haxegui.Dialog" [label="{\nDialog}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Dialog.html", tooltip="\nDialog", pos="362,151", rects="335,133,389,169", width="0.75", height="0.50"];
+	"haxegui.Console" [label="{\nConsole}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Console.html", tooltip="\nConsole", pos="362,205", rects="335,187,389,223", width="0.75", height="0.50"];
+	"haxegui.Automator" [label="{\nAutomator}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Automator.html", tooltip="\nAutomator", pos="362,259", rects="332,241,392,277", width="0.83", height="0.50"];
+	"haxegui.RichTextEditor" [label="{\nRichTextEditor}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/RichTextEditor.html", tooltip="\nRichTextEditor", pos="362,313", rects="325,295,400,331", width="1.03", height="0.50"];
+	"haxegui.DataDescriptor" [label="{\nDataDescriptor|}", style="rounded,filled", fillcolor="#ffffbf", pos="50,367", rects="1,349,81,385 81,349,100,385", width="1.36", height="0.50"];
+	"haxegui.DataSource" [label="{\nDataSource}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/DataSource.html", tooltip="\nDataSource", pos="212,367", rects="179,349,245,385", width="0.92", height="0.50"];
+	"haxegui.ColorPicker" [label="{\nColorPicker}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/ColorPicker.html", tooltip="\nColorPicker", pos="362,421", rects="330,403,394,439", width="0.89", height="0.50"];
+	"haxegui.XmlParser" [label="{\nXmlParser}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/XmlParser.html", tooltip="\nXmlParser", pos="362,475", rects="332,457,392,493", width="0.83", height="0.50"];
+	"haxegui.Node" [label="{\nNode}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Node.html", tooltip="\nNode", pos="362,367", rects="335,349,389,385", width="0.75", height="0.50"];
+	"haxegui.Introspector" [label="{\nIntrospector}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Introspector.html", tooltip="\nIntrospector", pos="362,529", rects="328,511,396,547", width="0.94", height="0.50"];
+	"haxegui.Appearance" [label="{\nAppearance}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Appearance.html", tooltip="\nAppearance", pos="362,583", rects="329,565,395,601", width="0.92", height="0.50"];
+	"haxegui.Stats" [label="{\nStats}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Stats.html", tooltip="\nStats", pos="362,637", rects="335,619,389,655", width="0.75", height="0.50"];
+	"haxegui.Binding" [label="{\nBinding}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Binding.html", tooltip="\nBinding", pos="362,691", rects="335,673,389,709", width="0.75", height="0.50"];
+	"haxegui.Alert" [label="{\nAlert}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/Alert.html", tooltip="\nAlert", pos="362,745", rects="335,727,389,763", width="0.75", height="0.50"];
+	"haxegui.ColorPicker2" [label="{\nColorPicker2}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/ColorPicker2.html", tooltip="\nColorPicker2", pos="362,799", rects="328,781,397,817", width="0.94", height="0.50"];
+	"haxegui.Window" -> "haxegui.WindowType" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,335,97 323,97 312,97 300,97 288,97"];
+	"haxegui.DataSource" -> "haxegui.DataDescriptor" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,179,367 167,367 146,367 122,367 100,367"];
+	"haxegui.Node" -> "haxegui.DataSource" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,335,367 323,367 299,367 268,367 245,367"];
 }

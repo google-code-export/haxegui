@@ -19,13 +19,13 @@
 
 package haxegui.utils;
 
-
 import flash.geom.Transform;
 
 /**
-* Functions to ease dealing with hex color triplets
+* Functions to ease dealing with hex color triplets.<br/>
+* This class especially comes handy with haxe's [using] keyword (not in hscript).
 *
-* @todo: HLS, HLV
+* @todo: HLS, HLV, CMYK...
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
@@ -33,6 +33,9 @@ import flash.geom.Transform;
 */
 class Color
 {
+	//{{{ Colors
+	// Basic colors only, for a full named list do:
+	// cat /etc/X11/rgb.txt | awk '{ printf "public static inline var %s = 0x%06X;\n", $4$5$6, or(lshift($1,16), or(lshift($2, 8), $3)) } '
 	public static inline var BLACK 	  : UInt = 0x000000;
 	public static inline var WHITE 	  : UInt = 0xFFFFFF;
 	public static inline var RED   	  : UInt = 0xFF0000;
@@ -41,42 +44,56 @@ class Color
 	public static inline var CYAN  	  : UInt = 0x00FFFF;
 	public static inline var MAGENTA  : UInt = 0xFF00FF;
 	public static inline var YELLOW   : UInt = 0xFFFF00;
-	
+	//}}}
+
+
+	//{{{ Functions
+
+
+	//{{{ toHex
 	/**
 	 * @return Flash formatted hex string (0xRRGGBB)
 	 */
 	public static inline function toHex(color:UInt) : String {
 		return "0x"+StringTools.hex(color, 6);
-	}	
-	
+	}
+	//}}}
 
-	/** 
-	* Single int to gray rgb triplet 
+
+	//{{{ grayHex
+	/**
+	* Single int to gray rgb triplet
 	* <pre class="code haxe">
 	* // results in #0A0A0A
 	* var htmlGray10 = "#"+StringTools.hex(Color.grayHex(10),6);
 	* // results in 0x141414
 	* var flashGray20 = "0x"+StringTools.hex(Color.grayHex(10)+Color.grayHex(10),6);
 	* </pre>
-	**/	
+	**/
 	public static inline function grayHex( v:UInt ) : UInt {
 		return ( v << 16 | v << 8 | v );
 	}
-	
-	/** 
-	* Clamps to black and white 
+	//}}}
+
+
+	//{{{ clamp
+	/**
+	* Clamps to black and white
 	* <pre class="code haxe">
 	* // not using clamp, traces 12C1414
 	* trace(StringTools.hex((300<<16)|(20<<8)|20));
-	* // rgb() uses clamping, traces FFFFFF 
+	* // rgb() uses clamping, traces FFFFFF
 	* trace(StringTools.hex(Color.rgb(300,20,20)));
 	* </pre>
 	**/
 	public static inline function clamp( color:UInt ) : UInt {
 		return cast (Math.max(BLACK, Math.min(WHITE, color)));
 	}
-	
-	/** 
+	//}}}
+
+
+	//{{{ darken
+	/**
 	* Darken color by value
 	* @param input color
 	* @param value (integer)
@@ -85,8 +102,11 @@ class Color
 	public static inline function darken(color:UInt, v:UInt ) : UInt {
 		return clamp(color - grayHex(v));
 	}
+	//}}}
 
-	/** 
+
+	//{{{ tint
+	/**
 	* Tint color by percentage
 	* <pre class="code haxe">
 	* // gives 50% gray
@@ -100,7 +120,7 @@ class Color
 		var r = color >> 16 ;
 		var g = color >> 8 & 0xFF ;
 		var b = color & 0xFF ;
-			
+
 		tint = 1 - tint;
 
 		r = Math.round( r + ( ( 255 - r ) * tint ) );
@@ -109,23 +129,29 @@ class Color
 
 		return clamp(( r << 16 ) | ( g << 8 ) | b);
 	}
+	//}}}
 
-	/** 
+
+	//{{{ rgb
+	/**
 	* Returns clamped hex integer color from rgb triplet
 	* <pre class="code haxe">
 	* var red = Color.rgb(255,0,0);
 	* var htmlGreen = "#"+StringTools.hex(Color.rgb(0,255,0),6);
 	* </pre>
-	* @param red
-	* @param green
-	* @param blue
+	* @param red value
+	* @param green value
+	* @param blue value
 	* @return output color
-	*/	
+	*/
 	public static inline function rgb(r:UInt,g:UInt,b:UInt) : UInt {
 		return clamp((r << 16) | (g << 8) | b);
 	}
-	
-	/** 
+	//}}}
+
+
+	//{{{ toRGB
+	/**
 	* Return object with rgb triplet from hex integer
 	* <pre class="code haxe">
 	* var rgb = Color.toRGB(Color.RED);
@@ -134,16 +160,20 @@ class Color
 	* </pre>
 	* @param input color
 	* @return Dynamic object with r,g,b fields
-	*/	
+	*/
 	public static inline function toRGB(color:UInt) : Dynamic {
 		var r = (color >> 16) & 0xFF ;
 		var g = (color >> 8) & 0xFF ;
 		var b = color & 0xFF ;
 		return { r: r, g: g, b: b };
 	}
+	//}}}
 
+
+	//{{{ random
 	public static inline function random() : UInt {
 		return Std.int(Math.random()*Color.WHITE);
 	}
-
+	//}}}
+	//}}}
 }

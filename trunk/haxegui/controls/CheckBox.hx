@@ -19,23 +19,27 @@
 
 package haxegui.controls;
 
+//{{{ Imports
 import flash.display.DisplayObjectContainer;
-import flash.geom.Rectangle;
 import flash.events.Event;
+import flash.geom.Rectangle;
+import haxegui.Haxegui;
+import haxegui.controls.AbstractButton;
+import haxegui.controls.Button;
+import haxegui.controls.IAdjustable;
 import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
 import haxegui.managers.StyleManager;
-import haxegui.utils.Opts;
-import haxegui.controls.AbstractButton;
-import haxegui.controls.IAdjustable;
-import haxegui.controls.Button;
 import haxegui.toys.Socket;
 import haxegui.utils.Color;
+import haxegui.utils.Opts;
 import haxegui.utils.Size;
+//}}}
 
+
+//{{{ CheckBox
 /**
-* An on\off CheckBox, with composited Label.<br>
-* use the member variable [checked] to get it's state.<br>
+* An on\off CheckBox, special kind of PushButton.<br/>
 * You can use the dispatched event:
 * <pre class="code haxe">
 * var chkbox = new CheckBox();
@@ -49,50 +53,65 @@ import haxegui.utils.Size;
 * chkbox.setAction("mouseClick",
 * "// this is the default code
 * if(!this.disabled) {
-*	this.checked = !this.checked;
+*	this.setSelected(!this.getSelected());
 *	this.redraw();
 *	this.updateColorTween( new feffects.Tween(50, 0, 150, feffects.easing.Linear.easeNone) );
 *   // your code here...
 * }
 * ");
 * </pre>
-* 
+*
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class CheckBox extends PushButton
-{
-
+class CheckBox extends PushButton {
+	//{{{ Functions
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
-		box = new Size(20, 20).toRect();
-		color = DefaultStyle.BACKGROUND;
 		adjustment = new Adjustment({ value: false, min: false, max: true, step:null, page: null});
-		//~ adjustment = new Adjustment({ value: 1, min: 0, max: 1, step:1, page: 1});
+
+
 		super.init(opts);
+
+
+		box = new Size(20, 20).toRect();
+
+
 		mouseChildren = true;
-		
+
+
+		// label
 		label.box.width -= 30;
 		label.center();
 		label.move(30,0);
-		
-		if(!disabled) {
+
+
+		// slot
+		if(!disabled && Haxegui.slots) {
 			slot = new haxegui.toys.Socket(this);
 			slot.init();
 			slot.moveTo(-14,Std.int(this.box.height)>>1);
-	
+
 			slot.color = Color.tint(slot.color, .5);
-		}	
+		}
+
 
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 	}
+	//}}}
 
+
+	//{{{ onChanged
 	public function onChanged(e:Event) {
 		trace(e+"\t"+adjustment.valueAsString());
 		selected = cast adjustment.getValue();
 		redraw();
 	}
-	
+	//}}}
+
+
+	///{{{ __setDisabled
 	override private function __setDisabled(v:Bool) : Bool {
 		super.__setDisabled(v);
 		if(this.disabled) {
@@ -105,12 +124,14 @@ class CheckBox extends PushButton
 		}
 		return v;
 	}
+	//}}}
 
 
-	//////////////////////////////////////////////////
-	////           Initialization                 ////
-	//////////////////////////////////////////////////
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(CheckBox);
 	}
+	//}}}
+	//}}}
 }
+//}}}

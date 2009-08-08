@@ -21,7 +21,7 @@ package haxegui.containers;
 
 /**
 *
-* Interface for containers.
+* Interface for containers.<br/>
 *
 */
 interface IContainer {

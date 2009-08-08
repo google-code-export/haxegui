@@ -1,17 +1,19 @@
 digraph uml {
-	graph [label="Package: haxegui.containers Composition", ratio=compress, rankdir=LR, size="24,12", fontname=Sans, fontsize=10, bgcolor="#88B3C1", fontcolor=black];
-	node [label="\N", fontname=Sans, fontsize=8, shape=record, color=black, fontcolor=black];
-	edge [fontname=Sans, fontsize=8, minlen=3, color=black, fontcolor=black];
-	graph [lp="232,10",
-		bb="0,0,464,589"];
-	"haxegui.containers.IContainer" [label="{IContainer}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/IContainer.html", tooltip=IContainer, portPos=IContainer, pos="31,39", rects="1,21,61,57", width="0.83", height="0.50"];
-	"haxegui.containers.Container" [label="{Container}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Container.html", tooltip=Container, portPos=Container, pos="31,228", rects="3,210,60,246", width="0.78", height="0.50"];
-	"haxegui.containers.ScrollPane" [label="{ScrollPane}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/ScrollPane.html", tooltip=ScrollPane, portPos=ScrollPane, pos="31,350", rects="1,332,62,368", width="0.83", height="0.50"];
-	"haxegui.containers.Stack" [label="{Stack}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Stack.html", tooltip=Stack, portPos=Stack, pos="31,438", rects="4,420,58,456", width="0.75", height="0.50"];
-	"haxegui.containers.DividerHandle" [label="{DividerHandle}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/DividerHandle.html", tooltip=DividerHandle, portPos=DividerHandle, pos="212,509", rects="175,491,250,527", width="1.03", height="0.50"];
-	"haxegui.containers.DividerHandleButton" [label="{DividerHandleButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/DividerHandleButton.html", tooltip=DividerHandleButton, portPos=DividerHandleButton, pos="413,509", rects="362,491,464,527", width="1.42", height="0.50"];
-	"haxegui.containers.Divider" [label="{Divider}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Divider.html", tooltip=Divider, portPos=Divider, pos="31,509", rects="4,491,58,527", width="0.75", height="0.50"];
-	"haxegui.containers.Accordion" [label="{Accordion}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Accordion.html", tooltip=Accordion, portPos=Accordion, pos="31,571", rects="3,553,60,589", width="0.78", height="0.50"];
-	"haxegui.containers.DividerHandle" -> "haxegui.containers.DividerHandleButton" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,362,509 250,509 277,509 315,509 347,509"];
-	"haxegui.containers.Divider" -> "haxegui.containers.DividerHandle" [color=white, style="setlinewidth(4)", arrowhead=diamond, arrowsize="1.25", pos="e,175,509 58,509 85,509 126,509 160,509"];
+	graph [label="Package: haxegui.containers Composition", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=false, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
+	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
+	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
+	graph [lp="156,12",
+		bb="0,0,312,439"];
+	"haxegui.containers.IContainer" [label="{\nIContainer}", fontcolor="#496962", style="rounded,filled", fillcolor="#88c2b3", URL="../types/haxegui/containers/IContainer.html", tooltip="\nIContainer", pos="281,43", rects="251,25,311,61", width="0.83", height="0.50"];
+	"haxegui.containers.Container" [label="{\nContainer}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Container.html", tooltip="\nContainer", pos="281,97", rects="253,79,310,115", width="0.78", height="0.50"];
+	"haxegui.containers.Grid" [label="{\nGrid}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Grid.html", tooltip="\nGrid", pos="281,151", rects="254,133,308,169", width="0.75", height="0.50"];
+	"haxegui.containers.HBox" [label="{\nHBox}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/HBox.html", tooltip="\nHBox", pos="281,205", rects="254,187,308,223", width="0.75", height="0.50"];
+	"haxegui.containers.ScrollPane" [label="{\nScrollPane}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/ScrollPane.html", tooltip="\nScrollPane", pos="281,259", rects="251,241,312,277", width="0.83", height="0.50"];
+	"haxegui.containers.Stack" [label="{\nStack}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Stack.html", tooltip="\nStack", pos="281,313", rects="254,295,308,331", width="0.75", height="0.50"];
+	"haxegui.containers.DividerHandle" [label="{\nDividerHandle}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/DividerHandle.html", tooltip="\nDividerHandle", pos="176,367", rects="139,349,214,385", width="1.03", height="0.50"];
+	"haxegui.containers.DividerHandleButton" [label="{\nDividerHandleButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/DividerHandleButton.html", tooltip="\nDividerHandleButton", pos="51,367", rects="0,349,102,385", width="1.42", height="0.50"];
+	"haxegui.containers.Divider" [label="{\nDivider}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Divider.html", tooltip="\nDivider", pos="281,367", rects="254,349,308,385", width="0.75", height="0.50"];
+	"haxegui.containers.Accordion" [label="{\nAccordion}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Accordion.html", tooltip="\nAccordion", pos="281,421", rects="253,403,310,439", width="0.78", height="0.50"];
+	"haxegui.containers.DividerHandle" -> "haxegui.containers.DividerHandleButton" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,139,367 127,367 119,367 111,367 102,367"];
+	"haxegui.containers.Divider" -> "haxegui.containers.DividerHandle" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,254,367 242,367 233,367 223,367 214,367"];
 }
