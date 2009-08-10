@@ -40,48 +40,59 @@ import haxegui.utils.Size;
 //}}}
 
 /**
- * Socket.<br/>
- *
- *
- */
-class Socket extends AbstractButton
-{
+* Socket.<br/>
+*
+*
+*/
+class Socket extends AbstractButton {
 	//{{{ init
 	override public function init(?opts:Dynamic=null) {
 		box = new Size(10,10).toRect();
 
+
 		super.init(opts);
+
 
 		color = Color.tint(Color.random(), .35);
 
 		setAction("redraw",
 		"
 		this.graphics.clear();
+
+		var r = Math.min(this.box.height, this.box.width);
+
+		this.graphics.clear();
 		this.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND, 40), 0, false, flash.display.LineScaleMode.NONE);
 		this.graphics.beginFill(this.color,1);
-		var points = [];
-		this.graphics.moveTo(0, 6);
+		this.graphics.moveTo(0, .6*r);
+
+		// hexagon
 		for(i in 1...7)
-			this.graphics.lineTo(6*Math.sin(i/3*Math.PI), 6*Math.cos(i/3*Math.PI));
-		this.graphics.drawCircle(0,0,3);
+		this.graphics.lineTo(.6*r*Math.sin(i/3*Math.PI), .6*r*Math.cos(i/3*Math.PI));
+
+		this.graphics.drawCircle(0,0,.3*r);
 		this.graphics.endFill();
-		this.graphics.beginFill(Color.darken(DefaultStyle.BACKGROUND, 120), .7);
-		this.graphics.drawCircle(0,0,3);
+
+
+		this.graphics.beginFill(Color.darken(DefaultStyle.BACKGROUND, 120));
+		this.graphics.drawCircle(0,0,.3*r);
 		this.graphics.endFill();
 		"
 		);
 
 		filters = [	new flash.filters.DropShadowFilter (1, 45, Color.BLACK, 1, 2, 2, .5, flash.filters.BitmapFilterQuality.LOW, false, false, false ),
-					new flash.filters.BevelFilter(1, 60, Color.WHITE, .85, Color.BLACK, .65, 1, 1, 1)];
+		new flash.filters.BevelFilter (1, 60, Color.WHITE, .85, Color.BLACK, .65, 1, 1, 1)];
 
 
 	}
 	//}}}
 
+
 	//{{{ onMouseDown
 	public override function onMouseDown(e:MouseEvent) {
 		if(Std.is(e.target.getParentWindow(), haxegui.Node)) return;
 
+		//
 		var patchLayer = cast flash.Lib.current.getChildByName('patchLayer');
 		var patch = new Patch(patchLayer);
 		patch.init();
@@ -111,9 +122,11 @@ class Socket extends AbstractButton
 	}
 	//}}}
 
+
 	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Socket);
 	}
 	//}}}
 }
+

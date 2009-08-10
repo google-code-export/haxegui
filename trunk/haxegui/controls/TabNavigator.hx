@@ -41,6 +41,8 @@ import haxegui.utils.Opts;
 import haxegui.utils.Size;
 //}}}
 
+
+//{{{ Tab
 /**
 * Tab Class<br/>
 *
@@ -95,6 +97,8 @@ class Tab extends AbstractButton, implements IAggregate
 	}
 	//}}}
 }
+//}}}
+
 
 //{{{ TabPosition
 enum TabPosition {
@@ -105,6 +109,8 @@ enum TabPosition {
 }
 //}}}
 
+
+//{{{ TabNavigator
 /**
 * Tab Navigator bar for switching visible content.<br/>
 * Add child [Tab]s to the bar, and connect it to a [Stack] container like this:
@@ -132,8 +138,7 @@ enum TabPosition {
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class TabNavigator extends Component
-{
+class TabNavigator extends Component {
 	//{{{ Members
 	/** Tab position **/
 	public var tabPosition : TabPosition;
@@ -155,6 +160,7 @@ class TabNavigator extends Component
 	}
 	//}}}
 
+
 	//{{{ init
 	override public function init(opts : Dynamic=null) {
 		box = new Size(200, 24).toRect();
@@ -162,22 +168,16 @@ class TabNavigator extends Component
 		description = null;
 		tabPosition = TabPosition.TOP;
 
+
 		super.init(opts);
 
-		// add the drop-shadow filters
-		//~ var shadow2:DropShadowFilter = new DropShadowFilter (4, 235, DefaultStyle.DROPSHADOW, 0.45, 4, 4,0.35,BitmapFilterQuality.HIGH,true,false,false);
-		//~ this.filters = [shadow1,shadow2];
-		this.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false)];
+
+		filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false)];
 
 		addEventListener(Event.CHANGE, onChanged, false, 0, true);
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
-
-		//~ if(this.parent!=null)
-		//~ parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
-		//~ parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-
-
 	} //}}}
+
 
 	//{{{ __setActive
 	/** Setter for the active tab **/
@@ -186,6 +186,7 @@ class TabNavigator extends Component
 		dispatchEvent(new Event(Event.CHANGE));
 		return activeTab;
 	} //}}}
+
 
 	//{{{ onChanged
 	/** Callback for a tab change, updates all child Tabs **/
@@ -199,6 +200,7 @@ class TabNavigator extends Component
 		}
 	}
 	//}}}
+
 
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
@@ -214,9 +216,11 @@ class TabNavigator extends Component
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	} //}}}
 
+
 	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(TabNavigator);
 	}
 	//}}}
 }
+//}}}

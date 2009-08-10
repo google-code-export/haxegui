@@ -24,15 +24,15 @@ import flash.events.Event;
 
 /**
 *
-* Binding Class
+* Binding<br/>
 *
 * @author <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.2
 */
-class Binding extends EventDispatcher
-{
+class Binding extends EventDispatcher {
 
+	//{{{ Members
 	/** The static binding id counter **/
 	private static var nextId : Int = 0;
 
@@ -40,7 +40,10 @@ class Binding extends EventDispatcher
 
 	public var id : Int;
 	public var name : String;
+	//}}}
 
+
+	//{{{ Constructor
 	public function new(?name:String) {
 		super();
 		this.id = Binding.nextId++;
@@ -49,18 +52,20 @@ class Binding extends EventDispatcher
 			this.name = name;
 		else
 			this.name = Type.getClassName(Type.getClass(this)).split(".").pop() + id;
-
-
 	}
+	//}}}
 
-	override public function toString() : String
-	{
+
+	//{{{ toString
+	override public function toString() : String {
 		return this.name + "[" + Type.getClassName(Type.getClass(this)) + "]";
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Binding);
 	}
-
-
+	//}}]
 }

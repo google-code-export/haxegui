@@ -51,14 +51,14 @@ enum ExpanderStyle {
 //}}}
 
 
+//{{{ ExpanderButton
 /**
 * ExpanderButton
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class ExpanderButton extends Button
-{
+class ExpanderButton extends Button {
 	/** Arrow **/
 	public var arrow		 : Arrow;
 
@@ -72,6 +72,7 @@ class ExpanderButton extends Button
 		haxegui.Haxegui.register(ExpanderButton);
 	}
 }
+//}}}
 
 
 //{{{ Expander
@@ -82,8 +83,8 @@ class ExpanderButton extends Button
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class Expander extends AbstractButton
-{
+class Expander extends AbstractButton {
+
 	//{{{ Members
 	public var style : ExpanderStyle;
 
@@ -138,7 +139,6 @@ class Expander extends AbstractButton
 		//cacheAsBitmap = true;
 
 		super.init(opts);
-
 	}
 	//}}}
 

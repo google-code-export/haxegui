@@ -125,11 +125,10 @@ class Slider extends Component, implements IAdjustable
 		var shadow = new flash.filters.DropShadowFilter (disabled ? 1 : 2, 45, DefaultStyle.DROPSHADOW, disabled ? 0.25 : 0.5, 4, 4, disabled ?  0.25 : 0.5, flash.filters.BitmapFilterQuality.LOW, false, false, false );
 		handle.filters = [shadow];
 
-		if(!disabled && Haxegui.slots) {
-			slot = new haxegui.toys.Socket(this);
-			slot.init({ color: Color.tint(slot.color, .5) });
-			slot.moveTo(-14,Std.int(this.box.height)>>1);
-		}
+		// slot
+		slot = new haxegui.toys.Socket(this);
+		slot.init({ color: Color.tint(slot.color, .5), visible: false });
+		slot.moveTo(-14,Std.int(this.box.height)>>1);
 
 		handle.addEventListener (MouseEvent.MOUSE_DOWN, onHandleMouseDown, false, 0, true);
 

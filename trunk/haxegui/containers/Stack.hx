@@ -44,8 +44,8 @@ import haxegui.utils.Opts;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class Stack extends Component, implements IContainer
-{
+class Stack extends Component, implements IContainer {
+
 	public var selectedIndex : Int;
 
 	//{{{ Constructor
@@ -80,27 +80,10 @@ class Stack extends Component, implements IContainer
 
 
 	//{{{ onParentResize
+	/** @todo check stack resizing **/
 	public function onParentResize(e:ResizeEvent) {
-
-		//~ if(Std.is(parent, Component)) {
-			//~ box = untyped parent.box.clone();
-			//~ box.width -= x;
-			//~ box.height -= y;
-		//~ }
-		//~ else
-		//~ if(Std.is(parent, Divider)) untyped {
-			//~ var b = parent.box.clone();
-			//~ b.height = parent.handle.y;
-			//~ box = b;
-		//~ }
-		//~ else
-		//~ if(Std.is(parent.parent, ScrollPane)) {
-			//~ box = untyped parent.parent.box.clone();
-		//~ }
-
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-
 	}
 	//}}}
 

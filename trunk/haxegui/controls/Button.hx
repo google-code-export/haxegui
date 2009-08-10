@@ -70,6 +70,7 @@ class Button extends AbstractButton, implements IAdjustable {
 	*/
 	public var label : Label;
 
+
 	/**
 	* Optional icon for the button
 	*
@@ -92,26 +93,26 @@ class Button extends AbstractButton, implements IAdjustable {
 	*/
 	public var icon  : Icon;
 
+
 	/**
 	* when true button will stay pressed when clicked and raise back on the next click.<br>
-	*
 	* use the [selected] property to tell if it is pressed or not.
-	*
 	* @see selected
 	**/
 	public var toggle : Bool;
 
+
 	/**
 	* true when is pressed.<br/>
-	*
 	* Notice when using hscript, selected is not available in direct access, use the getter and setter.
-	*
 	* @see selected
 	**/
 	public var selected( __getSelected, __setSelected ) : Bool;
 
+
 	/** slot **/
 	public var slot : Socket;
+
 
 	/** @todo send binary adjustments**/
 	public var adjustment : Adjustment;

@@ -56,8 +56,7 @@ class WindowManager extends EventDispatcher
 
 	//{{{ getInstance
 	public static function getInstance ():WindowManager {
-		if (WindowManager._instance == null)
-		{
+		if (WindowManager._instance == null) {
 			WindowManager._instance = new WindowManager ();
 		}
 		return WindowManager._instance;
@@ -97,9 +96,6 @@ class WindowManager extends EventDispatcher
 
 		var window =  new Window(parent, name, x, y);
 
-		//~ getInstance().windows.set(name, window);
-		//~ WindowManager.getInstance().register(window);
-
 		return window;
 	}
 	//}}}
@@ -135,11 +131,6 @@ class WindowManager extends EventDispatcher
 
 	//{{{ proxy
 	public function proxy(e:Dynamic) {
-		//~ for(i in 0...listeners.length) {
-		//~ var listener = listeners[i];
-		//~ Reflect.callMethod(listener, listener.log, [e]);
-		//~ }
-		//~ trace(e);
 		if(Std.is(e,FocusEvent)) {
 			switch(e.type) {
 				case FocusEvent.FOCUS_IN:

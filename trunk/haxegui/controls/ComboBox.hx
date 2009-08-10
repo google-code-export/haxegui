@@ -284,13 +284,10 @@ class ComboBox extends Component, implements IData, implements IAdjustable
 
 
 		// Slot
-		if(!disabled && haxegui.Haxegui.slots) {
-			slot = new haxegui.toys.Socket(this);
-			slot.init();
-			slot.moveTo(-14,Std.int(this.box.height)>>1);
-
-			slot.color = Color.tint(slot.color, .5);
-		}
+		slot = new haxegui.toys.Socket(this);
+		slot.init({visible: false});
+		slot.moveTo(-14,Std.int(this.box.height)>>1);
+		slot.color = Color.tint(slot.color, .5);
 
 
 		//

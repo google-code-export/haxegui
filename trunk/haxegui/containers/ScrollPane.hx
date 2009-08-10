@@ -102,6 +102,7 @@ class ScrollPane extends Component, implements IContainer
 
 
 	//{{{ onMouseWheel
+	/** @todo fix mouse wheeling **/
 	public override function onMouseWheel(e:MouseEvent) {
 		if(vert==null) return;
 		var handleMotionTween = new feffects.Tween( 0, 1, 1000, feffects.easing.Expo.easeOut );
@@ -118,37 +119,18 @@ class ScrollPane extends Component, implements IContainer
 	//{{{ onParentResize
 	/**
 	*
-	*
 	*/
 	public function onParentResize(e:ResizeEvent) {
 		//~ box = untyped parent.box.clone();
 		if(fitH) box.width = (cast parent).box.width - x - ((vert!=null && vert.visible) ? 20 : 0);
 		if(fitV) box.height = (cast parent).box.height - y - ((horz!=null && horz.visible) ? 20 : 0);
 
-		//~ box.width -= x;
-		//~ box.height -= y;
-
-		//~ if(horz.visible) box.height -= 20;
-		//~ if(vert.visible) box.width -= 20;
-
-
-
-				//~ if( (horz!=null && horz.visible) || (vert!=null && vert.visible))
-				//~ {
-					//~ this.graphics.clear();
-					//~ this.graphics.beginFill(color - 0x141414);
-					//~ this.graphics.drawRect(box.width, box.height, 22, 22);
-					//~ this.graphics.endFill();
-				//~ }
 
 		var r = box.clone();
 		r.x = content.scrollRect.x;
 		r.y = content.scrollRect.y;
 		content.scrollRect = r.clone();
 
-		// add the drop-shadow filter
-		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8,0.5,BitmapFilterQuality.HIGH,true,false,false);
-		//~ this.filters = [shadow];
 
 		content.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));

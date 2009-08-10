@@ -52,6 +52,7 @@ enum Cursor {
 }
 //}}}
 
+
 //{{{ CursorManager
 /**
 *
@@ -61,8 +62,7 @@ enum Cursor {
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class CursorManager extends EventDispatcher
-{
+class CursorManager extends EventDispatcher {
 	//{{{ Members
 	//{{{ Static
 	/** Singelton **/
@@ -113,10 +113,8 @@ class CursorManager extends EventDispatcher
 	//{{{ Public
 	//{{{ getInstance
 	/** Singleton access **/
-	public static function getInstance ():CursorManager
-	{
-		if (CursorManager._instance == null)
-		{
+	public static function getInstance ():CursorManager	{
+		if (CursorManager._instance == null) {
 			CursorManager._instance = new CursorManager ();
 		}
 		return CursorManager._instance;
@@ -125,8 +123,7 @@ class CursorManager extends EventDispatcher
 
 
 	//{{{ toString
-	public override function toString () : String
-	{
+	public override function toString () : String {
 		return "CursorManager";
 	}
 	//}}}
@@ -150,7 +147,6 @@ class CursorManager extends EventDispatcher
 
 
 	//{{{ getCursor
-
 	private inline function getCursor() : MovieClip	{
 		return _mc;
 	}
@@ -216,7 +212,7 @@ class CursorManager extends EventDispatcher
 	/**
 	*
 	*/
-	private function __setCursor(c:Cursor) : Cursor 	{
+	private function __setCursor(c:Cursor) : Cursor	{
 		var point : Point = new Point();
 		cursor = c;
 

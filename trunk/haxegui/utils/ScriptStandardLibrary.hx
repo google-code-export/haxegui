@@ -34,16 +34,14 @@ import hscript.Interp;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class ScriptStandardLibrary
-{
+class ScriptStandardLibrary {
 	//{{{ Functions
 	//{{{ set
 	/**
 	* Sets all the exported library methods to the given interpreter.<br/>
 	* <p>The haxegui package is exported without the "haxegui" prefix.</p>
 	**/
-	public static function set(interp:Interp)
-	{
+	public static function set(interp:Interp) {
 		//{{{ haxe
 		interp.variables.set( "Date", Date );
 		interp.variables.set( "Lambda", Lambda );

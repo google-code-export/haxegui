@@ -19,26 +19,24 @@
 
 package haxegui.controls;
 
-import flash.geom.Rectangle;
+//{{{ Imports
 import flash.display.DisplayObjectContainer;
-import flash.text.TextField;
-import flash.text.TextFieldType;
-import flash.text.TextFieldAutoSize;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
-
 import flash.events.Event;
 import flash.events.TextEvent;
-
+import flash.geom.Rectangle;
+import flash.text.TextField;
+import flash.text.TextFieldAutoSize;
+import flash.text.TextFieldType;
+import flash.text.TextFormat;
+import flash.text.TextFormatAlign;
+import haxegui.controls.Component;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.StyleManager;
-import haxegui.controls.Component;
-
 import haxegui.utils.Align;
-import haxegui.utils.Size;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
-
+import haxegui.utils.Size;
+//}}}
 
 
 /**
@@ -49,15 +47,15 @@ import haxegui.utils.Opts;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class Label extends Component, implements IText
-{
+class Label extends Component, implements IText {
+
 	public var tf 						: TextField;
 	public var text (getText, setText)  : String;
 
 	public var align : Alignment;
 
+	//{{{ init
 	override public function init(opts : Dynamic=null) {
-
 		if(text==null)
 			text = name;
 
@@ -102,18 +100,27 @@ class Label extends Component, implements IText
 
 		dirty = false;
 	}
+	//}}}
 
+
+	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
 		tf.width = box.width;
 		tf.height = box.height;
 		super.onResize(e);
 	}
+	//}}}
 
+
+	//{{{ getText
 	public function getText() : String {
 		if(tf==null) return null;
 		return tf.text;
 	}
+	//}}}
 
+
+	//{{{ setText
 	public function setText(s:String) : String {
 		if(tf==null || s==null) return null;
 		tf.text = s;
@@ -122,15 +129,17 @@ class Label extends Component, implements IText
 		resize(new Size(tf.width, tf.height));
 		return tf.text;
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
-		haxegui.Haxegui.register(Label,initialize);
+		haxegui.Haxegui.register(Label);
 	}
-
-	static function initialize() {
-	}
+	//}}}
 
 
+	//{{{ redraw
 	public override function redraw(opts:Dynamic=null) {
 
 		tf.x = Std.int(tf.x);
@@ -138,5 +147,5 @@ class Label extends Component, implements IText
 
 		super.redraw(opts);
 	}
-
+	//}}}
 }
