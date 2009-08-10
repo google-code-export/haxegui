@@ -222,8 +222,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 	/**
 	* Loads the layout
 	*/
-	static function loadXML(e:Event) : Void
-	{
+	static function loadXML(e:Event) : Void	{
 		trace(here.methodName) ;
 		var str = e.target.data;
 		LayoutManager.loadLayouts(Xml.parse(str));
@@ -339,7 +338,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 			// try and grab the base url from flashvars first
 			var baseURL = Reflect.field(fvars, "baseURL");
-			if(baseURL==null) Haxegui.loader.elementsNamed("domain").next().get("baseurl");
+			if(baseURL==null) baseURL = Haxegui.loader.elementsNamed("domain").next().get("baseurl");
 			if(baseURL==null) baseURL = "";
 			Haxegui.baseURL = baseURL;
 

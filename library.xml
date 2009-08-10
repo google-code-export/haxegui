@@ -33,10 +33,10 @@
 			<clip id="Logo" import="assets/hgui_logo.png"/>
 
 			<!-- Sounds -->
-			
+
 			<!-- Text -->
 			<textfield id="notice" width="200" height="50" size="10" font="_mono" color="#ffffff" text="Please do not run this file directly."/>
 		</library>
-		<place id="notice" name="notice" x="400" y="200" depth="10"/>
+		<place id="notice" name="notice" x="400" y="200" depth="0"/>
 	</frame>
 </movie>

@@ -52,8 +52,8 @@ using haxegui.controls.Component;
 */
 class DividerHandleButton extends AbstractButton {
 
-	override public function init(opts : Dynamic=null)
-	{
+	//{{{ init
+	override public function init(opts : Dynamic=null) {
 		if(untyped parent.parent.horizontal)
 		box = new Rectangle(0,0,10,100);
 		else
@@ -73,10 +73,14 @@ class DividerHandleButton extends AbstractButton {
 		}
 
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(DividerHandle);
 	}
+	//}}}
 }
 //}}}
 
@@ -89,6 +93,7 @@ class DividerHandle extends AbstractButton {
 
 	public var button : DividerHandleButton;
 
+	//{{{ init
 	override public function init(opts : Dynamic=null) {
 		if((cast parent).horizontal)
 		box = new Rectangle(0,0,10,512);
@@ -111,6 +116,8 @@ class DividerHandle extends AbstractButton {
 		button.moveTo(.5*(512-100),0);
 
 	}
+	//}}}
+
 
 	//{{{ onMouseMove
 	public function onMouseMove(e:MouseEvent) {}
@@ -153,18 +160,20 @@ class Divider extends Container {
 	//{{{ init
 	override public function init(opts : Dynamic=null) {
 		box = parent.asComponent().box.clone();
-		horizontal = Opts.optBool(opts, "horizontal", false);
+		horizontal = false;
 
 
 		super.init(opts);
 
 
+		horizontal = Opts.optBool(opts, "horizontal", horizontal);
+
 		handle = new DividerHandle(this);
 		handle.init();
 		if(horizontal)
-		handle.moveTo(250, 0);
+			handle.moveTo(250, 0);
 		else
-		handle.moveTo(0, 250);
+			handle.moveTo(0, 250);
 
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);

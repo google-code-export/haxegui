@@ -20,27 +20,26 @@
 package haxegui.controls;
 
 //{{{ Imports
-import flash.geom.Rectangle;
-
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-
-import haxegui.managers.DragManager;
-import haxegui.managers.CursorManager;
-import haxegui.managers.StyleManager;
-import haxegui.controls.Image;
-import haxegui.controls.Component;
-import haxegui.utils.Opts;
-import haxegui.controls.Expander;
-import haxegui.events.ResizeEvent;
-import haxegui.events.DragEvent;
+import flash.geom.Rectangle;
 import haxegui.DataSource;
-import haxegui.utils.Size;
+import haxegui.controls.Component;
+import haxegui.controls.Expander;
+import haxegui.controls.Image;
+import haxegui.events.DragEvent;
+import haxegui.events.ResizeEvent;
+import haxegui.managers.CursorManager;
+import haxegui.managers.DragManager;
+import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
+import haxegui.utils.Opts;
+import haxegui.utils.Size;
 //}}}
+
 
 using haxegui.controls.Component;
 
@@ -119,17 +118,36 @@ class TreeNode extends AbstractButton, implements IAggregate
 		super.init(opts);
 
 		expander = new Expander(this, name);
-		expander.init({expanded: false});
+		expander.init({expanded: true});
 		//expander.setAction("mouseClick", "");
 
-		// expander.mouseEnabled = false;
+		expander.mouseEnabled = false;
 		expander.removeEventListener(MouseEvent.CLICK, expander.onMouseClick);
 	}
 	//}}}
 
+
+	//{{{ addChild
+	public override function addChild(o:DisplayObject) : DisplayObject {
+		if(expander==null) return super.addChild(o);
+		return expander.addChild(o);
+		// return super.addChild(o);
+	}
+	//}}}
+
+
+	//{{{ getChildIndex
+	public override function getChildIndex(o:DisplayObject) : Int {
+		if(expander==null) return super.getChildIndex(o);
+		return expander.getChildIndex(o);
+		// return super.addChild(o);
+	}
+	//}}}
+
+	//{{{ onMouseClick
 	public override function onMouseClick(e:MouseEvent) {
 		for(i in 2...expander.numChildren)
-			expander.getChildAt(i).visible = expander.expanded;
+		expander.getChildAt(i).visible = expander.expanded;
 
 		expander.expanded = !expander.expanded;
 
@@ -137,6 +155,8 @@ class TreeNode extends AbstractButton, implements IAggregate
 
 		super.onMouseClick(e);
 	}
+	//}}}
+
 
 	//{{{ expand
 	public function expand() {}
@@ -188,40 +208,42 @@ class Tree extends Component, implements IData
 		rootNode = new TreeNode(this);
 		rootNode.init({x: 12, width: box.width, color: this.color });
 
-		var node = new TreeNode(rootNode.expander);
-		node.init({x: 24, y:24, color: this.color});
 
-		for(i in 0...3) {
-			node = new TreeNode(node.expander);
-			node.init({x: 24, y:24, width: box.width, color: this.color });
+
+		var o = {};
+		var root = flash.Lib.current;
+		for(i in 0...root.numChildren) {
+			var child = cast root.getChildAt(i);
+			Reflect.setField(o, child.name, child);
 		}
 
-		node = new TreeNode(rootNode.expander);
-		node.init({x: 24, y: 5*24, color: this.color});
+		process(o, rootNode);
 	}
 	//}}}
 
 	//{{{ redraw
 	public override function redraw(opts:Dynamic=null) {
+		// background
 		this.graphics.clear();
-		this.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,10), 1);
-		this.graphics.beginFill(this.color);
-		this.graphics.drawRect(0,0, this.box.width, this.box.height);
-		this.graphics.endFill();
-
-		var o = this;
-		var draw = function(x:Float,y:Float) {
-			var h = 24;
-			o.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,30), 1);
-			o.graphics.moveTo(12+x, h+24*y);
-			o.graphics.lineTo(12+x, 12+h+24*y);
-			o.graphics.lineTo(12+x, 12+h+24*y);
-			o.graphics.lineTo(24+x, 12+h+24*y);
+		for(i in 0...Std.int(box.height/24)+1) {
+			this.graphics.beginFill( (i%2==0?Color.darken(this.color,10):this.color) );
+			this.graphics.drawRect(0, 24*i, this.box.width, 24);
+			this.graphics.endFill();
 		}
 
-		var node = this.asComponent();
-		for(i in 0...4)
-		draw(12+24*i, i);
+		// var o = this;
+		// var draw = function(x:Float,y:Float) {
+		// 	var h = 24;
+		// 	o.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,30), 1);
+		// 	o.graphics.moveTo(12+x, h+24*y);
+		// 	o.graphics.lineTo(12+x, 12+h+24*y);
+		// 	o.graphics.lineTo(12+x, 12+h+24*y);
+		// 	o.graphics.lineTo(24+x, 12+h+24*y);
+		// }
+
+		// var node = this.asComponent();
+		// for(i in 0...4)
+		// draw(12+24*i, i);
 
 
 		super.redraw(opts);
@@ -241,8 +263,7 @@ class Tree extends Component, implements IData
 				}
 				else {
 					var treenode = new TreeNode(node, f);
-					treenode.init({x: x+20, width: box.width});
-					addNode(treenode);
+					treenode.init({x: x+24, y: 24*(node.getChildIndex(treenode)-1), width: box.width});
 					process(Reflect.field(o,f), treenode);
 				}
 			}
@@ -251,29 +272,6 @@ class Tree extends Component, implements IData
 	//}}}
 
 
-	//{{{ addLeaf
-	public function addLeaf(leaf: TreeLeaf, node:TreeNode) {
-		var n = 0;
-		for(l in node)
-		if(Std.is(l, TreeLeaf)) n++;
-		leaf.move(24,24*n);
-	}
-	//}}}
-
-
-	//{{{ addNode
-	public function addNode(node: TreeNode) {var n = 0;
-
-		var n = 0;
-		for(t in this)
-		if(Std.is(t, TreeNode)) {
-			for(l in cast(t,Component))
-			if(Std.is(l, TreeLeaf)) n++;
-			n++;
-		}
-		node.move(0,24*n);
-	}
-	//}}}
 
 
 	//{{{ __init__

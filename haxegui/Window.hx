@@ -196,29 +196,9 @@ class Window extends Component {
 
 	//{{{ onMouseDoubleClick
 	/**
-	* @todo fix window shading
+	* @todo window shading
 	*/
 	public override function onMouseDoubleClick(e:MouseEvent) : Void {
-		/*
-		var self = this;
-		var t = new feffects.Tween(this.box.height, 40, 1500, feffects.easing.Back.easeInOut);
-		t.setTweenHandlers( function(v) {
-		self.box.height = v;
-		self.redraw();
-		} );
-		t.start();
-
-		var self = this;
-		haxe.Timer.delay( function() {
-		for(i in 0...self.numChildren)
-		if(self.getChildAt(i)!=self.frame &&
-		self.getChildAt(i)!=self.titlebar &&
-		self.getChildAt(i)!=self.statusbar )
-		self.getChildAt(i).visible = false;
-
-		}, 1500 );
-		dispatchEvent(new WindowEvent(WindowEvent.ROLLED));
-		*/
 		super.onMouseDoubleClick(e);
 	}
 	//}}}
@@ -226,15 +206,10 @@ class Window extends Component {
 
 	//{{{ __init__
 	static function __init__() {
-		haxegui.Haxegui.register(Window,initialize);
+		haxegui.Haxegui.register(Window);
 	}
 	//}}}
 
-
-	//{{{ initialize
-	static function initialize() {
-	}
-	//}}}
 	//}}}
 }
 //}}}

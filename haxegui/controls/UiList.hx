@@ -61,15 +61,16 @@ using haxegui.controls.Component;
 * @author Russell Weir'
 *
 */
-class ListHeader extends AbstractButton, implements IComposite
-{
+class ListHeader extends AbstractButton, implements IComposite {
 	public var labels : Array<Label>;
 	public var seperators : Array<Seperator>;
 	public var arrow : Arrow;
 
 	//{{{  init
+	/**
+	* @throws String when not parented to a [UiList]
+	*/
 	override public function init(opts:Dynamic=null) {if(!Std.is(parent, UiList)) throw parent+" not a UiList";
-
 		if(!Std.is(parent, UiList)) throw parent+" not a UiList";
 
 		//~ mouseChildren = true;
@@ -95,6 +96,7 @@ class ListHeader extends AbstractButton, implements IComposite
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	} //}}}
 
+
 	//{{{ onMouseDown
 	override public function onMouseDown(e:MouseEvent) : Void {
 		if(Std.is(e.target, Label)) {
@@ -106,6 +108,7 @@ class ListHeader extends AbstractButton, implements IComposite
 		super.onMouseDown(e);
 	}
 	//}}}
+
 
 	//{{{ onMouseUp
 	override public function onMouseUp(e:MouseEvent) : Void {
@@ -119,6 +122,7 @@ class ListHeader extends AbstractButton, implements IComposite
 	}
 	//}}}
 
+
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
 		box = (cast parent).box.clone();
@@ -129,12 +133,13 @@ class ListHeader extends AbstractButton, implements IComposite
 
 	///{{{ destroy
 	public override function destroy() {
-		removeEventListener(MoveEvent.MOVE, (cast parent).onHeaderMove);
+		removeEventListener(MoveEvent.MOVE, (cast parent).onHeaderMoved);
 		parent.removeEventListener(ResizeEvent.RESIZE, onParentResize);
 
 		super.destroy();
 	}
 	//}}}
+
 
 	//{{{ __init__
 	static function __init__() {
@@ -157,8 +162,7 @@ class ListHeader extends AbstractButton, implements IComposite
 * @author Russell Weir'
 *
 */
-class ListItem extends AbstractButton, implements IRubberBand, implements IAggregate
-{
+class ListItem extends AbstractButton, implements IRubberBand, implements IAggregate {
 	public var label : Label;
 	public var selected : Bool;
 
@@ -188,12 +192,14 @@ class ListItem extends AbstractButton, implements IRubberBand, implements IAggre
 	}
 	//}}}
 
+
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {box.width = (cast parent).box.width;
 		box.width = (cast parent).box.width;
 		dirty = true;
 	}
 	//}}}
+
 
 	//{{{ __init__
 	static function __init__() {
@@ -216,8 +222,7 @@ class ListItem extends AbstractButton, implements IRubberBand, implements IAggre
 * @author Russell Weir'
 *
 */
-class UiList extends Component, implements IData, implements ArrayAccess<ListItem>
-{
+class UiList extends Component, implements IData, implements ArrayAccess<ListItem> {
 	//{{{ Members
 	/** Header for this list **/
 	public var header : ListHeader;
@@ -238,6 +243,7 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	/** index of the dragged item **/
 	var dragItem : Int;
 	//}}}
+
 
 	//{{{ init
 	public override function init(opts : Dynamic=null) {
@@ -299,40 +305,19 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 		}
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
-		header.addEventListener(MoveEvent.MOVE, onHeaderMove, false, 0, true);
-		/*
-		setAction("mouseClick",
-		"
-		if(this.dataSource!=null) {
-		trace(this.dataSource);
-		if(Std.is(this.dataSource.data, List)) {
-		var l = this.dataSource.data;
-		l.add('Item'+l.length);
-		this.dataSource.__setData(l);
-		var item = new haxegui.controls.ListItem(this, 'Item'+l.length);
-		item.color = DefaultStyle.INPUT_BACK;
-		item.init();
-		item.moveTo(0,20*l.length);
-		this.box.height += 20;
-		this.dirty=true;
-		}
-		trace(this.dataSource.data);
-		}
-		trace(this.data);
-		"
-		);
-		*/
+		header.addEventListener(MoveEvent.MOVE, onHeaderMoved, false, 0, true);
 	}
 	//}}}
 
-	//{{{ onHeaderMove
-	public function onHeaderMove(e:MoveEvent) {
+
+	//{{{ onHeaderMoved
+	public function onHeaderMoved(e:MoveEvent) {
 		this.move(header.x, header.y);
 		header.x = 0;
 		header.y = 0;
 	}
-
 	//}}}
+
 
 	//{{{ __setDataSource
 	public function __setDataSource(d:DataSource) : DataSource {
@@ -351,7 +336,7 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 			for(i in items) {
 				var item = new ListItem(this);
 				item.init({ color: DefaultStyle.INPUT_BACK,
-					text: i
+					label: i
 				});
 				box.width = item.box.width = Math.max(box.width, item.label.tf.width);
 				item.label.mouseEnabled = false;
@@ -363,12 +348,14 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	}
 	//}}}
 
+
 	//{{{ addChild
 	override function addChild(child : DisplayObject) : DisplayObject {
 		if(Std.is(child, ListItem)) items.push(cast child);
 		return super.addChild(child);
 	}
 	//}}}
+
 
 	//{{{ onData
 	private  function onData(e:Event) {
@@ -381,11 +368,13 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	}
 	//}}}
 
+
 	//{{{ onParentResize
 	private function onParentResize(e:ResizeEvent) : Void {
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
+
 
 	//{{{ onItemMouseUp
 	public function onItemMouseUp(e:MouseEvent) : Void {
@@ -398,9 +387,8 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	}
 	//}}}
 
+
 	//{{{ redraw
-
-
 	override public function redraw(opts:Dynamic=null) {
 		super.redraw(opts);
 
@@ -418,12 +406,14 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	}
 	//}}}
 
+
 	//{{{ destroy
 	public override function destroy() {
 		parent.removeEventListener(ResizeEvent.RESIZE, onParentResize);
 		super.destroy();
 	}
 	//}}}
+
 
 	//{{{ __init__
 	static function __init__() {
@@ -437,11 +427,12 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 //{{{ ListBox
 /**
 * Alias for a [UiList] with a [ScrollBar]
+* @todo
 */
-class ListBox extends UiList
-{
+class ListBox extends UiList {
 	public var scrollbar : ScrollBar;
 
+	//{{{ init
 	public override function init(opts:Dynamic=null) {
 		super.init(opts);
 
@@ -449,12 +440,15 @@ class ListBox extends UiList
 		scrollbar = new ScrollBar(this);
 		scrollbar.init({target: this, height: box.height});
 	}
+	//}}}
 
 
+	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
-		scrollbar.moveTo(20, box.width - 20);
+		scrollbar.moveTo(box.width - 20, 20);
 		super.onResize(e);
 	}
+	//}}}
 
 
 	//{{{ __init__

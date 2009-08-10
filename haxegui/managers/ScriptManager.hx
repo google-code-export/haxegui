@@ -36,7 +36,7 @@ import hscript.Interp;
 
 
 //{{{ ScriptObject
-/** Type object for managing scripts **/
+/** Typed object for managing scripts **/
 typedef ScriptObject = {
 	var interp  : Interp;
 	var program : Expr;
@@ -55,8 +55,8 @@ typedef ScriptObject = {
 * @author Russell Weir <damonsbane@gmail.com>
 * @author Omer Goshen <gershon@goosemoose.com>
 */
-class ScriptManager implements Dynamic
-{
+class ScriptManager implements Dynamic {
+
 	//{{{ Members
 	//{{{ Public
 	public static var debug 		: Bool = false;

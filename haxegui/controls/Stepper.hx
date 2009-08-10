@@ -44,20 +44,22 @@ import haxegui.utils.Opts;
 import haxegui.utils.Size;
 //}}}
 
+
 using haxegui.utils.Color;
 using haxegui.controls.Component;
 
 
 //{{{ StepperUpButton
 /**
-* A Button with an arrow pointing up.
+* A Button with an arrow pointing up.<br/>
 */
-class StepperUpButton extends Button, implements IComposite
-//}}}
-{
+class StepperUpButton extends Button, implements IComposite {
 	public var arrow : Arrow;
 	//{{{ Functions
 	//{{{ init
+	/**
+	* @throws String when not parented to a [Stepper]
+	*/
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, Stepper)) throw parent+" not a Stepper";
 		mouseChildren = false;
@@ -68,6 +70,8 @@ class StepperUpButton extends Button, implements IComposite
 		arrow.move(6,1);
 	}
 	//}}}
+
+
 	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(StepperUpButton);
@@ -78,9 +82,10 @@ class StepperUpButton extends Button, implements IComposite
 }
 //}}}
 
+
 //{{{ StepperDownButton
 /**
-* A Button with an arrow pointing down.
+* A Button with an arrow pointing down.<br/>
 */
 class StepperDownButton extends Button, implements IComposite {
 
@@ -88,6 +93,9 @@ class StepperDownButton extends Button, implements IComposite {
 
 	//{{{ Functions
 	//{{{ init
+	/**
+	* @throws String when not parented to a [Stepper]
+	*/
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, Stepper)) throw parent+" not a Stepper";
 		mouseChildren = false;
@@ -98,6 +106,8 @@ class StepperDownButton extends Button, implements IComposite {
 		arrow.move(6,1);
 	}
 	//}}}
+
+
 	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(StepperDownButton);
@@ -106,6 +116,7 @@ class StepperDownButton extends Button, implements IComposite {
 	//}}}
 }
 //}}}
+
 
 //{{{ Stepper
 /**
@@ -116,8 +127,7 @@ class StepperDownButton extends Button, implements IComposite {
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class Stepper extends Component, implements IAdjustable
-{
+class Stepper extends Component, implements IAdjustable {
 	//{{{ Members
 	public var up 			: StepperUpButton;
 	public var down 		: StepperDownButton;
@@ -148,7 +158,9 @@ class Stepper extends Component, implements IAdjustable
 
 		Opts.removeFields(aOpts, ["value","step", "page", "min","max"]);
 
+
 		super.init(aOpts);
+
 
 		// since we removed fields, reset the initOpts
 		this.initOpts = Opts.clone(opts);
@@ -163,22 +175,24 @@ class Stepper extends Component, implements IAdjustable
 		up.init(bOpts);
 		down.init(bOpts);
 
+		// this prevents too many glow filters
 		input.setAction("focusIn", "");
 		input.setAction("focusOut", "");
 
+		// input
 		input.tf.addEventListener (KeyboardEvent.KEY_DOWN, onInput, false, 0, true);
 		input.addEventListener (MoveEvent.MOVE, onInputMoved, false, 0, true);
 		input.addEventListener (ResizeEvent.RESIZE, onInputResized, false, 0, true);
 
-		if(!disabled && Haxegui.slots) {
-			slot = new haxegui.toys.Socket(this);
-			slot.init({radius: 6});
-			slot.moveTo(-14,Std.int(this.box.height)>>1);
+		// slot
+		slot = new haxegui.toys.Socket(this);
+		slot.init({radius: 6, visible: false});
+		slot.moveTo(-14,Std.int(this.box.height)>>1);
 
-		}
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 	}
 	//}}}
+
 
 	//{{{ onInput
 	/**
@@ -193,6 +207,7 @@ class Stepper extends Component, implements IAdjustable
 	}
 	//}}}
 
+
 	//{{{ onInputMoved
 	private function onInputMoved(e:MoveEvent) {
 		move(input.x, input.y);
@@ -203,20 +218,22 @@ class Stepper extends Component, implements IAdjustable
 	}
 	//}}}
 
+
 	//{{{ onInputResized
 	private function onInputResized(e:ResizeEvent) {
-		up.resize(new Size(box.height, box.height).shift(1));
-		up.moveTo(box.width-up.box.width,0);
-		down.resize(new Size(box.height, box.height).shift(1));
-		down.moveTo(box.width-up.box.width,up.box.height);
-		this.box = input.box.clone();
+		box = input.box.clone();
+		up.moveTo(box.width-10, 0);
+		down.moveTo(box.width-10, up.box.height);
+		up.dirty = down.dirty = true;
 	}
 	//}}}
+
 
 	//{{{ onChanged
 	private function onChanged(e:Event)	{
 		input.setText(adjustment.valueAsString());
 	}
+
 
 	//{{{ __init__
 	static function __init__() {
@@ -224,6 +241,6 @@ class Stepper extends Component, implements IAdjustable
 	}
 	//}}}
 	//}}}
+	//}}}
 }
 //}}}
-

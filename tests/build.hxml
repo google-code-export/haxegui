@@ -25,3 +25,34 @@
 
 ### Debug ###
 # -debug
+
+
+--next
+
+-main ScrollBarTest
+
+-cp ../
+-cp .../haxegui
+
+### haxelibs Dependencies ###
+-lib feffects
+-lib hscript
+-lib aPath
+-lib utest
+
+### Resources ###
+-resource ../loader.xml@Loader
+-resource ../assets/styles/default_style.xml@default_style
+-resource ../haxegui/toys/AnalogClock.hx@clock_code
+-resource ../samples/Example7.xml@xml_clock_code
+
+### Library ###
+-swf-lib ../assets.swf
+
+### Output ###
+-swf9 ScrollBarTest.swf
+-swf-version 9
+-swf-header 1024:768:120:3C3C3C
+
+### Debug ###
+# -debug

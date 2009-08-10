@@ -29,14 +29,13 @@ import haxegui.XmlParser;
 
 
 /**
-* LayoutManager handles loading layouts from XML files, and setting a layout.
+* LayoutManager handles loading layouts from XML files, and setting a layout.<br/>
 *
 * @version 0.1
 * @author Russell Weir <damonsbane@gmail.com>
 * @author Omer Goshen <gershon@goosemoose.com>
 */
-class LayoutManager
-{
+class LayoutManager {
 	public static var layouts : Hash<Xml> = new Hash<Xml>();
 	public static var lastLoaded : String;
 
@@ -89,8 +88,7 @@ class LayoutManager
 
 	//{{{ onXmlLoaded
 	/** fetchLayout handler **/
-	private static function onXmlLoaded(cb:Bool->Void, e:Event) : Void
-	{
+	private static function onXmlLoaded(cb:Bool->Void, e:Event) : Void {
 		trace(here.methodName);
 		var rv = true;
 		try {

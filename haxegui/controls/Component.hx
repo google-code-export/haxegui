@@ -754,6 +754,22 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	//}}}
 
 
+	//{{{ getElementsByClassList
+	/**
+	* Returns a list of all children of type.
+	* @param c Class to match
+	* @return All children of type [c]
+	*/
+	public function getElementsByClassArray(c:Class<Dynamic>) : Array<Dynamic> {
+		var a = new Array<Dynamic>();
+		for(i in this)
+		if(Std.is(i, c))
+		a.push(i);
+		return a;
+	}
+	//}}}
+
+
 	//{{{ removeChildren
 	/**
 	* Remove all children

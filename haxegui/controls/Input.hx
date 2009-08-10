@@ -44,14 +44,13 @@ import haxegui.controls.IAdjustable;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.2
 */
-class Input extends Component, implements IText
-{
+class Input extends Component, implements IText {
+
 	//{{{ Members
 	public var password 					: Bool;
 	public var selection(getSelection, null): String;
 	public var text(getText, setText) 		: String;
 	public var tf 							: TextField;
-
 	//}}}
 
 	//{{{ Functions
@@ -79,10 +78,10 @@ class Input extends Component, implements IText
 		tf.height = box.height;
 		tf.width = box.width;
 		tf.mouseEnabled = true;
-		tf.selectable = disabled ? false : true;
+		tf.selectable = ! disabled;
 		tf.tabEnabled = false;
 		tf.text = Opts.optString(opts, "text", name);
-		tf.type = disabled ? TextFieldType.DYNAMIC : TextFieldType.INPUT;
+		// tf.type = disabled ? TextFieldType.DYNAMIC : TextFieldType.INPUT;
 
 		tf.y = 4;
 		tf.height -=4;
@@ -95,10 +94,9 @@ class Input extends Component, implements IText
 
 
 		addChild(tf);
-
 		//addEventListener(TextEvent.TEXT_INPUT, onChanged, false, 0, true);
-
 	} //}}}
+
 
 	//{{{ __setDisabled
 	override private function __setDisabled(v:Bool) : Bool {
@@ -125,8 +123,7 @@ class Input extends Component, implements IText
 
 
 	//{{{ getText
-	public function getText() : String {return tf.text;
-
+	public function getText() : String {
 		return tf.text;
 	} //}}}
 
@@ -152,11 +149,9 @@ class Input extends Component, implements IText
 
 
 	//{{{ __init__
-	static function __init__() {haxegui.Haxegui.register(Input);
-
+	static function __init__() {
 		haxegui.Haxegui.register(Input);
 	}
 	//}}}
 	//}}}
 }
-

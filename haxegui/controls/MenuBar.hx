@@ -54,23 +54,37 @@ import haxegui.utils.Size;
 using haxegui.controls.Component;
 using haxegui.utils.Color;
 
+//{{{
+class Spacer extends Component {
+	//{{{ __init__
+	static function __init__() {
+		haxegui.Haxegui.register(Spacer);
+	}
+	//}}}
+}
+//}}}
 
-//{{{ MenuBarItem
+//{{{ Menu
 /**
-* MenuBarItem Class
+* Menu Class
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.2
 */
-class MenuBarItem extends AbstractButton, implements IAggregate {
+class Menu extends AbstractButton, implements IAggregate, implements IData {
 
 	public var label : Label;
 	public var icon  : Icon;
 	public var menu  : PopupMenu;
+	public var data  : Dynamic;
+	public var dataSource( default, __setDataSource ) : DataSource;
 
 
 	//{{{ init
+	/**
+	* @throws String when not parented to a [MenuBar]
+	*/
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, MenuBar)) throw parent+" not a MenuBar";
 		box = new Size(40,24).toRect();
@@ -85,6 +99,8 @@ class MenuBarItem extends AbstractButton, implements IAggregate {
 		label.move(4,4);
 		label.mouseEnabled = false;
 
+		box.width = label.width;
+		dirty = false;
 	}
 	//}}}
 
@@ -102,8 +118,9 @@ class MenuBarItem extends AbstractButton, implements IAggregate {
 		menu = new PopupMenu(flash.Lib.current);
 		// menu = new PopupMenu(getParentWindow());
 
-		menu.dataSource = new DataSource();
-		menu.dataSource.data = ["MenuItem", "MenuItem", "MenuItem", "MenuItem", "MenuItem"];
+		// menu.dataSource = new DataSource();
+		// menu.dataSource.data = ["MenuItem", "MenuItem", "MenuItem", "MenuItem", "MenuItem"];
+		menu.dataSource = this.dataSource;
 		menu.init ({color: this.color});
 
 		// menu.init ({x: p.x, y: p.y, color: this.color});
@@ -117,9 +134,23 @@ class MenuBarItem extends AbstractButton, implements IAggregate {
 	//}}}
 
 
+	//{{{ __setDataSource
+	public function __setDataSource(d:DataSource) : DataSource {
+		dataSource = d;
+
+		#if debug
+		trace(this.dataSource+" => "+this);
+		trace(this.dataSource+": "+dataSource.data);
+		#end
+
+		return dataSource;
+	}
+	//}}}
+
+
 	//{{{ __init__
 	static function __init__() {
-		haxegui.Haxegui.register(MenuBarItem);
+		haxegui.Haxegui.register(Menu);
 	}
 	//}}}
 }
@@ -136,7 +167,7 @@ class MenuBarItem extends AbstractButton, implements IAggregate {
 */
 class MenuBar extends Component, implements IRubberBand {
 	//{{{ Members
-	public var items : Array<MenuBarItem>;
+	public var items : Array<Menu>;
 
 	public var numMenus : Int;
 
@@ -164,13 +195,13 @@ class MenuBar extends Component, implements IRubberBand {
 		mouseEnabled = false;
 
 
-		_menu = 0;
-		numMenus = 1+Math.round( Math.random() * 4 );
+		// _menu = 0;
+		// numMenus = 1+Math.round( Math.random() * 4 );
 
-		for (i in 0...numMenus) {
-			var menu = new MenuBarItem(this, "Menu"+(i+1), 40*i, 0);
-			menu.init({color: this.color});
-		}
+		// for (i in 0...numMenus) {
+			// var menu = new Menu(this, "Menu"+(i+1), 40*i, 0);
+			// menu.init({color: this.color});
+		// }
 
 		// inner-drop-shadow filter
 		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.LOW,true,false,false);
@@ -184,9 +215,14 @@ class MenuBar extends Component, implements IRubberBand {
 
 	//{{{ addChild
 	override function addChild(child : flash.display.DisplayObject) : flash.display.DisplayObject {
-		if(Std.is(child, MenuBarItem))
+		var child = super.addChild(child);
+		if(Std.is(child, Menu))
 		items.push(cast child);
-		return super.addChild(child);
+		// child.x = 40*getChildIndex(child);
+		var w = .0;
+		for(i in this) w += (getChildIndex(child)==0?0:4) + (Std.is(i, Component)?(cast i).box.width:i.width);
+		child.x = w;
+		return child;
 	}
 	//}}}
 

@@ -17,76 +17,79 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package haxegui.toys;
+package haxegui;
 
-
-//{{{ Import
+//{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.FocusEvent;
+import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import haxegui.Window;
+import haxegui.containers.Container;
 import haxegui.controls.Component;
+import haxegui.controls.Image;
+import haxegui.controls.Label;
+import haxegui.events.DragEvent;
+import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
+import haxegui.managers.CursorManager;
+import haxegui.managers.MouseManager;
 import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
 //}}}
 
-
-using haxegui.utils.Color;
-
-
 /**
-* Component with basic drawRect script.<br/>
-* <p>Default proprties are set to random colors and some roundess.</p>
+* Automation of events on components<br/>
+*
+*
 */
-class Rectangle extends Component
+class Automator extends EventDispatcher
 {
-	public var roundness : Float;
-	public var stroke : UInt;
-	public var thickness : Float;
-	public var pivot : Point;
 
-	//{{{ init
-	override public function init(?opts:Dynamic=null) {
-		box = new Size(100,100).toRect();
-		color = Color.random().tint(.5);
-		stroke = color.darken(20);
-		thickness = 1;
-		roundness = 20;
-		pivot = new Point();
+	public static var stage = flash.Lib.current.stage;
 
 
-		super.init(opts);
-
-
-		roundness = Opts.optFloat(opts, "roundness", roundness);
-		thickness = Opts.optFloat(opts, "thickness", thickness);
-		stroke = Opts.optInt(opts, "stroke", stroke);
-
-
-		setAction("redraw",
-		"
-		this.graphics.clear();
-		this.graphics.lineStyle(this.thickness, this.stroke, 1, true, flash.display.LineScaleMode.NONE);
-		this.graphics.beginFill(this.color);
-		this.graphics.drawRoundRect(this.pivot.x,this.pivot.y,this.box.width,this.box.height, this.roundness, this.roundness);
-		this.graphics.endFill();
-
-		"
-		);
+	//{{{ mouseToPoint
+	public static function mouseToPoint(p:Point) : MouseEvent {
+		return MouseManager.getInstance().moveToPoint(p);
 	}
 	//}}}
 
-	//{{{ __init__
-	static function __init__() {
-		haxegui.Haxegui.register(Rectangle);
+
+	//{{{ mouseClick
+	public static function mouseClick(c:Component) {
+		var p = CursorManager.getInstance().getPoint();
+		c.dispatchEvent(new MouseEvent(MouseEvent.CLICK, false, true, p.x, p.y));
 	}
 	//}}}
 
+
+	//{{{ mouseDown
+	public static function mouseDown(c:Component) {
+		var p = CursorManager.getInstance().getPoint();
+		c.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, false, true, p.x, p.y));
+	}
+	//}}}
+
+
+	//{{{ mouseUp
+	public static function mouseUp(c:Component) {
+		var p = CursorManager.getInstance().getPoint();
+		c.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP, false, true, p.x, p.y));
+	}
+	//}}}
+
+
+	//{{{ actionClick
+	public static function actionClick(c:Component) {
+		return "Clicking "+c.name;
+	}
+	//}}}
 }

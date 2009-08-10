@@ -36,6 +36,7 @@ import flash.ui.Keyboard;
 import flash.ui.Mouse;
 import haxegui.Window;
 import haxegui.containers.Container;
+import haxegui.controls.Component;
 import haxegui.controls.ScrollBar;
 import haxegui.events.DragEvent;
 import haxegui.events.MoveEvent;
@@ -44,12 +45,14 @@ import haxegui.logging.ErrorType;
 import haxegui.logging.ILogger;
 import haxegui.logging.LogLevel;
 import haxegui.managers.StyleManager;
+import haxegui.utils.Color;
 import haxegui.utils.Opts;
-import haxegui.utils.Size;
 import haxegui.utils.Printing;
+import haxegui.utils.Size;
 import hscript.Expr;
 import hscript.Parser;
 //}}}
+
 
 /**
 *
@@ -62,11 +65,12 @@ import hscript.Parser;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class Console extends Window, implements ILogger
-{
+class Console extends Window, implements ILogger {
+
 	//{{{ Members
 	/** hscript parser **/
 	var parser : hscript.Parser;
+
 
 	/**
 	* hscript interpreter
@@ -82,8 +86,10 @@ class Console extends Window, implements ILogger
 	**/
 	var interp : hscript.Interp;
 
+
 	/** the console's input history, press up to pop a command **/
 	var history : Array<String>;
+
 
 	/**
 	* the current console "working directory"
@@ -93,6 +99,7 @@ class Console extends Window, implements ILogger
 	* </pre>
 	**/
 	var _pwd : DisplayObjectContainer;
+
 
 	/**
 	* the current console "working directory", in its array form.
@@ -104,6 +111,7 @@ class Console extends Window, implements ILogger
 	* </pre>
 	**/
 	var pwd : Array<String>;
+
 
 	var container : Container;
 	var output : TextField;
@@ -155,7 +163,7 @@ class Console extends Window, implements ILogger
 		// Input TextField for hscript execution
 		input = new TextField();
 		input.name = "input";
-		input.defaultTextFormat = DefaultStyle.getTextFormat(8, 0xFFFFFF);
+		input.defaultTextFormat = DefaultStyle.getTextFormat(8, Color.WHITE);
 		input.type = flash.text.TextFieldType.INPUT;
 		input.background = true;
 		input.backgroundColor = 0x4D4D4D;
@@ -361,7 +369,7 @@ class Console extends Window, implements ILogger
 	//{{{ getPwdFromClick
 	public function getPwdFromClick(e:MouseEvent) {
 		stage.removeEventListener(MouseEvent.MOUSE_DOWN, getPwdFromClick);
-		_pwd = e.target;
+		_pwd = Component.asComponent(e.target);
 		//pwd = e.target.ancestors().join(".");
 		var o = _pwd;
 		pwd = [];

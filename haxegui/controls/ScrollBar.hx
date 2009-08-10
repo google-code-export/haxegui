@@ -94,22 +94,28 @@ class ScrollBarDownButton extends AbstractButton, implements IAggregate
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ScrollBarHandle extends AbstractButton, implements IComposite
-{
+class ScrollBarHandle extends AbstractButton, implements IComposite {
+	//{{{ onResize
 	override public function onResize(e:ResizeEvent) : Void {
 		box.width =  parent.asComponent().box.width;
 		box.height = Math.max(20, box.height);
 		box.height = Math.min(box.height, parent.asComponent().box.height - y);
 	}
+	//}}}
 
 
+	//{{ onMouseMove
 	public function onMouseMove(e:MouseEvent) {
 		this.x=parent.x;
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBarHandle);
 	}
+	//}}}
 }
 //}}}
 
@@ -122,8 +128,8 @@ class ScrollBarHandle extends AbstractButton, implements IComposite
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ScrollBarFrame extends AbstractButton, implements IComposite
-{
+class ScrollBarFrame extends AbstractButton, implements IComposite {
+	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		super.init(opts);
 		setAction("mouseOver","");
@@ -132,10 +138,14 @@ class ScrollBarFrame extends AbstractButton, implements IComposite
 		setAction("mouseUp","");
 
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBarFrame);
 	}
+	//}}}
 }
 //}}}
 
@@ -152,13 +162,14 @@ class ScrollBarFrame extends AbstractButton, implements IComposite
 * <i>note: When parented to anything other than a [ScrollPane], it does not resize automatically.</i>
 *
 * @todo fix problems when adding extra buttons
+* @todo handle resizing to reflect content's height
+* @todo adjustment...
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class ScrollBar extends Component, implements IAdjustable
-{
+class ScrollBar extends Component, implements IAdjustable {
 	//{{{ Members
 	public var frame	 			: 	ScrollBarFrame;
 	public var handle	 			: 	ScrollBarHandle;

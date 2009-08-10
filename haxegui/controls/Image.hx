@@ -27,6 +27,8 @@ import flash.display.Loader;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.net.URLRequest;
+import flash.system.LoaderContext;
+import haxegui.Haxegui;
 import haxegui.utils.Opts;
 //}}}
 
@@ -78,8 +80,15 @@ class Image extends Component
 		if(loader==null)
 		loader = new Loader();
 
+		//
+		var context = new LoaderContext();
+		context.checkPolicyFile = true;
+		//
+		flash.system.Security.allowDomain("*");
+		flash.system.Security.loadPolicyFile(Haxegui.baseURL+"crossdomain.xml");
+
 		try {
-			loader.load(new URLRequest(src));
+			loader.load(new URLRequest(src), context);
 		}
 		catch(e:Dynamic) {
 			trace(e);
@@ -175,16 +184,17 @@ class Icon extends Image
 
 	//{{{ Functions
 	//{{{ init
-	override public function init(opts:Dynamic=null) : Void {
+	override public function init(?opts:Dynamic=null) : Void {
+		if(opts==null) opts = {};
 		src = Opts.optString(opts, "src", src);
-		src = haxegui.Haxegui.baseURL + iconDirectory + src;
+		src = Haxegui.baseURL + iconDirectory + src;
 		super.init({src: src});
 	}
 	//}}}
 
 
 	//{{{ __init__
-	static function __init__() {haxegui.Haxegui.register(Image);
+	static function __init__() {
 		haxegui.Haxegui.register(Image);
 	}
 	//}}}

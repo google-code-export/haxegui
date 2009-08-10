@@ -39,9 +39,15 @@ import haxegui.controls.UiList;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.FocusManager;
 import haxegui.managers.StyleManager;
+import haxegui.utils.Color;
 import haxegui.utils.Size;
 import haxegui.windowClasses.StatusBar;
 //}}}
+
+
+using haxegui.controls.Component;
+using haxegui.utils.Color;
+
 
 /**
 *
@@ -99,8 +105,8 @@ class Introspector extends Window {
 
 
 		//
-		divider = new Divider(this, "Divider", 10, 44);
-		divider.init({horizontal: false});
+		// divider = new Divider(this, "Divider", 10, 44);
+		// divider.init({horizontal: false});
 
 
 		//
@@ -143,9 +149,7 @@ class Introspector extends Window {
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
-		//FocusManager.getInstance().addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, onFocusChanged, false, 0, true);
 		this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged, false, 0, true);
-
 	}
 	//}}}
 
@@ -160,7 +164,6 @@ class Introspector extends Window {
 		target = e.target;
 
 		var self = this;
-
 
 
 		if(Std.is(e.target, Component)) {
@@ -211,6 +214,21 @@ class Introspector extends Window {
 			item.label.tf.mouseEnabled = true;
 		}
 		//}}}
+
+
+		var r = (cast tree.firstChild()).expander;
+		for(i in 0...r.numChildren) r.getChildAt(i).graphics.clear();
+		for(i in 0...r.numChildren) {
+			var c = r.getChildAt(i);
+			for(a in target.asComponent().ancestors())
+			if(c.name==a.name) {
+			// trace(c);
+			c.graphics.beginFill(Color.CYAN, .3);
+			c.graphics.drawRect(0,0,tree.box.width,24);
+			c.graphics.endFill();
+			}
+
+		}
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 

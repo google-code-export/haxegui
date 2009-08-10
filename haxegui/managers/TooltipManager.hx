@@ -49,8 +49,8 @@ import haxegui.utils.Size;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class Tooltip extends Component
-{
+class Tooltip extends Component {
+
 	//{{{ Members
 	public var target	 : Component;
 
@@ -70,6 +70,7 @@ class Tooltip extends Component
 
 
 		super (flash.Lib.current, "Tooltip",  flash.Lib.current.stage.mouseX - 15, flash.Lib.current.stage.mouseY - 30);
+
 
 		if(color==Color.MAGENTA) color = DefaultStyle.TOOLTIP;
 
@@ -150,8 +151,8 @@ class Tooltip extends Component
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class TooltipManager extends EventDispatcher
-{
+class TooltipManager extends EventDispatcher {
+
 	//{{{ Members
 	private static var _instance : TooltipManager = null;
 

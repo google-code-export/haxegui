@@ -38,6 +38,7 @@ import haxegui.utils.Size;
 * @version 0.1
 */
 class Dialog extends Window {
+
 	public var icon  	: Icon;
 	public var label 	: Label;
 	public var buttons  : Array<Button>;
@@ -66,7 +67,10 @@ class Dialog extends Window {
 			//t.start();
 			haxe.Timer.delay(t.start, 150);
 		}
+
+
 		super.init(opts);
+
 
 		moveTo(.5*(this.stage.stageWidth-box.width), .5*(this.stage.stageHeight-box.height));
 		type = WindowType.MODAL;
