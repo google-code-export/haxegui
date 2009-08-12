@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="App" basedir="." default="compileAll">
+	<taskdef resource="net/wildwinter/anthx/anthx.properties" classpath="/home/gershon/haxelib/anthx/0,6/libs/AntHX.jar"/>
+	<target name="compileAll">
+		<haxe2swf main="Main" out="main.swf" swflib="assets.swf" version="9">
+			<lib name="hscript"/>
+			<lib name="feffects"/>
+			<lib name="aPath"/>
+			<header width="1024" height="768" framerate="30" background="FFFFFF"/>
+		</haxe2swf>
+	</target>
+</project>
