@@ -117,7 +117,11 @@ class Appearance extends Window
 		combo.move(120,100);
 		combo.input.tf.text = "FFF_Harmony";
 		//cat library.xml  | grep 'font id=' | awk '{ print (substr($2,4)",") }'
-		combo.data = fonts;
+
+		combo.dataSource = new DataSource();
+		combo.dataSource.data = fonts;
+
+
 
 		var onFontSelected = function(e) {
 			combo.input.tf.text = e.target.getChildAt(0).tf.text;

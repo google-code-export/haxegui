@@ -6,15 +6,28 @@
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.graphics.clear();
-				//this.graphics.lineStyle(2, Color.RED);
+				this.graphics.lineStyle(2, Color.GREEN);
 				this.graphics.beginFill(this.color);
-				//~ this.graphics.lineStyle(1, Color.darken(this.color, 20));
 				this.graphics.drawRect(0, 0, this.box.width, this.box.height );
 				this.graphics.endFill();
 			]]>
 			</script>
 		</events>
 	</haxegui:containers:Divider>
+
+	<haxegui:containers:ScrollPane>
+		<events>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				this.graphics.clear();
+				this.graphics.lineStyle(2, Color.RED);
+				this.graphics.beginFill(this.color);
+				this.graphics.drawRect(0, 0, this.box.width, this.box.height );
+				this.graphics.endFill();
+			]]>
+			</script>
+		</events>
+	</haxegui:containers:ScrollPane>
 
 	<haxegui:containers:Container>
 		<events>
@@ -298,11 +311,6 @@
 			</script>
 		</events>
 	</haxegui:windowClasses:MinimizeButton>
-
-	<haxegui:managers:Tooltip>
-		<events>
-		</events>
-	</haxegui:managers:Tooltip>
 
 	<haxegui:Alert>
 		<events>
@@ -1676,17 +1684,6 @@
 
 	<haxegui:controls:TreeNode>
 		<events>
-			<script type="text/hscript" action="redraw">
-			<![CDATA[
-				// this.graphics.clear();
-				
-				// var i = this.parent.getChildIndex(this) ;
-				// var c = (i%2==0) ? this.color : Color.darken(this.color, 10);
-				// this.graphics.beginFill(c);
-				// this.graphics.drawRect(0, 0, this.box.width, this.box.height);
-				// this.graphics.endFill();
-			]]>
-			</script>
 		</events>
 	</haxegui:controls:TreeNode>
 

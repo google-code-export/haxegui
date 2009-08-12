@@ -47,6 +47,7 @@ import haxegui.utils.Size;
 
 
 using haxegui.controls.Component;
+using haxegui.utils.Color;
 
 
 //{{{ ComboBoxDropButton
@@ -83,6 +84,9 @@ class ComboBoxDropButton extends PushButton, implements IComposite
 	}
 
 
+	public override function onAdded(e:Event) {}
+
+
 	public override function onMouseClick(e:MouseEvent) {
 		if(this.disabled) return;
 
@@ -94,7 +98,6 @@ class ComboBoxDropButton extends PushButton, implements IComposite
 
 		var menu = (cast parent).menu;
 
-		// menu.data = (cast parent).data;
 		menu.dataSource = (cast parent).dataSource;
 		menu.data = (cast parent).dataSource.data;
 
@@ -180,6 +183,8 @@ class ComboBoxBackground extends Component, implements IComposite
 		label = new Label(this);
 		label.init({text: Opts.optString(opts, "label", name), disabled: this.disabled});
 		label.move(4,4);
+		label.tf.defaultTextFormat = DefaultStyle.getTextFormat(8, DefaultStyle.BACKGROUND.darken(100));
+		label.tf.setTextFormat(DefaultStyle.getTextFormat(8, DefaultStyle.BACKGROUND.darken(100)));
 	}
 	//}}}
 

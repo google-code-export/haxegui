@@ -45,30 +45,35 @@ import haxegui.managers.CursorManager;
 *
 * @todo dwell click, delayed click, triple clicks...
 */
-class MouseManager extends EventDispatcher
-{
+class MouseManager extends EventDispatcher {
+
 	//{{{ Members
-	private static var _instance : MouseManager = null;
+	///{{{ Public
+	public var listeners		: Array<haxegui.logging.ILogger>;
 
-	public var listeners:Array<haxegui.logging.ILogger>;
+	public var lastPosition 	: Point;
+	public var delta 			: Point;
 
-	public var lastPosition : Point;
-	public var delta : Point;
-
+	//{{{ Static
 	public static var moving    : Bool;
 	public static var automated : Bool;
 
 	public static var stage = flash.Lib.current.stage;
+	//}}}
+	//}}}
+
+	//{{{ Private
+	private static var _instance : MouseManager = null;
+	//}}}
+
 	//~ public var lock : Bool;
 	//}}}
 
 
 	//{{{ Functions
 	//{{{ getInstance
-	public static function getInstance ():MouseManager
-	{
-		if (MouseManager._instance == null)
-		{
+	public static function getInstance ():MouseManager {
+		if (MouseManager._instance == null)	{
 			MouseManager._instance = new MouseManager ();
 		}
 		return MouseManager._instance;
@@ -99,8 +104,12 @@ class MouseManager extends EventDispatcher
 		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseEnter, false, 0, true);
 		stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseEnter, false, 0, true);
 		stage.addEventListener(MouseEvent.MOUSE_UP, onMouseEnter, false, 0, true);
-		//~ stage.addEventListener(MouseEvent.MOUSE_UP, function(e){ CursorManager.getInstance().setCursor(Cursor.ARROW); });
-		//~ stage.addEventListener(MouseEvent.MOUSE_OUT, function(e){ CursorManager.setCursor(Cursor.ARROW); }, false, 0, true);
+
+		// stage.addEventListener(MouseEvent.CLICK, onMouseEnter, false, 0, true);
+		// stage.addEventListener(MouseEvent.MOUSE_OVER, onMouseEnter, false, 0, true);
+		// stage.addEventListener(MouseEvent.MOUSE_OUT, onMouseEnter, false, 0, true);
+
+
 		stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave, false, 0, true);
 	}
 	//}}}

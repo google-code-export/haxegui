@@ -22,7 +22,9 @@ package haxegui;
 //{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
+import flash.events.Event;
 import flash.events.FocusEvent;
+import flash.text.TextField;
 import haxegui.Window;
 import haxegui.containers.Container;
 import haxegui.containers.Divider;
@@ -58,13 +60,19 @@ using haxegui.utils.Color;
 * @version 0.2
 */
 class Introspector extends Window {
+
 	//{{{ Members
-	public var container : Container;
-	public var scrollpane : ScrollPane;
-	public var divider : Divider;
-	public var tree : Tree;
-	public var list1 : UiList;
-	public var list2 : UiList;
+	public var container 	: Container;
+	public var treePane 	: ScrollPane;
+	public var listPane 	: ScrollPane;
+	public var textPane 	: ScrollPane;
+	public var hdivider 	: Divider;
+	public var vdivider 	: Divider;
+	public var tree 		: Tree;
+	public var list1 		: UiList;
+	public var list2 		: UiList;
+
+	public var tf			: TextField;
 
 	/** the inspected component **/
 	public var target : Component;
@@ -80,12 +88,12 @@ class Introspector extends Window {
 		alpha					: "alpha",
 		box						: "box"
 		// size					: function(o) { return new Size.fromRect(o.box); },
-		// type 					: function() { return Type.typeof(e.target); },
-		// globalX					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
-		// globalY					: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; },
-		//~ init					: "init",
-		//~ initOpts				: "initOpts",
-		//~ validate				: "validate"
+		// type 				: function() { return Type.typeof(e.target); },
+		// globalX				: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
+		// globalY				: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; },
+		//~ init				: "init",
+		//~ initOpts			: "initOpts",
+		//~ validate			: "validate"
 		// path					: function(){ var path = []; var p=e.target.parent; while(p!=null) untyped { path.push(p.name); p=p.parent; } path.pop();path.pop(); path.push("root"); path.reverse(); return path.join(".")+"."+e.target.name; },
 	}
 	//}}}
@@ -96,49 +104,83 @@ class Introspector extends Window {
 		super.init(opts);
 
 
-		box = new Size(640, 320).toRect();
+		box = new Size(640, 500).toRect();
 
 
 		//
 		var menubar = new MenuBar (this, "MenuBar", 10,20);
 		menubar.init ();
 
+		//
+		vdivider = new Divider(this, "VerticalDivider", 10, 44);
+		vdivider.init({horizontal: false});
 
 		//
-		// divider = new Divider(this, "Divider", 10, 44);
-		// divider.init({horizontal: false});
-
-
-		//
-		container = new Container(this, "Container", 10, 44);
-		container.init({});
+		hdivider = new Divider(vdivider, "HorizontalDivider");
+		hdivider.init({horizontal: true});
 
 
 		//
-		scrollpane = new ScrollPane(container, "ScrollPane1", 210, 0);
-		scrollpane.init({width: 400, fitH: false, fitV: false});
-		scrollpane.removeChild(scrollpane.horz);
+		var c = new Container(vdivider);
+		c.init();
+
+		//
+		textPane = new ScrollPane(c, "textPane");
+		textPane.init();
+
+		tf = new flash.text.TextField();
+		tf.wordWrap = true;
+		tf.multiline = true;
+		tf.width = textPane.box.width;
+		// tf.height = textPane.box.height;
+		tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
+		tf.background = true;
+		tf.backgroundColor = Color.WHITE;
+		tf.text = haxegui.utils.Printing.print_r(this);
+		textPane.addChild(tf);
+
+		//
+		// container = new Container(this, "Container", 10, 44);
+		// container.init({});
 
 
 		//
-		var scrollpane2 = new ScrollPane(container, "ScrollPane2", 0, 0);
-		scrollpane2.init({width: 190, fitH: false, fitV: false});
+		var treePane = new ScrollPane(hdivider, "treePane");
+		treePane.init();
 
 
 		//
-		tree = new Tree(scrollpane2);
-		tree.data = { root : reflectDisplayObjectContainer(cast flash.Lib.current) };
+		listPane = new ScrollPane(hdivider, "listPane", 250);
+		listPane.init();
+
+
+		//
+		tree = new Tree(treePane);
+		// tree.data = { root : reflectDisplayObjectContainer(cast flash.Lib.current) };
 		tree.init({width: 250});
+		var node = tree.firstChild();
+
+
+		// var o = reflectDisplayObjectContainer(this);
+		// tree.process(o, node);
+
+		var o = {};
+		for(i in 0...(cast root).numChildren)
+		// Reflect.setField(o, (cast root).getChildAt(i).name, (cast root).getChildAt(i));
+		if(Std.is((cast root).getChildAt(i), DisplayObjectContainer))
+		Reflect.setField(o, (cast root).getChildAt(i).name,  reflectDisplayObjectContainer((cast root).getChildAt(i)));
+
+		tree.process(o, node);
 
 
 		//
-		list1 = new UiList(scrollpane, "Properties", 210, 0);
-		list1.init({text: null});
+		list1 = new UiList(listPane, "Properties", 210, 0);
+		list1.init({width: 350, text: null});
 
 
 		//
-		list2 = new UiList(scrollpane, "Values", 350, 0);
-		list2.init();
+		list2 = new UiList(listPane, "Values", 350, 0);
+		list2.init({width: 300});
 		// list2.header.destroy();
 
 
@@ -146,6 +188,11 @@ class Introspector extends Window {
 		var statusbar = new StatusBar(this, "StatusBar", 10, 360);
 		statusbar.init();
 
+
+		listPane.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
+		treePane.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
+
+		treePane.addEventListener(ResizeEvent.RESIZE, tree.onParentResize, false, 0, true);
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
@@ -169,7 +216,7 @@ class Introspector extends Window {
 		if(Std.is(e.target, Component)) {
 			Reflect.setField(props, "id", "id");
 			Reflect.setField(props, "disabled", "disabled");
-			Reflect.setField(props, "color",function() { return StringTools.hex(e.target.color); });
+			Reflect.setField(props, "color",function() { return "0x"+StringTools.hex(e.target.color,6); });
 			Reflect.setField(props, "focusable", "focusable");
 			Reflect.setField(props, "dirty", "dirty");
 			Reflect.setField(props, "box", "box");
@@ -183,8 +230,8 @@ class Introspector extends Window {
 		if(list1!=null) list1.destroy();
 		if(list2!=null) list2.destroy();
 
-		list1 = new UiList(scrollpane, "Properties", 210, 0);
-		list2 = new UiList(scrollpane, "Values", 350, 0);
+		list1 = new UiList(listPane, "Properties");
+		list2 = new UiList(listPane, "Values");
 		// list2.header.destroy();
 
 		list1.description = list2.description = null;
@@ -207,8 +254,8 @@ class Introspector extends Window {
 			}
 		}
 
-		list1.init({text: "Property"});
-		list2.init({text: "Value"});
+		list1.init({width: .5*listPane.box.width, text: "Property"});
+		list2.init({width: .5*listPane.box.width, x: .5*listPane.box.width, text: "Value"});
 		for(item in list2.getElementsByClass(ListItem)) {
 			item.label.tf.selectable = true;
 			item.label.tf.mouseEnabled = true;
@@ -222,13 +269,15 @@ class Introspector extends Window {
 			var c = r.getChildAt(i);
 			for(a in target.asComponent().ancestors())
 			if(c.name==a.name) {
-			// trace(c);
-			c.graphics.beginFill(Color.CYAN, .3);
-			c.graphics.drawRect(0,0,tree.box.width,24);
-			c.graphics.endFill();
+				c.graphics.beginFill(Color.CYAN, .3);
+				c.graphics.drawRect(0,0,tree.box.width,24);
+				c.graphics.endFill();
 			}
 
 		}
+
+		tf.text = haxegui.utils.Printing.print_r(target);
+
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
@@ -238,37 +287,57 @@ class Introspector extends Window {
 
 	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
-		if(container==null) return;
 
-		var scrollpane = cast container.getChildByName("ScrollPane1");
-		if(scrollpane!=null) {
-			scrollpane.box.height = this.box.height - 65;
-			scrollpane.box.width = this.box.width - scrollpane.x - 30;
-			scrollpane.dirty = true;
-		}
-		scrollpane = cast container.getChildByName("ScrollPane2");
-		if(scrollpane!=null)
-		scrollpane.box.height = this.box.height - 85;
+		if(vdivider==null) return;
+
+		vdivider.box = this.box.clone();
+		vdivider.box.width -= vdivider.x;
+		vdivider.box.height -= vdivider.y + 20;
+		vdivider.dirty=true;
 
 
-		if(tree!=null) {
-			tree.box.height = this.box.height - 85;
-			tree.dirty = true;
-		}
+		if(hdivider!=null) {
+			hdivider.box.width = box.width;
+			// vdivider.box.height -= divider.y;
+			// vdivider.redraw();
 
-
-		if(list1!=null) {
-			list1.x = 0;
-			list1.box.width = .5*(this.box.width - list1.parent.parent.x - 30) ;
-			list1.box.height = tree.box.height + 20;
-			list1.dirty = true;
+			hdivider.dirty=true;
 		}
 
-		if(list2!=null) {
-			list2.x = list1.x + list1.box.width;
-			list2.box.width = list1.box.width ;
-			list2.box.height = list1.box.height ;
-			list2.dirty = true;
+		if(treePane!=null) {
+			// treePane.box.height = divider.box.height;
+
+			if(tree!=null) {
+				// tree.box = treePane.box.clone();
+				// tree.box.height = this.box.height;
+				// tree.dirty = true;
+				// tree.redraw();
+			}
+			// }
+		}
+		if(listPane!=null) {
+			// listPane.box.height = this.box.height - 65;
+			// listPane.box.width = this.box.width - treePane.box.width - 30;
+			// listPane.dirty = true;
+
+			if(list1!=null) {
+				list1.x = 0;
+				list1.box.width = .5*listPane.box.width ;
+				// list1.box.height = listPane.box.height + 20;
+				list1.dirty = true;
+			}
+
+			if(list2!=null) {
+				list2.x = list1.x + list1.box.width;
+				list2.box.width = list1.box.width ;
+				// list2.box.height = list1.box.height ;
+				list2.dirty = true;
+			}
+		}
+
+		if(textPane!=null) {
+			tf.width = textPane.box.width;
+			// tf.width = textPane.box.height;
 		}
 
 		super.onResize(e);
@@ -285,7 +354,7 @@ class Introspector extends Window {
 
 
 	//{{{ reflectDisplayObjectContainer
-	function reflectDisplayObjectContainer(d:DisplayObjectContainer) : Dynamic {
+	public function reflectDisplayObjectContainer(d:DisplayObjectContainer) : Dynamic {
 		if(d==null) return;
 		var o = {};
 		for(i in 0...d.numChildren) {
@@ -293,6 +362,7 @@ class Introspector extends Window {
 			if(Std.is(child, flash.display.BitmapData)) return;
 			if(Std.is(child, flash.display.Bitmap)) return;
 			if(Std.is(child, flash.text.TextField)) return;
+			if(Std.is(child, DisplayObjectContainer))
 			Reflect.setField( o, child.name, reflectDisplayObjectContainer(cast child) );
 		}
 		return o;

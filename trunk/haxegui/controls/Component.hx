@@ -76,8 +76,7 @@ import haxegui.utils.Size;
 *
 *
 */
-class Component extends Sprite, implements IAccessible, implements IMovable, implements IToolTip, implements ITween, implements IValidate
-{
+class Component extends Sprite, implements IAccessible, implements IMovable, implements IToolTip, implements ITween, implements IValidate {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//{{{ Members
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -804,7 +803,6 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	public function swapParent(np:DisplayObjectContainer) : Void {
 		if(np==null) throw "new parent is null";
 		np.addChild(this);
-		parent.removeChild(this);
 	}
 	//}}}
 

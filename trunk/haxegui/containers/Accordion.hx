@@ -48,8 +48,7 @@ import haxegui.managers.StyleManager;
 * @author Russell Weir <damonsbane@gmail.com>
 * @author Omer Goshen <gershon@goosemoose.com>
 */
-class Accordion extends Container
-{
+class Accordion extends Container {
 
 	override public function init(opts : Dynamic=null) {
 		super.init(opts);

@@ -172,8 +172,7 @@ class Stats extends Window
 		statusbar.init();
 
 		var label = new Label(statusbar, "Label", 260, 2);
-		label.text = "Update Interval: ";
-		label.init();
+		label.init({text: "Update Interval: "});
 
 		//{{{ Stepper
 		var stepper = new Stepper(statusbar, "Stepper", 346, 0);

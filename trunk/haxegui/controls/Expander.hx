@@ -47,6 +47,8 @@ enum ExpanderStyle {
 	ARROW;
 	ICON;
 	BOX;
+	ARROW_AND_ICON;
+	ARROW_AND_BOX;
 }
 //}}}
 
@@ -105,16 +107,27 @@ class Expander extends AbstractButton {
 	override public function init(opts:Dynamic=null) {
 		box = new Size(100, 24).toRect();
 		color =  Color.darken(DefaultStyle.BACKGROUND, 16);
-		expanded = false;
+		expanded = true;
 		style = ExpanderStyle.ICON;
 
+
 		expanded = Opts.optBool(opts, "expanded", expanded);
+		var s = Opts.optString(opts, "style", "icon");
+		switch(s.toLowerCase()) {
+			case "arrow":
+			style = ExpanderStyle.ARROW;
+			case "icon":
+			style = ExpanderStyle.ICON;
+			case "arrow_and_icon":
+			style = ExpanderStyle.ARROW_AND_ICON;
+		}
+
 
 		button = new ExpanderButton(this);
 
 		switch(style) {
-			case ExpanderStyle.ARROW:
-			button.arrow = new Arrow(button);
+			case ExpanderStyle.ARROW, ExpanderStyle.ARROW_AND_BOX:
+			button.arrow = new Arrow(button, 4, 4);
 			button.arrow.init({color: Color.darken(DefaultStyle.BACKGROUND, 16)});
 
 			case ExpanderStyle.ICON:
@@ -123,6 +136,22 @@ class Expander extends AbstractButton {
 
 			button.collapsedIcon = new Icon(button);
 			button.collapsedIcon.init({src: Icon.STOCK_FOLDER});
+
+			button.expandedIcon.visible = expanded;
+			button.collapsedIcon.visible = !expanded;
+
+			case ExpanderStyle.ARROW_AND_ICON:
+			button.arrow = new Arrow(button);
+			button.arrow.init({color: Color.darken(DefaultStyle.BACKGROUND, 16)});
+			button.arrow.move(6,6);
+
+			button.expandedIcon = new Icon(button);
+			button.expandedIcon.init({src: Icon.STOCK_FOLDER_OPEN});
+			button.expandedIcon.move(24,0);
+
+			button.collapsedIcon = new Icon(button);
+			button.collapsedIcon.init({src: Icon.STOCK_FOLDER});
+			button.collapsedIcon.move(24,0);
 
 			button.expandedIcon.visible = expanded;
 			button.collapsedIcon.visible = !expanded;
@@ -162,26 +191,10 @@ class Expander extends AbstractButton {
 		scrollTween.start();
 
 
-		switch(style) {
-			case ExpanderStyle.ARROW:
-			if(arrowTween!=null)
-			arrowTween.stop();
-
-			arrowTween = new Tween(expanded?90:0, expanded?0:90, 150, button.firstChild(), "rotation", feffects.easing.Linear.easeNone);
-
-			arrowTween.start();
-			case ExpanderStyle.ICON:
-			button.expandedIcon.visible = !expanded;
-			button.collapsedIcon.visible = expanded;
-
-		}
-
 		e.stopImmediatePropagation();
 
 		expanded = !expanded;
 
-		for(i in 2...numChildren)
-		this.getChildAt(i).visible = true;
 
 		dispatchEvent(new Event(Event.CHANGE));
 
@@ -190,9 +203,7 @@ class Expander extends AbstractButton {
 	//}}}
 
 
-	//////////////////////////////////////////////////
-	////           Getters/Setters                ////
-	//////////////////////////////////////////////////
+	//{{{ Getters/Setters
 	//{{{ __getExpanded
 	private function __getExpanded() : Bool {
 		return this.expanded;
@@ -209,16 +220,21 @@ class Expander extends AbstractButton {
 			case ExpanderStyle.ARROW:
 			if(this.arrowTween!=null)
 			this.arrowTween.stop();
-
-			this.arrowTween = new Tween(expanded?90:0, expanded?0:90, 150, button.firstChild(), "rotation", feffects.easing.Linear.easeNone);
-
+			this.arrowTween = new Tween(expanded?0:90, expanded?90:0, 150, button.firstChild(), "rotation", feffects.easing.Linear.easeNone);
 			this.arrowTween.start();
 
-			case ExpanderStyle.ICON:
-			if(this.button!=null) {
-				this.button.expandedIcon.visible = !expanded;
-				this.button.collapsedIcon.visible = expanded;
-			}
+
+			case ExpanderStyle.ICON :
+			if(this.button!=null)
+				swapChildrenVisible(button.collapsedIcon, button.expandedIcon);
+
+			case ExpanderStyle.ARROW_AND_ICON:
+			if(this.arrowTween!=null)
+			this.arrowTween.stop();
+			this.arrowTween = new Tween(expanded?0:90, expanded?90:0, 150, button.firstChild(), "rotation", feffects.easing.Linear.easeNone);
+			this.arrowTween.start();
+			if(this.button!=null)
+				swapChildrenVisible(button.collapsedIcon, button.expandedIcon);
 
 		}
 
@@ -241,6 +257,7 @@ class Expander extends AbstractButton {
 		}
 		return v;
 	}
+	//}}}
 	//}}}
 
 

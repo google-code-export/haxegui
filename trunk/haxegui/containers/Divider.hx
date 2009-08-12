@@ -33,11 +33,13 @@ import flash.geom.Rectangle;
 import haxegui.containers.IContainer;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
+import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.CursorManager;
 import haxegui.managers.MouseManager;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
+import haxegui.toys.Arrow;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
 //}}}
@@ -52,6 +54,8 @@ using haxegui.controls.Component;
 */
 class DividerHandleButton extends AbstractButton {
 
+	public var arrow : Arrow;
+
 	//{{{ init
 	override public function init(opts : Dynamic=null) {
 		if(untyped parent.parent.horizontal)
@@ -62,8 +66,9 @@ class DividerHandleButton extends AbstractButton {
 		color = DefaultStyle.BACKGROUND;
 		super.init(opts);
 
-		var arrow = new haxegui.toys.Arrow(this);
+		arrow = new Arrow(this);
 		arrow.init({width: 6, height: 8, color: this.color});
+		arrow.mouseEnabled = false;
 		if(untyped parent.parent.horizontal)  {
 			arrow.moveTo(5, .5*(this.box.height-8));
 		}
@@ -75,6 +80,17 @@ class DividerHandleButton extends AbstractButton {
 	}
 	//}}}
 
+	public override function onMouseClick(e:MouseEvent) {
+		if((cast parent.parent).horizontal) {
+			parent.asComponent().moveTo(parent.parent.asComponent().box.width-10, 0);
+		}
+
+		arrow.rotation += 180;
+
+		(cast parent.parent).adjust();
+
+		super.onMouseClick(e);
+	}
 
 	//{{{ __init__
 	static function __init__() {
@@ -93,12 +109,13 @@ class DividerHandle extends AbstractButton {
 
 	public var button : DividerHandleButton;
 
+	public var oldPos : Float;
+
 	//{{{ init
 	override public function init(opts : Dynamic=null) {
+		box = new Size(10, (cast parent).box.height).toRect();
 		if((cast parent).horizontal)
-		box = new Rectangle(0,0,10,512);
-		else
-		box = new Rectangle(0,0,512,10);
+		box = new Size((cast parent).box.width,10).toRect();
 
 		color = DefaultStyle.BACKGROUND;
 		cursorOver = Cursor.NS;
@@ -111,10 +128,11 @@ class DividerHandle extends AbstractButton {
 		button = new DividerHandleButton(this);
 		button.init();
 		if((cast parent).horizontal)
-		button.moveTo(0, .5*(512-100));
+		button.moveTo(0, .5*(box.height-100));
 		else
-		button.moveTo(.5*(512-100),0);
+		button.moveTo(.5*(box.width-100),0);
 
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
 	//}}}
 
@@ -126,6 +144,16 @@ class DividerHandle extends AbstractButton {
 
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
+
+		if((cast parent).horizontal) {
+			box = new Size(10, (cast parent).box.height).toRect();
+			button.y = Std.int(box.height-100)>>1;
+		}
+		else {
+			box = new Size((cast parent).box.width,10).toRect();
+			button.x = Std.int(box.width-100)>>1;
+		}
+
 		redraw();
 	}
 	//}}}
@@ -153,14 +181,14 @@ class DividerHandle extends AbstractButton {
 */
 class Divider extends Container {
 
-	var handle : DividerHandle;
+	public var handle : DividerHandle;
 
-	var horizontal : Bool;
+	public var horizontal : Bool;
 
 	//{{{ init
 	override public function init(opts : Dynamic=null) {
 		box = parent.asComponent().box.clone();
-		horizontal = false;
+		horizontal = true;
 
 
 		super.init(opts);
@@ -171,12 +199,13 @@ class Divider extends Container {
 		handle = new DividerHandle(this);
 		handle.init();
 		if(horizontal)
-			handle.moveTo(250, 0);
+		handle.moveTo(box.width/2, 0);
 		else
-			handle.moveTo(0, 250);
+		handle.moveTo(0, .5*box.height);
 
 
-		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
+		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
 
@@ -194,11 +223,12 @@ class Divider extends Container {
 	//{{{ onMouseDown
 	public override function onMouseDown(e:MouseEvent) {
 		if(e.target==handle) {
-			if(horizontal)
-			e.target.startDrag(false, new Rectangle(-this.stage.stageWidth,0,2*this.stage.stageWidth,0));
+			if(this.horizontal)
+			handle.startDrag(false, new Rectangle(-this.stage.stageWidth,0,2*this.stage.stageWidth,0));
 			else
-			e.target.startDrag(false, new Rectangle(0,-this.stage.stageHeight,0,2*this.stage.stageHeight));
+			handle.startDrag(false, new Rectangle(0,-this.stage.stageHeight,0,2*this.stage.stageHeight));
 			this.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+
 		}
 		super.onMouseDown(e);
 	}
@@ -223,37 +253,80 @@ class Divider extends Container {
 
 	//{{{ onMouseMove
 	public function onMouseMove(e:MouseEvent) {
-		firstChild().asComponent().box.width = handle.x - 1;
-		firstChild().asComponent().redraw();
+		adjust();
 
-		firstChild().asComponent().nextSibling().x = handle.x - 1;
-		// firstChild().nextSibling().asComponent().redraw();
+		handle.dispatchEvent(new MoveEvent(MoveEvent.MOVE));
+		dispatchEvent(new Event(Event.CHANGE));
 	}
 	//}}}
 
 
-	//{{{ onParentResize
-	private override function onParentResize(e:ResizeEvent) {
-		// var size = new Size(parent.width - x, parent.height - y);
+	public function adjust() {
+		if(handle==null) return;
 
-		// if(Std.is(parent, Component))
-		// size = untyped new Size(parent.box.width - x, parent.box.height - y);
+		if(horizontal) {
+			if(this.iterator().hasNext()) {
+				firstChild().asComponent().box.width = handle.x - 1;
+				if(Std.is(firstChild().asComponent(), ScrollPane))
+				firstChild().asComponent().box.width -= 20;
 
-		// box = size.toRect();
+				firstChild().asComponent().redraw();
+				firstChild().dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+			}
 
-		box = parent.asComponent().box.clone();
+			if(this.numChildren==3) {
+				firstChild().asComponent().nextSibling().x = handle.x + 11;
+				firstChild().asComponent().nextSibling().asComponent().box.width = this.box.width - handle.x - 11;
+				firstChild().asComponent().nextSibling().asComponent().redraw();
+				firstChild().asComponent().nextSibling().dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
+				if(firstChild().asComponent().nextSibling().asComponent().getElementsByClass(haxegui.controls.ScrollBar).hasNext())
+				firstChild().asComponent().nextSibling().asComponent().box.width -= 20;
+			}
+		}
+		else {
+			if(firstChild()!=null) {
+				firstChild().asComponent().box.height = handle.y - 1;
+				firstChild().asComponent().redraw();
+				firstChild().dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+			}
+
+			if(this.numChildren==3) {
+				firstChild().asComponent().nextSibling().y = handle.y + 11;
+				firstChild().asComponent().nextSibling().asComponent().box.height = this.box.height - handle.y - 1;
+				firstChild().asComponent().nextSibling().asComponent().redraw();
+				firstChild().asComponent().nextSibling().dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+			}
+		}
+	}
+
+
+	override function onResize(e:ResizeEvent) {
 		if(handle!=null) {
-			if(horizontal)
-			handle.box.height = box.height;
-			else
-			handle.box.width = box.width;
-			// handle.dirty = true;
-			handle.redraw();
+		if(horizontal)
+			handle.x = Math.min( handle.x, box.width-10 );
+		else
+			handle.y = Math.min( handle.y, box.height-10 );
 		}
 
+		super.onResize(e);
+	}
 
-		redraw();
+
+	//{{{ onParentResize
+	private override function onParentResize(e:ResizeEvent) {
+
+		// box = parent.asComponent().box.clone();
+
+		// // redraw();
+		// if(handle!=null)
+		// if(horizontal) {
+		// 	handle.x = .5*box.width;
+		// }
+		// else
+		// 	handle.y = .5*box.height;
+
+		adjust();
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}

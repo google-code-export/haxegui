@@ -11,13 +11,11 @@
 ### Resources ###
 -resource loader.xml@Loader
 -resource assets/styles/default_style.xml@default_style
--resource haxegui/toys/AnalogClock.hx@clock_code
--resource samples/Example7.xml@xml_clock_code
 
 ### Flags ###
 --flash-use-stage
 --flash-strict
-# -debug
+#-debug
 
 ### Library ###
 -swf-lib assets.swf
