@@ -1682,11 +1682,6 @@
 		</events>
 	</haxegui:controls:TabNavigator>
 
-	<haxegui:controls:TreeNode>
-		<events>
-		</events>
-	</haxegui:controls:TreeNode>
-
 	<haxegui:controls:Seperator>
 		<events>
 			<script type="text/hscript" action="redraw">
