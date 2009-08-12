@@ -122,7 +122,7 @@ class PopupMenu extends Component, implements IData {
 
 	//{{{ shutDown
 	public function shutDown(e:MouseEvent) {
-		//~ dispatchEvent (new MenuEvent(MenuEvent.MENU_HIDE));
+		//~ dispatchEvent (new MenuEvent(MenuEvent.MENU_HIDE))
 		destroy();
 	}
 	//}}}

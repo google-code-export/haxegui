@@ -68,6 +68,7 @@ class ScrollBarUpButton extends AbstractButton, implements IAggregate
 }
 //}}}
 
+
 //{{{ ScrollBarDownButton
 /**
 *
@@ -85,6 +86,7 @@ class ScrollBarDownButton extends AbstractButton, implements IAggregate
 }
 //}}}
 
+
 //{{{ ScrollBarHandle
 /**
 *
@@ -95,6 +97,7 @@ class ScrollBarDownButton extends AbstractButton, implements IAggregate
 * @author Russell Weir <damonsbane@gmail.com>
 */
 class ScrollBarHandle extends AbstractButton, implements IComposite {
+
 	//{{{ onResize
 	override public function onResize(e:ResizeEvent) : Void {
 		box.width =  parent.asComponent().box.width;
@@ -118,6 +121,7 @@ class ScrollBarHandle extends AbstractButton, implements IComposite {
 	//}}}
 }
 //}}}
+
 
 //{{{ ScrollBarFrame
 /**
@@ -148,6 +152,7 @@ class ScrollBarFrame extends AbstractButton, implements IComposite {
 	//}}}
 }
 //}}}
+
 
 //{{{ ScrollBar
 /**

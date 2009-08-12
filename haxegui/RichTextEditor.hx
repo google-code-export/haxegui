@@ -112,7 +112,8 @@ class RichTextEditor extends Window, implements IText {
 		// font face selection combobox
 		var fontbox = new ComboBox(toolbar, "FontBox", 14, 10);
 		fontbox.init({text: "Arial", width: 100});
-		fontbox.data = ["Arial", "Arial Black", "Bitstream Vera Sans", "Courier", "Georgia", "Comic Sans MS", "Impact", "Times New Roman", "Trebuchet MS", "Verdana"];
+		fontbox.dataSource = new DataSource();
+		fontbox.dataSource.data = ["Arial", "Arial Black", "Bitstream Vera Sans", "Courier", "Georgia", "Comic Sans MS", "Impact", "Times New Roman", "Trebuchet MS", "Verdana"];
 
 
 		var self = this;
@@ -140,7 +141,8 @@ class RichTextEditor extends Window, implements IText {
 		// font size selection combobox
 		var sizebox = new ComboBox(toolbar, "SizeBox", 124, 10);
 		sizebox.init({text: "10", width: 50});
-		sizebox.data = [7,8,12,14,16,18,20,22,24,32,48,72,96];
+		sizebox.dataSource = new DataSource();
+		sizebox.dataSource.data = [7,8,12,14,16,18,20,22,24,32,48,72,96];
 
 		var onMenuShow = function(e) {
 			trace(e);

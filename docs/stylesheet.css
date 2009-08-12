@@ -47,7 +47,7 @@ blockquote, q {
 
 /** STYLE **/
 body {
-	font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	/*font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif;*/
 	font-size: 13px;
 	background: #88B3C1 ;
 }
@@ -245,7 +245,7 @@ pre {
 	padding: .5em;
 	font-size: 87%;
 	border-top: 1px solid #769BA8;
-	background-color: #88B3C1;	
+	background-color: #88B3C1;
 	color: #345F63;
 }
 
@@ -257,21 +257,21 @@ pre {
 
 
 .member .zebra {
-	background-color: #ACD7E6;	
+	background-color: #ACD7E6;
 }
 
 .member .header:hover {
-	background-color: lightyellow;	
+	background-color: lightyellow;
 }
 
 .member .header .type,
-.member .header a, 
+.member .header a,
 .member .header_detail .type,
 .member .header_detail a {
 	color: #16363A;
 }
 
-.member .header a:hover, 
+.member .header a:hover,
 .member .header_detail a:hover {
 	color: purple;
 	text-decoration: none;
@@ -345,16 +345,16 @@ div.inherited, div.overrides {
 }
 
 .hideInheritedVar {
-        display: none;
+		display: none;
 }
 .showInheritedVar {
-        display: inline;
+		display: inline;
 }
 .hideInheritedMethod {
-        display: none;
+		display: none;
 }
 .showInheritedMethod {
-        display: inline;
+		display: inline;
 }
 
 #todo h1 {

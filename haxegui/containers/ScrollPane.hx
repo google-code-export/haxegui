@@ -32,6 +32,7 @@ import haxegui.controls.ScrollBar;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.StyleManager;
 import haxegui.utils.Opts;
+import haxegui.utils.Size;
 //}}}
 
 
@@ -41,8 +42,9 @@ import haxegui.utils.Opts;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class ScrollPane extends Component, implements IContainer
-{
+class ScrollPane extends Component, implements IContainer {
+
+
 	public var content : Sprite;
 
 	public var vert : ScrollBar;
@@ -63,7 +65,7 @@ class ScrollPane extends Component, implements IContainer
 	override public function init(?opts:Dynamic) {
 		if(Std.is(parent, Component))
 			color = (cast parent).color;
-		box = new Rectangle(0, 0, 140, 100);
+		box = new Size(140, 100).toRect();
 
 
 		super.init(opts);
@@ -132,10 +134,17 @@ class ScrollPane extends Component, implements IContainer
 		content.scrollRect = r.clone();
 
 
+
 		content.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
+
+
+	public override function onResize(e:ResizeEvent) {
+				dirty = true;
+	}
+
 
 
 	//{{{ __init__

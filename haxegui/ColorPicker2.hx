@@ -231,11 +231,11 @@ class ColorPicker2 extends Window
 
 		// ok button
 		var button = new Button(container, "Ok", 20, 390);
-		button.init({color: 0xE6D3CC});
+		button.init({label: "Ok", color: 0xE6D3CC});
 
 		// cancel button
 		var button = new Button(container, "Cancel", 120, 390);
-		button.init({color: 0xE6D3CC});
+		button.init({label: "Cancel", color: 0xE6D3CC});
 
 
 

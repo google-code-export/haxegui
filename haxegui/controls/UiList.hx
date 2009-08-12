@@ -166,6 +166,9 @@ class ListItem extends AbstractButton, implements IRubberBand, implements IAggre
 	public var label : Label;
 	public var selected : Bool;
 
+	var oldPos : flash.geom.Point;
+	var oldParent : flash.display.DisplayObjectContainer;
+
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, UiList) && !Std.is(parent, PopupMenu)) throw parent+" not a UiList";
@@ -191,6 +194,41 @@ class ListItem extends AbstractButton, implements IRubberBand, implements IAggre
 
 	}
 	//}}}
+
+
+	public override function onMouseDown(e:MouseEvent) {
+		if(e.target!=this) return;
+
+		// oldPos = this.localToGlobal(new flash.geom.Point());
+		// oldParent = parent;
+
+		// var i = oldParent.getChildIndex(this);
+
+		// this.swapParent(flash.Lib.current);
+		// this.moveToPoint(oldPos);
+		// this.startDrag();
+
+		// this.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
+
+		super.onMouseDown(e);
+	}
+
+
+
+
+
+	public override function onMouseUp(e:MouseEvent) {
+
+		// this.swapParent(oldParent);
+		// this.moveToPoint(parent.globalToLocal(oldPos));
+		// this.stopDrag();
+
+		// this.filters = null;
+
+		// stage.invalidate();
+
+		super.onMouseUp(e);
+	}
 
 
 	//{{{ onParentResize

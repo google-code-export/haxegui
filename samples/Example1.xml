@@ -203,7 +203,7 @@
 						</haxegui:controls:RadioGroup>
 
 						<haxegui:controls:Expander x="430" y="90">
-							<haxegui:controls:UiList x="24" y="26" data="@StringArray" visible="false" />
+							<haxegui:controls:UiList x="24" y="26" data="@StringArray" visible="true" />
 						</haxegui:controls:Expander>
 
 						<haxegui:controls:ListBox x="360" y="250" width="300" data="@List1" />
@@ -246,14 +246,14 @@
 
 
 						<!-- Second stack child -->
-					<haxegui:containers:Divider horizontal="true" visible="false" width="512">
-						<haxegui:containers:Container width="512" height="200" color="0xFFFFFF">
-							<haxegui:containers:Divider horizontal="false" width="512">
-								<haxegui:controls:Label x="20" y="20">Second TabChild</haxegui:controls:Label>
-								<haxegui:containers:Container/>
-							</haxegui:containers:Divider>
-						</haxegui:containers:Container>
-						<haxegui:containers:Container width="512" color="0xccccff"/>
+					<haxegui:containers:Divider horizontal="true" visible="false" width="512" height="512">
+
+								<haxegui:containers:Divider width="250" horizontal="false">
+									<haxegui:containers:Container height="250" color="0x99ff99"/>
+									<haxegui:containers:Container y="250" color="0xffffcc"/>
+								</haxegui:containers:Divider>
+
+						<haxegui:containers:Container x="250" width="250" color="0xccccff"/>
 					</haxegui:containers:Divider>
 
 

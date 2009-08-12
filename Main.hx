@@ -299,7 +299,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 		// Console to show some debug
 		var console = new Console (flash.Lib.current, 50, 50);
-		console.init({color:0x2E2E2E, visible: false });
+		console.init({color:0x2E2E2E, visible: true });
 		haxe.Log.clear();
 		setRedirection(console.log);
 
@@ -322,7 +322,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		/////////////////////////////////////////////////////////////////////////
 		// Make some windows
 		/////////////////////////////////////////////////////////////////////////
-		makeWindows();
+		// makeWindows();
 
 		/////////////////////////////////////////////////////////////////////////
 		// Load XML
@@ -351,7 +351,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 			trace(here.methodName + " " + e);
 		}
 
-		loader.load(new URLRequest(Haxegui.baseURL+layout));
+		// loader.load(new URLRequest(Haxegui.baseURL+layout));
 
 
 		// remoting

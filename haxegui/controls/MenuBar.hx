@@ -107,27 +107,21 @@ class Menu extends AbstractButton, implements IAggregate, implements IData {
 
 	//{{{ onMouseClick
 	public override function onMouseClick(e:MouseEvent) {
-		// var a = new haxegui.Alert();
-		// a.init({label: this+"."+here.methodName+":\n\n\n"+"Not implemented yet..."});
-
 		var p = parent.localToGlobal(new flash.geom.Point(x, y));
-		trace(p);
 
 		if(menu!=null)
 		menu.destroy();
 		menu = new PopupMenu(flash.Lib.current);
-		// menu = new PopupMenu(getParentWindow());
-
-		// menu.dataSource = new DataSource();
-		// menu.dataSource.data = ["MenuItem", "MenuItem", "MenuItem", "MenuItem", "MenuItem"];
 		menu.dataSource = this.dataSource;
 		menu.init ({color: this.color});
 
-		// menu.init ({x: p.x, y: p.y, color: this.color});
 		menu.toFront();
 
 		menu.x = p.x;
 		menu.y = p.y + 20;
+
+		for(i in menu)
+			(cast i).setAction("mouseDown", "var a = new haxegui.Alert(); a.init(); a.label.setText(this.label.getText());");
 
 		super.onMouseClick(e);
 	}

@@ -1,0 +1,12 @@
+this.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND, 50));
+this.graphics.moveTo(0, 0);
+this.graphics.lineTo(0, 20);
+
+this.graphics.lineStyle(1, Color.tint(DefaultStyle.BACKGROUND, .5));
+this.graphics.moveTo(1, 0);
+this.graphics.lineTo(1, 20);
+
+this.graphics.lineStyle(0,0,0);
+this.graphics.beginFill(0,0);
+this.graphics.drawRect(-2,0,4,20);
+this.graphics.endFill();
