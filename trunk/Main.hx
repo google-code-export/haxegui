@@ -71,6 +71,7 @@ import haxegui.controls.Input;
 import haxegui.controls.Label;
 import haxegui.controls.MenuBar;
 import haxegui.controls.PopupMenu;
+import haxegui.controls.ProgressBar;
 import haxegui.controls.RadioButton;
 import haxegui.controls.Slider;
 import haxegui.controls.Stepper;
@@ -97,8 +98,8 @@ import haxegui.utils.Printing;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.26
 */
-class Main extends Sprite, implements haxe.rtti.Infos
-{
+class Main extends Sprite, implements haxe.rtti.Infos {
+
 	//{{{ members
 	static var load	   : Xml;
 	static var desktop : Sprite;
@@ -128,6 +129,11 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		logo.y = cast (stage.stageHeight - logo.height) >> 1;
 		logo.mouseEnabled = false;
 		*/
+		// Setup Haxegui
+		haxegui.Haxegui.init();
+
+		// Desktop
+		makeDekstop();
 
 		// init
 		haxe.Timer.delay( init, 50);
@@ -168,8 +174,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		stats.init();
 
 		// Color Picker
-		var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
-		colorpicker.init();
+		// var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
+		// colorpicker.init();
 
 		// rte
 		var rte = new RichTextEditor(flash.Lib.current, 120,120);
@@ -178,6 +184,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		// style
 		var appearance = new Appearance(flash.Lib.current, 180,180);
 		appearance.init();
+
 
 		// debugger
 		var introspect = new Introspector(flash.Lib.current, 150,150);
@@ -235,6 +242,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		//~ LayoutManager.fetchLayout("samples/Example6.xml");
 		//~ LayoutManager.setLayout("Example6");
 
+/*
 		var win = cast root.getChildByName("Widgets");
 		var sp = win.getChildByName("ScrollPane1");
 		var cnt = sp.content.getChildByName("Container1");
@@ -246,35 +254,18 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		var node = new haxegui.Node(cast sp);
 		node.init();
 		node.move(20,20);
-
+*/
 		trace("Finished Initialization in "+ haxe.Timer.stamp() +" sec.");
 
 
-		//~ var welcome = "\n<FONT SIZE='24'>Hello and welcome to <B>haxegui</B>.</FONT>\n";
-		var welcome = "\n
-		_                       _
-		| |_ ___ _ _ ___ ___ _ _|_|
-		|   | .'|_'_| -_| . | | | |
-		|_|_|__,|_,_|___|_  |___|_| Copyright (c) 2009 The haxegui developers
-		|___|\n\n\t";
-
-		var info = "<FONT SIZE='8'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+" "+(flash.system.Capabilities.isDebugger ? "Debug" : "")+".</FONT>\n";
+		var welcome = "\n<FONT SIZE='14'>Hello and welcome to <B>haxegui</B>.</FONT>\n";
+		var info = "\nCopyright (c) 2009 The haxegui developers\n";
+		info += "<FONT SIZE='8'>"+flash.system.Capabilities.os+" "+flash.system.Capabilities.version+" "+flash.system.Capabilities.playerType+" "+(flash.system.Capabilities.isDebugger ? "Debug" : "")+".</FONT>\n";
 		info += "\n\t<U><A HREF=\"http://haxe.org/\">haXe</A></U> (pronounced as hex) is an open source programming language.\n";
 		info += "\tHaxe Graphical User Interface for the flash9 platform, is a set of classes\n\tworking as widgets like flash/flex's components and windows.\n\n";
 		info += "\tThis console can exeute hscript in the textfield below,\n\ttype <I>help</I> to display a list of a few special commands.\n\n";
 
 		log(welcome);
-
-		trace("Capabilities.hasAccessibility: " + Capabilities.hasAccessibility);
-		if (Capabilities.hasAccessibility) {
-			Accessibility.updateProperties();
-		}
-
-		trace("Accessibility.active: " + Accessibility.active);
-		if(Accessibility.active) {
-			Accessibility.updateProperties();
-		}
-
 		log(info);
 		log("");
 
@@ -284,11 +275,6 @@ class Main extends Sprite, implements haxe.rtti.Infos
 
 	//{{{ init
 	public static function init ()	{
-		// Setup Haxegui
-		haxegui.Haxegui.init();
-
-		// Desktop
-		makeDekstop();
 
 		var bootupMessages = new Array<{v:Dynamic, inf:haxe.PosInfos}>();
 		var bootupHandler = function(v : Dynamic, ?inf:haxe.PosInfos) {
@@ -322,7 +308,7 @@ class Main extends Sprite, implements haxe.rtti.Infos
 		/////////////////////////////////////////////////////////////////////////
 		// Make some windows
 		/////////////////////////////////////////////////////////////////////////
-		// makeWindows();
+		makeWindows();
 
 		/////////////////////////////////////////////////////////////////////////
 		// Load XML
@@ -351,7 +337,8 @@ class Main extends Sprite, implements haxe.rtti.Infos
 			trace(here.methodName + " " + e);
 		}
 
-		// loader.load(new URLRequest(Haxegui.baseURL+layout));
+
+		loader.load(new URLRequest(Haxegui.baseURL+layout));
 
 
 		// remoting

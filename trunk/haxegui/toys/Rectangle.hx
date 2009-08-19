@@ -45,8 +45,8 @@ using haxegui.utils.Color;
 * Component with basic drawRect script.<br/>
 * <p>Default proprties are set to random colors and some roundess.</p>
 */
-class Rectangle extends Component
-{
+class Rectangle extends Component {
+
 	public var roundness : Float;
 	public var stroke : UInt;
 	public var thickness : Float;
@@ -88,5 +88,4 @@ class Rectangle extends Component
 		haxegui.Haxegui.register(Rectangle);
 	}
 	//}}}
-
 }

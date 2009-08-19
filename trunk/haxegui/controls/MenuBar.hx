@@ -88,7 +88,7 @@ class Menu extends AbstractButton, implements IAggregate, implements IData {
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, MenuBar)) throw parent+" not a MenuBar";
 		box = new Size(40,24).toRect();
-		menu = new PopupMenu();
+		// menu = new PopupMenu();
 
 
 		super.init(opts);
@@ -100,7 +100,7 @@ class Menu extends AbstractButton, implements IAggregate, implements IData {
 		label.mouseEnabled = false;
 
 		box.width = label.width;
-		dirty = false;
+		// dirty = false;
 	}
 	//}}}
 
@@ -120,8 +120,20 @@ class Menu extends AbstractButton, implements IAggregate, implements IData {
 		menu.x = p.x;
 		menu.y = p.y + 20;
 
-		for(i in menu)
-			(cast i).setAction("mouseDown", "var a = new haxegui.Alert(); a.init(); a.label.setText(this.label.getText());");
+		var self = this;
+		var r = new Rectangle();
+		r.width = menu.box.width;
+		menu.scrollRect = r;
+		var t = new feffects.Tween(0, menu.data.length*24, 250, r, "height", feffects.easing.Linear.easeOut);
+		t.setTweenHandlers(
+		function(v){
+			self.menu.scrollRect = r.clone();
+		}
+		);
+		t.start();
+
+		// for(i in menu)
+			// (cast i).setAction("mouseDown", "var a = new haxegui.Alert(); a.init(); a.label.setText(this.label.getText());");
 
 		super.onMouseClick(e);
 	}
@@ -189,17 +201,8 @@ class MenuBar extends Component, implements IRubberBand {
 		mouseEnabled = false;
 
 
-		// _menu = 0;
-		// numMenus = 1+Math.round( Math.random() * 4 );
-
-		// for (i in 0...numMenus) {
-			// var menu = new Menu(this, "Menu"+(i+1), 40*i, 0);
-			// menu.init({color: this.color});
-		// }
-
 		// inner-drop-shadow filter
-		var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.LOW,true,false,false);
-		this.filters = [shadow];
+		this.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.LOW,true,false,false)];
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 

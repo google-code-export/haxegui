@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <loader>
-	<layout url="samples/Example1.xml" />
-	<style name="default" />
-	<domain baseurl="" />
-	<assets/>
+	<layout url="samples/Example1.xml"/>
+	<style name="default"/>
+	<domain baseurl=""/>
+	<server address="localhost" port="2000"/>
 </loader>

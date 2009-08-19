@@ -3,7 +3,7 @@ digraph uml {
 	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
 	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
 	graph [lp="156,12",
-		bb="0,0,312,439"];
+		bb="0,0,312,547"];
 	"haxegui.containers.IContainer" [label="{\nIContainer}", fontcolor="#496962", style="rounded,filled", fillcolor="#88c2b3", URL="../types/haxegui/containers/IContainer.html", tooltip="\nIContainer", pos="281,43", rects="251,25,311,61", width="0.83", height="0.50"];
 	"haxegui.containers.Container" [label="{\nContainer}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Container.html", tooltip="\nContainer", pos="281,97", rects="253,79,310,115", width="0.78", height="0.50"];
 	"haxegui.containers.Grid" [label="{\nGrid}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Grid.html", tooltip="\nGrid", pos="281,151", rects="254,133,308,169", width="0.75", height="0.50"];
@@ -13,7 +13,9 @@ digraph uml {
 	"haxegui.containers.DividerHandle" [label="{\nDividerHandle}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/DividerHandle.html", tooltip="\nDividerHandle", pos="176,367", rects="139,349,214,385", width="1.03", height="0.50"];
 	"haxegui.containers.DividerHandleButton" [label="{\nDividerHandleButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/DividerHandleButton.html", tooltip="\nDividerHandleButton", pos="51,367", rects="0,349,102,385", width="1.42", height="0.50"];
 	"haxegui.containers.Divider" [label="{\nDivider}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Divider.html", tooltip="\nDivider", pos="281,367", rects="254,349,308,385", width="0.75", height="0.50"];
-	"haxegui.containers.Accordion" [label="{\nAccordion}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Accordion.html", tooltip="\nAccordion", pos="281,421", rects="253,403,310,439", width="0.78", height="0.50"];
+	"haxegui.containers.VDivider" [label="{\nVDivider}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/VDivider.html", tooltip="\nVDivider", pos="281,421", rects="254,403,308,439", width="0.75", height="0.50"];
+	"haxegui.containers.HDivider" [label="{\nHDivider}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/HDivider.html", tooltip="\nHDivider", pos="281,475", rects="254,457,308,493", width="0.75", height="0.50"];
+	"haxegui.containers.Accordion" [label="{\nAccordion}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/containers/Accordion.html", tooltip="\nAccordion", pos="281,529", rects="253,511,310,547", width="0.78", height="0.50"];
 	"haxegui.containers.DividerHandle" -> "haxegui.containers.DividerHandleButton" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,139,367 127,367 119,367 111,367 102,367"];
 	"haxegui.containers.Divider" -> "haxegui.containers.DividerHandle" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,254,367 242,367 233,367 223,367 214,367"];
 }

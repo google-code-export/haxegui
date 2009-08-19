@@ -13,7 +13,7 @@
 -resource assets/styles/default_style.xml@default_style
 
 ### Flags ###
---flash-use-stage
+# --flash-use-stage
 --flash-strict
 #-debug
 

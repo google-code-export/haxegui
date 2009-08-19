@@ -52,49 +52,51 @@ class Label extends Component, implements IText {
 	public var tf 						: TextField;
 	public var text (getText, setText)  : String;
 
-	public var align : Alignment;
+	public var align 					: Alignment;
 
 	//{{{ init
-	override public function init(opts : Dynamic=null) {
+	override public function init(?opts:Dynamic=null) {
 		if(text==null)
-			text = name;
-
-		description = null;
+		text = name;
+		align = { horizontal: HorizontalAlign.LEFT, vertical: VerticalAlign.CENTER };
 
 		super.init(opts);
 
+
+		description = null;
+
 		tf = new TextField();
 		tf.name = "tf";
-		tf.text = text;
-		tf.type = TextFieldType.DYNAMIC;
-		tf.embedFonts = true;
-		tf.multiline = true;
-		tf.wordWrap = Opts.optBool(opts, "wordWrap", false);
 		tf.autoSize = TextFieldAutoSize.LEFT;
-		tf.selectable = false;
-		tf.mouseEnabled = false;
-		tf.tabEnabled = false;
+		tf.defaultTextFormat = DefaultStyle.getTextFormat();
+		tf.embedFonts = true;
 		tf.focusRect = false;
+		tf.mouseEnabled = false;
+		tf.multiline = true;
+		tf.selectable = false;
+		tf.tabEnabled = false;
+		tf.type = TextFieldType.DYNAMIC;
+		tf.wordWrap = Opts.optBool(opts, "wordWrap", false);
 
 		if(!box.isEmpty()) {
-		tf.width = box.width;
-		tf.height = box.height;
+			tf.width = box.width;
+			tf.height = box.height;
 		}
 
-		//~ this.mouseEnabled = false;
-		this.tabEnabled = false;
+
 		this.focusRect = false;
+		this.tabEnabled = false;
+
 
 		tf.text = Opts.optString(opts, "text", text);
-		tf.defaultTextFormat = DefaultStyle.getTextFormat();
 		tf.setTextFormat(DefaultStyle.getTextFormat());
 		this.addChild(tf);
 
 		if(box.isEmpty())
 		resize(new Size(tf.width, tf.height));
 		else {
-		tf.width = box.width;
-		tf.height = box.height;
+			tf.width = box.width;
+			tf.height = box.height;
 		}
 		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
 
@@ -105,8 +107,27 @@ class Label extends Component, implements IText {
 
 	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
-		tf.width = box.width;
-		tf.height = box.height;
+
+		switch(align.horizontal) {
+			case LEFT:
+			case CENTER:
+			tf.x = Std.int(box.width - tf.width) >> 1;
+			case RIGHT:
+			case JUSTIFY:
+		}
+
+		switch(align.vertical) {
+			case TOP:
+			tf.y = 0;
+			case CENTER:
+			tf.y = Std.int(box.height - tf.height) >> 1;
+			case BOTTOM:
+			tf.y = box.height - tf.height;
+		}
+
+		// tf.width = box.width;
+		// tf.height = box.height;
+
 		super.onResize(e);
 	}
 	//}}}
@@ -141,11 +162,9 @@ class Label extends Component, implements IText {
 
 	//{{{ redraw
 	public override function redraw(opts:Dynamic=null) {
-
 		tf.x = Std.int(tf.x);
 		tf.y = Std.int(tf.y);
-
-		super.redraw(opts);
+		// super.redraw(opts);
 	}
 	//}}}
 }

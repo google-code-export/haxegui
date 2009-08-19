@@ -48,12 +48,22 @@ import haxegui.utils.Size;
 //}}}
 
 
+//{{{ ToolBarStyle
+enum ToolBarStyle {
+	ICONS;
+	LABELS;
+	BELOW;
+	RIGHT;
+}
+//}}}
+
+
 //{{{ ToolBarHandle
 /**
 * Handle to detach the [ToolBar]<br/>
 */
-class ToolBarHandle extends AbstractButton, implements IComposite
-{
+class ToolBarHandle extends AbstractButton, implements IComposite {
+
 	//{{{ init
 	override public function init (? opts : Dynamic) {
 		super.init();
@@ -75,9 +85,8 @@ class ToolBarHandle extends AbstractButton, implements IComposite
 	//}}}
 
 	//{{{
-	static function __init__() {haxegui.Haxegui.register(ToolBarHandle);
+	static function __init__() {
 		haxegui.Haxegui.register(ToolBarHandle);
-
 	}
 	//}}}
 }
@@ -93,10 +102,11 @@ class ToolBarHandle extends AbstractButton, implements IComposite
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.2
 */
-class ToolBar extends Component, implements IRubberBand
-{
+class ToolBar extends Component, implements IRubberBand {
+
 	public var handle 	  : ToolBarHandle;
 	public var seperators : Array<Seperator>;
+	public var style	  : ToolBarStyle;
 
 	//{{{ init
 	override public function init (? opts : Dynamic) {
@@ -117,7 +127,6 @@ class ToolBar extends Component, implements IRubberBand
 		parent.addEventListener (ResizeEvent.RESIZE, onParentResize);
 	}
 	//}}}
-
 
 
 	//{{{ onParentResize
@@ -143,11 +152,11 @@ class ToolBar extends Component, implements IRubberBand
 	}
 	//}}}
 
+
 	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(ToolBar);
 	}
 	//}}}
-
 }
 //}}}

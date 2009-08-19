@@ -3,16 +3,19 @@ digraph uml {
 	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
 	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
 	graph [lp="161,12",
-		bb="0,0,322,385"];
+		bb="0,0,322,493"];
 	"flash.net.URLRequestHeader" [label="{\nURLRequestHeader}", fillcolor=white, URL="../types/flash/net/URLRequestHeader.html", tooltip="\nURLRequestHeader", portPos=w, pos="241,43", rects="197,25,285,61", width="1.22", height="0.50"];
 	"flash.net.URLRequest" [label="{\nURLRequest}", fillcolor=white, URL="../types/flash/net/URLRequest.html", tooltip="\nURLRequest", portPos=w, pos="241,97", rects="211,79,272,115", width="0.83", height="0.50"];
-	"flash.net.URLLoader" [label="{\nURLLoader}", fillcolor=white, URL="../types/flash/net/URLLoader.html", tooltip="\nURLLoader", portPos=w, pos="241,259", rects="213,241,270,277", width="0.78", height="0.50"];
-	"flash.events.EventDispatcher" [fontcolor=black, pos="62,205", rects="1,187,124,223", width="1.69", height="0.50"];
+	"flash.net.URLLoader" [label="{\nURLLoader}", fillcolor=white, URL="../types/flash/net/URLLoader.html", tooltip="\nURLLoader", portPos=w, pos="241,313", rects="213,295,270,331", width="0.78", height="0.50"];
+	"flash.events.EventDispatcher" [fontcolor=black, pos="62,232", rects="1,214,124,250", width="1.69", height="0.50"];
+	"flash.net.XMLSocket" [label="{\nXMLSocket}", fillcolor=white, URL="../types/flash/net/XMLSocket.html", tooltip="\nXMLSocket", portPos=w, pos="241,259", rects="212,241,270,277", width="0.81", height="0.50"];
 	"flash.net.FileReferenceList" [label="{\nFileReferenceList}", fillcolor=white, URL="../types/flash/net/FileReferenceList.html", tooltip="\nFileReferenceList", portPos=w, pos="241,205", rects="201,187,282,223", width="1.11", height="0.50"];
-	"flash.net.URLLoaderDataFormat" [label="{\nURLLoaderDataFormat|VARIABLES\lTEXT\lBINARY\l}", fillcolor="#af8dc3", fontcolor=black, pos="241,313", rects="160,295,262,331 262,295,322,331", width="2.25", height="0.50"];
-	"flash.net.FileFilter" [label="{\nFileFilter}", fillcolor=white, URL="../types/flash/net/FileFilter.html", tooltip="\nFileFilter", portPos=w, pos="241,367", rects="214,349,268,385", width="0.75", height="0.50"];
+	"flash.net.URLVariables" [label="{\nURLVariables}", fillcolor=white, URL="../types/flash/net/URLVariables.html", tooltip="\nURLVariables", portPos=w, pos="241,367", rects="208,349,274,385", width="0.92", height="0.50"];
+	"flash.net.URLLoaderDataFormat" [label="{\nURLLoaderDataFormat|VARIABLES\lTEXT\lBINARY\l}", fillcolor="#af8dc3", fontcolor=black, pos="241,421", rects="160,403,262,439 262,403,322,439", width="2.25", height="0.50"];
+	"flash.net.FileFilter" [label="{\nFileFilter}", fillcolor=white, URL="../types/flash/net/FileFilter.html", tooltip="\nFileFilter", portPos=w, pos="241,475", rects="214,457,268,493", width="0.75", height="0.50"];
 	"flash.net.FileReference" [label="{\nFileReference}", fillcolor=white, URL="../types/flash/net/FileReference.html", tooltip="\nFileReference", portPos=w, pos="241,151", rects="207,133,276,169", width="0.94", height="0.50"];
-	"flash.net.URLLoader" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,122,223 213,250 192,244 160,234 132,226"];
-	"flash.net.FileReferenceList" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,124,205 201,205 181,205 157,205 134,205"];
-	"flash.net.FileReference" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,122,187 207,161 186,167 157,176 132,184"];
+	"flash.net.URLLoader" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,92,250 213,305 197,300 177,293 160,286 140,277 118,265 101,255"];
+	"flash.net.XMLSocket" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,124,241 212,255 191,251 161,247 134,243"];
+	"flash.net.FileReferenceList" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,124,223 201,211 181,214 157,218 134,221"];
+	"flash.net.FileReference" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,91,214 207,160 192,165 175,171 160,178 140,187 118,198 100,209"];
 }

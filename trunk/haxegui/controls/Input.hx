@@ -30,12 +30,17 @@ import flash.text.TextFieldAutoSize;
 import flash.text.TextFieldType;
 import flash.text.TextFormat;
 import haxegui.controls.Component;
+import haxegui.controls.IAdjustable;
+import haxegui.controls.PopupMenu;
+import haxegui.events.ResizeEvent;
 import haxegui.managers.StyleManager;
+import haxegui.utils.Align;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
-import haxegui.controls.IAdjustable;
 //}}}
 
+
+//{{{ Input
 /**
 * Input wraps an editable [TextField].<br/>
 *
@@ -51,12 +56,14 @@ class Input extends Component, implements IText {
 	public var selection(getSelection, null): String;
 	public var text(getText, setText) 		: String;
 	public var tf 							: TextField;
+	public var align						: Alignment;
 	//}}}
 
 	//{{{ Functions
 	//{{{ init
 	override public function init(?opts:Dynamic) : Void	{
 		box = new Size(140, 20).toRect();
+		align = { horizontal: HorizontalAlign.LEFT, vertical: VerticalAlign.CENTER };
 
 
 		super.init(opts);
@@ -92,10 +99,17 @@ class Input extends Component, implements IText {
 		tf.defaultTextFormat = fmt;
 		tf.setTextFormat(fmt);
 
-
 		addChild(tf);
 		//addEventListener(TextEvent.TEXT_INPUT, onChanged, false, 0, true);
 	} //}}}
+
+
+
+	public override function onResize(e:ResizeEvent) {
+		tf.width = box.width - 4;
+		tf.height = box.height - 4;
+	}
+
 
 
 	//{{{ __setDisabled
@@ -154,4 +168,12 @@ class Input extends Component, implements IText {
 	}
 	//}}}
 	//}}}
+}
+//}}}
+
+
+class AutoCompleteInput extends Input {
+
+	public var popup : PopupMenu;
+
 }

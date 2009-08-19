@@ -19,6 +19,7 @@
 
 package haxegui.controls;
 
+
 //{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
@@ -62,10 +63,11 @@ using haxegui.utils.Color;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ComboBoxDropButton extends PushButton, implements IComposite
-{
+class ComboBoxDropButton extends PushButton, implements IComposite {
+
 	public var arrow : Arrow;
 
+	//{{{ init
 	public override function init(opts:Dynamic=null) {
 		if(!Std.is(parent, ComboBox)) throw parent+" not a ComboBox";
 		selected = false;
@@ -82,11 +84,15 @@ class ComboBoxDropButton extends PushButton, implements IComposite
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 
 	}
+	//}}}
 
 
+	//{{{ onAdded
 	public override function onAdded(e:Event) {}
+	//}}}
 
 
+	//{{{ onMouseClick
 	public override function onMouseClick(e:MouseEvent) {
 		if(this.disabled) return;
 
@@ -104,36 +110,37 @@ class ComboBoxDropButton extends PushButton, implements IComposite
 		menu.addEventListener(MenuEvent.MENU_SHOW, (cast parent).onMenuShow, false, 0, true);
 		menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
 
-		menu.init({color: DefaultStyle.INPUT_BACK});
+		menu.init({width:(cast parent).box.width - 22, color: DefaultStyle.INPUT_BACK});
+
 
 		menu.x = p.x + 1;
 		menu.y = p.y + 20;
-		menu.box.width = (cast parent).box.width - 22;
-		//parent.list.box.height = 200;
-		//parent.list.. = [];
-
-		//menu.__setDataSource( parent.dataSource );
-		//for(i in 1...10)
-		//parent.list.data.push("List Item "+i);
-		//parent.list.data = parent.data;
-
-		//~ menu.dispatchEvent(new MenuEvent(MenuEvent.MENU_SHOW));
+		// menu.box.width = (cast parent).box.width - 22;
 
 		super.onMouseClick(e);
 	}
+	//}}}
 
+
+	//{{{ onMenuShow
 	public function onMenuShow(e:MenuEvent) {
 		parent.dispatchEvent(e);
-		//		(cast parent).menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
+		//(cast parent).menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
 	}
+	//}}}
 
+
+	//{{{ onMenuHide
 	public function onMenuHide(e:MenuEvent) {
 		selected = false;
 		//dirty = true;
 		redraw();
 		//trace(selected);
 	}
+	//}}}
 
+
+	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
 		moveTo(parent.asComponent().box.width - box.width, -1);
 		box  = parent.asComponent().box.clone();
@@ -141,18 +148,27 @@ class ComboBoxDropButton extends PushButton, implements IComposite
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
+	//}}}
 
+
+	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
-		arrow.box = box.clone();
-		arrow.box.inflate(-6,-6);
-		arrow.center();
-		arrow.dirty = true;
-		super.onResize(e);
-	}
+		arrow.box = new Size(box.height - 12, box.width - 12).setAtLeastZero().toRect();
 
+		arrow.dirty = true;
+		arrow.center();
+		arrow.move(.5*arrow.box.width, .5*arrow.box.height+1);
+
+		// super.onResize(e);
+	}
+	//}}}
+
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(ComboBoxDropButton);
 	}
+	//}}}
 }
 //}}}
 
@@ -167,8 +183,8 @@ class ComboBoxDropButton extends PushButton, implements IComposite
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class ComboBoxBackground extends Component, implements IComposite
-{
+class ComboBoxBackground extends Component, implements IComposite {
+
 	public var label : Label;
 
 
@@ -217,10 +233,9 @@ class ComboBoxBackground extends Component, implements IComposite
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ComboBox extends Component, implements IData, implements IAdjustable
-{
-	//{{{ Members
+class ComboBox extends Component, implements IData, implements IAdjustable {
 
+	//{{{ Members
 	//{{{ Public
 	public var adjustment : Adjustment;
 
@@ -243,7 +258,6 @@ class ComboBox extends Component, implements IData, implements IAdjustable
 	//{{{ Private
 	private var editable : Bool;
 	//}}}
-
 	//}}}
 
 
@@ -363,7 +377,12 @@ class ComboBox extends Component, implements IData, implements IAdjustable
 	public override function onResize(e:ResizeEvent) {
 		if(input==null) return;
 
-		if(box.width<input.tf.width) return;
+		input.box = box.clone();
+		input.dirty=true;
+
+		input.tf.width = box.width;
+		input.tf.height = box.height;
+
 		super.onResize(e);
 	}
 	//}}}

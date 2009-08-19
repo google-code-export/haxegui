@@ -32,6 +32,7 @@ import haxegui.controls.Expander;
 import haxegui.controls.Image;
 import haxegui.events.DragEvent;
 import haxegui.events.ResizeEvent;
+import haxegui.events.TreeEvent;
 import haxegui.managers.CursorManager;
 import haxegui.managers.DragManager;
 import haxegui.managers.StyleManager;
@@ -55,8 +56,9 @@ using haxegui.controls.Component;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class TreeLeaf extends AbstractButton, implements IAggregate {
-	/** Optional icon **/
+class TreeLeaf extends Component, implements IAggregate {
+
+	/** Leaf icon **/
 	var icon : Icon;
 	/** Default to the name property **/
 	var label : Label;
@@ -64,6 +66,7 @@ class TreeLeaf extends AbstractButton, implements IAggregate {
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		box = new Size(140,24).toRect();
+		color = DefaultStyle.INPUT_BACK;
 		icon = null;
 
 		super.init(opts);
@@ -73,10 +76,22 @@ class TreeLeaf extends AbstractButton, implements IAggregate {
 		label.move(48, 4);
 
 		icon = new Icon(this, 24, 4);
-		icon.init ({src: Icon.STOCK_DOCUMENT});
+		icon.init ({src: Opts.optString(opts, "icon", Icon.STOCK_DOCUMENT) });
 
 	}
 	//}}}
+
+
+	//{{{ onMouseClick
+	public override function onMouseClick(e:MouseEvent) {
+		if(disabled) return;
+
+		e.stopImmediatePropagation();
+
+		super.onMouseClick(e);
+	}
+	//}}}
+
 
 	//{{{ __init__
 	static function __init__() {
@@ -99,33 +114,32 @@ class TreeLeaf extends AbstractButton, implements IAggregate {
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class TreeNode extends AbstractButton, implements IAggregate {
+class TreeNode extends Component, implements IAggregate {
 
 	public var expander : Expander;
 
-	public var depth : Int;
-
 	public var expanded : Bool;
+
 	public var selected : Bool;
 
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		color = DefaultStyle.INPUT_BACK;
 		box = new Size(140, 24).toRect();
-		depth = Opts.optInt(opts, "depth", 0);
 
 
 		super.init(opts);
 
+
 		expander = new Expander(this, name);
 		expander.init({style: "arrow_and_icon", expanded: false});
-		// expander.init({style: ExpanderStyle.ARROW_AND_BOX, expanded: false});
-		//expander.setAction("mouseClick", "");
 		expander.label.x += 24;
 
 		expander.mouseEnabled = false;
 		expander.removeEventListener(MouseEvent.CLICK, expander.onMouseClick);
 
+
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
 	//}}}
 
@@ -137,9 +151,33 @@ class TreeNode extends AbstractButton, implements IAggregate {
 	//{{{ addChild
 	public override function addChild(o:DisplayObject) : DisplayObject {
 		if(expander==null) return super.addChild(o);
-		return expander.addChild(o);
+		var c = expander.addChild(o);
+		if(Std.is(c, TreeNode)) {
+			c.addEventListener(TreeEvent.ITEM_OPENING, onChildClicked, false, 0, true);
+		}
+		return c;
 	}
 	//}}}
+
+	public function onChildClicked(e:TreeEvent) {
+		var i = parent.getChildIndex(this) + 1;
+		if(parent.numChildren<i) return;
+
+		var v = expander.getVisibleChildren().length;
+		if(expander.label!=null) v--;
+		if(expander.button!=null) v--;
+		var h = 24*v;
+
+		for(j in i...parent.numChildren) {
+			parent.getChildAt(j).y += (e.type==TreeEvent.ITEM_OPENING?1:-1)*h;
+		}
+
+		parentTree(this).box.height += (e.type==TreeEvent.ITEM_OPENING?1:-1)*h;
+		parentTree(this).dirty = true;
+
+		// for(a in ancestors())
+		// if(Std.is(a, TreeNode)) { a.dispatchEvent(e); break; }
+	}
 
 
 	//{{{ getChildIndex
@@ -153,9 +191,10 @@ class TreeNode extends AbstractButton, implements IAggregate {
 
 	//{{{ onMouseClick
 	public override function onMouseClick(e:MouseEvent) {
+		if(disabled) return;
+		// if(empty() || disabled) return;
 
-
-		if(empty() || disabled) return;
+		e.stopImmediatePropagation();
 
 			expander.expanded = !expander.expanded;
 
@@ -168,12 +207,28 @@ class TreeNode extends AbstractButton, implements IAggregate {
 			expander.getChildAt(i).visible = expander.expanded;
 
 
-
-		e.stopImmediatePropagation();
-
 		super.onMouseClick(e);
 	}
 	//}}}
+
+	public override function onRollOver(e:MouseEvent) {
+		super.onRollOver(e);
+	}
+
+	public override function onRollOut(e:MouseEvent) {
+		super.onRollOut(e);
+	}
+
+
+	public  function onParentResize(e:ResizeEvent) : Void {
+		box.width = parent.asComponent().box.width;
+		expander.box = box.clone();
+		for(i in expander) {
+			i.asComponent().box.width = box.width;
+			i.asComponent().dirty=true;
+		}
+		dirty = true;
+	}
 
 
 	//{{{ expand
@@ -183,11 +238,7 @@ class TreeNode extends AbstractButton, implements IAggregate {
 		for(j in i...parent.numChildren)
 		parent.getChildAt(j).y += h;
 
-
-		// if((cast a).numChildren!=0)
-		// for(j in a.asComponent())
-		// j.y += h;
-
+		dispatchEvent(new TreeEvent(TreeEvent.ITEM_OPENING));
 	}
 	//}}}
 
@@ -198,15 +249,25 @@ class TreeNode extends AbstractButton, implements IAggregate {
 		for(j in i...parent.numChildren)
 		parent.getChildAt(j).y = 24*j - 24;
 
-
+		// (cast parent).expandedNodes.remove(this)
+		// (cast parent).collapsedNodes.add(this);
+		dispatchEvent(new TreeEvent(TreeEvent.ITEM_CLOSING));
 	}
 	//}}}
+
+	public static function parentTree(node:TreeNode) : Tree {
+		for(a in node.ancestors())
+			if(Std.is(a, Tree)) return cast a;
+		return null;
+	}
+
 
 	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(TreeNode);
 	}
 	//}}}
+
 }
 //}}}
 
@@ -224,40 +285,53 @@ class TreeNode extends AbstractButton, implements IAggregate {
 *
 */
 class Tree extends Component, implements IData {
-	public var dataSource : DataSource;
-	public var data : Dynamic;
-	/** A list of selected items on the tree **/
-	public var selected : List<DisplayObject>;
-	public var rootNode : TreeNode;
+	public var dataSource 		: DataSource;
+	public var data 			: Dynamic;
 
-	public var showRoot : Bool;
+	/** A list of selected items on the tree **/
+	public var selected 	  	: List<DisplayObject>;
+
+	public var expandedNodes  	: List<TreeNode>;
+	public var collapsedNodes 	: List<TreeNode>;
+
+	public var rootNode 		: TreeNode;
+	public var showRoot 		: Bool;
+
 	//{{{ Functions
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		box = new Size(140,24).toRect();
 		color = DefaultStyle.INPUT_BACK;
+		collapsedNodes = new List<TreeNode>();
+		expandedNodes = new List<TreeNode>();
+		selected = new List<DisplayObject>();
 
 
 		super.init(opts);
 
 
+		description = null;
+
+
 		rootNode = new TreeNode(this, "rootNode");
-		rootNode.init({x: 12, width: box.width, color: this.color });
+		rootNode.init({x: 12, width: box.width-12, color: this.color });
+		rootNode.description = null;
 
-
-
-		// var o = {};
-		// var root = flash.Lib.current;
-		// for(i in 0...root.numChildren) {
-		// 	var child = cast root.getChildAt(i);
-		// 	Reflect.setField(o, child.name, child);
-		// }
-
-		// process(o, rootNode);
-		var self = this;
-		addEventListener(ResizeEvent.RESIZE, function(e){ trace(e); self.redraw(); });
+		// var self = this;
+		// addEventListener(ResizeEvent.RESIZE, function(e){ trace(e); self.redraw(); });
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
 	//}}}
+
+	public override function addChild(o:DisplayObject) : DisplayObject {
+		var c = super.addChild(o);
+		if(Std.is(c, TreeNode)) {
+			if((cast c).expanded) expandedNodes.add(cast c);
+			else collapsedNodes.add(cast c);
+		}
+		return c;
+	}
+
 
 	public function count() : Int {
 		return 0;
@@ -267,34 +341,17 @@ class Tree extends Component, implements IData {
 	public override function redraw(opts:Dynamic=null) {
 		// background
 		this.graphics.clear();
-		for(i in 0...Std.int(this.box.height/24)+1) {
-			this.graphics.beginFill( (i%2==0?Color.darken(this.color,10):this.color) );
-			this.graphics.drawRect(0, 24*i, this.box.width, 24);
-			this.graphics.endFill();
-		}
+		this.graphics.beginFill(this.color);
+		this.graphics.drawRect(0, 0, box.width, box.height);
+		this.graphics.endFill();
 
-		// var o = this;
-		// var draw = function(x:Float,y:Float) {
-		// 	var h = 24;
-		// 	o.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,30), 1);
-		// 	o.graphics.moveTo(12+x, h+24*y);
-		// 	o.graphics.lineTo(12+x, 12+h+24*y);
-		// 	o.graphics.lineTo(12+x, 12+h+24*y);
-		// 	o.graphics.lineTo(24+x, 12+h+24*y);
+		// this.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,30), 1);
+		// this.graphics.moveTo(24, 12);
+		// this.graphics.lineTo(24, 24*this.rootNode.expander.numChildren);
+		// for(i in 0...this.rootNode.expander.numChildren) {
+		// 	this.graphics.moveTo(24, 24*i-12);
+		// 	this.graphics.lineTo(48, 24*i-12);
 		// }
-
-		this.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,30), 1);
-		this.graphics.moveTo(24, 12);
-		this.graphics.lineTo(24, 24*this.rootNode.expander.numChildren);
-
-
-		// var node = this.asComponent();
-		for(i in 0...this.rootNode.expander.numChildren) {
-			this.graphics.moveTo(24, 24*i-12);
-			this.graphics.lineTo(48, 24*i-12);
-
-		}
-
 
 
 		super.redraw(opts);
@@ -310,11 +367,11 @@ class Tree extends Component, implements IData {
 			if(Reflect.isObject(Reflect.field(o, f))) {
 				if(Std.is(Reflect.field(o, f), String) || Reflect.fields(Reflect.field(o,f)).length==0 )  {
 					var leaf = new TreeLeaf(node, f);
-					leaf.init({x: x+24, y: 24*(node.getChildIndex(leaf)-1), width: this.box.width, visible: false});
+					leaf.init({x: x+24, y: 24*(node.getChildIndex(leaf)-1), width: box.width-(node.x+x+24), visible: false, color: this.color });
 				}
 				else {
 					var treenode = new TreeNode(node, f);
-					treenode.init({x: x+24, y: 24*(node.getChildIndex(treenode)-1), width: box.width, visible: false });
+					treenode.init({width: box.width-(node.x+x+24), x: x+24, y: 24*(node.getChildIndex(treenode)-1), visible: false, color: this.color });
 					process(Reflect.field(o,f), treenode);
 				}
 			}
@@ -324,7 +381,28 @@ class Tree extends Component, implements IData {
 
 	public function onParentResize(e:ResizeEvent) : Void {
 		box = parent.asComponent().box.clone();
-		redraw();
+
+
+		// if(parent.parent!=null) {
+		// box.width = (cast parent.parent).box.width - x;
+		// box.height = (cast parent.parent).box.height - y;
+		// }
+
+		// for(a in ancestors()) {
+			// if(Std.is(a, haxegui.containers.Divider))
+				// box.width -= 10;
+		// }
+
+		// redraw();
+		for(i in this) {
+			i.asComponent().box.width = box.width;
+			i.asComponent().dirty=true;
+		}
+
+		dirty = true;
+
+
+		dispatchEvent(e);
 	}
 
 	public override function onResize(e:ResizeEvent) : Void {

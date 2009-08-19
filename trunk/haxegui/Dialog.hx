@@ -22,10 +22,14 @@ import haxegui.events.DragEvent;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.StyleManager;
+import haxegui.utils.Align;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
 //}}}
+
+
+using haxegui.controls.Component;
 
 
 //{{{ Dialog
@@ -39,13 +43,28 @@ import haxegui.utils.Size;
 */
 class Dialog extends Window {
 
-	public var icon  	: Icon;
-	public var label 	: Label;
-	public var buttons  : Array<Button>;
+	public var container 	: Container;
+	public var icon  	 	: Icon;
+	public var label 	 	: Label;
+	public var buttons   	: Array<Button>;
 
+	static var xml = Xml.parse(
+	'
+	<haxegui:Layout name="Dialog">
+		<haxegui:containers:Container name="Container">
+			<haxegui:containers:Grid rows="2" cols="1">
+				<haxegui:controls:Label name="Label"/>
+				<haxegui:container:HBox>
+					<haxegui:controls:Button label="Ok"/>
+					<haxegui:controls:Button label="Canel"/>
+				</haxegui:container:HBox>
+			</haxegui:containers:Grid>
+		</haxegui:containers:Container>
+	</haxegui:Layout>
+	').firstElement();
 
 	//{{{ init
-	public override function init(opts:Dynamic=null) {
+	public override function init(?opts:Dynamic=null) {
 		box = new Size(320,160).toRect();
 		type = WindowType.MODAL;
 
@@ -69,21 +88,32 @@ class Dialog extends Window {
 		}
 
 
+		xml.set("name", name);
+
+		// xml.elementsNamed("haxegui:controls:Label").next().set("text", name);
+
+		XmlParser.apply(Dialog.xml, this);
+
+
 		super.init(opts);
 
 
 		moveTo(.5*(this.stage.stageWidth-box.width), .5*(this.stage.stageHeight-box.height));
 		type = WindowType.MODAL;
 
-		var container = new Container(this);
-		container.init();
+		// container = new Container(this);
+		// container.init();
+		container = cast this.getChildByName("Container");
 
 
-		label = new haxegui.controls.Label(container);
-		label.init({text: Opts.optString(opts, "label", name)});
-		label.center();
-		label.move(0, -20);
-
+		// label = new haxegui.controls.Label(container);
+		// label.init({text: Opts.optString(opts, "label", name)});
+		label = cast container.asComponent().firstChild().asComponent().firstChild();
+		label.text = Opts.optString(opts, "label", name);
+		label.align.horizontal = HorizontalAlign.CENTER;
+		// label.center();
+		// label.move(0, -20);
+/*
 		icon = new Icon(container);
 		icon.init({src: Icon.DIALOG_WARNING});
 		icon.moveTo(14, label.y-6);
@@ -101,7 +131,7 @@ class Dialog extends Window {
 		button.move(60, 46);
 		button.setAction("mouseClick", "this.getParentWindow().destroy();");
 
-
+*/
 		this.toFront();
 	}
 	//}}}

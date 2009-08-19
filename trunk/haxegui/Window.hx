@@ -86,6 +86,14 @@ class Window extends Component {
 
 	//{{{ Static
 	public static var lazyResize : Bool;
+	static var xml = Xml.parse(
+	'
+	<haxegui:Layout name="Window">
+	<haxegui:windowClasses:WindowFrame/>
+	<haxegui:windowClasses:TitleBar/>
+	<!--<haxegui:windowClasses:StatusBar/>-->
+	</haxegui:Layout>
+	').firstElement();
 	//}}}
 
 	//}}}
@@ -150,7 +158,7 @@ class Window extends Component {
 		sizeable = Opts.optBool(opts, "sizeable", true);
 		lazyResize = Opts.optBool(opts, "lazyResize", false);
 
-
+/*
 		// frame
 		frame = new WindowFrame(this, "frame");
 		frame.init({color: this.color});
@@ -159,6 +167,12 @@ class Window extends Component {
 		// titlebar
 		titlebar = new TitleBar(this, "titlebar");
 		titlebar.init({title:this.name, color: this.color });
+*/
+
+		xml.set("name", name);
+
+		XmlParser.apply(Window.xml, this);
+
 
 		// register events with window manager
 		WindowManager.getInstance().register(this);
@@ -194,15 +208,11 @@ class Window extends Component {
 	//}}}
 
 
-	//{{{ onMouseDoubleClick
-	/**
-	* @todo window shading
-	*/
-	public override function onMouseDoubleClick(e:MouseEvent) : Void {
-		super.onMouseDoubleClick(e);
+	public override function onResize(e:ResizeEvent) {
+		super.onResize(e);
+		// frame.box = box.clone();
+		// frame.redraw();
 	}
-	//}}}
-
 
 	//{{{ __init__
 	static function __init__() {

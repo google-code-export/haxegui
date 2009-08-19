@@ -258,41 +258,32 @@ class RichTextEditor extends Window, implements IText {
 
 
 		//{{{ Color
-		btn = new Button(toolbar, "Color", 400, 8);
-		btn.init({width: 32, height: 24, label: null });
-		var swatch = new Component(btn);
-		swatch.mouseEnabled = false;
-		swatch.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,10));
-		swatch.graphics.beginFill(_color);
-		swatch.graphics.drawRect(4,4,24,16);
-		swatch.graphics.endFill();
-		swatch.filters = [new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,flash.filters.BitmapFilterQuality.HIGH,true,false,false)];
+		var swatch = new Swatch(toolbar, 400, 8);
+		swatch.init({_color: Color.BLACK, width: 32, height: 24, label: null });
 
 		//{{{ mouseClick
-		btn.setAction("mouseClick",
+		swatch.setAction("mouseClick",
 		"
 		var win = this.getParentWindow();
 		var tf = win.getChildByName('Container1').getChildByName('tf');
-		var swatch = this.getChildAt(0);
-
 
 		// Color picking
 		var c = new haxegui.ColorPicker();
 		c.currentColor = win._color;
+		this._color = win._color;
 		c.init();
 		var container = c.getChildByName('Container');
-		var ok = container.getChildByName('Ok');
-		var cancel = container.getChildByName('Cancel');
+		var grid = container.getChildByName('Grid');
+		var ok = grid.getChildByName('Ok');
+		var cancel = grid.getChildByName('Cancel');
 
 		cancel.setAction('mouseClick', 'this.getParentWindow().destroy();');
 		//{{{ onColoreChoosen
 		function onColoreChoosen(e) {
 			win._color = c.currentColor;
 			c.destroy();
-			swatch.graphics.clear();
-			swatch.graphics.beginFill(win._color);
-			swatch.graphics.drawRect(4,4,24,16);
-			swatch.graphics.endFill();
+			this._color = win._color;
+			this.redraw();
 			var hex = StringTools.hex(win._color);
 
 			var text = tf.selectedText;

@@ -38,7 +38,7 @@ class XmlParser {
 	private var isStyle : Bool;
 
 	//{{{ Constructor
-	private function new(xml:Xml) {
+	private function new(xml:Xml, ?parent:Dynamic) {
 		var typeParts = xml.nodeName.split(":");
 		if(typeParts[0] != "haxegui")
 		throw "Not a haxegui node";
@@ -50,7 +50,7 @@ class XmlParser {
 
 		trace(this+": Setting " + typeParts[1].toLowerCase() + " to " + xml.get("name"));
 		for(x in xml.elements())
-		parseNode(x);
+		parseNode(x, parent);
 	}
 	//}}}
 
@@ -159,8 +159,8 @@ class XmlParser {
 	/**
 	* Applies the given style or layout from the provided Xml node
 	**/
-	public static function apply(xml:Xml) {
-		var xp = new XmlParser(xml);
+	public static function apply(xml:Xml, ?parent:Dynamic) {
+		var xp = new XmlParser(xml, parent);
 	}
 	//}}}
 

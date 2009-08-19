@@ -50,12 +50,13 @@ class ScrollPane extends Component, implements IContainer {
 	public var vert : ScrollBar;
 	public var horz : ScrollBar;
 
+	//{{{ Functions
 
 	//{{{ addChild
 	/** Children are added to the [content] member **/
 	public override function addChild(o : DisplayObject) : DisplayObject {
 		if(content!=null && vert!=null && horz!=null)
-			return content.addChild(o);
+		return content.addChild(o);
 		return super.addChild(o);
 	}
 	//}}}
@@ -63,8 +64,7 @@ class ScrollPane extends Component, implements IContainer {
 
 	//{{{ init
 	override public function init(?opts:Dynamic) {
-		if(Std.is(parent, Component))
-			color = (cast parent).color;
+		color = DefaultStyle.BACKGROUND;
 		box = new Size(140, 100).toRect();
 
 
@@ -86,16 +86,20 @@ class ScrollPane extends Component, implements IContainer {
 
 
 		if(Opts.optBool(opts,"vert", true)) {
-		vert = new ScrollBar(this, "vscrollbar", this.box.width - 20, 0);
-		vert.init({target: content, color: this.color});
+			vert = new ScrollBar(this, "vscrollbar", this.box.width - 20, 0);
+			vert.init({target: content, color: this.color});
 		}
 
 
 		if(Opts.optBool(opts,"horz", true)) {
-		horz = new ScrollBar(this, "hscrollbar");
-		horz.init({target: content, horizontal: true, color: this.color});
+			horz = new ScrollBar(this, "hscrollbar");
+			horz.init({target: content, horizontal: true, color: this.color});
 		}
 
+
+		// #if debug
+		setAction("redraw", " this.graphics.clear(); this.graphics.lineStyle(2, Color.RED); this.graphics.drawRect(0,0,this.box.width, this.box.height); this.graphics.lineStyle(2, Color.GREEN); this.graphics.drawRect(0,0,this.box.width,this.box.height);" );
+		// #end
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
@@ -108,11 +112,11 @@ class ScrollPane extends Component, implements IContainer {
 	public override function onMouseWheel(e:MouseEvent) {
 		if(vert==null) return;
 		var handleMotionTween = new feffects.Tween( 0, 1, 1000, feffects.easing.Expo.easeOut );
-/*
+		/*
 		vert.handle.updatePositionTween( handleMotionTween,
-									new flash.geom.Point(0, e.delta * (vert.horizontal ? 1 : -1)* vert.adjustment.page),
-									null );
-	*/
+		new flash.geom.Point(0, e.delta * (vert.horizontal ? 1 : -1)* vert.adjustment.page),
+		null );
+		*/
 		super.onMouseWheel(e);
 	}
 	//}}}
@@ -124,25 +128,38 @@ class ScrollPane extends Component, implements IContainer {
 	*/
 	public function onParentResize(e:ResizeEvent) {
 		//~ box = untyped parent.box.clone();
-		if(fitH) box.width = (cast parent).box.width - x - ((vert!=null && vert.visible) ? 20 : 0);
-		if(fitV) box.height = (cast parent).box.height - y - ((horz!=null && horz.visible) ? 20 : 0);
+		if(!Std.is(parent, Divider)) {
+			if(fitH) box.width = (cast parent).box.width - x - ((vert!=null && vert.visible) ? 20 : 0);
+			if(fitV) box.height = (cast parent).box.height - y - ((horz!=null && horz.visible) ? 20 : 0);
+		}
+
+		if(Std.is(parent, haxegui.Window) && (cast parent).statusbar!=null)
+		box.height -= 20;
 
 
 		var r = box.clone();
 		r.x = content.scrollRect.x;
 		r.y = content.scrollRect.y;
+		// r.width += r.x;
+		// r.height += r.y;
 		content.scrollRect = r.clone();
 
 
-
-		content.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		content.dispatchEvent(e);
+		dispatchEvent(e);
 	}
 	//}}}
 
 
 	public override function onResize(e:ResizeEvent) {
-				dirty = true;
+		dirty = true;
+		var r = box.clone();
+		r.x = content.scrollRect.x;
+		r.y = content.scrollRect.y;
+		// r.width += r.x;
+		// r.height += r.y;
+		content.scrollRect = r.clone();
+		content.dispatchEvent(e);
 	}
 
 
@@ -151,5 +168,6 @@ class ScrollPane extends Component, implements IContainer {
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollPane);
 	}
+	//}}}
 	//}}}
 }

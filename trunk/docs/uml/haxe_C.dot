@@ -3,7 +3,7 @@ digraph uml {
 	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
 	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
 	graph [lp="198,12",
-		bb="0,0,396,612"];
+		bb="0,0,396,702"];
 	"haxe.Public" [label="{\nPublic}", fontcolor="#496962", style="rounded,filled", fillcolor="#88c2b3", URL="../types/haxe/Public.html", tooltip="\nPublic", pos="338,43", rects="311,25,365,61", width="0.75", height="0.50"];
 	"haxe.Resource" [label="{\nResource}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/Resource.html", tooltip="\nResource", pos="338,97", rects="310,79,366,115", width="0.78", height="0.50"];
 	"haxe.Unserializer" [label="{\nUnserializer}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/Unserializer.html", tooltip="\nUnserializer", pos="338,151", rects="305,133,371,169", width="0.92", height="0.50"];
@@ -17,9 +17,11 @@ digraph uml {
 	"haxe.FastList_aPath_Node" [label="{\nFastList_aPath_Node}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/FastList_aPath_Node.html", tooltip="\nFastList_aPath_Node", pos="338,468", rects="287,450,390,486", width="1.42", height="0.50"];
 	"haxe.FastList_feffects_Tween" [label="{\nFastList_feffects_Tween}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/FastList_feffects_Tween.html", tooltip="\nFastList_feffects_Tween", pos="338,205", rects="280,187,396,223", width="1.61", height="0.50"];
 	"haxe.Log" [label="{\nLog}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/Log.html", tooltip="\nLog", pos="338,331", rects="311,313,365,349", width="0.75", height="0.50"];
-	"haxe.FastCell" [label="{\nFastCell}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/FastCell.html", tooltip="\nFastCell", pos="122,540", rects="95,522,149,558", width="0.75", height="0.50"];
-	"haxe.FastList" [label="{\nFastList}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/FastList.html", tooltip="\nFastList", pos="338,540", rects="311,522,365,558", width="0.75", height="0.50"];
-	"haxe.Timer" [label="{\nTimer}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/Timer.html", tooltip="\nTimer", pos="338,594", rects="311,576,365,612", width="0.75", height="0.50"];
+	"haxe.Serializer" [label="{\nSerializer}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/Serializer.html", tooltip="\nSerializer", pos="338,522", rects="310,504,366,540", width="0.78", height="0.50"];
+	"haxe.Http" [label="{\nHttp}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/Http.html", tooltip="\nHttp", pos="338,576", rects="311,558,365,594", width="0.75", height="0.50"];
+	"haxe.FastCell" [label="{\nFastCell}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/FastCell.html", tooltip="\nFastCell", pos="122,630", rects="95,612,149,648", width="0.75", height="0.50"];
+	"haxe.FastList" [label="{\nFastList}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/FastList.html", tooltip="\nFastList", pos="338,630", rects="311,612,365,648", width="0.75", height="0.50"];
+	"haxe.Timer" [label="{\nTimer}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxe/Timer.html", tooltip="\nTimer", pos="338,684", rects="311,666,365,702", width="0.75", height="0.50"];
 	"haxe.Unserializer" -> "haxe.TypeResolver" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,305,151 293,151 278,151 261,151 244,151"];
 	"haxe.FastCell_feffects_Tween" -> "haxe.FastCell_feffects_Tween" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,161,223 158,235 152,239 140,241 122,241 90,241 77,233 83,223"];
 	"haxe.Int32" -> "haxe.Int32" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,365,268 375,275 385,285 372,295 338,295 296,295 286,280 311,268"];
@@ -29,6 +31,6 @@ digraph uml {
 	"haxe.FastCell_hscript_Token" -> "haxe.FastCell_hscript_Token" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,161,414 158,426 152,430 140,432 122,432 90,432 77,424 83,414"];
 	"haxe.FastList_feffects_Tween" -> "haxe.FastCell_feffects_Tween" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,280,205 268,205 240,205 208,205 181,205"];
 	"haxe.Log" -> "haxe.PosInfos" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,311,331 299,331 279,331 255,331 230,331"];
-	"haxe.FastCell" -> "haxe.FastCell" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,149,549 159,556 169,566 156,576 122,576 80,576 70,561 95,549"];
-	"haxe.FastList" -> "haxe.FastCell" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,311,540 299,540 256,540 187,540 149,540"];
+	"haxe.FastCell" -> "haxe.FastCell" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,149,639 159,646 169,656 156,666 122,666 80,666 70,651 95,639"];
+	"haxe.FastList" -> "haxe.FastCell" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,311,630 299,630 256,630 187,630 149,630"];
 }

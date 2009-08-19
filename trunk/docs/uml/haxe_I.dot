@@ -3,7 +3,7 @@ digraph uml {
 	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
 	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
 	graph [lp="107,12",
-		bb="0,0,214,883"];
+		bb="0,0,214,991"];
 	"haxe.Public" [label="{\nPublic}", fillcolor="#88c2b3", fontcolor="#496962", URL="../types/haxe/Public.html", tooltip="\nPublic", portPos=w, pos="107,43", rects="80,25,134,61", width="0.75", height="0.50"];
 	"haxe.Resource" [label="{\nResource}", fillcolor=white, URL="../types/haxe/Resource.html", tooltip="\nResource", portPos=w, pos="107,97", rects="80,79,134,115", width="0.75", height="0.50"];
 	"haxe.Unserializer" [label="{\nUnserializer}", fillcolor=white, URL="../types/haxe/Unserializer.html", tooltip="\nUnserializer", portPos=w, pos="107,151", rects="78,133,137,169", width="0.81", height="0.50"];
@@ -17,7 +17,9 @@ digraph uml {
 	"haxe.TypeResolver" [label="{\nTypeResolver|resolveEnum (name : String) : Enum\lresolveClass (name : String) : Class\l}", fillcolor="#ffffbf", fontcolor=black, pos="107,595", rects="1,577,67,613 67,577,214,613", width="2.94", height="0.50"];
 	"haxe.FastList_feffects_Tween" [label="{\nFastList_feffects_Tween}", fillcolor=white, URL="../types/haxe/FastList_feffects_Tween.html", tooltip="\nFastList_feffects_Tween", portPos=w, pos="107,649", rects="53,631,161,667", width="1.50", height="0.50"];
 	"haxe.Log" [label="{\nLog}", fillcolor=white, URL="../types/haxe/Log.html", tooltip="\nLog", portPos=w, pos="107,703", rects="80,685,134,721", width="0.75", height="0.50"];
-	"haxe.FastCell" [label="{\nFastCell}", fillcolor=white, URL="../types/haxe/FastCell.html", tooltip="\nFastCell", portPos=w, pos="107,757", rects="80,739,134,775", width="0.75", height="0.50"];
-	"haxe.FastList" [label="{\nFastList}", fillcolor=white, URL="../types/haxe/FastList.html", tooltip="\nFastList", portPos=w, pos="107,811", rects="80,793,134,829", width="0.75", height="0.50"];
-	"haxe.Timer" [label="{\nTimer}", fillcolor=white, URL="../types/haxe/Timer.html", tooltip="\nTimer", portPos=w, pos="107,865", rects="80,847,134,883", width="0.75", height="0.50"];
+	"haxe.Serializer" [label="{\nSerializer}", fillcolor=white, URL="../types/haxe/Serializer.html", tooltip="\nSerializer", portPos=w, pos="107,757", rects="80,739,134,775", width="0.75", height="0.50"];
+	"haxe.Http" [label="{\nHttp}", fillcolor=white, URL="../types/haxe/Http.html", tooltip="\nHttp", portPos=w, pos="107,811", rects="80,793,134,829", width="0.75", height="0.50"];
+	"haxe.FastCell" [label="{\nFastCell}", fillcolor=white, URL="../types/haxe/FastCell.html", tooltip="\nFastCell", portPos=w, pos="107,865", rects="80,847,134,883", width="0.75", height="0.50"];
+	"haxe.FastList" [label="{\nFastList}", fillcolor=white, URL="../types/haxe/FastList.html", tooltip="\nFastList", portPos=w, pos="107,919", rects="80,901,134,937", width="0.75", height="0.50"];
+	"haxe.Timer" [label="{\nTimer}", fillcolor=white, URL="../types/haxe/Timer.html", tooltip="\nTimer", portPos=w, pos="107,973", rects="80,955,134,991", width="0.75", height="0.50"];
 }

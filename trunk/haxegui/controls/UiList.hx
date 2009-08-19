@@ -62,6 +62,7 @@ using haxegui.controls.Component;
 *
 */
 class ListHeader extends AbstractButton, implements IComposite {
+
 	public var labels : Array<Label>;
 	public var seperators : Array<Seperator>;
 	public var arrow : Arrow;
@@ -73,13 +74,14 @@ class ListHeader extends AbstractButton, implements IComposite {
 	override public function init(opts:Dynamic=null) {if(!Std.is(parent, UiList)) throw parent+" not a UiList";
 		if(!Std.is(parent, UiList)) throw parent+" not a UiList";
 
-		//~ mouseChildren = true;
 
 		super.init(opts);
+
 
 		labels = [new Label(this)];
 		labels[0].init({text : name});
 		labels[0].moveTo(4,4);
+
 
 		arrow = new Arrow(this);
 		arrow.init({ width: 8, height: 8, color: haxegui.utils.Color.darken(this.color, 20)});
@@ -90,7 +92,7 @@ class ListHeader extends AbstractButton, implements IComposite {
 
 		seperators = [new Seperator(this)];
 		seperators[0].init({});
-		seperators[0].moveTo(labels[0].x + labels[0].width + 18, 4);
+		seperators[0].moveTo(labels[0].x + labels[0].width + 18, 0);
 
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
@@ -99,12 +101,11 @@ class ListHeader extends AbstractButton, implements IComposite {
 
 	//{{{ onMouseDown
 	override public function onMouseDown(e:MouseEvent) : Void {
-		if(Std.is(e.target, Label)) {
-			e.target.startDrag(false, new Rectangle(0, e.target.y, box.width - e.target.box.width, 0));
-			//~ e.stopImmediatePropagation();
-			CursorManager.getInstance().lock = true;
-			return;
-		}
+		// if(Std.is(e.target, Label)) {
+		// 	e.target.startDrag(false, new Rectangle(0, e.target.y, box.width - e.target.box.width, 0));
+		// 	CursorManager.getInstance().lock = true;
+		// 	return;
+		// }
 		super.onMouseDown(e);
 	}
 	//}}}
@@ -163,6 +164,7 @@ class ListHeader extends AbstractButton, implements IComposite {
 *
 */
 class ListItem extends AbstractButton, implements IRubberBand, implements IAggregate {
+
 	public var label : Label;
 	public var selected : Bool;
 
@@ -175,58 +177,33 @@ class ListItem extends AbstractButton, implements IRubberBand, implements IAggre
 		box = new Size(140, 20).toRect();
 		color = DefaultStyle.INPUT_BACK;
 
+
 		super.init(opts);
+
+
+		description = null;
+
 
 		label = new Label(this);
 		label.init({text: Opts.optString(opts, "label", name), color: DefaultStyle.INPUT_TEXT });
 		label.move(4,4);
 		label.mouseEnabled = false;
 
-		description = null;
 
-		// add the drop-shadow filter
-		//~ var shadow:DropShadowFilter = new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, BitmapFilterQuality.HIGH, true, false, false );
-		//~ this.filters = [shadow];
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
-
-		//~ setAction("mouseOver", "");
-		//~ setAction("mouseOut", "");
-
 	}
 	//}}}
 
 
 	public override function onMouseDown(e:MouseEvent) {
+		if(disabled) return;
 		if(e.target!=this) return;
-
-		// oldPos = this.localToGlobal(new flash.geom.Point());
-		// oldParent = parent;
-
-		// var i = oldParent.getChildIndex(this);
-
-		// this.swapParent(flash.Lib.current);
-		// this.moveToPoint(oldPos);
-		// this.startDrag();
-
-		// this.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
-
 		super.onMouseDown(e);
 	}
 
 
-
-
-
 	public override function onMouseUp(e:MouseEvent) {
-
-		// this.swapParent(oldParent);
-		// this.moveToPoint(parent.globalToLocal(oldPos));
-		// this.stopDrag();
-
-		// this.filters = null;
-
-		// stage.invalidate();
-
+		if(disabled) return;
 		super.onMouseUp(e);
 	}
 
@@ -261,6 +238,7 @@ class ListItem extends AbstractButton, implements IRubberBand, implements IAggre
 *
 */
 class UiList extends Component, implements IData, implements ArrayAccess<ListItem> {
+
 	//{{{ Members
 	/** Header for this list **/
 	public var header : ListHeader;
@@ -270,6 +248,7 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 
 
 	public var data : Dynamic;
+
 	public var dataSource( default, __setDataSource ) : DataSource;
 
 	/** sort direction, default (false) is ascending **/
@@ -289,14 +268,14 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 		color = DefaultStyle.BACKGROUND;
 		sortReverse = false;
 		items = new List<ListItem>();
-
-		if(Std.is(parent, Component))
-		color = parent.asComponent().color;
+		minSize = new Size(100,20);
 
 		if(data==null)
 		data = [];
 
+
 		super.init(opts);
+
 
 		if(opts == null) opts = {}
 		if(opts.innerData!=null)
@@ -313,12 +292,14 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 			data = cast(data, Array<Dynamic>);
 			for (i in 0...data.length) {
 				var item = new ListItem(this);
-				item.init({ width: this.box.width,
+				item.init({
+					// width: this.box.width,
 					color: DefaultStyle.INPUT_BACK,
 					label: data[i]
 				});
 				//item.label.mouseEnabled = false;
 				item.move(0,20+20*i+1);
+				box.width = Math.max( box.width, item.label.tf.width + 8 );
 			}
 		}
 		else
@@ -328,7 +309,8 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 			var items : Iterator<Dynamic> = data.iterator();
 			for(i in items) {
 				var item = new ListItem(this);
-				item.init({ color: DefaultStyle.INPUT_BACK,
+				item.init({
+					color: DefaultStyle.INPUT_BACK,
 					label: i
 				});
 				//item.label.mouseEnabled = false;
@@ -336,6 +318,7 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 				j++;
 			}
 		}
+		box.height = Math.max( box.height, 20*items.length );
 
 		for(i in this) {
 			//untyped box.width = i.box.width = Math.max(box.width, i.label.tf.width);
@@ -343,7 +326,18 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 		}
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
+		header.addEventListener(ResizeEvent.RESIZE, onHeaderResize, false, 0, true);
 		header.addEventListener(MoveEvent.MOVE, onHeaderMoved, false, 0, true);
+	}
+	//}}}
+
+
+
+	//{{{ onHeaderResized
+	public function onHeaderResize(e:ResizeEvent) {
+		box = header.box.clone();
+		dirty = true;
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
 
@@ -362,10 +356,10 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 		dataSource = d;
 		dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
 
-		#if debug
-		trace(this.dataSource+" => "+this);
-		trace(this.dataSource+": "+dataSource.data);
-		#end
+		// #if debug
+		// trace(this.dataSource+" => "+this);
+		// trace(this.dataSource+": "+dataSource.data);
+		// #end
 
 		if(Std.is(dataSource.data, List)) {
 			var j=0;
@@ -373,15 +367,18 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 			var items : Iterator<Dynamic> = data.iterator();
 			for(i in items) {
 				var item = new ListItem(this);
-				item.init({ color: DefaultStyle.INPUT_BACK,
+				item.init({
+					color: DefaultStyle.INPUT_BACK,
 					label: i
 				});
-				box.width = item.box.width = Math.max(box.width, item.label.tf.width);
+				box.width = Math.max(box.width, item.label.tf.width + 8);
 				item.label.mouseEnabled = false;
 				item.move(0,header==null ? 0 : 20+20*j+1);
 				j++;
 			}
 		}
+		box.height = Math.max( box.height, 20*items.length );
+		dirty = true;
 		return dataSource;
 	}
 	//}}}
@@ -398,11 +395,11 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	//{{{ onData
 	private  function onData(e:Event) {
 		#if debug
-		trace(e);
+		// trace(e);
 		#end
 
 		data = dataSource.data;
-		dirty = true;
+		// dirty = true;
 	}
 	//}}}
 
@@ -428,18 +425,11 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 
 	//{{{ redraw
 	override public function redraw(opts:Dynamic=null) {
-		super.redraw(opts);
-
-		/* Draw the frame */
+		// super.redraw(opts);
 		this.graphics.clear();
 		this.graphics.lineStyle(1, haxegui.utils.Color.darken(DefaultStyle.BACKGROUND, 20), 1);
-		//~ this.graphics.beginFill(this.color);
 		this.graphics.beginFill(DefaultStyle.INPUT_BACK);
-		if(header!=null)
-		this.graphics.drawRect(-1,header.box.height-1, box.width+1, box.height-header.box.height+1 );
-		else
-		this.graphics.drawRect(-1,-1, box.width+1, box.height+1 );
-
+		this.graphics.drawRect(-1,-1, this.box.width+1, this.box.height+1);
 		this.graphics.endFill();
 	}
 	//}}}
@@ -476,14 +466,24 @@ class ListBox extends UiList {
 
 
 		scrollbar = new ScrollBar(this);
-		scrollbar.init({target: this, height: box.height});
+		scrollbar.init({target: null, height: box.height});
+
+		scrollbar.addEventListener(Event.CHANGE, onScroll, false, 0, true);
+		scrollRect = box.clone();
 	}
 	//}}}
 
 
+	public function onScroll(e:Event) {
+		// trace(e);
+	}
+
+
 	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
-		scrollbar.moveTo(box.width - 20, 20);
+		scrollbar.moveTo(0, 20);
+		scrollbar.toFront();
+		scrollRect = box.clone();
 		super.onResize(e);
 	}
 	//}}}

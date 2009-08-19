@@ -60,11 +60,25 @@ using haxegui.controls.Component;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ScrollBarUpButton extends AbstractButton, implements IAggregate
-{
+class ScrollBarUpButton extends AbstractButton, implements IAggregate {
+	//{{{ init
+	override public function init(opts:Dynamic=null) {
+		box.width =  parent.asComponent().box.width;
+		box.height = 20;
+		minSize = new Size(15, 20);
+		color = parent.asComponent().color;
+
+
+		super.init(opts);
+	}
+	//}}}
+
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBarUpButton);
 	}
+	//}}}
 }
 //}}}
 
@@ -78,11 +92,25 @@ class ScrollBarUpButton extends AbstractButton, implements IAggregate
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ScrollBarDownButton extends AbstractButton, implements IAggregate
-{
+class ScrollBarDownButton extends AbstractButton, implements IAggregate {
+	//{{{ init
+	override public function init(opts:Dynamic=null) {
+		box.height = 20;
+		box.width =  parent.asComponent().box.width;
+		color = parent.asComponent().color;
+		minSize = new Size(15, 20);
+
+
+		super.init(opts);
+	}
+	//}}}
+
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(ScrollBarDownButton);
 	}
+	//}}}
 }
 //}}}
 
@@ -100,9 +128,10 @@ class ScrollBarHandle extends AbstractButton, implements IComposite {
 
 	//{{{ onResize
 	override public function onResize(e:ResizeEvent) : Void {
-		box.width =  parent.asComponent().box.width;
-		box.height = Math.max(20, box.height);
+		box.height = Math.max(15, box.height);
 		box.height = Math.min(box.height, parent.asComponent().box.height - y);
+		box.width =  parent.asComponent().box.width;
+		color = parent.asComponent().color;
 	}
 	//}}}
 
@@ -132,15 +161,12 @@ class ScrollBarHandle extends AbstractButton, implements IComposite {
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ScrollBarFrame extends AbstractButton, implements IComposite {
+class ScrollBarFrame extends Component, implements IComposite {
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
+		box = parent.asComponent().box.clone();
+		color = parent.asComponent().color;
 		super.init(opts);
-		setAction("mouseOver","");
-		setAction("mouseOut","");
-		setAction("mouseDown","");
-		setAction("mouseUp","");
-
 	}
 	//}}}
 
@@ -189,9 +215,20 @@ class ScrollBar extends Component, implements IAdjustable {
 	public var adjustment			:	Adjustment;
 	/** true for horizontal scrollbar **/
 	public var horizontal			:	Bool;
-
+	/** @todo socket **/
 	public var slot					: 	Socket;
 	//}}}
+
+	static var xml = Xml.parse(
+	'
+	<haxegui:Layout name="ScrollBar">
+			<haxegui:controls:ScrollBarFrame/>
+			<haxegui:controls:ScrollBarUpButton/>
+			<haxegui:controls:ScrollBarDownButton/>
+			<haxegui:controls:ScrollBarHandle/>
+	</haxegui:Layout>
+	'
+	).firstElement();
 
 	//{{{ Functions
 	//{{{ init
@@ -199,12 +236,13 @@ class ScrollBar extends Component, implements IAdjustable {
 	* @param opts.target Object to scroll, either a DisplayObject or TextField
 	*/
 	override public function init(opts:Dynamic=null) {
-		adjustment = new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 50., page: 100.});
+		adjustment = new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 10, page: 40});
 		box = new Size(20,80).toRect();
 		color = DefaultStyle.BACKGROUND;
 		horizontal = false;
 		scroll = 0;
 		scrollee = null;
+		minSize = new Size(15, 40);
 
 
 		// adjustment.object.value = Opts.optFloat(opts, "value", adjustment.object.value);
@@ -214,6 +252,11 @@ class ScrollBar extends Component, implements IAdjustable {
 		// adjustment.object.page  = Opts.optFloat(opts, "page",  adjustment.object.page);
 
 		scroll = Opts.optFloat(opts, "scroll",  scroll);
+
+
+		// xml.set("name", name);
+
+		haxegui.XmlParser.apply(ScrollBar.xml, this);
 
 
 		super.init(opts);
@@ -236,8 +279,9 @@ class ScrollBar extends Component, implements IAdjustable {
 
 
 		// frame
-		frame = new ScrollBarFrame(this);
-		frame.init({color: this.color});
+		// frame = new ScrollBarFrame(this);
+		// frame.init({color: this.color});
+		frame = this.getElementsByClass(ScrollBarFrame).next();
 		frame.focusRect = false;
 		frame.tabEnabled = false;
 		frame.description = null;
@@ -245,31 +289,59 @@ class ScrollBar extends Component, implements IAdjustable {
 
 
 		// handle
-		handle = new ScrollBarHandle(this);
+		// handle = new ScrollBarHandle(this);
+		handle = this.getElementsByClass(ScrollBarHandle).next();
 		var _y = 20 + scroll * (box.height - 40 - 40) ;
 		handle.init({y: _y, color: this.color, disabled: this.disabled, horizontal: this.horizontal , width: this.box.width, height : 40});
 		handle.filters = [new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, disabled ? .35 : .75, BitmapFilterQuality.LOW, false, false, false)];
 
 
 		// up button
-		up = new ScrollBarUpButton(this);
-		up.init({color: this.color, disabled: this.disabled});
+		// up = new ScrollBarUpButton(this);
+		up = this.getElementsByClass(ScrollBarUpButton).next();
+		// up.init({color: this.color, disabled: this.disabled});
 
 
 		// down button
-		down = new ScrollBarDownButton(this);
-		down.init({color: this.color, disabled: this.disabled});
+		// down = new ScrollBarDownButton(this);
+		down = this.getElementsByClass(ScrollBarDownButton).next();
+		// down.init({color: this.color, disabled: this.disabled});
 		down.move(0, box.height - 20);
 
 
+		if(scrollee!=null && Std.is(scrollee, TextField))
+		scrollee.addEventListener(Event.SCROLL, onTextFieldScrolled, false, 0, true);
+
 		//
 		frame.addEventListener(MoveEvent.MOVE, onFrameMoved, false, 0, true);
+		frame.addEventListener(ResizeEvent.RESIZE, onFrameResized, false, 0, true);
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 
 
 		addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 	}
 	//}}}
+
+	public function onTextFieldScrolled(e:Event) {
+		if(disabled) return;
+		handle.updatePositionTween();
+
+		scroll = scrollee.scrollV / scrollee.maxScrollV;
+		var rowHeight = 1 / scrollee.maxScrollV;
+		handle.box.height = Math.max(20, box.height*rowHeight);
+
+		if(handle.box.height>(box.height-20)) handle.visible=false;
+		else handle.visible=true;
+
+		handle.dirty = true;
+
+		var d = scroll*(box.height-handle.box.height-20) - handle.y;
+		if(handle.y+d<20) d = 20 - handle.y;
+		// if(scroll==0 && handle.y>20) d = 20-handle.y;
+
+		handle.updatePositionTween( new Tween( 0, 1, 2000, feffects.easing.Expo.easeOut ),  new Point(0, d));
+
+	}
 
 
 	//{{{ onFrameMoved
@@ -283,33 +355,64 @@ class ScrollBar extends Component, implements IAdjustable {
 	//}}}
 
 
+	//{{{ onFrameResized
+	private function onFrameResized(e:ResizeEvent) {
+		box = frame.box.clone();
+
+		handle.box.width = box.width;
+		handle.y = Math.max( 20, Math.min( handle.y, this.box.height - handle.box.height - 20));
+		handle.dirty = true;
+
+		up.box.width = box.width;
+		up.dirty = true;
+
+		down.box.width = box.width;
+		down.y = Math.max( 20, box.height - 20);
+		down.dirty = true;
+	}
+	//}}}
+
+
 	//{{{ onParentResize
 	/**
 	* When parented to a [ScrollPane] scrollbars with stretch to fit.
 	*/
 	public function onParentResize(e:ResizeEvent) {
-		if(!Std.is(parent, haxegui.containers.ScrollPane)) return;
+		// if(!Std.is(parent, haxegui.containers.ScrollPane)) return;
+
+		if(!Std.is(parent, haxegui.containers.ScrollPane) && !Std.is(parent, haxegui.controls.UiList)) return;
+
+
 
 		if(Std.is(parent, Component))
 		if(horizontal) {
-			box.height = parent.asComponent().box.width;
 			this.y = parent.asComponent().box.height + 20;
+			// if(parent.asComponent().box.width <= minSize.width) return;
+			box.height = parent.asComponent().box.width;
 		}
 		else {
 			box.height = parent.asComponent().box.height;
+			// if(parent.asComponent().box.height <= minSize.height) return;
 			this.x = parent.asComponent().box.width ;
 		}
 
 
 		down.y = Math.max( 20, box.height - 20);
+		if(Std.is(parent, haxegui.controls.UiList)) { box.height-=20; down.y-=20; x-=20; }
 		handle.y = Math.max( 20, Math.min( handle.y, this.box.height - handle.box.height - 20));
 
+		frame.box = box.clone();
 
 		dirty = true;
 		frame.dirty = true;
 		handle.dirty = true;
+		up.dirty = true;
+		down.dirty = true;
+
+		// dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
+
 
 
 	//{{{ onMouseWheel
@@ -340,27 +443,37 @@ class ScrollBar extends Component, implements IAdjustable {
 	* Adjust the scroll on the bar.
 	*/
 	public function adjust(?v:Float) : Float {
-		if(!scrollee) return scroll;
+		if(scrollee==null) return scroll;
 
 		if(v<0 || scroll<0 || handle.y < 20) {
+			adjustment.setValue(scroll=0);
 			handle.updatePositionTween();
 			handle.moveTo(0,20);
-			adjustment.setValue(scroll=0);
 			return scroll;
 		}
 
 		if(v>1 || scroll>1 || handle.y > (box.height - handle.box.height - 20)) {
+			adjustment.setValue(scroll=1);
 			handle.updatePositionTween();
 			handle.moveTo(0, box.height - handle.box.height - 20);
-			adjustment.setValue(scroll=1);
 			return scroll;
 		}
 
 
 		// handle textfields
 		if(Std.is(scrollee, TextField))	{
-			scroll = (handle.y-20) / (frame.box.height - handle.box.height + 2) ;
-			scrollee.scrollH = (horizontal ? scrollee.maxScrollH : scrollee.maxScrollV) * scroll;
+			if(scrollee.hasEventListener(Event.SCROLL))
+			scrollee.removeEventListener(Event.SCROLL, onTextFieldScrolled);
+
+			scroll = (handle.y-20) / (frame.height - handle.height + 2) ;
+			if(horizontal)
+			scrollee.scrollH = (scrollee.maxScrollH) * scroll;
+			else
+			scrollee.scrollV = (scrollee.maxScrollV+2) * scroll;
+
+			if(!scrollee.hasEventListener(Event.SCROLL))
+			scrollee.addEventListener(Event.SCROLL, onTextFieldScrolled, false, 0, true);
+
 			return scroll;
 		}
 
@@ -380,6 +493,7 @@ class ScrollBar extends Component, implements IAdjustable {
 
 		scrollee.scrollRect = rect;
 
+		// dispatchEvent(new Event(Event.CHANGE));
 		return scroll;
 	}
 	//}}}

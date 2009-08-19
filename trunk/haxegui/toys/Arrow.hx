@@ -25,6 +25,7 @@ import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
 import haxegui.utils.Size;
 
+
 //{{{ ArrowType
 enum ArrowType {
 	LINE;
@@ -36,34 +37,31 @@ enum ArrowType {
 }
 //}}}
 
+
+//{{{ Arrow
 /**
 * Simple arrowhead used by many widgets
 */
-class Arrow extends Component
-{
-    var type : ArrowType;
-	
-    //{{{ init
-    override public function init(?opts:Dynamic) {
+class Arrow extends Component {
+	var type : ArrowType;
+
+	//{{{ init
+	override public function init(?opts:Dynamic) {
 	box = new Size(12,12).toRect();
 	color = cast Math.random() * 0xFFFFFF;
-		
+
 	super.init(opts);
-				
+
 	this.setAction("redraw",
 	"
 	var s = Size.fromRect(this.box).shift(1);
-	var p = new flash.geom.Point(s.width, s.height);
+	var p = s.toPoint();
 	this.graphics.clear();
-	this.graphics.lineStyle(1, Color.darken(this.color, 16), 1, true,
-			    flash.display.LineScaleMode.NONE,
-			    flash.display.CapsStyle.ROUND,
-			    flash.display.JointStyle.ROUND);
-
+	this.graphics.lineStyle(1, Color.darken(this.color, 16), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND);
 	this.graphics.beginFill( this.color );
-
+	// Arrow
 	this.graphics.moveTo(-p.x,-p.y);
-	this.graphics.lineTo(p.x, 0);
+	this.graphics.lineTo( p.x, 0  );
 	this.graphics.lineTo(-p.x, p.y);
 	this.graphics.lineTo(-p.x,-p.y);
 
@@ -73,12 +71,13 @@ class Arrow extends Component
 
 	moveToPoint(Size.fromRect(box).shift(1).toPoint());
 
-    }
-    //}}}
+	}
+	//}}}
 
-    //{{{ __init__
-    static function __init__() {
-	    haxegui.Haxegui.register(Arrow);
-    }
+	//{{{ __init__
+	static function __init__() {
+		haxegui.Haxegui.register(Arrow);
+	}
 	//}}}
 }
+//}}}

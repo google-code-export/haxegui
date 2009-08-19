@@ -45,7 +45,9 @@ class ScriptStandardLibrary {
 		//{{{ haxe
 		interp.variables.set( "Date", Date );
 		interp.variables.set( "Lambda", Lambda );
+		interp.variables.set( "Lib", flash.Lib );
 		interp.variables.set( "List", List );
+		interp.variables.set( "Log", haxe.Log );
 		interp.variables.set( "Math", Math );
 		interp.variables.set( "Reflect", Reflect );
 		interp.variables.set( "Resource", haxe.Resource );
@@ -83,6 +85,13 @@ class ScriptStandardLibrary {
 		});
 		//}}}
 
+		interp.variables.set( "remoting",
+		{
+			HttpConnection 		: haxe.remoting.HttpConnection,
+			HttpAsyncConnection : haxe.remoting.HttpAsyncConnection,
+			SocketConnection	: haxe.remoting.SocketConnection
+		}
+		);
 
 		//{{{ flash
 		interp.variables.set("flash",
@@ -214,7 +223,7 @@ class ScriptStandardLibrary {
 
 
 		//{{{ CodeHighlighter
-		interp.variables.set("CodeHighlighter", CodeHighlighter);
+		//interp.variables.set("CodeHighlighter", CodeHighlighter);
 		//}}}
 
 

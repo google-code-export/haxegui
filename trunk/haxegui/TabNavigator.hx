@@ -54,8 +54,9 @@ import haxegui.utils.Size;
 * @author Russell Weir <damonsbane@gmail.com>
 *
 */
-class Tab extends AbstractButton
-{
+class Tab extends AbstractButton, implements IAggregate {
+
+
 	//{{{ Members
 	public var label : Label;
 	public var active : Bool;
@@ -158,8 +159,8 @@ enum TabPosition {
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class TabNavigator extends Component
-{
+class TabNavigator extends Component {
+
 	//{{{ Members
 	/** Tab position **/
 	public var tabPosition : TabPosition;

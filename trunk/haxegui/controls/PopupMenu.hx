@@ -48,6 +48,7 @@ import haxegui.utils.Size;
 *
 */
 class PopupMenu extends Component, implements IData {
+
 	//{{{ Members
 	public var items 						: List<ListItem>;
 
@@ -55,13 +56,14 @@ class PopupMenu extends Component, implements IData {
 	public var dataSource(default, default) : DataSource;
 	//}}}
 
+
 	//{{{ Functions
 	//{{{ init
 	override public function init(?opts:Dynamic=null) {
 		box = new Size(100,20).toRect();
 		color = DefaultStyle.BACKGROUND;
 		if(data==null) data = [""];
-
+		items = new List<ListItem>();
 
 		super.init(opts);
 
@@ -76,11 +78,13 @@ class PopupMenu extends Component, implements IData {
 				data = cast(dataSource.data, Array<Dynamic>);
 				for (i in 0...data.length) {
 					var item = new ListItem(this);
-					item.init({ width: this.box.width,
+					item.init({
+						// width: this.box.width,
 						color: this.color,
 						label: data[i]
 					});
 					//item.label.mouseEnabled = false;
+					box.width = Math.max( box.width, item.label.tf.width + 8 );
 					item.move(0,20*i+1);
 				}
 			}
@@ -91,15 +95,18 @@ class PopupMenu extends Component, implements IData {
 				var items : Iterator<Dynamic> = data.iterator();
 				for(i in items) {
 					var item = new ListItem(this);
-					item.init({ color: this.color,
+					item.init({
+						color: this.color,
 						label: i
 					});
 					//item.label.mouseEnabled = false;
+					box.width = Math.max( box.width, item.label.tf.width + 8 );
 					item.move(0,20*j+1);
 					j++;
 				}
 			}
 		}
+
 		// position
 		x = Opts.optFloat(opts,"x",0) + 10;
 		y = Opts.optFloat(opts,"y",0) + 20;
@@ -126,6 +133,16 @@ class PopupMenu extends Component, implements IData {
 		destroy();
 	}
 	//}}}
+
+
+	// //{{{ addChild
+	// override function addChild(child : flash.display.DisplayObject) : flash.display.DisplayObject {
+	// 	var child = super.addChild(child);
+	// 	if(Std.is(child, ListItem))
+	// 	items.push(cast child);
+	// 	return child;
+	// }
+	// //}}}
 
 
 	//{{{ onAdded

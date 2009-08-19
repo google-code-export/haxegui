@@ -128,6 +128,9 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	/** Unique component id number **/
 	public var id(default,null) : Int;
 
+	/** Creation timestamp **/
+	public var created(default, null) : Float;
+
 	/** Reference for tooltip **/
 	public var tooltip : Tooltip;
 
@@ -180,10 +183,13 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 
 		// id from static
 		this.id = Component.nextId++;
+		this.created = haxe.Timer.stamp();
 
 		//
 		color = Color.MAGENTA;
 		box = new Rectangle();
+		minSize = new Size();
+		maxSize = Size.square(2<<15);
 
 		//
 		tabEnabled = mouseEnabled = true;
@@ -279,19 +285,21 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	public function init(opts:Dynamic=null) {
 		if(opts == null || !Reflect.isObject(opts)) opts = {};
 
-		alpha		= Opts.optFloat (opts, "alpha", 	  alpha);
-		box.height  = Opts.optFloat (opts, "height", 	  box.height);
-		box.width 	= Opts.optFloat (opts, "width", 	  box.width);
-		buttonMode  = Opts.optBool	(opts, "buttonMode",  false);
-		color 		= Opts.optInt	(opts, "color",		  color);
-		description = Opts.optString(opts, "description", description);
-		disabled 	= Opts.optBool	(opts, "disabled",	  false);
-		fitH 		= Opts.optBool	(opts, "fitH", 		  false);
-		fitV 		= Opts.optBool	(opts, "fitV", 		  false);
-		name 		= Opts.optString(opts, "name", 		  name);
-		visible 	= Opts.optBool	(opts, "visible", 	  true);
-		x 			= Opts.optFloat	(opts, "x", 		  x);
-		y 			= Opts.optFloat	(opts, "y", 		  y);
+		alpha		 = Opts.optFloat (opts, "alpha", 	   alpha);
+		box.height   = Opts.optFloat (opts, "height", 	   box.height);
+		box.width 	 = Opts.optFloat (opts, "width", 	   box.width);
+		buttonMode   = Opts.optBool  (opts, "buttonMode",  false);
+		color 		 = Opts.optInt	 (opts, "color",	   color);
+		description  = Opts.optString(opts, "description", description);
+		disabled 	 = Opts.optBool	 (opts, "disabled",	   false);
+		fitH 		 = Opts.optBool	 (opts, "fitH", 	   false);
+		fitV 		 = Opts.optBool	 (opts, "fitV", 	   false);
+		mouseEnabled = Opts.optBool  (opts, "mouseEnabled",mouseEnabled);
+		name 		 = Opts.optString(opts, "name", 	   name);
+		rotation 	 = Opts.optFloat (opts, "rotation",	   rotation);
+		visible 	 = Opts.optBool	 (opts, "visible", 	   true);
+		x 			 = Opts.optFloat (opts, "x", 		   x);
+		y 			 = Opts.optFloat (opts, "y", 		   y);
 
 		//
 		var accessProps = new AccessibilityProperties();
@@ -329,7 +337,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 		var type = Type.getClass(this);
 		var inst = Type.createInstance(type, [parent, name+"_clone", x, y]);
 		Reflect.callMethod( inst, inst.init, [Opts.clone(initOpts)] );
-		trace(inst);
+		// trace(inst);
 
 		return inst;
 	}
@@ -563,6 +571,9 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	//{{{ center
 	/** Move to parent's center **/
 	public inline function center() {
+		if(parent==flash.Lib.current)
+		moveTo(Std.int(stage.stageWidth-box.width)>>1, Std.int(stage.stageHeight-box.height)>>1);
+		else
 		moveTo(Std.int((cast parent).box.width-box.width)>>1, Std.int((cast parent).box.height-box.height)>>1);
 	}
 	//}}}
@@ -588,6 +599,12 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 		}
 
 		dispatchEvent(event);
+
+		// if(maxSize==null || minSize==null) return box;
+
+		// box.width = Math.max(minSize.width, Math.min(maxSize.width, box.width));
+		// box.height = Math.max(minSize.height, Math.min(maxSize.height, box.height));
+		// dirty=true;
 
 		return box;
 	}
@@ -784,6 +801,20 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	//}}}
 
 
+	//{{{ getVisibleChildren
+	public function getHiddenChildren() {
+		return Lambda.filter(this, function(o) { return !o.visible; });
+	}
+	//}}}
+
+
+	//{{{ getVisibleChildren
+	public function getVisibleChildren() {
+		return Lambda.filter(this, function(o) { return o.visible; });
+	}
+	//}}}
+
+
 	//{{{ replaceChild
 	/**
 	* @param newChild Child to add
@@ -830,7 +861,6 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 		swapChildrenVisible(getChildAt(i), getChildAt(j));
 	}
 	//}}}
-
 
 
 	//{{{ Tweening
@@ -1010,8 +1040,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 
 	//{{{ onRollOver
 	/** onRollOver Event **/
-	public function onRollOver(e:MouseEvent)
-	{
+	public function onRollOver(e:MouseEvent) {
 		if(CursorManager.getInstance().lock) return;
 		if(description!=null) TooltipManager.getInstance().create(this);
 		ScriptManager.exec(this,"mouseOver", {event : e});
@@ -1021,8 +1050,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 
 	//{{{ onRollOut
 	/** onRollOut Event **/
-	public function onRollOut(e:MouseEvent) : Void
-	{
+	public function onRollOut(e:MouseEvent) : Void	{
 		if(CursorManager.getInstance().lock) return;
 		if(description!=null) TooltipManager.getInstance().destroy();
 		ScriptManager.exec(this,"mouseOut", {event : e});
@@ -1034,8 +1062,8 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	/** Mouse double-click **/
 	public function onMouseDoubleClick(e:MouseEvent) : Void {
 		#if debug
-		if(e.target == this)
-		trace("onMouseDoubleClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDoubleClick"));
+		// if(e.target == this)
+		// trace("onMouseDoubleClick " + this.name + " (trgt: " + e.target + ") hasOwnAction:" + hasOwnAction("mouseDoubleClick"));
 		#end
 		ScriptManager.exec(this,"mouseDoubleClick", {event : e});
 	}
@@ -1046,7 +1074,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	/** Mouse click **/
 	public function onMouseClick(e:MouseEvent) : Void {
 		#if debug
-		trace(e);
+		// trace(e);
 		#end
 
 		if(description!=null) TooltipManager.getInstance().destroy();
@@ -1062,7 +1090,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	**/
 	public function onMouseDown(e:MouseEvent) : Void {
 		#if debug
-		trace(e);
+		// trace(e);
 		#end
 
 		if(e.ctrlKey) {
@@ -1114,7 +1142,11 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 
 	//{{{ onResize
 	/** Overiden in sub-classes **/
-	public function onResize(e:ResizeEvent) : Void {}
+	public function onResize(e:ResizeEvent) : Void {
+		box.width = Math.max(minSize.width, Math.min(maxSize.width, box.width));
+		box.height = Math.max(minSize.height, Math.min(maxSize.height, box.height));
+		dirty=true;
+	}
 	//}}}
 
 

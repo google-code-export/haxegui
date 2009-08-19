@@ -36,11 +36,12 @@ import haxegui.utils.Opts;
 import haxegui.utils.Size;
 //}}}
 
-class Circle extends Component
-{
+class Circle extends Component {
+
 	public var radius : Float;
 	public var pivot : Point;
-	
+
+	//{{{ init
 	override public function init(?opts:Dynamic=null) {
 		box = new Size(100,100).toRect();
 		//pivot = new Size(100,100).shift(1).toPoint();
@@ -48,32 +49,34 @@ class Circle extends Component
 		//radius = Point.distance(new Point(x,y), pivot);
 		radius = Point.distance(new Point(x,y), new Size(100,100).shift(1).toPoint());
 		color = cast Math.random() * 0xFFFFFF;
-		
-		
+
+
 		super.init(opts);
 
 		radius = Opts.optFloat(opts, "radius", radius);
 		//pivot = new Point(-radius/2, -radius/2);
 		box = new Size(2*radius,2*radius).toRect();
 		//~ pivot = new Size(radius,radius).shift(1).toPoint();
-		
-		
+
+
 		setAction("redraw",
 		"
 		this.graphics.clear();
 		this.graphics.beginFill(this.color);
-		this.graphics.drawCircle(this.pivot.x,this.pivot.y,this.radius);
+		this.graphics.drawCircle(this.pivot.x, this.pivot.y, this.radius);
 		this.graphics.endFill();
 		"
 		);
 
 		this.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.25, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
-	
-	}
 
+	}
+	//}}}
+
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Circle);
 	}
-	
-	
+	//}}}
 }

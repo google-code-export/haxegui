@@ -56,6 +56,7 @@ import haxegui.windowClasses.WindowFrame;
 //~ WE;
 //~ }
 
+
 /**
 *
 * WidowFrame optionaly resizing window frame.
@@ -64,12 +65,12 @@ import haxegui.windowClasses.WindowFrame;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class WindowFrame extends Component
-{
+class WindowFrame extends Component {
 	//{{{ Functions
 	//{{{ init
 	override public function init(?opts:Dynamic) {
 		box = (cast parent).box.clone();
+		color = (cast parent).color;
 
 
 		super.init(opts);
@@ -81,6 +82,8 @@ class WindowFrame extends Component
 		if(!(cast parent).isModal()) {
 			this.setAction("mouseDown",
 			"
+			CursorManager.getInstance().lock = true;
+
 			this.updateColorTween( new feffects.Tween(0, 50, 150, feffects.easing.Linear.easeOut) );
 
 			// Remove corner detection
@@ -89,8 +92,7 @@ class WindowFrame extends Component
 			// Event for stopping the interval
 			this.stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, this.onStageMouseUp, false, 0, true);
 
-			this.startInterval(10);
-			CursorManager.getInstance().lock = true;
+			this.startInterval(25);
 
 
 			this.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.4, 12, 12, 0.85, flash.filters.BitmapFilterQuality.LOW, false, false, false)];
@@ -120,22 +122,23 @@ class WindowFrame extends Component
 			else
 			if(CursorManager.getInstance().cursor == Cursor.WE) {
 				if(p.x > r.x + .5*w.box.width)
-				w.box.width = p.x - q.x + d ;
+				w.box.width 	  = p.x - q.x + d ;
 				else {
-					w.box.width -= p.x - q.x + d;
+					w.box.width  -= p.x - q.x + d;
 					w.x += p.x - r.x + d ;
 				}
 			}
 			else
-			if(CursorManager.getInstance().cursor == Cursor.NESW) {
-				w.box.width -=  p.x - q.x + d ;
-				w.box.height = p.y - q.y + d ;
-				w.x += p.x - r.x + d;
+			if(CursorManager.getInstance().cursor == Cursor.NWSE) {
+				w.box.width   = p.x - q.x + d;
+				w.box.height  = p.y - q.y + d;
 			}
 			else
-			if(CursorManager.getInstance().cursor == Cursor.NWSE) {
-				w.box.width = p.x - q.x + d;
-				w.box.height =  p.y - q.y + d;
+			if(CursorManager.getInstance().cursor == Cursor.NESW) {
+				w.box.width  -= p.x - q.x + d ;
+				w.box.height  = p.y - q.y + d ;
+				if(w.box.width<=w.minSize.width) return;
+				w.x += p.x - r.x + d;
 			}
 
 			this.redraw();
@@ -188,31 +191,28 @@ class WindowFrame extends Component
 
 		CursorManager.getInstance().lock = false;
 		this.stopInterval();
+
+
 		stage.removeEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
 		stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 
-		if(!this.hitTestObject( CursorManager.getInstance()._mc ))
-		CursorManager.setCursor(Cursor.ARROW);
 
 		this.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-		//~ e.updateAfterEvent();
 	}
 	//}}}
 
 
 	//{{{ onRollOut
 	public override function onRollOut(e:MouseEvent) {
-		if(e.buttonDown ) return;
-		CursorManager.setCursor(Cursor.ARROW);
-
-		//~ e.updateAfterEvent();
+		// if(e.buttonDown ) return;
+		// CursorManager.setCursor(Cursor.ARROW);
 	}
 	//}}}
 
 
 	//{{{ redraw
-	override public function redraw(opts:Dynamic=null):Void {
+	override public function redraw(?opts:Dynamic=null):Void {
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		ScriptManager.exec(this,"redraw", null);
 	}

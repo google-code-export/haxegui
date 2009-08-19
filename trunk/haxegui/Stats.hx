@@ -41,11 +41,11 @@ import flash.ui.Keyboard;
 import flash.ui.Mouse;
 import haxe.Timer;
 import haxegui.Window;
+import haxegui.containers.Container;
 import haxegui.controls.Component;
 import haxegui.controls.Label;
 import haxegui.controls.Stepper;
 import haxegui.controls.UiList;
-import haxegui.containers.Container;
 import haxegui.events.DragEvent;
 import haxegui.events.MenuEvent;
 import haxegui.events.MoveEvent;
@@ -58,13 +58,16 @@ import haxegui.windowClasses.StatusBar;
 //}}}
 
 
+using haxegui.utils.Color;
+
+
 /**
 *
 * Some textual and chart performance statistics.<br/>
 *
 */
-class Stats extends Window
-{
+class Stats extends Window {
+
 	//{{{ Members
 	var list : UiList;
 	var list2 : UiList;
@@ -86,6 +89,7 @@ class Stats extends Window
 	public var interval : Int;
 	var last : Float;
 	var delta : Float;
+
 
 	var frameCounter : Int;
 	var fps    : Float;
@@ -112,10 +116,7 @@ class Stats extends Window
 		minFPS = Math.POSITIVE_INFINITY;
 
 
-		data =
-		data2 =
-		data3 =
-		data4 = [[240, 180], [240, 180]];
+		data = data2 = data3 = data4 = [[240, 180], [240, 180]];
 
 
 		//
@@ -146,12 +147,12 @@ class Stats extends Window
 		grid = new Component(graph);
 
 		grid.graphics.lineStyle(0,0,0);
-		grid.graphics.beginFill( 0xE5E5E5 );
+		grid.graphics.beginFill( Color.WHITE.darken(10) );
 		grid.graphics.drawRect(0,0,240+gridSpacing*4,180);
 		grid.graphics.endFill();
 
 		for(i in 0...Std.int(240/(gridSpacing-4))) {
-			grid.graphics.lineStyle(1,0xCCCCCC);
+			grid.graphics.lineStyle(1, Color.WHITE.darken(50));
 			grid.graphics.moveTo(gridSpacing*i,0);
 			grid.graphics.lineTo(gridSpacing*i,180);
 		}

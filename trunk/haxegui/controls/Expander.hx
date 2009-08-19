@@ -176,20 +176,6 @@ class Expander extends AbstractButton {
 	override public function onMouseClick(e:MouseEvent) {
 		if(disabled) return;
 
-		var self = this;
-		var r = new Size(this.stage.stageWidth,expanded?this.stage.stageHeight:0).toRect();
-
-		if(scrollTween!=null)
-		scrollTween.stop();
-
-		if(!expanded)
-		scrollTween = new Tween(box.height, this.stage.stageHeight, 1500, r, "height", feffects.easing.Linear.easeNone);
-		else
-		scrollTween = new Tween(this.stage.stageHeight, box.height, 500, r, "height", feffects.easing.Expo.easeOut);
-
-		scrollTween.setTweenHandlers( function(v) { self.scrollRect = r; });
-		scrollTween.start();
-
 
 		e.stopImmediatePropagation();
 
@@ -214,6 +200,21 @@ class Expander extends AbstractButton {
 	//{{{ __setExpanded
 	private function __setExpanded(v:Bool) : Bool {
 		if(v == this.expanded) return v;
+
+		var self = this;
+		var r = new Size(this.stage.stageWidth,expanded?this.stage.stageHeight:0).toRect();
+
+		if(scrollTween!=null)
+		scrollTween.stop();
+
+		if(!expanded)
+		scrollTween = new Tween(box.height, this.stage.stageHeight, 1500, r, "height", feffects.easing.Linear.easeNone);
+		else
+		scrollTween = new Tween(this.stage.stageHeight, box.height, 500, r, "height", feffects.easing.Expo.easeOut);
+
+		scrollTween.setTweenHandlers( function(v) { self.scrollRect = r; });
+		scrollTween.start();
+
 		this.expanded = v;
 
 		switch(style) {
@@ -238,6 +239,7 @@ class Expander extends AbstractButton {
 
 		}
 
+
 		this.dirty = true;
 		return v;
 	}
@@ -260,6 +262,11 @@ class Expander extends AbstractButton {
 	//}}}
 	//}}}
 
+	//{{{ toggle
+	public function toggle() {
+		expanded = !expanded;
+	}
+	//}}}
 
 	//{{{ __init__
 	static function __init__() {

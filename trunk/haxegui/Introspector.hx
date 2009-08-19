@@ -29,6 +29,7 @@ import haxegui.Window;
 import haxegui.containers.Container;
 import haxegui.containers.Divider;
 import haxegui.containers.ScrollPane;
+import haxegui.containers.Grid;
 import haxegui.controls.CheckBox;
 import haxegui.controls.Component;
 import haxegui.controls.Image;
@@ -68,6 +69,7 @@ class Introspector extends Window {
 	public var textPane 	: ScrollPane;
 	public var hdivider 	: Divider;
 	public var vdivider 	: Divider;
+	public var hbox			: HBox;
 	public var tree 		: Tree;
 	public var list1 		: UiList;
 	public var list2 		: UiList;
@@ -78,25 +80,57 @@ class Introspector extends Window {
 	public var target : Component;
 
 	public static var props = {
+		alpha					: "alpha",
+		box						: "box",
+		description				: "description",
+		filters					: "filters",
+		initOpts				: "initOpts",
+		height					: "height",
 		name 					: "name",
 		parent 					: "parent",
-		x						: "x",
-		y						: "y",
-		width					: "width",
-		height					: "height",
 		visible					: "visible",
-		alpha					: "alpha",
-		box						: "box"
+		width					: "width",
+		x						: "x",
+		y						: "y"
 		// size					: function(o) { return new Size.fromRect(o.box); },
 		// type 				: function() { return Type.typeof(e.target); },
 		// globalX				: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).x; },
 		// globalY				: function(){ return e.target.localToGlobal(new flash.geom.Point(e.target.x, e.target.y)).y; },
 		//~ init				: "init",
-		//~ initOpts			: "initOpts",
 		//~ validate			: "validate"
 		// path					: function(){ var path = []; var p=e.target.parent; while(p!=null) untyped { path.push(p.name); p=p.parent; } path.pop();path.pop(); path.push("root"); path.reverse(); return path.join(".")+"."+e.target.name; },
 	}
+
+	static var xml = Xml.parse('
+	<haxegui:Layout name="Introspector">
+	<haxegui:controls:MenuBar x="10" y="20"/>
+	<haxegui:containers:HDivider name="HDivider" x="10" y="40">
+
+	<haxegui:containers:VDivider name="VDivider">
+
+
+
+	<haxegui:containers:ScrollPane>
+	<haxegui:controls:Tree fitH="true"/>
+	</haxegui:containers:ScrollPane>
+<!--
+
+
+	<haxegui:toys:Rectangle width="300" height="240">
+	<haxegui:containers:HBox cellSpacing="0" width="300" fitV="true" fitH="true">
+		<haxegui:controls:UiList/>
+		<haxegui:controls:UiList/>
+	</haxegui:containers:HBox>
+	</haxegui:toys:Rectangle>
+-->
+	</haxegui:containers:VDivider>
+
+	<haxegui:toys:Rectangle/>
+	</haxegui:containers:HDivider>
+	</haxegui:Layout>
+	').firstElement();
 	//}}}
+
 
 	//{{{ Functions
 	//{{{ init
@@ -106,99 +140,98 @@ class Introspector extends Window {
 
 		box = new Size(640, 500).toRect();
 
+		xml.set("name", name);
 
-		//
-		var menubar = new MenuBar (this, "MenuBar", 10,20);
-		menubar.init ();
-
-		//
-		vdivider = new Divider(this, "VerticalDivider", 10, 44);
-		vdivider.init({horizontal: false});
-
-		//
-		hdivider = new Divider(vdivider, "HorizontalDivider");
-		hdivider.init({horizontal: true});
+		XmlParser.apply(Introspector.xml, this);
 
 
 		//
-		var c = new Container(vdivider);
-		c.init();
+		hdivider = cast this.getChildByName("HDivider");
 
 		//
-		textPane = new ScrollPane(c, "textPane");
+		vdivider = cast hdivider.getChildByName("VDivider");
+
+		/*
+		//
+		textPane = new ScrollPane(vdivider, "textPane");
 		textPane.init();
 
 		tf = new flash.text.TextField();
-		tf.wordWrap = true;
+		tf.wordWrap = false;
 		tf.multiline = true;
 		tf.width = textPane.box.width;
-		// tf.height = textPane.box.height;
-		tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
+		tf.height = textPane.box.height;
+		tf.autoSize = flash.text.TextFieldAutoSize.NONE;
 		tf.background = true;
 		tf.backgroundColor = Color.WHITE;
 		tf.text = haxegui.utils.Printing.print_r(this);
 		textPane.addChild(tf);
 
-		//
-		// container = new Container(this, "Container", 10, 44);
-		// container.init({});
-
+		textPane.addEventListener(ResizeEvent.RESIZE, onTextPaneResized, false, 0, true);
+*/
 
 		//
-		var treePane = new ScrollPane(hdivider, "treePane");
-		treePane.init();
-
+		treePane = cast vdivider.firstChild();
 
 		//
-		listPane = new ScrollPane(hdivider, "listPane", 250);
-		listPane.init();
+		tree = cast treePane.content.getChildAt(0);
 
-
-		//
-		tree = new Tree(treePane);
-		// tree.data = { root : reflectDisplayObjectContainer(cast flash.Lib.current) };
-		tree.init({width: 250});
-		var node = tree.firstChild();
-
-
-		// var o = reflectDisplayObjectContainer(this);
-		// tree.process(o, node);
+		// var self = this;
+		// treePane.addEventListener(ResizeEvent.RESIZE,
+		// function(e) {
+		// 	if(self.tree==null || self.treePane==null ) return;
+		// self.tree.box = self.treePane.box.clone();
+		// self.tree.redraw();
+		// });
 
 		var o = {};
 		for(i in 0...(cast root).numChildren)
-		// Reflect.setField(o, (cast root).getChildAt(i).name, (cast root).getChildAt(i));
 		if(Std.is((cast root).getChildAt(i), DisplayObjectContainer))
 		Reflect.setField(o, (cast root).getChildAt(i).name,  reflectDisplayObjectContainer((cast root).getChildAt(i)));
 
-		tree.process(o, node);
+		tree.process(o, tree.rootNode);
+/*
+
+		//
+		listPane = new ScrollPane(hdivider, "listPane");
+		listPane.init({});
+
+		//
+		hbox = new HBox(listPane, "HBox");
+		hbox.init({});
+
+		//
+		list1 = new UiList(hbox, "Properties");
+		list1.init();
 
 
 		//
-		list1 = new UiList(listPane, "Properties", 210, 0);
-		list1.init({width: 350, text: null});
+		list2 = new UiList(hbox, "Values");
+		list2.init();
 
 
 		//
-		list2 = new UiList(listPane, "Values", 350, 0);
-		list2.init({width: 300});
-		// list2.header.destroy();
-
-
-		//
-		var statusbar = new StatusBar(this, "StatusBar", 10, 360);
+		statusbar = new StatusBar(this, "StatusBar", 10, 360);
 		statusbar.init();
 
 
-		listPane.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
-		treePane.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
+		// treePane.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
+		// listPane.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
+		// textPane.addEventListener(ResizeEvent.RESIZE, onResize, false, 0, true);
+		// treePane.addEventListener(ResizeEvent.RESIZE, tree.onParentResize, false, 0, true);
 
-		treePane.addEventListener(ResizeEvent.RESIZE, tree.onParentResize, false, 0, true);
-
+		*/
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
-		this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged, false, 0, true);
+		// this.stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onFocusChanged, false, 0, true);
 	}
 	//}}}
+
+
+	public function onTextPaneResized(e:ResizeEvent) {
+		tf.width = textPane.box.width;
+		tf.height = textPane.box.height;
+	}
 
 
 	//{{{ onFocusChanged
@@ -216,22 +249,19 @@ class Introspector extends Window {
 		if(Std.is(e.target, Component)) {
 			Reflect.setField(props, "id", "id");
 			Reflect.setField(props, "disabled", "disabled");
-			Reflect.setField(props, "color",function() { return "0x"+StringTools.hex(e.target.color,6); });
+			Reflect.setField(props, "color", function() { return "0x"+StringTools.hex(e.target.color,6); });
 			Reflect.setField(props, "focusable", "focusable");
 			Reflect.setField(props, "dirty", "dirty");
 			Reflect.setField(props, "box", "box");
 		}
 
-		if(Std.is(e.target, UiList)) {
-			Reflect.setField(props, "dataSource", "dataSource");
-		}
 
 		//{{{ Lists
 		if(list1!=null) list1.destroy();
 		if(list2!=null) list2.destroy();
 
-		list1 = new UiList(listPane, "Properties");
-		list2 = new UiList(listPane, "Values");
+		list1 = new UiList(hbox, "Properties");
+		list2 = new UiList(hbox, "Values");
 		// list2.header.destroy();
 
 		list1.description = list2.description = null;
@@ -247,34 +277,17 @@ class Introspector extends Window {
 			//
 			if(Reflect.isFunction(Reflect.field(props, key)))
 			list2.data.push( Reflect.callMethod(props, Reflect.field(props, key), []) );
-
 			else {
 				var value = Reflect.field( target, Reflect.field(props, key));
 				list2.data.push( value );
 			}
 		}
 
-		list1.init({width: .5*listPane.box.width, text: "Property"});
-		list2.init({width: .5*listPane.box.width, x: .5*listPane.box.width, text: "Value"});
-		for(item in list2.getElementsByClass(ListItem)) {
-			item.label.tf.selectable = true;
-			item.label.tf.mouseEnabled = true;
-		}
+		list1.init();
+		list2.init();
+
 		//}}}
 
-
-		var r = (cast tree.firstChild()).expander;
-		for(i in 0...r.numChildren) r.getChildAt(i).graphics.clear();
-		for(i in 0...r.numChildren) {
-			var c = r.getChildAt(i);
-			for(a in target.asComponent().ancestors())
-			if(c.name==a.name) {
-				c.graphics.beginFill(Color.CYAN, .3);
-				c.graphics.drawRect(0,0,tree.box.width,24);
-				c.graphics.endFill();
-			}
-
-		}
 
 		tf.text = haxegui.utils.Printing.print_r(target);
 
@@ -287,58 +300,6 @@ class Introspector extends Window {
 
 	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
-
-		if(vdivider==null) return;
-
-		vdivider.box = this.box.clone();
-		vdivider.box.width -= vdivider.x;
-		vdivider.box.height -= vdivider.y + 20;
-		vdivider.dirty=true;
-
-
-		if(hdivider!=null) {
-			hdivider.box.width = box.width;
-			// vdivider.box.height -= divider.y;
-			// vdivider.redraw();
-
-			hdivider.dirty=true;
-		}
-
-		if(treePane!=null) {
-			// treePane.box.height = divider.box.height;
-
-			if(tree!=null) {
-				// tree.box = treePane.box.clone();
-				// tree.box.height = this.box.height;
-				// tree.dirty = true;
-				// tree.redraw();
-			}
-			// }
-		}
-		if(listPane!=null) {
-			// listPane.box.height = this.box.height - 65;
-			// listPane.box.width = this.box.width - treePane.box.width - 30;
-			// listPane.dirty = true;
-
-			if(list1!=null) {
-				list1.x = 0;
-				list1.box.width = .5*listPane.box.width ;
-				// list1.box.height = listPane.box.height + 20;
-				list1.dirty = true;
-			}
-
-			if(list2!=null) {
-				list2.x = list1.x + list1.box.width;
-				list2.box.width = list1.box.width ;
-				// list2.box.height = list1.box.height ;
-				list2.dirty = true;
-			}
-		}
-
-		if(textPane!=null) {
-			tf.width = textPane.box.width;
-			// tf.width = textPane.box.height;
-		}
 
 		super.onResize(e);
 	} //}}}

@@ -26,7 +26,7 @@ import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.Rectangle;
 import haxegui.controls.Component;
-import haxegui.controls.Component;
+import haxegui.controls.IAdjustable;
 import haxegui.events.MoveEvent;
 import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
@@ -44,11 +44,15 @@ using haxegui.controls.Component;
 //{{{ RadioGroup
 /**
 * Helper class to group radio buttons.<br/>
+* @todo adjustment
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class RadioGroup extends Component {
+class RadioGroup extends Component, implements IAdjustable {
+
+	public var adjustment : Adjustment;
+
 	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(RadioGroup);
@@ -66,8 +70,8 @@ class RadioGroup extends Component {
 * @author Russell Weir <damonsbane@gmail.com>
 **/
 class RadioButton extends Button {
-	public var group : RadioGroup;
 
+	public var group : RadioGroup;
 
 	//{{{ init
 	override public function init(?opts:Dynamic) {

@@ -50,12 +50,14 @@ import haxegui.utils.Size;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class SliderHandle extends AbstractButton, implements IAggregate
-{
+class SliderHandle extends AbstractButton, implements IAggregate {
+
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		box = new Rectangle(0, 0, 24, 10);
+		minSize = Size.fromRect(box);
 		super.init(opts);
+		y = Std.int( (cast parent).box.height - box.height )>>1;
 	}
 	//}}}
 
@@ -70,15 +72,15 @@ class SliderHandle extends AbstractButton, implements IAggregate
 //{{{ Slider
 /**
 *
-* Slider Class
+* Horizontal slider with a draggable handle.<br/>
 *
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class Slider extends Component, implements IAdjustable
-{
+class Slider extends Component, implements IAdjustable {
+
 	//{{{ Members
 	/** Slider handle **/
 	public var handle : SliderHandle;
@@ -99,31 +101,34 @@ class Slider extends Component, implements IAdjustable
 	//{{{ Functions
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
-		//adjustment = new Adjustment( 0, 0, Math.POSITIVE_INFINITY, 5, 10 );
-		adjustment = new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 5., page: 10.});
+		adjustment = new Adjustment({ value: 0.0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 5., page: 10.});
 		box = new Size(140, 20).toRect();
 		color = DefaultStyle.BACKGROUND;
 		description = null;
+		minSize = new Size(30,30);
 		showToolTip = true;
 		ticks = 25;
 
+
 		adjustment.object.value = Opts.optFloat(opts,"value", adjustment.object.value);
-		adjustment.object.min = Opts.optFloat(opts,"min", adjustment.object.min);
-		adjustment.object.max = Opts.optFloat(opts,"max", adjustment.object.max);
-		adjustment.object.step = Opts.optFloat(opts,"step", adjustment.object.step);
-		adjustment.object.page = Opts.optFloat(opts,"page", adjustment.object.page);
+		adjustment.object.min   = Opts.optFloat(opts,"min",   adjustment.object.min);
+		adjustment.object.max   = Opts.optFloat(opts,"max",   adjustment.object.max);
+		adjustment.object.step  = Opts.optFloat(opts,"step",  adjustment.object.step);
+		adjustment.object.page  = Opts.optFloat(opts,"page",  adjustment.object.page);
 
 		showToolTip = Opts.optBool(opts,"showToolTip", showToolTip);
 
+
 		super.init(opts);
 
+
+		// handle
 		handle = new SliderHandle(this);
 		handle.init({color: this.color, disabled: this.disabled });
-		handle.move(0,4);
+		// handle.moveTo(box.width/2, Std.int(box.height - handle.height )>>1);
 
 		// add the drop-shadow filters
-		var shadow = new flash.filters.DropShadowFilter (disabled ? 1 : 2, 45, DefaultStyle.DROPSHADOW, disabled ? 0.25 : 0.5, 4, 4, disabled ?  0.25 : 0.5, flash.filters.BitmapFilterQuality.LOW, false, false, false );
-		handle.filters = [shadow];
+		handle.filters = [new flash.filters.DropShadowFilter (disabled ? 1 : 2, 45, DefaultStyle.DROPSHADOW, disabled ? 0.25 : 0.5, 4, 4, disabled ?  0.25 : 0.5, flash.filters.BitmapFilterQuality.LOW, false, false, false )];
 
 		// slot
 		slot = new haxegui.toys.Socket(this);
@@ -139,25 +144,17 @@ class Slider extends Component, implements IAdjustable
 
 	//{{{ destroy
 	public override function destroy() {
-	/*
-		handle.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-		handle.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-
-		if(handle.stage.hasEventListener (MouseEvent.MOUSE_UP))
-			handle.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-
-		if(handle.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
-			handle.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
-	*/
 		super.destroy();
 	}
 	//}}}
+
 
 	//{{{ onChanged
 	public function onChanged(e:Event) {
 		handle.x = Math.max(0, Math.min( box.width- handle.box.width, adjustment.getValue()));
 	}
 	//}}}
+
 
 	//{{{ onHandleMouseDown
 	function onHandleMouseDown (e:MouseEvent) : Void {
@@ -185,28 +182,30 @@ class Slider extends Component, implements IAdjustable
 	}
 	//}}}
 
+
 	//{{{ onMouseUp
 	override public function onMouseUp (e:MouseEvent) : Void {
 		if(this.disabled) return;
 
 		if(e.target.stage.hasEventListener (MouseEvent.MOUSE_UP))
-			e.target.removeEventListener (MouseEvent.MOUSE_UP, onMouseUp);
+		e.target.removeEventListener (MouseEvent.MOUSE_UP, onMouseUp);
 
 		if(e.target.stage.hasEventListener (MouseEvent.MOUSE_MOVE))
-			e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
+		e.target.stage.removeEventListener (MouseEvent.MOUSE_MOVE, onMouseMove);
 
 		CursorManager.getInstance().lock = false;
 		if(hitTestObject( CursorManager.getInstance()._mc ))
-			CursorManager.setCursor (Cursor.ARROW);
+		CursorManager.setCursor (Cursor.ARROW);
 
 		handle.stopDrag();
 
 		if(tooltip!=null)
-			tooltip.destroy();
+		tooltip.destroy();
 
 		super.onMouseUp(e);
 	}
 	//}}}
+
 
 	//{{{ onMouseMove
 	public function onMouseMove (e:MouseEvent) {
@@ -220,22 +219,26 @@ class Slider extends Component, implements IAdjustable
 	}
 	//}}}
 
+
 	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
+		super.onResize(e);
 
-		//~ handle.dirty = true;
+
+		if(slot!=null)
+		slot.y = Std.int( this.box.height - slot.box.height )>>1;
+
+
+		// if((Std.int(box.height)>>1) < handle.minSize.height) return;
 		handle.box.height = Std.int(box.height)>>1;
 
-		handle.redraw();
+		handle.dirty = true;
 
 		handle.y = Std.int( this.box.height - handle.height )>>1;
 		handle.x = Math.max(0, Math.min( box.width - handle.box.width, handle.x ));
-
-		if(slot!=null)
-			slot.y = Std.int( this.box.height - slot.box.height )>>1;
-		super.onResize(e);
 	}
 	//}}}
+
 
 	//{{{ __init__
 	static function __init__() {

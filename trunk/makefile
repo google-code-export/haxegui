@@ -2,10 +2,12 @@
 
 TARGET = assets.swf
 
-all: style compile
+all: style haxe
 
-compile:
+swfmill:
 	swfmill  -v simple library.xml $(TARGET)
+
+haxe:
 	haxe Compile.hxml
 
 

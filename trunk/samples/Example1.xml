@@ -66,8 +66,8 @@
 		</haxegui:controls:MenuBar>
 
 		<!-- ToolBar -->
-		<haxegui:controls:ToolBar name="Toolbar1" width="400" x="10" y="44">
-			<haxegui:containers:HBox x="20" y="4" width="240">
+		<haxegui:controls:ToolBar name="Toolbar1" x="10" y="44">
+			<haxegui:containers:HBox x="20" y="4" cellSpacing="4">
 				<haxegui:controls:Button width="30" icon="STOCK_NEW" />
 				<haxegui:controls:Button width="30" icon="STOCK_OPEN" />
 				<haxegui:controls:Button width="30" icon="STOCK_SAVE" />
@@ -178,9 +178,9 @@
 						</haxegui:controls:DropDown>
 						<haxegui:controls:ComboBox x="30" y="190" disabled="true" />
 
-						<haxegui:controls:Slider x="200" y="130" />
-						<haxegui:controls:Slider x="200" y="160" step="10" page="40" />
-						<haxegui:controls:Slider x="200" y="190" disabled="true" />
+						<haxegui:controls:Slider x="200" y="130" value="20" />
+						<haxegui:controls:Slider x="200" y="160" value="50" step="10" page="40" />
+						<haxegui:controls:Slider x="200" y="190" value="100" disabled="true" />
 
 						<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="100" autoRepeat="true" repeatsPerSecond="20" repeatWaitTime=".5" />
 						<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="200" autoRepeat="true" repeatsPerSecond="10" repeatWaitTime=".5" />
@@ -246,28 +246,30 @@
 
 
 						<!-- Second stack child -->
-					<haxegui:containers:Divider horizontal="true" visible="false" width="512" height="512">
-
-								<haxegui:containers:Divider width="250" horizontal="false">
+					<haxegui:toys:Rectangle width="512" height="512" visible="false">
+						<haxegui:containers:HDivider width="512" height="512">
+								<haxegui:containers:VDivider width="250">
 									<haxegui:containers:Container height="250" color="0x99ff99"/>
-									<haxegui:containers:Container y="250" color="0xffffcc"/>
-								</haxegui:containers:Divider>
-
-						<haxegui:containers:Container x="250" width="250" color="0xccccff"/>
-					</haxegui:containers:Divider>
+									<haxegui:containers:Container color="0xffffcc"/>
+								</haxegui:containers:VDivider>
+						<haxegui:containers:Container width="250" color="0xccccff"/>
+						</haxegui:containers:HDivider>
+					</haxegui:toys:Rectangle>
 
 
 					<!-- Third stack child -->
 					<haxegui:containers:Container visible="false" width="512" height="512">
 						<haxegui:controls:Label x="20" y="20">Third TabChild</haxegui:controls:Label>
-						<haxegui:containers:Grid width="600" height="400" x="120" y="40" rows="2" cols="3">
-							<haxegui:toys:Rectangle/>
-							<haxegui:toys:Rectangle/>
-							<haxegui:toys:Rectangle/>
-							<haxegui:toys:Rectangle/>
-							<haxegui:toys:Rectangle/>
-							<haxegui:toys:Rectangle/>
-						</haxegui:containers:Grid>
+						<haxegui:toys:Rectangle width="600" height="400" x="120" y="40">
+							<haxegui:containers:Grid width="600" height="400" rows="2" cols="3">
+								<haxegui:toys:Rectangle/>
+								<haxegui:toys:Rectangle/>
+								<haxegui:toys:Rectangle/>
+								<haxegui:toys:Rectangle/>
+								<haxegui:toys:Rectangle/>
+								<haxegui:toys:Rectangle/>
+							</haxegui:containers:Grid>
+						</haxegui:toys:Rectangle>
 					</haxegui:containers:Container>
 
 

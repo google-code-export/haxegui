@@ -157,7 +157,8 @@ class SevenSegment extends Component, implements IAdjustable
 
 		slot = new haxegui.toys.Socket(this);
 		slot.init({radius: 6});
-		slot.moveTo(Std.int(this.box.width)>>1-6, this.box.height+10);
+		slot.moveTo(Std.int(this.box.width)>>1-20, -20);
+		// slot.moveTo(Std.int(this.box.width)>>1-6, this.box.height+10);
 
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 

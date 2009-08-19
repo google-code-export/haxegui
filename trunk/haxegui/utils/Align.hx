@@ -44,6 +44,6 @@ enum VerticalAlign {
 typedef Alignment = {
 	var horizontal  : HorizontalAlign;
 	var vertical	: VerticalAlign;
-	var offset 		: Point;
+	// var offset 		: Point;
 }
 //}}}

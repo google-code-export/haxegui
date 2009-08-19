@@ -66,7 +66,6 @@ import haxegui.utils.Size;
 * @author Russell Weir <damonsbane@gmail.com>
 **/
 class CheckBox extends PushButton {
-	//{{{ Functions
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		adjustment = new Adjustment({ value: false, min: false, max: true, step:null, page: null});
@@ -88,13 +87,11 @@ class CheckBox extends PushButton {
 
 
 		// slot
-		if(!disabled && Haxegui.slots) {
-			slot = new haxegui.toys.Socket(this);
-			slot.init();
-			slot.moveTo(-14,Std.int(this.box.height)>>1);
+		slot = new haxegui.toys.Socket(this);
+		slot.init({visible:  Haxegui.slots});
+		slot.moveTo(-14,Std.int(this.box.height)>>1);
 
-			slot.color = Color.tint(slot.color, .5);
-		}
+		slot.color = Color.tint(slot.color, .5);
 
 
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
@@ -131,7 +128,6 @@ class CheckBox extends PushButton {
 	static function __init__() {
 		haxegui.Haxegui.register(CheckBox);
 	}
-	//}}}
 	//}}}
 }
 //}}}
