@@ -70,8 +70,8 @@ import haxegui.managers.StyleManager;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class ColorPicker2 extends Window
-{
+class ColorPicker2 extends Window {
+
 	var colors : Array<UInt>;
 	var currentColor : UInt;
 

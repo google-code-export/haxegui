@@ -88,12 +88,11 @@ class Haxegui {
 
 		// load the default style
 		trace("loading style");
-
 		StyleManager.loadStyles(Xml.parse(haxe.Resource.getString("default_style")));
 		StyleManager.setStyle("default");
 		trace("complete");
 
-		dirtyInterval = 300;
+		dirtyInterval = 20;
 	}
 	//}}}
 

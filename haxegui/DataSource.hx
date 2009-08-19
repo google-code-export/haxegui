@@ -28,6 +28,7 @@ import flash.events.Event;
 
 //{{{ DataDescriptor
 typedef DataDescriptor = {
+	var hasRoot : Bool;
 }
 //}}}
 

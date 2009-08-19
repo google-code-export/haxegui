@@ -138,7 +138,6 @@ class CursorManager extends EventDispatcher {
 
 
 	//{{{ setCursor
-
 	public static function setCursor(c:Cursor) : Void {
 		if(getInstance().lock) return;
 		getInstance().cursor = c;
@@ -155,15 +154,12 @@ class CursorManager extends EventDispatcher {
 
 	//{{{ inject
 	public inline function inject(e:MouseEvent) {
-
-		_mc.visible = false;
-
-
 		_mc.x = e.stageX;
 		_mc.y = e.stageY;
 
 
-		showCursor();
+		// showCursor();
+		hideCursor();
 		toTop();
 
 
@@ -213,11 +209,12 @@ class CursorManager extends EventDispatcher {
 	*
 	*/
 	private function __setCursor(c:Cursor) : Cursor	{
-		var point : Point = new Point();
 		cursor = c;
 
+
+		var v = false;
 		if(_mc!=null) {
-			point  = new Point(_mc.x, _mc.y);
+			v = _mc.visible;
 			flash.Lib.current.removeChild(_mc);
 		}
 
@@ -259,8 +256,8 @@ class CursorManager extends EventDispatcher {
 		_mc.tabEnabled = false;
 
 		_mc.width = _mc.height = 32;
-		//~ _mc.x = point.x;
-		//~ _mc.y = point.y;
+
+		_mc.visible = v;
 
 		var toColor = new flash.geom.ColorTransform(.8, 1, .9, 1, 0, 0, 0, 1);
 		var t = new flash.geom.Transform(_mc);

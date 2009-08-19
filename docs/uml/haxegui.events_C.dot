@@ -3,12 +3,13 @@ digraph uml {
 	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
 	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
 	graph [lp="138,12",
-		bb="0,0,276,385"];
-	"haxegui.events.AdjustmentEvent" [label="{\nAdjustmentEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/AdjustmentEvent.html", tooltip="\nAdjustmentEvent", pos="138,43", rects="95,25,182,61", width="1.19", height="0.50"];
-	"haxegui.events.WindowEvent" [label="{\nWindowEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/WindowEvent.html", tooltip="\nWindowEvent", pos="138,97", rects="103,79,174,115", width="0.97", height="0.50"];
-	"haxegui.events.MoveEvent" [label="{\nMoveEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/MoveEvent.html", tooltip="\nMoveEvent", pos="138,151", rects="108,133,169,169", width="0.83", height="0.50"];
-	"haxegui.events.ListEvent" [label="{\nListEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/ListEvent.html", tooltip="\nListEvent", pos="138,205", rects="111,187,165,223", width="0.75", height="0.50"];
-	"haxegui.events.MenuEvent" [label="{\nMenuEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/MenuEvent.html", tooltip="\nMenuEvent", pos="138,259", rects="107,241,169,277", width="0.86", height="0.50"];
-	"haxegui.events.ResizeEvent" [label="{\nResizeEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/ResizeEvent.html", tooltip="\nResizeEvent", pos="138,313", rects="105,295,171,331", width="0.92", height="0.50"];
-	"haxegui.events.DragEvent" [label="{\nDragEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/DragEvent.html", tooltip="\nDragEvent", pos="138,367", rects="108,349,168,385", width="0.83", height="0.50"];
+		bb="0,0,276,439"];
+	"haxegui.events.TreeEvent" [label="{\nTreeEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/TreeEvent.html", tooltip="\nTreeEvent", pos="138,43", rects="110,25,167,61", width="0.78", height="0.50"];
+	"haxegui.events.AdjustmentEvent" [label="{\nAdjustmentEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/AdjustmentEvent.html", tooltip="\nAdjustmentEvent", pos="138,97", rects="95,79,182,115", width="1.19", height="0.50"];
+	"haxegui.events.WindowEvent" [label="{\nWindowEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/WindowEvent.html", tooltip="\nWindowEvent", pos="138,151", rects="103,133,174,169", width="0.97", height="0.50"];
+	"haxegui.events.MoveEvent" [label="{\nMoveEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/MoveEvent.html", tooltip="\nMoveEvent", pos="138,205", rects="108,187,169,223", width="0.83", height="0.50"];
+	"haxegui.events.ListEvent" [label="{\nListEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/ListEvent.html", tooltip="\nListEvent", pos="138,259", rects="111,241,165,277", width="0.75", height="0.50"];
+	"haxegui.events.MenuEvent" [label="{\nMenuEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/MenuEvent.html", tooltip="\nMenuEvent", pos="138,313", rects="107,295,169,331", width="0.86", height="0.50"];
+	"haxegui.events.ResizeEvent" [label="{\nResizeEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/ResizeEvent.html", tooltip="\nResizeEvent", pos="138,367", rects="105,349,171,385", width="0.92", height="0.50"];
+	"haxegui.events.DragEvent" [label="{\nDragEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/events/DragEvent.html", tooltip="\nDragEvent", pos="138,421", rects="108,403,168,439", width="0.83", height="0.50"];
 }

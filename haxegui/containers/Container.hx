@@ -40,8 +40,7 @@ import haxegui.utils.Size;
 * Generic "Canvas" or "Panel" to put components in.<br/>
 * <p>It listens for and streches when receives resize events from it's parent.</p>
 */
-class Container extends Component, implements IContainer
-{
+class Container extends Component, implements IContainer {
 
 	//{{{ Constructor
 	public function new (?parent : flash.display.DisplayObjectContainer, ?name:String, ?x : Float, ?y: Float) {

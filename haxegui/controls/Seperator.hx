@@ -22,8 +22,8 @@ package haxegui.controls;
 /**
  * Draggable seperator<br/>
  */
-class Seperator extends Component, implements IAggregate
-{
+class Seperator extends Component, implements IAggregate {
+
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		super.init(opts);

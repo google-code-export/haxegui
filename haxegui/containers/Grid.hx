@@ -49,6 +49,8 @@ class Grid extends Component, implements IContainer {
 	public var cols(default, setCols) : Int;
 	public var fit : Bool;
 
+	public var cellSpacing : Float;
+	public var cellPadding : Float;
 
 
 	//{{{ Constructor
@@ -79,33 +81,47 @@ class Grid extends Component, implements IContainer {
 		// if(Std.is(o, Component))
 		addEventListener(ResizeEvent.RESIZE,
 		function(e) {
+			if(!self.contains(o)) return;
 			if(self.fit) {
-			var s = Size.fromRect(self.box);
-			s.scale(1/self.cols, 1/self.rows);
-			o.asComponent().box = s.toRect();
+				var s = Size.fromRect(self.box);
+				s.scale(1/self.cols, 1/self.rows);
+				o.asComponent().box = s.toRect();
 			}
 			var i = (self.getChildIndex(o)) % self.cols;
 			var j = Std.int(self.getChildIndex(o)/self.cols);
 
-			o.asComponent().moveTo(i*self.box.width/self.cols, j*self.box.height/self.rows);
+			o.asComponent().moveTo(i*(self.box.width/self.cols+self.cellSpacing), j*(self.box.height/self.rows+self.cellSpacing));
+			// o.asComponent().moveTo(i*self.box.width/self.cols, j*self.box.height/self.rows);
+			o.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		});
 
 		return o;
 	}
 	//}}}
 
+	// public override function removeChild(o:DisplayObject) : DisplayObject{
+	// 	cols--;
+	// 	return super.removeChild(o);
+	// }
+
 
 	//{{{ init
 	override public function init(opts : Dynamic=null) {
+		box = new Size(200,200).toRect();
 		rows = 2;
 		cols = 2;
 		fit = true;
+		cellPadding = 0;
+		cellSpacing = 8;
 
 		super.init(opts);
 
 
 		rows = Opts.optInt(opts, "rows", rows);
 		cols = Opts.optInt(opts, "cols", cols);
+		cellSpacing = Opts.optFloat(opts, "cellSpacing", cellSpacing);
+		fitH = Opts.optBool(opts,"fitH", true);
+		fitV = Opts.optBool(opts,"fitV", true);
 
 
 		description = null;
@@ -115,7 +131,22 @@ class Grid extends Component, implements IContainer {
 		if(x==0 && y==0)
 		move(10,20);
 
-		// setAction("redraw", " this.graphics.clear(); this.graphics.lineStyle(2, Color.RED); this.graphics.drawRect(0,0,this.box.width, this.box.height); this.graphics.lineStyle(2, Color.GREEN); for(i in 1...this.rows) { this.graphics.moveTo(0, i*this.box.height/this.rows); this.graphics.lineTo(this.box.width, i*this.box.height/this.rows); } this.graphics.lineStyle(2, Color.BLUE); for(i in 1...this.cols) { this.graphics.moveTo(i*this.box.width/this.cols,0); this.graphics.lineTo(i*this.box.width/this.cols,this.box.height); } " );
+		setAction("redraw", "this.graphics.clear();
+		this.graphics.lineStyle(2, Color.RED);
+		this.graphics.drawRect(0, 0, this.box.width, this.box.height);
+
+		this.graphics.lineStyle(2, Color.GREEN);
+		for(i in 1...this.rows) {
+			this.graphics.moveTo(0, i*(this.box.height/this.rows+this.cellSpacing));
+			this.graphics.lineTo(this.box.width, i*(this.box.height/this.rows+this.cellSpacing));
+		}
+
+		this.graphics.lineStyle(2, Color.BLUE);
+		for(i in 1...this.cols) {
+			this.graphics.moveTo(i*(this.box.width/this.cols+this.cellSpacing), 0);
+			this.graphics.lineTo(i*(this.box.width/this.cols+this.cellSpacing), this.box.height);
+		}
+		");
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
@@ -132,8 +163,12 @@ class Grid extends Component, implements IContainer {
 		else
 		size = new Size(parent.width, parent.height);
 
+		size.subtract(new Size((cols-1)*cellSpacing, (rows-1)*cellSpacing));
+
 		box = size.toRect();
-		redraw();
+
+		// if(fitH) box.width = (cast parent).box.width - x;
+		// if(fitV) box.height = (cast parent).box.height - y;
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
@@ -144,6 +179,9 @@ class Grid extends Component, implements IContainer {
 	public override function onResize(e:ResizeEvent) {
 		for(i in this)
 		i.asComponent().dirty = true;
+
+		dirty = true;
+
 		super.onResize(e);
 	}
 	//}}}
@@ -181,12 +219,35 @@ class HBox extends Grid {
 		super.init(opts);
 		fit = false;
 		rows = 1;
+		cols = 0;
 
 		parent.removeEventListener(ResizeEvent.RESIZE, onParentResize);
 	}
 
 
-	override function onParentResize(e:ResizeEvent) {}
+	//{{{ onParentResize
+	// override function onParentResize(e:ResizeEvent) {}
+	private override function onParentResize(e:ResizeEvent) {
+		// trace(e);
+
+		if(fitH) box.width = (cast parent).box.width - x;
+		if(fitV) box.height = (cast parent).box.height - y;
+
+
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+	}
+	//}}}
+
+	//{{{ onResize
+	public override function onResize(e:ResizeEvent) {
+		for(i in this)
+		i.asComponent().dirty = true;
+
+		dirty = true;
+
+		super.onResize(e);
+	}
+	//}}}
 
 
 	override public function addChild(o:DisplayObject) {

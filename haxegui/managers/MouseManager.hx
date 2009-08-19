@@ -30,11 +30,65 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.ui.Mouse;
+import haxe.Timer;
+import haxegui.controls.Component;
 import haxegui.events.DragEvent;
 import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.CursorManager;
+import haxegui.utils.Color;
 //}}}
+
+
+class DwellIndicator extends Component {
+
+	public override function init(?opts:Dynamic) {
+		color = haxegui.utils.Color.random();
+
+
+		super.init();
+
+		// setAction("redraw",
+		// "
+		// this.graphics.beginFill(this.color);
+		// this.graphics.drawCircle(0,0,32);
+		// this.graphics.drawCircle(0,0,28);
+		// this.graphics.endFill();
+		// ");
+
+		// setAction("interval",
+		// "
+		// var mazk = new flash.display.Shape();
+		// mazk.graphics.beginFill(Color.MAGENTA);
+		// mazk.graphics.moveTo(0,0);
+		// mazk.graphics.lineTo(0,32);
+		// mazk.graphics.lineTo(32,0);
+		// mazk.graphics.lineTo(0,0);
+		// mazk.graphics.endFill();
+		// this.mask = mazk;
+		// ");
+		filters = [new flash.filters.GlowFilter (this.color, 1, 10, 10, 1, flash.filters.BitmapFilterQuality.HIGH, false, false)];
+
+		var f = new feffects.Tween(0,1,750,feffects.easing.Bounce.easeOut);
+		var self = this;
+		f.setTweenHandlers(function(v){ self.scaleX=self.scaleY=v;});
+		f.start();
+
+		setAction("interval",
+		"
+		var x = -24*Math.sin(2.1*Math.PI*Timer.stamp());
+		var y = 24*Math.cos(2.1*Math.PI*Timer.stamp());
+		this.graphics.lineStyle(1, Color.tint(this.color, .5));
+		this.graphics.beginFill(this.color, .5);
+		this.graphics.drawCircle(x, y, 3);
+		this.graphics.endFill();
+		"
+		);
+		startInterval(16);
+	}
+
+}
+
 
 
 /**
@@ -50,6 +104,10 @@ class MouseManager extends EventDispatcher {
 	//{{{ Members
 	///{{{ Public
 	public var listeners		: Array<haxegui.logging.ILogger>;
+
+	public var lastDown			: Float;
+	public var dwellTimer		: Timer;
+	public var dwellIndicator	: DwellIndicator;
 
 	public var lastPosition 	: Point;
 	public var delta 			: Point;
@@ -100,39 +158,85 @@ class MouseManager extends EventDispatcher {
 		lastPosition = new Point();
 		delta = new Point();
 
-		//~ CursorManager.getInstance().showCursor();
-		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseEnter, false, 0, true);
-		stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseEnter, false, 0, true);
-		stage.addEventListener(MouseEvent.MOUSE_UP, onMouseEnter, false, 0, true);
 
-		// stage.addEventListener(MouseEvent.CLICK, onMouseEnter, false, 0, true);
-		// stage.addEventListener(MouseEvent.MOUSE_OVER, onMouseEnter, false, 0, true);
-		// stage.addEventListener(MouseEvent.MOUSE_OUT, onMouseEnter, false, 0, true);
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+
+		stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
+		stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
+
+		// stage.addEventListener(MouseEvent.CLICK, onMouseMove, false, 0, true);
 
 
 		stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave, false, 0, true);
 	}
 	//}}}
 
+	//{{{ onMouseDown
+	public function onMouseDown(e:MouseEvent) : Void {
+		lastDown = Timer.stamp();
 
-	//{{{ onMouseEnter
-	public function onMouseEnter(e:MouseEvent) : Void {
-		/** Show fake cursor **/
-		//~ CursorManager.getInstance().showCursor();
-
-		/** Calculate new mouse delta **/
-		// delta = new Point( e.stageX - lastPosition.x, e.stageY - lastPosition.y );
-		//~ moving = delta.equals(new Point());
-
-		/** Inject to fake cursor **/
 		CursorManager.getInstance().inject(e);
 
-		/** Hold to last mouse position **/
-		//lastPosition = new Point( e.stageX, e.stageY );
+		// Timer.delay( doDwell, 50);
 
+
+		// trace("Down");
+	}
+	//}}}
+
+	public function onMouseUp(e:MouseEvent) : Void {
+		// if(dwellTimer!=null) dwellTimer.stop();
+		// if(dwellIndicator!=null) dwellIndicator.destroy();
+
+		CursorManager.getInstance().inject(e);
+
+		// trace("Up");
+	}
+
+	public function doDwell(){
+		var o = stage.getObjectsUnderPoint(new Point(stage.mouseX, stage.mouseY)).pop();
+		if(Std.is(o, haxegui.controls.IRepeater)) return;
+		dwellIndicator = new DwellIndicator(stage.mouseX, stage.mouseY);
+		dwellIndicator.init();
+		Timer.delay( dwellIndicator.destroy, 1000 );
+		dwellTimer = new Timer(1000);
+		dwellTimer.run = showMenu;
+	}
+
+	public function showMenu(){
+		if(dwellTimer!=null) dwellTimer.stop();
+
+		var popup = new haxegui.controls.PopupMenu(flash.Lib.current);
+		popup.dataSource = new haxegui.DataSource();
+		popup.dataSource.data = stage.getObjectsUnderPoint(new Point(stage.mouseX, stage.mouseY)).reverse();
+		popup.init();
+
+		popup.toFront();
+		popup.moveTo(stage.mouseX, stage.mouseY);
+
+		// trace("Dwell");
+	}
+
+	//{{{ onMouseMove
+	public function onMouseMove(e:MouseEvent) : Void {
+		var position = new Point(e.stageX, e.stageY);
+
+		// Calculate new mouse delta
+		delta = position.subtract(lastPosition);
+		moving = !delta.equals(new Point());
+		lastPosition = position;
+		if(!moving || position.equals(new Point())) return;
+
+		if(dwellTimer!=null) dwellTimer.stop();
+		if(dwellIndicator!=null) dwellIndicator.destroy();
+
+		// Inject to fake cursor
+		CursorManager.getInstance().inject(e);
+
+		if(dwellIndicator!=null) dwellIndicator.moveTo(e.stageX, e.stageY);
 		//~ e.updateAfterEvent();
 	}
-	//}}} onMouseEnter
+	//}}} onMouseMove
 
 
 	//{{{ onMouseLeave

@@ -23,16 +23,33 @@ import Type;
 
 /**
 *
-* Options handler
+* Options handler<br/>
+* <p>
+* Does type checking of fields in objects, and defaults to given values.
+* Instead of sending unchecked annonymous objects to functions, a given name is checked for
+* against the fields of the input object, and the default value will be used if it is not
+* found, or is in an unexpected format. This not only allows better type-checking, values are also converted
+* and safetly casted, so sending { bool1: true, bool2: "0", bool3: "true", int: "0xff", float: "0.123", ... } all work.
+* </p>
+* Usage example:
+* <pre class="code haxe">
+* var opts = { color1: "#FF0000", color2: "0xFF0000", color3: Color.RED };
+* // will fail, and result in 0xFF00FF
+* color = Opts.getInt(opts, "color1", Color.MAGENTA);
+* // both will succeced, assigining red
+* color = Opts.getInt(opts, "color2", Color.MAGENTA);
+* color = Opts.getInt(opts, "color3", Color.MAGENTA);
+* </pre>
 *
-* @version 0.1
-* @author Russell Weir'
+* @version 0.2
+* @author Russell Weir <damonsbane@gmail.com>
+* @author Omer Goshen <gershon@goosemoose.com>
 *
 */
 class Opts {
+
 	//{{{ string
-	public static function string(opts:Dynamic,field:String) : String
-	{
+	public static function string(opts:Dynamic, field:String) : String {
 		var v = optString(opts, field, null);
 		if(v == null) throw "Missing " + field;
 		return v;
@@ -45,21 +62,27 @@ class Opts {
 	* Clones a set of options, returning a new options object
 	**/
 	public static function clone(opts:Dynamic) : Dynamic {
-		var rv : Dynamic = {};
-		for(f in Reflect.fields(opts)) {
-			Reflect.setField(rv, f, Reflect.field(opts,f));
-		}
+		var rv = {};
+
+		for(f in Reflect.fields(opts))
+		Reflect.setField(rv, f, Reflect.field(opts,f));
+
 		return rv;
 	}
 	//}}}
 
 
 	//{{{ classInstance
-	public static function classInstance(opts:Dynamic,field:String,classes:Array<Class<Dynamic>>) {
-		var v =  getField(opts,field);
+	/**
+	* Get an instance [field] from [opts] object, matching one from an array of class types.
+	* @param classes Array of types like [Int, Float,...]
+	* @throws String When input type does'nt match any in the array
+	*/
+	public static function classInstance(opts:Dynamic, field:String, classes:Array<Class<Dynamic>>) {
+		var v =  getField(opts, field);
 		if(v == null) throw "Missing " + field;
 		if(classes == null || classes.length == 0)
-			return v;
+		return v;
 		var found = false;
 		for(ct in classes) {
 			if(Std.is(v, ct)) {
@@ -68,13 +91,16 @@ class Opts {
 			}
 		}
 		if(!found)
-			throw "Bad type for " + field;
+		throw "Bad type for " + field;
 		return v;
 	}
 	//}}}
 
 
 	//{{{ hasOpt
+	/**
+	* @return [true] if [field] exists in [opts]
+	*/
 	public static function hasOpt(opts:Dynamic, field:String) : Bool {
 		return (getField(opts, field) != null);
 	}
@@ -87,8 +113,8 @@ class Opts {
 		if(v == null) return defaultValue;
 		if(Std.is(v,String)) {
 			switch(v.toLowerCase()) {
-			case "1", "true", "yes": return true;
-			default: return false;
+				case "1", "true", "yes": return true;
+				default: return false;
 			}
 		}
 		return cast v;
@@ -98,21 +124,21 @@ class Opts {
 
 	//{{{ optFloat
 	public static function optFloat(opts:Dynamic,field:String,defaultValue:Float) : Float {
-		var v : Dynamic = getField(opts,field);
+		var v = getField(opts,field);
 
 		if(v == null) return defaultValue;
 
 		if(Std.is(v,Float) || Std.is(v, Int))
-			return v;
+		return v;
 
 		if(Std.is(v, String)) {
 			v = Std.parseFloat(v);
 			if(Math.isNaN(v))
-				return defaultValue;
+			return defaultValue;
 			return v;
 		}
 		if(v == null)
-			return defaultValue;
+		return defaultValue;
 		return v;
 	}
 	//}}}
@@ -120,14 +146,16 @@ class Opts {
 
 	//{{{ optInt
 	public static function optInt(opts:Dynamic,field:String,defaultValue:Int) : Int {
-		var v : Dynamic = getField(opts,field);
+		var v = getField(opts, field);
 		if(v == null) return defaultValue;
-		if(Std.is(v,Float) || Std.is(v, Int))
-			return Std.int(v);
+
+		if(Std.is(v, Int) || Std.is(v,Float))
+		return Std.int(v);
+
 		if(Std.is(v, String)) {
 			v = Std.parseInt(v);
 			if(v == null)
-				return defaultValue;
+			return defaultValue;
 			return v;
 		}
 		return defaultValue;
@@ -145,13 +173,22 @@ class Opts {
 
 
 	//{{{ getField
-	public static function getField(opts:Dynamic,field:String) : Dynamic {
+	/**
+	* Internally used by the class.
+	*
+	* @param opts  Dynamic input object
+	* @param field The field who's value to look for in the input
+	* @return  	   [null] or the found value
+	*/
+	public static function getField(opts:Dynamic, field:String) : Dynamic {
 		if(opts == null || field == null || field == "" || !Reflect.isObject(opts))
-			return null;
+		return null;
+
 		var idx = field.indexOf(".");
-		if(idx < 0) {
-			return Reflect.field(opts, field);
-		}
+
+		if(idx < 0)
+		return Reflect.field(opts, field);
+
 		return getField(Reflect.field(opts, field.substr(0,idx)), field.substr(idx+1));
 	}
 	//}}}

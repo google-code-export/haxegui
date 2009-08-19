@@ -2,6 +2,7 @@ this.graphics.clear();
 
 var matrix = new flash.geom.Matrix();
 matrix.createGradientBox(this.parent.box.width, 20, .5*Math.PI, 0, 0);
+
 this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, [this.color, Color.tint(this.color, .5)], [.85, 0], [0, 0xFF ], matrix );
 this.graphics.drawRoundRectComplex (0, 0, this.parent.box.width + 10, 20, 4, 4, 0, 0);
 this.graphics.endFill ();

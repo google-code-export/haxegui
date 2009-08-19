@@ -36,28 +36,28 @@ import haxegui.utils.Opts;
 import haxegui.utils.Size;
 //}}}
 
-class Line extends haxegui.controls.AbstractButton
-{
+class Line extends haxegui.controls.AbstractButton {
+
 	public var start : Point;
 	public var end	 : Point;
-	
-	public var thickness : Float;
-	
-	override public function init(?opts:Dynamic=null) {
-		color = Color.random();
-		thickness = 6;
 
-		thickness = Opts.optFloat(opts, "thickness", thickness);
+	public var thickness : Float;
+
+	//{{{ init
+	override public function init(?opts:Dynamic=null) {
+		thickness = Opts.optFloat(opts, "thickness", 6);
+		color = Color.random();
+
 
 		super.init(opts);
-		
-		//~ mouseEnabled = false;
+
 
 		start = new Point();
 		end = new Point(parent.mouseX, parent.mouseY);
 
+
 		setAction("redraw",
-		"	
+		"
 		this.graphics.clear();
 		this.graphics.lineStyle(this.thickness, this.color);
 		this.graphics.moveTo( this.start.x, this.start.y );
@@ -65,36 +65,38 @@ class Line extends haxegui.controls.AbstractButton
 		"
 		);
 
-		this.filters = [new flash.filters.DropShadowFilter (8, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
-				
-				
-		//this.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
-		//this.stage.addEventListener(MouseEvent.MOUSE_UP, onRelease);
 
-		//~ this.startInterval(25);
-
+		this.filters = [new flash.filters.DropShadowFilter (.5*thickness, 45, DefaultStyle.DROPSHADOW, 0.8, 4, 4, 0.65, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
 	}
+	//}}}
 
 
+	//{{{ onMove
 	function onMove(e) {
 		//end = new Point(e.stageX-this.x, e.stageY-this.y);
 		redraw();
 	}
+	//}}}
 
-	
+
+	//{{{ onRelease
 	function onRelease(e:MouseEvent) {
 		this.stage.removeEventListener(MouseEvent.MOUSE_UP, onRelease);
 		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
-		//~ haxe.Timer.delay( stopInterval, 5000 );
-		//~ var t = new feffects.Tween( k, 0, 2500, this, "k", feffects.easing.Elastic.easeOut );
-		//~ t.start();
 	}
+	//}}}
 
+
+	//{{{ onMouseDoubleClick
 	override public function onMouseDoubleClick(e:MouseEvent) : Void {
 		this.destroy();
 	}
+	//}}}
 
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(Line);
 	}
+	//}}}
 }

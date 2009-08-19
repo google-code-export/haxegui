@@ -3,16 +3,16 @@ digraph uml {
 	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
 	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
 	graph [lp="186,12",
-		bb="0,0,372,473"];
+		bb="0,0,372,471"];
 	"haxegui.utils.Color" [label="{\nColor}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/Color.html", tooltip="\nColor", pos="278,43", rects="251,25,305,61", width="0.75", height="0.50"];
 	"haxegui.utils.Printing" [label="{\nPrinting}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/Printing.html", tooltip="\nPrinting", pos="278,97", rects="251,79,305,115", width="0.75", height="0.50"];
 	"haxegui.utils.HorizontalAlign" [label="{\nHorizontalAlign|RIGHT\lLEFT\lJUSTIFY\lCENTER\l}", style="rounded,filled", fillcolor="#af8dc3", pos="278,157", rects="215,133,293,181 293,133,342,181", width="1.75", height="0.67"];
 	"haxegui.utils.VerticalAlign" [label="{\nVerticalAlign|TOP\lCENTER\lBOTTOM\l}", style="rounded,filled", fillcolor="#af8dc3", pos="278,218", rects="218,199,285,237 285,199,338,237", width="1.67", height="0.53"];
-	"haxegui.utils.Alignment" [label="{\nAlignment|vertical : VerticalAlign\loffset : flash.geom.Point\lhorizontal : HorizontalAlign\l}", style="rounded,filled", fillcolor="#ffffbf", pos="278,274", rects="185,255,243,293 243,255,372,293", width="2.58", height="0.53"];
-	"haxegui.utils.ScriptStandardLibrary" [label="{\nScriptStandardLibrary}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/ScriptStandardLibrary.html", tooltip="\nScriptStandardLibrary", pos="278,329", rects="224,311,333,347", width="1.50", height="0.50"];
-	"haxegui.utils.Opts" [label="{\nOpts}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/Opts.html", tooltip="\nOpts", pos="278,383", rects="251,365,305,401", width="0.75", height="0.50"];
-	"haxegui.utils.ScaleMode" [label="{\nScaleMode|KEEP_ASPECT\lIGNORE_ASPECT\l}", style="rounded,filled", fillcolor="#af8dc3", pos="74,437", rects="0,419,62,455 62,419,148,455", width="2.06", height="0.50"];
-	"haxegui.utils.Size" [label="{\nSize}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/Size.html", tooltip="\nSize", pos="278,437", rects="251,419,305,455", width="0.75", height="0.50"];
-	"haxegui.utils.Size" -> "haxegui.utils.Size" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,305,447 314,455 321,464 309,473 278,473 239,473 230,459 251,447"];
-	"haxegui.utils.Size" -> "haxegui.utils.ScaleMode" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,251,437 239,437 213,437 179,437 148,437"];
+	"haxegui.utils.Alignment" [label="{\nAlignment|vertical : VerticalAlign\lhorizontal : HorizontalAlign\l}", style="rounded,filled", fillcolor="#ffffbf", pos="278,273", rects="185,255,243,291 243,255,372,291", width="2.58", height="0.50"];
+	"haxegui.utils.ScriptStandardLibrary" [label="{\nScriptStandardLibrary}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/ScriptStandardLibrary.html", tooltip="\nScriptStandardLibrary", pos="278,327", rects="224,309,333,345", width="1.50", height="0.50"];
+	"haxegui.utils.Opts" [label="{\nOpts}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/Opts.html", tooltip="\nOpts", pos="278,381", rects="251,363,305,399", width="0.75", height="0.50"];
+	"haxegui.utils.ScaleMode" [label="{\nScaleMode|KEEP_ASPECT\lIGNORE_ASPECT\l}", style="rounded,filled", fillcolor="#af8dc3", pos="74,435", rects="0,417,62,453 62,417,148,453", width="2.06", height="0.50"];
+	"haxegui.utils.Size" [label="{\nSize}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/utils/Size.html", tooltip="\nSize", pos="278,435", rects="251,417,305,453", width="0.75", height="0.50"];
+	"haxegui.utils.Size" -> "haxegui.utils.Size" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,305,445 314,453 321,462 309,471 278,471 239,471 230,457 251,445"];
+	"haxegui.utils.Size" -> "haxegui.utils.ScaleMode" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,251,435 239,435 213,435 179,435 148,435"];
 }

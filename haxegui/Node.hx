@@ -33,6 +33,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import haxegui.Window;
 import haxegui.containers.Container;
+import haxegui.containers.Grid;
 import haxegui.controls.ComboBox;
 import haxegui.controls.Component;
 import haxegui.controls.IAdjustable;
@@ -63,8 +64,8 @@ using haxegui.controls.Component;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class Node extends Window
-{
+class Node extends Window {
+
 	//{{{ Members
 	public var combos : Array<ComboBox>;
 	public var inputs : Array<Input>;
@@ -72,6 +73,7 @@ class Node extends Window
 	public var adjustments : Array<Adjustment>;
 
 	var container : Container;
+	var grid	  : Grid;
 
 	var _current : Dynamic ;
 
@@ -103,6 +105,10 @@ class Node extends Window
 		container.graphics.clear();
 
 
+		grid = new Grid(container);
+		grid.init({color: Color.WHITE});
+
+
 		combos = [];
 		inputs = [];
 		sockets = [];
@@ -113,29 +119,29 @@ class Node extends Window
 			adjustments.push(new Adjustment({ value: 0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 5, page: 10}));
 
 
-			var j = combos.push(new ComboBox(container));
-			combos[j-1].init({color: this.color, text: "", x: 20, y:10+28*i, width: 90});
+			var j = combos.push(new ComboBox(grid));
+			combos[j-1].init({color: this.color, text: "", width: 90});
 			// combos[j-1].dataSource = new DataSource();
 			// combos[j-1].dataSource.data = ["Expression", "AND", "OR", "XOR", "NOR", "NAND", "XNOR"];
 			combos[j-1].dataSource = dataSource;
 
 
-			var j = inputs.push(new Input(container));
-			inputs[j-1].init({text: "", x: 120, y:10+28*i, width: 90});
+			var j = inputs.push(new Input(grid));
+			inputs[j-1].init({text: "", width: 90});
 			inputs[j-1].tf.multiline = false;
 			inputs[j-1].tf.autoSize = flash.text.TextFieldAutoSize.NONE;
 			inputs[j-1].tf.width = 80;
 
 
-			j = sockets.push(new Socket(container));
-			sockets[j-1].init({x: 220, y:20+28*i});
+			j = sockets.push(new Socket(inputs[j-1]));
+			sockets[j-1].init({x: 100, y: 10});
 
 			sockets[i].removeEventListener(MouseEvent.MOUSE_DOWN, sockets[i].onMouseDown);
 			sockets[j-1].removeEventListener(MouseEvent.MOUSE_DOWN, sockets[i].onMouseDown);
 		}
 		//}}}
 
-
+/*
 		//{{{ titlebar
 		titlebar.color = this.color;
 		titlebar.dirty = true;
@@ -184,6 +190,8 @@ class Node extends Window
 		this.graphics.endFill ();
 		");
 		//}}}
+*/
+
 	}
 	//}}}
 

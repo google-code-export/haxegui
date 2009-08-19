@@ -14,7 +14,7 @@ digraph uml {
 	"flash.events.EventDispatcher" [fontcolor=black, pos="218,691", rects="157,673,280,709", width="1.69", height="0.50"];
 	"haxegui.RichTextEditor" [label="{\nRichTextEditor}", fillcolor=white, URL="../types/haxegui/RichTextEditor.html", tooltip="\nRichTextEditor", portPos=w, pos="390,529", rects="355,511,426,547", width="0.97", height="0.50"];
 	"haxegui.controls.IText" [fontcolor=black, pos="218,529", rects="170,511,266,547", width="1.33", height="0.50"];
-	"haxegui.DataDescriptor" [label="{\nDataDescriptor|}", fillcolor="#ffffbf", fontcolor=black, pos="390,799", rects="345,781,417,817 417,781,435,817", width="1.25", height="0.50"];
+	"haxegui.DataDescriptor" [label="{\nDataDescriptor|hasRoot : Bool\l}", fillcolor="#ffffbf", fontcolor=black, pos="390,799", rects="320,781,392,817 392,781,460,817", width="1.94", height="0.50"];
 	"haxegui.DataSource" [label="{\nDataSource}", fillcolor=white, URL="../types/haxegui/DataSource.html", tooltip="\nDataSource", portPos=w, pos="390,691", rects="360,673,420,709", width="0.83", height="0.50"];
 	"haxegui.WindowType" [label="{\nWindowType|NORMAL\lMODAL\lALWAYS_ON_TOP\l}", fillcolor="#af8dc3", fontcolor=black, pos="390,853", rects="317,835,380,871 380,835,464,871", width="2.03", height="0.50"];
 	"haxegui.ColorPicker" [label="{\nColorPicker}", fillcolor=white, URL="../types/haxegui/ColorPicker.html", tooltip="\nColorPicker", portPos=w, pos="390,97", rects="360,79,420,115", width="0.83", height="0.50"];

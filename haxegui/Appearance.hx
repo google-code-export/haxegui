@@ -27,7 +27,9 @@ import flash.events.MouseEvent;
 import flash.geom.Rectangle;
 import haxegui.Window;
 import haxegui.containers.Container;
+import haxegui.containers.Grid;
 import haxegui.containers.ScrollPane;
+import haxegui.controls.Button;
 import haxegui.controls.CheckBox;
 import haxegui.controls.Component;
 import haxegui.controls.Image;
@@ -48,7 +50,9 @@ import haxegui.utils.Size;
 import haxegui.windowClasses.StatusBar;
 //}}}
 
+
 using haxegui.utils.Color;
+
 
 /**
 *
@@ -60,8 +64,8 @@ using haxegui.utils.Color;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.2
 */
-class Appearance extends Window
-{
+class Appearance extends Window {
+
 	//{{{ Members
 	public static var colorTheme : ColorTheme = {
 		ACTIVE_TITLEBAR : DefaultStyle.ACTIVE_TITLEBAR,
@@ -87,6 +91,11 @@ class Appearance extends Window
 	"Pixel_Classic"
 	];
 
+
+	public var container : Container;
+	public var grid		 : Grid;
+
+
 	//{{{ Constructor
 	public function new (?parent:DisplayObjectContainer, ?x:Float, ?y:Float) {
 		super (parent, "Appearance", x, y);
@@ -97,24 +106,31 @@ class Appearance extends Window
 	public override function init(?opts:Dynamic) {
 		super.init(opts);
 		box = new Size(320, 480).toRect();
+		minSize = Size.fromRect(box);
 
 		//
 		var menubar = new MenuBar (this, "MenuBar", 10,20);
 		menubar.init ();
 
 		//
-		var container = new Container(this, "Container", 10, 44);
+		container = new Container(this, "Container", 10, 42);
 		container.init({});
 
 		makeNoticeLabel();
 
-		var label = new Label(this);
-		label.init({text: "Default Font:"});
-		label.move(20,104);
+		//
+		grid = new Grid(container, -20, 40);
+		grid.init({rows: Reflect.fields(colorTheme).length+1, cols: 2});
 
-		var combo = new haxegui.controls.ComboBox(this);
+		//
+		var label = new Label(grid);
+		label.init({text: "Default Font:"});
+		// label.move(20,104);
+
+		//
+		var combo = new haxegui.controls.ComboBox(grid);
 		combo.init();
-		combo.move(120,100);
+		// combo.move(120,100);
 		combo.input.tf.text = "FFF_Harmony";
 		//cat library.xml  | grep 'font id=' | awk '{ print (substr($2,4)",") }'
 
@@ -137,24 +153,26 @@ class Appearance extends Window
 		var capitalize = function(word) { return Std.string(word.charAt(0).toUpperCase()) + word.substr(1,word.length-1); }
 
 		for(i in 0...Reflect.fields(colorTheme).length) {
-			label = new Label(this);
+			label = new Label(grid);
+
+			//
 			var str = Reflect.fields(colorTheme)[i].toLowerCase();
 			var words = Lambda.list(str.split("_"));
-			str = words.map(capitalize).join(" ");
-
-			str += ":";
+			str = words.map(capitalize).join(" ") + ":";
 			label.init({text: str });
-			label.move(20,144+30*i);
 
-			var btn = new haxegui.controls.Button(this);
-			btn.init({width: 40, label: null});
-			btn.move(120, 134+30*i);
+
+			var btn = new Swatch(grid);
+			btn.init({width: 40, label: null, _color: Reflect.field(colorTheme, Reflect.fields(colorTheme)[i]) });
+			btn.minSize = new Size(40,30);
+			btn.maxSize = new Size(200,2<<15);
+
 			btn.setAction("mouseClick",
 			"
-			var spr = this.getChildAt(0);
+			var spr = this.firstChild();
 
 			var c = new haxegui.ColorPicker();
-			c.currentColor = DefaultStyle.BACKGROUND;
+			c.currentColor = this._color;
 			c.init();
 			var container = c.getChildByName('Container');
 			var ok = container.getChildByName('Ok');
@@ -163,25 +181,11 @@ class Appearance extends Window
 			cancel.setAction('mouseClick', 'this.getParentWindow().destroy();');
 			ok.addEventListener(flash.events.MouseEvent.MOUSE_UP,
 			function(e) {
-				spr.graphics.clear();
-				spr.graphics.lineStyle(1,Color.darken(this.color, 40));
 				spr.graphics.beginFill(c.currentColor);
-				spr.graphics.drawRect(4,4,32,22);
-				spr.graphics.endFill();
 				DefaultStyle."+Reflect.fields(colorTheme)[i]+" = c.currentColor;
 				c.destroy();
 			});
 			");
-
-			//
-			var swatch = cast btn.addChild(new flash.display.Sprite());
-			swatch.graphics.lineStyle(1, this.color.darken(40));
-			swatch.graphics.beginFill(Reflect.field(colorTheme, Reflect.fields(colorTheme)[i]));
-			swatch.graphics.drawRect(4,4,32,22);
-			swatch.graphics.endFill();
-			swatch.mouseEnabled = false;
-			swatch.filters = [new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,flash.filters.BitmapFilterQuality.HIGH,true,false,false)];
-
 		}
 	}
 	//}}}
@@ -189,11 +193,11 @@ class Appearance extends Window
 	//{{{ makeNoticeLabel
 	private function makeNoticeLabel() {
 		// background
-		var rect = new haxegui.toys.Rectangle(this);
+		var rect = new haxegui.toys.Rectangle(container);
 		rect.init({width: 300, height: 20});
 		rect.color = 0xFFD69A;
 		rect.roundness = 12;
-		rect.move(15, 74);
+		rect.move(8, 8);
 
 		// icon
 		var icon = new Icon(rect);

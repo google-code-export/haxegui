@@ -3,21 +3,23 @@ digraph uml {
 	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
 	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
 	graph [lp="135,12",
-		bb="0,0,270,385"];
+		bb="0,0,270,439"];
+	"haxegui.events.TreeEvent" [label="{\nTreeEvent}", fillcolor=white, URL="../types/haxegui/events/TreeEvent.html", tooltip="\nTreeEvent", portPos=w, pos="207,259", rects="180,241,235,277", width="0.75", height="0.50"];
+	"flash.events.Event" [fontcolor=black, pos="77,151", rects="35,133,119,169", width="1.17", height="0.50"];
 	"haxegui.events.AdjustmentEvent" [label="{\nAdjustmentEvent}", fillcolor=white, URL="../types/haxegui/events/AdjustmentEvent.html", tooltip="\nAdjustmentEvent", portPos=w, pos="207,205", rects="168,187,247,223", width="1.08", height="0.50"];
-	"flash.events.Event" [fontcolor=black, pos="77,124", rects="35,106,119,142", width="1.17", height="0.50"];
 	"haxegui.events.WindowEvent" [label="{\nWindowEvent}", fillcolor=white, URL="../types/haxegui/events/WindowEvent.html", tooltip="\nWindowEvent", portPos=w, pos="207,151", rects="174,133,240,169", width="0.92", height="0.50"];
-	"haxegui.events.MoveEvent" [label="{\nMoveEvent}", fillcolor=white, URL="../types/haxegui/events/MoveEvent.html", tooltip="\nMoveEvent", portPos=w, pos="207,367", rects="179,349,236,385", width="0.78", height="0.50"];
-	"flash.events.MouseEvent" [fontcolor=black, pos="77,313", rects="24,295,131,331", width="1.47", height="0.50"];
+	"haxegui.events.MoveEvent" [label="{\nMoveEvent}", fillcolor=white, URL="../types/haxegui/events/MoveEvent.html", tooltip="\nMoveEvent", portPos=w, pos="207,421", rects="179,403,236,439", width="0.78", height="0.50"];
+	"flash.events.MouseEvent" [fontcolor=black, pos="77,367", rects="24,349,131,385", width="1.47", height="0.50"];
 	"haxegui.events.ListEvent" [label="{\nListEvent}", fillcolor=white, URL="../types/haxegui/events/ListEvent.html", tooltip="\nListEvent", portPos=w, pos="207,97", rects="180,79,234,115", width="0.75", height="0.50"];
 	"haxegui.events.MenuEvent" [label="{\nMenuEvent}", fillcolor=white, URL="../types/haxegui/events/MenuEvent.html", tooltip="\nMenuEvent", portPos=w, pos="207,43", rects="179,25,236,61", width="0.78", height="0.50"];
-	"haxegui.events.ResizeEvent" [label="{\nResizeEvent}", fillcolor=white, URL="../types/haxegui/events/ResizeEvent.html", tooltip="\nResizeEvent", portPos=w, pos="207,313", rects="177,295,238,331", width="0.83", height="0.50"];
-	"haxegui.events.DragEvent" [label="{\nDragEvent}", fillcolor=white, URL="../types/haxegui/events/DragEvent.html", tooltip="\nDragEvent", portPos=w, pos="207,259", rects="179,241,235,277", width="0.78", height="0.50"];
-	"haxegui.events.AdjustmentEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,106,142 178,187 159,176 134,161 114,148"];
-	"haxegui.events.WindowEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,119,133 174,144 160,142 144,138 129,135"];
-	"haxegui.events.MoveEvent" -> "flash.events.MouseEvent" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,121,331 179,355 165,349 147,342 131,335"];
-	"haxegui.events.ListEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,119,115 180,103 165,106 146,110 129,113"];
-	"haxegui.events.MenuEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,106,106 179,61 161,72 135,88 115,101"];
-	"haxegui.events.ResizeEvent" -> "flash.events.MouseEvent" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,131,313 177,313 166,313 154,313 141,313"];
-	"haxegui.events.DragEvent" -> "flash.events.MouseEvent" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,121,295 179,271 165,277 147,284 131,291"];
+	"haxegui.events.ResizeEvent" [label="{\nResizeEvent}", fillcolor=white, URL="../types/haxegui/events/ResizeEvent.html", tooltip="\nResizeEvent", portPos=w, pos="207,367", rects="177,349,238,385", width="0.83", height="0.50"];
+	"haxegui.events.DragEvent" [label="{\nDragEvent}", fillcolor=white, URL="../types/haxegui/events/DragEvent.html", tooltip="\nDragEvent", portPos=w, pos="207,313", rects="179,295,235,331", width="0.78", height="0.50"];
+	"haxegui.events.TreeEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,95,169 180,242 175,239 171,235 167,232 144,215 120,193 103,176"];
+	"haxegui.events.AdjustmentEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,119,169 168,189 156,184 142,178 129,173"];
+	"haxegui.events.WindowEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,119,151 174,151 160,151 144,151 129,151"];
+	"haxegui.events.MoveEvent" -> "flash.events.MouseEvent" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,121,385 179,409 165,403 147,396 131,389"];
+	"haxegui.events.ListEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,119,133 180,108 165,114 146,122 129,129"];
+	"haxegui.events.MenuEvent" -> "flash.events.Event" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,96,133 179,61 175,64 171,67 167,70 144,88 120,109 103,126"];
+	"haxegui.events.ResizeEvent" -> "flash.events.MouseEvent" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,131,367 177,367 166,367 154,367 141,367"];
+	"haxegui.events.DragEvent" -> "flash.events.MouseEvent" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,121,349 179,325 165,331 147,338 131,345"];
 }

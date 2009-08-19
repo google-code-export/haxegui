@@ -51,10 +51,10 @@ import haxegui.utils.Size;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class ProgressBarIndicator extends Component, implements IComposite
-{
+class ProgressBarIndicator extends Component, implements IComposite {
+
 	//{{{ init
-	override public function init(opts:Dynamic=null) {
+	override public function init(?opts:Dynamic=null) {
 		color = DefaultStyle.PROGRESS_BAR;
 
 
@@ -83,8 +83,8 @@ class ProgressBarIndicator extends Component, implements IComposite
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class ProgressBar extends Component, implements IAdjustable
-{
+class ProgressBar extends Component, implements IAdjustable {
+
 	//{{{ Members
 	/** Indicator **/
 	public var bar : ProgressBarIndicator;
@@ -105,6 +105,7 @@ class ProgressBar extends Component, implements IAdjustable
 
 	public var mazk : Shape;
 	//}}}
+
 
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
@@ -141,7 +142,7 @@ class ProgressBar extends Component, implements IAdjustable
 		bar.setAction("interval", "var x = -1; if(this.x < -parent.box.width/10) x = parent.box.width/10; this.move(x,0);");
 		bar.moveTo(0,1);
 		if(animate)
-		bar.startInterval(25);
+		bar.startInterval(30);
 
 
 		//
@@ -152,16 +153,16 @@ class ProgressBar extends Component, implements IAdjustable
 
 
 		///
-		if(!disabled && Haxegui.slots) {
 		slot = new Socket(this);
-		slot.init({radius: 6});
+		slot.init({radius: 6, visible: Haxegui.slots});
 		slot.moveTo(-14, Std.int(this.box.height)>>1);
-		}
+
 
 
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 	}
 	//}}}
+
 
 	//{{{ onChanged
 	private function onChanged(e:Event)	{progress = adjustment.getValue()/100;
@@ -170,12 +171,13 @@ class ProgressBar extends Component, implements IAdjustable
 	}
 	//}}}
 
-	//{{{ __init__
 
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(ProgressBar);
 	}
 	//}}}
+
 
 	//{{{ update
 	public function update() {
@@ -199,6 +201,7 @@ class ProgressBar extends Component, implements IAdjustable
 		//mazk.height = box.height;
 	} //}}}
 
+
 	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
 		label.center();
@@ -216,5 +219,6 @@ class ProgressBar extends Component, implements IAdjustable
 
 		super.onResize(e);
 	} //}}}
+
 }
 //}}}

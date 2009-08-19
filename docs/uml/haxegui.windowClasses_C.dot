@@ -3,14 +3,11 @@ digraph uml {
 	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
 	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
 	graph [lp="167,12",
-		bb="0,0,334,169"];
-	"haxegui.windowClasses.WindowFrame" [label="{\nWindowFrame}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/WindowFrame.html", tooltip="\nWindowFrame", pos="226,43", rects="189,25,263,61", width="1.03", height="0.50"];
-	"haxegui.windowClasses.CloseButton" [label="{\nCloseButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/CloseButton.html", tooltip="\nCloseButton", pos="112,151", rects="78,133,146,169", width="0.94", height="0.50"];
-	"haxegui.windowClasses.MinimizeButton" [label="{\nMinimizeButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/MinimizeButton.html", tooltip="\nMinimizeButton", pos="112,97", rects="72,79,152,115", width="1.11", height="0.50"];
-	"haxegui.windowClasses.MaximizeButton" [label="{\nMaximizeButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/MaximizeButton.html", tooltip="\nMaximizeButton", pos="112,43", rects="71,25,153,61", width="1.14", height="0.50"];
-	"haxegui.windowClasses.TitleBar" [label="{\nTitleBar}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/TitleBar.html", tooltip="\nTitleBar", pos="226,97", rects="199,79,253,115", width="0.75", height="0.50"];
-	"haxegui.windowClasses.StatusBar" [label="{\nStatusBar}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/StatusBar.html", tooltip="\nStatusBar", pos="226,151", rects="197,133,256,169", width="0.81", height="0.50"];
-	"haxegui.windowClasses.TitleBar" -> "haxegui.windowClasses.CloseButton" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,199,110 188,115 174,122 159,129 146,135"];
-	"haxegui.windowClasses.TitleBar" -> "haxegui.windowClasses.MinimizeButton" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,199,97 187,97 176,97 164,97 152,97"];
-	"haxegui.windowClasses.TitleBar" -> "haxegui.windowClasses.MaximizeButton" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,199,84 188,79 176,73 162,67 150,61"];
+		bb="0,0,334,331"];
+	"haxegui.windowClasses.WindowFrame" [label="{\nWindowFrame}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/WindowFrame.html", tooltip="\nWindowFrame", pos="167,43", rects="130,25,204,61", width="1.03", height="0.50"];
+	"haxegui.windowClasses.CloseButton" [label="{\nCloseButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/CloseButton.html", tooltip="\nCloseButton", pos="167,97", rects="133,79,201,115", width="0.94", height="0.50"];
+	"haxegui.windowClasses.MinimizeButton" [label="{\nMinimizeButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/MinimizeButton.html", tooltip="\nMinimizeButton", pos="167,151", rects="127,133,207,169", width="1.11", height="0.50"];
+	"haxegui.windowClasses.MaximizeButton" [label="{\nMaximizeButton}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/MaximizeButton.html", tooltip="\nMaximizeButton", pos="167,205", rects="126,187,208,223", width="1.14", height="0.50"];
+	"haxegui.windowClasses.TitleBar" [label="{\nTitleBar}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/TitleBar.html", tooltip="\nTitleBar", pos="167,259", rects="140,241,194,277", width="0.75", height="0.50"];
+	"haxegui.windowClasses.StatusBar" [label="{\nStatusBar}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/haxegui/windowClasses/StatusBar.html", tooltip="\nStatusBar", pos="167,313", rects="138,295,197,331", width="0.81", height="0.50"];
 }

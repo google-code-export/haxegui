@@ -2,20 +2,23 @@ digraph uml {
 	graph [label="Package: flash.events Composition", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=false, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
 	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
 	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
-	graph [lp="249,12",
-		bb="0,0,498,386"];
+	graph [lp="254,12",
+		bb="0,0,508,548"];
 	"flash.events.IEventDispatcher" [label="{\nIEventDispatcher}", fontcolor="#496962", style="rounded,filled", fillcolor="#88c2b3", URL="../types/flash/events/IEventDispatcher.html", tooltip="\nIEventDispatcher", pos="332,67", rects="289,49,376,85", width="1.19", height="0.50"];
 	"flash.events.Event" [label="{\nEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/Event.html", tooltip="\nEvent", pos="225,44", rects="198,26,252,62", width="0.75", height="0.50"];
-	"flash.events.EventDispatcher" [label="{\nEventDispatcher}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/EventDispatcher.html", tooltip="\nEventDispatcher", pos="455,44", rects="413,26,498,62", width="1.17", height="0.50"];
+	"flash.events.EventDispatcher" [label="{\nEventDispatcher}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/EventDispatcher.html", tooltip="\nEventDispatcher", pos="460,44", rects="418,26,503,62", width="1.17", height="0.50"];
 	"flash.events.EventPhase" [label="{\nEventPhase|CAPTURING_PHASE\lBUBBLING_PHASE\lAT_TARGET\l}", style="rounded,filled", fillcolor="#af8dc3", pos="81,44", rects="0,25,66,63 66,25,162,63", width="2.25", height="0.53"];
-	"flash.events.KeyboardEvent" [label="{\nKeyboardEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/KeyboardEvent.html", tooltip="\nKeyboardEvent", pos="455,98", rects="416,80,494,116", width="1.08", height="0.50"];
-	"flash.events.TextEvent" [label="{\nTextEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/TextEvent.html", tooltip="\nTextEvent", pos="455,152", rects="427,134,483,170", width="0.78", height="0.50"];
-	"flash.events.ErrorEvent" [label="{\nErrorEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/ErrorEvent.html", tooltip="\nErrorEvent", pos="455,206", rects="425,188,486,224", width="0.83", height="0.50"];
-	"flash.events.IOErrorEvent" [label="{\nIOErrorEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/IOErrorEvent.html", tooltip="\nIOErrorEvent", pos="455,260", rects="420,242,490,278", width="0.97", height="0.50"];
-	"flash.events.FocusEvent" [label="{\nFocusEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/FocusEvent.html", tooltip="\nFocusEvent", pos="455,314", rects="423,296,487,332", width="0.89", height="0.50"];
-	"flash.events.MouseEvent" [label="{\nMouseEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/MouseEvent.html", tooltip="\nMouseEvent", pos="455,368", rects="422,350,489,386", width="0.92", height="0.50"];
+	"flash.events.TextEvent" [label="{\nTextEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/TextEvent.html", tooltip="\nTextEvent", pos="460,98", rects="432,80,488,116", width="0.78", height="0.50"];
+	"flash.events.ErrorEvent" [label="{\nErrorEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/ErrorEvent.html", tooltip="\nErrorEvent", pos="460,152", rects="430,134,491,170", width="0.83", height="0.50"];
+	"flash.events.SecurityErrorEvent" [label="{\nSecurityErrorEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/SecurityErrorEvent.html", tooltip="\nSecurityErrorEvent", pos="460,206", rects="412,188,508,224", width="1.33", height="0.50"];
+	"flash.events.KeyboardEvent" [label="{\nKeyboardEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/KeyboardEvent.html", tooltip="\nKeyboardEvent", pos="460,260", rects="421,242,499,278", width="1.08", height="0.50"];
+	"flash.events.IOErrorEvent" [label="{\nIOErrorEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/IOErrorEvent.html", tooltip="\nIOErrorEvent", pos="460,314", rects="425,296,495,332", width="0.97", height="0.50"];
+	"flash.events.DataEvent" [label="{\nDataEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/DataEvent.html", tooltip="\nDataEvent", pos="460,368", rects="431,350,490,386", width="0.81", height="0.50"];
+	"flash.events.FocusEvent" [label="{\nFocusEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/FocusEvent.html", tooltip="\nFocusEvent", pos="460,422", rects="428,404,492,440", width="0.89", height="0.50"];
+	"flash.events.MouseEvent" [label="{\nMouseEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/MouseEvent.html", tooltip="\nMouseEvent", pos="460,476", rects="427,458,494,494", width="0.92", height="0.50"];
+	"flash.events.HTTPStatusEvent" [label="{\nHTTPStatusEvent}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/events/HTTPStatusEvent.html", tooltip="\nHTTPStatusEvent", pos="460,530", rects="416,512,505,548", width="1.22", height="0.50"];
 	"flash.events.IEventDispatcher" -> "flash.events.Event" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,289,58 277,55 268,53 260,51 252,50"];
-	"flash.events.EventDispatcher" -> "flash.events.Event" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,413,41 401,40 393,40 384,40 376,40 336,39 327,38 288,40 276,40 263,41 252,41"];
-	"flash.events.EventDispatcher" -> "flash.events.IEventDispatcher" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,413,52 401,54 393,56 384,58 376,59"];
+	"flash.events.EventDispatcher" -> "flash.events.Event" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,418,41 406,41 396,40 386,40 376,40 336,39 327,38 288,40 276,40 263,41 252,41"];
+	"flash.events.EventDispatcher" -> "flash.events.IEventDispatcher" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,418,52 406,54 396,56 386,58 376,59"];
 	"flash.events.Event" -> "flash.events.EventPhase" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,198,44 186,44 178,44 170,44 162,44"];
 }

@@ -22,17 +22,14 @@ package haxegui.controls;
 //{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-import flash.display.MovieClip;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.MouseEvent;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.filters.DropShadowFilter;
 import flash.geom.Rectangle;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
+import haxegui.controls.IAdjustable;
 import haxegui.controls.Label;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.StyleManager;
@@ -51,8 +48,8 @@ import haxegui.utils.Size;
 * @author Russell Weir <damonsbane@gmail.com>
 *
 */
-class Tab extends AbstractButton, implements IAggregate
-{
+class Tab extends AbstractButton, implements IAggregate {
+
 	public var label  : Label;
 	public var active : Bool;
 
@@ -71,6 +68,8 @@ class Tab extends AbstractButton, implements IAggregate
 		label = new Label(this, "label");
 		label.init({text : Opts.optString(opts, "label", name)});
 		label.mouseEnabled = false;
+
+		// label.tf.setTextFormat(DefaultStyle.getTextFormat(DefaultStyle.FONT_SIZE, active ? DefaultStyle.INPUT_TEXT : Color.darken(DefaultStyle.BACKGROUND, 80)));
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
@@ -138,7 +137,8 @@ enum TabPosition {
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class TabNavigator extends Component {
+class TabNavigator extends Component, implements IAdjustable {
+
 	//{{{ Members
 	/** Tab position **/
 	public var tabPosition : TabPosition;
@@ -148,6 +148,9 @@ class TabNavigator extends Component {
 
 	/** The index of the selected tab **/
 	public var activeTab(default, __setActive) : Int;
+
+	/** **/
+	public var adjustment : Adjustment;
 	//}}}
 
 	//{{{ addChild
@@ -172,7 +175,7 @@ class TabNavigator extends Component {
 		super.init(opts);
 
 
-		filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4,0.5,BitmapFilterQuality.HIGH,true,false,false)];
+		filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, .5, 4, 4, .5, flash.filters.BitmapFilterQuality.HIGH,true,false,false)];
 
 		addEventListener(Event.CHANGE, onChanged, false, 0, true);
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);

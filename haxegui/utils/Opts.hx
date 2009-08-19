@@ -30,8 +30,7 @@ import Type;
 *
 */
 class Opts {
-	public static function string(opts:Dynamic,field:String) : String
-	{
+	public static function string(opts:Dynamic,field:String) : String {
 		var v = optString(opts, field, null);
 		if(v == null) throw "Missing " + field;
 		return v;
@@ -40,8 +39,7 @@ class Opts {
 	/**
 	* Clones a set of options, returning a new options object
 	**/
-	public static function clone(opts:Dynamic) : Dynamic
-	{
+	public static function clone(opts:Dynamic) : Dynamic {
 		var rv : Dynamic = {};
 		for(f in Reflect.fields(opts)) {
 			Reflect.setField(rv, f, Reflect.field(opts,f));
@@ -49,8 +47,7 @@ class Opts {
 		return rv;
 	}
 
-	public static function classInstance(opts:Dynamic,field:String,classes:Array<Class<Dynamic>>)
-	{
+	public static function classInstance(opts:Dynamic,field:String,classes:Array<Class<Dynamic>>) {
 		var v =  getField(opts,field);
 		if(v == null) throw "Missing " + field;
 		if(classes == null || classes.length == 0)
@@ -67,13 +64,11 @@ class Opts {
 		return v;
 	}
 
-	public static function hasOpt(opts:Dynamic, field:String) : Bool
-	{
+	public static function hasOpt(opts:Dynamic, field:String) : Bool {
 		return (getField(opts, field) != null);
 	}
 
-	public static function optBool(opts:Dynamic,field:String,defaultValue:Bool) : Bool
-	{
+	public static function optBool(opts:Dynamic,field:String,defaultValue:Bool) : Bool {
 		var v = getField(opts,field);
 		if(v == null) return defaultValue;
 		if(Std.is(v,String)) {
@@ -85,8 +80,7 @@ class Opts {
 		return cast v;
 	}
 
-	public static function optFloat(opts:Dynamic,field:String,defaultValue:Float) : Float
-	{
+	public static function optFloat(opts:Dynamic,field:String,defaultValue:Float) : Float {
 		var v : Dynamic = getField(opts,field);
 
 		if(v == null) return defaultValue;
@@ -105,8 +99,7 @@ class Opts {
 		return v;
 	}
 
-	public static function optInt(opts:Dynamic,field:String,defaultValue:Int) : Int
-	{
+	public static function optInt(opts:Dynamic,field:String,defaultValue:Int) : Int	{
 		var v : Dynamic = getField(opts,field);
 		if(v == null) return defaultValue;
 		if(Std.is(v,Float) || Std.is(v, Int))
@@ -120,8 +113,7 @@ class Opts {
 		return defaultValue;
 	}
 
-	public static function optString(opts:Dynamic,field:String,defaultValue:String) : String
-	{
+	public static function optString(opts:Dynamic,field:String,defaultValue:String) : String {
 		var v = getField(opts,field);
 		if(v == null) return defaultValue;
 		return Std.string(v);
@@ -143,8 +135,7 @@ class Opts {
 	* @param opts Input opts to be modified
 	* @param fields list of field names to remove
 	**/
-	public static function removeFields(opts:Dynamic, fields:Array<String>) : Void
-	{
+	public static function removeFields(opts:Dynamic, fields:Array<String>) : Void {
 		for(f in fields) {
 			Reflect.deleteField(opts, f);
 		}

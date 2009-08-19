@@ -24,6 +24,7 @@ import flash.display.DisplayObjectContainer;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import haxegui.Window;
+import haxegui.XmlParser;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
 import haxegui.controls.Image;
@@ -47,8 +48,7 @@ import haxegui.utils.Size;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class CloseButton extends AbstractButton
-{
+class CloseButton extends AbstractButton {
 	//{{{ Constructor
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
@@ -81,8 +81,8 @@ class CloseButton extends AbstractButton
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class MinimizeButton extends AbstractButton
-{
+class MinimizeButton extends AbstractButton {
+
 	//{{{ Constructor
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
@@ -90,13 +90,14 @@ class MinimizeButton extends AbstractButton
 	}
 	//}}}
 
+
 	//{{{ onMouseClick
-	override public function onMouseClick(e:MouseEvent) : Void
-	{
+	override public function onMouseClick(e:MouseEvent) : Void	{
 		trace("Minimized clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
 	}
 	//}}}
+
 
 	//{{{ __init__
 	static function __init__() {
@@ -115,8 +116,8 @@ class MinimizeButton extends AbstractButton
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class MaximizeButton extends AbstractButton
-{
+class MaximizeButton extends AbstractButton {
+
 	//{{{ Constructor
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
@@ -126,8 +127,7 @@ class MaximizeButton extends AbstractButton
 
 	//{{{ Functions
 	//{{{ onMouseClick
-	override public function onMouseClick(e:MouseEvent) : Void
-	{
+	override public function onMouseClick(e:MouseEvent) : Void {
 		trace("Maximize clicked on " + parent.parent.toString());
 		//~ parent.dispatchEvent(new Event(Event.CLOSE));
 	}
@@ -151,21 +151,22 @@ class MaximizeButton extends AbstractButton
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class TitleBar extends AbstractButton
-{
+class TitleBar extends AbstractButton {
+
 	//{{{ Members
-	//{{{ Public
-	public var title 		  : Label;
-	public var closeButton 	  : CloseButton;
-	public var minimizeButton : MinimizeButton;
-	public var maximizeButton : MaximizeButton;
-	public var icon			  : Icon;
-	//}}}
-
-
 	//{{{ Static
 	/** Title offset from center titlebar **/
 	static inline var titleOffset : Point = new Point(0,-4);
+
+	static var xml = Xml.parse(	'
+	<haxegui:Layout name="TitleBar">
+	<haxegui:windowClasses:CloseButton x="4" y="4"/>
+	<haxegui:windowClasses:MinimizeButton x="20" y="4"/>
+	<haxegui:windowClasses:MaximizeButton x="36" y="4"/>
+	<haxegui:controls:Label/>
+	<haxegui:controls:Icon src="applications-system.png"/>
+	</haxegui:Layout>
+	').firstElement();
 	//}}}
 	//}}}
 
@@ -180,12 +181,17 @@ class TitleBar extends AbstractButton
 
 
 		box = new flash.geom.Rectangle(0,0, (cast parent).box.width, 32);
-		cursorOver = Cursor.SIZE_ALL;
+		color = (cast parent).color;
+		// cursorOver = Cursor.SIZE_ALL;
 
 
 		super.init(opts);
 
+		xml.set("name", name);
 
+		XmlParser.apply(TitleBar.xml, this);
+
+/*
 		// closeButton
 		closeButton = new CloseButton(this, "closeButton");
 		closeButton.init({color: this.color });
@@ -217,7 +223,7 @@ class TitleBar extends AbstractButton
 		title.tabEnabled = false;
 		title.center();
 		title.movePoint(titleOffset);
-
+*/
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
@@ -313,10 +319,28 @@ class TitleBar extends AbstractButton
 	}
 	//}}}
 
+
+	//{{{ onMouseDoubleClick
+	/**
+	* @todo window shading
+	*/
+	public override function onMouseDoubleClick(e:MouseEvent) : Void {
+		super.onMouseDoubleClick(e);
+	}
+	//}}}
+
+
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
 		box = new Size((cast parent).box.width, 32).toRect();
 		redraw();
+
+		var icon = this.getElementsByClass(Icon).next();
+		if(icon==null) return;
+		icon.moveTo((cast parent).box.width-12, 2);
+
+		var title = this.getElementsByClass(Label).next();
+		if(title==null) return;
 		title.center();
 		title.movePoint(titleOffset);
 	}

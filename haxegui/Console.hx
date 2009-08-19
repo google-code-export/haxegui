@@ -54,6 +54,10 @@ import hscript.Parser;
 //}}}
 
 
+using haxegui.controls.Component;
+using haxegui.utils.Color;
+
+
 /**
 *
 * Console for debugging, one [TextField] tracing messages and another parsing hscript.<br/>
@@ -119,9 +123,18 @@ class Console extends Window, implements ILogger {
 	var vert : ScrollBar;
 	//}}}
 
+	static var xml = Xml.parse(
+	'
+	<haxegui:Layout name="ColorPicker">
+		<haxegui:containers:Container name="Container">
+			<haxegui:controls:ScrollBar name="ScrollBar" color="0x444444" scroll="1"/>
+		</haxegui:containers:Container>
+	</haxegui:Layout>
+	').firstElement();
+
 
 	//{{{ Constructor
-	public override function new (parent:DisplayObjectContainer=null, name:String=null, ?x:Float, ?y:Float) {
+	public override function new (?parent:DisplayObjectContainer=null, ?name:String=null, ?x:Float, ?y:Float) {
 		super(parent, "Console", x, y);
 	}
 	//}}}
@@ -132,14 +145,19 @@ class Console extends Window, implements ILogger {
 	public override function init(?opts:Dynamic) {
 		type = WindowType.ALWAYS_ON_TOP;
 
+		xml.set("name", name);
+
+		XmlParser.apply(Console.xml, this);
+
 
 		super.init(opts);
 
 		box = new Size(640, 260).toRect();
 
 
-		container = new Container(this, "Container", 10, 20);
-		container.init();
+		// container = new Container(this, "Container", 10, 20);
+		// container.init();
+		container = cast this.getChildByName("Container");
 
 
 		// Output TextField for trace and log messages
@@ -157,6 +175,7 @@ class Console extends Window, implements ILogger {
 		output.mouseEnabled = true;
 		output.focusRect = true;
 		output.tabEnabled = true;
+		output.mouseWheelEnabled = true;
 		output.defaultTextFormat = DefaultStyle.getTextFormat();
 
 
@@ -174,19 +193,22 @@ class Console extends Window, implements ILogger {
 
 
 		// Container
-		container.init({
-			color: Opts.optInt(opts,"bgcolor", 0x222222),
-			alpha: Opts.optFloat(opts, "bgalpha", 0.85),
-		});
+		container.color = Opts.optInt(opts,"bgcolor", Color.BLACK.tint(.9));
+		container.alpha = Opts.optFloat(opts, "bgalpha", 0.85);
+
 
 		container.addChild(output);
 		container.addChild(input);
 
 		// Vertical Scrollbar
-		vert = new ScrollBar(container, "vscrollbar");
-		vert.init({target : output, color: this.color});
+		// vert = new ScrollBar(container, "vscrollbar");
+		// vert.init({target : output, color: this.color});
+		vert = cast container.getChildByName("ScrollBar");
+		vert.color = this.color;
+		vert.scrollee = output;
 		vert.removeEventListener(ResizeEvent.RESIZE, vert.onParentResize);
-
+		// vert.removeEventListener(Event.SCROLL, vert.onTextFieldScrolled);
+		// output.addEventListener(MouseEvent.MOUSE_WHEEL, onScroll, false, 0, true);
 
 		// Shell
 		pwd 	= ["root"];
@@ -222,28 +244,53 @@ class Console extends Window, implements ILogger {
 				case "/":
 				self.pwd = ["root"];
 				default:
+				var tmpPwd = new Array<String>().concat(self.pwd);
+				tmpPwd.push(v);
+
+				var o = cast flash.Lib.current;
+				for(i in 1...tmpPwd.length) {
+				if(o.getChildByName(tmpPwd[i])==null) return v+": No such object";
+				o = cast(o.getChildByName(tmpPwd[i]), flash.display.DisplayObjectContainer);
+				self._pwd = cast o;
+				}
+
 				self.pwd.push(v);
 			}
-
-			var o = cast flash.Lib.current;
-			for(i in 1...self.pwd.length)
-			o = cast(o.getChildByName(self.pwd[i]), flash.display.DisplayObjectContainer);
-			self._pwd = cast o;
-
 			return self.pwd.join(".");
 		});
 
 
-		interp.variables.set( "ls", function(?v,?h) {
+		interp.variables.set( "ls", function(?d,?v) {
+			// trace(v+" "+h);
+
 			var o = cast flash.Lib.current;
 			for(i in 1...self.pwd.length)
 			o = untyped o.getChildByName(self.pwd[i]);
-			var txt="";
+
+			// if(d!=null && d!="")
+			// o = untyped o.getChildByName(d);
+
+			var txt="\n";
+			if(v)
 			for(i in 0...o.numChildren) {
-				var c = o.getChildAt(i);
-				txt += c.name + "\t";
+				if(Std.is(o.getChildAt(i), Component)) {
+				txt += StringTools.lpad(o.getChildAt(i).created, " ", 6) + "\t";
+				txt += StringTools.lpad(o.getChildAt(i).id, " ", 6) + "\t";
+				}
+				else
+				txt += StringTools.lpad("", " ", 12) + "\t\t";
+
+				txt += StringTools.rpad(o.getChildAt(i).name, " ", 25) + "\t";
+				txt += Type.getClassName(Type.getClass(o.getChildAt(i)));
+				txt += "\n";
+			}
+			else
+			for(i in 0...o.numChildren) {
+				txt += o.getChildAt(i).name + "\t";
 				txt += "\t";
 			}
+
+
 			trace(txt);
 		});
 
@@ -272,9 +319,20 @@ class Console extends Window, implements ILogger {
 		vert.down.y = Math.max( 20, box.height - 40);
 		vert.dirty = true;
 		vert.frame.dirty = true;
+		vert.handle.y = Math.min( vert.handle.y, vert.box.height - vert.handle.box.height - 20 );
+		vert.handle.y = Math.max( vert.handle.y, 20 );
+
 	}
 	//}}}
 
+	public function onScroll(e:MouseEvent) {
+		 // trace(e);
+		 // vert.adjustment.setValue(output.scrollV/output.maxScrollV);
+		 // e.preventDefault();
+
+		 // vert.adjust(output.scrollV/output.maxScrollV);
+
+	}
 
 	//{{{ onInputKeyDown
 	/** Process keyboard input **/
@@ -290,9 +348,16 @@ class Console extends Window, implements ILogger {
 			// text replacement for shell functions
 			if(input.text.substr(0,2)=="ls") {
 				var args = input.text.split(" ");
-				var dir = args.pop();
-				//for(a in args)
-				input.text="ls('"+dir+"',"+Lambda.has(args, "-l")+")";
+				args.reverse();
+
+				var dir = null;
+				// dir = args.pop();
+
+				var la = false;
+				for(a in args)
+				if(a=="-l" || a=="-la") la=true;
+
+				input.text="ls('"+dir+"',"+la+")";
 			}
 
 
@@ -304,14 +369,23 @@ class Console extends Window, implements ILogger {
 
 			// convert shell commands to functions
 			if(input.text=="clear") input.text="clear()";
-			if(input.text=="dir") input.text="dir()";
-			if(input.text=="get") input.text="get()";
+			if(input.text=="dir") 	input.text="dir()";
+			if(input.text=="get") 	input.text="get()";
 
 			// set the program
 			var program = parser.parseString(input.text);
 
 			// set the current pwd
 			interp.variables.set("this", getPwd());
+
+			// this exports children
+			for(i in 0...getPwd().numChildren)
+				interp.variables.set( getPwd().getChildAt(i).name, getPwd().getChildAt(i));
+
+
+			// this exports members
+			for(f in Reflect.fields(getPwd()))
+				interp.variables.set(f, Reflect.field(getPwd(),f));
 
 			// clear the command and push to history
 			history.push(input.text);
@@ -416,7 +490,7 @@ class Console extends Window, implements ILogger {
 		var text = "\n";
 		var commands = {
 			pwd 	 : "\tcurrent path",
-			cd 		 : "\tpush an object name to current path, ex. cd('Component'), cd('..'), cd('/') ",
+			cd 		 : "\tpush an object name to current path, ex. cd Component, cd .., cd /",
 			ls		 : "\tprints current object",
 			get 	 : "\tgrab the path target from next mouse click",
 			dir		 : "\tprints the interpreter's variables list",

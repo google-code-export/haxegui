@@ -20,6 +20,7 @@
 package haxegui.controls;
 
 //{{{ Imports
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.geom.Rectangle;
 import haxegui.controls.AbstractButton;
@@ -95,7 +96,7 @@ class Button extends AbstractButton, implements IAdjustable {
 
 
 	/**
-	* when true button will stay pressed when clicked and raise back on the next click.<br>
+	* when true button will stay pressed when clicked and raise back on the next click.<br/>
 	* use the [selected] property to tell if it is pressed or not.
 	* @see selected
 	**/
@@ -104,7 +105,7 @@ class Button extends AbstractButton, implements IAdjustable {
 
 	/**
 	* true when is pressed.<br/>
-	* Notice when using hscript, selected is not available in direct access, use the getter and setter.
+	* Notice that when using hscript, [selected] is not available in direct access, use the getter and setter.
 	* @see selected
 	**/
 	public var selected( __getSelected, __setSelected ) : Bool;
@@ -123,6 +124,7 @@ class Button extends AbstractButton, implements IAdjustable {
 	override public function init(opts:Dynamic=null) {
 		box = new Size(90,30).toRect();
 		color = DefaultStyle.BACKGROUND;
+		minSize = new Size(24,24);
 		mouseChildren = false;
 
 
@@ -141,6 +143,7 @@ class Button extends AbstractButton, implements IAdjustable {
 		if(Opts.optString(opts, "label", null)!=null) {
 			label = new Label(this);
 			label.init({text : Opts.optString(opts, "label", name)});
+			minSize.width = Std.int(Math.max( minSize.width, label.tf.width ));
 		}
 
 
@@ -171,9 +174,9 @@ class Button extends AbstractButton, implements IAdjustable {
 			redraw();
 			dirty = false;
 			this.graphics.clear();
-			setAction("mouseOut", "event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
-			setAction("mouseUp", "event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
-			setAction("mouseOver","this.redraw();");
+			setAction("mouseOut",  "event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
+			setAction("mouseUp",   "event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
+			setAction("mouseOver", "this.redraw();");
 		}
 	}
 	//}}}
@@ -246,13 +249,36 @@ class PushButton extends Button {
 * Button with a color sprite, opens a color picked on click<br/>
 **/
 class Swatch extends Button {
+
+	public var sprite : Sprite;
+	public var _color: UInt;
+
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(opts==null) opts = {};
 		Reflect.setField(opts, "toggle", true);
+
+		_color = Opts.optInt(opts, "_color", color);
+
 		super.init(opts);
+
+
+		sprite = new Sprite();
+		sprite.filters = [new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, flash.filters.BitmapFilterQuality.HIGH, true, false, false )];
+
+		addChild(sprite);
 	}
 	//}}}
+
+	public override function redraw(?opts:Dynamic) {
+		super.redraw(opts);
+		if(sprite==null) return;
+		sprite.graphics.clear();
+		sprite.graphics.lineStyle(1, Color.darken(color, 20), 1, flash.display.LineScaleMode.NONE);
+		sprite.graphics.beginFill(_color);
+		sprite.graphics.drawRect(4,4,box.width-8, box.height-8);
+		sprite.graphics.endFill();
+	}
 
 	//{{{ __init__
 	static function __init__() {

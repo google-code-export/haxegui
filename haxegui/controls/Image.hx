@@ -48,12 +48,12 @@ import haxegui.utils.Opts;
 * image.init({src: "http://www..."});
 * </pre>
 *
-* @version 0.1
+* @version 0.2
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class Image extends Component
-{
+class Image extends Component {
+
 	//{{{ Members
 	/** url **/
 	public var src : String;
@@ -83,6 +83,7 @@ class Image extends Component
 		//
 		var context = new LoaderContext();
 		context.checkPolicyFile = true;
+
 		//
 		flash.system.Security.allowDomain("*");
 		flash.system.Security.loadPolicyFile(Haxegui.baseURL+"crossdomain.xml");
@@ -99,23 +100,29 @@ class Image extends Component
 	}
 	//}}}
 
+
 	//{{{ onComplete
 	function onComplete(e:Event) {
 		bitmap = e.currentTarget.content ;
 		aspect = bitmap.width / bitmap.height;
+
 		addChild(bitmap);
 		dispatchEvent(e);
+
 		if(box.isEmpty()) return;
+
 		bitmap.width = box.width;
 		bitmap.height = box.height;
 	}
 	//}}}
+
 
 	//{{{ onError
 	function onError(e:IOErrorEvent) {trace(e);
 		trace(e);
 	}
 	//}}}
+
 
 	//{{{ __init__
 	static function __init__() {haxegui	.Haxegui.register(Image);
@@ -145,15 +152,15 @@ class Image extends Component
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class Icon extends Image
-{
+class Icon extends Image {
+
 	//{{{ Members
 	//{{{ Public
 	/** baseURL relative icon path **/
-	public static var iconDirectory : String = "assets/icons/";
+	public static var iconDirectory				 : String = "assets/icons/";
 
 	/** Theme **/
-	public static var iconTheme : String = "tango";
+	public static var iconTheme 				 : String = "tango";
 	//}}}
 
 
@@ -186,8 +193,10 @@ class Icon extends Image
 	//{{{ init
 	override public function init(?opts:Dynamic=null) : Void {
 		if(opts==null) opts = {};
+
 		src = Opts.optString(opts, "src", src);
 		src = Haxegui.baseURL + iconDirectory + src;
+
 		super.init({src: src});
 	}
 	//}}}

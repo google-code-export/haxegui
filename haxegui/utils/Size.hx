@@ -73,6 +73,13 @@ class Size {
 	//}}}
 
 
+	//{{{ isValid
+	public static function isValid(s) : Bool {
+		return s.valid();
+	}
+	//}}}
+
+
 	//{{{ empty
 	public function empty() : Bool {
 		return equal(this, new Size());
@@ -80,11 +87,6 @@ class Size {
 	//}}}
 
 
-	//{{{ isValid
-	public function isValid() : Bool {
-		return valid();
-	}
-	//}}}
 
 
 	//{{{ valid

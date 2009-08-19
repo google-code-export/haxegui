@@ -3,29 +3,31 @@ digraph uml {
 	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
 	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
 	graph [lp="163,12",
-		bb="0,0,326,871"];
+		bb="0,0,326,925"];
 	"haxegui.managers.WindowManager" [label="{\nWindowManager}", fillcolor=white, URL="../types/haxegui/managers/WindowManager.html", tooltip="\nWindowManager", portPos=w, pos="243,313", rects="205,295,282,331", width="1.06", height="0.50"];
 	"flash.events.EventDispatcher" [fontcolor=black, pos="62,178", rects="1,160,124,196", width="1.69", height="0.50"];
 	"haxegui.managers.DragManager" [label="{\nDragManager}", fillcolor=white, URL="../types/haxegui/managers/DragManager.html", tooltip="\nDragManager", portPos=w, pos="243,259", rects="210,241,276,277", width="0.92", height="0.50"];
 	"haxegui.managers.Cursor" [label="{\nCursor|WE\lSIZE_ALL\lNWSE\lNS\lNESW\lIBEAM\lHAND2\lHAND\lDRAG\lCROSSHAIR\lARROW\l}", fillcolor="#af8dc3", fontcolor=black, pos="243,397", rects="192,349,234,445 234,349,295,445", width="1.42", height="1.33"];
 	"haxegui.managers.CursorManager" [label="{\nCursorManager}", fillcolor=white, URL="../types/haxegui/managers/CursorManager.html", tooltip="\nCursorManager", portPos=w, pos="243,205", rects="206,187,281,223", width="1.03", height="0.50"];
 	"haxegui.managers.FocusManager" [label="{\nFocusManager}", fillcolor=white, URL="../types/haxegui/managers/FocusManager.html", tooltip="\nFocusManager", portPos=w, pos="243,151", rects="208,133,279,169", width="0.97", height="0.50"];
+	"haxegui.managers.DwellIndicator" [label="{\nDwellIndicator}", fillcolor=white, URL="../types/haxegui/managers/DwellIndicator.html", tooltip="\nDwellIndicator", portPos=w, pos="243,535", rects="210,517,277,553", width="0.92", height="0.50"];
+	"haxegui.controls.Component" [fontcolor=black, pos="62,508", rects="2,490,122,526", width="1.67", height="0.50"];
 	"haxegui.managers.MouseManager" [label="{\nMouseManager}", fillcolor=white, URL="../types/haxegui/managers/MouseManager.html", tooltip="\nMouseManager", portPos=w, pos="243,97", rects="207,79,279,115", width="1.00", height="0.50"];
-	"haxegui.managers.StyleManager" [label="{\nStyleManager}", fillcolor=white, URL="../types/haxegui/managers/StyleManager.html", tooltip="\nStyleManager", portPos=w, pos="243,481", rects="210,463,277,499", width="0.92", height="0.50"];
-	"haxegui.managers.DefaultStyle" [label="{\nDefaultStyle}", fillcolor=white, URL="../types/haxegui/managers/DefaultStyle.html", tooltip="\nDefaultStyle", portPos=w, pos="243,535", rects="212,517,274,553", width="0.86", height="0.50"];
+	"haxegui.managers.StyleManager" [label="{\nStyleManager}", fillcolor=white, URL="../types/haxegui/managers/StyleManager.html", tooltip="\nStyleManager", portPos=w, pos="243,589", rects="210,571,277,607", width="0.92", height="0.50"];
+	"haxegui.managers.DefaultStyle" [label="{\nDefaultStyle}", fillcolor=white, URL="../types/haxegui/managers/DefaultStyle.html", tooltip="\nDefaultStyle", portPos=w, pos="243,643", rects="212,625,274,661", width="0.86", height="0.50"];
 	"haxegui.managers.ColorTheme" [label="{\nColorTheme|TOOLTIP : UInt\lPROGRESS_BAR : UInt\lLABEL_TEXT : UInt\lINPUT_TEXT : UInt\lINPUT_BACK : UInt\lFOCUS : UInt\lDROPSH\
-ADOW : UInt\lBACKGROUND : UInt\lACTIVE_TITLEBAR : UInt\l}", fillcolor="#ffffbf", fontcolor=black, pos="243,611", rects="161,571,221,651 221,571,326,651", width="2.28", height="1.11"];
-	"haxegui.managers.ScriptObject" [label="{\nScriptObject|setup () : hscript.Interp\lprogram : hscript.Expr\linterp : hscript.Interp\lcode : String\l}", fillcolor="#ffffbf", fontcolor=black, pos="243,689", rects="161,669,224,709 224,669,325,709", width="2.28", height="0.56"];
-	"haxegui.managers.ScriptManager" [label="{\nScriptManager}", fillcolor=white, URL="../types/haxegui/managers/ScriptManager.html", tooltip="\nScriptManager", portPos=w, pos="243,745", rects="208,727,279,763", width="0.97", height="0.50"];
-	"haxegui.managers.Tooltip" [label="{\nTooltip}", fillcolor=white, URL="../types/haxegui/managers/Tooltip.html", tooltip="\nTooltip", portPos=w, pos="243,799", rects="216,781,270,817", width="0.75", height="0.50"];
-	"haxegui.controls.Component" [fontcolor=black, pos="62,799", rects="2,781,122,817", width="1.67", height="0.50"];
+ADOW : UInt\lBACKGROUND : UInt\lACTIVE_TITLEBAR : UInt\l}", fillcolor="#ffffbf", fontcolor=black, pos="243,719", rects="161,679,221,759 221,679,326,759", width="2.28", height="1.11"];
+	"haxegui.managers.ScriptObject" [label="{\nScriptObject|setup () : hscript.Interp\lprogram : hscript.Expr\linterp : hscript.Interp\lcode : String\l}", fillcolor="#ffffbf", fontcolor=black, pos="243,797", rects="161,777,224,817 224,777,325,817", width="2.28", height="0.56"];
+	"haxegui.managers.ScriptManager" [label="{\nScriptManager}", fillcolor=white, URL="../types/haxegui/managers/ScriptManager.html", tooltip="\nScriptManager", portPos=w, pos="243,853", rects="208,835,279,871", width="0.97", height="0.50"];
+	"haxegui.managers.Tooltip" [label="{\nTooltip}", fillcolor=white, URL="../types/haxegui/managers/Tooltip.html", tooltip="\nTooltip", portPos=w, pos="243,481", rects="216,463,270,499", width="0.75", height="0.50"];
 	"haxegui.managers.TooltipManager" [label="{\nTooltipManager}", fillcolor=white, URL="../types/haxegui/managers/TooltipManager.html", tooltip="\nTooltipManager", portPos=w, pos="243,43", rects="207,25,279,61", width="1.00", height="0.50"];
-	"haxegui.managers.LayoutManager" [label="{\nLayoutManager}", fillcolor=white, URL="../types/haxegui/managers/LayoutManager.html", tooltip="\nLayoutManager", portPos=w, pos="243,853", rects="206,835,280,871", width="1.03", height="0.50"];
+	"haxegui.managers.LayoutManager" [label="{\nLayoutManager}", fillcolor=white, URL="../types/haxegui/managers/LayoutManager.html", tooltip="\nLayoutManager", portPos=w, pos="243,907", rects="206,889,280,925", width="1.03", height="0.50"];
 	"haxegui.managers.WindowManager" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,74,196 205,306 190,301 173,295 160,286 126,265 97,229 80,204"];
 	"haxegui.managers.DragManager" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,91,196 210,250 194,245 176,239 160,232 140,223 118,212 100,201"];
 	"haxegui.managers.CursorManager" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,124,187 206,199 186,196 159,192 134,188"];
 	"haxegui.managers.FocusManager" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,124,169 208,156 187,160 159,163 134,167"];
+	"haxegui.managers.DwellIndicator" -> "haxegui.controls.Component" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,122,517 210,530 189,526 159,522 132,518"];
 	"haxegui.managers.MouseManager" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,92,160 207,107 192,112 175,118 160,124 140,133 118,145 101,155"];
-	"haxegui.managers.Tooltip" -> "haxegui.controls.Component" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,122,799 216,799 194,799 162,799 132,799"];
+	"haxegui.managers.Tooltip" -> "haxegui.controls.Component" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,122,499 216,485 194,489 161,493 132,497"];
 	"haxegui.managers.TooltipManager" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,74,160 207,50 191,55 174,61 160,70 126,92 97,127 80,152"];
 }

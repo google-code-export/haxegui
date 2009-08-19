@@ -28,6 +28,7 @@ import flash.events.MouseEvent;
 import flash.events.TextEvent;
 import flash.geom.Rectangle;
 import haxegui.Haxegui;
+import haxegui.XmlParser;
 import haxegui.controls.Component;
 import haxegui.controls.Component;
 import haxegui.controls.IAdjustable;
@@ -54,8 +55,9 @@ using haxegui.controls.Component;
 * A Button with an arrow pointing up.<br/>
 */
 class StepperUpButton extends Button, implements IComposite {
+
 	public var arrow : Arrow;
-	//{{{ Functions
+
 	//{{{ init
 	/**
 	* @throws String when not parented to a [Stepper]
@@ -63,7 +65,11 @@ class StepperUpButton extends Button, implements IComposite {
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, Stepper)) throw parent+" not a Stepper";
 		mouseChildren = false;
+		minSize = new Size(16,10);
+
 		super.init(opts);
+
+
 		arrow = new haxegui.toys.Arrow(this);
 		arrow.init({ color: color.darken(20), width: .5*parent.asComponent().box.height-6, height: 8 });
 		arrow.rotation = -90;
@@ -78,7 +84,6 @@ class StepperUpButton extends Button, implements IComposite {
 
 	}
 	//}}}
-	//}}}
 }
 //}}}
 
@@ -91,7 +96,6 @@ class StepperDownButton extends Button, implements IComposite {
 
 	public var arrow : Arrow;
 
-	//{{{ Functions
 	//{{{ init
 	/**
 	* @throws String when not parented to a [Stepper]
@@ -99,7 +103,12 @@ class StepperDownButton extends Button, implements IComposite {
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, Stepper)) throw parent+" not a Stepper";
 		mouseChildren = false;
+		minSize = new Size(16,10);
+
+
 		super.init(opts);
+
+
 		arrow = new haxegui.toys.Arrow(this);
 		arrow.init({ color: haxegui.utils.Color.darken(this.color, 20), width: .5*(cast this.parent).box.height-6, height: 8 });
 		arrow.rotation = 90;
@@ -112,7 +121,6 @@ class StepperDownButton extends Button, implements IComposite {
 	static function __init__() {
 		haxegui.Haxegui.register(StepperDownButton);
 	}
-	//}}}
 	//}}}
 }
 //}}}
@@ -128,13 +136,25 @@ class StepperDownButton extends Button, implements IComposite {
 * @version 0.1
 */
 class Stepper extends Component, implements IAdjustable {
+
 	//{{{ Members
+	public var adjustment 	: Adjustment;
 	public var up 			: StepperUpButton;
 	public var down 		: StepperDownButton;
 	public var input 		: Input;
-	public var adjustment 	: Adjustment;
 	public var slot 	  	: Socket;
+
+
+	static var xml = Xml.parse(
+	'
+	<haxegui:Layout name="Stepper">
+		<haxegui:controls:Input/>
+		<haxegui:controls:StepperUpButton/>
+		<haxegui:controls:StepperDownButton/>
+	</haxegui:Layout>
+	').firstElement();
 	//}}}
+
 
 	//{{{ Functions
 	//{{{ init
@@ -142,11 +162,12 @@ class Stepper extends Component, implements IAdjustable {
 		//adjustment = new Adjustment({ value: 0, min: 0, max: 100, step: 1, page: 10 });
 		adjustment = new Adjustment(Adjustment.newAdjustmentObject(Int));
 		box = new Size(40, 20).toRect();
+		minSize = new Size(20,20);
 		color = DefaultStyle.BACKGROUND;
 
-		input = new Input(this);
-		up = new StepperUpButton(this);
-		down = new StepperDownButton(this);
+		// input = new Input(this);
+		// up = new StepperUpButton(this);
+		// down = new StepperDownButton(this);
 
 		var aOpts = Opts.clone(opts);
 
@@ -162,6 +183,11 @@ class Stepper extends Component, implements IAdjustable {
 		super.init(aOpts);
 
 
+		xml.set("name", name);
+
+		XmlParser.apply(Stepper.xml, this);
+
+
 		// since we removed fields, reset the initOpts
 		this.initOpts = Opts.clone(opts);
 
@@ -170,10 +196,14 @@ class Stepper extends Component, implements IAdjustable {
 		Opts.optFloat(bOpts, "repeatsPerSecond", 50);
 		Opts.optFloat(bOpts, "repeatWaitTime", .75);
 
+		input = getElementsByClass(Input).next();
 		// init children
-		input.init({text: adjustment.object.value, width: box.width, height: box.height, disabled: this.disabled });
-		up.init(bOpts);
-		down.init(bOpts);
+		// input.init({text: adjustment.object.value, width: box.width, height: box.height, disabled: this.disabled });
+		input.box = box.clone();
+		input.setText(adjustment.object.value);
+
+		// up.init(bOpts);
+		// down.init(bOpts);
 
 		// this prevents too many glow filters
 		input.setAction("focusIn", "");
@@ -202,7 +232,6 @@ class Stepper extends Component, implements IAdjustable {
 		switch(e.keyCode) {
 			case flash.ui.Keyboard.ENTER:
 			adjustment.setValue(Std.parseFloat(e.target.text));
-			//adjustment.value = Std.parseFloat(e.target.text);
 		}
 	}
 	//}}}
@@ -223,10 +252,16 @@ class Stepper extends Component, implements IAdjustable {
 	private function onInputResized(e:ResizeEvent) {
 		box = input.box.clone();
 		up.moveTo(box.width-10, 0);
-		down.moveTo(box.width-10, up.box.height);
+		down.moveTo(box.width-10, .5*up.box.height);
 		up.dirty = down.dirty = true;
 	}
 	//}}}
+
+
+	public override function onResize(e:ResizeEvent) {
+		super.onResize(e);
+		input.dispatchEvent(e);
+	}
 
 
 	//{{{ onChanged

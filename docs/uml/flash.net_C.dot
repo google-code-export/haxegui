@@ -3,13 +3,15 @@ digraph uml {
 	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
 	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
 	graph [lp="215,12",
-		bb="0,0,430,225"];
+		bb="0,0,430,333"];
 	"flash.net.URLRequestHeader" [label="{\nURLRequestHeader}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/URLRequestHeader.html", tooltip="\nURLRequestHeader", pos="49,99", rects="1,81,98,117", width="1.33", height="0.50"];
 	"flash.net.URLRequest" [label="{\nURLRequest}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/URLRequest.html", tooltip="\nURLRequest", pos="220,99", rects="187,81,253,117", width="0.92", height="0.50"];
 	"flash.net.URLLoader" [label="{\nURLLoader}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/URLLoader.html", tooltip="\nURLLoader", pos="386,44", rects="356,26,417,62", width="0.83", height="0.50"];
 	"flash.net.URLLoaderDataFormat" [label="{\nURLLoaderDataFormat|VARIABLES\lTEXT\lBINARY\l}", style="rounded,filled", fillcolor="#af8dc3", pos="220,44", rects="135,25,246,63 246,25,306,63", width="2.36", height="0.53"];
-	"flash.net.FileReferenceList" [label="{\nFileReferenceList}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/FileReferenceList.html", tooltip="\nFileReferenceList", pos="386,153", rects="343,135,430,171", width="1.19", height="0.50"];
-	"flash.net.FileFilter" [label="{\nFileFilter}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/FileFilter.html", tooltip="\nFileFilter", pos="386,207", rects="359,189,413,225", width="0.75", height="0.50"];
+	"flash.net.XMLSocket" [label="{\nXMLSocket}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/XMLSocket.html", tooltip="\nXMLSocket", pos="386,153", rects="356,135,417,171", width="0.83", height="0.50"];
+	"flash.net.FileReferenceList" [label="{\nFileReferenceList}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/FileReferenceList.html", tooltip="\nFileReferenceList", pos="386,207", rects="343,189,430,225", width="1.19", height="0.50"];
+	"flash.net.URLVariables" [label="{\nURLVariables}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/URLVariables.html", tooltip="\nURLVariables", pos="386,261", rects="351,243,421,279", width="0.97", height="0.50"];
+	"flash.net.FileFilter" [label="{\nFileFilter}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/FileFilter.html", tooltip="\nFileFilter", pos="386,315", rects="359,297,413,333", width="0.75", height="0.50"];
 	"flash.net.FileReference" [label="{\nFileReference}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/net/FileReference.html", tooltip="\nFileReference", pos="386,99", rects="350,81,422,117", width="1.00", height="0.50"];
 	"flash.net.URLRequest" -> "flash.net.URLRequestHeader" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,187,99 175,99 151,99 123,99 98,99"];
 	"flash.net.URLLoader" -> "flash.net.URLLoaderDataFormat" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,356,44 344,44 332,44 319,44 306,44"];

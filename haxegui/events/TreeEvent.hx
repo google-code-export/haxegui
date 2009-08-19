@@ -21,23 +21,25 @@ package haxegui.events;
 
 import flash.events.Event;
 
-class TooltipEvent extends Event {
+
+class TreeEvent extends Event {
 
 	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool) : Void {
 		super(type, bubbles, cancelable);
 	}
 
 	public override function toString():String {
-		return "["+"TooltipEvent"+" type=\""+type+"\" bubbles="+bubbles+" cancelable="+cancelable+" oldX="+oldX+" oldY="+oldY+"]";
+		return "["+"TreeEvent"+" type=\""+type+"\" bubbles="+bubbles+" cancelable="+cancelable+"]";
 	}
 
 	override public function clone():Event {
-		return new TooltipEvent(this.type, this.bubbles, this.cancelable);
+		return new TreeEvent(this.type, this.bubbles, this.cancelable);
 	}
 
-	public var relatedObject : flash.display.InteractiveObject;
+	// public var relatedObject : flash.display.InteractiveObject;
 
-	public static var SHOW   : String = "show";
-	public static var HIDE   : String = "hide";
-	public static var UPDATE : String = "update";
+	public static var ITEM_CLOSE 	: String = "item_close";
+	public static var ITEM_OPEN 	: String = "item_open";
+	public static var ITEM_OPENING : String = "item_openning";
+	public static var ITEM_CLOSING : String = "item_closing";
 }
