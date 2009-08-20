@@ -145,12 +145,11 @@ class Stepper extends Component, implements IAdjustable {
 	public var slot 	  	: Socket;
 
 
-	static var xml = Xml.parse(
-	'
+	static var xml = Xml.parse('
 	<haxegui:Layout name="Stepper">
-		<haxegui:controls:Input/>
-		<haxegui:controls:StepperUpButton/>
-		<haxegui:controls:StepperDownButton/>
+		<haxegui:controls:Input text="{parent.adjustment.getValue()}"/>
+		<haxegui:controls:StepperUpButton color="{parent.color}"/>
+		<haxegui:controls:StepperDownButton color="{parent.color}"/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
@@ -200,7 +199,7 @@ class Stepper extends Component, implements IAdjustable {
 		// init children
 		// input.init({text: adjustment.object.value, width: box.width, height: box.height, disabled: this.disabled });
 		input.box = box.clone();
-		input.setText(adjustment.object.value);
+		// input.setText(adjustment.object.value);
 
 		// up.init(bOpts);
 		// down.init(bOpts);

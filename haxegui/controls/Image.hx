@@ -195,9 +195,16 @@ class Icon extends Image {
 		if(opts==null) opts = {};
 
 		src = Opts.optString(opts, "src", src);
+
+		// for(f in Reflect.fields(this)) {
+		// 	if(f==src) src = Reflect.field(this, src);
+		// trace(f);
+		// }
 		src = Haxegui.baseURL + iconDirectory + src;
 
 		super.init({src: src});
+
+		moveTo(Opts.optFloat(opts, "x", x), Opts.optFloat(opts, "y", y));
 	}
 	//}}}
 

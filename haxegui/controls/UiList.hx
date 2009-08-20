@@ -44,6 +44,7 @@ import haxegui.toys.Arrow;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
+import haxegui.XmlParser;
 //}}}
 
 
@@ -67,6 +68,17 @@ class ListHeader extends AbstractButton, implements IComposite {
 	public var seperators : Array<Seperator>;
 	public var arrow : Arrow;
 
+	static var xml = Xml.parse('
+	<haxegui:Layout name="ListHeader">
+	<haxegui:controls:Label x="4" y="2" text="{parent.name}"/>
+		<haxegui:toys:Arrow
+			width="8"
+			height="8"
+			color="{Color.darken(parent.color, 20)}"
+			rotation="{parent.parent.sortReverse ? -90 : 90}"/>
+	</haxegui:Layout>
+	').firstElement();
+
 	//{{{  init
 	/**
 	* @throws String when not parented to a [UiList]
@@ -77,15 +89,21 @@ class ListHeader extends AbstractButton, implements IComposite {
 
 		super.init(opts);
 
+		xml.set("name", name);
 
-		labels = [new Label(this)];
-		labels[0].init({text : name});
-		labels[0].moveTo(4,4);
+		XmlParser.apply(ListHeader.xml, this);
 
 
-		arrow = new Arrow(this);
-		arrow.init({ width: 8, height: 8, color: haxegui.utils.Color.darken(this.color, 20)});
-		arrow.rotation = (cast parent).sortReverse ? -90 : 90;
+		// labels = [new Label(this)];
+		labels = [cast firstChild()];
+		// labels[0].init({text : name});
+		// labels[0].moveTo(4,4);
+
+
+		// arrow = new Arrow(this);
+		// arrow.init({ width: 8, height: 8, color: haxegui.utils.Color.darken(this.color, 20)});
+		arrow = cast firstChild().asComponent().nextSibling();
+		// arrow.rotation = (cast parent).sortReverse ? -90 : 90;
 		//~ arrow.moveTo((cast parent).box.width - 10, 10);
 		arrow.moveTo( labels[0].x + labels[0].width + 10, 10);
 
@@ -171,6 +189,13 @@ class ListItem extends AbstractButton, implements IRubberBand, implements IAggre
 	var oldPos : flash.geom.Point;
 	var oldParent : flash.display.DisplayObjectContainer;
 
+	static var xml = Xml.parse('
+	<haxegui:Layout name="ListHeader">
+	<haxegui:controls:Label x="4" y="4"/>
+	</haxegui:Layout>
+	').firstElement();
+
+
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, UiList) && !Std.is(parent, PopupMenu)) throw parent+" not a UiList";
@@ -180,14 +205,16 @@ class ListItem extends AbstractButton, implements IRubberBand, implements IAggre
 
 		super.init(opts);
 
+		xml.set("name", name);
+
+		XmlParser.apply(ListItem.xml, this);
+
 
 		description = null;
 
 
-		label = new Label(this);
-		label.init({text: Opts.optString(opts, "label", name), color: DefaultStyle.INPUT_TEXT });
-		label.move(4,4);
-		label.mouseEnabled = false;
+		label = cast firstChild();
+		label.setText(Opts.optString(opts, "label", name));
 
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);

@@ -30,6 +30,7 @@ import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.Rectangle;
 import haxegui.DataSource;
+import haxegui.XmlParser;
 import haxegui.controls.Button;
 import haxegui.controls.Component;
 import haxegui.controls.IAdjustable;
@@ -65,8 +66,20 @@ using haxegui.utils.Color;
 */
 class ComboBoxDropButton extends PushButton, implements IComposite {
 
+	//{{{ Members
 	public var arrow : Arrow;
 
+	static var xml = Xml.parse('
+	<haxegui:Layout name="ComboBoxDropButton">
+		<haxegui:toys:Arrow
+			x="6" y="7"
+			width="8" height="8"
+			rotation="90" color="{Color.darken(parent.color, 10)}"/>
+	</haxegui:Layout>
+	').firstElement();
+	//}}}
+
+	//{{{ Functions
 	//{{{ init
 	public override function init(opts:Dynamic=null) {
 		if(!Std.is(parent, ComboBox)) throw parent+" not a ComboBox";
@@ -75,10 +88,16 @@ class ComboBoxDropButton extends PushButton, implements IComposite {
 
 		super.init(opts);
 
-		arrow = new haxegui.toys.Arrow(this);
-		arrow.init({ width: 8, height: 8, color: haxegui.utils.Color.darken(this.color, 10)});
-		arrow.rotation = 90;
-		arrow.move(6,7);
+		xml.set("name", name);
+
+		XmlParser.apply(ComboBoxDropButton.xml, this);
+
+
+		// arrow = new haxegui.toys.Arrow(this);
+		// arrow.init({ width: 8, height: 8, color: haxegui.utils.Color.darken(this.color, 10)});
+		// arrow.rotation = 90;
+		// arrow.move(6,7);
+		arrow = cast firstChild();
 		arrow.mouseEnabled = false;
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
@@ -168,6 +187,7 @@ class ComboBoxDropButton extends PushButton, implements IComposite {
 	static function __init__() {
 		haxegui.Haxegui.register(ComboBoxDropButton);
 	}
+	//}}}
 	//}}}
 }
 //}}}

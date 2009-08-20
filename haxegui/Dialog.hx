@@ -48,8 +48,7 @@ class Dialog extends Window {
 	public var label 	 	: Label;
 	public var buttons   	: Array<Button>;
 
-	static var xml = Xml.parse(
-	'
+	static var xml = Xml.parse('
 	<haxegui:Layout name="Dialog">
 		<haxegui:containers:Container name="Container">
 			<haxegui:containers:Grid rows="2" cols="1">
@@ -67,7 +66,7 @@ class Dialog extends Window {
 	public override function init(?opts:Dynamic=null) {
 		box = new Size(320,160).toRect();
 		type = WindowType.MODAL;
-
+/*
 		if(flash.Lib.current.getChildByName("bitmap")==null) {
 			var bmpd = new flash.display.BitmapData(this.stage.stageWidth, this.stage.stageHeight);
 			bmpd.draw(this.stage);
@@ -86,6 +85,8 @@ class Dialog extends Window {
 			//t.start();
 			haxe.Timer.delay(t.start, 150);
 		}
+*/
+		super.init(opts);
 
 
 		xml.set("name", name);
@@ -95,7 +96,6 @@ class Dialog extends Window {
 		XmlParser.apply(Dialog.xml, this);
 
 
-		super.init(opts);
 
 
 		moveTo(.5*(this.stage.stageWidth-box.width), .5*(this.stage.stageHeight-box.height));

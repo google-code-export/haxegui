@@ -177,6 +177,9 @@ class Main extends Sprite, implements haxe.rtti.Infos {
 		// var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
 		// colorpicker.init();
 
+		// var filedialog = new haxegui.FileDialog(flash.Lib.current, 100, 100);
+		// filedialog.init();
+
 		// rte
 		var rte = new RichTextEditor(flash.Lib.current, 120,120);
 		rte.init();
@@ -184,7 +187,6 @@ class Main extends Sprite, implements haxe.rtti.Infos {
 		// style
 		var appearance = new Appearance(flash.Lib.current, 180,180);
 		appearance.init();
-
 
 		// debugger
 		var introspect = new Introspector(flash.Lib.current, 150,150);

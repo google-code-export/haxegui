@@ -39,6 +39,7 @@ import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
+import haxegui.XmlParser;
 //}}}
 
 
@@ -59,24 +60,35 @@ using haxegui.controls.Component;
 class TreeLeaf extends Component, implements IAggregate {
 
 	/** Leaf icon **/
-	var icon : Icon;
+	// var icon : Icon;
 	/** Default to the name property **/
-	var label : Label;
+	// var label : Label;
+
+	static var xml = Xml.parse('
+	<haxegui:Layout name="TreeLeaf">
+		<haxegui:controls:Icon x="24" y="4" src="'+Icon.STOCK_DOCUMENT+'"/>
+		<haxegui:controls:Label x="24" y="2" text="{parent.name}"/>
+	</haxegui:Layout>
+	').firstElement();
 
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		box = new Size(140,24).toRect();
 		color = DefaultStyle.INPUT_BACK;
-		icon = null;
+		// icon = null;
 
 		super.init(opts);
 
-		label = new Label(this);
-		label.init({text: this.name});
-		label.move(48, 4);
+		xml.set("name", name);
 
-		icon = new Icon(this, 24, 4);
-		icon.init ({src: Opts.optString(opts, "icon", Icon.STOCK_DOCUMENT) });
+		XmlParser.apply(TreeLeaf.xml, this);
+
+		// label = new Label(this);
+		// label.init({text: this.name});
+		// label.move(48, 4);
+
+		// icon = new Icon(this, 24, 4);
+		// icon.init ({src: Opts.optString(opts, "icon", Icon.STOCK_DOCUMENT) });
 
 	}
 	//}}}
@@ -122,6 +134,13 @@ class TreeNode extends Component, implements IAggregate {
 
 	public var selected : Bool;
 
+
+	static var xml = Xml.parse('
+	<haxegui:Layout name="TreeNode">
+	<haxegui:controls:Expander label="{parent.name}" style="arrow_and_icon" expanded="false"/>
+	</haxegui:Layout>
+	').firstElement();
+
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		color = DefaultStyle.INPUT_BACK;
@@ -130,10 +149,14 @@ class TreeNode extends Component, implements IAggregate {
 
 		super.init(opts);
 
+		xml.set("name", name);
 
-		expander = new Expander(this, name);
-		expander.init({style: "arrow_and_icon", expanded: false});
-		expander.label.x += 24;
+		XmlParser.apply(TreeNode.xml, this);
+
+		// expander = new Expander(this, name);
+		// expander.init({style: "arrow_and_icon", expanded: false});
+		expander = cast firstChild();
+		// expander.label.x += 24;
 
 		expander.mouseEnabled = false;
 		expander.removeEventListener(MouseEvent.CLICK, expander.onMouseClick);
@@ -367,7 +390,7 @@ class Tree extends Component, implements IData {
 			if(Reflect.isObject(Reflect.field(o, f))) {
 				if(Std.is(Reflect.field(o, f), String) || Reflect.fields(Reflect.field(o,f)).length==0 )  {
 					var leaf = new TreeLeaf(node, f);
-					leaf.init({x: x+24, y: 24*(node.getChildIndex(leaf)-1), width: box.width-(node.x+x+24), visible: false, color: this.color });
+					leaf.init({x: x+24, y: 24*(node.getChildIndex(leaf)-1), width: box.width-(node.x), visible: false, color: this.color });
 				}
 				else {
 					var treenode = new TreeNode(node, f);

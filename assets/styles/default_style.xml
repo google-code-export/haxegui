@@ -597,6 +597,24 @@
 
 	<haxegui:controls:ComboBox>
 		<events>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
+				/*
+				if(this.color==0 || Math.isNaN(this.color))
+					this.color = DefaultStyle.BACKGROUND;
+				
+				if(this.input != null)
+					this.input.redraw();
+				
+				if(this.background!=null)
+					this.background.redraw();
+				
+				this.dropButton.redraw();
+				
+				this.setChildIndex(this.dropButton, this.numChildren - 1);
+				*/
+			]]>
+			</script>
 		</events>
 	</haxegui:controls:ComboBox>
 

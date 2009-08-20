@@ -25,6 +25,7 @@ import flash.events.FocusEvent;
 import flash.events.MouseEvent;
 import flash.geom.Rectangle;
 import haxegui.Haxegui;
+import haxegui.XmlParser;
 import haxegui.controls.Component;
 import haxegui.controls.Component;
 import haxegui.controls.IAdjustable;
@@ -58,6 +59,9 @@ class SliderHandle extends AbstractButton, implements IAggregate {
 		minSize = Size.fromRect(box);
 		super.init(opts);
 		y = Std.int( (cast parent).box.height - box.height )>>1;
+
+		// add the drop-shadow filters
+		filters = [new flash.filters.DropShadowFilter (disabled ? 1 : 2, 45, DefaultStyle.DROPSHADOW, disabled ? 0.25 : 0.5, 4, 4, disabled ?  0.25 : 0.5, flash.filters.BitmapFilterQuality.LOW, false, false, false )];
 	}
 	//}}}
 
@@ -68,6 +72,7 @@ class SliderHandle extends AbstractButton, implements IAggregate {
 	//}}}
 }
 //}}}
+
 
 //{{{ Slider
 /**
@@ -96,6 +101,13 @@ class Slider extends Component, implements IAdjustable {
 
 	/** true to show value in tooltip while dragging the handle **/
 	public var showToolTip: Bool;
+
+
+	static var xml = Xml.parse('
+	<haxegui:Layout name="Slider">
+	<haxegui:controls:SliderHandle color="{parent.color}"/>
+	</haxegui:Layout>
+	').firstElement();
 	//}}}
 
 	//{{{ Functions
@@ -121,14 +133,15 @@ class Slider extends Component, implements IAdjustable {
 
 		super.init(opts);
 
+		xml.set("name", name);
+
+		XmlParser.apply(Slider.xml, this);
+
 
 		// handle
-		handle = new SliderHandle(this);
-		handle.init({color: this.color, disabled: this.disabled });
 		// handle.moveTo(box.width/2, Std.int(box.height - handle.height )>>1);
+		handle = cast firstChild();
 
-		// add the drop-shadow filters
-		handle.filters = [new flash.filters.DropShadowFilter (disabled ? 1 : 2, 45, DefaultStyle.DROPSHADOW, disabled ? 0.25 : 0.5, 4, 4, disabled ?  0.25 : 0.5, flash.filters.BitmapFilterQuality.LOW, false, false, false )];
 
 		// slot
 		slot = new haxegui.toys.Socket(this);

@@ -83,6 +83,7 @@ class Adjustment extends EventDispatcher {
 	}
 	//}}}
 
+
 	//{{{ setValue
 	public function setValue(v:Float) : Float {object.value = v;
 		object.value = v;
@@ -91,11 +92,13 @@ class Adjustment extends EventDispatcher {
 	}
 	//}}}
 
+
 	//{{{ getValue
 	public function getValue() : Float {return object.value;
 		return object.value;
 	}
 	//}}}
+
 
 	//{{{ getStep
 	public function getStep() : Float {return object.step;
@@ -103,11 +106,13 @@ class Adjustment extends EventDispatcher {
 	}
 	//}}}
 
+
 	//{{{ valueAsString
 	public function valueAsString() : String {return Std.string(getValue());
 		return Std.string(getValue());
 	}
 	//}}}
+
 
 	//{{{ newAdjustmentObject
 	public static function newAdjustmentObject(type:Class<Dynamic>) : AdjustmentObject<Dynamic> {
