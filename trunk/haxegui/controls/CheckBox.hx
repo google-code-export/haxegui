@@ -66,15 +66,27 @@ import haxegui.utils.Size;
 * @author Russell Weir <damonsbane@gmail.com>
 **/
 class CheckBox extends PushButton {
+
+	//{{{ Members
+	static var xml = Xml.parse('
+	<haxegui:Layout name="CheckBox">
+	</haxegui:Layout>
+	').firstElement();
+	//}}}
+
+	//{{{ Functions
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		adjustment = new Adjustment({ value: false, min: false, max: true, step:null, page: null});
 
-
 		super.init(opts);
 
+		box = Size.square(20).toRect();
 
-		box = new Size(20, 20).toRect();
+
+		xml.set("name", name);
+
+		haxegui.XmlParser.apply(CheckBox.xml, this);
 
 
 		mouseChildren = true;
@@ -101,7 +113,7 @@ class CheckBox extends PushButton {
 
 	//{{{ onChanged
 	public function onChanged(e:Event) {
-		trace(e+"\t"+adjustment.valueAsString());
+		// trace(e+"\t"+adjustment.valueAsString());
 		selected = cast adjustment.getValue();
 		redraw();
 	}
@@ -128,6 +140,7 @@ class CheckBox extends PushButton {
 	static function __init__() {
 		haxegui.Haxegui.register(CheckBox);
 	}
+	//}}}
 	//}}}
 }
 //}}}

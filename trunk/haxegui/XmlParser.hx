@@ -24,7 +24,7 @@ package haxegui;
 import haxegui.controls.Component;
 import haxegui.controls.Component;
 import haxegui.managers.ScriptManager;
-
+import haxegui.utils.ScriptStandardLibrary;
 
 /**
 * Style and Layout parser
@@ -36,6 +36,9 @@ import haxegui.managers.ScriptManager;
 class XmlParser {
 
 	private var isStyle : Bool;
+	/** @todo maybe find a different runtime container **/
+	static var GLOBAL_OBJECT = flash.Lib.current;
+
 
 	//{{{ Constructor
 	private function new(xml:Xml, ?parent:Dynamic) {
@@ -48,7 +51,7 @@ class XmlParser {
 			default:		throw "Unhandled xml type: " + typeParts[1];
 		}
 
-		trace(this+": Setting " + typeParts[1].toLowerCase() + " to " + xml.get("name"));
+		// trace(this+": Parsing " + typeParts[1].toLowerCase() + " for " + xml.get("name"));
 		for(x in xml.elements())
 		parseNode(x, parent);
 	}
@@ -181,8 +184,8 @@ class XmlParser {
 
 		var ns = "";
 		for(i in node.attributes())
-			if(i.substr(0,7)=="haxegui")
-			className = "haxegui."+className;
+		if(i.substr(0,7)=="haxegui")
+		className = "haxegui."+className;
 
 		var resolvedClass = Type.resolveClass(className);
 		if(resolvedClass == null) {
@@ -229,7 +232,6 @@ class XmlParser {
 			parent.__setDataSource(data);
 
 
-			//trace(haxegui.Utils.print_r(data));
 			return;
 		}
 
@@ -247,10 +249,31 @@ class XmlParser {
 
 			for(attr in node.attributes()) {
 				var val = node.get(attr);
-				if(val.charAt(0) == "@")
-				Reflect.setField(args, attr, Reflect.field(flash.Lib.current, val.substr(1, val.length) ) );
-				else
-				Reflect.setField(args, attr, val );
+				switch(val.charAt(0)) {
+					case "@":
+					Reflect.setField(args, attr, Reflect.field(GLOBAL_OBJECT, val.substr(1, val.length) ) );
+
+					case "{":
+					val = val.substr(1,val.length-2);
+
+					var parser = new hscript.Parser();
+					var program = parser.parseString(val);
+					var interp = new hscript.Interp();
+
+					interp.variables.set( "this", inst );
+					interp.variables.set( "parent", parent );
+					ScriptStandardLibrary.set(interp);
+					try {
+						var rv = interp.execute(program);
+						Reflect.setField(args, attr, rv );
+					}
+					catch(e:Dynamic) {
+						trace(e);
+					}
+
+					default:
+					Reflect.setField(args, attr, val );
+				}
 			}
 
 			if(node.firstChild() != null) {

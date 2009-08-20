@@ -28,6 +28,7 @@ import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import haxegui.XmlParser;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Image;
 import haxegui.events.MoveEvent;
@@ -101,6 +102,11 @@ class Expander extends AbstractButton {
 	public var arrowTween : Tween;
 	//}}}
 
+	static var xml = Xml.parse('
+	<haxegui:Layout name="Expander">
+	<haxegui:controls:Label text="{parent.name}"/>
+	</haxegui:Layout>
+	').firstElement();
 
 	//{{{ Functions
 	//{{{ init
@@ -109,6 +115,13 @@ class Expander extends AbstractButton {
 		color =  Color.darken(DefaultStyle.BACKGROUND, 16);
 		expanded = true;
 		style = ExpanderStyle.ICON;
+
+
+		super.init(opts);
+
+		xml.set("name", name);
+
+		XmlParser.apply(Expander.xml, this);
 
 
 		expanded = Opts.optBool(opts, "expanded", expanded);
@@ -121,6 +134,15 @@ class Expander extends AbstractButton {
 			case "arrow_and_icon":
 			style = ExpanderStyle.ARROW_AND_ICON;
 		}
+
+
+		// label = new Label(this);
+		label = getElementsByClass(Label).next();
+		// label.init({text: this.name});
+		label.setText(Opts.optString(opts, "label", label.text));
+		label.center();
+		label.x = Math.max(24, label.x);
+		label.mouseEnabled = false;
 
 
 		button = new ExpanderButton(this);
@@ -155,19 +177,15 @@ class Expander extends AbstractButton {
 
 			button.expandedIcon.visible = expanded;
 			button.collapsedIcon.visible = !expanded;
+
+			label.move(24,0);
 		}
 
-		label = new Label(this);
-		label.init({text: this.name});
-		label.center();
-		label.x = Math.max(24, label.x);
-		label.mouseEnabled = false;
-		label.tf.mouseEnabled = false;
+
 
 		//scrollRect = new Rectangle(0, 0, box.width, box.height);
 		//cacheAsBitmap = true;
 
-		super.init(opts);
 	}
 	//}}}
 

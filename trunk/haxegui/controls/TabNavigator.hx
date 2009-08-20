@@ -36,6 +36,7 @@ import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
+import haxegui.XmlParser;
 //}}}
 
 
@@ -53,6 +54,11 @@ class Tab extends AbstractButton, implements IAggregate {
 	public var label  : Label;
 	public var active : Bool;
 
+	static var xml = Xml.parse('
+	<haxegui:Layout name="Tab">
+	<haxegui:controls:Label text="{parent.name}"/>
+	</haxegui:Layout>
+	').firstElement();
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, TabNavigator)) throw parent+" not a TabNavigator";
@@ -63,20 +69,26 @@ class Tab extends AbstractButton, implements IAggregate {
 
 		super.init(opts);
 
+		xml.set("name", name);
+
+
+		XmlParser.apply(Tab.xml, this);
+
+
 		active = Opts.optBool(opts, "active", active);
 
-		label = new Label(this, "label");
-		label.init({text : Opts.optString(opts, "label", name)});
+		label = getElementsByClass(Label).next();
 		label.mouseEnabled = false;
 
-		// label.tf.setTextFormat(DefaultStyle.getTextFormat(DefaultStyle.FONT_SIZE, active ? DefaultStyle.INPUT_TEXT : Color.darken(DefaultStyle.BACKGROUND, 80)));
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
 	//}}}
 
+
 	//{{{ onMouseClick
-	/** Mouse click **/public override function onMouseClick(e:MouseEvent) {
+	/** Mouse click **/
+	public override function onMouseClick(e:MouseEvent) {
 		var tabnav = cast(parent, TabNavigator);
 		tabnav.activeTab = tabnav.getChildIndex(this);
 		//parent.dispatchEvent(new Event(Event.CHANGE));
@@ -84,11 +96,13 @@ class Tab extends AbstractButton, implements IAggregate {
 	}
 	//}}}
 
+
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
 		moveTo(x, (cast parent).box.height-box.height);
 	}
 	//}}}
+
 
 	//{{{ __init__
 	static function __init__() {

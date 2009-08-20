@@ -77,21 +77,20 @@ class Input extends Component, implements IText {
 
 
 		tf = new TextField();
-		tf.name = "tf";
 		tf.autoSize =  TextFieldAutoSize.NONE;
 		tf.background = false;
 		tf.border = false;
 		tf.embedFonts = true;
+		tf.height -=4;
 		tf.height = box.height;
-		tf.width = box.width;
 		tf.mouseEnabled = true;
+		tf.name = "tf";
 		tf.selectable = ! disabled;
 		tf.tabEnabled = false;
 		tf.text = Opts.optString(opts, "text", name);
-		// tf.type = disabled ? TextFieldType.DYNAMIC : TextFieldType.INPUT;
-
+		tf.type =TextFieldType.INPUT;
+		tf.width = box.width;
 		tf.y = 4;
-		tf.height -=4;
 
 		var fmt = DefaultStyle.getTextFormat();
 		fmt.leftMargin = 4;

@@ -48,6 +48,7 @@ import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
 import haxegui.windowClasses.StatusBar;
+import haxegui.XmlParser;
 //}}}
 
 
@@ -91,6 +92,15 @@ class Appearance extends Window {
 	"Pixel_Classic"
 	];
 
+	static var xml = Xml.parse('
+	<haxegui:Layout name="Appearance">
+		<haxegui:controls:MenuBar x="10" y="20">
+		</haxegui:controls:MenuBar>
+		<haxegui:controls:TabNavigator x="10" y="40">
+		</haxegui:controls:TabNavigator>
+		<haxegui:containers:Container x="10" y="60"/>
+	</haxegui:Layout>
+	').firstElement();
 
 	public var container : Container;
 	public var grid		 : Grid;
@@ -102,24 +112,25 @@ class Appearance extends Window {
 	}
 	//}}}
 
+
 	//{{{ init
 	public override function init(?opts:Dynamic) {
 		super.init(opts);
 		box = new Size(320, 480).toRect();
 		minSize = Size.fromRect(box);
 
-		//
-		var menubar = new MenuBar (this, "MenuBar", 10,20);
-		menubar.init ();
+		xml.set("name", name);
 
-		//
-		container = new Container(this, "Container", 10, 42);
-		container.init({});
+		XmlParser.apply(Appearance.xml, this);
+
+
+		container = this.getElementsByClass(Container).next();
 
 		makeNoticeLabel();
 
+
 		//
-		grid = new Grid(container, -20, 40);
+		grid = new Grid(container, 20, 40);
 		grid.init({rows: Reflect.fields(colorTheme).length+1, cols: 2});
 
 		//

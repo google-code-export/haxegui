@@ -1078,7 +1078,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 		#end
 
 		if(description!=null) TooltipManager.getInstance().destroy();
-		ScriptManager.exec(this,"mouseClick", {event : e});
+		ScriptManager.exec(this, "mouseClick", {event : e});
 	}
 	//}}}
 

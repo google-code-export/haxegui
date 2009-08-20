@@ -49,6 +49,8 @@ import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Printing;
 import haxegui.utils.Size;
+import haxegui.windowClasses.TitleBar;
+import haxegui.controls.Image;
 import hscript.Expr;
 import hscript.Parser;
 //}}}
@@ -123,9 +125,8 @@ class Console extends Window, implements ILogger {
 	var vert : ScrollBar;
 	//}}}
 
-	static var xml = Xml.parse(
-	'
-	<haxegui:Layout name="ColorPicker">
+	static var xml = Xml.parse(	'
+	<haxegui:Layout name="Console">
 		<haxegui:containers:Container name="Container">
 			<haxegui:controls:ScrollBar name="ScrollBar" color="0x444444" scroll="1"/>
 		</haxegui:containers:Container>
@@ -145,12 +146,17 @@ class Console extends Window, implements ILogger {
 	public override function init(?opts:Dynamic) {
 		type = WindowType.ALWAYS_ON_TOP;
 
+
+		// TitleBar.iconFile = "utilities-terminal.png";
+
+		super.init(opts);
+
+
 		xml.set("name", name);
 
 		XmlParser.apply(Console.xml, this);
 
 
-		super.init(opts);
 
 		box = new Size(640, 260).toRect();
 

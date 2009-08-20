@@ -39,6 +39,7 @@ import haxegui.toys.Socket;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
+import haxegui.XmlParser;
 //}}}
 
 
@@ -52,7 +53,6 @@ import haxegui.utils.Size;
 * @version 0.1
 */
 class ProgressBarIndicator extends Component, implements IComposite {
-
 	//{{{ init
 	override public function init(?opts:Dynamic=null) {
 		color = DefaultStyle.PROGRESS_BAR;
@@ -70,9 +70,9 @@ class ProgressBarIndicator extends Component, implements IComposite {
 		haxegui.Haxegui.register(ProgressBarIndicator);
 	}
 	//}}}
-
 }
 //}}}
+
 
 //{{{ ProgressBar
 /**
@@ -104,6 +104,22 @@ class ProgressBar extends Component, implements IAdjustable {
 	public var animate : Bool;
 
 	public var mazk : Shape;
+
+	static var xml = Xml.parse('
+	<haxegui:Layout name="ProgressBar">
+		<haxegui:controls:ProgressBarIndicator>
+			<events>
+				<script type="text/hscript" action="interval">
+				<![CDATA[
+					var x = -1;
+					if(this.x < -parent.box.width/10) x = parent.box.width/10;
+					this.move(x,0);
+				]]>
+				</script>
+			</events>
+		</haxegui:controls:ProgressBarIndicator>
+	</haxegui:Layout>
+	').firstElement();
 	//}}}
 
 
@@ -119,13 +135,22 @@ class ProgressBar extends Component, implements IAdjustable {
 		super.init(opts);
 
 
+		xml.set("name", name);
+
+
+		XmlParser.apply(ProgressBar.xml, this);
+
+
 		progress = Opts.optFloat(opts, "progress", progress);
 		animate = Opts.optBool(opts, "animate", animate);
 
 		filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, disabled ? .35 : .75, flash.filters.BitmapFilterQuality.HIGH, true, false, false)];
 
-		bar = new ProgressBarIndicator(this, "Indicator");
-		bar.init({disabled: this.disabled});
+		// bar = new ProgressBarIndicator(this, "Indicator");
+		// bar.init({disabled: this.disabled});
+
+		bar = getElementsByClass(ProgressBarIndicator).next();
+		// bar = cast firstChild();
 		bar.cacheAsBitmap = true;
 		bar.filters = [new flash.filters.DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.5, 4, 4, disabled ? .35 : .75, flash.filters.BitmapFilterQuality.LOW, false, false, false)];
 
@@ -139,7 +164,7 @@ class ProgressBar extends Component, implements IAdjustable {
 
 
 		//
-		bar.setAction("interval", "var x = -1; if(this.x < -parent.box.width/10) x = parent.box.width/10; this.move(x,0);");
+		// bar.setAction("interval", "var x = -1; if(this.x < -parent.box.width/10) x = parent.box.width/10; this.move(x,0);");
 		bar.moveTo(0,1);
 		if(animate)
 		bar.startInterval(30);

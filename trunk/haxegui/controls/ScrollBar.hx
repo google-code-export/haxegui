@@ -66,10 +66,8 @@ class ScrollBarUpButton extends AbstractButton, implements IAggregate {
 		box.width =  parent.asComponent().box.width;
 		box.height = 20;
 		minSize = new Size(15, 20);
-		color = parent.asComponent().color;
-
-
 		super.init(opts);
+		color = parent.asComponent().color;
 	}
 	//}}}
 
@@ -97,11 +95,9 @@ class ScrollBarDownButton extends AbstractButton, implements IAggregate {
 	override public function init(opts:Dynamic=null) {
 		box.height = 20;
 		box.width =  parent.asComponent().box.width;
-		color = parent.asComponent().color;
 		minSize = new Size(15, 20);
-
-
 		super.init(opts);
+		color = parent.asComponent().color;
 	}
 	//}}}
 
@@ -165,8 +161,8 @@ class ScrollBarFrame extends Component, implements IComposite {
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		box = parent.asComponent().box.clone();
-		color = parent.asComponent().color;
 		super.init(opts);
+		color = parent.asComponent().color;
 	}
 	//}}}
 
@@ -219,16 +215,14 @@ class ScrollBar extends Component, implements IAdjustable {
 	public var slot					: 	Socket;
 	//}}}
 
-	static var xml = Xml.parse(
-	'
+	static var xml = Xml.parse('
 	<haxegui:Layout name="ScrollBar">
-			<haxegui:controls:ScrollBarFrame/>
-			<haxegui:controls:ScrollBarUpButton/>
-			<haxegui:controls:ScrollBarDownButton/>
-			<haxegui:controls:ScrollBarHandle/>
+		<haxegui:controls:ScrollBarFrame/>
+		<haxegui:controls:ScrollBarUpButton/>
+		<haxegui:controls:ScrollBarDownButton/>
+		<haxegui:controls:ScrollBarHandle/>
 	</haxegui:Layout>
-	'
-	).firstElement();
+	').firstElement();
 
 	//{{{ Functions
 	//{{{ init
@@ -245,6 +239,9 @@ class ScrollBar extends Component, implements IAdjustable {
 		minSize = new Size(15, 40);
 
 
+		super.init(opts);
+
+
 		// adjustment.object.value = Opts.optFloat(opts, "value", adjustment.object.value);
 		// adjustment.object.min   = Opts.optFloat(opts, "min",   adjustment.object.min);
 		// adjustment.object.max   = Opts.optFloat(opts, "max",   adjustment.object.max);
@@ -254,12 +251,11 @@ class ScrollBar extends Component, implements IAdjustable {
 		scroll = Opts.optFloat(opts, "scroll",  scroll);
 
 
-		// xml.set("name", name);
+		xml.set("name", name);
 
 		haxegui.XmlParser.apply(ScrollBar.xml, this);
 
 
-		super.init(opts);
 
 
 		// horizontal scrollbar

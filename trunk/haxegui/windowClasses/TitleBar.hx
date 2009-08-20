@@ -158,13 +158,55 @@ class TitleBar extends AbstractButton {
 	/** Title offset from center titlebar **/
 	static inline var titleOffset : Point = new Point(0,-4);
 
+	public static var iconFile : String = "applications-system.png";
+
 	static var xml = Xml.parse(	'
 	<haxegui:Layout name="TitleBar">
+	<events>
+		<script type="text/hscript" action="mouseOver">
+		<![CDATA[
+		CursorManager.setCursor(this.cursorOver);
+		]]>
+		</script>
+		<script type="text/hscript" action="mouseOut">
+		<![CDATA[
+		CursorManager.setCursor(Cursor.ARROW);
+		]]>
+		</script>
+		<script type="text/hscript" action="mouseDown">
+		<![CDATA[
+		]]>
+		</script>
+		<script type="text/hscript" action="mouseUp">
+		<![CDATA[
+		CursorManager.getInstance().lock = false;
+
+
+		this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
+
+
+		var win = this.getParentWindow();
+		if(win==null) return;
+
+
+		win.stopDrag();
+		win.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		win.removeEventListener(MouseEvent.MOUSE_UP, onStopDrag);
+
+
+		if(this.hitTestObject( CursorManager.getInstance()._mc ))
+		CursorManager.setCursor(this.cursorOver);
+		else
+		CursorManager.setCursor(Cursor.ARROW);
+
+		]]>
+		</script>
+	</events>
 	<haxegui:windowClasses:CloseButton x="4" y="4"/>
 	<haxegui:windowClasses:MinimizeButton x="20" y="4"/>
 	<haxegui:windowClasses:MaximizeButton x="36" y="4"/>
-	<haxegui:controls:Label/>
-	<haxegui:controls:Icon src="applications-system.png"/>
+	<haxegui:controls:Label text="{this.getParentWindow().name}"/>
+	<haxegui:controls:Icon src="16x16/'+iconFile+'" x="{parent.box.width-12}"/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
@@ -174,24 +216,31 @@ class TitleBar extends AbstractButton {
 	//{{{ Functions
 	//{{{ init
 	/**
-	* @throws String warning when not attached to a window
+	* @throws String warning when not attached to a window		// xml.elementsNamed("haxegui:controls:Icon").next().set("src", "16x16/utilities-terminal.png");
+
 	*/
 	override public function init(?opts:Dynamic) {
-		if(!Std.is(parent, Window)) throw parent+" not a Window";
+		if(!Std.is(parent, Window)) throw parent+" not a Window";		// xml.elementsNamed("haxegui:controls:Icon").next().set("src", "16x16/utilities-terminal.png");
 
 
-		box = new flash.geom.Rectangle(0,0, (cast parent).box.width, 32);
+
+		box = new flash.geom.Rectangle(0,0, (cast parent).box.width, 32);		// xml.elementsNamed("haxegui:controls:Icon").next().set("src", "16x16/utilities-terminal.png");
+
 		color = (cast parent).color;
 		// cursorOver = Cursor.SIZE_ALL;
+		// xml.elementsNamed("haxegui:controls:Icon").next().set("src", "16x16/utilities-terminal.png");
 
 
 		super.init(opts);
+		// xml.elementsNamed("haxegui:controls:Icon").next().set("src", "16x16/utilities-terminal.png");
 
 		xml.set("name", name);
 
-		XmlParser.apply(TitleBar.xml, this);
+		XmlParser.apply(TitleBar.xml, this);		// xml.elementsNamed("haxegui:controls:Icon").next().set("src", "16x16/utilities-terminal.png");
 
-/*
+
+		// this.getElementsByClass(Label).next().setText((cast parent).name);
+		/*
 		// closeButton
 		closeButton = new CloseButton(this, "closeButton");
 		closeButton.init({color: this.color });
@@ -223,25 +272,13 @@ class TitleBar extends AbstractButton {
 		title.tabEnabled = false;
 		title.center();
 		title.movePoint(titleOffset);
-*/
+		*/
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
 	//}}}
 
-	//{{{ onRollOver
-	override public function onRollOver (e:MouseEvent) {
-		CursorManager.setCursor(this.cursorOver);
-		super.onRollOver(e);
-	}
-	//}}}
 
-	//{{{ onRollOut
-	override public function onRollOut (e:MouseEvent) {
-		CursorManager.setCursor(Cursor.ARROW);
-		super.onRollOut(e);
-	}
-	//}}}
 
 	//{{{ onMouseDown
 	override public function onMouseDown (e:MouseEvent)	{
@@ -288,36 +325,6 @@ class TitleBar extends AbstractButton {
 	//}}}
 
 
-	//{{{ onMouseUp
-	override public function onMouseUp (e:MouseEvent) {
-		#if debug
-		trace(e);
-		#end
-
-		CursorManager.getInstance().lock = false;
-
-
-		this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
-
-
-		var win = this.getParentWindow();
-		if(win== null) return;
-
-
-		win.stopDrag();
-		win.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-		win.removeEventListener(MouseEvent.MOUSE_UP, onStopDrag);
-
-
-		if(this.hitTestObject( CursorManager.getInstance()._mc ))
-		CursorManager.setCursor(this.cursorOver);
-		else
-		CursorManager.setCursor(Cursor.ARROW);
-
-
-		super.onMouseUp(e);
-	}
-	//}}}
 
 
 	//{{{ onMouseDoubleClick
