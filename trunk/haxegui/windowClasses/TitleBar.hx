@@ -162,46 +162,6 @@ class TitleBar extends AbstractButton {
 
 	static var xml = Xml.parse(	'
 	<haxegui:Layout name="TitleBar">
-	<events>
-		<script type="text/hscript" action="mouseOver">
-		<![CDATA[
-		CursorManager.setCursor(this.cursorOver);
-		]]>
-		</script>
-		<script type="text/hscript" action="mouseOut">
-		<![CDATA[
-		CursorManager.setCursor(Cursor.ARROW);
-		]]>
-		</script>
-		<script type="text/hscript" action="mouseDown">
-		<![CDATA[
-		]]>
-		</script>
-		<script type="text/hscript" action="mouseUp">
-		<![CDATA[
-		CursorManager.getInstance().lock = false;
-
-
-		this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
-
-
-		var win = this.getParentWindow();
-		if(win==null) return;
-
-
-		win.stopDrag();
-		win.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-		win.removeEventListener(MouseEvent.MOUSE_UP, onStopDrag);
-
-
-		if(this.hitTestObject( CursorManager.getInstance()._mc ))
-		CursorManager.setCursor(this.cursorOver);
-		else
-		CursorManager.setCursor(Cursor.ARROW);
-
-		]]>
-		</script>
-	</events>
 	<haxegui:windowClasses:CloseButton x="4" y="4"/>
 	<haxegui:windowClasses:MinimizeButton x="20" y="4"/>
 	<haxegui:windowClasses:MaximizeButton x="36" y="4"/>
