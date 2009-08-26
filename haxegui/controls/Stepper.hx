@@ -56,7 +56,20 @@ using haxegui.controls.Component;
 */
 class StepperUpButton extends Button, implements IComposite {
 
-	public var arrow : Arrow;
+	static var xml = Xml.parse('
+	<haxegui:Layout name="StepperUpButton">
+		<haxegui:toys:Arrow
+		x="8" y="5"
+		color="{Color.darken(parent.color, 20)}"
+		rotation="-90"
+		width="{parent.box.height>>1}"
+		height="{parent.box.width>>1}"
+		autoRepeat="{parent.autoRepeat}"
+		repeatsPerSecond="{parent.repeatsPerSecond}"
+		repeatWaitTime="{parent.repeatWaitTime}"
+		/>
+	</haxegui:Layout>
+	').firstElement();
 
 	//{{{ init
 	/**
@@ -69,11 +82,12 @@ class StepperUpButton extends Button, implements IComposite {
 
 		super.init(opts);
 
+		box = new Size(16,10).toRect();
+		moveTo((cast parent).box.width-10,0);
 
-		arrow = new haxegui.toys.Arrow(this);
-		arrow.init({ color: color.darken(20), width: .5*parent.asComponent().box.height-6, height: 8 });
-		arrow.rotation = -90;
-		arrow.move(6,1);
+		xml.set("name", name);
+
+		XmlParser.apply(StepperUpButton.xml, this);
 	}
 	//}}}
 
@@ -94,7 +108,21 @@ class StepperUpButton extends Button, implements IComposite {
 */
 class StepperDownButton extends Button, implements IComposite {
 
-	public var arrow : Arrow;
+	static var xml = Xml.parse('
+	<haxegui:Layout name="StepperDownButton">
+		<haxegui:toys:Arrow
+		x="8" y="5"
+		color="{Color.darken(parent.color, 20)}"
+		rotation="90"
+		width="{parent.box.height>>1}"
+		height="{parent.box.width>>1}"
+		autoRepeat="{parent.autoRepeat}"
+		repeatsPerSecond="{parent.repeatsPerSecond}"
+		repeatWaitTime="{parent.repeatWaitTime}"
+		/>
+	</haxegui:Layout>
+	').firstElement();
+
 
 	//{{{ init
 	/**
@@ -108,11 +136,13 @@ class StepperDownButton extends Button, implements IComposite {
 
 		super.init(opts);
 
+		box = new Size(16,10).toRect();
 
-		arrow = new haxegui.toys.Arrow(this);
-		arrow.init({ color: haxegui.utils.Color.darken(this.color, 20), width: .5*(cast this.parent).box.height-6, height: 8 });
-		arrow.rotation = 90;
-		arrow.move(6,1);
+		xml.set("name", name);
+
+		XmlParser.apply(StepperDownButton.xml, this);
+
+		// firstChild().asComponent().center();
 	}
 	//}}}
 
@@ -147,9 +177,9 @@ class Stepper extends Component, implements IAdjustable {
 
 	static var xml = Xml.parse('
 	<haxegui:Layout name="Stepper">
-		<haxegui:controls:Input text="{parent.adjustment.getValue()}"/>
-		<haxegui:controls:StepperUpButton color="{parent.color}"/>
-		<haxegui:controls:StepperDownButton color="{parent.color}"/>
+		<haxegui:controls:Input width="{parent.box.width-10}" text="{parent.adjustment.getValue()}"/>
+		<haxegui:controls:StepperUpButton/>
+		<haxegui:controls:StepperDownButton/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
@@ -158,8 +188,8 @@ class Stepper extends Component, implements IAdjustable {
 	//{{{ Functions
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
-		//adjustment = new Adjustment({ value: 0, min: 0, max: 100, step: 1, page: 10 });
-		adjustment = new Adjustment(Adjustment.newAdjustmentObject(Int));
+		adjustment = new Adjustment({ value: 0, min: -(2<<15), max: 2<<15, step: 1, page: 10 });
+		// adjustment = new Adjustment(Adjustment.newAdjustmentObject(Int));
 		box = new Size(40, 20).toRect();
 		minSize = new Size(20,20);
 		color = DefaultStyle.BACKGROUND;
@@ -170,11 +200,11 @@ class Stepper extends Component, implements IAdjustable {
 
 		var aOpts = Opts.clone(opts);
 
-		adjustment.object.value = Opts.optFloat(opts,"value", adjustment.object.value);
-		adjustment.object.min = Opts.optFloat(opts,"min", adjustment.object.min);
-		adjustment.object.max = Opts.optFloat(opts,"max", adjustment.object.max);
-		adjustment.object.step = Opts.optFloat(opts,"step", adjustment.object.step);
-		adjustment.object.page = Opts.optFloat(opts,"page", adjustment.object.page);
+		adjustment.object.value = Opts.optFloat(opts, "value", adjustment.object.value);
+		adjustment.object.min   = Opts.optFloat(opts, "min",   adjustment.object.min);
+		adjustment.object.max   = Opts.optFloat(opts, "max",   adjustment.object.max);
+		adjustment.object.step  = Opts.optFloat(opts, "step",  adjustment.object.step);
+		adjustment.object.page  = Opts.optFloat(opts, "page",  adjustment.object.page);
 
 		Opts.removeFields(aOpts, ["value","step", "page", "min","max"]);
 
@@ -249,25 +279,27 @@ class Stepper extends Component, implements IAdjustable {
 
 	//{{{ onInputResized
 	private function onInputResized(e:ResizeEvent) {
+		if(input==null) return;
 		box = input.box.clone();
-		up.moveTo(box.width-10, 0);
-		down.moveTo(box.width-10, .5*up.box.height);
-		up.dirty = down.dirty = true;
+
+		if(up!=null) {
+			up.moveTo(box.width-up.box.width, 0);
+			up.dirty = true;
+		}
+
+		if(down!=null) {
+			down.moveTo(box.width-down.box.width, .5*up.box.height);
+			down.dirty = true;
+		}
 	}
 	//}}}
-
-
-	public override function onResize(e:ResizeEvent) {
-		super.onResize(e);
-		input.dispatchEvent(e);
-	}
 
 
 	//{{{ onChanged
 	private function onChanged(e:Event)	{
 		input.setText(adjustment.valueAsString());
 	}
-
+	//}}}
 
 	//{{{ __init__
 	static function __init__() {

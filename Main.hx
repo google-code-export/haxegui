@@ -170,8 +170,8 @@ class Main extends Sprite, implements haxe.rtti.Infos {
 	*/
 	public static function makeWindows() {
 		// Statistics
-		var stats = new Stats (flash.Lib.current, 540, 80);
-		stats.init();
+		// var stats = new Stats (flash.Lib.current, 540, 80);
+		// stats.init();
 
 		// Color Picker
 		// var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);

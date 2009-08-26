@@ -138,7 +138,7 @@ class ScriptManager implements Dynamic {
 	* @return ScriptObject which is the default for the Component type
 	* @throws String "No default action." if a default action does not exist
 	**/
-	private static function getDefaultActionObject(classType:Class<Dynamic>, action:String) : ScriptObject {
+	public static function getDefaultActionObject(classType:Class<Dynamic>, action:String) : ScriptObject {
 		var key = getDefaultActionKey(classType, action);
 		if(!defaultActions.exists(key) || defaultActions.get(key) == null) {
 			var sc = Type.getSuperClass(classType);
@@ -151,7 +151,7 @@ class ScriptManager implements Dynamic {
 	//}}}
 
 
-	//{{{ getInstanceOwnActionObject
+	//{{{ getDefaultActionKey
 	/**
 	* Returns the key for the default action for the given Component instance
 	*
@@ -223,7 +223,11 @@ class ScriptManager implements Dynamic {
 		if(setup == null)
 		setup = commonSetup;
 
-		defaultActions.set(getDefaultActionKey(classType,action), { interp: interp, program: program, setup: setup, code: code, });
+
+		var key = getDefaultActionKey(classType,action);
+		if(defaultActions.exists(key)) return defaultActions.get(key).code;
+
+		defaultActions.set(key, { interp: interp, program: program, setup: setup, code: code });
 
 		return code;
 	}

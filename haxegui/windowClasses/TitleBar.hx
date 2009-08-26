@@ -147,9 +147,11 @@ class MaximizeButton extends AbstractButton {
 *
 * Titlebar class
 *
+* @todo icon
+*
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
-* @version 0.1
+* @version 0.2
 */
 class TitleBar extends AbstractButton {
 
@@ -160,14 +162,61 @@ class TitleBar extends AbstractButton {
 
 	public static var iconFile : String = "applications-system.png";
 
-	static var xml = Xml.parse(	'
+	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="TitleBar">
-	<haxegui:windowClasses:CloseButton x="4" y="4"/>
-	<haxegui:windowClasses:MinimizeButton x="20" y="4"/>
-	<haxegui:windowClasses:MaximizeButton x="36" y="4"/>
+	<<<<<<< .mine
+	<haxegui:windowClasses:CloseButton	  x="4"  y="4" color="{parent.color}"/>
+	<haxegui:windowClasses:MinimizeButton x="20" y="4" color="{parent.color}"/>
+	<haxegui:windowClasses:MaximizeButton x="36" y="4" color="{parent.color}"/>
 	<haxegui:controls:Label text="{this.getParentWindow().name}"/>
 	<haxegui:controls:Icon src="16x16/'+iconFile+'" x="{parent.box.width-12}"/>
 	</haxegui:Layout>
+	').firstElement();
+
+	static var styleXml = Xml.parse('
+	<haxegui:Style name="TitleBar">
+	<haxegui:windowClasses:TitleBar>
+	<events>
+	<script type="text/hscript" action="mouseDoubleClick"><![CDATA[	]]></script>
+	<script type="text/hscript" action="mouseDown">
+	<![CDATA[
+	CursorManager.getInstance().lock = true;
+
+	this.updateColorTween( new feffects.Tween(0, -50, 350, feffects.easing.Linear.easeOut) );
+
+	var win = this.getParentWindow();
+	if(win==null) return;
+
+	win.startDrag();
+	win.addEventListener(flash.events.MouseEvent.MOUSE_UP, this.onStopDrag, false, 0, true);
+	win.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove, false, 0, true);
+	]]>
+	</script>
+
+	<script type="text/hscript" action="mouseUp">
+	<![CDATA[
+	CursorManager.getInstance().lock = false;
+	this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
+
+
+	var win = this.getParentWindow();
+	// if(win==null) return;
+
+
+	win.stopDrag();
+	win.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove);
+	win.removeEventListener(flash.events.MouseEvent.MOUSE_UP, this.onStopDrag);
+
+
+	if(this.hitTestObject( CursorManager.getInstance()._mc ))
+	CursorManager.setCursor(this.cursorOver);
+	else
+	CursorManager.setCursor(Cursor.ARROW);
+	]]>
+	</script>
+	</events>
+	</haxegui:windowClasses:TitleBar>
+	</haxegui:Style>
 	').firstElement();
 	//}}}
 	//}}}
@@ -180,88 +229,23 @@ class TitleBar extends AbstractButton {
 
 	*/
 	override public function init(?opts:Dynamic) {
-		if(!Std.is(parent, Window)) throw parent+" not a Window";		// xml.elementsNamed("haxegui:controls:Icon").next().set("src", "16x16/utilities-terminal.png");
-
-
-
-		box = new flash.geom.Rectangle(0,0, (cast parent).box.width, 32);		// xml.elementsNamed("haxegui:controls:Icon").next().set("src", "16x16/utilities-terminal.png");
-
+		if(!Std.is(parent, Window)) throw parent+" not a Window";
+		box = new flash.geom.Rectangle(0,0, (cast parent).box.width, 32);
 		color = (cast parent).color;
-		// cursorOver = Cursor.SIZE_ALL;
-		// xml.elementsNamed("haxegui:controls:Icon").next().set("src", "16x16/utilities-terminal.png");
 
 
 		super.init(opts);
-		// xml.elementsNamed("haxegui:controls:Icon").next().set("src", "16x16/utilities-terminal.png");
-
-		xml.set("name", name);
-
-		XmlParser.apply(TitleBar.xml, this);		// xml.elementsNamed("haxegui:controls:Icon").next().set("src", "16x16/utilities-terminal.png");
 
 
-		// this.getElementsByClass(Label).next().setText((cast parent).name);
-		/*
-		// closeButton
-		closeButton = new CloseButton(this, "closeButton");
-		closeButton.init({color: this.color });
-		closeButton.moveTo(4,4);
-		closeButton.redraw();
+		layoutXml.set("name", name);
 
+		XmlParser.apply(TitleBar.styleXml, true);
+		XmlParser.apply(TitleBar.layoutXml, this);
 
-		// minimizeButton
-		minimizeButton = new MinimizeButton(this, "minimizeButton");
-		minimizeButton.init({color: this.color });
-		minimizeButton.moveTo(20,4);
+		description = null;
 
-
-		// maximizeButton
-		maximizeButton = new MaximizeButton(this, "maximizeButton");
-		maximizeButton.init({color: this.color });
-		maximizeButton.moveTo(36,4);
-
-
-		// filters
-		closeButton.filters = minimizeButton.filters = maximizeButton.filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
-		//closeButton.useHandCursors = minimizeButton.useHandCursors = maximizeButton.useHandCursors = true;
-
-
-		// title
-		title = new Label(this);
-		title.init({text: Opts.optString(opts,"title", name)});
-		title.mouseEnabled = false;
-		title.tabEnabled = false;
-		title.center();
-		title.movePoint(titleOffset);
-		*/
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
-	}
-	//}}}
-
-
-
-	//{{{ onMouseDown
-	override public function onMouseDown (e:MouseEvent)	{
-		#if debug
-		trace(e);
-		#end
-
-		CursorManager.getInstance().lock = true;
-
-
-		this.updateColorTween( new feffects.Tween(0, -50, 350, feffects.easing.Linear.easeOut) );
-
-
-		var win = this.getParentWindow();
-		if(win==null) return;
-
-
-		win.startDrag();
-		win.addEventListener(MouseEvent.MOUSE_UP, onStopDrag, false, 0, true);
-		win.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
-
-
-		super.onMouseDown(e);
 	}
 	//}}}
 
@@ -281,18 +265,6 @@ class TitleBar extends AbstractButton {
 		if(win==null) return;
 
 		win.stopDrag();
-	}
-	//}}}
-
-
-
-
-	//{{{ onMouseDoubleClick
-	/**
-	* @todo window shading
-	*/
-	public override function onMouseDoubleClick(e:MouseEvent) : Void {
-		super.onMouseDoubleClick(e);
 	}
 	//}}}
 

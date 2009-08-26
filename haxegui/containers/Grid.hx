@@ -28,6 +28,7 @@ import flash.geom.Rectangle;
 import haxegui.containers.IContainer;
 import haxegui.controls.Component;
 import haxegui.controls.ScrollBar;
+import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.MouseManager;
 import haxegui.managers.ScriptManager;
@@ -85,14 +86,18 @@ class Grid extends Component, implements IContainer {
 			if(self.fit) {
 				var s = Size.fromRect(self.box);
 				s.scale(1/self.cols, 1/self.rows);
+				if(Std.is(self, HBox))
+				s.height = Std.int(self.box.height);
+
 				o.asComponent().box = s.toRect();
+				// o.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 			}
 			var i = (self.getChildIndex(o)) % self.cols;
 			var j = Std.int(self.getChildIndex(o)/self.cols);
 
 			o.asComponent().moveTo(i*(self.box.width/self.cols+self.cellSpacing), j*(self.box.height/self.rows+self.cellSpacing));
 			// o.asComponent().moveTo(i*self.box.width/self.cols, j*self.box.height/self.rows);
-			o.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+			o.dispatchEvent(new MoveEvent(MoveEvent.MOVE));
 		});
 
 		return o;
@@ -130,7 +135,7 @@ class Grid extends Component, implements IContainer {
 		if(Std.is(parent, haxegui.Window))
 		if(x==0 && y==0)
 		move(10,20);
-
+/*
 		setAction("redraw", "this.graphics.clear();
 		this.graphics.lineStyle(2, Color.RED);
 		this.graphics.drawRect(0, 0, this.box.width, this.box.height);
@@ -147,7 +152,7 @@ class Grid extends Component, implements IContainer {
 			this.graphics.lineTo(i*(this.box.width/this.cols+this.cellSpacing), this.box.height);
 		}
 		");
-
+*/
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
@@ -215,11 +220,12 @@ class Grid extends Component, implements IContainer {
 */
 class HBox extends Grid {
 
-	override public function init(opts : Dynamic=null) {
+	override public function init(opts:Dynamic=null) {
 		super.init(opts);
-		fit = false;
+
 		rows = 1;
 		cols = 0;
+		fit = Opts.optBool(opts, "fit", false);
 
 		parent.removeEventListener(ResizeEvent.RESIZE, onParentResize);
 	}

@@ -28,6 +28,7 @@ import flash.geom.Rectangle;
 import haxegui.Window;
 import haxegui.containers.Container;
 import haxegui.containers.Grid;
+import haxegui.containers.Divider;
 import haxegui.containers.ScrollPane;
 import haxegui.controls.Button;
 import haxegui.controls.CheckBox;
@@ -97,12 +98,29 @@ class Appearance extends Window {
 		<haxegui:controls:MenuBar x="10" y="20">
 		</haxegui:controls:MenuBar>
 		<haxegui:controls:TabNavigator x="10" y="40">
+		<haxegui:controls:Tab/>
+		<haxegui:controls:Tab/>
+		<haxegui:controls:Tab/>
 		</haxegui:controls:TabNavigator>
-		<haxegui:containers:Container x="10" y="60"/>
+		<haxegui:containers:HDivider x="10" y="60">
+			<haxegui:containers:Container/>
+			<haxegui:containers:Container>
+			<!--
+				<haxegui:containers:ScrollPane>
+					<haxegui:Window x="20" y="20">
+					<haxegui:containers:Container>
+						<haxegui:controls:Button/>
+					</haxegui:containers:Container>
+					</haxegui:Window>
+				</haxegui:containers:ScrollPane>
+			-->
+			</haxegui:containers:Container>
+		</haxegui:containers:HDivider>
 	</haxegui:Layout>
 	').firstElement();
 
 	public var container : Container;
+	public var hdivider	 : HDivider;
 	public var grid		 : Grid;
 
 
@@ -117,14 +135,14 @@ class Appearance extends Window {
 	public override function init(?opts:Dynamic) {
 		super.init(opts);
 		box = new Size(320, 480).toRect();
-		minSize = Size.fromRect(box);
+		minSize = new Size(250, 400);
 
-		xml.set("name", name);
 
 		XmlParser.apply(Appearance.xml, this);
 
 
-		container = this.getElementsByClass(Container).next();
+		hdivider = this.getElementsByClass(HDivider).next();
+		container = hdivider.getElementsByClass(Container).next();
 
 		makeNoticeLabel();
 

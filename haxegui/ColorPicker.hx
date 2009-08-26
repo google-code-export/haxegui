@@ -157,7 +157,7 @@ class ColorPicker extends Window {
 		//
 		spectrum = cast hbox.firstChild();
 		spectrum.minSize = new Size(150,220);
-		spectrum.maxSize = spectrum.minSize;
+		// spectrum.maxSize = spectrum.minSize;
 
 
 /*

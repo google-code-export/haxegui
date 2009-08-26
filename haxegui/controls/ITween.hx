@@ -25,16 +25,17 @@ import feffects.Tween;
 /**
 *
 * Interface for tweening widgets.
-* 
+*
 * @todo updateSizeTween
+* @todo updateScrollTween
 *
 */
 interface ITween {
 	/** true if is currently tweening **/
 	public var isTweening : Bool;
- 
+
 	private var colorTween  : Tween;
-	
+
 	private var positionTween  : Tween;
 
 	public function updateColorTween(?t : Tween) : Void;

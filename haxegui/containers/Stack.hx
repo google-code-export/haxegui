@@ -34,6 +34,7 @@ import haxegui.managers.MouseManager;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
 import haxegui.utils.Opts;
+import haxegui.utils.Size;
 //}}}
 
 
@@ -50,7 +51,6 @@ class Stack extends Component, implements IContainer {
 
 	//{{{ Constructor
 	public function new (?parent : flash.display.DisplayObjectContainer, ?name:String, ?x : Float, ?y: Float) {
-
 		super (parent, name, x, y);
 
 		color = DefaultStyle.BACKGROUND;
@@ -82,7 +82,8 @@ class Stack extends Component, implements IContainer {
 	//{{{ onParentResize
 	/** @todo check stack resizing **/
 	public function onParentResize(e:ResizeEvent) {
-		dirty = true;
+		// dirty = true;
+
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}

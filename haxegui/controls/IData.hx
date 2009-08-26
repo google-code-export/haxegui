@@ -20,9 +20,9 @@
 package haxegui.controls;
 
 /**
- * Interface for data-rendering components. 
+ * Interface for data-rendering components.
  *
  */
 interface IData {
-	var data : Dynamic;
+	public var data : Dynamic;
 }

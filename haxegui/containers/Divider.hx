@@ -177,9 +177,7 @@ class DividerHandle extends AbstractButton {
 /**
 * Divider is a split pane containers.<br/>
 *
-* @todo the whole thing
-*
-* @version 0.1
+* @version 0.2
 * @author Russell Weir <damonsbane@gmail.com>
 * @author Omer Goshen <gershon@goosemoose.com>
 */

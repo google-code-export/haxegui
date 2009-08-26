@@ -215,6 +215,7 @@ class Console extends Window, implements ILogger {
 		vert.removeEventListener(ResizeEvent.RESIZE, vert.onParentResize);
 		// vert.removeEventListener(Event.SCROLL, vert.onTextFieldScrolled);
 		// output.addEventListener(MouseEvent.MOUSE_WHEEL, onScroll, false, 0, true);
+		vert.adjust();
 
 		// Shell
 		pwd 	= ["root"];

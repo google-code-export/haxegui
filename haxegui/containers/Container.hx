@@ -28,6 +28,7 @@ import flash.geom.Rectangle;
 import haxegui.containers.IContainer;
 import haxegui.controls.Component;
 import haxegui.controls.ScrollBar;
+import haxegui.events.MoveEvent;
 import haxegui.events.ResizeEvent;
 import haxegui.managers.MouseManager;
 import haxegui.managers.ScriptManager;
@@ -57,10 +58,27 @@ class Container extends Component, implements IContainer {
 	//{{{ addChild
 	/** @todo probably recalcuate and fire a resize event **/
 	public override function addChild(o : DisplayObject) : DisplayObject {
-		dirty = true;
-		return super.addChild(o);
+
+		var child = super.addChild(o);
+
+		if(Std.is(child, Component))
+		child.addEventListener(MoveEvent.MOVE, onChildMoved, false, 0, true);
+
+		return child;
 	}
 	//}}}
+
+	public function onChildMoved(e:MoveEvent) {
+		// box = box.union(e.target.box);
+
+		box.width = Math.max(box.width, e.target.x+e.target.box.width);
+		box.height = Math.max(box.width, e.target.y+e.target.box.height);
+
+		// dirty=true;
+		redraw();
+
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+	}
 
 
 	//{{{ init
@@ -71,9 +89,7 @@ class Container extends Component, implements IContainer {
 		description = null;
 
 
-		if(Std.is(parent, haxegui.Window))
-		if(x==0 && y==0)
-		move(10,20);
+		if(Std.is(parent, haxegui.Window) && x==0 && y==0) move(10,20);
 
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
@@ -89,9 +105,11 @@ class Container extends Component, implements IContainer {
 		if(Std.is(parent, Component))
 		size = new Size((cast parent).box.width - x, (cast parent).box.height - y);
 		else
-		size = new Size(parent.width, parent.height);
+		// size = new Size(parent.width, parent.height);
+		size = Size.fromRect(parent.transform.pixelBounds);
 
 		box = size.toRect();
+
 
 		redraw();
 		dirty = false;

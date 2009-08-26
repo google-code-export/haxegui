@@ -30,12 +30,16 @@ import Type;
 *
 */
 class Opts {
+	//{{ string
 	public static function string(opts:Dynamic,field:String) : String {
 		var v = optString(opts, field, null);
 		if(v == null) throw "Missing " + field;
 		return v;
 	}
+	//}}}
 
+
+	//{{{ clone
 	/**
 	* Clones a set of options, returning a new options object
 	**/
@@ -46,7 +50,10 @@ class Opts {
 		}
 		return rv;
 	}
+	//}}}
 
+
+	//{{{ classInstance
 	public static function classInstance(opts:Dynamic,field:String,classes:Array<Class<Dynamic>>) {
 		var v =  getField(opts,field);
 		if(v == null) throw "Missing " + field;
@@ -63,11 +70,17 @@ class Opts {
 			throw "Bad type for " + field;
 		return v;
 	}
+	//}}}
 
+
+	//{{{ hasOpt
 	public static function hasOpt(opts:Dynamic, field:String) : Bool {
 		return (getField(opts, field) != null);
 	}
+	//}}}
 
+
+	//{{{ optBool
 	public static function optBool(opts:Dynamic,field:String,defaultValue:Bool) : Bool {
 		var v = getField(opts,field);
 		if(v == null) return defaultValue;
@@ -79,7 +92,10 @@ class Opts {
 		}
 		return cast v;
 	}
+	//}}}
 
+
+	//{{{ optFloat
 	public static function optFloat(opts:Dynamic,field:String,defaultValue:Float) : Float {
 		var v : Dynamic = getField(opts,field);
 
@@ -98,7 +114,10 @@ class Opts {
 			return defaultValue;
 		return v;
 	}
+	//}}}
 
+
+	//{{{ optInt
 	public static function optInt(opts:Dynamic,field:String,defaultValue:Int) : Int	{
 		var v : Dynamic = getField(opts,field);
 		if(v == null) return defaultValue;
@@ -112,13 +131,19 @@ class Opts {
 		}
 		return defaultValue;
 	}
+	//}}}
 
+
+	//{{{ optString
 	public static function optString(opts:Dynamic,field:String,defaultValue:String) : String {
 		var v = getField(opts,field);
 		if(v == null) return defaultValue;
 		return Std.string(v);
 	}
+	//}}}
 
+
+	//{{{ getField
 	public static function getField(opts:Dynamic,field:String) : Dynamic {
 		if(opts == null || field == null || field == "" || !Reflect.isObject(opts))
 			return null;
@@ -128,7 +153,10 @@ class Opts {
 		}
 		return getField(Reflect.field(opts, field.substr(0,idx)), field.substr(idx+1));
 	}
+	//}}}
 
+
+	//{{{ removeFields
 	/**
 	* Takes the input opts and removes all the fields specified.
 	*
@@ -140,4 +168,6 @@ class Opts {
 			Reflect.deleteField(opts, f);
 		}
 	}
+	//}}}
 }
+//}}}

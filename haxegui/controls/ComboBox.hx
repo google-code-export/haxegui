@@ -72,8 +72,8 @@ class ComboBoxDropButton extends PushButton, implements IComposite {
 	static var xml = Xml.parse('
 	<haxegui:Layout name="ComboBoxDropButton">
 		<haxegui:toys:Arrow
-			x="6" y="7"
 			width="8" height="8"
+			x="10" y="11"
 			rotation="90" color="{Color.darken(parent.color, 10)}"/>
 	</haxegui:Layout>
 	').firstElement();
@@ -124,7 +124,6 @@ class ComboBoxDropButton extends PushButton, implements IComposite {
 		var menu = (cast parent).menu;
 
 		menu.dataSource = (cast parent).dataSource;
-		menu.data = (cast parent).dataSource.data;
 
 		menu.addEventListener(MenuEvent.MENU_SHOW, (cast parent).onMenuShow, false, 0, true);
 		menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
@@ -133,7 +132,7 @@ class ComboBoxDropButton extends PushButton, implements IComposite {
 
 
 		menu.x = p.x + 1;
-		menu.y = p.y + 20;
+		menu.y = p.y;
 		// menu.box.width = (cast parent).box.width - 22;
 
 		super.onMouseClick(e);
@@ -253,21 +252,18 @@ class ComboBoxBackground extends Component, implements IComposite {
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class ComboBox extends Component, implements IData, implements IAdjustable {
+class ComboBox extends Component, implements IDataSource, implements IAdjustable {
 
 	//{{{ Members
 	//{{{ Public
 	public var adjustment : Adjustment;
 
 	public var background : ComboBoxBackground;
-
-	public var data : Dynamic;
-
-	public var dataSource( default, __setDataSource ) : DataSource;
-
 	public var dropButton : ComboBoxDropButton;
-
 	public var input	  : Input;
+
+	public var dataSource(default, setDataSource) : DataSource;
+
 
 	public var menu 	  : PopupMenu;
 
@@ -277,6 +273,13 @@ class ComboBox extends Component, implements IData, implements IAdjustable {
 
 	//{{{ Private
 	private var editable : Bool;
+	//}}}
+
+	//{{{ Static
+	static var xml = Xml.parse('
+	<haxegui:Layout name="ComboBox">
+	</haxegui:Layout>
+	').firstElement();
 	//}}}
 	//}}}
 
@@ -291,6 +294,10 @@ class ComboBox extends Component, implements IData, implements IAdjustable {
 
 
 		super.init(opts);
+
+		xml.set("name", name);
+
+		XmlParser.apply(ComboBox.xml, this);
 
 
 		editable = Opts.optBool(opts, "editable", true);
@@ -382,15 +389,7 @@ class ComboBox extends Component, implements IData, implements IAdjustable {
 	//}}}
 
 
-	//{{{ __setDataSource
-	public function __setDataSource(d:DataSource) : DataSource {
-		dataSource = d;
-		//dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
-		//~ trace(this.dataSource+" => "+this);
-		//~ trace(dataSource.data);
-		return dataSource;
-	}
-	//}}}
+
 
 
 	//{{{ onResize
@@ -406,6 +405,14 @@ class ComboBox extends Component, implements IData, implements IAdjustable {
 		super.onResize(e);
 	}
 	//}}}
+
+	//{{{ setDataSource
+	public function setDataSource(d:DataSource) : DataSource {
+		dataSource = d;
+		return dataSource;
+	}
+	//}}}
+
 
 
 	//{{{ __init__

@@ -49,6 +49,16 @@ import haxegui.utils.Size;
 //}}}
 
 
+//{{{ WindowPosition
+enum WindowPosition {
+  NONE;
+  CENTER;
+  MOUSE;
+  PARENT_CENTER;
+}
+//}}}
+
+
 //{{{ WindowType
 enum WindowType {
 	NORMAL;
@@ -89,9 +99,9 @@ class Window extends Component {
 	static var xml = Xml.parse(
 	'
 	<haxegui:Layout name="Window">
-	<haxegui:windowClasses:WindowFrame/>
-	<haxegui:windowClasses:TitleBar/>
-	<!--<haxegui:windowClasses:StatusBar/>-->
+		<haxegui:windowClasses:WindowFrame color="{parent.color}"/>
+		<haxegui:windowClasses:TitleBar color="{parent.color}"/>
+		<!--<haxegui:windowClasses:StatusBar/>-->
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
@@ -107,23 +117,9 @@ class Window extends Component {
 	* @param name	 	Window's instance name on stage nad title.
 	* @param x		 	Horizontal offset
 	* @param y		 	Vertical offset
-	* @param height  	Window's height, set to member box
-	* @param width   	Window's width, set to member box
-	* @param sizeable   True to make window sizeable
 	*/
-	public
-	function new (
-	? parent	: DisplayObjectContainer,
-	? name   	: String,
-	? x 	 	: Float,
-	? y 	 	: Float,
-	? width  	: Float,
-	? height 	: Float,
-	? sizeable  : Bool)	{
-
-
+	public function new (?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-
 
 		// register creation with window manager
 		WindowManager.getInstance().windows.set( name, this );

@@ -92,7 +92,7 @@ class Haxegui {
 		StyleManager.setStyle("default");
 		trace("complete");
 
-		dirtyInterval = 20;
+		dirtyInterval = 350;
 	}
 	//}}}
 
@@ -105,7 +105,11 @@ class Haxegui {
 	}
 	//}}}
 
+
 	//{{{ onInterval
+	/**
+	* Redraws dirty components
+	*/
 	private static function onInterval() {
 		if(dirtyList.isEmpty()) return;
 		for(c in dirtyList) {
@@ -137,7 +141,7 @@ class Haxegui {
 	/**
 	* Mark a component for redrawing
 	*
-	* @param c The disty [Component]
+	* @param c The dirty [Component]
 	**/
 	public static inline function setDirty(c : Component) : Void {
 		dirtyList.add(c);
@@ -145,7 +149,7 @@ class Haxegui {
 	//}}}
 
 	//{{{ toggleSnapping
-	/** Toggle the [gridSnapping] on and off. **/
+	/** Toggle [gridSnapping] on and off. **/
 	public static function toggleSnapping() : Bool {
 		return gridSnapping = !gridSnapping;
 	}

@@ -115,8 +115,6 @@ class Button extends AbstractButton, implements IAdjustable {
 	public var slot : Socket;
 
 
-
-
 	/** @todo send binary adjustments**/
 	public var adjustment : Adjustment;
 	//}}}

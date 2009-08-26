@@ -41,7 +41,21 @@ import haxegui.utils.Size;
 
 /**
 *
-* Label class, non-interactive text component.
+* Label class, non-interactive text component.<br/>
+* <p>
+* In haXe code you create a label like so:
+* </p>
+* <pre class="code haxe">
+* var label = new Label();
+* label.init({text: "I'm a label"});
+* </pre>
+* <p>
+* In XML both of the options below are possible:
+* </p>
+* <pre class="code xml">
+* <haxegui:controls:Label text="Label #1"/>
+* <haxegui:controls:Label>Label #2</haxegui:controls:Label>
+* </pre>
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
@@ -86,10 +100,11 @@ class Label extends Component, implements IText {
 
 		this.focusRect = false;
 		this.tabEnabled = false;
+		this.mouseEnabled = Opts.optBool(opts, "mouseEnabled", true);
 
 
 		tf.text = Opts.optString(opts, "text", text);
-		tf.setTextFormat(DefaultStyle.getTextFormat());
+		tf.setTextFormat(DefaultStyle.getTextFormat(Opts.optInt(opts, "size", DefaultStyle.FONT_SIZE), Opts.optInt(opts, "color", DefaultStyle.LABEL_TEXT)));
 		this.addChild(tf);
 
 		if(box.isEmpty())

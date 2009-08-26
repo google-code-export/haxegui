@@ -4,4 +4,5 @@
 	<style name="default"/>
 	<domain baseurl=""/>
 	<server address="localhost" port="2000"/>
+	<!--<GLOBAL_OBJECT>flash.Lib.current</GLOBAL_OBJECT>-->
 </loader>

@@ -43,7 +43,9 @@ class ScriptStandardLibrary {
 	**/
 	public static function set(interp:Interp) {
 		//{{{ haxe
+		interp.variables.set( "Bool", Bool );
 		interp.variables.set( "Date", Date );
+		interp.variables.set( "Int", Int );
 		interp.variables.set( "Lambda", Lambda );
 		interp.variables.set( "Lib", flash.Lib );
 		interp.variables.set( "List", List );
@@ -229,6 +231,7 @@ class ScriptStandardLibrary {
 
 		//{{{ haxegui
 		/** haxegui exported with haxegui package stripped **/
+		interp.variables.set("AbstractButton", haxegui.controls.AbstractButton);
 		interp.variables.set("Alert", haxegui.Alert);
 		interp.variables.set("Appearance", haxegui.Appearance);
 		interp.variables.set("Color", haxegui.utils.Color);

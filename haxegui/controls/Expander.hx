@@ -93,18 +93,36 @@ class Expander extends AbstractButton {
 
 	public var expanded(__getExpanded,__setExpanded) : Bool;
 
-	public var button : ExpanderButton;
+	public var button 		: ExpanderButton;
 
-	public var label  : Label;
+	public var label  		: Label;
 
-	public var scrollTween : Tween;
+	public var scrollTween  : Tween;
 
-	public var arrowTween : Tween;
+	public var arrowTween   : Tween;
 	//}}}
 
-	static var xml = Xml.parse('
+
+	static var styleXml = Xml.parse('
+	<haxegui:Style name="Expander">
+		<haxegui:controls:Expander>
+			<events>
+				<script type="text/hscript" action="mouseClick">
+				<![CDATA[
+				if(this.disabled) return;
+				event.stopImmediatePropagation();
+				this.__setExpanded(!this.__getExpanded());
+				this.dispatchEvent(new flash.events.Event(flash.events.Event.CHANGE));
+				]]>
+				</script>
+			</events>
+		</haxegui:controls:Expander>
+	</haxegui:Style>
+	').firstElement();
+
+	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="Expander">
-	<haxegui:controls:Label text="{parent.name}"/>
+		<haxegui:controls:Label text="{parent.name}"/>
 	</haxegui:Layout>
 	').firstElement();
 
@@ -119,9 +137,10 @@ class Expander extends AbstractButton {
 
 		super.init(opts);
 
-		xml.set("name", name);
+		layoutXml.set("name", name);
 
-		XmlParser.apply(Expander.xml, this);
+		XmlParser.apply(Expander.styleXml, true);
+		XmlParser.apply(Expander.layoutXml, this);
 
 
 		expanded = Opts.optBool(opts, "expanded", expanded);
@@ -136,9 +155,7 @@ class Expander extends AbstractButton {
 		}
 
 
-		// label = new Label(this);
 		label = getElementsByClass(Label).next();
-		// label.init({text: this.name});
 		label.setText(Opts.optString(opts, "label", label.text));
 		label.center();
 		label.x = Math.max(24, label.x);
@@ -180,29 +197,6 @@ class Expander extends AbstractButton {
 
 			label.move(24,0);
 		}
-
-
-
-		//scrollRect = new Rectangle(0, 0, box.width, box.height);
-		//cacheAsBitmap = true;
-
-	}
-	//}}}
-
-
-	//{{{ onMouseClick
-	override public function onMouseClick(e:MouseEvent) {
-		if(disabled) return;
-
-
-		e.stopImmediatePropagation();
-
-		expanded = !expanded;
-
-
-		dispatchEvent(new Event(Event.CHANGE));
-
-		super.onMouseClick(e);
 	}
 	//}}}
 
