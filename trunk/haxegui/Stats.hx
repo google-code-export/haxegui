@@ -125,13 +125,18 @@ class Stats extends Window {
 
 		//{{{ Lists
 		list = new UiList(container, "List1");
-		list.data=["FPS", "minFPS", "maxFPS", "avgFPS", "objs", "dirty", "Mem", "Uptime"];
+		var ds = new DataSource();
+		ds.data = ["FPS", "minFPS", "maxFPS", "avgFPS", "objs", "dirty", "Mem", "Uptime"];
+		list.dataSource = ds;
 		list.init({color: 0x2A7ACD, width: 70, height: 160});
 
 		list2 = new UiList(container, "List2");
-		list2.data = [];
-		for(i in 0...list.data.length)
-		list2.data.push(Std.string(Math.NaN));
+		var ds2 = new DataSource();
+		ds2.data = [];
+		for(i in 0...ds2.data.length)
+		ds2.data.push(Std.string(Math.NaN));
+
+		list2.dataSource = ds2;
 
 		list2.init({color: 0x2A7ACD, width: 70, height: 180});
 		list2.move(70,0);
@@ -250,22 +255,22 @@ class Stats extends Window {
 		if(avgFPS.length > 25 ) avgFPS.shift();
 		//}}}
 
-		//{{{ List
-		list2.data =
-		[   "",
-		Std.string(fps).substr(0,5),
-		Std.string(minFPS).substr(0,5),
-		Std.string(maxFPS).substr(0,5),
-		Std.string(avg).substr(0,5),
-		Std.string(count(flash.Lib.current)),
-		Std.string(Lambda.count(Haxegui.dirtyList)),
-		Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5),
-		DateTools.format(new Date(0,0,0,0,0,Std.int(haxe.Timer.stamp())), "%H:%M:%S"),
-		""
-		];
+		// //{{{ List
+		// list2.data =
+		// [   "",
+		// Std.string(fps).substr(0,5),
+		// Std.string(minFPS).substr(0,5),
+		// Std.string(maxFPS).substr(0,5),
+		// Std.string(avg).substr(0,5),
+		// Std.string(count(flash.Lib.current)),
+		// Std.string(Lambda.count(Haxegui.dirtyList)),
+		// Std.string(flash.system.System.totalMemory/Math.pow(10,6)).substr(0,5),
+		// DateTools.format(new Date(0,0,0,0,0,Std.int(haxe.Timer.stamp())), "%H:%M:%S"),
+		// ""
+		// ];
 
-		for(item in list2.getElementsByClass(ListItem))
-		item.label.tf.text = list2.data[list2.getChildIndex(cast item)];
+		// for(item in list2.getElementsByClass(ListItem))
+		// item.label.tf.text = list2.data[list2.getChildIndex(cast item)];
 
 
 

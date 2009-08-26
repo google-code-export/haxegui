@@ -68,7 +68,19 @@ import haxegui.utils.Size;
 class CheckBox extends PushButton {
 
 	//{{{ Members
-	static var xml = Xml.parse('
+	static var styleXml = Xml.parse('
+	<haxegui:Style name="CheckBox">
+		<haxegui:controls:CheckBox>
+			<events>
+			<script type="text/hscript" action="mouseClick"><![CDATA[
+			]]>
+			</script>
+			</events>
+		</haxegui:controls:CheckBox>
+	</haxegui:Style>
+	').firstElement();
+
+	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="CheckBox">
 	</haxegui:Layout>
 	').firstElement();
@@ -84,12 +96,14 @@ class CheckBox extends PushButton {
 		box = Size.square(20).toRect();
 
 
-		xml.set("name", name);
+		layoutXml.set("name", name);
 
-		haxegui.XmlParser.apply(CheckBox.xml, this);
+		haxegui.XmlParser.apply(CheckBox.styleXml, true);
+		haxegui.XmlParser.apply(CheckBox.layoutXml, this);
 
 
 		mouseChildren = true;
+		doubleClickEnabled = false;
 
 
 		// label

@@ -47,7 +47,7 @@ import haxegui.utils.Size;
 *
 * Draggable handle to slide values.
 *
-* @version 0.1
+* @version 0.2
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
@@ -58,7 +58,7 @@ class SliderHandle extends AbstractButton, implements IAggregate {
 		box = new Rectangle(0, 0, 24, 10);
 		minSize = Size.fromRect(box);
 		super.init(opts);
-		y = Std.int( (cast parent).box.height - box.height )>>1;
+		y = .5*((cast parent).box.height - box.height);
 
 		// add the drop-shadow filters
 		filters = [new flash.filters.DropShadowFilter (disabled ? 1 : 2, 45, DefaultStyle.DROPSHADOW, disabled ? 0.25 : 0.5, 4, 4, disabled ?  0.25 : 0.5, flash.filters.BitmapFilterQuality.LOW, false, false, false )];
@@ -105,14 +105,14 @@ class Slider extends Component, implements IAdjustable {
 
 	static var xml = Xml.parse('
 	<haxegui:Layout name="Slider">
-	<haxegui:controls:SliderHandle color="{parent.color}"/>
+	<haxegui:controls:SliderHandle color="{parent.color}" disabled="{parent.disabled}"/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
 
 	//{{{ Functions
 	//{{{ init
-	override public function init(opts:Dynamic=null) {
+	override public function init(?opts:Dynamic=null) {
 		adjustment = new Adjustment({ value: 0.0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 5., page: 10.});
 		box = new Size(140, 20).toRect();
 		color = DefaultStyle.BACKGROUND;
@@ -139,7 +139,6 @@ class Slider extends Component, implements IAdjustable {
 
 
 		// handle
-		// handle.moveTo(box.width/2, Std.int(box.height - handle.height )>>1);
 		handle = cast firstChild();
 
 
@@ -151,6 +150,8 @@ class Slider extends Component, implements IAdjustable {
 		handle.addEventListener (MouseEvent.MOUSE_DOWN, onHandleMouseDown, false, 0, true);
 
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
+
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
 
@@ -243,11 +244,10 @@ class Slider extends Component, implements IAdjustable {
 
 
 		// if((Std.int(box.height)>>1) < handle.minSize.height) return;
-		handle.box.height = Std.int(box.height)>>1;
-
+		handle.box.height = .5*box.height;
 		handle.dirty = true;
 
-		handle.y = Std.int( this.box.height - handle.height )>>1;
+		handle.y = .5*(this.box.height - handle.box.height);
 		handle.x = Math.max(0, Math.min( box.width - handle.box.width, handle.x ));
 	}
 	//}}}

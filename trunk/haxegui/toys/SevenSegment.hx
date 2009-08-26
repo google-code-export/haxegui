@@ -52,13 +52,14 @@ class SevenSegment extends Component, implements IAdjustable
 
 	/** Adjustment object **/
 	public var adjustment : Adjustment;
-
+	//
 	//     a
 	//    ---
 	// f | g | b
 	//    ---
-	// e | d | c
+	// e |   | c
 	//    ---
+	//     d
 	//
 	// abcdefg
 	// 1111110 = 0x7e (zero)
@@ -93,7 +94,6 @@ class SevenSegment extends Component, implements IAdjustable
 		super.init(opts);
 
 		digit = Opts.optInt(opts, "digit", digit);
-		//~ color = Opts.optInt(opts, "color", color);
 		digitColor = Opts.optInt(opts, "digitColor", digitColor);
 
 		setAction("redraw",

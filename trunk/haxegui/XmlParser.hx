@@ -26,6 +26,7 @@ import haxegui.controls.Component;
 import haxegui.managers.ScriptManager;
 import haxegui.utils.ScriptStandardLibrary;
 
+
 /**
 * Style and Layout parser
 *
@@ -35,9 +36,11 @@ import haxegui.utils.ScriptStandardLibrary;
 */
 class XmlParser {
 
+	//{{{ Members
 	private var isStyle : Bool;
 	/** @todo maybe find a different runtime container **/
 	static var GLOBAL_OBJECT = flash.Lib.current;
+	//}}}
 
 
 	//{{{ Constructor
@@ -45,10 +48,11 @@ class XmlParser {
 		var typeParts = xml.nodeName.split(":");
 		if(typeParts[0] != "haxegui")
 		throw "Not a haxegui node";
+
 		switch(typeParts[1].toLowerCase()) {
-			case "layout":	isStyle = false;
-			case "style":	isStyle = true;
-			default:		throw "Unhandled xml type: " + typeParts[1];
+			case "layout" : isStyle = false;
+			case "style"  : isStyle = true;
+			default		  : throw "Unhandled xml type: " + typeParts[1];
 		}
 
 		// trace(this+": Parsing " + typeParts[1].toLowerCase() + " for " + xml.get("name"));
@@ -57,6 +61,7 @@ class XmlParser {
 	}
 	//}}}
 
+	//{{{ Functions
 
 	//{{{ toString
 	public function toString() : String {
@@ -195,22 +200,60 @@ class XmlParser {
 
 
 		if(!isStyle) {
-			if(Std.is(parent, List))
-			{
+			if(Std.is(parent, List)) {
 				parent.add( node.firstChild().nodeValue );
-				Reflect.setField(flash.Lib.current, node.parent.get("name"), parent);
+				Reflect.setField(GLOBAL_OBJECT, node.parent.get("name"), parent);
 				return;
 			}
 
-			if(Std.is(parent, Array))
-			{
+			if(Std.is(parent, Array)) {
 				parent.push( node.firstChild().nodeValue );
-				Reflect.setField(flash.Lib.current, node.parent.get("name"), parent);
-				// trace(Reflect.field(flash.Lib.current, "IntArray"));
-				// trace(node.parent.get("name"));
+				Reflect.setField(GLOBAL_OBJECT, node.parent.get("name"), parent);
 				return;
 			}
+
+			if(node.nodeName=="Float" || node.nodeName=="String" || node.nodeName=="String" || node.nodeName=="Bool") {
+				Reflect.setField(GLOBAL_OBJECT, node.get("name"), node.firstChild().nodeValue);
+				return;
+			}
+
+			if(node.nodeName=="Function") {
+				var f = function(){};
+				var args = {};
+				var code = node.elementsNamed("Return").next().firstChild().nodeValue;
+
+				var parser = new hscript.Parser();
+				var program = parser.parseString(code);
+				var interp = new hscript.Interp();
+
+				for(arg in node.elementsNamed("Argument")) {
+					Reflect.setField(args, arg.get("name"), Type.createInstance(Type.resolveClass(arg.get("type")), []));
+					interp.variables.set(arg.get("name"), 2 );
+				}
+
+
+				// interp.variables.set( "this", inst );
+				// interp.variables.set( "parent", parent );
+				// interp.variables.set( "arguments", args );
+
+
+				ScriptStandardLibrary.set(interp);
+				try {
+					var rv = interp.execute(program);
+					trace(rv);
+				}
+				catch(e:Dynamic) {
+					trace(e);
+				}
+
+
+
+				Reflect.setField(GLOBAL_OBJECT, node.get("name"), f);
+				return;
+			}
+
 		}
+
 
 		if(!isStyle)
 		if(isDataSourceNode(node) || isDataNode(node)) {
@@ -223,14 +266,22 @@ class XmlParser {
 			if(Std.is(parent, DataSource))
 			parent.data = data;
 
+
 			if(node.elements().hasNext())
 			for(i in node.elements())
 			parseNode(i, data);
 
-			if(Std.is(parent, Component) && Std.is(data, DataSource))
-			//parent.dataSource = data;
-			parent.__setDataSource(data);
+			// if(Std.is(parent, Component) && Std.is(data, DataSource)) {
+			if(Std.is(parent, haxegui.controls.IDataSource) && Std.is(data, DataSource)) {
+				// parent.dataSource = data;
+				parent.setDataSource(data);
 
+				// if(Reflect.hasField( parent, "onData") )
+				// if(Reflect.isFunction( Reflect.field(parent, "onData") ))
+				// Reflect.callMethod( parent, parent.onData, [] );
+
+
+			}
 
 			return;
 		}
@@ -240,8 +291,14 @@ class XmlParser {
 		var comp : Component = null;
 		if(!isStyle) {
 			var args : Dynamic = {};
+			// switch(Type.getClassName(resolvedClass)) {
+			// case "flash.text.TextField", "flash.display.Sprite":
+			// inst = Type.createInstance(resolvedClass, []);
+			// parent.addChild(inst);
+
+			// default:
 			inst = Type.createInstance(resolvedClass, [parent, node.get("name")]);
-			//inst = Type.createInstance(resolvedClass, [parent]);
+			// }
 			if(Std.is(inst, Component)) {
 				comp = cast inst;
 			}
@@ -252,6 +309,7 @@ class XmlParser {
 				switch(val.charAt(0)) {
 					case "@":
 					Reflect.setField(args, attr, Reflect.field(GLOBAL_OBJECT, val.substr(1, val.length) ) );
+					trace(attr+"\t"+Reflect.field(GLOBAL_OBJECT, val.substr(1, val.length) ));
 
 					case "{":
 					val = val.substr(1,val.length-2);
@@ -302,18 +360,18 @@ class XmlParser {
 		}
 
 
-		if(!isStyle) {
-			if(node.elements().hasNext())
-			for(i in node.elements())
-			parseNode(i, inst);
-			if(comp != null && comp.hasAction("onLoaded")) {
-				trace("Executing onLoaded method for component "+ comp.name);
-				try {
-					ScriptManager.exec(comp, "onLoaded", {});
-				} catch(e:Dynamic) {
-					trace("Error executing onLoaded method for component "+ comp.name);
-				}
+		// if(!isStyle) {
+		if(node.elements().hasNext())
+		for(i in node.elements())
+		parseNode(i, inst);
+		if(comp != null && comp.hasAction("onLoaded")) {
+			trace("Executing onLoaded method for component "+ comp.name);
+			try {
+				ScriptManager.exec(comp, "onLoaded", {});
+			} catch(e:Dynamic) {
+				trace("Error executing onLoaded method for component "+ comp.name);
 			}
+			// }
 		}
 	}
 	//}}}
@@ -330,7 +388,7 @@ class XmlParser {
 	* @throws String 		Error
 	* @return
 	*/
-	function parseScriptNode(className:String, node:Xml, inst:Component, resolvedClass : Class<Dynamic>) {
+	function parseScriptNode(className:String, node:Xml, inst:Component, resolvedClass:Class<Dynamic>) {
 		var location = " in "+className+"<events> section";
 		if(node.nodeName != "script") {
 			trace("XmlParser : warning : Unexpected node " + node.nodeName + location);
@@ -362,12 +420,13 @@ class XmlParser {
 
 
 		if(isStyle)
-		ScriptManager.setDefaultScript(resolvedClass,action,code);
+		ScriptManager.setDefaultScript(resolvedClass, action, code);
 		else {
 			inst.setAction(action,code);
 			if(!inst.hasOwnAction(action))
 			throw "instance name " + inst.name + " has no " + action;
 		}
 	}
+	//}}}
 	//}}}
 }

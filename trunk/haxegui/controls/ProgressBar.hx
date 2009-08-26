@@ -118,6 +118,8 @@ class ProgressBar extends Component, implements IAdjustable {
 				</script>
 			</events>
 		</haxegui:controls:ProgressBarIndicator>
+		<haxegui:controls:Label text="{Math.round(100*parent.progress) + \'%\'}"/>
+		<haxegui:toys:Socket x="-14" y="10" radius="6" visible="false"/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
@@ -171,16 +173,16 @@ class ProgressBar extends Component, implements IAdjustable {
 
 
 		//
-		label = new Label(this);
-		label.init({ text: Math.round(100*progress) + "%" });
+		// label = new Label(this);
+		// label.init({ text: Math.round(100*progress) + "%" });
+		label = getElementsByClass(Label).next();
 		label.center();
 		label.move(0,1);
 
-
 		///
-		slot = new Socket(this);
-		slot.init({radius: 6, visible: Haxegui.slots});
-		slot.moveTo(-14, Std.int(this.box.height)>>1);
+		// slot = new Socket(this);
+		// slot.init({radius: 6, visible: Haxegui.slots});
+		// slot.moveTo(-14, Std.int(this.box.height)>>1);
 
 
 

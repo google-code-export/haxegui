@@ -36,8 +36,20 @@ import haxegui.utils.Size;
 //}}}
 
 
+//{{{ ScrollPolicy
+enum ScrollPolicy {
+	ALWAYS_SHOW;
+	AUTOMATIC;
+	NEVER_SHOW;
+}
+//}}}
+
+
+//{{{ ScrollPane
 /**
 * ScrollPane masks his children, and allows to expose the hidden parts using ScrollBars.<br/>
+*
+* @todo Policy from Xml
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
@@ -49,6 +61,9 @@ class ScrollPane extends Component, implements IContainer {
 
 	public var vert : ScrollBar;
 	public var horz : ScrollBar;
+
+	public var vertPolicy : ScrollPolicy;
+	public var horzPolicy : ScrollPolicy;
 
 	//{{{ Functions
 
@@ -85,20 +100,20 @@ class ScrollPane extends Component, implements IContainer {
 		addChild(content);
 
 
-		if(Opts.optBool(opts,"vert", true)) {
+		if(Opts.optBool(opts, "vert", true)) {
 			vert = new ScrollBar(this, "vscrollbar", this.box.width - 20, 0);
 			vert.init({target: content, color: this.color});
 		}
 
 
-		if(Opts.optBool(opts,"horz", true)) {
+		if(Opts.optBool(opts, "horz", true)) {
 			horz = new ScrollBar(this, "hscrollbar");
 			horz.init({target: content, horizontal: true, color: this.color});
 		}
 
 
 		// #if debug
-		setAction("redraw", " this.graphics.clear(); this.graphics.lineStyle(2, Color.RED); this.graphics.drawRect(0,0,this.box.width, this.box.height); this.graphics.lineStyle(2, Color.GREEN); this.graphics.drawRect(0,0,this.box.width,this.box.height);" );
+		// setAction("redraw", " this.graphics.clear(); this.graphics.lineStyle(2, Color.RED); this.graphics.drawRect(0,0,this.box.width, this.box.height); this.graphics.lineStyle(2, Color.GREEN); this.graphics.drawRect(0,0,this.box.width,this.box.height);" );
 		// #end
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
@@ -127,7 +142,8 @@ class ScrollPane extends Component, implements IContainer {
 	*
 	*/
 	public function onParentResize(e:ResizeEvent) {
-		//~ box = untyped parent.box.clone();
+
+		//
 		if(!Std.is(parent, Divider)) {
 			if(fitH) box.width = (cast parent).box.width - x - ((vert!=null && vert.visible) ? 20 : 0);
 			if(fitV) box.height = (cast parent).box.height - y - ((horz!=null && horz.visible) ? 20 : 0);
@@ -140,8 +156,6 @@ class ScrollPane extends Component, implements IContainer {
 		var r = box.clone();
 		r.x = content.scrollRect.x;
 		r.y = content.scrollRect.y;
-		// r.width += r.x;
-		// r.height += r.y;
 		content.scrollRect = r.clone();
 
 
@@ -149,6 +163,7 @@ class ScrollPane extends Component, implements IContainer {
 		dispatchEvent(e);
 	}
 	//}}}
+
 
 
 	public override function onResize(e:ResizeEvent) {
@@ -171,3 +186,4 @@ class ScrollPane extends Component, implements IContainer {
 	//}}}
 	//}}}
 }
+//}}}

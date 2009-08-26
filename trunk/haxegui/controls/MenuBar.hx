@@ -37,6 +37,7 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.ui.Keyboard;
 import haxegui.DataSource;
+import haxegui.XmlParser;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
 import haxegui.controls.Image;
@@ -72,15 +73,24 @@ class Spacer extends Component {
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.2
 */
-class Menu extends AbstractButton, implements IAggregate, implements IData {
+class Menu extends AbstractButton, implements IDataSource, implements IAggregate {
 
-	public var label : Label;
-	public var icon  : Icon;
-	public var menu  : PopupMenu;
-	public var data  : Dynamic;
-	public var dataSource( default, __setDataSource ) : DataSource;
+	//{{{ Members
+	public var label 		: Label;
+	public var icon  		: Icon;
+	public var menu  		: PopupMenu;
+
+	public var dataSource(default, setDataSource) : DataSource;
+
+	static var layoutXml = Xml.parse('
+	<haxegui:Layout name="Menu">
+		<haxegui:controls:Label x="4" y="3" text="{parent.name}"/>
+	</haxegui:Layout>
+	').firstElement();
+	//}}}
 
 
+	//{{{ Functions
 	//{{{ init
 	/**
 	* @throws String when not parented to a [MenuBar]
@@ -94,10 +104,14 @@ class Menu extends AbstractButton, implements IAggregate, implements IData {
 		super.init(opts);
 
 
-		label = new Label(this);
-		label.init({text: name});
-		label.move(4,4);
-		label.mouseEnabled = false;
+		XmlParser.apply(Menu.layoutXml, this);
+
+		// label = new Label(this);
+		// label.init({text: name});
+		// label.move(4,4);
+		// label.mouseEnabled = false;
+
+		label = cast firstChild();
 
 		box.width = label.width;
 		// dirty = false;
@@ -124,13 +138,14 @@ class Menu extends AbstractButton, implements IAggregate, implements IData {
 		var r = new Rectangle();
 		r.width = menu.box.width;
 		menu.scrollRect = r;
-		var t = new feffects.Tween(0, menu.data.length*24, 250, r, "height", feffects.easing.Linear.easeOut);
-		t.setTweenHandlers(
-		function(v){
-			self.menu.scrollRect = r.clone();
-		}
-		);
-		t.start();
+
+		// var t = new feffects.Tween(0, menu.data.length*24, 250, r, "height", feffects.easing.Linear.easeOut);
+		// t.setTweenHandlers(
+		// function(v){
+		// 	self.menu.scrollRect = r.clone();
+		// }
+		// );
+		// t.start();
 
 		// for(i in menu)
 			// (cast i).setAction("mouseDown", "var a = new haxegui.Alert(); a.init(); a.label.setText(this.label.getText());");
@@ -140,15 +155,10 @@ class Menu extends AbstractButton, implements IAggregate, implements IData {
 	//}}}
 
 
-	//{{{ __setDataSource
-	public function __setDataSource(d:DataSource) : DataSource {
+	//{{{ setDataSource
+	public function setDataSource(d:DataSource) : DataSource {
 		dataSource = d;
-
-		#if debug
-		trace(this.dataSource+" => "+this);
-		trace(this.dataSource+": "+dataSource.data);
-		#end
-
+		// dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
 		return dataSource;
 	}
 	//}}}
@@ -158,6 +168,7 @@ class Menu extends AbstractButton, implements IAggregate, implements IData {
 	static function __init__() {
 		haxegui.Haxegui.register(Menu);
 	}
+	//}}}
 	//}}}
 }
 //}}}
@@ -173,14 +184,15 @@ class Menu extends AbstractButton, implements IAggregate, implements IData {
 */
 class MenuBar extends Component, implements IRubberBand {
 	//{{{ Members
-	public var items : Array<Menu>;
+	public var items 	: Array<Menu>;
 
 	public var numMenus : Int;
 
-	private var _menu:Int;
+	private var _menu	: Int;
 	//}}} Members
 
 
+	//{{{ Functions
 	//{{{ init
 	override public function init(opts : Dynamic=null) {
 		// assuming parent is a window
@@ -275,6 +287,7 @@ class MenuBar extends Component, implements IRubberBand {
 	static function __init__() {
 		haxegui.Haxegui.register(MenuBar);
 	}
+	//}}}
 	//}}}
 }
 //}}}

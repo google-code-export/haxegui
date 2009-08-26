@@ -17,18 +17,15 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package haxegui;
+package haxegui.controls;
+
+import haxegui.DataSource;
 
 /**
-*
-* Interface for interval-repeating components.
-*
-*/
-interface IRepeater {
-	public var autoRepeat : Bool;
-	/** number of [interval] actions per second on auto repeat **/
-	public var repeatsPerSecond : Float;
-	/** Seconds before auto repeat starts **/
-	public var repeatWaitTime : Float;
+ * Interface for data provided components.
+ *
+ */
+interface IDataSource {
+	public var dataSource(default, setDataSource) : DataSource;
+	public function setDataSource(d:DataSource) : DataSource;
 }
-

@@ -88,8 +88,9 @@ class Input extends Component, implements IText {
 		tf.selectable = ! disabled;
 		tf.tabEnabled = false;
 		tf.text = Opts.optString(opts, "text", name);
-		tf.type =TextFieldType.INPUT;
+		tf.type = TextFieldType.INPUT;
 		tf.width = box.width;
+		tf.x = 0;
 		tf.y = 4;
 
 		var fmt = DefaultStyle.getTextFormat();
@@ -142,7 +143,7 @@ class Input extends Component, implements IText {
 
 
 	//{{{ setText
-	public function setText(s:String) : String {tf.text = s;
+	public function setText(s:String) : String {
 		tf.text = s;
 		this.dispatchEvent(new Event(Event.CHANGE));
 		return s;

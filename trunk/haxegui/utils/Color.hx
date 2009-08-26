@@ -25,7 +25,7 @@ import flash.geom.Transform;
 * Functions to ease dealing with hex color triplets.<br/>
 * This class especially comes handy with haxe's [using] keyword (not in hscript).
 *
-* @todo: HLS, HLV, CMYK...
+* @todo: HLS, HLV, CMYK... <http://haxe.org/doc/snip/colorconverter>
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>

@@ -40,6 +40,7 @@ import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
+import haxegui.events.ResizeEvent;
 //}}}
 
 /**
@@ -47,13 +48,12 @@ import haxegui.utils.Size;
 *
 *
 */
-class PopupMenu extends Component, implements IData {
+class PopupMenu extends Component, implements IDataSource {
 
 	//{{{ Members
-	public var items 						: List<ListItem>;
+	public var items : List<ListItem>;
 
-	public var data 						: Dynamic;
-	public var dataSource(default, default) : DataSource;
+	public var dataSource(default, setDataSource) : DataSource;
 	//}}}
 
 
@@ -62,7 +62,7 @@ class PopupMenu extends Component, implements IData {
 	override public function init(?opts:Dynamic=null) {
 		box = new Size(100,20).toRect();
 		color = DefaultStyle.BACKGROUND;
-		if(data==null) data = [""];
+		// if(data==null) data = [""];
 		items = new List<ListItem>();
 
 		super.init(opts);
@@ -71,41 +71,6 @@ class PopupMenu extends Component, implements IData {
 		mouseEnabled = false;
 		tabEnabled = false;
 
-
-		// data
-		if(dataSource!=null) {
-			if(Std.is(dataSource.data, Array)) {
-				data = cast(dataSource.data, Array<Dynamic>);
-				for (i in 0...data.length) {
-					var item = new ListItem(this);
-					item.init({
-						// width: this.box.width,
-						color: this.color,
-						label: data[i]
-					});
-					//item.label.mouseEnabled = false;
-					box.width = Math.max( box.width, item.label.tf.width + 8 );
-					item.move(0,20*i+1);
-				}
-			}
-			else
-			if(Std.is(dataSource.data, List)) {
-				var j=0;
-				data = cast(dataSource.data, List<Dynamic>);
-				var items : Iterator<Dynamic> = data.iterator();
-				for(i in items) {
-					var item = new ListItem(this);
-					item.init({
-						color: this.color,
-						label: i
-					});
-					//item.label.mouseEnabled = false;
-					box.width = Math.max( box.width, item.label.tf.width + 8 );
-					item.move(0,20*j+1);
-					j++;
-				}
-			}
-		}
 
 		// position
 		x = Opts.optFloat(opts,"x",0) + 10;
@@ -123,6 +88,9 @@ class PopupMenu extends Component, implements IData {
 		dispatchEvent (new MenuEvent(MenuEvent.CHANGE, false, false));
 
 		// for(i in this) (cast i).redraw();
+		if(dataSource==null) return;
+		dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
+		dataSource.dispatchEvent(new Event(Event.CHANGE));
 	}
 	//}}}
 
@@ -143,6 +111,16 @@ class PopupMenu extends Component, implements IData {
 	// 	return child;
 	// }
 	// //}}}
+
+
+	//{{{ setDataSource
+	public function setDataSource(d:DataSource) : DataSource {
+		dataSource = d;
+		dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
+		return dataSource;
+	}
+	//}}}
+
 
 
 	//{{{ onAdded
@@ -175,6 +153,49 @@ class PopupMenu extends Component, implements IData {
 	public override function destroy() {
 		dispatchEvent(new MenuEvent(MenuEvent.MENU_HIDE));
 		super.destroy();
+	}
+	//}}}
+
+
+	//{{{ onData
+	public function onData(?e:Event) {
+	if(dataSource==null) return;
+		if(Std.is(dataSource.data, Array)) {
+			var data = cast(dataSource.data, Array<Dynamic>);
+			for (i in 0...data.length) {
+				var item = new ListItem(this);
+				item.init({
+					color: DefaultStyle.INPUT_BACK,
+					label: data[i]
+				});
+				item.move(0,20+20*i+1);
+				box.width = Math.max( box.width, item.label.tf.width + 8 );
+			}
+		}
+		else
+		if(Std.is(dataSource.data, List)) {
+			var j=0;
+			var data = cast(dataSource.data, List<Dynamic>);
+			var items : Iterator<Dynamic> = data.iterator();
+			for(i in items) {
+				var item = new ListItem(this);
+				item.init({
+					color: DefaultStyle.INPUT_BACK,
+					label: i
+				});
+				item.move(0,20+20*j+1);
+				box.width = Math.max( box.width, item.label.tf.width + 8 );
+				j++;
+			}
+		}
+
+
+		box.height = Math.max( box.height, 20*items.length );
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+
+		// for(i in this)
+			// (cast i).dirty=true;
+
 	}
 	//}}}
 

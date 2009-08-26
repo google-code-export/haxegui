@@ -21,6 +21,7 @@ package haxegui.controls;
 
 /**
 * Interface for widgets that can detach and snap.<br/>
+* @todo implement
 */
 interface IRubberBand {
 }

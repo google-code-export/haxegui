@@ -5,9 +5,19 @@
 <!-- Non-visual -->
 
 
+	<Function name="add">
+	<Argument name="a" type="Int"/>
+	<Argument name="b" type="Int"/>
+	<Return>a+b</Return>
+	</Function>
+
+
 	<String name="hello">Hello World</String>
+	<Int name="int">3</Int>
+	<Bool name="b">true</Bool>
 	<Float name="aNumber">3.45</Float>
-	<haxegui:DataSource>
+	<Float name="NaN">NotaNumber</Float>
+	<haxegui:DataSource name="ArraySource">
 		<Array name="StringArray">
 			<String>Array Item 1</String>
 			<String>Array Item 2</String>
@@ -16,7 +26,8 @@
 			<String>Array Item 5</String>
 		</Array>
 	</haxegui:DataSource>
-	<haxegui:DataSource>
+
+	<haxegui:DataSource name="ListSource">
 		<List name="List1">
 			<String>List Item 1</String>
 			<String>List Item 2</String>
@@ -71,6 +82,7 @@
 				<haxegui:controls:Button width="30" icon="STOCK_NEW" />
 				<haxegui:controls:Button width="30" icon="STOCK_OPEN" />
 				<haxegui:controls:Button width="30" icon="STOCK_SAVE" />
+				<haxegui:controls:ToolBarSeperator/>
 				<haxegui:controls:Button width="30" icon="STOCK_COPY" />
 				<haxegui:controls:Button width="30" icon="STOCK_CUT" />
 				<haxegui:controls:Button width="30" icon="STOCK_PASTE"/>
@@ -81,7 +93,7 @@
 
 		<!-- Main ScrollPane -->
 		<haxegui:containers:ScrollPane name="ScrollPane1" x="10" y="84">
-			<haxegui:containers:Container width="512" height="512">
+			<haxegui:containers:Container name="Container1" width="512" height="512">
 
 
 				<haxegui:controls:TabNavigator name="TabNavigator" x="0" y="0" width="512">
@@ -105,7 +117,7 @@
 					<haxegui:controls:Tab x="60" width="60"/>
 					<haxegui:controls:Tab x="120" width="60"/>
 					<haxegui:controls:Label x="120" y="3">Active tab: </haxegui:controls:Label>
-					<haxegui:controls:Stepper name="TabStepper" x="300" y="2" value="0" step="1" max="2" autoRepeat="false">
+					<haxegui:controls:Stepper name="TabStepper" x="300" y="2" value="0" step="1" min="0" max="2" autoRepeat="false">
 						<events>
 							<script type="text/hscript" action="onLoaded">
 								<![CDATA[
@@ -169,7 +181,7 @@
 
 						<haxegui:controls:DropDown x="30" y="160">
 							<haxegui:DataSource name="FruitList">
-								<List>
+								<List name="FruitList">
 									<String>Apples</String>
 									<String>Bananas</String>
 									<String>Oranges</String>
@@ -203,28 +215,45 @@
 						</haxegui:controls:RadioGroup>
 
 						<haxegui:controls:Expander x="430" y="90">
-							<haxegui:controls:UiList x="24" y="26" data="@StringArray" visible="true" />
+							<haxegui:controls:UiList x="24" y="26" dataSource="@ArraySource" visible="true" />
+							<haxegui:DataSource data="@StringArray"/>
 						</haxegui:controls:Expander>
 
-						<haxegui:controls:ListBox x="360" y="250" width="300" data="@List1" />
+						<haxegui:controls:Button label="Add" width="40" height="20" x="360" y="220">
+						<events>
+							<script type="text/hscript" action="mouseClick"><![CDATA[
+							var list = parent.getChildByName("ListBox");
+							if(list.dataSource==null) {
+							list.dataSource = new haxegui.DataSource();
+							list.dataSource.data = [];
+							}
+							list.dataSource.addItem("Item");
+							list.onData();
+							]]>
+							</script>
+						</events>
+						</haxegui:controls:Button>
+
+						<haxegui:controls:Button label="Remove" height="20" x="410" y="220"/>
+
+						<haxegui:controls:ListBox name="ListBox" x="360" y="250" width="300"/>
+
 						<haxegui:controls:UiList x="710" y="250">
-							<haxegui:DataSource name="FruitList">
-								<List>
+							<events>
+								<script type="text/hscript" action="onLoaded">
+									<![CDATA[
+										this.dataSource.addItem("Pineapple");
+										this.dataSource.addItem("Watermelon");
+									]]>
+									</script>
+							</events>
+							<haxegui:DataSource name="Fruit">
+								<List name="FruitList">
 									<String>Apples</String>
 									<String>Bananas</String>
 									<String>Oranges</String>
 								</List>
 							</haxegui:DataSource>
-							<events>
-								<script type="text/hscript" action="onLoaded">
-									<![CDATA[
-										var d = this.dataSource;
-										d.data.add("Pineapple");
-										d.data.add("Watermelon");
-										this.__setDataSource( d );
-									]]>
-									</script>
-							</events>
 						</haxegui:controls:UiList>
 
 						<haxegui:controls:ProgressBar x="30" y="450" width="300" />

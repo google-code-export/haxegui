@@ -23,10 +23,14 @@ import haxegui.controls.Component;
 
 class DragEvent extends flash.events.MouseEvent {
 
-	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool,
+	public function new(
+	type 		: String,
+	?bubbles 	: Bool,
+	?cancelable : Bool,
 	// ?dragInitiator : Component, ?dragSource : mx.core.DragSource, ?action : String,
-	?ctrlKey : Bool, ?altKey : Bool, ?shiftKey : Bool) : Void
-	{
+	?ctrlKey	: Bool,
+	?altKey 	: Bool,
+	?shiftKey	: Bool) : Void {
 		super(type, bubbles, cancelable, 0, 0, null, ctrlKey, altKey, shiftKey);
 	}
 
@@ -34,10 +38,10 @@ class DragEvent extends flash.events.MouseEvent {
 	var dragInitiator : Component;
 	//var dragSource : mx.core.DragSource;
 	var draggedItem : Dynamic;
-	public static inline var DRAG_COMPLETE : String = "stopDrag";
-	static var DRAG_DROP : String;
-	static var DRAG_ENTER : String;
-	static var DRAG_EXIT : String;
-	public static inline var DRAG_OVER : String = "dragOver";
-	public static inline var DRAG_START : String = "startDrag";
+	public static inline var DRAG_COMPLETE  : String = "stopDrag";
+	public static inline var DRAG_OVER 		: String = "dragOver";
+	public static inline var DRAG_START 	: String = "startDrag";
+	public static var DRAG_DROP : String;
+	public static var DRAG_ENTER : String;
+	public static var DRAG_EXIT : String;
 }

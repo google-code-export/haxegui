@@ -26,21 +26,28 @@ import haxegui.controls.UiList;
 
 class ListEvent extends Event {
 
-	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool,
-						?list : UiList,
-						?item : flash.display.DisplayObject,
-						?index : Int)
-						: Void {
+	public function new(type : String,
+	?bubbles 	: Bool,
+	?cancelable : Bool,
+	?list  		: UiList,
+	?item  		: flash.display.DisplayObject,
+	?index		: Int,
+	?range		: IntIter) : Void {
 		super(type,bubbles,cancelable);
 	}
 
-	override public function clone():Event {  
-		return new ListEvent(this.type, this.bubbles, this.cancelable);  
-	}  
-	
+	override public function clone():Event {
+		return new ListEvent(this.type, this.bubbles, this.cancelable);
+	}
+
 	var index : Int;
 	public var list : UiList;
-	public static var ITEM_CLICK : String = "itemClick";
-	public static var ITEM_ROLL_OUT : String;
+	public static var range			 : IntIter;
+
+	public static var ITEM_ADDED	 : String = "itemAdded";
+	public static var CHANGE	 	 : String = "change";
+	public static var ITEM_CLICK 	 : String = "itemClick";
+	public static var ITEM_ROLL_OUT  : String;
 	public static var ITEM_ROLL_OVER : String;
+
 }

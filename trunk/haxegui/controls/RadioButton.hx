@@ -64,7 +64,7 @@ class RadioGroup extends Component, implements IAdjustable {
 
 //{{{ RadioButton
 /**
-* RadioButton allows the user to select only one of the predefined set of similar widgets.
+* RadioButton allows the user to select only one of the predefined set of similar widgets.<br/>
 *
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>

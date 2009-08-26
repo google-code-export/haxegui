@@ -59,6 +59,8 @@ class Tab extends AbstractButton, implements IAggregate {
 	<haxegui:controls:Label text="{parent.name}"/>
 	</haxegui:Layout>
 	').firstElement();
+
+
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, TabNavigator)) throw parent+" not a TabNavigator";
@@ -114,6 +116,7 @@ class Tab extends AbstractButton, implements IAggregate {
 
 
 //{{{ TabPosition
+/** @todo implement **/
 enum TabPosition {
 	TOP;
 	BOTTOM;
@@ -221,13 +224,13 @@ class TabNavigator extends Component, implements IAdjustable {
 
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
-		if(Std.is(parent, Component)) {
-			box.width = untyped parent.box.width - x;
-		}
+		// if(Std.is(parent, Component)) {
+		// 	box.width = (cast parent).box.width - x;
+		// }
 
-		if(Std.is(parent.parent, haxegui.containers.ScrollPane)) {
-			box.width = untyped parent.parent.box.width;
-		}
+		// if(Std.is(parent.parent, haxegui.containers.ScrollPane)) {
+		// 	box.width = untyped parent.parent.box.width;
+		// }
 
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));

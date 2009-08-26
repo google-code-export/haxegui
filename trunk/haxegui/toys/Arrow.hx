@@ -24,6 +24,7 @@ import haxegui.controls.Component;
 import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
 import haxegui.utils.Size;
+import haxegui.utils.Opts;
 
 
 //{{{ ArrowType
@@ -70,7 +71,7 @@ class Arrow extends Component {
 	);
 
 	moveToPoint(Size.fromRect(box).shift(1).toPoint());
-
+	moveTo(Opts.optFloat(opts, "x", x), Opts.optFloat(opts, "y", y));
 	}
 	//}}}
 

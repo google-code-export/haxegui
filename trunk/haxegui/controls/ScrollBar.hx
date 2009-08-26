@@ -218,16 +218,16 @@ class ScrollBar extends Component, implements IAdjustable {
 	static var xml = Xml.parse('
 	<haxegui:Layout name="ScrollBar">
 		<haxegui:controls:ScrollBarFrame/>
+		<haxegui:controls:ScrollBarHandle/>
 		<haxegui:controls:ScrollBarUpButton/>
 		<haxegui:controls:ScrollBarDownButton/>
-		<haxegui:controls:ScrollBarHandle/>
 	</haxegui:Layout>
 	').firstElement();
 
 	//{{{ Functions
 	//{{{ init
 	/**
-	* @param opts.target Object to scroll, either a DisplayObject or TextField
+	* @param opts.target Object to scroll, either a [DisplayObject] or [TextField]
 	*/
 	override public function init(opts:Dynamic=null) {
 		adjustment = new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 10, page: 40});
@@ -254,8 +254,6 @@ class ScrollBar extends Component, implements IAdjustable {
 		xml.set("name", name);
 
 		haxegui.XmlParser.apply(ScrollBar.xml, this);
-
-
 
 
 		// horizontal scrollbar
@@ -305,8 +303,13 @@ class ScrollBar extends Component, implements IAdjustable {
 		down.move(0, box.height - 20);
 
 
-		if(scrollee!=null && Std.is(scrollee, TextField))
+		if(scrollee!=null) {
+		if(Std.is(scrollee, TextField))
 		scrollee.addEventListener(Event.SCROLL, onTextFieldScrolled, false, 0, true);
+		else
+		if(Std.is(scrollee, DisplayObject))
+		scrollee.addEventListener(ResizeEvent.RESIZE, onTargetResized, false, 0, true);
+		}
 
 		//
 		frame.addEventListener(MoveEvent.MOVE, onFrameMoved, false, 0, true);
@@ -315,9 +318,13 @@ class ScrollBar extends Component, implements IAdjustable {
 
 
 		addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
+
+		adjust();
 	}
 	//}}}
 
+
+	//{{{ onTextFieldScrolled
 	public function onTextFieldScrolled(e:Event) {
 		if(disabled) return;
 		handle.updatePositionTween();
@@ -338,11 +345,30 @@ class ScrollBar extends Component, implements IAdjustable {
 		handle.updatePositionTween( new Tween( 0, 1, 2000, feffects.easing.Expo.easeOut ),  new Point(0, d));
 
 	}
+	//}}}
 
+
+	//{{{ onTargetResized
+	public function onTargetResized(e:ResizeEvent) {
+		var h = e.target.scrollRect.height/e.target.transform.pixelBounds.height;
+		// var h = e.target.scrollRect.height/e.target.height;
+
+		if(horizontal)
+		h = e.target.scrollRect.width/e.target.transform.pixelBounds.width;
+		// h = e.target.scrollRect.width/e.target.width;
+
+		handle.box.height = Math.max(20, box.height * h);
+		handle.dirty = true;
+
+		// handle.visible = !(handle.box.height >= box.height);
+
+		adjust();
+	}
+	//}}}
 
 	//{{{ onFrameMoved
 	private function onFrameMoved(e:MoveEvent) {
-		move(frame.x, frame.y);
+		move(e.target.x, e.target.y);
 		e.target.removeEventListener(MoveEvent.MOVE, onFrameMoved);
 		e.target.moveTo(0,0);
 		e.target.addEventListener(MoveEvent.MOVE, onFrameMoved, false, 0, true);
@@ -394,7 +420,7 @@ class ScrollBar extends Component, implements IAdjustable {
 
 
 		down.y = Math.max( 20, box.height - 20);
-		if(Std.is(parent, haxegui.controls.UiList)) { box.height-=20; down.y-=20; x-=20; }
+		// if(Std.is(parent, haxegui.controls.UiList)) { box.height-=20; down.y-=20; x-=20; }
 		handle.y = Math.max( 20, Math.min( handle.y, this.box.height - handle.box.height - 20));
 
 		frame.box = box.clone();
@@ -416,7 +442,7 @@ class ScrollBar extends Component, implements IAdjustable {
 		if(disabled) return;
 
 		var self = this;
-		var handleMotionTween = new Tween( 0, 1, 3000, feffects.easing.Expo.easeOut );
+		var handleMotionTween = new Tween( 0, 1, 2000, feffects.easing.Expo.easeOut );
 		var offset = e.delta * (horizontal ? 1 : -1)* adjustment.object.page;
 
 		handle.updatePositionTween( handleMotionTween,  new Point(0, offset), function(v) { self.adjust(); } );
@@ -488,6 +514,7 @@ class ScrollBar extends Component, implements IAdjustable {
 		rect.y = ( bounds.height - rect.height ) * scroll ;
 
 		scrollee.scrollRect = rect;
+
 
 		// dispatchEvent(new Event(Event.CHANGE));
 		return scroll;

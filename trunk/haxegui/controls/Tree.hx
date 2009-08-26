@@ -57,17 +57,18 @@ using haxegui.controls.Component;
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
 */
-class TreeLeaf extends Component, implements IAggregate {
+class TreeLeaf extends Component, implements IAggregate, implements IData {
 
 	/** Leaf icon **/
 	// var icon : Icon;
 	/** Default to the name property **/
 	// var label : Label;
+	public var data : Dynamic;
 
 	static var xml = Xml.parse('
 	<haxegui:Layout name="TreeLeaf">
-		<haxegui:controls:Icon x="24" y="4" src="'+Icon.STOCK_DOCUMENT+'"/>
-		<haxegui:controls:Label x="24" y="2" text="{parent.name}"/>
+	<haxegui:controls:Icon x="24" y="4" src="'+Icon.STOCK_DOCUMENT+'"/>
+	<haxegui:controls:Label x="24" y="2" text="{parent.name}"/>
 	</haxegui:Layout>
 	').firstElement();
 
@@ -119,14 +120,12 @@ class TreeLeaf extends Component, implements IAggregate {
 /**
 * Expandable tree node<br/>
 *
-* @todo expand(), collapse()
-*
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class TreeNode extends Component, implements IAggregate {
+class TreeNode extends Component, implements IAggregate, implements IData {
 
 	public var expander : Expander;
 
@@ -134,11 +133,35 @@ class TreeNode extends Component, implements IAggregate {
 
 	public var selected : Bool;
 
+	public var data : Dynamic;
 
-	static var xml = Xml.parse('
+	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="TreeNode">
 	<haxegui:controls:Expander label="{parent.name}" style="arrow_and_icon" expanded="false"/>
 	</haxegui:Layout>
+	').firstElement();
+
+	static var styleXml = Xml.parse('
+	<haxegui:Style name="TreeNode">
+	<haxegui:controls:TreeNode>
+	<events>
+	<script type="text/hscript" action="mouseClick"><![CDATA[
+	event.stopImmediatePropagation();
+
+	this.expander.__setExpanded(!this.expander.__getExpanded());
+
+	if(this.expander.expanded)
+	this.expand();
+	else
+	this.collapse();
+
+	for(i in 2...this.expander.numChildren)
+	this.expander.getChildAt(i).visible = this.expander.expanded;
+	]]>
+	</script>
+	</events>
+	</haxegui:controls:TreeNode>
+	</haxegui:Style>
 	').firstElement();
 
 	//{{{ init
@@ -149,14 +172,12 @@ class TreeNode extends Component, implements IAggregate {
 
 		super.init(opts);
 
-		xml.set("name", name);
+		layoutXml.set("name", name);
 
-		XmlParser.apply(TreeNode.xml, this);
+		XmlParser.apply(TreeNode.styleXml, true);
+		XmlParser.apply(TreeNode.layoutXml, this);
 
-		// expander = new Expander(this, name);
-		// expander.init({style: "arrow_and_icon", expanded: false});
 		expander = cast firstChild();
-		// expander.label.x += 24;
 
 		expander.mouseEnabled = false;
 		expander.removeEventListener(MouseEvent.CLICK, expander.onMouseClick);
@@ -170,6 +191,17 @@ class TreeNode extends Component, implements IAggregate {
 		return expander.numChildren<=2;
 	}
 
+	//{{{ removeItems
+	public function removeItems() {
+		for(i in expander)
+		if(!Std.is(i, Label) && !Std.is(i, ExpanderButton))
+		// expander.removeChild(i);
+		i.asComponent().destroy();
+
+		// expander.expanded = false;
+	}
+	///}}}
+
 
 	//{{{ addChild
 	public override function addChild(o:DisplayObject) : DisplayObject {
@@ -181,6 +213,7 @@ class TreeNode extends Component, implements IAggregate {
 		return c;
 	}
 	//}}}
+
 
 	public function onChildClicked(e:TreeEvent) {
 		var i = parent.getChildIndex(this) + 1;
@@ -212,37 +245,6 @@ class TreeNode extends Component, implements IAggregate {
 	//}}}
 
 
-	//{{{ onMouseClick
-	public override function onMouseClick(e:MouseEvent) {
-		if(disabled) return;
-		// if(empty() || disabled) return;
-
-		e.stopImmediatePropagation();
-
-			expander.expanded = !expander.expanded;
-
-			if(expander.expanded)
-			expand();
-			else
-			collapse();
-
-			for(i in 2...expander.numChildren)
-			expander.getChildAt(i).visible = expander.expanded;
-
-
-		super.onMouseClick(e);
-	}
-	//}}}
-
-	public override function onRollOver(e:MouseEvent) {
-		super.onRollOver(e);
-	}
-
-	public override function onRollOut(e:MouseEvent) {
-		super.onRollOut(e);
-	}
-
-
 	public  function onParentResize(e:ResizeEvent) : Void {
 		box.width = parent.asComponent().box.width;
 		expander.box = box.clone();
@@ -272,15 +274,14 @@ class TreeNode extends Component, implements IAggregate {
 		for(j in i...parent.numChildren)
 		parent.getChildAt(j).y = 24*j - 24;
 
-		// (cast parent).expandedNodes.remove(this)
-		// (cast parent).collapsedNodes.add(this);
 		dispatchEvent(new TreeEvent(TreeEvent.ITEM_CLOSING));
 	}
 	//}}}
 
+
 	public static function parentTree(node:TreeNode) : Tree {
 		for(a in node.ancestors())
-			if(Std.is(a, Tree)) return cast a;
+		if(Std.is(a, Tree)) return cast a;
 		return null;
 	}
 
@@ -300,16 +301,13 @@ class TreeNode extends Component, implements IAggregate {
 *
 * Tree Class
 *
-* @todo all
-*
-* @version 0.1
+* @version 0.2
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 *
 */
-class Tree extends Component, implements IData {
-	public var dataSource 		: DataSource;
-	public var data 			: Dynamic;
+class Tree extends Component, implements IDataSource {
+	public var dataSource(default, setDataSource) : DataSource;
 
 	/** A list of selected items on the tree **/
 	public var selected 	  	: List<DisplayObject>;
@@ -318,6 +316,10 @@ class Tree extends Component, implements IData {
 	public var collapsedNodes 	: List<TreeNode>;
 
 	public var rootNode 		: TreeNode;
+	/**
+	* Set to [true] to show the root node
+	* @todo showRoot
+	*/
 	public var showRoot 		: Bool;
 
 	//{{{ Functions
@@ -412,8 +414,8 @@ class Tree extends Component, implements IData {
 		// }
 
 		// for(a in ancestors()) {
-			// if(Std.is(a, haxegui.containers.Divider))
-				// box.width -= 10;
+		// if(Std.is(a, haxegui.containers.Divider))
+		// box.width -= 10;
 		// }
 
 		// redraw();
@@ -447,9 +449,24 @@ class Tree extends Component, implements IData {
 		if(n==null) return 0;
 		var i = n.expander.numChildren;
 		for(c in n.expander)
-			if(Std.is(c, TreeNode)) i+=countNode(cast c);
-			return i;
+		if(Std.is(c, TreeNode)) i+=countNode(cast c);
+		return i;
 	}
+
+
+	//{{{ setDataSource
+	public function setDataSource(d:DataSource) : DataSource {
+		dataSource = d;
+
+		// dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
+		// var l = 0;
+		// if(dataSource.data!=null)
+		// l = dataSource.data.length;
+		// dispatchEvent(new ListEvent(ListEvent.CHANGE, new IntIter(0, l)));
+
+		return dataSource;
+	}
+	//}}}
 
 
 	//{{{ __init__

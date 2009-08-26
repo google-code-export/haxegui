@@ -30,9 +30,11 @@ import flash.geom.Rectangle;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import haxegui.DataSource;
+import haxegui.XmlParser;
 import haxegui.controls.Component;
 import haxegui.controls.IData;
 import haxegui.controls.Seperator;
+import haxegui.events.DataEvent;
 import haxegui.events.DragEvent;
 import haxegui.events.ListEvent;
 import haxegui.events.MoveEvent;
@@ -44,11 +46,18 @@ import haxegui.toys.Arrow;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
-import haxegui.XmlParser;
 //}}}
 
 
 using haxegui.controls.Component;
+using haxegui.utils.Color;
+
+//{{{ ListSelectionMode
+enum ListSelectionMode {
+	SINGLE;
+	MULTI;
+}
+//}}}
 
 
 //{{{ ListHeader
@@ -71,11 +80,12 @@ class ListHeader extends AbstractButton, implements IComposite {
 	static var xml = Xml.parse('
 	<haxegui:Layout name="ListHeader">
 	<haxegui:controls:Label x="4" y="2" text="{parent.name}"/>
-		<haxegui:toys:Arrow
-			width="8"
-			height="8"
-			color="{Color.darken(parent.color, 20)}"
-			rotation="{parent.parent.sortReverse ? -90 : 90}"/>
+	<haxegui:toys:Arrow
+	width="8"
+	height="8"
+	color="{Color.darken(parent.color, 20)}"
+	rotation="{parent.parent.sortReverse ? -90 : 90}"/>
+	<haxegui:controls:Seperator/>
 	</haxegui:Layout>
 	').firstElement();
 
@@ -85,7 +95,8 @@ class ListHeader extends AbstractButton, implements IComposite {
 	*/
 	override public function init(opts:Dynamic=null) {if(!Std.is(parent, UiList)) throw parent+" not a UiList";
 		if(!Std.is(parent, UiList)) throw parent+" not a UiList";
-
+		box = new Size(140, 24).toRect();
+		color = DefaultStyle.BACKGROUND;
 
 		super.init(opts);
 
@@ -108,8 +119,8 @@ class ListHeader extends AbstractButton, implements IComposite {
 		arrow.moveTo( labels[0].x + labels[0].width + 10, 10);
 
 
-		seperators = [new Seperator(this)];
-		seperators[0].init({});
+		seperators = [cast arrow.nextSibling()];
+		// seperators[0].init({});
 		seperators[0].moveTo(labels[0].x + labels[0].width + 18, 0);
 
 
@@ -144,7 +155,7 @@ class ListHeader extends AbstractButton, implements IComposite {
 
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
-		box = (cast parent).box.clone();
+		box.width = parent.asComponent().box.width;
 		dirty = true;
 	}
 	//}}}
@@ -181,33 +192,52 @@ class ListHeader extends AbstractButton, implements IComposite {
 * @author Russell Weir'
 *
 */
-class ListItem extends AbstractButton, implements IRubberBand, implements IAggregate {
+class ListItem extends AbstractButton, implements IData, implements IRubberBand, implements IAggregate {
 
 	public var label : Label;
 	public var selected : Bool;
+	public var data : Dynamic;
 
 	var oldPos : flash.geom.Point;
 	var oldParent : flash.display.DisplayObjectContainer;
 
-	static var xml = Xml.parse('
-	<haxegui:Layout name="ListHeader">
-	<haxegui:controls:Label x="4" y="4"/>
+	static var layoutXml = Xml.parse('
+	<haxegui:Layout name="ListItem">
+		<haxegui:controls:Label x="4" y="2" height="{parent.box.height}"/>
 	</haxegui:Layout>
+	').firstElement();
+
+	static var styleXml = Xml.parse('
+	<haxegui:Style name="ListItem">
+		<haxegui:controls:ListItem>
+			<events>
+				<script type="text/hscript" action="mouseClick">
+					<![CDATA[
+						this.selected = ! this.selected;
+						this.color = this.selected ? DefaultStyle.FOCUS : DefaultStyle.INPUT_BACK;
+						this.redraw();
+					]]>
+				</script>
+			</events>
+		</haxegui:controls:ListItem>
+	</haxegui:Style>
 	').firstElement();
 
 
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, UiList) && !Std.is(parent, PopupMenu)) throw parent+" not a UiList";
-		box = new Size(140, 20).toRect();
+		box = new Size(140, 24).toRect();
 		color = DefaultStyle.INPUT_BACK;
-
+		oldParent = parent;
+		data = name;
 
 		super.init(opts);
 
-		xml.set("name", name);
+		// xml.set("name", name);
 
-		XmlParser.apply(ListItem.xml, this);
+		XmlParser.apply(ListItem.styleXml, true);
+		XmlParser.apply(ListItem.layoutXml, this);
 
 
 		description = null;
@@ -215,30 +245,40 @@ class ListItem extends AbstractButton, implements IRubberBand, implements IAggre
 
 		label = cast firstChild();
 		label.setText(Opts.optString(opts, "label", name));
+		label.mouseEnabled = false;
 
+
+		try {
+			data = Opts.classInstance(opts, "data", untyped [String, Float, Int, Bool, Dynamic]);
+		}
+		catch(e:Dynamic) {
+			data = name;
+		}
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
 	//}}}
 
 
-	public override function onMouseDown(e:MouseEvent) {
-		if(disabled) return;
-		if(e.target!=this) return;
-		super.onMouseDown(e);
-	}
-
-
-	public override function onMouseUp(e:MouseEvent) {
-		if(disabled) return;
-		super.onMouseUp(e);
-	}
-
-
 	//{{{ onParentResize
-	public function onParentResize(e:ResizeEvent) {box.width = (cast parent).box.width;
-		box.width = (cast parent).box.width;
+	public function onParentResize(e:ResizeEvent) {
+		box.width = parent.asComponent().box.width;
 		dirty = true;
+		// redraw();
+
+		// dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+	}
+	//}}}
+
+	public override function destroy() {
+		parent.removeEventListener(ResizeEvent.RESIZE, onParentResize);
+
+		super.destroy();
+	}
+
+
+	//{{{ onChanged
+	public function onChanged(e:Event) {
 	}
 	//}}}
 
@@ -257,14 +297,16 @@ class ListItem extends AbstractButton, implements IRubberBand, implements IAggre
 *
 * Sortable List Class.<br/>
 *
-* The list will follow it's header it moved.
+* The list will follow it's header if moved.
+*
+* @todo implements ArrayAccess<ListItem>
 *
 * @version 0.1
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir'
 *
 */
-class UiList extends Component, implements IData, implements ArrayAccess<ListItem> {
+class UiList extends Component, implements IDataSource, implements ArrayAccess<ListItem> {
 
 	//{{{ Members
 	/** Header for this list **/
@@ -273,10 +315,15 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	/** [Array] of items **/
 	public var items  : List<ListItem>;
 
+	// public var selectedIndex	(default, null) : Null<Int>;
+	// public var selectedIndexes	(default, null) : Array<Null<Int>>;
+	// public var selectedItem		(default, null) : ListItem;
+	// public var selectedItems	(default, null) : Array<ListItem>;
 
-	public var data : Dynamic;
+	public var selectionMode : ListSelectionMode;
 
-	public var dataSource( default, __setDataSource ) : DataSource;
+	/** DataSource **/
+	public var dataSource(default, setDataSource) : DataSource;
 
 	/** sort direction, default (false) is ascending **/
 	public var sortReverse : Bool;
@@ -284,8 +331,28 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	/** true to enable dragging of items **/
 	public var dragEnabled : Bool;
 
-	/** index of the dragged item **/
-	var dragItem : Int;
+	/** true to enable dropping of items **/
+	public var dropEnabled : Bool;
+
+
+	static var layoutXml = Xml.parse('
+	<haxegui:Layout name="UiList">
+	<haxegui:controls:ListHeader width="{parent.box.width}" color="{parent.color}"/>
+	</haxegui:Layout>
+	').firstElement();
+
+	static var styleXml = Xml.parse('
+	<haxegui:Style name="UiList">
+		<haxegui:controls:UiList>
+		<events>
+			<script type="text/hscript" action="mouseClick">
+				<![CDATA[
+				]]>
+			</script>
+			</events>
+		</haxegui:controls:UiList>
+	</haxegui:Style>
+	').firstElement();
 	//}}}
 
 
@@ -293,71 +360,60 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	public override function init(opts : Dynamic=null) {
 		box = new Size(140, 100).toRect();
 		color = DefaultStyle.BACKGROUND;
-		sortReverse = false;
 		items = new List<ListItem>();
-		minSize = new Size(100,20);
+		minSize = new Size(100,24);
+		sortReverse = false;
 
-		if(data==null)
-		data = [];
-
+		// dataSource = new DataSource();
+		// dataSource.data = ["1", "2", "3", "4"];
 
 		super.init(opts);
 
+		// xml.set("name", name);
 
-		if(opts == null) opts = {}
-		if(opts.innerData!=null)
-		data = opts.innerData.split(",");
-		if(opts.data!=null)
-		data = opts.data;
+		haxegui.XmlParser.apply(UiList.styleXml, true);
+		haxegui.XmlParser.apply(UiList.layoutXml, this);
 
 
-		header = new ListHeader(this);
-		header.init({color: this.color, width: this.box.width});
+		// if(opts == null) opts = {}
+		// if(opts.innerData!=null)
+		// data = opts.innerData.split(",");
+		// if(opts.data!=null)
+		// data = opts.data;
 
 
-		if(Std.is(data, Array)) {
-			data = cast(data, Array<Dynamic>);
-			for (i in 0...data.length) {
-				var item = new ListItem(this);
-				item.init({
-					// width: this.box.width,
-					color: DefaultStyle.INPUT_BACK,
-					label: data[i]
-				});
-				//item.label.mouseEnabled = false;
-				item.move(0,20+20*i+1);
-				box.width = Math.max( box.width, item.label.tf.width + 8 );
-			}
-		}
-		else
-		if(Std.is(data, List)) {
-			var j=0;
-			data = cast(data, List<Dynamic>);
-			var items : Iterator<Dynamic> = data.iterator();
-			for(i in items) {
-				var item = new ListItem(this);
-				item.init({
-					color: DefaultStyle.INPUT_BACK,
-					label: i
-				});
-				//item.label.mouseEnabled = false;
-				item.move(0,20+20*j+1);
-				j++;
-			}
-		}
-		box.height = Math.max( box.height, 20*items.length );
+		header = cast firstChild();
 
-		for(i in this) {
-			//untyped box.width = i.box.width = Math.max(box.width, i.label.tf.width);
-			(cast i).dirty=true;
-		}
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
+
 		header.addEventListener(ResizeEvent.RESIZE, onHeaderResize, false, 0, true);
-		header.addEventListener(MoveEvent.MOVE, onHeaderMoved, false, 0, true);
+		header.addEventListener(MoveEvent.MOVE, 	onHeaderMoved,  false, 0, true);
+
+		// addEventListener(ListEvent.CHANGE, 	onData,  false, 0, true);
+
+
+		if(dataSource==null) return;
+		dataSource.addEventListener(DataEvent.CHANGE, onData, false, 0, true);
+		dataSource.dispatchEvent(new DataEvent(DataEvent.CHANGE));
+
+		addEventListener(ListEvent.CHANGE, onData, false, 0, true);
 	}
 	//}}}
 
+	// public function clearSelection() {}
+
+	// public function setSelected(i:ListItem) : ListItem {}
+	// public function setSelectedIndex(i:Int) : Int {}
+
+	// public function getSelected() : ListItem {}
+	// public function getSelectedIndex() : Int {}
+
+	// public function getSelectedItems() : Array<ListItem> {}
+	// public function getSelectedIndices() : Array<Int> {}
+
+	// public function setSelectedItems(l:Array<ListItem>) : Array<ListItem> {}
+	// public function setSelectedIndices(i:Array<Int>) : Array<Int> {}
 
 
 	//{{{ onHeaderResized
@@ -368,45 +424,27 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	}
 	//}}}
 
+	//{{{ setDataSource
+	public function setDataSource(d:DataSource) : DataSource {
+		dataSource = d;
+		dataSource.addEventListener(DataEvent.CHANGE, onData, false, 0, true);
 
-	//{{{ onHeaderMoved
-	public function onHeaderMoved(e:MoveEvent) {
-		this.move(header.x, header.y);
-		header.x = 0;
-		header.y = 0;
+		var l = 0;
+		if(Std.is(dataSource.data, Array) || Std.is(dataSource.data, List))
+		l = dataSource.data.length;
+
+		dataSource.dispatchEvent(new DataEvent(DataEvent.CHANGE, 0, l));
+		// dispatchEvent(new ListEvent(ListEvent.CHANGE));
+
+		return dataSource;
 	}
 	//}}}
 
 
-	//{{{ __setDataSource
-	public function __setDataSource(d:DataSource) : DataSource {
-		dataSource = d;
-		dataSource.addEventListener(Event.CHANGE, onData, false, 0, true);
-
-		// #if debug
-		// trace(this.dataSource+" => "+this);
-		// trace(this.dataSource+": "+dataSource.data);
-		// #end
-
-		if(Std.is(dataSource.data, List)) {
-			var j=0;
-			data = cast(dataSource.data, List<Dynamic>);
-			var items : Iterator<Dynamic> = data.iterator();
-			for(i in items) {
-				var item = new ListItem(this);
-				item.init({
-					color: DefaultStyle.INPUT_BACK,
-					label: i
-				});
-				box.width = Math.max(box.width, item.label.tf.width + 8);
-				item.label.mouseEnabled = false;
-				item.move(0,header==null ? 0 : 20+20*j+1);
-				j++;
-			}
-		}
-		box.height = Math.max( box.height, 20*items.length );
-		dirty = true;
-		return dataSource;
+	//{{{ onHeaderMoved
+	public function onHeaderMoved(e:MoveEvent) {
+		this.move(header.x, header.y);
+		header.x = header.y = 0;
 	}
 	//}}}
 
@@ -419,21 +457,21 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	//}}}
 
 
-	//{{{ onData
-	private  function onData(e:Event) {
-		#if debug
-		// trace(e);
-		#end
-
-		data = dataSource.data;
-		// dirty = true;
+	//{{{ onParentResize
+	private function onParentResize(e:ResizeEvent) : Void {
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
 
 
-	//{{{ onParentResize
-	private function onParentResize(e:ResizeEvent) : Void {
-		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+	//{{{ onResize
+	public override function onResize(e:ResizeEvent) : Void {
+		// header.box.width = box.width;
+		// header.dirty = true;
+		// dirty = true;
+		// header.redraw();
+
+		super.onResize(e);
 	}
 	//}}}
 
@@ -442,10 +480,8 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	public function onItemMouseUp(e:MouseEvent) : Void {
 		e.target.dispatchEvent (new DragEvent (DragEvent.DRAG_COMPLETE));
 		e.target.x = 0;
-		//~ e.target.y = dragItem * 20;
-		//~ e.target.y = 20 + e.target.x % 20;
-		e.target.y = dragItem * 20;
-		setChildIndex(e.target, dragItem);
+		// e.target.y = dragItem * 20;
+		// setChildIndex(e.target, dragItem);
 	}
 	//}}}
 
@@ -454,7 +490,7 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	override public function redraw(opts:Dynamic=null) {
 		// super.redraw(opts);
 		this.graphics.clear();
-		this.graphics.lineStyle(1, haxegui.utils.Color.darken(DefaultStyle.BACKGROUND, 20), 1);
+		this.graphics.lineStyle(1, DefaultStyle.BACKGROUND.darken(20), 1);
 		this.graphics.beginFill(DefaultStyle.INPUT_BACK);
 		this.graphics.drawRect(-1,-1, this.box.width+1, this.box.height+1);
 		this.graphics.endFill();
@@ -466,6 +502,64 @@ class UiList extends Component, implements IData, implements ArrayAccess<ListIte
 	public override function destroy() {
 		parent.removeEventListener(ResizeEvent.RESIZE, onParentResize);
 		super.destroy();
+	}
+	//}}}
+
+
+
+	//{{{ onData
+	/**
+	* @todo Xml
+	*/
+	public function onData(?e:DataEvent) {
+		// if(dataSource==null) return;
+
+		if(Std.is(dataSource.data, Array)) {
+			var data = cast(dataSource.data, Array<Dynamic>);
+			for (i in e.startIndex...e.endIndex-1) {
+				if(i<numChildren) {
+					var item = cast getChildAt(i);
+					if(Std.is(item, ListItem)) {
+						item.label.setText(data[i]);
+						box.width = Math.max( box.width, item.label.tf.width + 8 );
+					}
+				}
+				else {
+					var item = new ListItem(this);
+					item.init({
+						// width: box.width,
+						color: DefaultStyle.INPUT_BACK,
+						label: data[i],
+						data: data[i]
+					});
+					item.move(0,24*i+1);
+					// box.width = Math.max( box.width, item.label.tf.width + 8 );
+				}
+			}
+		}
+		else
+		if(Std.is(dataSource.data, List)) {
+			var j=0;
+			var data = cast(dataSource.data, List<Dynamic>);
+			var items : Iterator<Dynamic> = data.iterator();
+			for(i in items) {
+				var item = new ListItem(this);
+				item.init({
+					color: DefaultStyle.INPUT_BACK,
+					label: i,
+					data: i
+				});
+				item.move(0,24+24*j+1);
+				box.width = Math.max( box.width, item.label.tf.width + 8 );
+				j++;
+			}
+		}
+
+
+		// box.height = Math.max( box.height, 20*items.length );
+
+		// for(i in this)
+		// (cast i).dirty=true;
 	}
 	//}}}
 
@@ -501,14 +595,16 @@ class ListBox extends UiList {
 	//}}}
 
 
+	//{{{ onScroll
 	public function onScroll(e:Event) {
 		// trace(e);
 	}
+	//}}}
 
 
 	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
-		scrollbar.moveTo(0, 20);
+		scrollbar.moveTo(0, 24);
 		scrollbar.toFront();
 		scrollRect = box.clone();
 		super.onResize(e);

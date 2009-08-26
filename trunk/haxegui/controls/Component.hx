@@ -110,7 +110,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	/** Minimum size **/
 	public var minSize : Size;
 
-	/** Maximum size **/
+	/** @todo Maximum size **/
 	public var maxSize : Size;
 
 	/** The color of this component, which has different meanings per component **/
@@ -126,7 +126,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	public var focusable : Bool;
 
 	/** Unique component id number **/
-	public var id(default,null) : Int;
+	public var id(default, null) : Int;
 
 	/** Creation timestamp **/
 	public var created(default, null) : Float;
@@ -1299,6 +1299,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	* is a Component, then it will be returned. Useful for finding what Component
 	* a Sprite belongs to.
 	*
+	* @todo maybe unstatic the function, mostly used with 'using'
 	* @param obj DisplayObject or Component
 	* @return Component, or null if is not a Component and does not belong to a Component.
 	**/

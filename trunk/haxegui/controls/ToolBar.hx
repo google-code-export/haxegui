@@ -30,10 +30,12 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.MouseEvent;
+import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 import flash.ui.Keyboard;
 import flash.ui.Mouse;
+import haxegui.XmlParser;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
 import haxegui.events.DragEvent;
@@ -45,6 +47,7 @@ import haxegui.managers.StyleManager;
 import haxegui.managers.WindowManager;
 import haxegui.utils.Color;
 import haxegui.utils.Size;
+import haxegui.utils.Opts;
 //}}}
 
 
@@ -64,25 +67,45 @@ enum ToolBarStyle {
 */
 class ToolBarHandle extends AbstractButton, implements IComposite {
 
+	static var styleXml = Xml.parse('
+	<haxegui:Style name="ToolBarHandle">
+		<haxegui:controls:ToolBarHandle>
+			<events>
+				<script type="text/hscript" action="mouseDown">
+				<![CDATA[
+					// parent.clone();
+					parent.oldParent = parent.parent;
+					parent.oldPos = parent.localToGlobal(new flash.geom.Point());
+					parent.swapParent(root);
+					parent.moveToPoint(parent.oldPos);
+					parent.startDrag();
+					parent.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4, 0.5, flash.filters.BitmapFilterQuality.LOW,false,false,false)];
+				]]>
+				</script>
+				<script type="text/hscript" action="mouseUp">
+				<![CDATA[
+					parent.stopDrag();
+					parent.swapParent(parent.oldParent);
+					parent.moveToPoint(parent.parent.globalToLocal(parent.oldPos));
+					parent.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4, 0.5, flash.filters.BitmapFilterQuality.LOW,true,false,false)];
+				]]>
+				</script>
+			</events>
+		</haxegui:controls:ToolBarHandle>
+	</haxegui:Style>
+	').firstElement();
+
 	//{{{ init
-	override public function init (? opts : Dynamic) {
+	override public function init (?opts:Dynamic) {
 		super.init();
+
+		moveTo(Opts.optFloat(opts, "x", x), Opts.optFloat(opts, "y", y));
+
+
+		XmlParser.apply(ToolBarHandle.styleXml, true);
 	}
 	//}}}
 
-	//{{{ onMouseDown
-	override public function onMouseDown(e:MouseEvent) {
-		untyped parent.startDrag();
-		stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
-	}
-	//}}}
-
-	//{{{ onMouseUp
-	override public function onMouseUp(e:MouseEvent) {
-		untyped parent.stopDrag();
-		stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp, false);
-	}
-	//}}}
 
 	//{{{
 	static function __init__() {
@@ -108,6 +131,19 @@ class ToolBar extends Component, implements IRubberBand {
 	public var seperators : Array<Seperator>;
 	public var style	  : ToolBarStyle;
 
+	public var oldParent : DisplayObjectContainer;
+	public var oldPos 	 : Point;
+
+
+	static var layoutXml = Xml.parse('
+	<haxegui:Layout name="ToolBar">
+		<haxegui:controls:ToolBarHandle x="8" y="8"/>
+	</haxegui:Layout>
+	').firstElement();
+
+	static var styleXml = Xml.parse('
+	').firstElement();
+
 	//{{{ init
 	override public function init (? opts : Dynamic) {
 		color = DefaultStyle.BACKGROUND;
@@ -117,9 +153,12 @@ class ToolBar extends Component, implements IRubberBand {
 
 		description = null;
 
-		handle = new ToolBarHandle(this);
-		handle.init();
-		handle.move(8,8);
+
+		XmlParser.apply(ToolBar.layoutXml, this);
+
+		// handle = new ToolBarHandle(this);
+		// handle.init();
+		// handle.move(8,8);
 
 		// inner-drop-shadow filter
 		this.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4, 0.5, flash.filters.BitmapFilterQuality.LOW,true,false,false)];

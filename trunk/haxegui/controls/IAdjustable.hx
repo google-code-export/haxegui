@@ -78,6 +78,10 @@ class Adjustment extends EventDispatcher {
 	//{{{ adjust
 	public function adjust(?a:AdjustmentObject<Dynamic>) : AdjustmentObject<Dynamic> {
 		object = a;
+
+		object.value = Math.min( object.value, object.max );
+		object.value = Math.max( object.value, object.min );
+
 		dispatchEvent(new Event(Event.CHANGE));
 		return object;
 	}
@@ -85,7 +89,7 @@ class Adjustment extends EventDispatcher {
 
 
 	//{{{ setValue
-	public function setValue(v:Float) : Float {object.value = v;
+	public function setValue(v:Float) : Float {
 		object.value = v;
 		adjust(object);
 		return v;
