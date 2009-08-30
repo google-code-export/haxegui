@@ -181,20 +181,20 @@ class Main extends Sprite, implements haxe.rtti.Infos {
 		// filedialog.init();
 
 		// rte
-		var rte = new RichTextEditor(flash.Lib.current, 120,120);
-		rte.init();
+		//var rte = new RichTextEditor(flash.Lib.current, 120,120);
+		//rte.init();
 
 		// style
-		var appearance = new Appearance(flash.Lib.current, 180,180);
-		appearance.init();
+		//var appearance = new Appearance(flash.Lib.current, 180,180);
+		//appearance.init();
 
 		// debugger
-		var introspect = new Introspector(flash.Lib.current, 150,150);
-		introspect.init();
+		// var introspect = new Introspector(flash.Lib.current, 150,150);
+		// introspect.init();
 
 		// Analog Clock
-		var clock = new haxegui.toys.AnalogClock(flash.Lib.current, 210,88);
-		clock.init();
+		//var clock = new haxegui.toys.AnalogClock(flash.Lib.current, 210,88);
+		//clock.init();
 
 		//
 		var patchLayer = new Component(flash.Lib.current, "patchLayer");

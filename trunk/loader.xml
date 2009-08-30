@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <loader>
-	<layout url="samples/Example1.xml"/>
+	<layout url="samples/Example4.xml"/>
 	<style name="default"/>
-	<domain baseurl=""/>
+	<domain baseurl="http://haxegui.googlecode.com/svn/trunk/"/>
 	<server address="localhost" port="2000"/>
 	<!--<GLOBAL_OBJECT>flash.Lib.current</GLOBAL_OBJECT>-->
 </loader>

@@ -123,6 +123,7 @@ class DefaultStyle {
 		fmt.size  = ( size == null || size == 0 || Math.isNaN(size) ) ? DefaultStyle.FONT_SIZE : size;
 		fmt.align = ( align == null || !Std.is(align, flash.text.TextFormatAlign) ) ? TextFormatAlign.LEFT : align;
 		fmt.color = ( color == 0 ) ? DefaultStyle.LABEL_TEXT : color ;
+		// TextFormat("_sans", 11, 0x000000, false, false, false, '', '', TextFormatAlign.LEFT, 0, 0, 0, 0).
 		return fmt;
 	}
 	//}}}

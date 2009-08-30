@@ -56,14 +56,16 @@ class Knob extends Component, implements IAdjustable {
 	//{{{ Functions
 	//{{{ init
 	override public function init(?opts:Dynamic=null) {
+		// if(box.isEmpty())
 		box = new Size(60,60).toRect();
 		adjustment = new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 10., page: 35.});
-		radius = Point.distance(new Point(x,y), new Size(60,60).shift(1).toPoint());
-		color = Color.random();
+		// if(radius==null)
+		// radius = Point.distance(new Point(x,y), Size.fromRect(box).shift(1).toPoint());
+		//color = Color.random();
+		//color = Color.tint(Color.BLACK, .5);
 
 
 		super.init(opts);
-
 
 		radius = Opts.optFloat(opts, "radius", radius);
 		box = new Size(2*radius,2*radius).toRect();
@@ -73,6 +75,10 @@ class Knob extends Component, implements IAdjustable {
 		pot.name = "pot";
 		this.addChild(pot);
 
+		setAction("redraw",
+		"
+		this.graphics.clear();
+		
 		var colors = [];
 		for(i in 0...360) {
 			if(i<=90)
@@ -84,10 +90,10 @@ class Knob extends Component, implements IAdjustable {
 			if(i>270 && i<=360)
 			colors[i] = Color.tint(this.color, 1-(i-270)/90) ;
 		}
-		var innerRadius = this.radius - 10;
+		var innerRadius = .75*this.radius;
 
-		var alphas =[1, 1];
-		var ratios =[0, 0xFF];
+		var alphas = [1, 1];
+		var ratios = [0, 0xFF];
 		var matrix = new flash.geom.Matrix ();
 
 		matrix.createGradientBox (this.box.width, this.box.height, .5*Math.PI, 0, 0);
@@ -95,54 +101,55 @@ class Knob extends Component, implements IAdjustable {
 
 		for(i in 0...720) {
 			var color = colors[i>>1];
-			var angle = i/2 * Math.PI / 180;
-			pot.graphics.lineStyle(1, color, 1, false, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE);
-			pot.graphics.moveTo(0,0);
-			pot.graphics.lineTo(Math.cos(angle) * innerRadius, Math.sin(angle) * innerRadius);
+			var angle = .5 * i * Math.PI / 180;
+			this.pot.graphics.lineStyle(1, color, 1, false, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE);
+			this.pot.graphics.moveTo(0,0);
+			this.pot.graphics.lineTo(Math.cos(angle) * innerRadius, Math.sin(angle) * innerRadius);
 		}
-		pot.rotation = 45;
 
+		this.pot.graphics.lineStyle(1, Color.WHITE, .5);
+		this.pot.graphics.drawCircle(0,0, innerRadius);
 
-		marker = new Line(this);
-		marker.init({thickness: 2, color: Color.BLACK});
-		marker.end = new Point(Math.sin(-145)*(innerRadius-4), Math.cos(-145)*(innerRadius-4));
-		//marker.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 2, 2, 0.5, flash.filters.BitmapFilterQuality.HIGH, true, false, false )];
-		marker.filters = null;
+		this.pot.filters = [new flash.filters.BevelFilter(4,45, Color.WHITE, .5, Color.BLACK, .5, 4, 4, .5),	new flash.filters.DropShadowFilter (.5*this.radius, 45, Color.BLACK, 1, 5, 5, .7, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
 
-
-		pot.graphics.lineStyle(1, Color.WHITE, .5);
-		pot.graphics.drawCircle(0,0,innerRadius);
-
-		pot.filters = [new flash.filters.BevelFilter(4,45, Color.WHITE, .5, Color.BLACK, .5, 4, 4, .5),	new flash.filters.DropShadowFilter (8, 45, Color.BLACK, 1, 5, 5, .7, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
-
-
+		this.graphics.lineStyle(0, 0, 0, false, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE);
 		this.graphics.beginFill(Color.tint(this.color, .8));
 		this.graphics.drawCircle(0,0,this.radius);
 		this.graphics.endFill();
-		this.graphics.beginFill(Color.darken(DefaultStyle.BACKGROUND,16));
-		this.graphics.drawCircle(0,0,innerRadius+.25*(radius-innerRadius));
+		this.graphics.beginFill(Color.darken(this.color, 16));
+		this.graphics.drawCircle(0,0,innerRadius+.5*(this.radius-innerRadius));
 		this.graphics.drawCircle(0,0,this.radius);
 		this.graphics.endFill();
 
 		this.graphics.beginFill(this.color, .25);
-		this.graphics.drawCircle(0,0,innerRadius+.25*(radius-innerRadius));
+		this.graphics.drawCircle(0,0,innerRadius+.5*(this.radius-innerRadius));
 		this.graphics.drawCircle(0,0,this.radius);
 		this.graphics.endFill();
 
 		for(i in 0...5) {
 			var angle = i/2.5*Math.PI - Math.PI/10;
-			this.graphics.lineStyle(1, Color.BLACK, 1, false, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE);
+			this.graphics.lineStyle(1, Color.BLACK, .5, false, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE);
 			this.graphics.moveTo(Math.cos(angle) * this.radius, Math.sin(angle) * this.radius);
 			this.graphics.lineTo(Math.cos(angle) * innerRadius, Math.sin(angle) * innerRadius);
 
 		}
 
+		this.pot.rotation = 45;
+		");
 
+		var innerRadius = .75*this.radius;
+
+		marker = new Line(this);
+		marker.init({thickness: 2, color: Color.BLACK});
+		marker.end = new Point(Math.sin(-145)*(innerRadius-4), Math.cos(-145)*(innerRadius-4));
+		marker.filters = null;
+
+		
 		slot = new haxegui.toys.Socket(this);
 		slot.init();
 		slot.moveTo(-radius,radius);
 		slot.color = Color.tint(slot.color, .5);
-
+		
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 
 

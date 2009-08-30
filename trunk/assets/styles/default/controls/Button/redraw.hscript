@@ -1,11 +1,11 @@
 this.graphics.clear ();
 
 var highlight = Color.tint(this.color, .7);
-var colors = (this.toggle && this.__getSelected()) ? [this.color, Color.darken(this.color, this.disabled ? 20 : 40 )] : [highlight, this.color] ;
+var colors = (this.toggle && this.__getSelected()) ? [this.color, Color.darken(this.color, this.disabled ? 20 : 50 )] : [highlight, this.color] ;
 var matrix = new flash.geom.Matrix ();
 matrix.createGradientBox (this.box.width, this.box.height, .5*Math.PI, 0, 0);
 
-this.graphics.lineStyle (1, Color.darken(this.color, this.disabled ? 15 : 30), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND);
+this.graphics.lineStyle (1, Color.darken(this.color, this.disabled ? 15 : 40), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND);
 this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, colors, [1, 1], [0, 0xFF], matrix);
 
 if (this.toggle && this.__getSelected())
@@ -26,5 +26,5 @@ if(this.label!=null) {
 		       
 }
 /* Drop-Shadow */
-this.filters = [new flash.filters.DropShadowFilter (this.disabled ? 0 : 1, 45, DefaultStyle.DROPSHADOW, this.disabled ? 0.2 : 0.5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, (this.toggle && this.__getSelected()), false, false)];
+this.filters = [new flash.filters.DropShadowFilter (this.disabled ? 0 : 1, 45, DefaultStyle.DROPSHADOW, this.disabled ? .2 : .5, 4, 4, .75, flash.filters.BitmapFilterQuality.HIGH, (this.toggle && this.__getSelected()), false, false)];
 

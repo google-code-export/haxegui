@@ -164,7 +164,6 @@ class TitleBar extends AbstractButton {
 
 	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="TitleBar">
-	<<<<<<< .mine
 	<haxegui:windowClasses:CloseButton	  x="4"  y="4" color="{parent.color}"/>
 	<haxegui:windowClasses:MinimizeButton x="20" y="4" color="{parent.color}"/>
 	<haxegui:windowClasses:MaximizeButton x="36" y="4" color="{parent.color}"/>

@@ -91,6 +91,7 @@ class StepperUpButton extends Button, implements IComposite {
 	}
 	//}}}
 
+	public override function onAdded(e:Event) {}
 
 	//{{{ __init__
 	static function __init__() {
@@ -146,7 +147,8 @@ class StepperDownButton extends Button, implements IComposite {
 	}
 	//}}}
 
-
+	public override function onAdded(e:Event) {}
+	
 	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(StepperDownButton);
@@ -178,8 +180,8 @@ class Stepper extends Component, implements IAdjustable {
 	static var xml = Xml.parse('
 	<haxegui:Layout name="Stepper">
 		<haxegui:controls:Input width="{parent.box.width-10}" text="{parent.adjustment.getValue()}"/>
-		<haxegui:controls:StepperUpButton/>
-		<haxegui:controls:StepperDownButton/>
+		<haxegui:controls:StepperUpButton color="{parent.color}" autoRepeat="{parent.initOpts.autoRepeat}" repeatsPerSecond="{parent.initOpts.repeatsPerSecond}" repeatWaitTime="{parent.initOpts.repeatWaitTime}"/>
+		<haxegui:controls:StepperDownButton color="{parent.color}" autoRepeat="{parent.initOpts.autoRepeat}" repeatsPerSecond="{parent.initOpts.repeatsPerSecond}" repeatWaitTime="{parent.initOpts.repeatWaitTime}"/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
@@ -188,6 +190,7 @@ class Stepper extends Component, implements IAdjustable {
 	//{{{ Functions
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
+		// adjustment = new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 1, page: 10 });
 		adjustment = new Adjustment({ value: 0, min: -(2<<15), max: 2<<15, step: 1, page: 10 });
 		// adjustment = new Adjustment(Adjustment.newAdjustmentObject(Int));
 		box = new Size(40, 20).toRect();
