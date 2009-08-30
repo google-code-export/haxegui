@@ -268,7 +268,7 @@
 						<haxegui:toys:SevenSegment x="470" y="120" color="0x60181C" digitColor="0xFF0000"/>
 						<haxegui:toys:SevenSegment x="550" y="130" width="50" height="70" color="0x181B60" digitColor="0x0000FF"/>
 
-						<haxegui:toys:Knob x="450" y="440" radius="30"/>
+						<haxegui:toys:Knob x="450" y="440" radius="30" color="{DefaultStyle.BACKGROUND}"/>
 						<haxegui:toys:Knob x="560" y="440" radius="50"/>
 						<haxegui:toys:Knob x="660" y="440" radius="20"/>
 					</haxegui:containers:Container>

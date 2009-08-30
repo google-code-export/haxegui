@@ -246,28 +246,11 @@
 				this.graphics.endFill ();
 			]]>
 			</script>
-			<script type="text/hscript" action="mouseOut">
+			<script type="text/hscript" action="mouseOver">
 			<![CDATA[
-				CursorManager.setCursor(Cursor.ARROW);
-			]]>
-			</script>
-			<script type="text/hscript" action="mouseUp">
-			<![CDATA[
-				CursorManager.getInstance().lock = false;
-		
-				this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
-		
-				var win = this.getParentWindow();
-				if(win==null) return;
-		
-				win.stopDrag();
-				win.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove);
-				win.removeEventListener(flash.events.MouseEvent.MOUSE_UP, this.onStopDrag);
-		
-				if(this.hitTestObject( CursorManager.getInstance()._mc ))
-				CursorManager.setCursor(this.cursorOver);
-				else
-				CursorManager.setCursor(Cursor.ARROW);
+				if(this.disabled) return;
+				this.updateColorTween( new feffects.Tween(0, 50, 275, feffects.easing.Expo.easeOut ) );
+					CursorManager.setCursor(this.cursorOver);
 			]]>
 			</script>
 		</events>
@@ -351,29 +334,27 @@
 			</script>
 			<script type="text/hscript" action="interval">
 			<![CDATA[
-				//this.parent.__setValue(this.parent.__getValue() - this.parent.step);
-				//this.parent.adjustment.__setValue ( this.parent.adjustment.value - this.parent.adjustment.step );
-				this.parent.adjustment.object.value -= this.parent.adjustment.object.step;
-				this.parent.adjustment.adjust(this.parent.adjustment.object);
+				this.parent.adjustment.setValue(this.parent.adjustment.getValue() - this.parent.adjustment.object.step);
 			]]>
 			</script>
 			<script type="text/hscript" action="mouseUp">
 			<![CDATA[
-				if(!this.disabled) {
-					if(this.autoRepeat)
-						this.stopInterval();
-					else
-						this.parent.adjustment.__setValue ( this.parent.adjustment.value - this.parent.adjustment.step );
+				if(this.disabled) return;
 				
+				if(this.autoRepeat)
+					this.stopInterval();
+				//else
+				//	this.parent.adjustment.__setValue ( this.parent.adjustment.value - this.parent.adjustment.step );
 				
-					if(this.hitTestObject( CursorManager.getInstance()._mc )) {
-						this.updateColorTween( new feffects.Tween(-50, 50, 150, feffects.easing.Linear.easeNone) );
-						CursorManager.setCursor(this.cursorOver);
-					}
-					else {
-						this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
-					}
+				/*
+				if(this.hitTestObject( CursorManager.getInstance()._mc )) {
+					this.updateColorTween( new feffects.Tween(-50, 50, 150, feffects.easing.Linear.easeNone) );
+					CursorManager.setCursor(this.cursorOver);
 				}
+				else
+				*/
+				
+				this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
 			]]>
 			</script>
 			<script type="text/hscript" action="redraw">
@@ -407,18 +388,15 @@
 			</script>
 			<script type="text/hscript" action="mouseDown">
 			<![CDATA[
-				if(!this.disabled) {
-					if(this.autoRepeat) {
-						//this.parent.__setValue(this.parent.__getValue() - this.parent.step);
-						//this.parent.adjustment.__setValue ( this.parent.adjustment.value - this.parent.adjustment.step );
-						this.parent.adjustment.object.value -= this.parent.adjustment.object.step;
-						this.parent.adjustment.adjust(this.parent.adjustment.object);
-						this.startIntervalDelayed(this.repeatsPerSecond, this.repeatWaitTime);
+				if(this.disabled) return;
 				
-					}
-					this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
-					CursorManager.setCursor(this.cursorPress);
+				if(this.autoRepeat) {
+					this.parent.adjustment.setValue ( this.parent.adjustment.getValue() - this.parent.adjustment.object.step );
+					this.startIntervalDelayed(this.repeatsPerSecond, this.repeatWaitTime);
 				}
+				
+				this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
+				CursorManager.setCursor(this.cursorPress);
 			]]>
 			</script>
 		</events>
@@ -855,11 +833,11 @@
 				this.graphics.clear ();
 				
 				var highlight = Color.tint(this.color, .7);
-				var colors = (this.toggle && this.__getSelected()) ? [this.color, Color.darken(this.color, this.disabled ? 20 : 40 )] : [highlight, this.color] ;
+				var colors = (this.toggle && this.__getSelected()) ? [this.color, Color.darken(this.color, this.disabled ? 20 : 50 )] : [highlight, this.color] ;
 				var matrix = new flash.geom.Matrix ();
 				matrix.createGradientBox (this.box.width, this.box.height, .5*Math.PI, 0, 0);
 				
-				this.graphics.lineStyle (1, Color.darken(this.color, this.disabled ? 15 : 30), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND);
+				this.graphics.lineStyle (1, Color.darken(this.color, this.disabled ? 15 : 40), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND);
 				this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, colors, [1, 1], [0, 0xFF], matrix);
 				
 				if (this.toggle && this.__getSelected())
@@ -880,7 +858,7 @@
 				
 				}
 				/* Drop-Shadow */
-				this.filters = [new flash.filters.DropShadowFilter (this.disabled ? 0 : 1, 45, DefaultStyle.DROPSHADOW, this.disabled ? 0.2 : 0.5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, (this.toggle && this.__getSelected()), false, false)];
+				this.filters = [new flash.filters.DropShadowFilter (this.disabled ? 0 : 1, 45, DefaultStyle.DROPSHADOW, this.disabled ? .2 : .5, 4, 4, .75, flash.filters.BitmapFilterQuality.HIGH, (this.toggle && this.__getSelected()), false, false)];
 			]]>
 			</script>
 			<script type="text/hscript" action="focusOut">
@@ -1079,30 +1057,24 @@
 			</script>
 			<script type="text/hscript" action="interval">
 			<![CDATA[
-				//this.parent.__setValue(this.parent.__getValue() + this.parent.step);
-				//this.parent.adjustment.__setValue ( this.parent.adjustment.value + this.parent.adjustment.step );
-				this.parent.adjustment.object.value += this.parent.adjustment.object.step;
-				this.parent.adjustment.adjust(this.parent.adjustment.object);
+				this.parent.adjustment.setValue(this.parent.adjustment.getValue()+this.parent.adjustment.object.step);
 			]]>
 			</script>
 			<script type="text/hscript" action="mouseUp">
 			<![CDATA[
-				if(!this.disabled) {
-					if(this.autoRepeat)
-						this.stopInterval();
-					else
-						//this.parent.adjustment.__setValue ( this.parent.adjustment.value + this.parent.adjustment.step );
-						this.parent.adjustment.value += this.parent.adjustment.step;
+				if(this.disabled) return;
 				
+				if(this.autoRepeat)
+					this.stopInterval();
 				
-					if(this.hitTestObject( CursorManager.getInstance()._mc )) {
-						this.updateColorTween( new feffects.Tween(-50, 50, 150, feffects.easing.Linear.easeNone) );
-						CursorManager.setCursor(this.cursorOver);
-					}
-					else {
-						this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
-					}
+				/*
+				if(this.hitTestObject( CursorManager.getInstance()._mc )) {
+					this.updateColorTween( new feffects.Tween(-50, 50, 150, feffects.easing.Linear.easeNone) );
+					CursorManager.setCursor(this.cursorOver);
 				}
+				else
+				*/
+					this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
 			]]>
 			</script>
 			<script type="text/hscript" action="redraw">
@@ -1145,20 +1117,15 @@
 			</script>
 			<script type="text/hscript" action="mouseDown">
 			<![CDATA[
-				if(!this.disabled) {
+				if(this.disabled) return;
 				
-					if(this.autoRepeat) {
-						//this.parent.__setValue(this.parent.__getValue() + this.parent.step);
-						//this.parent.adjustment.__setValue ( this.parent.adjustment.value + this.parent.adjustment.step );
-						this.parent.adjustment.object.value += this.parent.adjustment.object.step;
-						this.parent.adjustment.adjust(this.parent.adjustment.object);
-						this.startIntervalDelayed(this.repeatsPerSecond, this.repeatWaitTime);
-						}
-				
-					this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
-					CursorManager.setCursor(this.cursorPress);
-				
+				if(this.autoRepeat) {
+					this.parent.adjustment.setValue( this.parent.adjustment.getValue() + this.parent.adjustment.object.step);
+					this.startIntervalDelayed(this.repeatsPerSecond, this.repeatWaitTime);
 				}
+				
+				this.updateColorTween( new feffects.Tween(50, -50, 350, feffects.easing.Linear.easeOut) );
+				CursorManager.setCursor(this.cursorPress);
 			]]>
 			</script>
 		</events>
@@ -1452,7 +1419,7 @@
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(w, h, .5*Math.PI, 0, 0);
 				
-				this.graphics.lineStyle (1, Color.darken(DefaultStyle.BACKGROUND, 16), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND);
+				this.graphics.lineStyle (1, Color.darken(this.color, 16), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND);
 				
 				if(parent.disabled)
 					colors = [ this.color, Color.darken(this.color, this.__getSelected() ? 20 : 10) ];

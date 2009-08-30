@@ -209,8 +209,8 @@ class ComboBoxBackground extends Component, implements IComposite {
 
 	//{{{ init
 	override public function init(?opts:Dynamic=null) {
-		color = DefaultStyle.BACKGROUND;
-
+		// color = DefaultStyle.BACKGROUND;
+		// color = parent.asComponent().color;
 
 		super.init(opts);
 

@@ -82,13 +82,14 @@ class CheckBox extends PushButton {
 
 	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="CheckBox">
+	<haxegui:controls:Label text="{parent.name}"/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
 
 	//{{{ Functions
 	//{{{ init
-	override public function init(opts:Dynamic=null) {
+	override public function init(?opts:Dynamic=null) {
 		adjustment = new Adjustment({ value: false, min: false, max: true, step:null, page: null});
 
 		super.init(opts);
@@ -107,17 +108,17 @@ class CheckBox extends PushButton {
 
 
 		// label
+		label = cast firstChild();
 		label.box.width -= 30;
 		label.center();
 		label.move(30,0);
 
 
 		// slot
-		slot = new haxegui.toys.Socket(this);
-		slot.init({visible:  Haxegui.slots});
-		slot.moveTo(-14,Std.int(this.box.height)>>1);
-
-		slot.color = Color.tint(slot.color, .5);
+		// slot = new haxegui.toys.Socket(this);
+		// slot.init({visible:  Haxegui.slots});
+		// slot.moveTo(-14,Std.int(this.box.height)>>1);
+		// slot.color = Color.tint(slot.color, .5);
 
 
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);

@@ -45,6 +45,7 @@ class ScriptStandardLibrary {
 		//{{{ haxe
 		interp.variables.set( "Bool", Bool );
 		interp.variables.set( "Date", Date );
+		interp.variables.set( "Hash", Hash );
 		interp.variables.set( "Int", Int );
 		interp.variables.set( "Lambda", Lambda );
 		interp.variables.set( "Lib", flash.Lib );
@@ -94,6 +95,7 @@ class ScriptStandardLibrary {
 			SocketConnection	: haxe.remoting.SocketConnection
 		}
 		);
+
 
 		//{{{ flash
 		interp.variables.set("flash",
@@ -194,16 +196,23 @@ class ScriptStandardLibrary {
 				}
 			},
 			events : {
-				Event 		  : flash.events.Event,
-				EventPhase	  : flash.events.EventPhase,
-				FocusEvent    : flash.events.FocusEvent,
-				KeyboardEvent : flash.events.KeyboardEvent,
-				MouseEvent    : flash.events.MouseEvent,
-				TextEvent     : flash.events.TextEvent
+				DataEvent     	: flash.events.DataEvent,
+				Event 		  	: flash.events.Event,
+				EventPhase	  	: flash.events.EventPhase,
+				FocusEvent    	: flash.events.FocusEvent,
+				KeyboardEvent 	: flash.events.KeyboardEvent,
+				MouseEvent    	: flash.events.MouseEvent,
+				//SampleDataEvent : flash.events.SampleDataEvent,
+				TextEvent     	: flash.events.TextEvent
 			},
 			net : {
 				URLLoader	: flash.net.URLLoader,
 				URLRequest	: flash.net.URLRequest
+			},
+			media : {
+				Sound		 : flash.media.Sound,
+				SoundChannel : flash.media.SoundChannel,
+				SoundMixer   : flash.media.SoundMixer
 			},
 			ui : {
 				Keyboard : keyboard(),
@@ -213,6 +222,10 @@ class ScriptStandardLibrary {
 				Capabilities : flash.system.Capabilities,
 				Security 	 : flash.system.Security,
 				System 		 : flash.system.System,
+			},
+			utils : {
+				ByteArray	 : flash.utils.ByteArray,
+				Endian		 : flash.utils.Endian
 			}
 		});
 		//}}}

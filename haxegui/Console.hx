@@ -525,7 +525,7 @@ class Console extends Window, implements ILogger {
 	public function log( msg : Dynamic, ?inf : haxe.PosInfos, ?error:ErrorType ) : Void {
 		if(msg==null) return;
 
-		var text:String =  "<FONT FACE='MONO' SIZE='10' COLOR='#eeeeee'>";
+		var text =  "<FONT FACE='MONO' SIZE='10' COLOR='#eeeeee'>";
 		text += DateTools.format (Date.now (), "%H:%M:%S") + " " ;
 
 		#if debug
