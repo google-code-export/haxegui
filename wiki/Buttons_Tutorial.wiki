@@ -1,3 +1,5 @@
+#summary Tutorial #2 - Buttons
+
 =Tutorial #2 - Buttons=
 
 Last tutorial we created a window, windows accept some controls as direct children, like MenuBar or a ToolBar, but buttons are usually laid out in a Container.
