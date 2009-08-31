@@ -1,3 +1,4 @@
+#summary Tutorial #1 - Windows
 =Tutorial #1 - Windows=
 
 See [http://code.google.com/p/haxegui/source/checkout] for download details, where you can grab the latest revision, we'll be editing a file like `Main.hx`, with a similar directory tree to the svn's trunk, see also `makefile` and `Compile.hxml` for compilation.
