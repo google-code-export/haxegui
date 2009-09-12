@@ -60,14 +60,34 @@ using haxegui.controls.Component;
 class TreeLeaf extends Component, implements IAggregate, implements IData {
 
 	/** Leaf icon **/
-	// var icon : Icon;
-	/** Default to the name property **/
-	// var label : Label;
+	public var icon : Icon;
+	/** Defaults to the name property **/
+	public var label : Label;
+
 	public var data : Dynamic;
 
-	static var xml = Xml.parse('
+	public var selected : Bool;
+
+
+	static var styleXml = Xml.parse('
+	<haxegui:Style name="TreeLeaf">
+	<haxegui:controls:TreeLeaf>
+	<events>
+	<script type="text/hscript" action="mouseClick"><![CDATA[
+	this.selected = !this.selected;
+	this.color = this.selected ? DefaultStyle.FOCUS : DefaultStyle.INPUT_BACK;
+	this.redraw();
+	return;
+	]]>
+	</script>
+	</events>
+	</haxegui:controls:TreeLeaf>
+	</haxegui:Style>
+	').firstElement();
+
+	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="TreeLeaf">
-	<haxegui:controls:Icon x="24" y="4" src="'+Icon.STOCK_DOCUMENT+'"/>
+	<haxegui:controls:Icon x="22" y="2"/>
 	<haxegui:controls:Label x="24" y="2" text="{parent.name}"/>
 	</haxegui:Layout>
 	').firstElement();
@@ -80,13 +100,18 @@ class TreeLeaf extends Component, implements IAggregate, implements IData {
 
 		super.init(opts);
 
-		xml.set("name", name);
+		layoutXml.firstElement().set("src", Opts.optString(opts, "icon", Icon.STOCK_DOCUMENT));
 
-		XmlParser.apply(TreeLeaf.xml, this);
+		layoutXml.set("name", name);
+
+		XmlParser.apply(TreeLeaf.layoutXml, this);
+		XmlParser.apply(TreeLeaf.styleXml, true);
 
 		// label = new Label(this);
 		// label.init({text: this.name});
 		// label.move(48, 4);
+		label = getElementsByClass(Label).next();
+		label.setText(Opts.optString(opts, "label", name));
 
 		// icon = new Icon(this, 24, 4);
 		// icon.init ({src: Opts.optString(opts, "icon", Icon.STOCK_DOCUMENT) });
@@ -132,6 +157,7 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 	public var expanded : Bool;
 
 	public var selected : Bool;
+	public var selectable : Bool;
 
 	public var data : Dynamic;
 
@@ -147,6 +173,12 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 	<events>
 	<script type="text/hscript" action="mouseClick"><![CDATA[
 	event.stopImmediatePropagation();
+	if(event.target==this) {
+		this.selected = !this.selected;
+		this.color = this.selected ? DefaultStyle.FOCUS : DefaultStyle.INPUT_BACK;
+		this.redraw();
+		return;
+	}
 
 	this.expander.__setExpanded(!this.expander.__getExpanded());
 
@@ -157,6 +189,7 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 
 	for(i in 2...this.expander.numChildren)
 	this.expander.getChildAt(i).visible = this.expander.expanded;
+
 	]]>
 	</script>
 	</events>
@@ -166,6 +199,8 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
 		color = DefaultStyle.INPUT_BACK;
 		box = new Size(140, 24).toRect();
 
@@ -179,17 +214,24 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 
 		expander = cast firstChild();
 
-		expander.mouseEnabled = false;
+		expander.label.mouseEnabled = true;
 		expander.removeEventListener(MouseEvent.CLICK, expander.onMouseClick);
 
+		expander.button.arrow.resize(new Size(8,8));
+		expander.label.setText(Opts.optString(opts, "label", name));
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
+
+		haxegui.Profiler.end();
 	}
 	//}}}
 
+	//{{{ empty
 	public function empty() {
 		return expander.numChildren<=2;
 	}
+	//}}}
+
 
 	//{{{ removeItems
 	public function removeItems() {
@@ -215,6 +257,7 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 	//}}}
 
 
+	//{{{ onChildClicked
 	public function onChildClicked(e:TreeEvent) {
 		var i = parent.getChildIndex(this) + 1;
 		if(parent.numChildren<i) return;
@@ -234,6 +277,7 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 		// for(a in ancestors())
 		// if(Std.is(a, TreeNode)) { a.dispatchEvent(e); break; }
 	}
+	//}}}
 
 
 	//{{{ getChildIndex
@@ -245,7 +289,9 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 	//}}}
 
 
+	//{{{ onParentResize
 	public  function onParentResize(e:ResizeEvent) : Void {
+		if(parent==null || parent.asComponent().box==null) return;
 		box.width = parent.asComponent().box.width;
 		expander.box = box.clone();
 		for(i in expander) {
@@ -254,6 +300,7 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 		}
 		dirty = true;
 	}
+	//}}}
 
 
 	//{{{ expand
@@ -264,6 +311,7 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 		parent.getChildAt(j).y += h;
 
 		dispatchEvent(new TreeEvent(TreeEvent.ITEM_OPENING));
+		this.parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
 
@@ -275,15 +323,32 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 		parent.getChildAt(j).y = 24*j - 24;
 
 		dispatchEvent(new TreeEvent(TreeEvent.ITEM_CLOSING));
+		this.parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
 
 
+	//{{{ getPath
+	public function getPath() : Array<Dynamic>{
+		var nodes : Array<Dynamic> = [this.expander.label.getText()];
+		for(a in ancestors()) {
+			if(Std.is(a, Tree)) break;
+			if(Std.is(a, TreeNode))
+			nodes.push(untyped a.expander.label.getText());
+		}
+		nodes.reverse();
+		return nodes;
+	}
+	//}}}
+
+
+	//{{{ parentTree
 	public static function parentTree(node:TreeNode) : Tree {
 		for(a in node.ancestors())
 		if(Std.is(a, Tree)) return cast a;
 		return null;
 	}
+	//}}}
 
 
 	//{{{ __init__
@@ -324,7 +389,7 @@ class Tree extends Component, implements IDataSource {
 
 	//{{{ Functions
 	//{{{ init
-	override public function init(opts:Dynamic=null) {
+	override public function init(?opts:Dynamic=null) {
 		box = new Size(140,24).toRect();
 		color = DefaultStyle.INPUT_BACK;
 		collapsedNodes = new List<TreeNode>();
@@ -339,8 +404,9 @@ class Tree extends Component, implements IDataSource {
 
 
 		rootNode = new TreeNode(this, "rootNode");
-		rootNode.init({x: 12, width: box.width-12, color: this.color });
+		rootNode.init({width: box.width, color: this.color });
 		rootNode.description = null;
+		rootNode.expander.label.setText(Opts.optString(opts, "text", rootNode.expander.label.getText()));
 
 		// var self = this;
 		// addEventListener(ResizeEvent.RESIZE, function(e){ trace(e); self.redraw(); });
@@ -370,6 +436,12 @@ class Tree extends Component, implements IDataSource {
 		this.graphics.drawRect(0, 0, box.width, box.height);
 		this.graphics.endFill();
 
+		for(i in 0...Std.int(box.height/20)) {
+			this.graphics.beginFill(i%2==0 ? this.color : Color.darken(this.color, 10));
+			this.graphics.drawRect(0, 24*i, box.width, 24);
+			this.graphics.endFill();
+		}
+
 		// this.graphics.lineStyle(1, Color.darken(DefaultStyle.BACKGROUND,30), 1);
 		// this.graphics.moveTo(24, 12);
 		// this.graphics.lineTo(24, 24*this.rootNode.expander.numChildren);
@@ -386,24 +458,86 @@ class Tree extends Component, implements IDataSource {
 
 	//{{{ process
 	public function process(o:Dynamic, ?node:Dynamic=null) {
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
 		if(o==null) return;
 		if(node==null) node=this;
 		for(f in Reflect.fields(o)) {
 			if(Reflect.isObject(Reflect.field(o, f))) {
 				if(Std.is(Reflect.field(o, f), String) || Reflect.fields(Reflect.field(o,f)).length==0 )  {
 					var leaf = new TreeLeaf(node, f);
-					leaf.init({x: x+24, y: 24*(node.getChildIndex(leaf)-1), width: box.width-(node.x), visible: false, color: this.color });
+					leaf.init({
+						x: x+24,
+						y: 24*(node.getChildIndex(leaf)-1),
+						width: box.width-(node.x),
+						height: 24,
+						isible: false,
+						color: this.color
+					});
 				}
 				else {
 					var treenode = new TreeNode(node, f);
-					treenode.init({width: box.width-(node.x+x+24), x: x+24, y: 24*(node.getChildIndex(treenode)-1), visible: false, color: this.color });
+					treenode.init({
+						width: box.width,
+						height: 24,
+						x: x+24,
+						y: 24*(node.getChildIndex(treenode)-1),
+						visible: false,
+						color: this.color
+					});
 					process(Reflect.field(o,f), treenode);
 				}
 			}
 		}
+
+		haxegui.Profiler.end();
 	}
 	//}}}
 
+
+	//{{{ processXml
+	public function processXml(xml:Xml, ?node:Dynamic=null) {
+		if(xml==null) return;
+		if(node==null) node=this.rootNode;
+
+		for(e in xml.elements()) {
+			var fast = new haxe.xml.Fast(e);
+			if(e.firstElement()==null) {
+				var leaf = new TreeLeaf(node);
+				leaf.init({
+					x: x + 24,
+					y: 24 * (node.getChildIndex(leaf)-1),
+					width: box.width-(node.x),
+					height: 24,
+					visible: false,
+					label:
+					// (e.attributes().hasNext() && e.exists("name")) ? e.get("name") :
+					// (e.exists("id")) ? e.get("id") : e.nodeName,
+					fast.has.name ? fast.att.name : fast.has.id ? fast.att.id : fast.name,
+					color: this.color
+				});
+			}
+			else {
+				var treenode = new TreeNode(node);
+				treenode.init({
+					width: box.width,
+					height: 24,
+					x: x+24,
+					y: 24*(node.getChildIndex(treenode)-1),
+					visible: false,
+					// label: (e.attributes().hasNext() && e.exists("name")) ? e.get("name") : e.nodeName,
+					label: fast.has.name ? fast.att.name : fast.has.id ? fast.att.id : fast.name,
+					color: this.color
+				});
+				processXml(e, treenode);
+			}
+
+		}
+	}
+	//}}}
+
+
+	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) : Void {
 		box = parent.asComponent().box.clone();
 
@@ -429,22 +563,55 @@ class Tree extends Component, implements IDataSource {
 
 		dispatchEvent(e);
 	}
+	//}}}
 
+
+	//{{{ onResize
 	public override function onResize(e:ResizeEvent) : Void {
 		redraw();
 	}
+	//}}}
 
 
+	//{{{ expandNode
+	public function expandNode(node:TreeNode) {
+		node.expander.expanded = true;
+		node.expand();
+		for(i in 2...node.expander.numChildren)
+		node.expander.getChildAt(i).visible = true;
+		for(n in node.expander.getElementsByClass(TreeNode))
+		expandNode(n);
+	}
+	//}}}
+
+
+	//{{{ expandFull
+	public function expandFull() {
+		expandNode(rootNode);
+
+		box = getBounds(this);
+		dirty = true;
+	}
+	//}}}
+
+
+	//{{{ visibleRowCount
 	public function visibleRowCount() : Int {
 		// var count = function(o) { if(o==null) return; var i=o.numChildren; for(j in o) i+=count(j); return i; };
 		return 0;
 	}
+	//}}}
 
+
+	//{{{ totalRowCount
 	public function totalRowCount() : Int {
 		// return 0;
 		return countNode(rootNode);
 	}
+	//}}}
 
+
+	//{{{ countNode
 	public function countNode(n:TreeNode) : Int {
 		if(n==null) return 0;
 		var i = n.expander.numChildren;
@@ -452,7 +619,7 @@ class Tree extends Component, implements IDataSource {
 		if(Std.is(c, TreeNode)) i+=countNode(cast c);
 		return i;
 	}
-
+	//}}}
 
 	//{{{ setDataSource
 	public function setDataSource(d:DataSource) : DataSource {

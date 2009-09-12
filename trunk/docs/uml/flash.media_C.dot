@@ -3,6 +3,16 @@ digraph uml {
 	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
 	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
 	graph [lp="124,12",
-		bb="0,0,248,61"];
-	"flash.media.SoundTransform" [label="{\nSoundTransform}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/media/SoundTransform.html", tooltip="\nSoundTransform", pos="124,43", rects="81,25,168,61", width="1.19", height="0.50"];
+		bb="0,0,248,223"];
+	"flash.media.SoundChannel" [label="{\nSoundChannel}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/media/SoundChannel.html", tooltip="\nSoundChannel", pos="195,205", rects="156,187,234,223", width="1.08", height="0.50"];
+	"flash.media.SoundTransform" [label="{\nSoundTransform}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/media/SoundTransform.html", tooltip="\nSoundTransform", pos="67,151", rects="24,133,111,169", width="1.19", height="0.50"];
+	"flash.media.SoundMixer" [label="{\nSoundMixer}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/media/SoundMixer.html", tooltip="\nSoundMixer", pos="195,151", rects="162,133,228,169", width="0.92", height="0.50"];
+	"flash.media.ID3Info" [label="{\nID3Info}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/media/ID3Info.html", tooltip="\nID3Info", pos="67,97", rects="40,79,94,115", width="0.75", height="0.50"];
+	"flash.media.SoundLoaderContext" [label="{\nSoundLoaderContext}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/media/SoundLoaderContext.html", tooltip="\nSoundLoaderContext", pos="67,43", rects="15,25,120,61", width="1.44", height="0.50"];
+	"flash.media.Sound" [label="{\nSound}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/media/Sound.html", tooltip="\nSound", pos="195,97", rects="168,79,222,115", width="0.75", height="0.50"];
+	"flash.media.SoundChannel" -> "flash.media.SoundTransform" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,156,189 145,184 133,180 120,174 109,169"];
+	"flash.media.SoundMixer" -> "flash.media.SoundTransform" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,162,151 150,151 137,151 124,151 111,151"];
+	"flash.media.Sound" -> "flash.media.ID3Info" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,168,97 156,97 136,97 112,97 94,97"];
+	"flash.media.Sound" -> "flash.media.SoundLoaderContext" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,168,86 157,81 141,75 124,67 109,61"];
+	"flash.media.Sound" -> "flash.media.SoundTransform" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,168,108 157,113 141,119 124,127 109,133"];
 }

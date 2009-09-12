@@ -84,6 +84,39 @@ class Stack extends Component, implements IContainer {
 	public function onParentResize(e:ResizeEvent) {
 		// dirty = true;
 
+		for(i in this) {
+			if(Std.is(i, Component)) {
+				if(!Math.isNaN((cast i).left)) {
+				i.x = (cast i).left;
+				}
+				else
+				if(!Math.isNaN((cast i).right)) {
+				i.x = box.width - (cast i).box.width - (cast i).right;
+				}
+
+				if(!Math.isNaN((cast i).left) && !Math.isNaN((cast i).right)) {
+				i.x = (cast i).left;
+				(cast i).box.width = box.width - (cast i).right - i.x;
+				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+				}
+
+
+				if(!Math.isNaN((cast i).top)) {
+				i.y = (cast i).top;
+				}
+				else
+				if(!Math.isNaN((cast i).bottom)) {
+				i.y = box.height - (cast i).box.height - (cast i).bottom;
+				}
+
+				if(!Math.isNaN((cast i).top) && !Math.isNaN((cast i).bottom)) {
+				i.y = (cast i).top;
+				(cast i).box.height = box.height - (cast i).bottom - i.y;
+				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+				}
+			}
+		}
+
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}

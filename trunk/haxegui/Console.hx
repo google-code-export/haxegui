@@ -34,9 +34,11 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.ui.Keyboard;
 import flash.ui.Mouse;
+import haxe.Timer;
 import haxegui.Window;
 import haxegui.containers.Container;
 import haxegui.controls.Component;
+import haxegui.controls.Image;
 import haxegui.controls.ScrollBar;
 import haxegui.events.DragEvent;
 import haxegui.events.MoveEvent;
@@ -50,7 +52,6 @@ import haxegui.utils.Opts;
 import haxegui.utils.Printing;
 import haxegui.utils.Size;
 import haxegui.windowClasses.TitleBar;
-import haxegui.controls.Image;
 import hscript.Expr;
 import hscript.Parser;
 //}}}
@@ -119,16 +120,19 @@ class Console extends Window, implements ILogger {
 	var pwd : Array<String>;
 
 
-	var container : Container;
-	var output : TextField;
-	var input : TextField;
-	var vert : ScrollBar;
+	var watchTimer : Timer;
+	var ctrlKey : Bool;
+
+	public var container : Container;
+	public var output : TextField;
+	public var input : TextField;
+	public var vert : ScrollBar;
 	//}}}
 
 	static var xml = Xml.parse(	'
 	<haxegui:Layout name="Console">
 		<haxegui:containers:Container name="Container">
-			<haxegui:controls:ScrollBar name="ScrollBar" color="0x444444" scroll="1"/>
+			<haxegui:controls:ScrollBar name="ScrollBar" top="0" bottom="0" right="0" color="0x444444" scroll="1"/>
 		</haxegui:containers:Container>
 	</haxegui:Layout>
 	').firstElement();
@@ -145,7 +149,7 @@ class Console extends Window, implements ILogger {
 	//{{{ init
 	public override function init(?opts:Dynamic) {
 		type = WindowType.ALWAYS_ON_TOP;
-
+		minSize = new Size(124,60);
 
 		// TitleBar.iconFile = "utilities-terminal.png";
 
@@ -195,7 +199,12 @@ class Console extends Window, implements ILogger {
 		input.border = true;
 		input.width = box.width - 40;
 		input.height = 20;
+		input.selectable = true;
+
+
 		input.addEventListener (KeyboardEvent.KEY_DOWN, onInputKeyDown);
+		input.addEventListener (KeyboardEvent.KEY_UP, onInputKeyUp);
+		// input.addEventListener (Event.COPY, onInputCopy);
 
 
 		// Container
@@ -241,8 +250,31 @@ class Console extends Window, implements ILogger {
 		interp.variables.set( "tree", function() { Printing.print_r(self._pwd); } );
 		interp.variables.set( "where", function() { trace(untyped self._pwd.name+" "+self._pwd.box.toString().substr(1).split("=").join("='").split(",").join("'").split(")").join("'").split("h").join("height").split("w").join("width")); });
 
+		interp.variables.set( "note", function() new haxegui.toys.Note(flash.Lib.current.stage.mouseX, flash.Lib.current.stage.mouseY).init() );
+		interp.variables.set( "pin", function() new haxegui.toys.Pin(flash.Lib.current.stage.mouseX, flash.Lib.current.stage.mouseY).init() );
 
-		interp.variables.set( "cd", function(?v) {
+		var self = this;
+		interp.variables.set( "watch", function(o:Dynamic, ?args:Array<Dynamic>, ?interval:Int=100) {
+			if(o==null) return;
+			if(args==null) args=[];
+
+			if(self.watchTimer!=null)
+			self.watchTimer.stop();
+			self.watchTimer = new haxe.Timer(interval);
+			self.watchTimer.run = function() {
+			self.clear();
+			if(Reflect.isObject(o))
+				trace(o);
+			else
+			if(Reflect.isFunction(o))
+				trace(Reflect.callMethod(o, o, args));
+			}
+
+		});
+
+		interp.variables.set( "unwatch", function() { if(self.watchTimer!=null) self.watchTimer.stop(); });
+
+			interp.variables.set( "cd", function(?v) {
 			if(v==null) return "";
 			switch(v) {
 				case ".":
@@ -320,7 +352,7 @@ class Console extends Window, implements ILogger {
 		input.width = box.width - 30;
 		input.y = box.height - 40;
 
-
+/*
 		vert.box.height = box.height - 20;
 		vert.x = box.width - 30;
 		vert.down.y = Math.max( 20, box.height - 40);
@@ -328,7 +360,7 @@ class Console extends Window, implements ILogger {
 		vert.frame.dirty = true;
 		vert.handle.y = Math.min( vert.handle.y, vert.box.height - vert.handle.box.height - 20 );
 		vert.handle.y = Math.max( vert.handle.y, 20 );
-
+*/
 	}
 	//}}}
 
@@ -341,16 +373,56 @@ class Console extends Window, implements ILogger {
 
 	}
 
+
+	//{{{ onInputFocusChanged
+	/**
+	* Called in respose to a TAB key press, handles auto-completion
+	*/
+	public function onInputFocusChanged(e:FocusEvent) {
+		e.preventDefault();
+		flash.Lib.current.stage.focus = cast e.target;
+
+		var lastChar = input.text.charAt(input.text.length-1);
+
+		for(i in 0..._pwd.numChildren) {
+			var child = _pwd.getChildAt(i);
+			if(child.name.charAt(0)==lastChar) {
+			input.text += child.name.substr(1, child.name.length-1);
+			input.setSelection(input.text.length, input.text.length);
+			break;
+			}
+		}
+/*
+		for(f in Reflect.fields(_pwd)) {
+			if(f.charAt(0)==lastChar) {
+			input.text += f.substr(1, f.length-1);
+			input.setSelection(input.text.length, input.text.length);
+			input.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE, onInputFocusChanged);
+			return;
+			}
+		}
+*/
+		input.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE, onInputFocusChanged);
+	}
+	//}}}
+
+	//{{{
+	public function onInputKeyUp(e:KeyboardEvent) : Void {
+	}
+	//}}}
+
+
+
 	//{{{ onInputKeyDown
 	/** Process keyboard input **/
 	public function onInputKeyDown(e:KeyboardEvent) : Void {
+
 		switch(e.keyCode) {
 			case Keyboard.ENTER :
 			if(input.text=="")	{
 				trace("");
 				return;
 			}
-
 
 			// text replacement for shell functions
 			if(input.text.substr(0,2)=="ls") {
@@ -374,10 +446,10 @@ class Console extends Window, implements ILogger {
 				input.text="cd('"+dir+"')";
 			}
 
-			// convert shell commands to functions
-			if(input.text=="clear") input.text="clear()";
-			if(input.text=="dir") 	input.text="dir()";
-			if(input.text=="get") 	input.text="get()";
+			// convert shell commands to functions by adding brackets
+			var r = ~/^(clear|dir|get|where)/gm;
+			input.text = r.replace(input.text, "$1()");
+
 
 			// set the program
 			var program = parser.parseString(input.text);
@@ -388,7 +460,6 @@ class Console extends Window, implements ILogger {
 			// this exports children
 			for(i in 0...getPwd().numChildren)
 				interp.variables.set( getPwd().getChildAt(i).name, getPwd().getChildAt(i));
-
 
 			// this exports members
 			for(f in Reflect.fields(getPwd()))
@@ -431,6 +502,8 @@ class Console extends Window, implements ILogger {
 				trace(e);
 			}
 
+			case Keyboard.TAB:
+			input.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, onInputFocusChanged, false, 0, true);
 
 			case Keyboard.UP :
 			input.text = history.pop();

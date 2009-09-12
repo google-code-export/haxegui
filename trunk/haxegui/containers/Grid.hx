@@ -71,18 +71,24 @@ class Grid extends Component, implements IContainer {
 	* @todo cleanup
 	*/
 	public override function addChild(o : DisplayObject) : DisplayObject {
-		var o = super.addChild(o);
+		var o = super.addChild(o).asComponent();
 		var self = this;
 
 		var i = (self.getChildIndex(o)) % self.cols;
 		var j = Std.int(self.getChildIndex(o)/self.cols);
 
-		o.asComponent().moveTo(i*self.box.width/self.cols, j*self.box.height/self.rows);
+		// o.moveTo(i*self.box.width/self.cols, j*self.box.height/self.rows);
+		o.x = i*self.box.width/self.cols;
+		o.y = j*self.box.height/self.rows;
 
 		// if(Std.is(o, Component))
 		addEventListener(ResizeEvent.RESIZE,
 		function(e) {
 			if(!self.contains(o)) return;
+
+			if(Std.is(o, haxegui.controls.Label))
+			o.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+
 			if(self.fit) {
 				var s = Size.fromRect(self.box);
 				s.scale(1/self.cols, 1/self.rows);
@@ -95,8 +101,10 @@ class Grid extends Component, implements IContainer {
 			var i = (self.getChildIndex(o)) % self.cols;
 			var j = Std.int(self.getChildIndex(o)/self.cols);
 
-			o.asComponent().moveTo(i*(self.box.width/self.cols+self.cellSpacing), j*(self.box.height/self.rows+self.cellSpacing));
-			// o.asComponent().moveTo(i*self.box.width/self.cols, j*self.box.height/self.rows);
+			//o.asComponent().moveTo(i*(self.box.width/self.cols+self.cellSpacing), j*(self.box.height/self.rows+self.cellSpacing));
+			o.x = i*(self.box.width/self.cols+self.cellSpacing);
+			o.y = j*(self.box.height/self.rows+self.cellSpacing);
+
 			o.dispatchEvent(new MoveEvent(MoveEvent.MOVE));
 		});
 
@@ -169,6 +177,7 @@ class Grid extends Component, implements IContainer {
 		size = new Size(parent.width, parent.height);
 
 		size.subtract(new Size((cols-1)*cellSpacing, (rows-1)*cellSpacing));
+		size.setAtLeastZero();
 
 		box = size.toRect();
 

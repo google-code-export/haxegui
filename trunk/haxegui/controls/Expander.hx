@@ -61,7 +61,7 @@ enum ExpanderStyle {
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 **/
-class ExpanderButton extends Button {
+class ExpanderButton extends AbstractButton {
 	/** Arrow **/
 	public var arrow		 : Arrow;
 
@@ -71,9 +71,18 @@ class ExpanderButton extends Button {
 	/** Collapsed state icon **/
 	public var collapsedIcon : Icon;
 
+	//{{{ init
+	public override function init(?opts:Dynamic=null) {
+		super.init(opts);
+	}
+	//}}}
+
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(ExpanderButton);
 	}
+	//}}}
 }
 //}}}
 

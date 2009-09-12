@@ -82,7 +82,6 @@ class CheckBox extends PushButton {
 
 	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="CheckBox">
-	<haxegui:controls:Label text="{parent.name}"/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
@@ -109,10 +108,11 @@ class CheckBox extends PushButton {
 
 		// label
 		label = cast firstChild();
+		if(label!=null) {
 		label.box.width -= 30;
 		label.center();
 		label.move(30,0);
-
+		}
 
 		// slot
 		// slot = new haxegui.toys.Socket(this);

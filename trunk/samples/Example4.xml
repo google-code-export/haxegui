@@ -7,24 +7,27 @@
 			<script type="text/hscript" action="onLoaded">
 				<![CDATA[
 				function onResize(e) {
-					var bmpd = new flash.display.BitmapData(this.box.width>>2, (this.box.height>>2)-5, true, 0x00000000);
-					
+					var bmpd = new flash.display.BitmapData(this.box.width>>2, (this.box.height>>1)-10, true, 0x00000000);
+
 
 					if(this.getChildAt(0).numChildren==1)
 					this.getChildAt(0).removeChild(this.getChildAt(0).getChildAt(0));
 
 					var bitmap = new flash.display.Bitmap(bmpd);
-					bitmap.scaleX = 4;
-					bitmap.scaleY = 4;
+					bitmap.scaleX = 8;
+					bitmap.scaleY = 2;
+
+					bitmap.y = 8;
 					//bitmap.blendMode = flash.display.BlendMode.MULTIPLY;
-					
+
 					this.getChildAt(0).addChild(bitmap);
 					this.scrollRect = parent.box.clone();
 				}
 				this.addEventListener(events.ResizeEvent.RESIZE, onResize);
 				]]>
-			</script>		
-			<script type="text/hscript" action="redraw"><![CDATA[
+			</script>
+			<script type="text/hscript" action="redraw">
+			<![CDATA[
 			this.graphics.clear();
 			this.graphics.beginFill(Color.tint(Color.RED, .25));
 			this.graphics.drawRect(0,0,this.box.width>>1,this.box.height);
@@ -32,7 +35,7 @@
 			this.graphics.beginFill(Color.tint(Color.BLUE, .25));
 			this.graphics.drawRect(this.box.width>>1,0,this.box.width>>1,this.box.height);
 			this.graphics.endFill();
-			
+
 			for(i in 0...Math.round(this.box.height/10)) {
 				this.graphics.lineStyle(1, Color.tint(Color.RED, .325));
 				this.graphics.moveTo(0,i*10);
@@ -40,6 +43,7 @@
 				this.graphics.lineStyle(1, Color.tint(Color.BLUE, .325));
 				this.graphics.lineTo(this.box.width,i*10);
 			}
+
 			this.filters = [new flash.filters.DropShadowFilter(4,45,DefaultStyle.DROPSHADOW,.5,4,4,.85,flash.filters.BitmapFilterQuality.HIGH, true, false, false)];
 			]]>
 			</script>
@@ -48,60 +52,73 @@
 			<events>
 			<script type="text/hscript" action="onLoaded">
 				<![CDATA[
-					parent.dispatchEvent(new events.ResizeEvent(events.ResizeEvent.RESIZE));
+					//parent.dispatchEvent(new events.ResizeEvent(events.ResizeEvent.RESIZE));
 				]]>
 			</script>
 
 			<script type="text/hscript" action="interval">
 				<![CDATA[
 					if(this.numChildren==0) return;
-					
+
 					var ba = new flash.utils.ByteArray();
 					var w = parent.box.width>>2;
-					var h = (parent.box.height>>2) - 5;
+					var h = (parent.box.height>>1) - 10;
 
 					var bmpd = this.getChildAt(0).bitmapData;
+
+
 					flash.media.SoundMixer.computeSpectrum(ba, true, 0);
-								
-					bmpd.lock();
-					
-					var mat = 
+
+
+					var mat =
 							[ 1,0,0,0,0,
 							  0,1,0,0,0,
 							  0,0,1,0,0,
-							  0,0,0,.85,0 ];
-
+							  0,0,0,.9,0 ];
 
 					//bmpd.fillRect(new flash.geom.Rectangle(0,0,w,h), Color.WHITE);
-					this.getChildAt(0).bitmapData.applyFilter(bmpd, parent.box, new flash.geom.Point(0,0), new flash.filters.ColorMatrixFilter(mat));
-					this.getChildAt(0).bitmapData.applyFilter(bmpd, parent.box, new flash.geom.Point(0,0), new flash.filters.BlurFilter(2, 2, flash.filters.BitmapFilterQuality.LOW));
-					
-					
+
+					var p = new flash.geom.Point();
+					bmpd.applyFilter(bmpd, parent.box, p, new flash.filters.ColorMatrixFilter(mat));
+					bmpd.applyFilter(bmpd, parent.box, p, new flash.filters.BlurFilter(0, 3, flash.filters.BitmapFilterQuality.LOW));
+
+
 					var matrix = new flash.geom.Matrix();
 					matrix.createBox (w, h, .5*Math.PI, 0, 0);
-					var trans = new flash.geom.ColorTransform(0, 1, 1, .1, 0, 0, 255, 0);
+					var trans = new flash.geom.ColorTransform();
 					bmpd.draw(this, matrix, trans);
-							
+
+					var a = [];
 					for (i in 0...64) {
 						var v = 0;
-						for(n in 1...8) 
-						v += ba.readFloat();
-						v /= 6;
-						
+						v = ba.readFloat();
+						ba.position += 4*7;
+						a.push(v);
+
 						//var c = (i>=32) ? Color.BLUE : Color.RED;
 						var c = (i>=32) ? 0xCC0000FF : 0xCCFF0000;
-						var x = w*i/64;
+						var x = w*i/128;
 						var y = h*(1-v);
 
 						for(j in y...h) {
 						bmpd.setPixel32(x,j,c);
-						//bmpd.setPixel32(x+1,j,c);
 						}
+						bmpd.setPixel32(x,y,0xFFFFFFFF);
+
 
 					}
-					
-					bmpd.unlock();
-										
+
+
+					Timer.delay(
+					function() {
+					for(i in 0...a.length) {
+					var x = w*i/128;
+					var y = h*(1-a[i]);
+					bmpd.setPixel32(x,y-v,0xFF000000);
+					}}, 1000);
+
+
+
 					//this.getChildAt(0).bitmapData.applyFilter(bmpd, parent.box, new flash.geom.Point(0,0), new flash.filters.BlurFilter(3, 3, flash.filters.BitmapFilterQuality.LOW));
 				]]>
 			</script>
@@ -110,22 +127,22 @@
 		</haxegui:containers:Container>
 		<haxegui:windowClasses:StatusBar x="10">
 		<haxegui:controls:Stepper name="Stepper1" value="20" color="0x666666"/>
-		<haxegui:controls:Stepper name="Stepper2" x="100" value="4" color="0x666666"/>		
-		</haxegui:windowClasses:StatusBar>		
+		<haxegui:controls:Stepper name="Stepper2" x="100" value="4" color="0x666666"/>
+		</haxegui:windowClasses:StatusBar>
 	</haxegui:Window>
-	
-	
+
+
 	<haxegui:Window name="Step Sequencer" x="100" y="40" width="570" height="600" sizeable="true" color="0x666666">
 		<events>
-			<script type="text/hscript" action="onLoaded"><![CDATA[
+			<script type="text/hscript" action="onLoaded">
+			<![CDATA[
 			this.minSize = Size.fromRect(this.box.clone());
-			
+
 			var container = this.getChildByName("Container1");
 			var toolbar = this.getChildByName("toolbar");
 			var hbox = toolbar.getChildAt(1);
 			var spectrum = root.getChildByName("Spectrum").getChildByName("Container1").getChildAt(0);
 			var BPM_TO_MS = 60*250;
-
 
 			var sampleFiles = [
 			"909_bd.mp3",
@@ -144,7 +161,7 @@
 			"synth2.mp3",
 			"synth3.mp3"
 			];
-			
+
 			var samples = [];
 
 			for(f in sampleFiles) {
@@ -201,8 +218,9 @@
 					var s = container.getChildByName("button"+i).getChildByName("volume");
 
 					if(selected) {
+						// Profiler.begin("Sound.play");
 						var channel = sample.play();
-
+						// Profiler.end();
 						var vol = container.getChildByName("volume"+i);
 						var pan = container.getChildByName("pan"+i);
 
@@ -211,7 +229,6 @@
 						transform.pan = pan.adjustment.getValue()/150-1;
 						channel.soundTransform = transform;
 
-			
 						s.graphics.clear();
 						s.graphics.lineStyle(1, 0x4D4D4D, 0);
 						//s.graphics.beginFill(selected ? Color.tint(Color.GREEN, .5) : 0x666666);
@@ -222,26 +239,26 @@
 						s.graphics.drawRect(0,0,10,16);
 						s.graphics.endFill();
 
-					
+
 						var t = new feffects.Tween(transform.volume, 1, sample.length, feffects.easing.Expo.easeNone);
 						t.setTweenHandlers(function(v) {
 						s.graphics.beginFill(0x666666, v);
 						s.graphics.drawRect(0,0,10,16*v);
-						s.graphics.endFill();					
+						s.graphics.endFill();
 						});
 						t.start();
-						
+
 						function onComplete(e) {
 						t.stop();
 						s.graphics.clear();
 						s.graphics.lineStyle(1, 0x4D4D4D);
 						s.graphics.beginFill(0x666666);
 						s.graphics.drawRect(0,0,10,16);
-						s.graphics.endFill();						
+						s.graphics.endFill();
 						}
 						sample.addEventListener(flash.events.Event.SOUND_COMPLETE, onComplete, false, 0, true);
-					
-									
+
+
 						chkbox.graphics.lineStyle(2,Color.GREEN);
 						chkbox.graphics.moveTo(4,5);
 						chkbox.graphics.lineTo(10,5);
@@ -271,7 +288,6 @@
 				t = new haxe.Timer( BPM_TO_MS / step1.adjustment.getValue() );
 				t.run = update;
 			}
-
 			step1.adjustment.addEventListener( flash.events.Event.CHANGE, reset);
 
 			start.addEventListener( flash.events.MouseEvent.MOUSE_UP,
@@ -279,7 +295,7 @@
 				t.stop();
 				t = new haxe.Timer( BPM_TO_MS / step1.adjustment.getValue() );
 				t.run = update;
-				spectrum.startInterval(25);
+				spectrum.startInterval(20);
 			});
 
 			stop.addEventListener ( flash.events.MouseEvent.MOUSE_UP,
@@ -288,6 +304,7 @@
 				flash.media.SoundMixer.stopAll();
 				spectrum.stopInterval();
 			});
+
 
 			for(i in 0...samples.length) {
 
@@ -301,7 +318,7 @@
 				chkbox.setAction("mouseOver", "this.updateColorTween( new feffects.Tween(0, 50, 275, feffects.easing.Expo.easeOut ) );");
 				chkbox.setAction("mouseOut", "this.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 350, feffects.easing.Linear.easeOut ) );");
 				chkbox.setAction("focusIn", "");
-				chkbox.setAction("focusOut", "");				
+				chkbox.setAction("focusOut", "");
 				chkbox.setAction("redraw",
 				"
 				this.graphics.clear();
@@ -322,11 +339,12 @@
 				");
 				chkbox.filters = [new flash.filters.BevelFilter(3, 90, Color.WHITE, .5, Color.BLACK, 1, 3, 4, .25), new flash.filters.DropShadowFilter (2, 90, Color.BLACK, .5, 2, 2, .5, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
 
-
+				if(chkbox.numChildren!=0)
 				chkbox.removeChild(chkbox.firstChild());
 				chkbox.color =  (Math.floor(j/4)%2!=0) ? 0x999999 : 0x666666;
-				//chkbox.redraw();
+				//~chkbox.redraw();
 			}
+
 
 			var vol = new haxegui.toys.Knob(container, "volume"+i);
 			vol.radius = 12;
@@ -344,7 +362,7 @@
 			pan.description = "Pan";
 			pan.color = this.color;
 			pan.move(52, 50+30*i);
-			pan.adjustment.setValue(155);			
+			pan.adjustment.setValue(155);
 			if(pan.slot!=null) pan.slot.visible=false;
 
 			var mute = new haxegui.controls.RadioButton(container);
@@ -371,15 +389,16 @@
 			btn.label.init();
 			btn.label.setText(sampleFiles[i].split(".mp3").shift());
 
+
 			function makeWindow(e) {
 				var w = new haxegui.Window(root, btn.name);
 				w.init();
 				w.color = 0x666666;
-			
+
 				var c = new haxegui.containers.Container(w);
 				c.init();
 				c.color = w.color;
-				
+
 				var rect = new haxegui.toys.Rectangle(c);
 				rect.init();
 				rect.box = c.box.clone();
@@ -388,7 +407,7 @@
 				rect.color = btn.color;
 				rect.stroke = Color.darken(btn.color,20);
 				rect.redraw();
-				
+
 				var lbl = new haxegui.controls.Label(rect);
 				lbl.init();
 				lbl.box = rect.box.clone();
@@ -407,7 +426,7 @@
 				combo.dataSource.data = sampleFiles;
 				combo.input.setText(sampleFiles[i]);
 
-				
+
 				var s = new flash.display.Sprite();
 				s.graphics.beginFill(Color.tint(Color.BLACK, .5));
 				s.graphics.drawRect(0,0,w.box.width-30, 100);
@@ -421,10 +440,10 @@
 				snd.load(new flash.net.URLRequest("assets/sounds/"+sampleFiles[i]));
 
 				var b = new flash.utils.ByteArray();
-			}			
+			}
 
 			btn.addEventListener(flash.events.MouseEvent.CLICK, makeWindow);
-						
+
 			var s = new flash.display.Sprite();
 			s.name = "volume";
 			s.graphics.lineStyle(1, 0x4D4D4D);
@@ -435,7 +454,6 @@
 			s.y = 4;
 			s.filters = [new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW,.5,2,2,.75,flash.filters.BitmapFilterQuality.LOW,true,false,false)];
 			btn.addChild(s);
-			
 			}
 		]]>
 		</script>
@@ -456,6 +474,5 @@
 		</haxegui:controls:ToolBar>
 		<haxegui:containers:Container name="Container1" x="10" y="80" color="0x666666"/>
 	</haxegui:Window>
-
 
 </haxegui:Layout>

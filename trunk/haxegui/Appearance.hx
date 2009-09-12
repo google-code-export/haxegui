@@ -96,26 +96,31 @@ class Appearance extends Window {
 	static var xml = Xml.parse('
 	<haxegui:Layout name="Appearance">
 		<haxegui:controls:MenuBar x="10" y="20">
+			<haxegui:controls:Menu name="Appearance"/>
 		</haxegui:controls:MenuBar>
-		<haxegui:controls:TabNavigator x="10" y="40">
+		<haxegui:controls:TabNavigator x="10" y="42" left="10" right="0">
 		<haxegui:controls:Tab/>
 		<haxegui:controls:Tab/>
 		<haxegui:controls:Tab/>
 		</haxegui:controls:TabNavigator>
-		<haxegui:containers:HDivider x="10" y="60">
-			<haxegui:containers:Container/>
-			<haxegui:containers:Container>
-			<!--
-				<haxegui:containers:ScrollPane>
-					<haxegui:Window x="20" y="20">
-					<haxegui:containers:Container>
-						<haxegui:controls:Button/>
-					</haxegui:containers:Container>
-					</haxegui:Window>
-				</haxegui:containers:ScrollPane>
-			-->
-			</haxegui:containers:Container>
-		</haxegui:containers:HDivider>
+		<haxegui:containers:Container x="10" y="62" top="62" bottom="10">
+			<haxegui:containers:HDivider>
+				<haxegui:containers:Container>
+				<!-- Will be filled later -->
+				</haxegui:containers:Container>
+				<haxegui:containers:Container>
+					<haxegui:containers:ScrollPane>
+						<haxegui:Window x="20" y="20" mouseEnabled="false" scaleX=".75" scaleY=".75"/>
+						<haxegui:Window x="40" y="40" mouseEnabled="false" scaleX=".75" scaleY=".75">
+						<haxegui:containers:Container>
+							<haxegui:controls:Button x="20" y="20"/>
+							<haxegui:controls:Button x="120" y="20"/>
+						</haxegui:containers:Container>
+						</haxegui:Window>
+					</haxegui:containers:ScrollPane>
+				</haxegui:containers:Container>
+			</haxegui:containers:HDivider>
+		</haxegui:containers:Container>
 	</haxegui:Layout>
 	').firstElement();
 
@@ -141,7 +146,8 @@ class Appearance extends Window {
 		XmlParser.apply(Appearance.xml, this);
 
 
-		hdivider = this.getElementsByClass(HDivider).next();
+		container = this.getElementsByClass(Container).next();
+		hdivider = container.getElementsByClass(HDivider).next();
 		container = hdivider.getElementsByClass(Container).next();
 
 		makeNoticeLabel();

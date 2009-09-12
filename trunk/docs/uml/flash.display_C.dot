@@ -2,8 +2,8 @@ digraph uml {
 	graph [label="Package: flash.display Composition", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=false, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
 	node [label="\N", fontname="DejaVu Sans Condenesed", fontsize=8, shape=record, color=black, fontcolor=black];
 	edge [fontname="DejaVu Sans Condenesed", fontsize=8, color=black, fontcolor=black];
-	graph [lp="294,12",
-		bb="0,0,588,915"];
+	graph [lp="297,12",
+		bb="0,0,594,915"];
 	"flash.display.IBitmapDrawable" [label="{\nIBitmapDrawable}", fontcolor="#496962", style="rounded,filled", fillcolor="#88c2b3", URL="../types/flash/display/IBitmapDrawable.html", tooltip="\nIBitmapDrawable", pos="91,99", rects="47,81,135,117", width="1.22", height="0.50"];
 	"flash.display.DisplayObject" [label="{\nDisplayObject}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/DisplayObject.html", tooltip="\nDisplayObject", pos="459,574", rects="422,556,496,592", width="1.03", height="0.50"];
 	"flash.display.BlendMode" [label="{\nBlendMode|SUBTRACT\lSCREEN\lOVERLAY\lNORMAL\lMULTIPLY\lLIGHTEN\lLAYER\lINVERT\lHARDLIGHT\lERASE\lDIFFERENCE\lDARKEN\lALPHA\lA\
@@ -12,7 +12,7 @@ DD\l}", style="rounded,filled", fillcolor="#af8dc3", pos="91,240", rects="27,166
 	"flash.display.DisplayObjectContainer" [label="{\nDisplayObjectContainer}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/DisplayObjectContainer.html", tooltip="\nDisplayObjectContainer", pos="302,711", rects="245,693,360,729", width="1.58", height="0.50"];
 	"flash.display.Stage" [label="{\nStage}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Stage.html", tooltip="\nStage", pos="302,657", rects="275,639,329,675", width="0.75", height="0.50"];
 	"flash.display.InteractiveObject" [label="{\nInteractiveObject}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/InteractiveObject.html", tooltip="\nInteractiveObject", pos="91,897", rects="48,879,135,915", width="1.19", height="0.50"];
-	"flash.display.Sprite" [label="{\nSprite}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Sprite.html", tooltip="\nSprite", pos="560,449", rects="533,431,587,467", width="0.75", height="0.50"];
+	"flash.display.Sprite" [label="{\nSprite}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Sprite.html", tooltip="\nSprite", pos="563,449", rects="536,431,590,467", width="0.75", height="0.50"];
 	"flash.display.Graphics" [label="{\nGraphics}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Graphics.html", tooltip="\nGraphics", pos="459,321", rects="432,303,486,339", width="0.75", height="0.50"];
 	"flash.display.BitmapData" [label="{\nBitmapData}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/BitmapData.html", tooltip="\nBitmapData", pos="302,99", rects="269,81,335,117", width="0.92", height="0.50"];
 	"flash.display.GradientType" [label="{\nGradientType|RADIAL\lLINEAR\l}", style="rounded,filled", fillcolor="#af8dc3", pos="302,403", rects="244,385,316,421 316,385,361,421", width="1.61", height="0.50"];
@@ -28,21 +28,22 @@ DD\l}", style="rounded,filled", fillcolor="#af8dc3", pos="91,240", rects="27,166
 	"flash.display.ActionScriptVersion" [label="{\nActionScriptVersion|ACTIONSCRIPT3\lACTIONSCRIPT2\l}", style="rounded,filled", fillcolor="#af8dc3", pos="91,381", rects="1,363,99,399 99,363,182,399", width="2.50", height="0.50"];
 	"flash.display.StageQuality" [label="{\nStageQuality|MEDIUM\lLOW\lHIGH\lBEST\l}", style="rounded,filled", fillcolor="#af8dc3", pos="91,731", rects="32,707,102,755 102,707,151,755", width="1.64", height="0.67"];
 	"flash.display.Loader" [label="{\nLoader}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Loader.html", tooltip="\nLoader", pos="91,551", rects="64,533,118,569", width="0.75", height="0.50"];
-	"flash.display.Shape" [label="{\nShape}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Shape.html", tooltip="\nShape", pos="560,321", rects="533,303,587,339", width="0.75", height="0.50"];
+	"flash.display.Shape" [label="{\nShape}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Shape.html", tooltip="\nShape", pos="563,321", rects="536,303,590,339", width="0.75", height="0.50"];
 	"flash.display.StageDisplayState" [label="{\nStageDisplayState|NORMAL\lFULL_SCREEN\l}", style="rounded,filled", fillcolor="#af8dc3", pos="91,671", rects="7,653,101,689 101,653,175,689", width="2.33", height="0.50"];
 	"flash.display.StageScaleMode" [label="{\nStageScaleMode|SHOW_ALL\lNO_SCALE\lNO_BORDER\lEXACT_FIT\l}", style="rounded,filled", fillcolor="#af8dc3", pos="91,611", rects="14,587,101,635 101,587,169,635", width="2.14", height="0.67"];
 	"flash.display.Bitmap" [label="{\nBitmap}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/Bitmap.html", tooltip="\nBitmap", pos="459,71", rects="432,53,486,89", width="0.75", height="0.50"];
 	"flash.display.PixelSnapping" [label="{\nPixelSnapping|NEVER\lAUTO\lALWAYS\l}", style="rounded,filled", fillcolor="#af8dc3", pos="302,44", rects="241,25,316,63 316,25,363,63", width="1.69", height="0.53"];
-	"flash.display.MovieClip" [label="{\nMovieClip}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/MovieClip.html", tooltip="\nMovieClip", pos="560,765", rects="532,747,588,783", width="0.78", height="0.50"];
+	"flash.display.MovieClip" [label="{\nMovieClip}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/MovieClip.html", tooltip="\nMovieClip", pos="563,765", rects="535,747,591,783", width="0.78", height="0.50"];
+	"flash.display.AVM1Movie" [label="{\nAVM1Movie}", fontcolor="#104E8B", style="rounded,filled", fillcolor=white, URL="../types/flash/display/AVM1Movie.html", tooltip="\nAVM1Movie", pos="563,819", rects="532,801,594,837", width="0.86", height="0.50"];
 	"flash.display.DisplayObject" -> "flash.display.BlendMode" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,437,556 427,549 415,540 401,530 386,524 315,494 273,539 218,486 174,444 209,409 182,354 175,340 166,326 156,313"];
 	"flash.display.DisplayObject" -> "flash.display.LoaderInfo" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,422,563 410,561 385,557 354,553 333,550"];
-	"flash.display.DisplayObject" -> "flash.display.DisplayObject" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,477,592 475,604 472,608 467,610 459,610 444,610 438,602 441,592"];
+	"flash.display.DisplayObject" -> "flash.display.DisplayObject" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,478,592 476,604 473,608 467,610 459,610 444,610 437,602 440,592"];
 	"flash.display.DisplayObject" -> "flash.display.DisplayObjectContainer" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,448,592 442,603 430,625 411,655 386,675 375,683 362,689 349,693"];
 	"flash.display.DisplayObject" -> "flash.display.Stage" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,425,592 414,598 387,612 353,631 329,643"];
 	"flash.display.DisplayObjectContainer" -> "flash.display.DisplayObject" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,360,706 371,702 376,699 381,696 386,693 420,666 444,619 454,592"];
-	"flash.display.Sprite" -> "flash.display.DisplayObject" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,545,467 538,476 518,501 491,535 474,556"];
-	"flash.display.Sprite" -> "flash.display.Graphics" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,546,431 538,421 519,397 490,360 473,339"];
-	"flash.display.Sprite" -> "flash.display.Sprite" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,578,467 576,479 573,483 568,485 560,485 545,485 539,477 542,467"];
+	"flash.display.Sprite" -> "flash.display.DisplayObject" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,548,467 540,476 520,501 492,535 474,556"];
+	"flash.display.Sprite" -> "flash.display.Graphics" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,548,431 540,421 521,397 492,360 474,339"];
+	"flash.display.Sprite" -> "flash.display.Sprite" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,582,467 580,479 577,483 571,485 563,485 548,485 541,477 544,467"];
 	"flash.display.Graphics" -> "flash.display.BitmapData" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,456,303 453,291 445,253 425,187 386,144 372,129 352,118 335,111"];
 	"flash.display.Graphics" -> "flash.display.GradientType" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,439,339 429,347 417,357 401,368 386,376 378,380 370,384 361,387"];
 	"flash.display.Graphics" -> "flash.display.SpreadMethod" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,432,326 420,328 404,331 385,334 367,337"];
@@ -55,11 +56,11 @@ DD\l}", style="rounded,filled", fillcolor="#af8dc3", pos="91,240", rects="27,166
 	"flash.display.LoaderInfo" -> "flash.display.DisplayObject" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,333,561 345,563 369,568 399,572 422,574"];
 	"flash.display.LoaderInfo" -> "flash.display.Loader" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,272,546 260,546 217,544 153,544 118,546"];
 	"flash.display.LoaderInfo" -> "flash.display.SWFVersion" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,272,540 261,536 247,530 232,524 218,519 195,510 170,500 148,491"];
-	"flash.display.Shape" -> "flash.display.Graphics" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,533,321 521,321 509,321 497,321 486,321"];
+	"flash.display.Shape" -> "flash.display.Graphics" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,536,321 524,321 511,321 498,321 486,321"];
 	"flash.display.Bitmap" -> "flash.display.BitmapData" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,432,76 420,78 394,83 360,89 335,93"];
 	"flash.display.Bitmap" -> "flash.display.PixelSnapping" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,432,66 420,64 403,61 382,58 363,55"];
-	"flash.display.MovieClip" -> "flash.display.FrameLabel" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,532,767 520,768 512,769 504,769 496,769 439,770 374,768 335,767"];
-	"flash.display.MovieClip" -> "flash.display.Scene" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,532,759 520,756 509,754 496,751 486,748"];
+	"flash.display.MovieClip" -> "flash.display.FrameLabel" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,535,767 523,768 514,769 505,769 496,769 439,770 374,768 335,767"];
+	"flash.display.MovieClip" -> "flash.display.Scene" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,535,759 523,756 511,754 497,750 486,748"];
 	"flash.display.BitmapData" -> "flash.display.BitmapData" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,330,117 328,129 323,133 315,135 302,135 279,135 269,127 274,117"];
 	"flash.display.BitmapData" -> "flash.display.IBitmapDrawable" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,269,99 257,99 221,99 171,99 135,99"];
 	"flash.display.BitmapData" -> "flash.display.BlendMode" [color=white, style=bold, arrowhead=none, arrowtail=diamond, arrowsize=1, pos="s,269,116 258,122 245,128 231,136 218,144 197,157 176,173 156,188"];

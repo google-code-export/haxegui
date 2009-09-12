@@ -55,7 +55,6 @@ class Balloon extends haxegui.toys.Rectangle
 		this.graphics.clear();
 		this.graphics.beginFill(this.color);
 		this.graphics.drawRoundRect(this.pivot.x,this.pivot.y,this.box.width,this.box.height, this.roundness, this.roundness);
-		this.graphics.endFill();
 		this.graphics.moveTo(10, this.box.height);
 		this.graphics.lineTo(15, this.box.height+8);
 		this.graphics.lineTo(25, this.box.height);

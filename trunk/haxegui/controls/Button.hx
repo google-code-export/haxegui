@@ -142,7 +142,11 @@ class Button extends AbstractButton, implements IAdjustable {
 		// Default to a no-label simple button
 		if(Opts.optString(opts, "label", null)!=null) {
 			label = new Label(this);
-			label.init({text : Opts.optString(opts, "label", name)});
+			label.init({
+			text : Opts.optString(opts, "label", name),
+			color: disabled ? Color.darken(DefaultStyle.BACKGROUND,30) : DefaultStyle.LABEL_TEXT
+			});
+			label.center();
 			minSize.width = Std.int(Math.max( minSize.width, label.tf.width ));
 		}
 
@@ -158,7 +162,61 @@ class Button extends AbstractButton, implements IAdjustable {
 
 			icon.init({src: src});
 			icon.move(4,4);
+
+
+			if(disabled) {
+				var mat = [
+				0.3,0.6,0.082,0,0,
+				0.3,0.6,0.082,0,0,
+				0.3,0.6,0.082,0,0,
+				0,  0,0,1,0 ];
+
+				icon.filters = [new flash.filters.ColorMatrixFilter(mat)];
+				icon.alpha = .5;
+			}
+			else {
+				icon.filters = [];
+				icon.alpha = 1;
+			}
 		}
+	}
+	//}}}
+
+
+	//{{{ __setDisabled
+	private override function __setDisabled(b:Bool) : Bool {
+
+		disabled = super.__setDisabled(b);
+
+		if(icon==null) return disabled;
+
+		if(disabled) {
+			var mat = [
+			0.3,0.6,0.082,0,0,
+			0.3,0.6,0.082,0,0,
+			0.3,0.6,0.082,0,0,
+			0,  0,0,1,0 ];
+
+			icon.filters = [new flash.filters.ColorMatrixFilter(mat)];
+			icon.alpha = .5;
+		}
+		else {
+			icon.filters = [];
+			icon.alpha = 1;
+		}
+
+		if(this.label!=null && this.label.tf!=null) {
+		var fmt = DefaultStyle.getTextFormat (8, DefaultStyle.LABEL_TEXT, flash.text.TextFormatAlign.LEFT);
+		if (this.disabled) fmt.color = Color.darken(this.color, 24);
+		this.label.tf.setTextFormat (fmt);
+		}
+
+		redraw();
+		dirty = false;
+		this.graphics.clear();
+
+
+		return disabled;
 	}
 	//}}}
 
@@ -174,9 +232,9 @@ class Button extends AbstractButton, implements IAdjustable {
 			redraw();
 			dirty = false;
 			this.graphics.clear();
-			setAction("mouseOut",  "event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
-			setAction("mouseUp",   "event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
-			setAction("mouseOver", "this.redraw();");
+			setAction("mouseOut",  "if(!this.disabled) event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
+			setAction("mouseUp",   "if(!this.disabled) event.target.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 100, feffects.easing.Expo.easeOut ) );	this.graphics.clear();");
+			setAction("mouseOver", "if(!this.disabled) this.redraw();");
 		}
 	}
 	//}}}

@@ -21,6 +21,8 @@ package haxegui.controls;
 
 
 //{{{ Imports
+import haxegui.controls.UiList;
+import haxegui.controls.PopupMenu;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.Shape;
@@ -79,12 +81,15 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 	public var label 		: Label;
 	public var icon  		: Icon;
 	public var menu  		: PopupMenu;
+	
+	/** Keyboard shortcut keycode **/
+	public var key : Int;
 
 	public var dataSource(default, setDataSource) : DataSource;
 
 	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="Menu">
-		<haxegui:controls:Label x="4" y="3" text="{parent.name}"/>
+		<haxegui:controls:Label x="4" y="3" text="{parent.name}" mouseEnabled="false"/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
@@ -96,13 +101,11 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 	* @throws String when not parented to a [MenuBar]
 	*/
 	override public function init(opts:Dynamic=null) {
-		if(!Std.is(parent, MenuBar)) throw parent+" not a MenuBar";
+		//if(!Std.is(parent, MenuBar)) throw parent+" not a MenuBar";
 		box = new Size(40,24).toRect();
 		// menu = new PopupMenu();
 
-
 		super.init(opts);
-
 
 		XmlParser.apply(Menu.layoutXml, this);
 
@@ -113,6 +116,14 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 
 		label = cast firstChild();
 
+		var r = ~/_(.)/;
+		if(r.match(name)) {
+		key = r.matched(0).charCodeAt(1);
+		name = r.replace(name, "<U>$1</U>");
+		label.tf.htmlText = name;
+		}
+
+		
 		box.width = label.width;
 		// dirty = false;
 	}
@@ -127,17 +138,17 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 		menu.destroy();
 		menu = new PopupMenu(flash.Lib.current);
 		menu.dataSource = this.dataSource;
-		menu.init ({color: this.color});
+		menu.init ();
 
 		menu.toFront();
 
-		menu.x = p.x;
-		menu.y = p.y + 20;
+		menu.x = p.x + 4;
+		menu.y = p.y;
 
-		var self = this;
-		var r = new Rectangle();
-		r.width = menu.box.width;
-		menu.scrollRect = r;
+		//var self = this;
+		//var r = new Rectangle();
+		//r.width = menu.box.width;
+		//menu.scrollRect = r;
 
 		// var t = new feffects.Tween(0, menu.data.length*24, 250, r, "height", feffects.easing.Linear.easeOut);
 		// t.setTweenHandlers(
@@ -146,7 +157,15 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 		// }
 		// );
 		// t.start();
+		this.color = DefaultStyle.FOCUS;
+		redraw();
 
+		var self = this;
+		var onMenuHide = function(e) {
+			self.color = (cast self.parent).color;
+			self.redraw();
+		}
+		menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
 		// for(i in menu)
 			// (cast i).setAction("mouseDown", "var a = new haxegui.Alert(); a.init(); a.label.setText(this.label.getText());");
 
@@ -186,7 +205,7 @@ class MenuBar extends Component, implements IRubberBand {
 	//{{{ Members
 	public var items 	: Array<Menu>;
 
-	public var numMenus : Int;
+	//public var numMenus(default, null) : Int;
 
 	private var _menu	: Int;
 	//}}} Members
@@ -238,11 +257,11 @@ class MenuBar extends Component, implements IRubberBand {
 
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
-		box.width = untyped parent.box.width - 10;
+		box.width = parent.asComponent().box.width - 10;
 
 		var b = box.clone();
 		b.height = box.height;
-		b.x = b.y =0;
+		b.x = b.y = 0;
 		this.scrollRect = b;
 
 		dirty = true;
@@ -254,19 +273,16 @@ class MenuBar extends Component, implements IRubberBand {
 
 	//{{{ onKeyDown
 	override public function onKeyDown (e:KeyboardEvent) {}
-
 	//}}}
 
 
 	//{{{ openMenuByName
-
 	/**
 	*
 	*/
 	function openMenuByName (name:String) {
 		openMenuAt (this.getChildIndex (this.getChildByName (name)));
 	}
-
 	//}}}
 
 

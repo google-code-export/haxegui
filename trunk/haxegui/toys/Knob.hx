@@ -78,7 +78,7 @@ class Knob extends Component, implements IAdjustable {
 		setAction("redraw",
 		"
 		this.graphics.clear();
-		
+
 		var colors = [];
 		for(i in 0...360) {
 			if(i<=90)
@@ -110,25 +110,20 @@ class Knob extends Component, implements IAdjustable {
 		this.pot.graphics.lineStyle(1, Color.WHITE, .5);
 		this.pot.graphics.drawCircle(0,0, innerRadius);
 
-		this.pot.filters = [new flash.filters.BevelFilter(4,45, Color.WHITE, .5, Color.BLACK, .5, 4, 4, .5),	new flash.filters.DropShadowFilter (.5*this.radius, 45, Color.BLACK, 1, 5, 5, .7, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
+		this.pot.filters = [new flash.filters.BevelFilter(4,45, Color.WHITE, .5, Color.BLACK, .5, 4, 4, .5),
+							new flash.filters.DropShadowFilter (.33*this.radius, 45, Color.BLACK, 1, 5, 5, .7, flash.filters.BitmapFilterQuality.HIGH, false, false, false )];
 
 		this.graphics.lineStyle(0, 0, 0, false, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE);
 		this.graphics.beginFill(Color.tint(this.color, .8));
 		this.graphics.drawCircle(0,0,this.radius);
 		this.graphics.endFill();
-		this.graphics.beginFill(Color.darken(this.color, 16));
-		this.graphics.drawCircle(0,0,innerRadius+.5*(this.radius-innerRadius));
-		this.graphics.drawCircle(0,0,this.radius);
-		this.graphics.endFill();
 
-		this.graphics.beginFill(this.color, .25);
-		this.graphics.drawCircle(0,0,innerRadius+.5*(this.radius-innerRadius));
-		this.graphics.drawCircle(0,0,this.radius);
-		this.graphics.endFill();
+		this.graphics.lineStyle(3, Color.darken(this.color, 16), 1, false, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE);
+		this.graphics.drawCircle(0,0,innerRadius);
 
+		this.graphics.lineStyle(1, Color.BLACK, .5, false, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE);
 		for(i in 0...5) {
 			var angle = i/2.5*Math.PI - Math.PI/10;
-			this.graphics.lineStyle(1, Color.BLACK, .5, false, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE);
 			this.graphics.moveTo(Math.cos(angle) * this.radius, Math.sin(angle) * this.radius);
 			this.graphics.lineTo(Math.cos(angle) * innerRadius, Math.sin(angle) * innerRadius);
 
@@ -144,12 +139,12 @@ class Knob extends Component, implements IAdjustable {
 		marker.end = new Point(Math.sin(-145)*(innerRadius-4), Math.cos(-145)*(innerRadius-4));
 		marker.filters = null;
 
-		
+
 		slot = new haxegui.toys.Socket(this);
 		slot.init();
 		slot.moveTo(-radius,radius);
 		slot.color = Color.tint(slot.color, .5);
-		
+
 		adjustment.addEventListener (Event.CHANGE, onChanged, false, 0, true);
 
 

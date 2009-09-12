@@ -28,6 +28,7 @@ import flash.geom.Rectangle;
 import haxegui.controls.Component;
 import haxegui.controls.IAdjustable;
 import haxegui.events.MoveEvent;
+import haxegui.events.ResizeEvent;
 import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
 import haxegui.managers.ScriptManager;
@@ -73,6 +74,25 @@ class RadioButton extends Button {
 
 	public var group : RadioGroup;
 
+		//{{{ Members
+	static var styleXml = Xml.parse('
+	<haxegui:Style name="RadioButton">
+		<haxegui:controls:RadioButton>
+			<events>
+			<script type="text/hscript" action="mouseClick"><![CDATA[
+			]]>
+			</script>
+			</events>
+		</haxegui:controls:RadioButton>
+	</haxegui:Style>
+	').firstElement();
+
+	static var layoutXml = Xml.parse('
+	<haxegui:Layout name="RadioButton">
+	</haxegui:Layout>
+	').firstElement();
+	//}}}
+
 	//{{{ init
 	override public function init(?opts:Dynamic) {
 		super.init(opts);
@@ -80,22 +100,41 @@ class RadioButton extends Button {
 
 		box = new Size(20,20).toRect();
 
+		layoutXml.set("name", name);
+
+		haxegui.XmlParser.apply(RadioButton.styleXml, true);
+		haxegui.XmlParser.apply(RadioButton.layoutXml, this);
+
 
 		selected = Opts.optBool(opts, "selected", selected);
 
 		// label on by default
 		if(Opts.optString(opts, "label", name)!="false") {
-			label = new Label(this);
-			label.init({disabled: this.disabled});
-			label.text = Opts.optString(opts, "label", name);
-			label.move(24, 4);
+			label = new Label(this, 24, 4);
+			label.init({
+				text: Opts.optString(opts, "label", name),
+				valign: "center",
+				disabled: this.disabled
+			});
 		}
 
 		// dropshadow filter
 		filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, 0.8, 2, 2, 0.65, flash.filters.BitmapFilterQuality.LOW, true, false, false )];
+
+
 	}
 	//}}}
 
+	//{{{ onResize
+	public override function onResize(e:ResizeEvent) {
+		super.onResize(e);
+
+		label.box = box.clone();
+		label.onResize(e);
+		// label.x = Math.min(box.width, box.height) + 4;
+		// label.y = .5*box.height;
+	}
+	//}}}
 
 	//{{{ onMouseClick
 	public override function onMouseClick(e:MouseEvent) {

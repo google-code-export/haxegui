@@ -15,7 +15,7 @@
 ### Flags ###
 # --flash-use-stage
 --flash-strict
-#-debug
+-debug
 
 ### Library ###
 -swf-lib assets.swf

@@ -1,4 +1,4 @@
-if(!this.disabled) {
+if(this.disabled) return;
 
 
 	if(this.hitTestObject( CursorManager.getInstance()._mc )) {
@@ -9,5 +9,4 @@ if(!this.disabled) {
 		this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
 	}
 
-
-}
+this.stopInterval();

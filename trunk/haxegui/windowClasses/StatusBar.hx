@@ -42,29 +42,71 @@ import haxegui.controls.AbstractButton;
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 */
-class StatusBar extends Component
-{
-	
+class StatusBar extends Component {
+
+	//{{{ init
 	override public function init(?opts:Dynamic) {
 		box = (cast parent).box.clone();
 		color = (cast parent).color;
-		
+		if(x==0) x=10;
+
 		super.init(opts);
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
-		
-		this.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5,BitmapFilterQuality.HIGH,true,false,false)];
-		
-	}	
 
+		this.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5,BitmapFilterQuality.HIGH,true,false,false)];
+
+	}
+	//}}}
+
+
+	//{{{ onParentResize
+	public function onParentResize(e:ResizeEvent) {
+		box = untyped new Rectangle(0,0,parent.box.width-10, parent.box.height+20);
+		//this.scrollRect = untyped new Rectangle(0,0,parent.box.width-10, parent.box.height+20);
+		scrollRect = box;
+
+		for(i in this) {
+			if(Std.is(i, Component)) {
+				if(!Math.isNaN((cast i).left)) {
+				i.x = (cast i).left;
+				}
+				else
+				if(!Math.isNaN((cast i).right)) {
+				i.x = box.width - (cast i).box.width - (cast i).right;
+				}
+
+				if(!Math.isNaN((cast i).left) && !Math.isNaN((cast i).right)) {
+				i.x = (cast i).left;
+				(cast i).box.width = box.width - (cast i).right - i.x;
+				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+				}
+
+
+				if(!Math.isNaN((cast i).top)) {
+				i.y = (cast i).top;
+				}
+				else
+				if(!Math.isNaN((cast i).bottom)) {
+				i.y = box.height - (cast i).box.height - (cast i).bottom;
+				}
+
+				if(!Math.isNaN((cast i).top) && !Math.isNaN((cast i).bottom)) {
+				i.y = (cast i).top;
+				(cast i).box.height = box.height - (cast i).bottom - i.y;
+				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+				}
+			}
+		}
+
+		dirty = true;
+	}
+	//}}}
+
+
+	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(WindowFrame);
 	}
-	
-
-	public function onParentResize(e:ResizeEvent) {
-		this.scrollRect = untyped new Rectangle(0,0,parent.box.width-10, parent.box.height+20);
-		redraw();
-	}
-
+	//}}}
 }

@@ -52,8 +52,7 @@ class ToolBarSeperator extends Seperator {
 	override public function init(opts:Dynamic=null) {
 		super.init(opts);
 
-		box.height = 40;
-
+		box.height = (cast parent).box.height-4;
 	}
 	//}}}
 
@@ -69,6 +68,28 @@ class ToolBarSeperator extends Seperator {
 
 //{{{ MenuSeperator
 class MenuSeperator extends Seperator {
+
+	//{{{ init
+	override public function init(opts:Dynamic=null) {
+		super.init(opts);
+
+		box.width = (cast parent).box.width;
+		
+		this.setAction("redraw",
+		"
+		this.graphics.clear();
+		this.graphics.beginFill(this.color);
+		this.graphics.drawRect(0,0,this.box.width,this.box.height);
+		this.graphics.endFill();
+				
+		this.graphics.lineStyle(1, Color.darken(this.color, 20));
+		this.graphics.moveTo(1, this.box.height>>1);
+		this.graphics.lineTo(this.box.width-1, this.box.height>>1);
+		");
+	}
+	//}}}
+
+
 	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(MenuSeperator);

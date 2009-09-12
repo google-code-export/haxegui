@@ -9,7 +9,7 @@ matrix.createGradientBox(w, h, .5*Math.PI, 0, 0);
 
 this.graphics.lineStyle (1, Color.darken(this.color, 16), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND);
 
-if(parent.disabled)
+if(parent!=null && parent.disabled)
 	colors = [ this.color, Color.darken(this.color, this.__getSelected() ? 20 : 10) ];
 
 this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, [1, 1], [0, 0xFF], matrix );

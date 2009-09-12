@@ -211,9 +211,9 @@ class TabNavigator extends Component, implements IAdjustable {
 	//{{{ onChanged
 	/** Callback for a tab change, updates all child Tabs **/
 	public function onChanged(e:Event) {
-		#if debug
-		trace(this+" tab changed: "+activeTab);
-		#end
+		// #if debug
+		// trace(this+" tab changed: "+activeTab);
+		// #end
 		for(tab in getElementsByClass(Tab)) {
 			tab.active = ( getChildIndex(cast tab) == activeTab );
 			tab.redraw();
@@ -231,6 +231,7 @@ class TabNavigator extends Component, implements IAdjustable {
 		// if(Std.is(parent.parent, haxegui.containers.ScrollPane)) {
 		// 	box.width = untyped parent.parent.box.width;
 		// }
+		scrollRect = box;
 
 		dirty = true;
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));

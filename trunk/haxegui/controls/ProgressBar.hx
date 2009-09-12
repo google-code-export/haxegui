@@ -113,7 +113,8 @@ class ProgressBar extends Component, implements IAdjustable {
 				<![CDATA[
 					var x = -1;
 					if(this.x < -parent.box.width/10) x = parent.box.width/10;
-					this.move(x,0);
+					// this.move(x,0);
+					this.x+=x;
 				]]>
 				</script>
 			</events>
@@ -247,5 +248,11 @@ class ProgressBar extends Component, implements IAdjustable {
 		super.onResize(e);
 	} //}}}
 
+
+	public override function destroy() {
+		bar.stopInterval();
+
+		super.destroy();
+	}
 }
 //}}}

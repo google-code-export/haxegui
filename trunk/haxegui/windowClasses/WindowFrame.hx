@@ -95,7 +95,7 @@ class WindowFrame extends Component {
 			this.startInterval(12);
 
 
-			this.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.4, 12, 12, 0.85, flash.filters.BitmapFilterQuality.LOW, false, false, false)];
+			this.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 12, 12, 0.75, flash.filters.BitmapFilterQuality.LOW, false, false, false)];
 			"
 			);
 
@@ -108,7 +108,11 @@ class WindowFrame extends Component {
 			//{{{ interval
 			this.setAction("interval",
 			"
-			// the corner delta
+			var e = new haxegui.events.ResizeEvent(events.ResizeEvent.RESIZE);
+			e.oldWidth = this.parent.box.width;
+			e.oldHeight = this.parent.box.height;
+
+		// the corner delta
 			var d = -5;
 			//
 			var w = this.parent;
@@ -141,8 +145,10 @@ class WindowFrame extends Component {
 				w.x += p.x - r.x + d;
 			}
 
-			this.redraw();
-			this.dirty = false;
+			// this.redraw();
+			// this.__setDirty(false);
+		 if(w.box.width!=e.oldWidth || w.box.height!=e.oldHeight)
+			this.dispatchEvent(e);
 			"
 			);
 			// listener for changing cursor icon == resizing direction.
@@ -151,7 +157,7 @@ class WindowFrame extends Component {
 		//}}}
 
 
-		filters =[new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 12, 12, 0.85, flash.filters.BitmapFilterQuality.HIGH, false, false, false)];
+		filters =[new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, 0.5, flash.filters.BitmapFilterQuality.HIGH, false, false, false)];
 	}
 	//}}}
 
@@ -211,12 +217,30 @@ class WindowFrame extends Component {
 	//}}}
 
 
-	//{{{ redraw
-	override public function redraw(?opts:Dynamic=null):Void {
-		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
-		ScriptManager.exec(this,"redraw", null);
+	//{{ onResize
+	public override function onResize(e:ResizeEvent) {
+			redraw();
 	}
 	//}}}
+
+
+	//{{{ redraw
+	override public function redraw(?opts:Dynamic=null):Void {
+
+		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+
+		// ScriptManager.exec(this,"redraw", null);
+		super.redraw();
+	}
+	//}}}
+
+	//{{{ onRollOut
+	public override function destroy() {
+		this.stopInterval();
+		super.destroy();
+	}
+	//}}}
+
 
 
 	//{{{ __init__

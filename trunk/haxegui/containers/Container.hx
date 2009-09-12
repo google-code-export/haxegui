@@ -34,6 +34,7 @@ import haxegui.managers.MouseManager;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
 import haxegui.utils.Size;
+import haxegui.utils.Opts;
 //}}}
 
 
@@ -70,14 +71,17 @@ class Container extends Component, implements IContainer {
 
 	public function onChildMoved(e:MoveEvent) {
 		// box = box.union(e.target.box);
+		//if(this.box.containsRect(e.target.box)) return;
+		if(!fitV || !fitH) return;
 
 		box.width = Math.max(box.width, e.target.x+e.target.box.width);
 		box.height = Math.max(box.width, e.target.y+e.target.box.height);
 
-		// dirty=true;
-		redraw();
+		dirty = true;
+		// redraw();
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		//parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 
 
@@ -87,6 +91,9 @@ class Container extends Component, implements IContainer {
 
 
 		description = null;
+
+		fitH = Opts.optBool(opts, "fitH", true);
+		fitV = Opts.optBool(opts, "fitV", true);
 
 
 		if(Std.is(parent, haxegui.Window) && x==0 && y==0) move(10,20);
@@ -100,16 +107,62 @@ class Container extends Component, implements IContainer {
 
 	//{{{ onParentResize
 	private function onParentResize(e:ResizeEvent) {
-		var size = new Size();
+		var size = Size.fromRect(box);
 
-		if(Std.is(parent, Component))
+
+		if(Std.is(parent, Component)) {
+		if(!Std.is(parent, Grid))
 		size = new Size((cast parent).box.width - x, (cast parent).box.height - y);
-		else
+		}
+		else {
 		// size = new Size(parent.width, parent.height);
 		size = Size.fromRect(parent.transform.pixelBounds);
+		// if(size==null) size = new Size();
+		size.subtract(Size.square(1));
+		size.setAtLeastZero();
+
+		if(parent.parent!=null && Std.is(parent.parent, ScrollPane))
+		size = Size.fromRect((cast parent.parent).box);
+		}
+
+		if(!fitV) size.height = Std.int(box.height);
+		if(!fitH) size.width = Std.int(box.width);
 
 		box = size.toRect();
 
+
+		for(i in this) {
+			if(Std.is(i, Component)) {
+				if(!Math.isNaN((cast i).left)) {
+				i.x = (cast i).left;
+				}
+				else
+				if(!Math.isNaN((cast i).right)) {
+				i.x = box.width - (cast i).box.width - (cast i).right;
+				}
+
+				if(!Math.isNaN((cast i).left) && !Math.isNaN((cast i).right)) {
+				i.x = (cast i).left;
+				(cast i).box.width = box.width - (cast i).right - i.x;
+				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+				}
+
+
+				if(!Math.isNaN((cast i).top)) {
+				i.y = (cast i).top;
+				}
+				else
+				if(!Math.isNaN((cast i).bottom)) {
+				i.y = box.height - (cast i).box.height - (cast i).bottom;
+				}
+
+				if(!Math.isNaN((cast i).top) && !Math.isNaN((cast i).bottom)) {
+				i.y = (cast i).top;
+				(cast i).box.height = box.height - (cast i).bottom - i.y;
+				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+				}
+			}
+		}
 
 		redraw();
 		dirty = false;

@@ -102,22 +102,25 @@ class Introspector extends Window {
 
 	static var xml = Xml.parse('
 	<haxegui:Layout name="Introspector">
-	<haxegui:controls:MenuBar x="10" y="20"/>
-	<haxegui:containers:HDivider name="HDivider" x="10" y="40">
-	<haxegui:containers:VDivider name="VDivider">
+		<haxegui:controls:MenuBar x="10" y="20"/>
+		<haxegui:containers:Container name="Container" x="10" y="40">
+			<haxegui:containers:HDivider name="HDivider">
+			<haxegui:containers:VDivider name="VDivider">
 
-	<haxegui:containers:ScrollPane>
-	<haxegui:controls:Tree fitH="true"/>
-	</haxegui:containers:ScrollPane>
+			<haxegui:containers:ScrollPane>
+			<haxegui:controls:Tree fitH="true"/>
+			</haxegui:containers:ScrollPane>
 
-	<haxegui:containers:HBox cellSpacing="0" width="300" fit="true">
-	<haxegui:controls:UiList/>
-	<haxegui:controls:UiList/>
-	</haxegui:containers:HBox>
+			<haxegui:containers:HBox cellSpacing="0" width="300" fit="true">
+			<haxegui:controls:UiList/>
+			<haxegui:controls:UiList/>
+			</haxegui:containers:HBox>
 
-	</haxegui:containers:VDivider>
-	<haxegui:containers:ScrollPane/>
-	</haxegui:containers:HDivider>
+			</haxegui:containers:VDivider>
+			<haxegui:containers:ScrollPane/>
+			</haxegui:containers:HDivider>
+		</haxegui:containers:Container>
+		<haxegui:windowClasses:StatusBar/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
@@ -137,7 +140,10 @@ class Introspector extends Window {
 
 
 		//
-		hdivider = cast this.getChildByName("HDivider");
+		container = cast this.getChildByName("Container");
+
+		//
+		hdivider = cast container.getChildByName("HDivider");
 
 		//
 		vdivider = cast hdivider.getChildByName("VDivider");
@@ -293,6 +299,13 @@ class Introspector extends Window {
 			if(Std.is(this.data, Int)) {
 				var step = new haxegui.controls.Stepper(this);
 				step.init();
+				step.left = 0;
+				step.right = 0;
+				step.top = 0;
+				step.bottom = 0;
+				step.box.width = this.box.width-10;
+				step.input.box.width = this.box.width-10;
+				step.input.dirty=true;
 				step.adjustment.setValue(Std.parseInt(this.label.getText()));
 			}
 			else {
@@ -301,7 +314,7 @@ class Introspector extends Window {
 				input.box.width = this.box.width;
 				input.setText(this.label.getText());
 			}
-
+			this.dispatchEvent(new haxegui.events.ResizeEvent(events.ResizeEvent.RESIZE));
 			");
 
 			// and back to label

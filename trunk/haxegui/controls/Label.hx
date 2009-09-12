@@ -68,6 +68,7 @@ class Label extends Component, implements IText {
 
 	public var align 					: Alignment;
 
+	//{{{ Functions
 	//{{{ init
 	override public function init(?opts:Dynamic=null) {
 		if(text==null)
@@ -75,6 +76,24 @@ class Label extends Component, implements IText {
 		align = { horizontal: HorizontalAlign.LEFT, vertical: VerticalAlign.CENTER };
 
 		super.init(opts);
+
+		switch(Opts.optString(opts, "halign", null)) {
+			case "right":
+			align.horizontal = HorizontalAlign.RIGHT;
+			case "center":
+			align.horizontal = HorizontalAlign.CENTER;
+			default:
+			align.horizontal = HorizontalAlign.LEFT;
+		}
+
+		switch(Opts.optString(opts, "valign", null)) {
+			case "top":
+			align.vertical = VerticalAlign.TOP;
+			case "bottom":
+			align.vertical = VerticalAlign.BOTTOM;
+			default:
+			align.vertical = VerticalAlign.CENTER;
+		}
 
 
 		description = null;
@@ -122,12 +141,16 @@ class Label extends Component, implements IText {
 
 	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
+		super.onResize(e);
+
 
 		switch(align.horizontal) {
 			case LEFT:
+			tf.x = 0;
 			case CENTER:
 			tf.x = Std.int(box.width - tf.width) >> 1;
 			case RIGHT:
+			tf.x = Std.int(box.width - tf.width);
 			case JUSTIFY:
 		}
 
@@ -139,11 +162,6 @@ class Label extends Component, implements IText {
 			case BOTTOM:
 			tf.y = box.height - tf.height;
 		}
-
-		// tf.width = box.width;
-		// tf.height = box.height;
-
-		super.onResize(e);
 	}
 	//}}}
 
@@ -160,10 +178,17 @@ class Label extends Component, implements IText {
 	public function setText(s:String) : String {
 		if(tf==null || s==null) return null;
 		tf.text = s;
-		//tf.setTextFormat(DefaultStyle.getTextFormat());
-		//dispatchEvent(new Event(Event.CHANGE));
+		if(tf.width!=box.width || tf.height!=box.height)
 		resize(new Size(tf.width, tf.height));
 		return tf.text;
+	}
+	//}}}
+
+
+	//{{{ redraw
+	public override function redraw(opts:Dynamic=null) {
+		tf.x = Std.int(tf.x);
+		tf.y = Std.int(tf.y);
 	}
 	//}}}
 
@@ -173,13 +198,5 @@ class Label extends Component, implements IText {
 		haxegui.Haxegui.register(Label);
 	}
 	//}}}
-
-
-	//{{{ redraw
-	public override function redraw(opts:Dynamic=null) {
-		tf.x = Std.int(tf.x);
-		tf.y = Std.int(tf.y);
-		// super.redraw(opts);
-	}
 	//}}}
 }

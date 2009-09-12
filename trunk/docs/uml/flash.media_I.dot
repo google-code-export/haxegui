@@ -2,7 +2,15 @@ digraph uml {
 	graph [label="Package: flash.media Inheritance", ratio=compress, rankdir=RL, smoothing=avg_dist, overlap=compress, packMode="graph", labelloc=c, fontname="DejaVu Sans Condenesed", fontsize=14, bgcolor="#88B3C1", fontcolor=black];
 	node [label="\N", style="rounded,filled", fillcolor="#96c288", fontcolor="#104E8B", fontname="FFF Harmony", fontsize=6, shape=record, color=black];
 	edge [fontname=Sans, fontsize=8, minlen="1.2", color=black, fontcolor=black];
-	graph [lp="121,12",
-		bb="0,0,242,61"];
-	"flash.media.SoundTransform" [label="{\nSoundTransform}", fillcolor=white, URL="../types/flash/media/SoundTransform.html", tooltip="\nSoundTransform", portPos=w, pos="121,43", rects="82,25,160,61", width="1.08", height="0.50"];
+	graph [lp="128,12",
+		bb="0,0,256,331"];
+	"flash.media.SoundChannel" [label="{\nSoundChannel}", fillcolor=white, URL="../types/flash/media/SoundChannel.html", tooltip="\nSoundChannel", portPos=w, pos="208,97", rects="174,79,243,115", width="0.94", height="0.50"];
+	"flash.events.EventDispatcher" [fontcolor=black, pos="62,70", rects="1,52,124,88", width="1.69", height="0.50"];
+	"flash.media.SoundMixer" [label="{\nSoundMixer}", fillcolor=white, URL="../types/flash/media/SoundMixer.html", tooltip="\nSoundMixer", portPos=w, pos="208,151", rects="178,133,238,169", width="0.83", height="0.50"];
+	"flash.media.ID3Info" [label="{\nID3Info}", fillcolor=white, URL="../types/flash/media/ID3Info.html", tooltip="\nID3Info", portPos=w, pos="208,205", rects="181,187,235,223", width="0.75", height="0.50"];
+	"flash.media.SoundLoaderContext" [label="{\nSoundLoaderContext}", fillcolor=white, URL="../types/flash/media/SoundLoaderContext.html", tooltip="\nSoundLoaderContext", portPos=w, pos="208,259", rects="160,241,256,277", width="1.33", height="0.50"];
+	"flash.media.Sound" [label="{\nSound}", fillcolor=white, URL="../types/flash/media/Sound.html", tooltip="\nSound", portPos=w, pos="208,43", rects="181,25,235,61", width="0.75", height="0.50"];
+	"flash.media.SoundTransform" [label="{\nSoundTransform}", fillcolor=white, URL="../types/flash/media/SoundTransform.html", tooltip="\nSoundTransform", portPos=w, pos="208,313", rects="169,295,247,331", width="1.08", height="0.50"];
+	"flash.media.SoundChannel" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,124,82 174,91 162,89 148,86 134,84"];
+	"flash.media.Sound" -> "flash.events.EventDispatcher" [color=white, style=bold, arrowhead=normal, arrowsize="1.0", pos="e,124,59 181,48 168,51 151,54 134,57"];
 }
