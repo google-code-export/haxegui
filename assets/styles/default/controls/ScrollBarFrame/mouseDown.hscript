@@ -1,15 +1,4 @@
 CursorManager.setCursor (Cursor.HAND2);
 
-
-//var t = new feffects.Tween( 0, 1, 750, feffects.easing.Back.easeInOut );
-var t = new feffects.Tween( 0, 1, 750, feffects.easing.Quad.easeInOut );
-parent.handle.updatePositionTween( t, new flash.geom.Point(0, event.target.mouseY-parent.handle.y), parent.adjust );
-
-/*
-if(parent.horizontal)
-	handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.width - 2*down.height - handle.height + 4));
-else
-	handle.startDrag(false,new Rectangle(0,up.height-2, 0, box.height - 2*down.height - handle.height + 4));
-
-root.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
-*/
+// var t = new feffects.Tween( 0, 1, 750, feffects.easing.Quad.easeInOut );
+// parent.handle.updatePositionTween( t, new flash.geom.Point(0, event.target.mouseY-parent.handle.y), parent.adjust );

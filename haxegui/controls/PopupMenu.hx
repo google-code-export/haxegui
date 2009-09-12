@@ -41,6 +41,8 @@ import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
 import haxegui.events.ResizeEvent;
+import haxegui.controls.Seperator;
+import haxegui.controls.MenuBar;
 //}}}
 
 /**
@@ -61,7 +63,7 @@ class PopupMenu extends Component, implements IDataSource {
 	//{{{ init
 	override public function init(?opts:Dynamic=null) {
 		box = new Size(100,20).toRect();
-		color = DefaultStyle.BACKGROUND;
+		color = DefaultStyle.INPUT_BACK;
 		// if(data==null) data = [""];
 		items = new List<ListItem>();
 
@@ -98,6 +100,7 @@ class PopupMenu extends Component, implements IDataSource {
 	//{{{ shutDown
 	public function shutDown(e:MouseEvent) {
 		//~ dispatchEvent (new MenuEvent(MenuEvent.MENU_HIDE))
+		if(!Std.is(e.target, flash.text.TextField))
 		destroy();
 	}
 	//}}}
@@ -163,13 +166,31 @@ class PopupMenu extends Component, implements IDataSource {
 		if(Std.is(dataSource.data, Array)) {
 			var data = cast(dataSource.data, Array<Dynamic>);
 			for (i in 0...data.length) {
-				var item = new ListItem(this);
-				item.init({
-					color: DefaultStyle.INPUT_BACK,
-					label: data[i]
-				});
-				item.move(0,20+20*i+1);
-				box.width = Math.max( box.width, item.label.tf.width + 8 );
+				if(data[i]=="") {
+					var s = new MenuSeperator(this, 0, 20+20*i+1);
+					s.init({
+						color: this.color,
+						width: this.box.width,
+						height: 20
+					});
+				}
+				else {
+					var item = new ListItem(this, 0, 20+20*i+1);
+					item.init({
+						color: this.color,
+						label: data[i]
+					});
+
+					var txt = data[i];
+					var r = ~/_(.)/;
+					txt = r.replace(txt, "<U>$1</U>");
+
+					item.label.tf.htmlText = txt;
+					item.label.mouseEnabled = true;
+					item.label.tf.mouseEnabled = true;
+
+					box.width = Math.max( box.width, item.label.tf.width + 8 );
+				}
 			}
 		}
 		else
@@ -178,16 +199,109 @@ class PopupMenu extends Component, implements IDataSource {
 			var data = cast(dataSource.data, List<Dynamic>);
 			var items : Iterator<Dynamic> = data.iterator();
 			for(i in items) {
-				var item = new ListItem(this);
-				item.init({
-					color: DefaultStyle.INPUT_BACK,
-					label: i
-				});
-				item.move(0,20+20*j+1);
-				box.width = Math.max( box.width, item.label.tf.width + 8 );
+				if(i=="") {
+					var s = new MenuSeperator(this, 0, 20+20*j+1);
+					s.init({
+						color: this.color,
+						width: this.box.width,
+						height: 20
+					});
+				}
+				else {
+					var item = new ListItem(this, 0, 20+20*j+1);
+					item.init({
+						color: this.color,
+						label: i
+					});
+
+					var txt = i;
+					var r = ~/_(.)/;
+					txt = r.replace(txt, "<U>$1</U>");
+
+					item.label.tf.htmlText = txt;
+					item.label.mouseEnabled = true;
+					item.label.tf.mouseEnabled = true;
+
+
+					box.width = Math.max( box.width, item.label.tf.width + 8 );
+				}
 				j++;
 			}
 		}
+		else
+		if(Std.is(dataSource.data, Xml)) {
+//			trace(StringTools.htmlEscape(dataSource.data));
+			var self = this;
+			var makeMenu = null;
+			makeMenu = function(o:DisplayObjectContainer, x:Xml) : Int {
+				var j=0;
+				for(i in x.elements()) {
+					if(i.nodeName=="separator" || i.get("type")=="separator") {
+						var s = new MenuSeperator(o, 0, 20+20*j+1);
+						s.init({
+							color: self.color,
+							width: self.box.width,
+							height: 20
+						});
+					}
+					else {
+						var item = new ListItem(o, 0, 20+20*j+1);
+						item.init({
+							disabled: i.get("disabled"),
+							color: self.color,
+							label: i.get("label")
+						});
+
+						var txt = i.get("label");
+						var r = ~/_(.)/;
+						txt = r.replace(txt, "<U>$1</U>");
+
+						item.label.tf.htmlText = txt;
+						item.label.mouseEnabled = true;
+						item.label.tf.mouseEnabled = true;
+
+						self.box.width = Math.max( self.box.width, item.label.tf.width + 8 );
+						if(i.elements().hasNext()) {
+							var a = new haxegui.toys.Arrow(item);
+							a.init({x: 2, y: 10, right:4, width:6, height: 6, color: DefaultStyle.BACKGROUND});
+							//var c = makeMenu(o, i);
+							//j+=c;
+							var p = new PopupMenu(self);
+							p.init({
+								color: item.color,
+								x: self.box.width - 10,
+								y: item.y - item.box.height - 17,
+								visible: false
+							});
+							p.filters = [];
+							var c = makeMenu(p, i);
+							item.addEventListener(MouseEvent.MOUSE_OVER, function(e) {
+							p.visible=true;
+							});
+							item.addEventListener(MouseEvent.MOUSE_OUT, function(e) {
+							if(!p.visible) return;
+							p.visible = false;
+							});
+						}
+						self.box.width = Math.max( self.box.width, item.label.tf.width + 8 );
+					}
+					j++;
+				}
+				return j;
+			}
+			makeMenu(cast this, dataSource.data.firstElement());
+
+/*
+				var txt = i.get("label");
+				var r = ~/_(.)/;
+				txt = r.replace(txt, "<U>$1</U>");
+
+				item.label.tf.htmlText = txt;
+				item.label.mouseEnabled = true;
+				item.label.tf.mouseEnabled = true;
+*/
+
+			}
 
 
 		box.height = Math.max( box.height, 20*items.length );

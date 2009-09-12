@@ -1,10 +1,6 @@
-//~ this.titlebar.color = DefaultStyle.ACTIVE_TITLEBAR;
+this.getElementsByClass(windowClasses.TitleBar).next().color = Color.tint(this.color, .5);
+this.getElementsByClass(windowClasses.TitleBar).next().redraw();
+//this.getElementsByClass(windowClasses.TitleBar).next().filters = [new flash.filters.GlowFilter (DefaultStyle.FOCUS, .5, 4, 4, 1, flash.filters.BitmapFilterQuality.HIGH, false, false)];
+//this.getElementsByClass(windowClasses.TitleBar).next().getElementsByClass(controls.Label).next().filters = [new flash.filters.GlowFilter (Color.WHITE, 1, 3, 3, 2, flash.filters.BitmapFilterQuality.HIGH, true, false)];
 
-//~ var fmt = DefaultStyle.getTextFormat();
-//~ this.titlebar.title.tf.setTextFormat(fmt);
-
-//this.frame.color = Math.min(0xFFFFFF, this.color | 0x262626);
-//~ this.titlebar.redraw();
-//this.frame.redraw();
-
-this.getElementsByClass(windowClasses.WindowFrame).next().filters =[new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.9, 12, 12, 0.85, flash.filters.BitmapFilterQuality.LOW, false, false, false)];
+this.getElementsByClass(windowClasses.WindowFrame).next().filters =[new flash.filters.DropShadowFilter (8, 45, DefaultStyle.DROPSHADOW, 0.5, 8, 8, 0.75, flash.filters.BitmapFilterQuality.LOW, false, false, false)];

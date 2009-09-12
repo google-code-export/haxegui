@@ -78,6 +78,7 @@ import haxegui.controls.Stepper;
 import haxegui.controls.TabNavigator;
 import haxegui.controls.ToolBar;
 import haxegui.controls.UiList;
+import haxegui.events.FileEvent;
 import haxegui.events.MenuEvent;
 import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
@@ -177,20 +178,20 @@ class Main extends Sprite, implements haxe.rtti.Infos {
 		// var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
 		// colorpicker.init();
 
-		// var filedialog = new haxegui.FileDialog(flash.Lib.current, 100, 100);
-		// filedialog.init();
+		var filedialog = new haxegui.FileDialog(flash.Lib.current, 100, 100);
+		 filedialog.init();
 
 		// rte
-		//var rte = new RichTextEditor(flash.Lib.current, 120,120);
-		//rte.init();
+		var rte = new RichTextEditor(flash.Lib.current, 120,120);
+		rte.init();
 
 		// style
-		//var appearance = new Appearance(flash.Lib.current, 180,180);
-		//appearance.init();
+		var appearance = new Appearance(flash.Lib.current, 180,180);
+		appearance.init();
 
 		// debugger
-		// var introspect = new Introspector(flash.Lib.current, 150,150);
-		// introspect.init();
+		//var introspect = new Introspector(flash.Lib.current, 150,150);
+		//introspect.init();
 
 		// Analog Clock
 		//var clock = new haxegui.toys.AnalogClock(flash.Lib.current, 210,88);

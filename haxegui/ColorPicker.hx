@@ -89,8 +89,6 @@ class ColorPicker extends Window {
 	/** main container **/
 	var container : Container;
 
-	var hbox : HBox;
-
 	/** grid for sliders and steppers **/
 	var grid : Grid;
 
@@ -104,28 +102,43 @@ class ColorPicker extends Window {
 	static var xml = Xml.parse('
 	<haxegui:Layout name="ColorPicker">
 		<haxegui:containers:Container name="Container">
-			<haxegui:containers:HBox>
-				<haxegui:controls:Image width="150" height="220" name="Spectrum" src="assets/spectrum.png"/>
-				<haxegui:containers:Grid rows="6" cols="2">
-					<haxegui:controls:Swatch/>
-					<haxegui:controls:Input/>
+			<haxegui:controls:Image width="150" height="220" name="Spectrum" src="assets/spectrum.png"/>
 
-					<haxegui:controls:Slider/>
-					<haxegui:controls:Stepper/>
+			<haxegui:containers:Container name="Container" left="160" top="10" bottom="10" right="20" fitH="false" fitV="false">
+				<haxegui:containers:Grid rows="6" cols="1">
 
-					<haxegui:controls:Slider/>
-					<haxegui:controls:Stepper/>
+					<haxegui:containers:Container>
+					<haxegui:controls:Swatch _color="{this.getParentWindow().currentColor}" left="0" right="130" top="0" bottom="0"/>
+						<haxegui:controls:Input text="{StringTools.hex(this.getParentWindow().currentColor,6)}" y="4" width="120" right="0"/>
+					</haxegui:containers:Container>
 
-					<haxegui:controls:Slider/>
-					<haxegui:controls:Stepper/>
+					<haxegui:containers:Container right="40">
+						<haxegui:controls:Slider left="0" right="50"/>
+						<haxegui:controls:Stepper y="6" width="40" right="0"/>
+					</haxegui:containers:Container>
 
-					<haxegui:controls:Slider/>
-					<haxegui:controls:Stepper/>
+					<haxegui:containers:Container>
+						<haxegui:controls:Slider left="0" right="50"/>
+						<haxegui:controls:Stepper y="6" width="40" right="0"/>
+					</haxegui:containers:Container>
 
-					<haxegui:controls:Button name="Ok" label="Ok"/>
-					<haxegui:controls:Button name="Cancel" label="Cancel"/>
+					<haxegui:containers:Container>
+						<haxegui:controls:Slider left="0" right="50"/>
+						<haxegui:controls:Stepper y="6" width="40" right="0"/>
+					</haxegui:containers:Container>
+
+					<haxegui:containers:Container>
+						<haxegui:controls:Slider left="0" right="50"/>
+						<haxegui:controls:Stepper y="6" width="40" right="0"/>
+					</haxegui:containers:Container>
+
+					<haxegui:containers:Container name="Container6">
+						<haxegui:controls:Button right="100" name="Ok" label="Ok"/>
+						<haxegui:controls:Button right="0" name="Cancel" label="Cancel"/>
+					</haxegui:containers:Container>
+
 				</haxegui:containers:Grid>
-			</haxegui:containers:HBox>
+			</haxegui:containers:Container>
 		</haxegui:containers:Container>
 	</haxegui:Layout>
 	').firstElement();
@@ -137,7 +150,9 @@ class ColorPicker extends Window {
 		super.init(opts);
 
 
-		box = new Rectangle (0, 0, 480, 320);
+		box = new Rectangle (0, 0, 480, 240);
+		minSize = new Size(380, 240);
+		maxSize = new Size(1000, 240);
 		currentAlpha = 1;
 		var rgb = currentColor.toRGB();
 
@@ -152,10 +167,9 @@ class ColorPicker extends Window {
 		container = win.getChildByName("Container");
 		container.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false)];
 
-		hbox = cast container.firstChild();
 
 		//
-		spectrum = cast hbox.firstChild();
+		spectrum = cast container.firstChild();
 		spectrum.minSize = new Size(150,220);
 		// spectrum.maxSize = spectrum.minSize;
 
@@ -296,14 +310,6 @@ class ColorPicker extends Window {
 		// if(container==null) return;
 		// container.box = box.clone();
 		// container.dirty = true;
-
-		if(hbox==null) return;
-		hbox.box = container.box.clone();
-		hbox.box.inflate(-20, -20);
-		hbox.moveTo(20, 20);
-		// hbox.dirty = true;
-		hbox.dispatchEvent(e);
-
 	}
 	//}}}
 

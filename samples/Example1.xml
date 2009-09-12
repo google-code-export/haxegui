@@ -14,7 +14,7 @@
 
 	<String name="hello">Hello World</String>
 	<Int name="int">3</Int>
-	<Bool name="b">true</Bool>
+	<!--<Bool name="b">true</Bool>-->
 	<Float name="aNumber">3.45</Float>
 	<Float name="NaN">NotaNumber</Float>
 	<haxegui:DataSource name="ArraySource">
@@ -78,25 +78,25 @@
 
 		<!-- ToolBar -->
 		<haxegui:controls:ToolBar name="Toolbar1" x="10" y="44">
-			<haxegui:containers:HBox x="20" y="4" cellSpacing="4">
+			<haxegui:containers:HBox width="240" fitH="false" x="20" y="4" cellSpacing="4">
 				<haxegui:controls:Button width="30" icon="STOCK_NEW" />
 				<haxegui:controls:Button width="30" icon="STOCK_OPEN" />
 				<haxegui:controls:Button width="30" icon="STOCK_SAVE" />
-				<haxegui:controls:ToolBarSeperator/>
+				<haxegui:controls:ToolBarSeperator width="30"/>
 				<haxegui:controls:Button width="30" icon="STOCK_COPY" />
 				<haxegui:controls:Button width="30" icon="STOCK_CUT" />
 				<haxegui:controls:Button width="30" icon="STOCK_PASTE"/>
+				<haxegui:controls:ToolBarSeperator width="30"/>
 				<haxegui:controls:Button width="30" icon="STOCK_FIND" />
 			</haxegui:containers:HBox>
 		</haxegui:controls:ToolBar>
 
 
 		<!-- Main ScrollPane -->
-		<haxegui:containers:ScrollPane name="ScrollPane1" x="10" y="84">
-			<haxegui:containers:Container name="Container1" width="512" height="512">
+			<haxegui:containers:Container name="Container1" x="10" y="84" left="10" right="10" top="84" bottom="10">
 
 
-				<haxegui:controls:TabNavigator name="TabNavigator" x="0" y="0" width="512">
+				<haxegui:controls:TabNavigator name="TabNavigator" left="0" right="0">
 					<events>
 						<script type="text/hscript" action="onLoaded">
 							<![CDATA[
@@ -137,11 +137,12 @@
 
 
 				<!-- Stack Container -->
-				<haxegui:containers:Stack name="Stack" y="24" width="512" height="512" selectedIndex="0">
+				<haxegui:containers:Stack name="Stack" y="24" top="24" left="0" bottom="20" right="0" selectedIndex="0">
 
 
 				<!-- First stack child -->
-					<haxegui:containers:Container width="512" height="512">
+					<haxegui:containers:Container top="0" left="0" bottom="0" right="0">
+						<haxegui:containers:ScrollPane name="ScrollPane1" >
 						<haxegui:controls:Label x="14" y="14">This window and it's content are dynamically generated from xml, Some events are also defined in hscript. </haxegui:controls:Label>
 						<haxegui:controls:Button label="Click" x="30" y="50" width="120" />
 						<haxegui:controls:PushButton label="Push" x="160" y="50" width="60" />
@@ -195,7 +196,7 @@
 						<haxegui:controls:Slider x="200" y="190" value="100" disabled="true" />
 
 						<haxegui:controls:Stepper name="Stepper1" x="360" y="130" value="0" step="1" max="100" autoRepeat="true" repeatsPerSecond="20" repeatWaitTime=".5" />
-						<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="200" autoRepeat="true" repeatsPerSecond="10" repeatWaitTime=".5" />
+						<haxegui:controls:Stepper name="Stepper2" x="360" y="160" value="0" step="5" max="200" autoRepeat="true" repeatsPerSecond="10" repeatWaitTime="2" />
 						<haxegui:controls:Stepper name="Stepper3" x="360" y="190" value="0" step="10" max="300" disabled="true" />
 
 						<haxegui:controls:Input name="Input1" x="30" y="220">Input1</haxegui:controls:Input>
@@ -242,8 +243,8 @@
 							<events>
 								<script type="text/hscript" action="onLoaded">
 									<![CDATA[
-										this.dataSource.addItem("Pineapple");
-										this.dataSource.addItem("Watermelon");
+									//	this.dataSource.addItem("Pineapple");
+									//	this.dataSource.addItem("Watermelon");
 									]]>
 									</script>
 							</events>
@@ -265,23 +266,24 @@
 						<haxegui:controls:ScrollBar target="" scroll=".5" horizontal="false" x="710" y="30" height="200" />
 						<haxegui:controls:ScrollBar target="" scroll=".75" horizontal="false" x="740" y="30" height="200" disabled="true"/>
 
-						<haxegui:toys:SevenSegment x="470" y="120" color="0x60181C" digitColor="0xFF0000"/>
-						<haxegui:toys:SevenSegment x="550" y="130" width="50" height="70" color="0x181B60" digitColor="0x0000FF"/>
+						<haxegui:toys:SevenSegment x="740" y="410" color="0x60181C" digitColor="0xFF0000"/>
+						<haxegui:toys:SevenSegment x="850" y="416" width="50" height="70" color="0x181B60" digitColor="0x0000FF"/>
 
-						<haxegui:toys:Knob x="450" y="440" radius="30" color="{DefaultStyle.BACKGROUND}"/>
-						<haxegui:toys:Knob x="560" y="440" radius="50"/>
-						<haxegui:toys:Knob x="660" y="440" radius="20"/>
+						<haxegui:toys:Knob x="450" y="440" radius="30" color="{Color.random()}"/>
+						<haxegui:toys:Knob x="560" y="440" radius="50" color="{Color.random()}"/>
+						<haxegui:toys:Knob x="660" y="440" radius="20" color="{Color.random()}"/>
+						</haxegui:containers:ScrollPane>
 					</haxegui:containers:Container>
 
 
 						<!-- Second stack child -->
-					<haxegui:toys:Rectangle width="512" height="512" visible="false">
+					<haxegui:toys:Rectangle top="0" left="0" right="0" bottom="0" visible="false">
 						<haxegui:containers:HDivider width="512" height="512">
-								<haxegui:containers:VDivider width="250">
-									<haxegui:containers:Container height="250" color="0x99ff99"/>
-									<haxegui:containers:Container color="0xffffcc"/>
-								</haxegui:containers:VDivider>
-						<haxegui:containers:Container width="250" color="0xccccff"/>
+							<haxegui:containers:VDivider width="250">
+								<haxegui:containers:Container height="250" color="0x99ff99"/>
+								<haxegui:containers:Container color="0xffffcc"/>
+							</haxegui:containers:VDivider>
+							<haxegui:containers:Container width="250" color="0xccccff"/>
 						</haxegui:containers:HDivider>
 					</haxegui:toys:Rectangle>
 
@@ -313,6 +315,6 @@
 					</haxegui:containers:Container>
 				</haxegui:containers:Stack>
 			</haxegui:containers:Container>
-		</haxegui:containers:ScrollPane>
+		<haxegui:windowClasses:StatusBar/>
 	</haxegui:Window>
 </haxegui:Layout>

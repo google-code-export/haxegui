@@ -45,6 +45,8 @@ class ScriptStandardLibrary {
 		//{{{ haxe
 		interp.variables.set( "Bool", Bool );
 		interp.variables.set( "Date", Date );
+		interp.variables.set( "EReg", EReg );
+		interp.variables.set( "Firebug", haxe.Firebug );
 		interp.variables.set( "Hash", Hash );
 		interp.variables.set( "Int", Int );
 		interp.variables.set( "Lambda", Lambda );
@@ -140,7 +142,9 @@ class ScriptStandardLibrary {
 					SQUARE : flash.display.CapsStyle.SQUARE
 				},
 				Shape : flash.display.Shape,
-				Sprite : flash.display.Sprite
+				Sprite : flash.display.Sprite,
+				MovieClip : flash.display.MovieClip,
+				AVM1Movie : flash.display.AVM1Movie
 			},
 			external : {
 				ExternalInterface : flash.external.ExternalInterface
@@ -259,6 +263,7 @@ class ScriptStandardLibrary {
 		interp.variables.set("Dialog", haxegui.Dialog);
 		interp.variables.set("Divider", haxegui.containers.Divider);
 		interp.variables.set("DragManager", haxegui.managers.DragManager);
+		interp.variables.set("FileDialog", haxegui.FileDialog);
 		interp.variables.set("FocusManager", haxegui.managers.FocusManager);
 		interp.variables.set("Grid", haxegui.containers.Grid);
 		interp.variables.set("Haxegui", haxegui.Haxegui);
@@ -270,6 +275,7 @@ class ScriptStandardLibrary {
 		interp.variables.set("Opts", haxegui.utils.Opts);
 		interp.variables.set("PopupMenu", haxegui.controls.PopupMenu);
 		interp.variables.set("Printing", haxegui.utils.Printing);
+		interp.variables.set("Profiler", haxegui.Profiler);
 		interp.variables.set("RichTextEditor", haxegui.RichTextEditor);
 		interp.variables.set("ScriptManager", haxegui.managers.ScriptManager);
 		interp.variables.set("ScriptStandardLibrary", ScriptStandardLibrary);
@@ -348,11 +354,14 @@ class ScriptStandardLibrary {
 		{
 			AnalogClock			: haxegui.toys.AnalogClock,
 			Arrow				: haxegui.toys.Arrow,
+			Balloon				: haxegui.toys.Balloon,
 			Circle				: haxegui.toys.Circle,
 			Curvy				: haxegui.toys.Curvy,
 			Knob				: haxegui.toys.Knob,
 			Line				: haxegui.toys.Line,
+			Note				: haxegui.toys.Note,
 			Patch				: haxegui.toys.Patch,
+			Pin					: haxegui.toys.Pin,
 			Rectangle			: haxegui.toys.Rectangle,
 			SevenSegment		: haxegui.toys.SevenSegment,
 			Socket				: haxegui.toys.Socket,

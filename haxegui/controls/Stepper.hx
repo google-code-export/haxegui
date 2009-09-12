@@ -148,7 +148,7 @@ class StepperDownButton extends Button, implements IComposite {
 	//}}}
 
 	public override function onAdded(e:Event) {}
-	
+
 	//{{{ __init__
 	static function __init__() {
 		haxegui.Haxegui.register(StepperDownButton);
@@ -229,6 +229,8 @@ class Stepper extends Component, implements IAdjustable {
 		Opts.optFloat(bOpts, "repeatWaitTime", .75);
 
 		input = getElementsByClass(Input).next();
+		input.tf.restrict = "0-9.";
+
 		// init children
 		// input.init({text: adjustment.object.value, width: box.width, height: box.height, disabled: this.disabled });
 		input.box = box.clone();
@@ -297,6 +299,10 @@ class Stepper extends Component, implements IAdjustable {
 	}
 	//}}}
 
+	public override function destroy() {
+		input.removeEventListener (MoveEvent.MOVE, onInputMoved);
+		super.destroy();
+	}
 
 	//{{{ onChanged
 	private function onChanged(e:Event)	{

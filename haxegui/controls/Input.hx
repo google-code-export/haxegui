@@ -108,6 +108,8 @@ class Input extends Component, implements IText {
 	public override function onResize(e:ResizeEvent) {
 		tf.width = box.width - 4;
 		tf.height = box.height - 4;
+		
+		dirty = true;
 	}
 
 

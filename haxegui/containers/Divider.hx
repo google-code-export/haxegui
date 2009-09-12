@@ -26,9 +26,6 @@ import flash.display.MovieClip;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.filters.BitmapFilter;
-import flash.filters.BitmapFilterQuality;
-import flash.filters.DropShadowFilter;
 import flash.geom.Rectangle;
 import haxegui.containers.IContainer;
 import haxegui.controls.AbstractButton;
@@ -40,6 +37,7 @@ import haxegui.managers.MouseManager;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
 import haxegui.toys.Arrow;
+import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
 //}}}
@@ -78,6 +76,7 @@ class DividerHandleButton extends AbstractButton {
 			arrow.rotation = 90;
 			arrow.moveTo(.5*(this.box.width-8), 5);
 		}
+		//arrow.filters = [new flash.filters.DropShadowFilter (1, 45, DefaultStyle.DROPSHADOW, .7, 2, 2, .7, flash.filters.BitmapFilterQuality.LOW, true, false, false)];
 
 	}
 	//}}}
@@ -126,13 +125,12 @@ class DividerHandle extends AbstractButton {
 
 		super.init(opts);
 
+		var h = .5*(box.height-100);
+		var w = .5*(box.width-100);
 
-		button = new DividerHandleButton(this);
+		button = new DividerHandleButton(this, cast(parent, Divider).horizontal ? 0 : w, cast(parent, Divider).horizontal ? h : 0);
 		button.init();
-		if((cast parent).horizontal)
-		button.moveTo(0, .5*(box.height-100));
-		else
-		button.moveTo(.5*(box.width-100),0);
+
 
 		this.filters = [new flash.filters.DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, .5, 4, 4, 0.5, flash.filters.BitmapFilterQuality.HIGH, false, false, false)];
 
@@ -195,7 +193,6 @@ class Divider extends Container {
 
 		super.init(opts);
 
-
 		handle = new DividerHandle(this);
 		handle.init();
 		if(horizontal)
@@ -203,6 +200,7 @@ class Divider extends Container {
 		else
 		handle.moveTo(0, .5*box.height);
 
+		this.graphics.clear();
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
@@ -212,13 +210,14 @@ class Divider extends Container {
 
 	//{{{ addChild
 	public override function addChild(o:DisplayObject) {
-		if(handle==null) return super.addChild(o);
 		var r = super.addChild(o);
-		handle.toFront();
+		if(handle!=null) handle.toFront();
 		return r;
 	}
 	//}}}
 
+	public override function onChildMoved(e:MoveEvent) {
+	}
 
 	//{{{ onMouseDown
 	public override function onMouseDown(e:MouseEvent) {
@@ -228,6 +227,9 @@ class Divider extends Container {
 			else
 			handle.startDrag(false, new Rectangle(0,-this.stage.stageHeight,0,2*this.stage.stageHeight));
 			this.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			// adjust();
+			handle.dispatchEvent(new MoveEvent(MoveEvent.MOVE));
+			dispatchEvent(new Event(Event.CHANGE));
 		}
 		super.onMouseDown(e);
 	}
@@ -260,12 +262,13 @@ class Divider extends Container {
 
 		if(horizontal) {
 			if(firstChild()!=null) {
-				firstChild().asComponent().box.width = handle.x - 1;
+				firstChild().asComponent().box.width = handle.x ;
 				firstChild().asComponent().box.height = box.height;
 
 				if(Std.is(firstChild(), ScrollPane)) {
-					firstChild().asComponent().box.width -= 20;
-					firstChild().asComponent().box.height -= 20;
+					var sp = cast (firstChild(), ScrollPane);
+					sp.box.width -= 20;
+					sp.box.height -= 20;
 				}
 
 				firstChild().asComponent().dirty = true;
@@ -273,13 +276,14 @@ class Divider extends Container {
 			}
 
 			if(this.numChildren==3) {
-				firstChild().asComponent().nextSibling().x = handle.x + 11;
+				firstChild().asComponent().nextSibling().x = handle.x + 10;
 				firstChild().asComponent().nextSibling().asComponent().box.width = this.box.width - handle.x - 11;
 				firstChild().asComponent().nextSibling().asComponent().box.height = this.box.height;
 
 				if(Std.is(firstChild().asComponent().nextSibling(), ScrollPane)) {
-					firstChild().asComponent().nextSibling().asComponent().box.width -= 20;
-					firstChild().asComponent().nextSibling().asComponent().box.height -= 20;
+					var sp = cast (firstChild().asComponent().nextSibling(), ScrollPane);
+					if(sp.vert.visible) sp.asComponent().box.width -= 20;
+					if(sp.horz.visible) sp.asComponent().box.height -= 20;
 				}
 
 				firstChild().asComponent().nextSibling().asComponent().dirty = true;
@@ -289,7 +293,7 @@ class Divider extends Container {
 		else {
 			if(firstChild()!=null) {
 				firstChild().asComponent().box.width = box.width;
-				firstChild().asComponent().box.height = handle.y - 1;
+				firstChild().asComponent().box.height = handle.y ;
 
 				if(Std.is(firstChild(), ScrollPane)) {
 					firstChild().asComponent().box.width -= 20;
@@ -300,12 +304,17 @@ class Divider extends Container {
 				firstChild().dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 			}
 			if(this.numChildren==3) {
-				firstChild().asComponent().nextSibling().y = handle.y + 11;
+				firstChild().asComponent().nextSibling().y = handle.y + 10;
 				firstChild().asComponent().nextSibling().asComponent().box.width = box.width;
 				firstChild().asComponent().nextSibling().asComponent().box.height = box.height - handle.y - 1;
 
+
 				if(Std.is(firstChild().asComponent().nextSibling(), ScrollPane)) {
 					firstChild().asComponent().nextSibling().asComponent().box.width -= 20;
+					firstChild().asComponent().nextSibling().asComponent().box.height -= 20;
+				}
+
+				if(Std.is(firstChild().asComponent().nextSibling(), Divider)) {
 					firstChild().asComponent().nextSibling().asComponent().box.height -= 20;
 				}
 
@@ -339,13 +348,18 @@ class Divider extends Container {
 			box.width = parent.asComponent().box.width;
 		}
 		else
-		super.onParentResize(e);
+//		super.onParentResize(e);
+		box = parent.asComponent().box.clone();
 
 		if(Std.is(parent, haxegui.Window)) {
-			box.height -= 10;
+			box.width -= 10;
+			box.height -= 20;
 		}
 
 		adjust();
+
+		//this.graphics.clear();
+		dirty = true;
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}

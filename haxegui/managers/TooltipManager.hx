@@ -76,16 +76,19 @@ class Tooltip extends Component {
 
 		balloon = new Balloon(this);
 		balloon.init({color: this.color, roundness: 8});
+		balloon.mouseEnabled = false;
+		balloon.description = null;
 
+		mouseChildren = false;
 		mouseEnabled = false;
+		description = null;
 		buttonMode = false;
 		visible = false;
 		alpha = 0;
 
 
-		label = new Label(this);
+		label = new Label(this, 4, 4);
 		label.init({ text: target.description == null ? target.name : target.description });
-		label.move(4,4);
 		label.mouseEnabled = false;
 		label.tf.selectable = false;
 		label.tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
@@ -101,6 +104,7 @@ class Tooltip extends Component {
 		if (this.parent != null)
 		if (this.parent.contains (this))
 		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
+
 
 		dirty = false;
 		var self = this;

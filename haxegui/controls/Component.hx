@@ -76,7 +76,17 @@ import haxegui.utils.Size;
 *
 *
 */
-class Component extends Sprite, implements IAccessible, implements IMovable, implements IToolTip, implements ITween, implements IValidate {
+class Component
+extends Sprite,
+implements IAccessible,
+implements IMovable,
+implements IToolTip,
+implements ITween,
+implements IValidate,
+implements haxe.rtti.Infos
+// implements haxe.Public,
+// implements Dynamic
+{
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//{{{ Members
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,6 +157,12 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	public var fitV : Bool;
 
 	public var allowedParents : Array<Class<Dynamic>>;
+
+	public var left : Float;
+	public var right : Float;
+	public var top : Float;
+	public var bottom : Float;
+
 	//}}}
 
 
@@ -283,6 +299,8 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	* @param opts Initial options object
 	*/
 	public function init(opts:Dynamic=null) {
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
 		if(opts == null || !Reflect.isObject(opts)) opts = {};
 
 		alpha		 = Opts.optFloat (opts, "alpha", 	   alpha);
@@ -298,8 +316,16 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 		name 		 = Opts.optString(opts, "name", 	   name);
 		rotation 	 = Opts.optFloat (opts, "rotation",	   rotation);
 		visible 	 = Opts.optBool	 (opts, "visible", 	   true);
+		mouseEnabled = Opts.optBool	 (opts, "mouseEnabled",mouseEnabled);
+		scaleX 		 = Opts.optFloat (opts, "scaleX", 	   scaleX);
+		scaleY		 = Opts.optFloat (opts, "scaleY", 	   scaleY);
 		x 			 = Opts.optFloat (opts, "x", 		   x);
 		y 			 = Opts.optFloat (opts, "y", 		   y);
+
+		left 		 = Opts.optFloat (opts, "left", 	   left);
+		right		 = Opts.optFloat (opts, "right", 	   right);
+		top			 = Opts.optFloat (opts, "top", 		   top);
+		bottom		 = Opts.optFloat (opts, "bottom",	   bottom);
 
 		//
 		var accessProps = new AccessibilityProperties();
@@ -312,6 +338,8 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 
 		// request a redraw
 		dirty = true;
+
+		haxegui.Profiler.end();
 	}
 	//}}}
 
@@ -322,6 +350,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	*/
 	public function destroy() : Void {
 		removeChildren();
+		stopInterval();
 		if(this.parent != null)
 		this.parent.removeChild(this);
 		//~ flash.system.System.gc();
@@ -511,6 +540,8 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	* @param y offset relative to parent
 	**/
 	public inline function moveTo(x : Float, y : Float) : Void	{
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
 		var event = new MoveEvent(MoveEvent.MOVE, this.x, this.y);
 
 		this.x = x;
@@ -526,6 +557,8 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 
 		if(!isTweening)
 		dispatchEvent(event);
+
+		haxegui.Profiler.end();
 	}
 	//}}}
 
@@ -585,6 +618,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	* @return Rectangle new size
 	**/
 	public function resize(b:Size) : Rectangle	{
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
 
 		var event = new ResizeEvent(ResizeEvent.RESIZE);
 
@@ -600,11 +634,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 
 		dispatchEvent(event);
 
-		// if(maxSize==null || minSize==null) return box;
-
-		// box.width = Math.max(minSize.width, Math.min(maxSize.width, box.width));
-		// box.height = Math.max(minSize.height, Math.min(maxSize.height, box.height));
-		// dirty=true;
+		haxegui.Profiler.end();
 
 		return box;
 	}
@@ -772,7 +802,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 
 	//{{{ getElementsByClassList
 	/**
-	* Returns a list of all children of type.
+	* Returns an array of all children of type.
 	* @param c Class to match
 	* @return All children of type [c]
 	*/
@@ -874,6 +904,8 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	* @todo rgb color transformation
 	**/
 	public function updateColorTween(?t : Tween = null) : Void {
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
 		var me = this;
 		var colorTrans = new ColorTransform();
 		if(colorTween != null)
@@ -895,6 +927,8 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 		}
 		);
 		colorTween.start();
+
+		haxegui.Profiler.end();
 	}
 	//}}}
 
@@ -920,7 +954,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 		function(v) {
 			var pos = Point.interpolate(p, new Point(), v);
 			pos = pos.add(oldPos);
-			// me.isTweening = true;
+			me.isTweening = true;
 			// me.moveTo(pos.x, pos.y);
 			me.x = pos.x;
 			me.y = pos.y;
@@ -928,7 +962,7 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 		},
 		function(v) {
 			me.positionTween = null;
-			// me.isTweening = false;
+			me.isTweening = false;
 		}
 		);
 		positionTween.start();
@@ -1143,9 +1177,11 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	//{{{ onResize
 	/** Overiden in sub-classes **/
 	public function onResize(e:ResizeEvent) : Void {
+
 		box.width = Math.max(minSize.width, Math.min(maxSize.width, box.width));
 		box.height = Math.max(minSize.height, Math.min(maxSize.height, box.height));
-		dirty=true;
+
+		dirty = true;
 	}
 	//}}}
 
@@ -1223,7 +1259,11 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 	* @param opts to pass the redrawing script
 	**/
 	public function redraw(opts:Dynamic=null) {
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
 		ScriptManager.exec(this,"redraw", opts);
+
+		haxegui.Profiler.end();
 	}
 	//}}}
 	//}}}
@@ -1244,11 +1284,15 @@ class Component extends Sprite, implements IAccessible, implements IMovable, imp
 		return v;
 	}
 	//}}}
+
+
 	//{{{ __getDisabled
 	private function __getDisabled() : Bool {
 		return this.disabled;
 	}
 	//}}}
+
+
 	//{{{ __setDisabled
 	private function __setDisabled(v:Bool) : Bool {
 		if(this.disabled == v) return v;

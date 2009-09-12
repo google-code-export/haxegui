@@ -34,6 +34,7 @@ import haxegui.XmlParser;
 import haxegui.controls.Button;
 import haxegui.controls.Component;
 import haxegui.controls.IAdjustable;
+import haxegui.controls.UiList;
 import haxegui.controls.PopupMenu;
 import haxegui.events.MenuEvent;
 import haxegui.events.MoveEvent;
@@ -345,6 +346,15 @@ class ComboBox extends Component, implements IDataSource, implements IAdjustable
 	//}}}
 
 
+	private override function __setDisabled(b:Bool) : Bool {
+		if(input!=null)
+		input.disabled = b;
+		if(dropButton!=null)
+		dropButton.disabled = b;
+		return super.__setDisabled(b);
+	}	
+
+
 	//{{{ onInputChanged
 	public function onInputChanged(e:Event) {
 		dispatchEvent(e);
@@ -354,6 +364,7 @@ class ComboBox extends Component, implements IDataSource, implements IAdjustable
 
 	//{{{ onMenuItemSelected
 	public function onMenuItemSelected(e:MouseEvent) {
+		if(!Std.is(e.target, ListItem)) return;
 		if(input!=null)
 		input.setText(e.target.getChildAt(0).tf.text);
 		if(background!=null)

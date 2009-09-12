@@ -158,7 +158,6 @@ class ScrollPane extends Component, implements IContainer {
 		r.y = content.scrollRect.y;
 		content.scrollRect = r.clone();
 
-
 		content.dispatchEvent(e);
 		dispatchEvent(e);
 	}
@@ -175,6 +174,10 @@ class ScrollPane extends Component, implements IContainer {
 		// r.height += r.y;
 		content.scrollRect = r.clone();
 		content.dispatchEvent(e);
+
+		/** @todo use a scroll policy */
+		horz.visible = horz.handle.visible;
+		vert.visible = vert.handle.visible;
 	}
 
 

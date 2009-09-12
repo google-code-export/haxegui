@@ -52,7 +52,9 @@ class CloseButton extends AbstractButton {
 	//{{{ Constructor
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		description = "Close Window";
+		//		description = "Close Window";
+		description = null;
+		setAction("mouseClick", "this.getParentWindow().destroy();");
 	}
 	//}}}
 
@@ -60,7 +62,7 @@ class CloseButton extends AbstractButton {
 	//{{{ onMouseClick
 	override public function onMouseClick(e:MouseEvent) : Void	{
 		trace("Close clicked on " + parent.parent.toString());
-		this.getParentWindow().destroy();
+		super.onMouseClick(e);
 	}
 	//}}}
 
@@ -86,7 +88,8 @@ class MinimizeButton extends AbstractButton {
 	//{{{ Constructor
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		description = "Minimize Window";
+		//		description = "Minimize Window";
+		description = null;
 	}
 	//}}}
 
@@ -121,7 +124,8 @@ class MaximizeButton extends AbstractButton {
 	//{{{ Constructor
 	public function new(?parent:DisplayObjectContainer, ?name:String, ?x:Float, ?y:Float) {
 		super (parent, name, x, y);
-		description = "Maximize Window";
+		//		description = "Maximize Window";
+		description = null;
 	}
 	//}}}
 
@@ -159,15 +163,16 @@ class TitleBar extends AbstractButton {
 	//{{{ Static
 	/** Title offset from center titlebar **/
 	static inline var titleOffset : Point = new Point(0,-4);
-
 	public static var iconFile : String = "applications-system.png";
+
+	public var title : Label;
 
 	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="TitleBar">
 	<haxegui:windowClasses:CloseButton	  x="4"  y="4" color="{parent.color}"/>
 	<haxegui:windowClasses:MinimizeButton x="20" y="4" color="{parent.color}"/>
 	<haxegui:windowClasses:MaximizeButton x="36" y="4" color="{parent.color}"/>
-	<haxegui:controls:Label text="{this.getParentWindow().name}"/>
+	<haxegui:controls:Label text="{this.getParentWindow().name}" mouseEnabled="false"/>
 	<haxegui:controls:Icon src="16x16/'+iconFile+'" x="{parent.box.width-12}"/>
 	</haxegui:Layout>
 	').firstElement();
@@ -179,6 +184,8 @@ class TitleBar extends AbstractButton {
 	<script type="text/hscript" action="mouseDoubleClick"><![CDATA[	]]></script>
 	<script type="text/hscript" action="mouseDown">
 	<![CDATA[
+	if(event.target!=this) return;
+
 	CursorManager.getInstance().lock = true;
 
 	this.updateColorTween( new feffects.Tween(0, -50, 350, feffects.easing.Linear.easeOut) );
@@ -197,20 +204,19 @@ class TitleBar extends AbstractButton {
 	CursorManager.getInstance().lock = false;
 	this.updateColorTween( new feffects.Tween(-50, 0, 120, feffects.easing.Linear.easeNone) );
 
-
-	var win = this.getParentWindow();
-	// if(win==null) return;
-
-
-	win.stopDrag();
-	win.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove);
-	win.removeEventListener(flash.events.MouseEvent.MOUSE_UP, this.onStopDrag);
-
-
 	if(this.hitTestObject( CursorManager.getInstance()._mc ))
 	CursorManager.setCursor(this.cursorOver);
 	else
 	CursorManager.setCursor(Cursor.ARROW);
+
+	var win = this.getParentWindow();
+	if(win==null) return;
+
+	win.stopDrag();
+	if(win.hasEventListener(flash.events.MouseEvent.MOUSE_MOVE))
+	win.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, this.onMouseMove);
+	if(win.hasEventListener(flash.events.MouseEvent.MOUSE_UP))
+	win.removeEventListener(flash.events.MouseEvent.MOUSE_UP, this.onStopDrag);
 	]]>
 	</script>
 	</events>
@@ -243,6 +249,7 @@ class TitleBar extends AbstractButton {
 
 		description = null;
 
+		title = this.getElementsByClass(Label).next();
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 	}
@@ -270,17 +277,19 @@ class TitleBar extends AbstractButton {
 
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
-		box = new Size((cast parent).box.width, 32).toRect();
+		box = new Size((cast parent).box.width+10, 32).toRect();
 		redraw();
 
 		var icon = this.getElementsByClass(Icon).next();
 		if(icon==null) return;
 		icon.moveTo((cast parent).box.width-12, 2);
 
-		var title = this.getElementsByClass(Label).next();
 		if(title==null) return;
 		title.center();
 		title.movePoint(titleOffset);
+		title.x = Math.max(60, title.x);
+
+		scrollRect = box;
 	}
 	//}}}
 

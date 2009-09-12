@@ -169,6 +169,7 @@ class Window extends Component {
 
 		XmlParser.apply(Window.xml, this);
 
+		titlebar = cast getElementsByClass(TitleBar).next();
 
 		// register events with window manager
 		WindowManager.getInstance().register(this);
@@ -204,11 +205,48 @@ class Window extends Component {
 	//}}}
 
 
+	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
+
+		for(i in this) {
+			if(Std.is(i, Component)) {
+				if(!Math.isNaN((cast i).left)) {
+				i.x = (cast i).left;
+				}
+				else
+				if(!Math.isNaN((cast i).right)) {
+				i.x = box.width - (cast i).box.width - (cast i).right;
+				}
+
+				if(!Math.isNaN((cast i).left) && !Math.isNaN((cast i).right)) {
+				i.x = (cast i).left;
+				(cast i).box.width = box.width - (cast i).right - i.x;
+				//(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+				}
+
+
+				if(!Math.isNaN((cast i).top)) {
+				i.y = (cast i).top;
+				}
+				else
+				if(!Math.isNaN((cast i).bottom)) {
+				i.y = box.height - (cast i).box.height - (cast i).bottom;
+				}
+
+				if(!Math.isNaN((cast i).top) && !Math.isNaN((cast i).bottom)) {
+				i.y = (cast i).top;
+				(cast i).box.height = box.height - (cast i).bottom - i.y;
+				//(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+				}
+			}
+		}
+
 		super.onResize(e);
-		// frame.box = box.clone();
+		// frame.box = box.clone();setdirty
 		// frame.redraw();
 	}
+	//}}}
+
 
 	//{{{ __init__
 	static function __init__() {

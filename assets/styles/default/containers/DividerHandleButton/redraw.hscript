@@ -17,7 +17,7 @@ this.graphics.drawRect(.5*(this.box.width-100),0, 100, this.box.height);
 
 this.graphics.endFill();
 
-this.graphics.lineStyle(1, Color.darken(this.color,60), 1, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE);
+this.graphics.lineStyle(1, Color.darken(this.color,60), 1, false, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.NONE);
 
 if(parent.parent.horizontal) {
 	this.graphics.moveTo(0,0);

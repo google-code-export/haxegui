@@ -53,10 +53,10 @@ class Dialog extends Window {
 		<haxegui:containers:Container name="Container">
 			<haxegui:containers:Grid rows="2" cols="1">
 				<haxegui:controls:Label name="Label"/>
-				<haxegui:container:HBox>
+				<haxegui:containers:HBox>
 					<haxegui:controls:Button label="Ok"/>
 					<haxegui:controls:Button label="Canel"/>
-				</haxegui:container:HBox>
+				</haxegui:containers:HBox>
 			</haxegui:containers:Grid>
 		</haxegui:containers:Container>
 	</haxegui:Layout>
@@ -113,25 +113,25 @@ class Dialog extends Window {
 		label.align.horizontal = HorizontalAlign.CENTER;
 		// label.center();
 		// label.move(0, -20);
-/*
-		icon = new Icon(container);
-		icon.init({src: Icon.DIALOG_WARNING});
-		icon.moveTo(14, label.y-6);
+
+//		icon = new Icon(container);
+//		icon.init({src: Icon.DIALOG_WARNING});
+//		icon.moveTo(14, label.y-6);
 
 
-		var button = new haxegui.controls.Button(container);
-		button.init({label: "ok"});
-		button.center();
-		button.move(-60, 46);
-		button.setAction("mouseClick", "this.getParentWindow().destroy();");
+//		var button = new haxegui.controls.Button(container);
+//		button.init({label: "ok"});
+//		button.center();
+//		button.move(-60, 46);
+//		button.setAction("mouseClick", "this.getParentWindow().destroy();");
 
-		var button = new haxegui.controls.Button(container);
-		button.init({label: "cancel"});
-		button.center();
-		button.move(60, 46);
-		button.setAction("mouseClick", "this.getParentWindow().destroy();");
+//		var button = new haxegui.controls.Button(container);
+//		button.init({label: "cancel"});
+//		button.center();
+//		button.move(60, 46);
+//		button.setAction("mouseClick", "this.getParentWindow().destroy();");
 
-*/
+
 		this.toFront();
 	}
 	//}}}

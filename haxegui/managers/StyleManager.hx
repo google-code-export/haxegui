@@ -117,6 +117,9 @@ class DefaultStyle {
 
 	//{{{ getTextFormat
 	public static function getTextFormat(?size:Dynamic, ?color:UInt, ?align:TextFormatAlign) : TextFormat {
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
+
 		var fmt   = new TextFormat ();
 		fmt.align = align;
 		fmt.font  = DefaultStyle.FONT;
@@ -124,6 +127,10 @@ class DefaultStyle {
 		fmt.align = ( align == null || !Std.is(align, flash.text.TextFormatAlign) ) ? TextFormatAlign.LEFT : align;
 		fmt.color = ( color == 0 ) ? DefaultStyle.LABEL_TEXT : color ;
 		// TextFormat("_sans", 11, 0x000000, false, false, false, '', '', TextFormatAlign.LEFT, 0, 0, 0, 0).
+
+
+		haxegui.Profiler.end();
+
 		return fmt;
 	}
 	//}}}

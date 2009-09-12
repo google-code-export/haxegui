@@ -1,4 +1,4 @@
-// Copyright (c) 2009 The haxegui developers
+ // Copyright (c) 2009 The haxegui developers
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -30,6 +30,7 @@ import flash.net.URLRequest;
 import flash.system.LoaderContext;
 import haxegui.Haxegui;
 import haxegui.utils.Opts;
+import haxegui.utils.Size;
 //}}}
 
 
@@ -63,6 +64,7 @@ class Image extends Component {
 
 	/** the bitmap itself **/
 	public var bitmap : Bitmap;
+	public var originalSize : Size;
 
 	/** aspect ratio **/
 	public var aspect(default, null) : Float;
@@ -105,7 +107,8 @@ class Image extends Component {
 	function onComplete(e:Event) {
 		bitmap = e.currentTarget.content ;
 		aspect = bitmap.width / bitmap.height;
-
+		originalSize = new Size(bitmap.width, bitmap.height);
+		
 		addChild(bitmap);
 		dispatchEvent(e);
 
@@ -179,6 +182,9 @@ class Icon extends Image {
 	public inline static var STOCK_ADD    		 : String = "list-add.png";
 	public inline static var STOCK_REMOVE 		 : String = "list-remove.png";
 
+	public inline static var STOCK_UNDO 		 : String = "edit-undo.png";
+	public inline static var STOCK_REDO 		 : String = "edit-redo.png";
+	
 	public inline static var STOCK_DOCUMENT 	 : String = "text-x-generic.png";
 	public inline static var STOCK_FOLDER  	 	 : String = "folder.png";
 	public inline static var STOCK_FOLDER_OPEN   : String = "folder-open.png";

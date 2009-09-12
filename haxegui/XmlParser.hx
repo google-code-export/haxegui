@@ -142,7 +142,7 @@ class XmlParser {
 	* @return true when parsing a data node
 	*/
 	public static function isDataNode(xml:Xml) : Bool {
-		if(xml.nodeName == "List" || xml.nodeName == "Array" )
+		if(xml.nodeName == "List" || xml.nodeName == "Array" || xml.nodeName == "Xml")
 		return true;
 		return false;
 	}
@@ -212,6 +212,12 @@ class XmlParser {
 				return;
 			}
 
+			if(node.nodeName=="Xml") {
+				parent.data = Xml.parse(node.firstChild().nodeValue) ;
+				Reflect.setField(GLOBAL_OBJECT, node.get("name"), parent.data);
+				return;
+			}
+
 			if(node.nodeName=="Float" || node.nodeName=="String" || node.nodeName=="String" || node.nodeName=="Bool") {
 				Reflect.setField(GLOBAL_OBJECT, node.get("name"), node.firstChild().nodeValue);
 				return;
@@ -245,7 +251,6 @@ class XmlParser {
 				catch(e:Dynamic) {
 					trace(e);
 				}
-
 
 
 				Reflect.setField(GLOBAL_OBJECT, node.get("name"), f);
@@ -306,6 +311,7 @@ class XmlParser {
 
 			for(attr in node.attributes()) {
 				var val = node.get(attr);
+
 				switch(val.charAt(0)) {
 					case "@":
 					Reflect.setField(args, attr, Reflect.field(GLOBAL_OBJECT, val.substr(1, val.length) ) );

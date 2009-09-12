@@ -124,7 +124,8 @@ class ScrollBarHandle extends AbstractButton, implements IComposite {
 
 	//{{{ onResize
 	override public function onResize(e:ResizeEvent) : Void {
-		box.height = Math.max(15, box.height);
+		if(!visible) return;
+		box.height = Math.max(20, box.height);
 		box.height = Math.min(box.height, parent.asComponent().box.height - y);
 		box.width =  parent.asComponent().box.width;
 		color = parent.asComponent().color;
@@ -134,7 +135,7 @@ class ScrollBarHandle extends AbstractButton, implements IComposite {
 
 	//{{ onMouseMove
 	public function onMouseMove(e:MouseEvent) {
-		this.x=parent.x;
+		this.x = parent.x;
 	}
 	//}}}
 
@@ -217,27 +218,38 @@ class ScrollBar extends Component, implements IAdjustable {
 
 	static var xml = Xml.parse('
 	<haxegui:Layout name="ScrollBar">
-		<haxegui:controls:ScrollBarFrame/>
-		<haxegui:controls:ScrollBarHandle/>
-		<haxegui:controls:ScrollBarUpButton/>
-		<haxegui:controls:ScrollBarDownButton/>
+	<haxegui:controls:ScrollBarFrame/>
+	<haxegui:controls:ScrollBarHandle
+	color="{parent.color}"
+	disabled="{parent.disabled}"
+	width="{parent.box.width}"
+	height="40"
+	horizontal="{parent.horizontal}"
+	y="{20 + parent.scroll * (parent.box.height - 40)}"
+	/>
+	<haxegui:controls:ScrollBarUpButton
+	color="{parent.color}"
+	disabled="{parent.disabled}"
+	/>
+	<haxegui:controls:ScrollBarDownButton
+	color="{parent.color}"
+	disabled="{parent.disabled}"
+	/>
 	</haxegui:Layout>
 	').firstElement();
-
 	//{{{ Functions
 	//{{{ init
 	/**
 	* @param opts.target Object to scroll, either a [DisplayObject] or [TextField]
 	*/
 	override public function init(opts:Dynamic=null) {
-		adjustment = new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 10, page: 40});
+		adjustment = new Adjustment({ value: .0, min: Math.NEGATIVE_INFINITY, max: Math.POSITIVE_INFINITY, step: 3, page: 40});
 		box = new Size(20,80).toRect();
 		color = DefaultStyle.BACKGROUND;
 		horizontal = false;
 		scroll = 0;
 		scrollee = null;
 		minSize = new Size(15, 40);
-
 
 		super.init(opts);
 
@@ -247,6 +259,8 @@ class ScrollBar extends Component, implements IAdjustable {
 		// adjustment.object.max   = Opts.optFloat(opts, "max",   adjustment.object.max);
 		// adjustment.object.step  = Opts.optFloat(opts, "step",  adjustment.object.step);
 		// adjustment.object.page  = Opts.optFloat(opts, "page",  adjustment.object.page);
+
+		description = null;
 
 		scroll = Opts.optFloat(opts, "scroll",  scroll);
 
@@ -264,6 +278,11 @@ class ScrollBar extends Component, implements IAdjustable {
 		// Silently notify only when target is missing
 		try {
 			scrollee = Opts.classInstance(opts, "target", untyped [TextField, DisplayObject]);
+			if(Std.is(scrollee, TextField))
+			scrollee.addEventListener(Event.SCROLL, onTextFieldScrolled, false, 0, true);
+			else
+			if(Std.is(scrollee, DisplayObject))
+			scrollee.addEventListener(ResizeEvent.RESIZE, onTargetResized, false, 0, true);
 		}
 		catch(s:String) {
 			trace(s);
@@ -285,38 +304,33 @@ class ScrollBar extends Component, implements IAdjustable {
 		// handle
 		// handle = new ScrollBarHandle(this);
 		handle = this.getElementsByClass(ScrollBarHandle).next();
-		var _y = 20 + scroll * (box.height - 40 - 40) ;
-		handle.init({y: _y, color: this.color, disabled: this.disabled, horizontal: this.horizontal , width: this.box.width, height : 40});
+		// handle.init({
+		// 	color: this.color,
+		// 	disabled: this.disabled,
+		// 	width: this.box.width,
+		// 	height : 40,
+		// 	horizontal: this.horizontal,
+		// 	y: 20 + scroll * (box.height - 40 - 40),
+		// });
+
 		handle.filters = [new DropShadowFilter (0, 0, DefaultStyle.DROPSHADOW, 0.75, horizontal ? 8 : 0, horizontal ? 0 : 8, disabled ? .35 : .75, BitmapFilterQuality.LOW, false, false, false)];
 
 
 		// up button
-		// up = new ScrollBarUpButton(this);
 		up = this.getElementsByClass(ScrollBarUpButton).next();
-		// up.init({color: this.color, disabled: this.disabled});
 
 
 		// down button
-		// down = new ScrollBarDownButton(this);
 		down = this.getElementsByClass(ScrollBarDownButton).next();
-		// down.init({color: this.color, disabled: this.disabled});
 		down.move(0, box.height - 20);
 
 
-		if(scrollee!=null) {
-		if(Std.is(scrollee, TextField))
-		scrollee.addEventListener(Event.SCROLL, onTextFieldScrolled, false, 0, true);
-		else
-		if(Std.is(scrollee, DisplayObject))
-		scrollee.addEventListener(ResizeEvent.RESIZE, onTargetResized, false, 0, true);
-		}
-
-		//
+		// external listeners
 		frame.addEventListener(MoveEvent.MOVE, onFrameMoved, false, 0, true);
 		frame.addEventListener(ResizeEvent.RESIZE, onFrameResized, false, 0, true);
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 
-
+		// listeners
 		addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 
 		adjust();
@@ -329,12 +343,12 @@ class ScrollBar extends Component, implements IAdjustable {
 		if(disabled) return;
 		handle.updatePositionTween();
 
+
 		scroll = scrollee.scrollV / scrollee.maxScrollV;
 		var rowHeight = 1 / scrollee.maxScrollV;
 		handle.box.height = Math.max(20, box.height*rowHeight);
 
-		if(handle.box.height>(box.height-20)) handle.visible=false;
-		else handle.visible=true;
+		handle.visible = handle.box.height < (box.height-20);
 
 		handle.dirty = true;
 
@@ -344,6 +358,7 @@ class ScrollBar extends Component, implements IAdjustable {
 
 		handle.updatePositionTween( new Tween( 0, 1, 2000, feffects.easing.Expo.easeOut ),  new Point(0, d));
 
+		// adjust();
 	}
 	//}}}
 
@@ -358,21 +373,23 @@ class ScrollBar extends Component, implements IAdjustable {
 		// h = e.target.scrollRect.width/e.target.width;
 
 		handle.box.height = Math.max(20, box.height * h);
+
+		handle.visible = handle.box.height < (box.height-20);
+		if(handle.visible)
 		handle.dirty = true;
 
 		// handle.visible = !(handle.box.height >= box.height);
 
-		adjust();
 	}
 	//}}}
 
 	//{{{ onFrameMoved
 	private function onFrameMoved(e:MoveEvent) {
-		move(e.target.x, e.target.y);
-		e.target.removeEventListener(MoveEvent.MOVE, onFrameMoved);
-		e.target.moveTo(0,0);
-		e.target.addEventListener(MoveEvent.MOVE, onFrameMoved, false, 0, true);
-
+		//		move(e.target.x, e.target.y);
+		x = e.target.x;
+		y = e.target.y;
+		e.target.x = 0;
+		e.target.y = 0;
 	}
 	//}}}
 
@@ -383,6 +400,7 @@ class ScrollBar extends Component, implements IAdjustable {
 
 		handle.box.width = box.width;
 		handle.y = Math.max( 20, Math.min( handle.y, this.box.height - handle.box.height - 20));
+		if(handle.visible)
 		handle.dirty = true;
 
 		up.box.width = box.width;
@@ -405,36 +423,35 @@ class ScrollBar extends Component, implements IAdjustable {
 		if(!Std.is(parent, haxegui.containers.ScrollPane) && !Std.is(parent, haxegui.controls.UiList)) return;
 
 
-
 		if(Std.is(parent, Component))
 		if(horizontal) {
 			this.y = parent.asComponent().box.height + 20;
-			// if(parent.asComponent().box.width <= minSize.width) return;
 			box.height = parent.asComponent().box.width;
 		}
 		else {
 			box.height = parent.asComponent().box.height;
-			// if(parent.asComponent().box.height <= minSize.height) return;
 			this.x = parent.asComponent().box.width ;
 		}
 
 
-		down.y = Math.max( 20, box.height - 20);
-		// if(Std.is(parent, haxegui.controls.UiList)) { box.height-=20; down.y-=20; x-=20; }
-		handle.y = Math.max( 20, Math.min( handle.y, this.box.height - handle.box.height - 20));
-
-		frame.box = box.clone();
-
-		dirty = true;
-		frame.dirty = true;
-		handle.dirty = true;
-		up.dirty = true;
-		down.dirty = true;
-
-		// dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
 
+
+	//{{{ onResize
+	public override function onResize(e:ResizeEvent) {
+		frame.dirty = true;
+		frame.box = box.clone();
+
+		handle.y = Math.max( 20, Math.min( handle.y, this.box.height - handle.box.height - 20));
+		handle.dirty = true;
+
+		down.y = Math.max( 20, box.height - 20);
+
+		dirty = true;
+	}
+	//}}}
 
 
 	//{{{ onMouseWheel
@@ -446,6 +463,9 @@ class ScrollBar extends Component, implements IAdjustable {
 		var offset = e.delta * (horizontal ? 1 : -1)* adjustment.object.page;
 
 		handle.updatePositionTween( handleMotionTween,  new Point(0, offset), function(v) { self.adjust(); } );
+
+		// handle.updatePositionTween( handleMotionTween,  new Point(0, offset));
+		// adjust();
 
 		super.onMouseWheel(e);
 	}
@@ -466,24 +486,34 @@ class ScrollBar extends Component, implements IAdjustable {
 	*/
 	public function adjust(?v:Float) : Float {
 		if(scrollee==null) return scroll;
+		if(handle==null || handle.visible==false) return scroll;
+
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
 
 		if(v<0 || scroll<0 || handle.y < 20) {
 			adjustment.setValue(scroll=0);
 			handle.updatePositionTween();
-			handle.moveTo(0,20);
+			handle.x = 0;
+			handle.y = 20;
+
+			haxegui.Profiler.end();
 			return scroll;
 		}
 
 		if(v>1 || scroll>1 || handle.y > (box.height - handle.box.height - 20)) {
 			adjustment.setValue(scroll=1);
 			handle.updatePositionTween();
-			handle.moveTo(0, box.height - handle.box.height - 20);
+			handle.x = 0;
+			handle.y = box.height - handle.box.height - 20;
+
+			haxegui.Profiler.end();
 			return scroll;
 		}
 
 
 		// handle textfields
 		if(Std.is(scrollee, TextField))	{
+
 			if(scrollee.hasEventListener(Event.SCROLL))
 			scrollee.removeEventListener(Event.SCROLL, onTextFieldScrolled);
 
@@ -496,11 +526,25 @@ class ScrollBar extends Component, implements IAdjustable {
 			if(!scrollee.hasEventListener(Event.SCROLL))
 			scrollee.addEventListener(Event.SCROLL, onTextFieldScrolled, false, 0, true);
 
+			if(!horizontal)
+			if( scrollee.scrollV==1 && scrollee.bottomScrollV >= scrollee.numLines ) {
+				// if(scrollee.scrollV==1) {
+				handle.box.height = box.height-20;
+				handle.visible = false;
+				scroll=0;
+			}
+
+			haxegui.Profiler.end();
+
 			return scroll;
 		}
 
 
-		if(scrollee.scrollRect==null || scrollee.scrollRect.isEmpty()) return scroll;
+		if(scrollee.scrollRect==null || scrollee.scrollRect.isEmpty()) {
+			haxegui.Profiler.end();
+
+			return scroll;
+		}
 
 		var rect = scrollee.scrollRect.clone();
 		var transform = scrollee.transform;
@@ -515,12 +559,19 @@ class ScrollBar extends Component, implements IAdjustable {
 
 		scrollee.scrollRect = rect;
 
-
 		// dispatchEvent(new Event(Event.CHANGE));
+
+
+		haxegui.Profiler.end();
+
 		return scroll;
 	}
 	//}}}
 
+	public override function destroy() {
+		frame.removeEventListener(MoveEvent.MOVE, onFrameMoved);
+		super.destroy();
+	}
 
 	//{{{ __init__
 	static function __init__() {
