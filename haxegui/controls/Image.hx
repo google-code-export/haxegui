@@ -62,6 +62,8 @@ class Image extends Component {
 	/** loader for the bitmap **/
 	public var loader : Loader;
 
+	public var smoothing : Bool;
+
 	/** the bitmap itself **/
 	public var bitmap : Bitmap;
 	public var originalSize : Size;
@@ -77,6 +79,8 @@ class Image extends Component {
 
 
 		src = Opts.optString(opts, "src", src);
+		smoothing = Opts.optBool(opts, "smoothing", true);
+
 
 
 		if(loader==null)
@@ -108,7 +112,9 @@ class Image extends Component {
 		bitmap = e.currentTarget.content ;
 		aspect = bitmap.width / bitmap.height;
 		originalSize = new Size(bitmap.width, bitmap.height);
-		
+
+		bitmap.smoothing = smoothing;
+
 		addChild(bitmap);
 		dispatchEvent(e);
 
@@ -116,6 +122,7 @@ class Image extends Component {
 
 		bitmap.width = box.width;
 		bitmap.height = box.height;
+
 	}
 	//}}}
 
@@ -128,7 +135,7 @@ class Image extends Component {
 
 
 	//{{{ __init__
-	static function __init__() {haxegui	.Haxegui.register(Image);
+	static function __init__() {
 		haxegui	.Haxegui.register(Image);
 	}
 	//}}}
@@ -179,18 +186,30 @@ class Icon extends Image {
 	public inline static var STOCK_DELETE 		 : String = "edit-delete.png";
 
 	public inline static var STOCK_FIND   		 : String = "edit-find.png";
+	public inline static var STOCK_FIND_NEXT	 : String = "edit-find-next.png";
+	public inline static var STOCK_FIND_REPLACE	 : String = "edit-find-replace.png";
 	public inline static var STOCK_ADD    		 : String = "list-add.png";
 	public inline static var STOCK_REMOVE 		 : String = "list-remove.png";
 
 	public inline static var STOCK_UNDO 		 : String = "edit-undo.png";
 	public inline static var STOCK_REDO 		 : String = "edit-redo.png";
-	
+
+	public inline static var STOCK_PLAY 		 : String = "run.png";
+	public inline static var STOCK_STOP 		 : String = "stop.png";
+	public inline static var STOCK_PAUSE 		 : String = "pause.png";
+
 	public inline static var STOCK_DOCUMENT 	 : String = "text-x-generic.png";
 	public inline static var STOCK_FOLDER  	 	 : String = "folder.png";
 	public inline static var STOCK_FOLDER_OPEN   : String = "folder-open.png";
 
 	public inline static var DIALOG_ERROR 		 : String = "dialog-error.png";
 	public inline static var DIALOG_WARNING	 	 : String = "dialog-warning.png";
+
+	public inline static var STOCK_VIEW_REFRESH	 : String = "view-refresh.png";
+
+	public inline static var STOCK_VIEW_REFRESH_16x16	 : String = "16x16/view-refresh.png";
+	public inline static var DOCUMENT_PROPERTIES_16x16	 : String = "16x16/document-properties.png";
+
 	//}}}
 	//}}}
 
