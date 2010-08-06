@@ -66,6 +66,9 @@ class Label extends Component, implements IText {
 	public var tf 						: TextField;
 	public var text (getText, setText)  : String;
 
+	public var textWidth (default, null)  : Float;
+	public var textHeight (default, null)  : Float;
+
 	public var align 					: Alignment;
 
 	//{{{ Functions
@@ -99,17 +102,21 @@ class Label extends Component, implements IText {
 		description = null;
 
 		tf = new TextField();
-		tf.name = "tf";
 		tf.autoSize = TextFieldAutoSize.LEFT;
 		tf.defaultTextFormat = DefaultStyle.getTextFormat();
 		tf.embedFonts = true;
 		tf.focusRect = false;
 		tf.mouseEnabled = false;
 		tf.multiline = true;
+		// tf.border = true;
+		tf.name = "tf";
 		tf.selectable = false;
 		tf.tabEnabled = false;
 		tf.type = TextFieldType.DYNAMIC;
 		tf.wordWrap = Opts.optBool(opts, "wordWrap", false);
+
+		textWidth = tf.width;
+		textHeight = tf.height;
 
 		if(!box.isEmpty()) {
 			tf.width = box.width;
@@ -119,7 +126,7 @@ class Label extends Component, implements IText {
 
 		this.focusRect = false;
 		this.tabEnabled = false;
-		this.mouseEnabled = Opts.optBool(opts, "mouseEnabled", true);
+		this.mouseEnabled = Opts.optBool(opts, "mouseEnabled", false);
 
 
 		tf.text = Opts.optString(opts, "text", text);
@@ -134,7 +141,7 @@ class Label extends Component, implements IText {
 		}
 		move(Opts.optFloat(opts,"x",0), Opts.optFloat(opts,"y",0));
 
-		dirty = false;
+
 	}
 	//}}}
 
@@ -142,7 +149,6 @@ class Label extends Component, implements IText {
 	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
 		super.onResize(e);
-
 
 		switch(align.horizontal) {
 			case LEFT:
@@ -160,8 +166,11 @@ class Label extends Component, implements IText {
 			case CENTER:
 			tf.y = Std.int(box.height - tf.height) >> 1;
 			case BOTTOM:
-			tf.y = box.height - tf.height;
+			tf.y = Std.int(box.height - tf.height);
 		}
+
+		// dirty = true;
+		// redraw();
 	}
 	//}}}
 
@@ -178,8 +187,13 @@ class Label extends Component, implements IText {
 	public function setText(s:String) : String {
 		if(tf==null || s==null) return null;
 		tf.text = s;
-		if(tf.width!=box.width || tf.height!=box.height)
-		resize(new Size(tf.width, tf.height));
+
+		textWidth = tf.width;
+		textHeight = tf.height;
+
+		// if(textWidth!=box.width || textHeight!=box.height)
+		// resize(new Size(textWidth, textWidth));
+
 		return tf.text;
 	}
 	//}}}
@@ -187,6 +201,8 @@ class Label extends Component, implements IText {
 
 	//{{{ redraw
 	public override function redraw(opts:Dynamic=null) {
+		x = Std.int(x);
+		y = Std.int(y);
 		tf.x = Std.int(tf.x);
 		tf.y = Std.int(tf.y);
 	}

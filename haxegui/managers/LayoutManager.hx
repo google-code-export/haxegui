@@ -96,7 +96,7 @@ class LayoutManager {
 			LayoutManager.loadLayouts(Xml.parse(str));
 			trace("Current layouts:");
 			for(k in LayoutManager.layouts.keys())
-				trace(" : " + k);
+				trace(k);
 		} catch(e:Dynamic) {
 			rv = false;
 		}

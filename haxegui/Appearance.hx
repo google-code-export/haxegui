@@ -22,6 +22,7 @@ package haxegui;
 //{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
+import flash.display.Sprite;
 import flash.events.FocusEvent;
 import flash.events.MouseEvent;
 import flash.geom.Rectangle;
@@ -95,39 +96,45 @@ class Appearance extends Window {
 
 	static var xml = Xml.parse('
 	<haxegui:Layout name="Appearance">
-		<haxegui:controls:MenuBar x="10" y="20">
-			<haxegui:controls:Menu name="Appearance"/>
-		</haxegui:controls:MenuBar>
-		<haxegui:controls:TabNavigator x="10" y="42" left="10" right="0">
-		<haxegui:controls:Tab/>
-		<haxegui:controls:Tab/>
-		<haxegui:controls:Tab/>
-		</haxegui:controls:TabNavigator>
-		<haxegui:containers:Container x="10" y="62" top="62" bottom="10">
-			<haxegui:containers:HDivider>
-				<haxegui:containers:Container>
-				<!-- Will be filled later -->
-				</haxegui:containers:Container>
-				<haxegui:containers:Container>
-					<haxegui:containers:ScrollPane>
-						<haxegui:Window x="20" y="20" mouseEnabled="false" scaleX=".75" scaleY=".75"/>
-						<haxegui:Window x="40" y="40" mouseEnabled="false" scaleX=".75" scaleY=".75">
-						<haxegui:containers:Container>
-							<haxegui:controls:Button x="20" y="20"/>
-							<haxegui:controls:Button x="120" y="20"/>
-						</haxegui:containers:Container>
-						</haxegui:Window>
-					</haxegui:containers:ScrollPane>
-				</haxegui:containers:Container>
-			</haxegui:containers:HDivider>
-		</haxegui:containers:Container>
+	<haxegui:controls:MenuBar x="10" y="20">
+	<haxegui:controls:Menu name="Appearance"/>
+	</haxegui:controls:MenuBar>
+	<haxegui:controls:TabNavigator x="10" y="42" left="10" right="0">
+	<haxegui:controls:Tab/>
+	<haxegui:controls:Tab/>
+	<haxegui:controls:Tab/>
+	</haxegui:controls:TabNavigator>
+	<haxegui:containers:Container x="10" y="62" top="62" bottom="50" fitV="false">
+	<haxegui:containers:VDivider handlePosition="240">
+	<haxegui:containers:Container fitH="false" fitV="false">
+	<!-- Will be filled later -->
+	</haxegui:containers:Container>
+	<haxegui:containers:Container>
+	<haxegui:containers:ScrollPane>
+	<haxegui:Window x="20" y="20" width="240" height="300"/>
+	<haxegui:Window x="40" y="40" width="240" height="300">
+	<haxegui:containers:Container>
+	<haxegui:controls:Button x="20" y="20"/>
+	<haxegui:controls:Button x="120" y="20"/>
+	<haxegui:controls:ProgressBar x="20" y="40"/>
+	</haxegui:containers:Container>
+	</haxegui:Window>
+	</haxegui:containers:ScrollPane>
+	</haxegui:containers:Container>
+	</haxegui:containers:VDivider>
+	</haxegui:containers:Container>
+	<haxegui:containers:Container bottom="0" height="50" fitV="false">
+	<haxegui:controls:Button right="10" bottom="10"/>
+	<haxegui:controls:Button right="120" bottom="10"/>
+	</haxegui:containers:Container>
 	</haxegui:Layout>
 	').firstElement();
 
 	public var container : Container;
-	public var hdivider	 : HDivider;
+	public var vdivider	 : VDivider;
 	public var grid		 : Grid;
 
+	public var preview : Sprite;
 
 	//{{{ Constructor
 	public function new (?parent:DisplayObjectContainer, ?x:Float, ?y:Float) {
@@ -135,27 +142,33 @@ class Appearance extends Window {
 	}
 	//}}}
 
-
+	//{{{ Functions
 	//{{{ init
 	public override function init(?opts:Dynamic) {
 		super.init(opts);
-		box = new Size(320, 480).toRect();
-		minSize = new Size(250, 400);
+		box = new Size(720, 480).toRect();
+		// minSize = new Size(250, 400);
 
 
 		XmlParser.apply(Appearance.xml, this);
 
 
 		container = this.getElementsByClass(Container).next();
-		hdivider = container.getElementsByClass(HDivider).next();
-		container = hdivider.getElementsByClass(Container).next();
+		vdivider = container.getElementsByClass(VDivider).next();
+		container = vdivider.getElementsByClass(Container).next();
 
-		makeNoticeLabel();
-
+		preview = untyped container.nextSibling().firstChild().content;
 
 		//
-		grid = new Grid(container, 20, 40);
-		grid.init({rows: Reflect.fields(colorTheme).length+1, cols: 2});
+		grid = new Grid(container, 0, 0);
+		grid.init({
+			rows: Reflect.fields(colorTheme).length+1,
+			cols: 2
+			// left: 10,
+			// top: 10,
+			// bottom: 10,
+			// right: 10
+		});
 
 		//
 		var label = new Label(grid);
@@ -171,7 +184,6 @@ class Appearance extends Window {
 
 		combo.dataSource = new DataSource();
 		combo.dataSource.data = fonts;
-
 
 
 		var onFontSelected = function(e) {
@@ -199,7 +211,7 @@ class Appearance extends Window {
 
 			var btn = new Swatch(grid);
 			btn.init({width: 40, label: null, _color: Reflect.field(colorTheme, Reflect.fields(colorTheme)[i]) });
-			btn.minSize = new Size(40,30);
+			btn.minSize = new Size(40,20);
 			btn.maxSize = new Size(200,2<<15);
 
 			btn.setAction("mouseClick",
@@ -209,40 +221,40 @@ class Appearance extends Window {
 			var c = new haxegui.ColorPicker();
 			c.currentColor = this._color;
 			c.init();
-			var container = c.getChildByName('Container');
-			var ok = container.getChildByName('Ok');
-			var cancel = container.getChildByName('Cancel');
 
-			cancel.setAction('mouseClick', 'this.getParentWindow().destroy();');
-			ok.addEventListener(flash.events.MouseEvent.MOUSE_UP,
+			c.cancel.setAction('mouseClick', 'this.getParentWindow().destroy();');
+			c.ok.addEventListener(flash.events.MouseEvent.MOUSE_UP,
 			function(e) {
-				spr.graphics.beginFill(c.currentColor);
+				this._color = c.currentColor;
+				this.redraw();
 				DefaultStyle."+Reflect.fields(colorTheme)[i]+" = c.currentColor;
 				c.destroy();
+				this.getParentWindow().updatePreview();
 			});
 			");
 		}
 	}
 	//}}}
 
-	//{{{ makeNoticeLabel
-	private function makeNoticeLabel() {
-		// background
-		var rect = new haxegui.toys.Rectangle(container);
-		rect.init({width: 300, height: 20});
-		rect.color = 0xFFD69A;
-		rect.roundness = 12;
-		rect.move(8, 8);
-
-		// icon
-		var icon = new Icon(rect);
-		icon.init({src: "notice.png"});
-		icon.move(8,2);
-
-		// label
-		var label = new haxegui.controls.Label(rect);
-		label.init({text: "Some settings here will only affect new components."});
-		label.move(24,2);
+	//{{{ updatePreview
+	public function updatePreview() {
+		updateColorRecursive(preview, DefaultStyle.BACKGROUND);
 	}
+	//}}}
+
+	//{{{ updateColorRecursive
+	private function updateColorRecursive(o:DisplayObjectContainer, color:UInt) {
+		if(Std.is(o, flash.text.TextField)) return;
+		if(Std.is(o, flash.display.Bitmap)) return;
+		for(i in 0...o.numChildren) {
+			var child = o.getChildAt(i);
+			if(Std.is(child, flash.text.TextField)) return;
+			if(Std.is(child, flash.display.Bitmap)) return;
+			(cast child).color = color;
+			(cast child).redraw();
+			updateColorRecursive(cast child, color);
+		}
+	}
+	//}}}
 	//}}}
 }

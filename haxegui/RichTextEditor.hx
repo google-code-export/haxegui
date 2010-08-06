@@ -77,16 +77,16 @@ import haxegui.windowClasses.StatusBar;
 */
 class RichTextEditor extends Window, implements IText {
 	//{{{ Members
-	//{{{ Public
-	public var tf : TextField;
-	public var text(getText, setText) : String;
-	//}}}
+		//{{{ Public
+		public var tf : TextField;
+		public var text(getText, setText) : String;
+		//}}}
 
 
-	//{{{ Private
-	var _color : UInt;
-	var _html : Bool;
-	//}}}
+		//{{{ Private
+		var _color : UInt;
+		var _html : Bool;
+		//}}}
 	//}}}
 
 
@@ -95,9 +95,9 @@ class RichTextEditor extends Window, implements IText {
 	public override function init(?opts:Dynamic=null) {
 		_color = Color.BLACK;
 		_html = true;
+		type = WindowType.MODAL;
 
-
-		super.init();
+		super.init(opts);
 
 
 		box = new Size(512, 380).toRect();
@@ -110,12 +110,11 @@ class RichTextEditor extends Window, implements IText {
 
 		//{{{ FontBox
 		// font face selection combobox
-		var fontbox = new ComboBox(toolbar, "FontBox", 14, 10);
+		var fontbox = new ComboBox(toolbar, "FontBox", 24, 10);
 		fontbox.init({text: "Arial", width: 100});
 		var ds = new DataSource();
 		ds.data = ["Arial", "Arial Black", "Bitstream Vera Sans", "Courier", "Georgia", "Comic Sans MS", "Impact", "Times New Roman", "Trebuchet MS", "Verdana"];
 		fontbox.dataSource = ds;
-
 
 		var self = this;
 		var onFontChanged = function(e) {
@@ -134,13 +133,24 @@ class RichTextEditor extends Window, implements IText {
 			self.tf.htmlText = htmlText.text;
 			self.tf.dispatchEvent(new Event(Event.CHANGE));
 		}
+
 		fontbox.addEventListener(Event.CHANGE, onFontChanged);
+
+		/*
+		var onFontClicked = function(e) {
+			var text = self.tf.selectedText;
+			if(text=="")
+				self.tf.setSelection(0, self.tf.text.length);
+		}
+		fontbox.addEventListener(MouseEvent.CLICK, onFontClicked);
+		*/
+
 		//}}}
 
 
 		//{{{ SizeBox
 		// font size selection combobox
-		var sizebox = new ComboBox(toolbar, "SizeBox", 124, 10);
+		var sizebox = new ComboBox(toolbar, "SizeBox", 134, 10);
 		sizebox.init({text: "10", width: 50});
 		var ds = new DataSource();
 		ds.data = [7,8,12,14,16,18,20,22,24,32,48,72,96];
@@ -172,11 +182,21 @@ class RichTextEditor extends Window, implements IText {
 		}
 
 		sizebox.addEventListener(Event.CHANGE, onSizeChanged);
+
+		/*
+		var onSizeClicked = function(e) {
+			var text = self.tf.selectedText;
+			if(text=="")
+				self.tf.setSelection(0, self.tf.text.length);
+		}
+		sizebox.addEventListener(MouseEvent.CLICK, onSizeClicked);
+		*/
 		//}}}
 
 
 		//{{{ Bold
-		var btn = new Button(toolbar, "Bold", 180, 8);
+		var btn = new Button(toolbar, "Bold", 190, 8);
+		btn.addEventListener(MouseEvent.MOUSE_DOWN, onToolBarButtonClicked, false, 0, true);
 		btn.init({width: 24, height: 24, label: null, icon: "format-text-bold.png" });
 		btn.setAction("mouseClick",
 		"
@@ -199,7 +219,8 @@ class RichTextEditor extends Window, implements IText {
 
 
 		//{{{ Italic
-		btn = new Button(toolbar, "Italic", 204, 8);
+		btn = new Button(toolbar, "Italic", 214, 8);
+		btn.addEventListener(MouseEvent.MOUSE_DOWN, onToolBarButtonClicked, false, 0, true);
 		btn.init({width: 24, height: 24, label: null, icon: "format-text-italic.png" });
 		btn.setAction("mouseClick",
 		"
@@ -222,21 +243,22 @@ class RichTextEditor extends Window, implements IText {
 
 
 		//{{{ Underline
-		btn = new Button(toolbar, "UnderLine", 228, 8);
+		btn = new Button(toolbar, "UnderLine", 238, 8);
+		btn.addEventListener(MouseEvent.MOUSE_DOWN, onToolBarButtonClicked, false, 0, true);
 		btn.init({width: 24, height: 24, label: null, icon: "format-text-underline.png" });
 		btn.setAction("mouseClick",
 		"
 		var tf = this.getParentWindow().getChildByName(\"Container1\").getChildByName(\"tf\");
 		var text = tf.selectedText;
-		tf.replaceSelectedText( \"[replace]\" );
+		tf.replaceSelectedText( '[replace]' );
 
 		var htmlText  = new flash.text.TextField();
 		htmlText.text = tf.htmlText;
 
-		var start = htmlText.text.indexOf(\"[replace]\", 0);
-		var end = start + \"[replace]\".length;
+		var start = htmlText.text.indexOf('[replace]', 0);
+		var end = start + '[replace]'.length;
 
-		htmlText.replaceText(start, end, \"<U>\" + text + \"</U>\" );
+		htmlText.replaceText(start, end, '<U>' + text + '</U>' );
 
 		tf.htmlText = htmlText.text;
 		"
@@ -245,29 +267,99 @@ class RichTextEditor extends Window, implements IText {
 
 
 		//{{{ Align
-		btn = new Button(toolbar, "AlignLeft", 252, 8);
+		btn = new Button(toolbar, "AlignLeft", 262, 8);
 		btn.init({width: 24, height: 24, label: null, icon: "format-justify-left.png" });
+		btn.setAction("mouseClick",
+		"
+		var tf = this.getParentWindow().tf;
+		var text = tf.selectedText;
+		tf.replaceSelectedText( '[replace]' );
 
-		btn = new Button(toolbar, "AlignCenter", 276, 8);
+		var htmlText  = new flash.text.TextField();
+		htmlText.text = tf.htmlText;
+
+		var start = htmlText.text.indexOf(\"[replace]\", 0);
+		var end = start + '[replace]'.length;
+
+		htmlText.replaceText(start, end, \"<P ALIGN='LEFT'>\" + text + \"</P>\" );
+
+		tf.htmlText = htmlText.text;
+		"
+		);
+
+		btn = new Button(toolbar, "AlignCenter", 286, 8);
 		btn.init({width: 24, height: 24, label: null, icon: "format-justify-center.png" });
+		btn.setAction("mouseClick",
+		"
+		var tf = this.getParentWindow().tf;
+		var text = tf.selectedText;
+		tf.replaceSelectedText( '[replace]' );
 
-		btn = new Button(toolbar, "AlignRight", 300, 8);
+		var htmlText  = new flash.text.TextField();
+		htmlText.text = tf.htmlText;
+
+		var start = htmlText.text.indexOf('[replace]', 0);
+		var end = start + '[replace]'.length;
+
+		htmlText.replaceText(start, end, \"<P ALIGN='CENTER'>\" + text + \"</P>\" );
+
+		tf.htmlText = htmlText.text;
+		"
+		);
+
+		btn = new Button(toolbar, "AlignRight", 310, 8);
 		btn.init({width: 24, height: 24, label: null, icon: "format-justify-right.png" });
+		btn.setAction("mouseClick",
+		"
+		var tf = this.getParentWindow().tf;
+		var text = tf.selectedText;
+		tf.replaceSelectedText( '[replace]' );
 
-		btn = new Button(toolbar, "AlignFill", 324, 8);
+		var htmlText  = new flash.text.TextField();
+		htmlText.text = tf.htmlText;
+
+		var start = htmlText.text.indexOf('[replace]', 0);
+		var end = start + '[replace]'.length;
+
+		htmlText.replaceText(start, end, \"<P ALIGN='RIGHT'>\" + text + \"</P>\" );
+
+		tf.htmlText = htmlText.text;
+		"
+		);
+
+		btn = new Button(toolbar, "AlignFill", 334, 8);
 		btn.init({width: 24, height: 24, label: null, icon: "format-justify-fill.png" });
+		btn.setAction("mouseClick",
+		"
+		var tf = this.getParentWindow().tf;
+		var text = tf.selectedText;
+		tf.replaceSelectedText( '[replace]' );
+
+		var htmlText  = new flash.text.TextField();
+		htmlText.text = tf.htmlText;
+
+		var start = htmlText.text.indexOf('[replace]', 0);
+		var end = start + '[replace]'.length;
+
+		htmlText.replaceText(start, end, \"<P ALIGN='JUSTIFY'>\" + text + \"</P>\" );
+
+		tf.htmlText = htmlText.text;
+		"
+		);
 		//}}}
 
 
 		//{{{ Color
 		var swatch = new Swatch(toolbar, 400, 8);
 		swatch.init({_color: Color.BLACK, width: 32, height: 24, label: null });
+		swatch.addEventListener(MouseEvent.CLICK, onToolBarButtonClicked, false, 0, true);
 
 		//{{{ mouseClick
 		swatch.setAction("mouseClick",
 		"
 		var win = this.getParentWindow();
-		var tf = win.getChildByName('Container1').getChildByName('tf');
+		// var tf = win.getChildByName('Container1').getChildByName('tf');
+		var tf = win.tf;
 
 		// Color picking
 		var c = new haxegui.ColorPicker();
@@ -276,10 +368,8 @@ class RichTextEditor extends Window, implements IText {
 		c.init();
 		var container = c.getChildByName('Container');
 		var grid = container.getChildByName('Grid');
-		var ok = grid.getChildByName('Ok');
-		var cancel = grid.getChildByName('Cancel');
 
-		cancel.setAction('mouseClick', 'this.getParentWindow().destroy();');
+		c.cancel.setAction('mouseClick', 'this.getParentWindow().destroy();');
 		//{{{ onColoreChoosen
 		function onColoreChoosen(e) {
 			win._color = c.currentColor;
@@ -302,7 +392,7 @@ class RichTextEditor extends Window, implements IText {
 			tf.htmlText = htmlText.text;
 			tf.dispatchEvent(new flash.events.Event(flash.events.Event.CHANGE));
 		};
-		ok.addEventListener(flash.events.MouseEvent.MOUSE_UP, onColoreChoosen, false, 0, true);
+		c.ok.addEventListener(flash.events.MouseEvent.MOUSE_UP, onColoreChoosen, false, 0, true);
 		//}}}
 		"
 		);
@@ -382,21 +472,32 @@ class RichTextEditor extends Window, implements IText {
 		info.init();
 
 
-		tf.addEventListener(TextEvent.TEXT_INPUT, updateInfo);
-		tf.addEventListener(Event.CHANGE, updateInfo);
-		tf.addEventListener(MouseEvent.MOUSE_DOWN, updateInfo);
-		tf.addEventListener(MouseEvent.MOUSE_UP, updateInfo);
-		tf.addEventListener(KeyboardEvent.KEY_DOWN, updateInfo);
+		tf.addEventListener(TextEvent.TEXT_INPUT, updateInfo, false, 0, true);
+		tf.addEventListener(Event.CHANGE, updateInfo, false, 0, true);
+		tf.addEventListener(MouseEvent.MOUSE_DOWN, updateInfo, false, 0, true);
+		tf.addEventListener(MouseEvent.MOUSE_UP, updateInfo, false, 0, true);
+		tf.addEventListener(KeyboardEvent.KEY_DOWN, updateInfo, false, 0, true);
 
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
 
+	//{{{ onButtonClicked
+	public function onToolBarButtonClicked(e:MouseEvent) {
+		//if(tf.selectionBeginIndex==tf.selectionEndIndex)
+			//selectAll();
+	}
+	//}}}
+
+	//{{{ selectAll
+	public function selectAll() {
+		tf.setSelection(0, tf.text.length);
+	}
+	//}}}
 
 	//{{{ updateInfo
-	public function updateInfo(e:Dynamic) {var info = cast statusbar.getChildAt(0);
-
+	public function updateInfo(e:Dynamic) {
 		var info = cast statusbar.getChildAt(0);
 
 		var l = 0;

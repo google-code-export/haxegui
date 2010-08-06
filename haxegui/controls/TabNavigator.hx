@@ -222,6 +222,21 @@ class TabNavigator extends Component, implements IAdjustable {
 	//}}}
 
 
+	//{{{ onResize
+	public override function onResize(e:ResizeEvent) {
+		super.onResize(e);
+
+		// var w = transform.pixelBounds.width;
+		// if(scrollRect==null ||  scrollRect.isEmpty()) return;
+		// if(w>scrollRect.width) {
+		// 	var arrow = new haxegui.toys.Arrow(this);
+		// 	arrow.init();
+		// 	arrow.toFront();
+		// }
+	}
+	//}}}
+
+
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
 		// if(Std.is(parent, Component)) {
@@ -231,10 +246,41 @@ class TabNavigator extends Component, implements IAdjustable {
 		// if(Std.is(parent.parent, haxegui.containers.ScrollPane)) {
 		// 	box.width = untyped parent.parent.box.width;
 		// }
-		scrollRect = box;
 
+		scrollRect = box;
 		dirty = true;
-		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+
+		for(i in getElementsByClass(haxegui.controls.Button))
+		i.destroy();
+
+		var w = transform.pixelBounds.width;
+		if(box.width < w) {
+			//left button
+			var button = new haxegui.controls.Button(this);
+			button.init({width: 24, height:box.height});
+			button.toFront();
+
+			var arrow = new haxegui.toys.Arrow(button);
+			arrow.init({rotation: 180, color : Color.darken(this.color, 20)});
+			arrow.place(12,12);
+
+			//right button
+			var button = new haxegui.controls.Button(this);
+			button.init({width: 24, height:box.height});
+			button.place(box.width - 24, 0);
+			button.toFront();
+
+			var arrow = new haxegui.toys.Arrow(button);
+			arrow.init({color : Color.darken(this.color, 20)});
+			arrow.place(12,12);
+		}
+		// else
+		// for(i in this)
+		// if(Std.is(i, haxegui.toys.Arrow)
+
+
+
+		// dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	} //}}}
 
 

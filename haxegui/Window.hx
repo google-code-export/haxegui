@@ -63,6 +63,7 @@ enum WindowPosition {
 enum WindowType {
 	NORMAL;
 	MODAL;
+	DIALOG;
 	ALWAYS_ON_TOP;
 }
 //}}}
@@ -142,7 +143,7 @@ class Window extends Component {
 		color = DefaultStyle.BACKGROUND;
 		description = null;
 
-
+		if(type==null)
 		type = Opts.getField(opts, "type");
 		if(type==null) type = WindowType.NORMAL;
 

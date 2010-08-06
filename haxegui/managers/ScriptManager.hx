@@ -121,6 +121,8 @@ class ScriptManager implements Dynamic {
 		} catch(e:Dynamic) {
 			if(e != "No default action.") {
 				trace(inst.toString() + " " + action + " script error : " + e);
+				// for(stackItem in haxe.Stack.exceptionStack()) trace(stackItem);
+				// trace( haxe.Stack.toString(haxe.Stack.callStack()) );
 			}
 		}
 		return null;

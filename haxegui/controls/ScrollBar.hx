@@ -230,10 +230,14 @@ class ScrollBar extends Component, implements IAdjustable {
 	<haxegui:controls:ScrollBarUpButton
 	color="{parent.color}"
 	disabled="{parent.disabled}"
+	repeatWaitTime="2.0"
+	autoRepeat="true"
 	/>
 	<haxegui:controls:ScrollBarDownButton
 	color="{parent.color}"
 	disabled="{parent.disabled}"
+	repeatWaitTime="2.0"
+	autoRepeat="true"
 	/>
 	</haxegui:Layout>
 	').firstElement();
@@ -346,10 +350,13 @@ class ScrollBar extends Component, implements IAdjustable {
 
 		scroll = scrollee.scrollV / scrollee.maxScrollV;
 		var rowHeight = 1 / scrollee.maxScrollV;
+
 		handle.box.height = Math.max(20, box.height*rowHeight);
 
 		handle.visible = handle.box.height < (box.height-20);
+		// handle.visible = scrollee.numLines > 2;
 
+		if(handle.visible)
 		handle.dirty = true;
 
 		var d = scroll*(box.height-handle.box.height-20) - handle.y;
@@ -365,11 +372,16 @@ class ScrollBar extends Component, implements IAdjustable {
 
 	//{{{ onTargetResized
 	public function onTargetResized(e:ResizeEvent) {
-		var h = e.target.scrollRect.height/e.target.transform.pixelBounds.height;
+
+		var h = e.target.scrollRect.height / e.target.transform.pixelBounds.height;
+
+		// if(Std.is(e.target.parent, haxegui.containers.ScrollPane))
+		// h = e.target.scrollRect.height / e.target.parent.box.height;
+
 		// var h = e.target.scrollRect.height/e.target.height;
 
 		if(horizontal)
-		h = e.target.scrollRect.width/e.target.transform.pixelBounds.width;
+		h = e.target.scrollRect.width / e.target.transform.pixelBounds.width;
 		// h = e.target.scrollRect.width/e.target.width;
 
 		handle.box.height = Math.max(20, box.height * h);
@@ -462,7 +474,7 @@ class ScrollBar extends Component, implements IAdjustable {
 		var handleMotionTween = new Tween( 0, 1, 2000, feffects.easing.Expo.easeOut );
 		var offset = e.delta * (horizontal ? 1 : -1)* adjustment.object.page;
 
-		handle.updatePositionTween( handleMotionTween,  new Point(0, offset), function(v) { self.adjust(); } );
+		handle.updatePositionTween( handleMotionTween,  new Point(0, offset), function(v) self.adjust());
 
 		// handle.updatePositionTween( handleMotionTween,  new Point(0, offset));
 		// adjust();

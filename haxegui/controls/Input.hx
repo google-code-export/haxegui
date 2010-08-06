@@ -88,6 +88,7 @@ class Input extends Component, implements IText {
 		tf.selectable = ! disabled;
 		tf.tabEnabled = false;
 		tf.text = Opts.optString(opts, "text", name);
+		tf.restrict = Opts.optString(opts, "restrict", null);
 		tf.type = TextFieldType.INPUT;
 		tf.width = box.width;
 		tf.x = 0;
@@ -108,7 +109,7 @@ class Input extends Component, implements IText {
 	public override function onResize(e:ResizeEvent) {
 		tf.width = box.width - 4;
 		tf.height = box.height - 4;
-		
+
 		dirty = true;
 	}
 

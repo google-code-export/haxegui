@@ -195,11 +195,13 @@ class Divider extends Container {
 
 		handle = new DividerHandle(this);
 		handle.init();
-		if(horizontal)
-		handle.moveTo(.5*box.width, 0);
-		else
-		handle.moveTo(0, .5*box.height);
 
+		if(horizontal)
+		handle.moveTo(Opts.optFloat(opts, "handlePosition", .5*box.width), 0);
+		else
+		handle.moveTo(0, Opts.optFloat(opts, "handlePosition", .5*box.height));
+
+		this.setAction("redraw", "");
 		this.graphics.clear();
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
@@ -347,9 +349,15 @@ class Divider extends Container {
 			else
 			box.width = parent.asComponent().box.width;
 		}
-		else
+		else {
 //		super.onParentResize(e);
-		box = parent.asComponent().box.clone();
+		var b = parent.asComponent().box.clone();
+
+		if(!fitV) b.height = box.height;
+		if(!fitH) b.width = box.width;
+
+		box = b;
+		}
 
 		if(Std.is(parent, haxegui.Window)) {
 			box.width -= 10;

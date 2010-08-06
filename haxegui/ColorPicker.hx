@@ -81,10 +81,10 @@ class ColorPicker extends Window {
 	public var currentAlpha : Float;
 
 	/** input shows color in flash 0xhex format **/
-	public var input : Input;
+	var input : Input;
 
 	/** the swatch, shows the [currentColor] **/
-	public var swatch : Swatch;
+	var swatch : Swatch;
 
 	/** main container **/
 	var container : Container;
@@ -97,14 +97,18 @@ class ColorPicker extends Window {
 
 	/** a marker to point the [currentColor] on the [spectrum] **/
 	var marker : Component;
+
+	public var ok : Button;
+	public var cancel : Button;
+
 	//}}}
 
 	static var xml = Xml.parse('
 	<haxegui:Layout name="ColorPicker">
 		<haxegui:containers:Container name="Container">
-			<haxegui:controls:Image width="150" height="220" name="Spectrum" src="assets/spectrum.png"/>
+			<haxegui:controls:Image x="10" y="10" top="10" left="10" bottom="10" width="150" height="220" name="Spectrum" src="assets/spectrum.png"/>
 
-			<haxegui:containers:Container name="Container" left="160" top="10" bottom="10" right="20" fitH="false" fitV="false">
+			<haxegui:containers:Container name="Container" left="180" top="10" bottom="10" right="20" fitH="false" fitV="false">
 				<haxegui:containers:Grid rows="6" cols="1">
 
 					<haxegui:containers:Container>
@@ -146,15 +150,19 @@ class ColorPicker extends Window {
 	//{{{ Functions
 	//{{{ init
 	public override function init(?opts:Dynamic) {
+		type = WindowType.DIALOG;
 
 		super.init(opts);
 
 
-		box = new Rectangle (0, 0, 480, 240);
-		minSize = new Size(380, 240);
-		maxSize = new Size(1000, 240);
+		box = new Rectangle (0, 0, 500, 260);
+		minSize = new Size(400, 260);
+		maxSize = new Size(1000, 1000);
+
+
 		currentAlpha = 1;
 		var rgb = currentColor.toRGB();
+
 
 		xml.set("name", name);
 
@@ -167,6 +175,16 @@ class ColorPicker extends Window {
 		container = win.getChildByName("Container");
 		container.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false)];
 
+		// dangerous!!
+		var c = untyped container.firstChild().nextSibling();
+		grid = untyped c.firstChild();
+		c = untyped grid.firstChild();
+		swatch = untyped c.firstChild();
+		input = untyped c.firstChild().nextSibling();
+
+		c = untyped grid.getChildByName("Container6");
+		ok = untyped c.firstChild();
+		cancel = untyped c.firstChild().nextSibling();
 
 		//
 		spectrum = cast container.firstChild();
@@ -174,50 +192,62 @@ class ColorPicker extends Window {
 		// spectrum.maxSize = spectrum.minSize;
 
 
-/*
-		var self = this;
-		var spec = spectrum;
-		spectrum.addEventListener(Event.COMPLETE,
-		function(e) {
-			spec.graphics.lineStyle(4, self.color.darken(10));
-			spec.graphics.beginFill(Color.WHITE);
-			spec.graphics.drawRect(0,0,spec.width,spec.height);
-			spec.graphics.endFill();
-			spec.scrollRect = new Size(spec.width, spec.height).toRect();
-			spec.setChildIndex(spec.bitmap, 0);
-
-			var arrow = new Arrow(self.container, "topArrow");
+			var arrow = new Arrow(container, "topArrow");
 			arrow.init({width: 7, height: 7, color: Color.BLACK});
-			arrow.moveTo(spec.width/2, 15);
+			arrow.moveTo(75, 5);
 			arrow.rotation = 90;
 
-			arrow = new Arrow(self.container, "bottomArrow");
+			arrow = new Arrow(container, "bottomArrow");
 			arrow.init({width: 7, height: 7, color: Color.BLACK});
-			arrow.moveTo(spec.width/2, spec.height+24);
+			arrow.moveTo(75, 220+14);
 			arrow.rotation = -90;
 
-			var arrow = new Arrow(self.container, "leftArrow");
+			var arrow = new Arrow(container, "leftArrow");
 			arrow.init({width: 7, height: 7, color: Color.BLACK});
-			arrow.moveTo(10, spec.height/2);
+			arrow.moveTo(5,110);
 			arrow.rotation = 0;
 
-			var arrow = new Arrow(self.container, "rightArrow");
+			var arrow = new Arrow(container, "rightArrow");
 			arrow.init({width: 7, height: 7, color: Color.BLACK});
-			arrow.moveTo(spec.width+17, spec.height/2);
+			arrow.moveTo(150+17,110);
 			arrow.rotation = 180;
-		}
-		);
 
-		spectrum.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5,4, 4,0.75,BitmapFilterQuality.HIGH,true,false,false)];
+
+		// var self = this;
+		// var spec = spectrum;
+		// spectrum.addEventListener(Event.COMPLETE,
+		// function(e) {
+		// 	spec.graphics.lineStyle(4, self.color.darken(10));
+		// 	spec.graphics.beginFill(Color.WHITE);
+		// 	spec.graphics.drawRect(0,0,spec.width,spec.height);
+		// 	spec.graphics.endFill();
+		// 	spec.scrollRect = new Size(spec.width, spec.height).toRect();
+		// 	spec.setChildIndex(spec.bitmap, 0);
+
+		// 	var arrow = new Arrow(self.container, "topArrow", .5*spec.width, 5);
+		// 	arrow.init({rotation: 90, width: 7, height: 7, color: Color.BLACK});
+
+		// 	arrow = new Arrow(self.container, "bottomArrow", .5*spec.width, spec.height+14);
+		// 	arrow.init({rotation: -90, width: 7, height: 7, color: Color.BLACK});
+
+		// 	var arrow = new Arrow(self.container, "leftArrow", 5, .5*spec.height);
+		// 	arrow.init({rotation: 0, width: 7, height: 7, color: Color.BLACK});
+
+		// 	var arrow = new Arrow(self.container, "rightArrow", spec.width+17, .5*spec.height);
+		// 	arrow.init({rotation: 180, width: 7, height: 7, color: Color.BLACK});
+		// }
+		// );
+
+		spectrum.filters = [new DropShadowFilter (4, -235, DefaultStyle.DROPSHADOW, .5, 4, 4, .75, BitmapFilterQuality.HIGH,true,false,false)];
 
 		spectrum.addEventListener(MouseEvent.MOUSE_DOWN, onMouseMoveImage, false, 0, true);
 		spectrum.addEventListener(MouseEvent.MOUSE_UP, onMouseUpImage, false, 0, true);
 		spectrum.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMoveImage, false, 0, true);
-		marker = new Component(spec, "marker");
+		marker = new Component(spectrum, "marker");
 		marker.init();
 		marker.filters = [new DropShadowFilter (2, 45, DefaultStyle.DROPSHADOW, 0.5,2, 2,0.5,BitmapFilterQuality.LOW,false,false,false)];
 		marker.mouseEnabled = false;//
-
+/*
 		//
 		grid = new Grid(container, "Grid", 200, 20);
 		grid.init({height: 200, rows: 6, cols: 2});
@@ -328,16 +358,16 @@ class ColorPicker extends Window {
 		if(!Std.is(e.target, Image) || !e.buttonDown ) return;
 
 		var arrow = container.getChildByName("topArrow");
-		arrow.x = e.localX + 17;
+		arrow.x = e.localX + 10;
 
 		arrow = container.getChildByName("bottomArrow");
-		arrow.x = e.localX + 20;
+		arrow.x = e.localX + 10;
 
 		arrow = container.getChildByName("leftArrow");
-		arrow.y = e.localY + 24;
+		arrow.y = e.localY + 10;
 
 		arrow = container.getChildByName("rightArrow");
-		arrow.y = e.localY + 24;
+		arrow.y = e.localY + 10;
 
 		var ix = Std.int(e.localX);
 		var iy = Std.int(e.localY);
@@ -352,6 +382,8 @@ class ColorPicker extends Window {
 		marker.graphics.moveTo(e.localX, e.localY-1);
 		marker.graphics.lineTo(e.localX, e.localY+1);
 
+		marker.toFront();
+
 		CursorManager.setCursor(Cursor.CROSSHAIR);
 		//~ trace(e.target.getChildAt(0).bitmapData.getPixel(e.localX, e.localY));
 		//~ currentColor = (cast spectrum.getChildAt(0)).bitmapData.getPixel(e.localX, e.localY);
@@ -359,21 +391,21 @@ class ColorPicker extends Window {
 
 
 		var cc = currentColor.toRGB();
-		var w = untyped grid.getChildByName("Slider1").box.width;
+		// var w = untyped grid.getChildByName("Slider1").box.width;
 
-		untyped grid.getChildByName("Slider1").handle.x = cc.r/255*w ;
-		untyped grid.getChildByName("Slider2").handle.x = cc.g/255*w ;
-		untyped grid.getChildByName("Slider3").handle.x = cc.b/255*w ;
+		// untyped grid.getChildByName("Slider1").handle.x = cc.r/255*w ;
+		// untyped grid.getChildByName("Slider2").handle.x = cc.g/255*w ;
+		// untyped grid.getChildByName("Slider3").handle.x = cc.b/255*w ;
 
 
-		untyped grid.getChildByName("Slider1").adjustment.object.value = cc.r;
-		untyped grid.getChildByName("Slider1").adjustment.adjust(grid.getChildByName("Slider1").adjustment.object);
+		// untyped grid.getChildByName("Slider1").adjustment.object.value = cc.r;
+		// untyped grid.getChildByName("Slider1").adjustment.adjust(grid.getChildByName("Slider1").adjustment.object);
 
-		untyped grid.getChildByName("Slider2").adjustment.object.value = cc.g ;
-		untyped grid.getChildByName("Slider2").adjustment.adjust(grid.getChildByName("Slider2").adjustment.object);
+		// untyped grid.getChildByName("Slider2").adjustment.object.value = cc.g ;
+		// untyped grid.getChildByName("Slider2").adjustment.adjust(grid.getChildByName("Slider2").adjustment.object);
 
-		untyped grid.getChildByName("Slider3").adjustment.object.value = cc.b ;
-		untyped grid.getChildByName("Slider3").adjustment.adjust(grid.getChildByName("Slider3").adjustment.object);
+		// untyped grid.getChildByName("Slider3").adjustment.object.value = cc.b ;
+		// untyped grid.getChildByName("Slider3").adjustment.adjust(grid.getChildByName("Slider3").adjustment.object);
 
 		updateColor();
 
@@ -383,13 +415,13 @@ class ColorPicker extends Window {
 
 	//{{{ updateColor
 	public function updateColor() {
-		var r =  untyped grid.getChildByName("Slider1").adjustment.getValue();
-		var g =  untyped grid.getChildByName("Slider2").adjustment.getValue();
-		var b =  untyped grid.getChildByName("Slider3").adjustment.getValue();
-		var a =  untyped grid.getChildByName("Stepper4").adjustment.getValue();
+		// var r =  untyped grid.getChildByName("Slider1").adjustment.getValue();
+		// var g =  untyped grid.getChildByName("Slider2").adjustment.getValue();
+		// var b =  untyped grid.getChildByName("Slider3").adjustment.getValue();
+		// var a =  untyped grid.getChildByName("Stepper4").adjustment.getValue();
 
-		currentColor = Color.rgb(r, g, b);
-		currentAlpha = a;
+		// currentColor = Color.rgb(r, g, b);
+		// currentAlpha = a;
 
 		redrawSwatch();
 
@@ -423,6 +455,12 @@ class ColorPicker extends Window {
 		spectrum.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMoveImage);
 
 		super.destroy();
+	}
+	//}}}
+
+	//{{{ __init__
+	static function __init__() {
+		haxegui.Haxegui.register(ColorPicker);
 	}
 	//}}}
 	//}}}

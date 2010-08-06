@@ -78,8 +78,7 @@ class Grid extends Component, implements IContainer {
 		var j = Std.int(self.getChildIndex(o)/self.cols);
 
 		// o.moveTo(i*self.box.width/self.cols, j*self.box.height/self.rows);
-		o.x = i*self.box.width/self.cols;
-		o.y = j*self.box.height/self.rows;
+		o.place(i*self.box.width/self.cols, j*self.box.height/self.rows);
 
 		// if(Std.is(o, Component))
 		addEventListener(ResizeEvent.RESIZE,
@@ -95,15 +94,18 @@ class Grid extends Component, implements IContainer {
 				if(Std.is(self, HBox))
 				s.height = Std.int(self.box.height);
 
+
 				o.asComponent().box = s.toRect();
+				o.asComponent().onResize(e);
 				// o.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 			}
 			var i = (self.getChildIndex(o)) % self.cols;
 			var j = Std.int(self.getChildIndex(o)/self.cols);
 
 			//o.asComponent().moveTo(i*(self.box.width/self.cols+self.cellSpacing), j*(self.box.height/self.rows+self.cellSpacing));
-			o.x = i*(self.box.width/self.cols+self.cellSpacing);
-			o.y = j*(self.box.height/self.rows+self.cellSpacing);
+			o.place(i*(self.box.width/self.cols+self.cellSpacing), j*(self.box.height/self.rows+self.cellSpacing));
+			// o.x = i*(self.box.width/self.cols+self.cellSpacing);
+			// o.y = j*(self.box.height/self.rows+self.cellSpacing);
 
 			o.dispatchEvent(new MoveEvent(MoveEvent.MOVE));
 		});

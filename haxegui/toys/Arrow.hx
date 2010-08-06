@@ -49,7 +49,7 @@ class Arrow extends Component {
 	//{{{ init
 	override public function init(?opts:Dynamic) {
 	box = new Size(12,12).toRect();
-	color = cast Math.random() * 0xFFFFFF;
+	color = Color.random();
 
 	super.init(opts);
 

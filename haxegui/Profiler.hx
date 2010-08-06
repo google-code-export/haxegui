@@ -138,25 +138,31 @@ class Profiler {
 	public static function print(?out:String->Void) {
 		if(out==null) out = flash.Lib.trace;
 
+		var a : Array<String> = [];
+
 		var s : String = "\nUptime: "+DateTools.format(new Date(0,0,0,0,0,Std.int(haxe.Timer.stamp())), "%H:%M:%S")+"\n";
 		s += "["+StringTools.rpad("Class.methodName"," ",32)+"]\t"+
 		"["+Std.string("% Time")+"]\t"+
 		"["+Std.string(" Calls ")+"]\t"+
 		"["+Std.string("Tot. Time")+"]\t"+
-		"["+Std.string("Self Time")+"]\t"+
-		"\n";
+		"["+Std.string("Self Time")+"]\n\n";
 
 		for(p in profiles.keys()) {
 			var stat = profiles.get(p);
-			s +=
+			var t =
 			"["+StringTools.rpad(p," ",32)+"]\t"+
 			"["+StringTools.lpad(Std.string(stat.percentage).substr(0,5), " ",5)+"%"+"]\t"+
 			"["+StringTools.lpad(Std.string(stat.calls), " ", 7)+"]\t"+
 			"["+StringTools.lpad(Std.string(stat.time).substr(0,8), " ", 8)+"s]\t"+
-			"["+StringTools.lpad(Std.string(stat.selfTime).substr(0,8), " ", 8)+"s]"+
-			"\n";
+			"["+StringTools.lpad(Std.string(stat.selfTime).substr(0,8), " ", 8)+"s]";
+			a.push(t);
 		}
-		trace(s);
+
+		var sorter = function(s1:String, s2:String) {
+			return s1>s2 ? 1 : s1<s1 ? -1 : 0;
+		}
+		a.sort(sorter);
+		trace(s+a.join("\n"));
 	}
 	//}}}
 

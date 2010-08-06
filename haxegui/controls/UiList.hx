@@ -204,11 +204,19 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 	<haxegui:Style name="ListItem">
 		<haxegui:controls:ListItem>
 			<events>
-				<script type="text/hscript" action="mouseClick">
+				<script type="text/hscript" action="mouseDown">
 					<![CDATA[
 						this.toggleSelection();
+					]]>
+				</script>
+				<script type="text/hscript" action="mouseClick">
+					<![CDATA[
+						// this.toggleSelection();
 
-						parent.rowData = [];
+
+						parent.rowData = [this.data];
+
+						// if(!Std.is(parent, controls.PopupMenu)) return;
 
 						var i = parent.getChildIndex(this);
 
@@ -242,7 +250,6 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 	</haxegui:Style>
 	').firstElement();
 
-
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, UiList) && !Std.is(parent, PopupMenu)) throw parent+" not a UiList";
@@ -255,6 +262,7 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 
 		super.init(opts);
 
+		mouseChildren = false;
 		// xml.set("name", name);
 
 		XmlParser.apply(ListItem.styleXml, true);
@@ -266,8 +274,7 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 
 		label = cast firstChild();
 		label.setText(Opts.optString(opts, "label", name));
-		label.mouseEnabled = false;
-
+		// label.mouseEnabled = false;
 
 		try {
 			data = Opts.classInstance(opts, "data", untyped [String, Float, Int, Bool, Dynamic]);
@@ -283,6 +290,31 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 	//}}}
 
 
+	//{{{ onRollOver
+	public override function onRollOver(e:MouseEvent) {
+		// addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+		// if(e.buttonDown) toggleSelection();
+		super.onRollOver(e);
+	}
+	//}}}
+
+
+	//{{{ onRollOut
+	public override function onRollOut(e:MouseEvent) {
+		// removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		super.onRollOut(e);
+	}
+	//}}}
+
+
+	// //{{{ onMouseMove
+	// public function onMouseMove(e:MouseEvent) {
+	// 	if(e.buttonDown) selected = !selected;
+	// 	removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+	// }
+	// //}}}
+
+
 	//{{{ onParentResize
 	/**
 	* @todo when inside a grid, being a DataGrid no need to redraw all listitems...
@@ -290,42 +322,49 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 	public function onParentResize(e:ResizeEvent) {
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
 
-		box.width = (cast parent).box.width;
-		dirty = true;
-		// redraw();
+		if(Std.is(parent, UiList))
+		box.width = Std.int((cast parent).box.width);
 
 		for(i in this) {
 			if(Std.is(i, Component)) {
 				if(!Math.isNaN((cast i).left)) {
-				i.x = (cast i).left;
+				i.x = Std.int((cast i).left);
 				}
 				else
 				if(!Math.isNaN((cast i).right)) {
-				i.x = box.width - (cast i).box.width - (cast i).right;
+				i.x = Std.int(box.width - (cast i).box.width - (cast i).right);
 				}
 
 				if(!Math.isNaN((cast i).left) && !Math.isNaN((cast i).right)) {
-				i.x = (cast i).left;
-				(cast i).box.width = box.width - (cast i).right - i.x;
+				i.x = Std.int((cast i).left);
+				(cast i).box.width = Std.int(box.width - (cast i).right - i.x);
 				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 				}
 
 
 				if(!Math.isNaN((cast i).top)) {
-				i.y = (cast i).top;
+				i.y = Std.int((cast i).top);
 				}
 				else
 				if(!Math.isNaN((cast i).bottom)) {
-				i.y = box.height - (cast i).box.height - (cast i).bottom;
+				i.y = Std.int(box.height - (cast i).box.height - (cast i).bottom);
 				}
 
 				if(!Math.isNaN((cast i).top) && !Math.isNaN((cast i).bottom)) {
-				i.y = (cast i).top;
-				(cast i).box.height = box.height - (cast i).bottom - i.y;
+				i.y = Std.int((cast i).top);
+				(cast i).box.height = Std.int(box.height - (cast i).bottom - i.y);
 				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 				}
 			}
 		}
+
+		// label.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		// label.redraw();
+
+		// dirty = true;
+
+		var self = this;
+		haxe.Timer.delay(function() self.dirty=true, 20);
 
 		// dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 		haxegui.Profiler.end();
@@ -340,7 +379,7 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 	private function __setSelected(b:Bool) : Bool {
 		selected = b;
 		color = selected ? DefaultStyle.FOCUS : DefaultStyle.INPUT_BACK;
-		color =  parent.getChildIndex(this)%2==0 ? color : color.darken(10);
+		color =  (parent.getChildIndex(this)&1==0)? color : color.darken(10);
 		redraw();
 		return selected;
 	}
@@ -357,12 +396,14 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 	return (selected = !selected);
 	}
 
-
+	//{{{ destroy
 	public override function destroy() {
+		if(parent!=null && parent.hasEventListener(ResizeEvent.RESIZE))
 		parent.removeEventListener(ResizeEvent.RESIZE, onParentResize);
 
 		super.destroy();
 	}
+	//}}}
 
 
 	//{{{ onChanged
@@ -546,9 +587,9 @@ class UiList extends Component, implements IDataSource, implements ArrayAccess<L
 
 	//{{{ onHeaderMoved
 	public function onHeaderMoved(e:MoveEvent) {
-		// this.move(header.x, header.y);
-		x = header.x;
-		y = header.y;
+		this.move(header.x, header.y);
+		// x = header.x;
+		// y = header.y;
 		header.x = header.y = 0;
 	}
 	//}}}
@@ -585,6 +626,15 @@ class UiList extends Component, implements IDataSource, implements ArrayAccess<L
 	//{{{ onMouseDown
 	public override function onMouseDown(e:MouseEvent) {
 		//addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+
+		// var clone = e.target.clone();
+		// var p = e.target.localToGlobal(new flash.geom.Point());
+		// clone.swapParent(root);
+		// clone.moveToPoint(p);
+		// clone.startDrag(false);
+
+		// stage.addEventListener(MouseEvent.MOUSE_UP, function(e) clone.destroy());
+
 		super.onMouseDown(e);
 	}
 	//}}}
@@ -627,6 +677,17 @@ class UiList extends Component, implements IDataSource, implements ArrayAccess<L
 
 	//{{{ redraw
 	override public function redraw(opts:Dynamic=null) {
+		// this.graphics.clear();
+		// this.graphics.beginFill(this.color);
+		// this.graphics.drawRect(0, 0, box.width, box.height);
+		// this.graphics.endFill();
+
+		// for(i in 0...Std.int(box.height/20)) {
+		// 	this.graphics.beginFill( (i&1==0) ? this.color : Color.darken(this.color, 10));
+		// 	this.graphics.drawRect(0, 24*i, box.width, 24);
+		// 	this.graphics.endFill();
+		// }
+
 		super.redraw(opts);
 	}
 	//}}}
@@ -663,7 +724,7 @@ class UiList extends Component, implements IDataSource, implements ArrayAccess<L
 					var item = new ListItem(this, 0, 24*i+1);
 					item.init({
 						// width: box.width,
-						color: i%2==0 ? DefaultStyle.INPUT_BACK : DefaultStyle.INPUT_BACK.darken(10),
+						color: (i&1==0) ? DefaultStyle.INPUT_BACK : DefaultStyle.INPUT_BACK.darken(10),
 						label: data[i],
 						data: data[i]
 					});
@@ -679,7 +740,7 @@ class UiList extends Component, implements IDataSource, implements ArrayAccess<L
 			for(i in items) {
 				var item = new ListItem(this, 0, 24+24*j+1);
 				item.init({
-					color: j%2==0 ? DefaultStyle.INPUT_BACK : DefaultStyle.INPUT_BACK.darken(10),
+					color: (j&1==0) ? DefaultStyle.INPUT_BACK : DefaultStyle.INPUT_BACK.darken(10),
 					label: i,
 					data: i
 				});
@@ -687,6 +748,9 @@ class UiList extends Component, implements IDataSource, implements ArrayAccess<L
 				j++;
 			}
 		}
+
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+
 		haxegui.Profiler.end();
 	}
 	//}}}

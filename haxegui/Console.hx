@@ -23,6 +23,7 @@ package haxegui;
 //{{{ Imports
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
+import flash.events.ContextMenuEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.FocusEvent;
@@ -32,6 +33,8 @@ import flash.geom.Rectangle;
 import flash.system.Capabilities;
 import flash.text.TextField;
 import flash.text.TextFormat;
+import flash.ui.ContextMenu;
+import flash.ui.ContextMenuItem;
 import flash.ui.Keyboard;
 import flash.ui.Mouse;
 import haxe.Timer;
@@ -39,6 +42,7 @@ import haxegui.Window;
 import haxegui.containers.Container;
 import haxegui.controls.Component;
 import haxegui.controls.Image;
+import haxegui.controls.MenuBar;
 import haxegui.controls.ScrollBar;
 import haxegui.events.DragEvent;
 import haxegui.events.MoveEvent;
@@ -61,6 +65,14 @@ using haxegui.controls.Component;
 using haxegui.utils.Color;
 
 
+
+//{{{
+class ConsolePlugin {
+}
+//}}}
+
+
+//{{{ Console
 /**
 *
 * Console for debugging, one [TextField] tracing messages and another parsing hscript.<br/>
@@ -120,22 +132,64 @@ class Console extends Window, implements ILogger {
 	var pwd : Array<String>;
 
 
-	var watchTimer : Timer;
-	var ctrlKey : Bool;
+	var watchTimer  : Timer;
+	var ctrlKey 	: Bool;
 
 	public var container : Container;
+	public var menubar : MenuBar;
 	public var output : TextField;
 	public var input : TextField;
 	public var vert : ScrollBar;
-	//}}}
+
+
+	public static var font	: String = "MONO";
+	public static var fontSize : Int = 12;
+
+
+	public var plugins : Array<ConsolePlugin>;
+
 
 	static var xml = Xml.parse(	'
 	<haxegui:Layout name="Console">
-		<haxegui:containers:Container name="Container">
-			<haxegui:controls:ScrollBar name="ScrollBar" top="0" bottom="0" right="0" color="0x444444" scroll="1"/>
-		</haxegui:containers:Container>
+	<haxegui:controls:MenuBar x="10" y="20" color="0x444444">
+		<haxegui:controls:Menu name="_Edit">
+			<haxegui:DataSource>
+				<Xml><![CDATA[
+				<root>
+						<menuitem label="_Copy"/>
+						<menuitem label="_Paste"/>
+						<menuitem label="Cu_t"/>
+						<separator/>
+						<menuitem label="_Preferences" action=""/>
+				</root>
+				]]>
+				</Xml>
+			</haxegui:DataSource>
+		</haxegui:controls:Menu>
+		<haxegui:controls:Menu name="_View">
+			<haxegui:DataSource>
+				<Xml><![CDATA[
+				<root>
+						<menuitem label="Hide _MenuBar" action="this.parent.ownerWindow.toggleMenuBar()"/>
+						<separator/>
+						<menuitem label="Zoom _In" action="this.parent.ownerWindow.ZoomIn()"/>
+						<menuitem label="Zoom _Out" action="this.parent.ownerWindow.ZoomOut()"/>
+						<menuitem label="_Normal Size"/>
+						<separator/>
+						<menuitem label="Scroll Up One Line"/>
+						<menuitem label="Scroll Down One Line"/>
+				</root>
+				]]>
+				</Xml>
+			</haxegui:DataSource>
+		</haxegui:controls:Menu>
+	</haxegui:controls:MenuBar>
+	<haxegui:containers:Container name="Container"  x="10" y="40">
+	<haxegui:controls:ScrollBar name="ScrollBar" top="0" bottom="0" right="0" color="0x444444" scroll="1"/>
+	</haxegui:containers:Container>
 	</haxegui:Layout>
 	').firstElement();
+	//}}}
 
 
 	//{{{ Constructor
@@ -150,7 +204,6 @@ class Console extends Window, implements ILogger {
 	public override function init(?opts:Dynamic) {
 		type = WindowType.ALWAYS_ON_TOP;
 		minSize = new Size(124,60);
-
 		// TitleBar.iconFile = "utilities-terminal.png";
 
 		super.init(opts);
@@ -161,9 +214,10 @@ class Console extends Window, implements ILogger {
 		XmlParser.apply(Console.xml, this);
 
 
-
 		box = new Size(640, 260).toRect();
 
+
+		menubar = cast this.getElementsByClass(MenuBar).next();
 
 		// container = new Container(this, "Container", 10, 20);
 		// container.init();
@@ -181,6 +235,7 @@ class Console extends Window, implements ILogger {
 		output.multiline = true;
 		output.autoSize = flash.text.TextFieldAutoSize.NONE;
 		output.type = flash.text.TextFieldType.DYNAMIC;
+		output.alwaysShowSelection = true;
 		output.selectable = true;
 		output.mouseEnabled = true;
 		output.focusRect = true;
@@ -192,7 +247,7 @@ class Console extends Window, implements ILogger {
 		// Input TextField for hscript execution
 		input = new TextField();
 		input.name = "input";
-		input.defaultTextFormat = DefaultStyle.getTextFormat(8, Color.WHITE);
+		input.defaultTextFormat = DefaultStyle.getTextFormat(fontSize, Color.WHITE);
 		input.type = flash.text.TextFieldType.INPUT;
 		input.background = true;
 		input.backgroundColor = 0x4D4D4D;
@@ -262,19 +317,20 @@ class Console extends Window, implements ILogger {
 			self.watchTimer.stop();
 			self.watchTimer = new haxe.Timer(interval);
 			self.watchTimer.run = function() {
-			self.clear();
-			if(Reflect.isObject(o))
+				self.clear();
+				if(Reflect.isObject(o))
 				trace(o);
-			else
-			if(Reflect.isFunction(o))
+				else
+				if(Reflect.isFunction(o))
 				trace(Reflect.callMethod(o, o, args));
+				// trace(Reflect.callMethod(o, o, args));
 			}
 
 		});
 
 		interp.variables.set( "unwatch", function() { if(self.watchTimer!=null) self.watchTimer.stop(); });
 
-			interp.variables.set( "cd", function(?v) {
+		interp.variables.set( "cd", function(?v) {
 			if(v==null) return "";
 			switch(v) {
 				case ".":
@@ -288,9 +344,9 @@ class Console extends Window, implements ILogger {
 
 				var o = cast flash.Lib.current;
 				for(i in 1...tmpPwd.length) {
-				if(o.getChildByName(tmpPwd[i])==null) return v+": No such object";
-				o = cast(o.getChildByName(tmpPwd[i]), flash.display.DisplayObjectContainer);
-				self._pwd = cast o;
+					if(o.getChildByName(tmpPwd[i])==null) return v+": No such object";
+					o = cast(o.getChildByName(tmpPwd[i]), flash.display.DisplayObjectContainer);
+					self._pwd = cast o;
 				}
 
 				self.pwd.push(v);
@@ -313,8 +369,8 @@ class Console extends Window, implements ILogger {
 			if(v)
 			for(i in 0...o.numChildren) {
 				if(Std.is(o.getChildAt(i), Component)) {
-				txt += StringTools.lpad(o.getChildAt(i).created, " ", 6) + "\t";
-				txt += StringTools.lpad(o.getChildAt(i).id, " ", 6) + "\t";
+					txt += StringTools.lpad(o.getChildAt(i).created, " ", 6) + "\t";
+					txt += StringTools.lpad(o.getChildAt(i).id, " ", 6) + "\t";
 				}
 				else
 				txt += StringTools.lpad("", " ", 12) + "\t\t";
@@ -333,6 +389,61 @@ class Console extends Window, implements ILogger {
 			trace(txt);
 		});
 
+		var cm = new ContextMenu();
+		cm.hideBuiltInItems();
+		cm.customItems = [
+		new ContextMenuItem("Clear console"),
+		new ContextMenuItem("Show MenuBar")
+		];
+
+		for(item in cm.customItems)
+		item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
+
+		cm.addEventListener(ContextMenuEvent.MENU_SELECT, menuSelectHandler);
+		contextMenu = cm;
+	}
+	//}}}
+
+
+	//{{{ ZoomIn
+	public function ZoomIn() : Void {
+		fontSize ++;
+		log("");
+	}
+	//}}}
+
+
+	//{{{ ZoomOut
+	public function ZoomOut() : Void {
+		fontSize --;
+		log("");
+	}
+	//}}}
+
+
+	//{{{ toggleMenuBar
+	public function toggleMenuBar() : Void {
+		menubar.visible = !menubar.visible;
+		dispatchEvent(new Event(Event.RESIZE));
+	}
+	//}}}
+
+
+	//{{{ menuSelectHandler
+	private function menuSelectHandler(event:ContextMenuEvent) : Void {
+		// trace("menuSelectHandler: " + event);
+	}
+	//}}}
+
+
+	//{{{ menuItemSelectHandler
+	private function menuItemSelectHandler(event:ContextMenuEvent):Void {
+		// trace("menuItemSelectHandler: " + event);
+		// trace(event.target);
+		switch(event.target.caption) {
+			case "Show MenuBar":
+				toggleMenuBar();
+		}
 	}
 	//}}}
 
@@ -344,15 +455,16 @@ class Console extends Window, implements ILogger {
 
 		super.onResize(e);
 
+		container.y = menubar.visible ? 40 : 20;
 
 		output.width = box.width - 30;
-		output.height = box.height - 40;
+		output.height = box.height - (menubar.visible ? 60 : 40);
 
 
 		input.width = box.width - 30;
-		input.y = box.height - 40;
+		input.y = box.height - (menubar.visible ? 60 : 40);
 
-/*
+		/*
 		vert.box.height = box.height - 20;
 		vert.x = box.width - 30;
 		vert.down.y = Math.max( 20, box.height - 40);
@@ -360,16 +472,16 @@ class Console extends Window, implements ILogger {
 		vert.frame.dirty = true;
 		vert.handle.y = Math.min( vert.handle.y, vert.box.height - vert.handle.box.height - 20 );
 		vert.handle.y = Math.max( vert.handle.y, 20 );
-*/
+		*/
 	}
 	//}}}
 
 	public function onScroll(e:MouseEvent) {
-		 // trace(e);
-		 // vert.adjustment.setValue(output.scrollV/output.maxScrollV);
-		 // e.preventDefault();
+		// trace(e);
+		// vert.adjustment.setValue(output.scrollV/output.maxScrollV);
+		// e.preventDefault();
 
-		 // vert.adjust(output.scrollV/output.maxScrollV);
+		// vert.adjust(output.scrollV/output.maxScrollV);
 
 	}
 
@@ -387,22 +499,36 @@ class Console extends Window, implements ILogger {
 		for(i in 0..._pwd.numChildren) {
 			var child = _pwd.getChildAt(i);
 			if(child.name.charAt(0)==lastChar) {
-			input.text += child.name.substr(1, child.name.length-1);
-			input.setSelection(input.text.length, input.text.length);
-			break;
+				input.text += child.name.substr(1, child.name.length-1);
+				input.setSelection(input.text.length, input.text.length);
+				break;
 			}
 		}
-/*
+		/*
 		for(f in Reflect.fields(_pwd)) {
-			if(f.charAt(0)==lastChar) {
-			input.text += f.substr(1, f.length-1);
-			input.setSelection(input.text.length, input.text.length);
-			input.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE, onInputFocusChanged);
-			return;
-			}
-		}
-*/
+		if(f.charAt(0)==lastChar) {
+		input.text += f.substr(1, f.length-1);
+		input.setSelection(input.text.length, input.text.length);
 		input.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE, onInputFocusChanged);
+		return;
+		}
+		}
+		*/
+		input.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE, onInputFocusChanged);
+	}
+	//}}}
+
+	//{{{ onKeyDown
+	public override function onKeyDown(e:KeyboardEvent) {
+		if(e.ctrlKey)
+		switch(e.charCode) {
+			case "-".code:
+			ZoomOut();
+			stage.focus = output;
+			case "+".code:
+			ZoomIn();
+			stage.focus = output;
+		}
 	}
 	//}}}
 
@@ -410,7 +536,6 @@ class Console extends Window, implements ILogger {
 	public function onInputKeyUp(e:KeyboardEvent) : Void {
 	}
 	//}}}
-
 
 
 	//{{{ onInputKeyDown
@@ -459,11 +584,11 @@ class Console extends Window, implements ILogger {
 
 			// this exports children
 			for(i in 0...getPwd().numChildren)
-				interp.variables.set( getPwd().getChildAt(i).name, getPwd().getChildAt(i));
+			interp.variables.set( getPwd().getChildAt(i).name, getPwd().getChildAt(i));
 
 			// this exports members
 			for(f in Reflect.fields(getPwd()))
-				interp.variables.set(f, Reflect.field(getPwd(),f));
+			interp.variables.set(f, Reflect.field(getPwd(),f));
 
 			// clear the command and push to history
 			history.push(input.text);
@@ -492,21 +617,24 @@ class Console extends Window, implements ILogger {
 						log("Unexpected: "+"<B>"+s+"</B>", ErrorType.ERROR);
 					}
 					case EUnterminatedString:
-					trace(e);
+					log("Unterminated String: "+"<B>"+e+"</B>", ErrorType.ERROR);
 					default:
-					trace(e);
+					log("Error: "+"<B>"+e+"</B>", ErrorType.ERROR);
 				}
 			}
 			catch(e : Dynamic) {
-
-				trace(e);
+				// trace(e);
+				log(e, ErrorType.ERROR);
 			}
 
 			case Keyboard.TAB:
 			input.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, onInputFocusChanged, false, 0, true);
 
 			case Keyboard.UP :
-			input.text = history.pop();
+			var h = history.pop();
+			if(h!=null)
+			input.text = h;
+
 		}
 	}
 	//}}}
@@ -598,7 +726,7 @@ class Console extends Window, implements ILogger {
 	public function log( msg : Dynamic, ?inf : haxe.PosInfos, ?error:ErrorType ) : Void {
 		if(msg==null) return;
 
-		var text =  "<FONT FACE='MONO' SIZE='10' COLOR='#eeeeee'>";
+		var text =  "<FONT FACE='"+font+"' SIZE='"+fontSize+"' COLOR='#eeeeee'>";
 		text += DateTools.format (Date.now (), "%H:%M:%S") + " " ;
 
 		#if debug
@@ -610,9 +738,15 @@ class Console extends Window, implements ILogger {
 		text += pwd.join(".") + "~> ";
 
 		switch(Type.typeof(msg)) {
-			case TClass(c):
+			// case TClass(c):
+			// switch(c) {
+			// }
+
 			case TEnum(e):
 			switch(Type.getEnumName(e)) {
+				case "haxe.StackItem":
+				error = ErrorType.ERROR;
+
 				case "hscript.Error":
 				error = ErrorType.ERROR;
 			}
@@ -641,3 +775,4 @@ class Console extends Window, implements ILogger {
 	//}}}
 	//}}}
 }
+//}}}

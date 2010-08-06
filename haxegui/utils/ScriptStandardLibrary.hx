@@ -318,8 +318,9 @@ class ScriptStandardLibrary {
 
 
 		//{{{ events
-		interp.variables.set("events",
-		{
+		interp.variables.set("events", {
+			TreeEvent			: haxegui.events.TreeEvent,
+			FileEvent			: haxegui.events.FileEvent,
 			MenuEvent			: haxegui.events.MenuEvent,
 			MoveEvent			: haxegui.events.MoveEvent,
 			ResizeEvent			: haxegui.events.ResizeEvent,

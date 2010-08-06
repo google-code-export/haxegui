@@ -81,7 +81,7 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 	public var label 		: Label;
 	public var icon  		: Icon;
 	public var menu  		: PopupMenu;
-	
+
 	/** Keyboard shortcut keycode **/
 	public var key : Int;
 
@@ -89,7 +89,7 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 
 	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="Menu">
-		<haxegui:controls:Label x="4" y="3" text="{parent.name}" mouseEnabled="false"/>
+	<haxegui:controls:Label x="4" y="3" text="{parent.name}" mouseEnabled="false"/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
@@ -104,6 +104,7 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 		//if(!Std.is(parent, MenuBar)) throw parent+" not a MenuBar";
 		box = new Size(40,24).toRect();
 		// menu = new PopupMenu();
+		color = parent.asComponent().color;
 
 		super.init(opts);
 
@@ -118,12 +119,12 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 
 		var r = ~/_(.)/;
 		if(r.match(name)) {
-		key = r.matched(0).charCodeAt(1);
-		name = r.replace(name, "<U>$1</U>");
-		label.tf.htmlText = name;
+			key = r.matched(0).charCodeAt(1);
+			name = r.replace(name, "$1");
+			label.tf.htmlText = r.replace(name, "<U>$1</U>");
 		}
 
-		
+
 		box.width = label.width;
 		// dirty = false;
 	}
@@ -132,18 +133,19 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 
 	//{{{ onMouseClick
 	public override function onMouseClick(e:MouseEvent) {
+		untyped parent._menu = parent.getChildIndex(this);
+
 		var p = parent.localToGlobal(new flash.geom.Point(x, y));
 
 		if(menu!=null)
 		menu.destroy();
+
 		menu = new PopupMenu(flash.Lib.current);
 		menu.dataSource = this.dataSource;
+		menu.ownerWindow = this.getParentWindow();
 		menu.init ();
-
+		menu.place(p.x + 4, p.y);
 		menu.toFront();
-
-		menu.x = p.x + 4;
-		menu.y = p.y;
 
 		//var self = this;
 		//var r = new Rectangle();
@@ -167,7 +169,7 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 		}
 		menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
 		// for(i in menu)
-			// (cast i).setAction("mouseDown", "var a = new haxegui.Alert(); a.init(); a.label.setText(this.label.getText());");
+		// (cast i).setAction("mouseDown", "var a = new haxegui.Alert(); a.init(); a.label.setText(this.label.getText());");
 
 		super.onMouseClick(e);
 	}
@@ -206,6 +208,7 @@ class MenuBar extends Component, implements IRubberBand {
 	public var items 	: Array<Menu>;
 
 	//public var numMenus(default, null) : Int;
+	public var popup : PopupMenu;
 
 	private var _menu	: Int;
 	//}}} Members
@@ -216,10 +219,10 @@ class MenuBar extends Component, implements IRubberBand {
 	override public function init(opts : Dynamic=null) {
 		// assuming parent is a window
 		box = new Size(parent.asComponent().box.width - 10, 24).toRect();
-
-		color = (cast parent).color;
+		color = parent.asComponent().color;
+		// color = (cast parent).color;
 		items = [];
-
+		_menu = 0;
 
 		super.init(opts);
 
@@ -272,7 +275,18 @@ class MenuBar extends Component, implements IRubberBand {
 
 
 	//{{{ onKeyDown
-	override public function onKeyDown (e:KeyboardEvent) {}
+	override public function onKeyDown (e:KeyboardEvent) {
+		// trace(e);
+		switch(e.keyCode) {
+			case Keyboard.LEFT:
+				openMenuAt(_menu--);
+			case Keyboard.RIGHT:
+				openMenuAt(_menu++);
+			case Keyboard.DOWN:
+				openMenuAt(_menu);
+		}
+
+	}
 	//}}}
 
 
@@ -291,10 +305,53 @@ class MenuBar extends Component, implements IRubberBand {
 	*
 	*/
 	function openMenuAt (i:UInt) {
-		var menu = this.getChildAt (i);
+		//i = Std.int(Math.max(0, Math.min(numChildren-1, i)));
+		if(i<0) i = numChildren - 1;
+		if(i>numChildren-1) i = 0;
+
+		// trace(i);
+
+		var menu = cast(this.getChildAt (i), Menu);
 		//~ var popup = PopupMenu.getInstance();
 		//~ popup.init ({parent:this.parent, x:menu.x, y:menu.y + 20});
 		//register new popups for close
+		var p = menu.localToGlobal(new flash.geom.Point());
+
+		if(popup!=null)
+		popup.destroy();
+
+		popup = new PopupMenu(flash.Lib.current);
+		popup.dataSource = menu.dataSource;
+		popup.ownerWindow = this.getParentWindow();
+		popup.init ();
+
+		popup.toFront();
+
+		popup.x = p.x + 4;
+		popup.y = p.y;
+
+		//var self = this;
+		//var r = new Rectangle();
+		//r.width = menu.box.width;
+		//menu.scrollRect = r;
+
+		// var t = new feffects.Tween(0, menu.data.length*24, 250, r, "height", feffects.easing.Linear.easeOut);
+		// t.setTweenHandlers(
+		// function(v){
+		// 	self.menu.scrollRect = r.clone();
+		// }
+		// );
+		// t.start();
+
+		var self = this;
+		var onMenuHide = function(e) {
+			self.color = (cast self.parent).color;
+			self.redraw();
+		}
+		popup.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
+		// for(i in menu)
+		// (cast i).setAction("mouseDown", "var a = new haxegui.Alert(); a.init(); a.label.setText(this.label.getText());");
+
 	}
 	//}}}
 

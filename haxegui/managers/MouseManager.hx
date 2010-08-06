@@ -113,6 +113,8 @@ class MouseManager extends EventDispatcher {
 	public var delta 			: Point;
 
 	//{{{ Static
+	public static var lastSeenOnStage : Float;
+
 	public static var moving    : Bool;
 	public static var automated : Bool;
 
@@ -242,6 +244,7 @@ class MouseManager extends EventDispatcher {
 	//{{{ onMouseLeave
 	public inline function onMouseLeave(e:Event) : Void	{
 		//~ trace(e);
+		lastSeenOnStage = haxe.Timer.stamp();
 		CursorManager.getInstance().hideCursor();
 		//~ CursorManager.getInstance()._mc.stopDrag();
 	}

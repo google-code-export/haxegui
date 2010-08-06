@@ -36,11 +36,11 @@ class WindowEvent extends flash.events.Event {
 	/** Fired when the window is rolled **/
 	public static inline var ROLLED : String = "rooled";
 	///}}}
-	
+
 	public function new(type : String, ?bubbles : Bool, ?cancelable : Bool, ?oldX : Float, ?oldY : Float) : Void {
 		super(type, bubbles, cancelable);
 	}
-	
+
 	public override function toString():String {
 		return "["+"WindowEvent"+" type=\""+type+"\" bubbles="+bubbles+" cancelable="+cancelable+" oldX="+oldX+" oldY="+oldY+"]";
 	}
