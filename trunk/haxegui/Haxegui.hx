@@ -55,7 +55,7 @@ class Haxegui {
 	public static var dirtyInterval( default, setInterval ) : Int;
 
 	/** The xml loader **/
-	public static var loader : Xml = Xml.parse(haxe.Resource.getString("Loader")).firstElement();
+	public static var loader : haxe.xml.Fast =  new haxe.xml.Fast(Xml.parse(haxe.Resource.getString("Loader")).firstElement());
 
 	/** Grid spacing in pixels **/
 	public static var gridSpacing : Int = 15;
@@ -92,7 +92,8 @@ class Haxegui {
 		StyleManager.setStyle("default");
 		trace("complete");
 
-		dirtyInterval = 350;
+
+		dirtyInterval = 300;
 	}
 	//}}}
 
