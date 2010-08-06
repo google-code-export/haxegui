@@ -91,10 +91,12 @@ implements haxe.rtti.Infos
 	//{{{ Members
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 	//{{{ Private
 	/** Current color tween in effect **/
 	private var colorTween : Tween;
+
+	/** Current saturation tween in effect **/
+	private var saturationTween : Tween;
 
 	/** Current position tween in effect **/
 	private var positionTween : Tween;
@@ -303,29 +305,29 @@ implements haxe.rtti.Infos
 
 		if(opts == null || !Reflect.isObject(opts)) opts = {};
 
-		alpha		 = Opts.optFloat (opts, "alpha", 	   alpha);
-		box.height   = Opts.optFloat (opts, "height", 	   box.height);
-		box.width 	 = Opts.optFloat (opts, "width", 	   box.width);
-		buttonMode   = Opts.optBool  (opts, "buttonMode",  false);
-		color 		 = Opts.optInt	 (opts, "color",	   color);
-		description  = Opts.optString(opts, "description", description);
-		disabled 	 = Opts.optBool	 (opts, "disabled",	   false);
-		fitH 		 = Opts.optBool	 (opts, "fitH", 	   false);
-		fitV 		 = Opts.optBool	 (opts, "fitV", 	   false);
-		mouseEnabled = Opts.optBool  (opts, "mouseEnabled",mouseEnabled);
-		name 		 = Opts.optString(opts, "name", 	   name);
-		rotation 	 = Opts.optFloat (opts, "rotation",	   rotation);
-		visible 	 = Opts.optBool	 (opts, "visible", 	   true);
-		mouseEnabled = Opts.optBool	 (opts, "mouseEnabled",mouseEnabled);
-		scaleX 		 = Opts.optFloat (opts, "scaleX", 	   scaleX);
-		scaleY		 = Opts.optFloat (opts, "scaleY", 	   scaleY);
-		x 			 = Opts.optFloat (opts, "x", 		   x);
-		y 			 = Opts.optFloat (opts, "y", 		   y);
+		alpha		  = Opts.optFloat (opts, "alpha", 	    alpha);
+		box.height    = Opts.optFloat (opts, "height", 	    box.height);
+		box.width 	  = Opts.optFloat (opts, "width", 	    box.width);
+		buttonMode    = Opts.optBool  (opts, "buttonMode",   false);
+		color 		  = Opts.optInt	  (opts, "color",	    color);
+		description   = Opts.optString(opts, "description",  description);
+		disabled 	  = Opts.optBool  (opts, "disabled",	    false);
+		fitH 		  = Opts.optBool  (opts, "fitH", 	    false);
+		fitV 		  = Opts.optBool  (opts, "fitV", 	    false);
+		mouseChildren = Opts.optBool  (opts, "mouseChildren", mouseChildren);
+		mouseEnabled  = Opts.optBool  (opts, "mouseEnabled" , mouseEnabled);
+		name 		  = Opts.optString(opts, "name", 	    name);
+		rotation 	  = Opts.optFloat (opts, "rotation",	    rotation);
+		visible 	  = Opts.optBool  (opts, "visible", 	    true);
+		scaleX 		  = Opts.optFloat (opts, "scaleX", 	    scaleX);
+		scaleY		  = Opts.optFloat (opts, "scaleY", 	    scaleY);
+		x 			  = Opts.optFloat (opts, "x", 		    x);
+		y 			  = Opts.optFloat (opts, "y", 		    y);
 
-		left 		 = Opts.optFloat (opts, "left", 	   left);
-		right		 = Opts.optFloat (opts, "right", 	   right);
-		top			 = Opts.optFloat (opts, "top", 		   top);
-		bottom		 = Opts.optFloat (opts, "bottom",	   bottom);
+		left 		  = Opts.optFloat (opts, "left", 	    left);
+		right		  = Opts.optFloat (opts, "right", 	    right);
+		top			  = Opts.optFloat (opts, "top", 		top);
+		bottom		  = Opts.optFloat (opts, "bottom",	    bottom);
 
 		//
 		var accessProps = new AccessibilityProperties();
@@ -349,8 +351,8 @@ implements haxe.rtti.Infos
 	* Destroy this component and all children
 	*/
 	public function destroy() : Void {
+		removeDisplayObjectEvents(this);
 		removeChildren();
-		stopInterval();
 		if(this.parent != null)
 		this.parent.removeChild(this);
 		//~ flash.system.System.gc();
@@ -532,7 +534,38 @@ implements haxe.rtti.Infos
 	//}}}
 
 
-	//{{{ Position & Size
+	//{{{ Transformations
+	//{{{ rotate
+	public inline function rotate(a:Float) : Void {
+		this.rotation += a;
+	}
+	//}}}
+
+
+	//{{{ rotateTo
+	public inline function rotateTo(a:Float) : Void {
+		this.rotation = a;
+	}
+	//}}}
+
+
+	//{{{ place
+	/**
+	* Absolute placement, no event sent
+	* @param x offset relative to parent
+	* @param y offset relative to parent
+	**/
+	public inline function place(x : Float, y : Float) : Void	{
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
+		this.x = box.x = x;
+		this.y = box.y = y;
+
+		haxegui.Profiler.end();
+	}
+	//}}}
+
+
 	//{{{ moveTo
 	/**
 	* Move to specific location.
@@ -550,10 +583,10 @@ implements haxe.rtti.Infos
 		box.x = x;
 		box.y = y;
 
-		if(Haxegui.gridSnapping) {
-			box.x = this.x -= this.x % Haxegui.gridSpacing;
-			box.y = this.y -= this.y % Haxegui.gridSpacing;
-		}
+		// if(Haxegui.gridSnapping) {
+		// 	box.x = this.x -= this.x % Haxegui.gridSpacing;
+		// 	box.y = this.y -= this.y % Haxegui.gridSpacing;
+		// }
 
 		if(!isTweening)
 		dispatchEvent(event);
@@ -764,11 +797,20 @@ implements haxe.rtti.Infos
 	//{{{ nextSibling
 	/** @return The next sibling in the display list **/
 	public function nextSibling() : DisplayObject {
-		var p = Component.asComponent(parent);
-		for(i in p)
-		if(i==this)
-		if(p.getChildIndex(this)<p.numChildren) return p.getChildAt(p.getChildIndex(this)+1);
-		return null;
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
+		// var p = Component.asComponent(parent);
+		var i = parent.getChildIndex(this);
+		if(parent.numChildren==i) return null;
+		// for(i in p)
+		// if(i==this)
+		// if(p.getChildIndex(this)<p.numChildren) return p.getChildAt(p.getChildIndex(this)+1);
+
+		// return null;
+
+		haxegui.Profiler.end();
+
+		return parent.getChildAt(i+1);
 	}
 	//}}}
 
@@ -931,6 +973,53 @@ implements haxe.rtti.Infos
 		haxegui.Profiler.end();
 	}
 	//}}}
+
+
+	//{{{ updateSaturationTween
+	/**
+	* Stops the current(if there is one), and creates a new color tween
+	* <pre class="code haxe">
+	* this.updateColorTween( new feffects.Tween(0, 100, 1000, feffects.easing.Expo.easeOut ) );
+	* </pre>
+	* @param t The [Tween] to use
+	* @todo rgb color transformation
+	**/
+	public function updateSaturationTween(?t : Tween = null) : Void {
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
+
+		var me = this;
+
+		if(saturationTween != null)
+		saturationTween.stop();
+		saturationTween = t;
+		if(t==null) return;
+		saturationTween.setTweenHandlers(
+		function(v) {
+			// me.isTweening = true;
+			var b : Float = v / 3;
+			var c : Float = 1 - (b * 2);
+			var mtx : Array<Float> = [
+			c, b, b, 0, 0,
+			b, c, b, 0, 0,
+			b, b, c, 0, 0,
+			0, 0, 0, 1, 0];
+
+
+			me.filters = [new flash.filters.ColorMatrixFilter(mtx)];
+
+		},
+		function(v){
+			// me.isTweening = false;
+			me.saturationTween = null;
+		}
+		);
+		saturationTween.start();
+
+		haxegui.Profiler.end();
+	}
+	//}}}
+
 
 	//{{{ updatePositionTween
 	/**
@@ -1218,7 +1307,7 @@ implements haxe.rtti.Infos
 				e.stopImmediatePropagation();
 				comp.stage.focus = comp;
 				#if debug
-				trace("Losing focus prevented by " + asComponentIfIs(e.relatedObject).name);
+				trace("Losing focus to " + asComponentIfIs(e.relatedObject).name + " prevented by " + asComponentIfIs(e.target).name);
 				#end
 				return;
 			}
