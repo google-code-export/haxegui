@@ -29,6 +29,7 @@ import haxegui.Window;
 import haxegui.containers.Container;
 import haxegui.containers.Divider;
 import haxegui.containers.ScrollPane;
+import haxegui.containers.Stack;
 import haxegui.containers.Grid;
 import haxegui.controls.CheckBox;
 import haxegui.controls.Component;
@@ -107,9 +108,20 @@ class Introspector extends Window {
 			<haxegui:containers:HDivider name="HDivider">
 			<haxegui:containers:VDivider name="VDivider">
 
-			<haxegui:containers:ScrollPane>
-			<haxegui:controls:Tree fitH="true"/>
-			</haxegui:containers:ScrollPane>
+
+			<haxegui:containers:Container fitH="false" fitV="false">
+			<haxegui:controls:TabNavigator  left="0" right="0">
+				<haxegui:controls:Tab/>
+				<haxegui:controls:Tab x="40"/>
+			</haxegui:controls:TabNavigator>
+				<haxegui:containers:ScrollPane top="24" bottom="0" left="0" right="0">
+					<haxegui:containers:Stack>
+						<haxegui:controls:Tree/>
+						<haxegui:controls:Tree visible="false"/>
+					</haxegui:containers:Stack>
+				</haxegui:containers:ScrollPane>
+			</haxegui:containers:Container>
+
 
 			<haxegui:containers:HBox cellSpacing="0" width="300" fit="true">
 			<haxegui:controls:UiList/>
@@ -172,17 +184,21 @@ class Introspector extends Window {
 
 
 		//
-		treePane = cast vdivider.firstChild();
+		var c : Container = cast vdivider.firstChild();
+		treePane = untyped c.firstChild().nextSibling();
+
+		var stack : Stack = cast treePane.content.getChildAt(0);
 
 		//
-		tree = cast treePane.content.getChildAt(0);
+		tree = cast stack.getChildAt(0);
+		// tree = cast treePane.content.getChildAt(0);
 
-		var o = {};
-		for(i in 0...(cast root).numChildren)
-		if(Std.is((cast root).getChildAt(i), DisplayObjectContainer))
-		Reflect.setField(o, (cast root).getChildAt(i).name,  reflectDisplayObjectContainer((cast root).getChildAt(i)));
+		// var o = {};
+		// for(i in 0...(cast root).numChildren)
+		// if(Std.is((cast root).getChildAt(i), DisplayObjectContainer))
+		// Reflect.setField(o, (cast root).getChildAt(i).name,  reflectDisplayObjectContainer((cast root).getChildAt(i)));
 
-		tree.process(o, tree.rootNode);
+		// tree.process(o, tree.rootNode);
 
 		//
 		// listPane = new ScrollPane(hdivider, "listPane");
@@ -361,10 +377,10 @@ class Introspector extends Window {
 		// tree.init();
 		tree.rootNode.removeItems();
 		var node = new TreeNode(tree.rootNode.expander, target.name);
-		node.move(24,24);
+		node.move(12,24);
 		node.init();
 
-		tree.rootNode.expander.expanded = true;
+		// tree.rootNode.expander.expanded = true;
 
 		var t = target;
 
@@ -375,16 +391,17 @@ class Introspector extends Window {
 
 
 		tree.process(o, node);
+		tree.expandFull();
 
 
 
 		var xml = Reflect.field(Type.getClass(target), "layoutXml");
 		var txt = xml!=null ? Std.string(xml) : Std.string(target);
 
-		var styles = new flash.text.StyleSheet();
-		styles.parseCSS(".code-line-numbers {    color:#809080;    border-right:1px dotted #809080;    float:left;    text-align:right;    width:2em;    padding-right:3px;    margin-right:12px;}.code-code {}.code-keyword {    font-weight: bold;    color: #000000;}.code-type {    font-weight: bold;    color: #106020;}.code-variable {    color: #004050;}.code-number {    color: #F08000;}.code-comment {    color: #208000;}.code-string {    color: #F00000;}");
-		tf.styleSheet = styles;
-		tf.text = CodeHighlighter.highlight( txt, "xml") ;
+		// var styles = new flash.text.StyleSheet();
+		// styles.parseCSS(".code-line-numbers {    color:#809080;    border-right:1px dotted #809080;    float:left;    text-align:right;    width:2em;    padding-right:3px;    margin-right:12px;}.code-code {}.code-keyword {    font-weight: bold;    color: #000000;}.code-type {    font-weight: bold;    color: #106020;}.code-variable {    color: #004050;}.code-number {    color: #F08000;}.code-comment {    color: #208000;}.code-string {    color: #F00000;}");
+		// tf.styleSheet = styles;
+		// tf.text = CodeHighlighter.highlight( txt, "xml") ;
 
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
@@ -395,9 +412,9 @@ class Introspector extends Window {
 
 	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
-
 		super.onResize(e);
-	} //}}}
+	}
+	//}}}
 
 
 	//{{{ destroy
@@ -415,20 +432,11 @@ class Introspector extends Window {
 		for(i in 0...d.numChildren) {
 			var child = d.getChildAt(i);
 			if(child==null) return child;
-			if (
-				Std.is(child, flash.display.Bitmap) ||
-				Std.is(child, flash.display.BitmapData) ||
-				Std.is(child, flash.display.Shape) ||
-				Std.is(child, flash.text.TextField)
-				) {
+			if(!Std.is(child, DisplayObjectContainer)) {
 					var o2 = {};
 					Reflect.setField( o2, child.name, child.name );
-					// Reflect.setField( o, child.name, o2 );
 				return o2;
 				}
-
-
-			// if(Std.is(child, DisplayObjectContainer)
 			Reflect.setField( o, child.name, reflectDisplayObjectContainer(cast child) );
 		}
 		return o;

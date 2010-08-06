@@ -49,24 +49,28 @@ using haxegui.controls.Component;
 */
 class FileDialog extends Window {
 
-	public var showHidden : Bool;
-	public var useFilter  : Bool;
+	//{{{ Members
+	public var showHidden  : Bool;
+	public var useFilter   : Bool;
 
-	public var filter     : EReg;
+	public var filter(getFilter, setFilter) : String;
 
-	public var path		  : String;
-	public var file		  : String;
+	public var path		   : String;
+	public var file		   : String;
 
-	public var tree 	  : Tree;
-	public var pathCombo  : ComboBox;
-	public var fileInput  : Input;
-	public var ok  		  : Button;
+	public var tree 	   : Tree;
+	public var pathCombo   : ComboBox;
+	public var filterCombo : ComboBox;
+	public var fileInput   : Input;
+
+	public var ok  		   : Button;
+	public var cancel	   : Button;
 
 
 	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="FileDialog">
 		<haxegui:containers:Container name="Container1" x="10" y="20" left="10" right="0" top="20" bottom="20" fitV="false" fitH="false">
-			<haxegui:containers:VDivider name="VDivider">
+			<haxegui:containers:VDivider name="VDivider" handlePosition="200">
 
 				<haxegui:containers:ScrollPane name="ScrollPane1">
 					<haxegui:controls:Tree/>
@@ -110,7 +114,7 @@ class FileDialog extends Window {
 					<haxegui:controls:Button height="24" label="Ok" right="10" top="10"/>
 
 					<haxegui:controls:Label text="Filter" left="10" bottom="12"/>
-					<haxegui:controls:ComboBox text="^(.+[^~])$"left="40" bottom="10" right="110">
+					<haxegui:controls:ComboBox name="FilterBox" text="^(.+[^~])$"left="40" bottom="10" right="110">
 						<haxegui:DataSource>
 							<Array>
 								<String>^(.+[^~])$</String>
@@ -130,13 +134,19 @@ class FileDialog extends Window {
 		</haxegui:windowClasses:StatusBar>
 	</haxegui:Layout>
 	').firstElement();
+	//}}}
 
+
+	//{{{ Functions
 	//{{{ init
 	public override function init(?opts:Dynamic=null) {
 		box = new Size(720,384).toRect();
 		type = WindowType.MODAL;
+		sizeable = true;
 
 		super.init(opts);
+
+		moveTo(Opts.optFloat(opts, "x", Std.int(this.stage.stageWidth-720)>>1), Opts.optFloat(opts, "y", Std.int(this.stage.stageHeight-384)>>1));
 
 		path = Opts.optString(opts, "path", path);
 
@@ -146,26 +156,29 @@ class FileDialog extends Window {
 
 		XmlParser.apply(FileDialog.layoutXml, this);
 
+
 		tree = untyped getChildByName("Container1").getChildByName("VDivider").getChildByName("ScrollPane1").getChildByName("content").getChildAt(0);
 		if(path!=null)
 		tree.rootNode.expander.label.setText(path.split("/").pop());
 
 
 		pathCombo = untyped getChildByName("Container1").getChildByName("VDivider").getChildByName("Container2").getChildAt(0).getChildAt(1);
-		//pathCombo.input.addEventListener(Event.CHANGE, function(e) trace(e), false, 0, true);
-
+		filterCombo = untyped getChildByName("Container1").getChildByName("VDivider").getChildByName("Container2").getChildByName("Container4").getChildByName("FilterBox");
 		fileInput = untyped getChildByName("Container1").getChildByName("VDivider").getChildByName("Container2").getChildByName("Container4").getChildByName("fileInput");
-
 		ok = untyped getChildByName("Container1").getChildByName("VDivider").getChildByName("Container2").getChildByName("Container4").getElementsByClass(Button).next();
-		//ok.addEventListener(MouseEvent.CLICK, onSelected, false, 0, true);
+		cancel = cast filterCombo.nextSibling();
 	}
 	//}}}
 
+
+	//{{{ onSelected
 	public function onSelected(e:MouseEvent) {
 		//dispatchEvent(new Event(Event.CHANGE));
 	}
+	//}}}
 
-	//{{{
+
+	//{{{ onMouseDoubleClick
 	public override function onMouseDoubleClick(e:MouseEvent) {
 		if(fileInput!=null && Std.is(e.target, ListItem)) {
 		fileInput.setText(e.target.parent.rowData[0]);
@@ -176,7 +189,9 @@ class FileDialog extends Window {
 		//destroy();
 	}
 	//}}}
-	//{{{
+
+
+	//{{{ onMouseClick
 	public override function onMouseClick(e:MouseEvent) {
 		if(fileInput!=null && Std.is(e.target, ListItem))
 		fileInput.setText(e.target.parent.rowData[0]);
@@ -188,6 +203,23 @@ class FileDialog extends Window {
 
 		//destroy();
 	}
+	//}}}
 
+
+	//{{{ getFilter
+	public function getFilter() : String {
+		return filter;
+	}
+	//}}}
+
+
+	//{{{ setFilter
+	public function setFilter(f:String) : String {
+		filter = f;
+		filterCombo.input.setText(filter);
+		return filter;
+	}
+	//}}}
+	//}}}
 }
 //}}}
