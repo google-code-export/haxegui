@@ -24,10 +24,10 @@ import haxegui.controls.Component;
 
 class AdjustmentEvent extends Event {
 
-	public function new(type : String,
-						?bubbles : Bool,
-						?cancelable : Bool
-						) : Void {
+	public function new(
+	type : String,
+	?bubbles : Bool,
+	?cancelable : Bool) : Void {
 		super(type,bubbles,cancelable);
 	}
 
@@ -43,9 +43,9 @@ class AdjustmentEvent extends Event {
 	public static var INCREMENT : String = "increment";
 	public static var DECREMENT : String = "decrement";
 
-	public static var VALUE : String = "value";
-	public static var MIN : String = "min";
-	public static var MAX : String = "max";
-	public static var STEP : String = "step";
-	public static var PAGE : String = "page";
+	public static var VALUE 	: String = "value";
+	public static var MIN   	: String = "min";
+	public static var MAX   	: String = "max";
+	public static var STEP  	: String = "step";
+	public static var PAGE  	: String = "page";
 }

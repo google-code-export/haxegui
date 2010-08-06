@@ -114,7 +114,7 @@ class AbstractButton extends Component, implements IRepeater {
 		super.init(opts);
 
 
-		autoRepeat = Opts.optBool(opts,"autoRepeat", true);
+		autoRepeat = Opts.optBool(opts,"autoRepeat", false);
 		repeatWaitTime = Opts.optFloat(opts,"repeatWaitTime", .75);
 		repeatsPerSecond = Opts.optFloat(opts,"repeatsPerSecond", 25);
 	}

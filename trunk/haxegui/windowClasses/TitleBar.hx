@@ -54,7 +54,11 @@ class CloseButton extends AbstractButton {
 		super (parent, name, x, y);
 		//		description = "Close Window";
 		description = null;
-		setAction("mouseClick", "this.getParentWindow().destroy();");
+		setAction("mouseClick", 
+		"
+		//this.getParentWindow().dispatchEvent(new haxegui.events.WindowEvent(events.WindowEvent.CLOSE));	
+		this.getParentWindow().destroy();
+		");
 	}
 	//}}}
 
@@ -167,6 +171,14 @@ class TitleBar extends AbstractButton {
 
 	public var title : Label;
 
+	static var alternateXml = Xml.parse('
+	<haxegui:Layout name="TitleBar">
+	<haxegui:windowClasses:CloseButton	  x="4"  y="4" color="{parent.color}"/>
+	<haxegui:controls:Label text="{this.getParentWindow().name}" mouseEnabled="false"/>
+	<haxegui:controls:Icon src="16x16/'+iconFile+'" x="{parent.box.width-12}"/>
+	</haxegui:Layout>
+	').firstElement();
+
 	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="TitleBar">
 	<haxegui:windowClasses:CloseButton	  x="4"  y="4" color="{parent.color}"/>
@@ -245,6 +257,10 @@ class TitleBar extends AbstractButton {
 		layoutXml.set("name", name);
 
 		XmlParser.apply(TitleBar.styleXml, true);
+
+		if((cast parent).isModal() || Std.is(parent, haxegui.Dialog))
+		XmlParser.apply(TitleBar.alternateXml, this);
+		else
 		XmlParser.apply(TitleBar.layoutXml, this);
 
 		description = null;
@@ -292,6 +308,14 @@ class TitleBar extends AbstractButton {
 		scrollRect = box;
 	}
 	//}}}
+
+
+	//{{{ destroy
+	public override function destroy() {
+		parent.removeEventListener(ResizeEvent.RESIZE, onParentResize);
+	}
+	//}}}
+
 
 	//{{{ __init__
 	static function __init__() {

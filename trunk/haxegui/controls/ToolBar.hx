@@ -137,7 +137,7 @@ class ToolBar extends Component, implements IRubberBand {
 
 	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="ToolBar">
-		<haxegui:controls:ToolBarHandle x="8" y="8"/>
+		<haxegui:controls:ToolBarHandle x="8" y="8" color="{parent.color}"/>
 	</haxegui:Layout>
 	').firstElement();
 
@@ -188,6 +188,40 @@ class ToolBar extends Component, implements IRubberBand {
 		scrollRect = box.clone();
 
 		redraw();
+
+		for(i in this) {
+			if(Std.is(i, Component)) {
+				if(!Math.isNaN((cast i).left)) {
+				i.x = (cast i).left;
+				}
+				else
+				if(!Math.isNaN((cast i).right)) {
+				i.x = box.width - (cast i).box.width - (cast i).right;
+				}
+
+				if(!Math.isNaN((cast i).left) && !Math.isNaN((cast i).right)) {
+				i.x = (cast i).left;
+				(cast i).box.width = box.width - (cast i).right - i.x;
+				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+				}
+
+
+				if(!Math.isNaN((cast i).top)) {
+				i.y = (cast i).top;
+				}
+				else
+				if(!Math.isNaN((cast i).bottom)) {
+				i.y = box.height - (cast i).box.height - (cast i).bottom;
+				}
+
+				if(!Math.isNaN((cast i).top) && !Math.isNaN((cast i).bottom)) {
+				i.y = (cast i).top;
+				(cast i).box.height = box.height - (cast i).bottom - i.y;
+				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+				}
+			}
+		}
+
 	}
 	//}}}
 

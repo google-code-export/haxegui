@@ -32,14 +32,15 @@ import feffects.Tween;
 */
 interface ITween {
 	/** true if is currently tweening **/
-	public var isTweening : Bool;
+	public var isTweening 		 : Bool;
 
-	private var colorTween  : Tween;
+	private var colorTween		 : Tween;
+	private var saturationTween  : Tween;
+	private var positionTween  	 : Tween;
 
-	private var positionTween  : Tween;
-
-	public function updateColorTween(?t : Tween) : Void;
-	public function updatePositionTween(?t : Tween, ?p:Point, ?f:Float->Void) : Void;
+	public function updateColorTween (?t: Tween) : Void;
+	public function updateSaturationTween (?t: Tween) : Void;
+	public function updatePositionTween (?t: Tween, ?p:Point, ?f:Float->Void) : Void;
 
 }
 

@@ -45,6 +45,9 @@ import haxegui.utils.Size;
 *
 * A Ballon with a label.<br/>
 *
+* @todo applicationDomain
+*
+*
 * @author Omer Goshen <gershon@goosemoose.com>
 * @author Russell Weir <damonsbane@gmail.com>
 * @version 0.1
@@ -69,7 +72,7 @@ class Tooltip extends Component {
 		fixed = false;
 
 
-		super (flash.Lib.current, "Tooltip",  flash.Lib.current.stage.mouseX - 15, flash.Lib.current.stage.mouseY - 30);
+		super (flash.Lib.current, "Tooltip", target.stage.mouseX - 15, target.stage.mouseY - 30);
 
 
 		if(color==Color.MAGENTA) color = DefaultStyle.TOOLTIP;
@@ -103,7 +106,7 @@ class Tooltip extends Component {
 		if(!fixed)
 		if (this.parent != null)
 		if (this.parent.contains (this))
-		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
+		target.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
 
 
 		dirty = false;

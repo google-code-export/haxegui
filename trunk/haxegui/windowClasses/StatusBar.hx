@@ -52,7 +52,7 @@ class StatusBar extends Component {
 
 		super.init(opts);
 
-		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 
 		this.filters = [new DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 4, 4, 0.5,BitmapFilterQuality.HIGH,true,false,false)];
 
@@ -62,7 +62,10 @@ class StatusBar extends Component {
 
 	//{{{ onParentResize
 	public function onParentResize(e:ResizeEvent) {
-		box = untyped new Rectangle(0,0,parent.box.width-10, parent.box.height+20);
+
+		var win = cast(parent, haxegui.Window);
+		y = win.box.height - 20;
+		box = new Rectangle(0,0, win.box.width-10, win.box.height+20);
 		//this.scrollRect = untyped new Rectangle(0,0,parent.box.width-10, parent.box.height+20);
 		scrollRect = box;
 
@@ -100,6 +103,15 @@ class StatusBar extends Component {
 		}
 
 		dirty = true;
+	}
+	//}}}
+
+
+	//{{{ destroy
+	public override function destroy() {
+		parent.removeEventListener(ResizeEvent.RESIZE, onParentResize);
+
+		super.destroy();
 	}
 	//}}}
 

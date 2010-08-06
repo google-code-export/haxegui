@@ -53,10 +53,10 @@ class Dialog extends Window {
 		<haxegui:containers:Container name="Container">
 			<haxegui:containers:Grid rows="2" cols="1">
 				<haxegui:controls:Label name="Label"/>
-				<haxegui:containers:HBox>
-					<haxegui:controls:Button label="Ok"/>
-					<haxegui:controls:Button label="Canel"/>
-				</haxegui:containers:HBox>
+				<haxegui:containers:Container fitV="false" fitH="false">
+					<haxegui:controls:Button label="Ok" bottom="10" left="10"/>
+					<haxegui:controls:Button label="Canel" bottom="10" left="110"/>
+				</haxegui:containers:Container>
 			</haxegui:containers:Grid>
 		</haxegui:containers:Container>
 	</haxegui:Layout>
@@ -64,8 +64,10 @@ class Dialog extends Window {
 
 	//{{{ init
 	public override function init(?opts:Dynamic=null) {
-		box = new Size(320,160).toRect();
-		type = WindowType.MODAL;
+		box = new Size(220,180).toRect();
+		minSize = Size.fromRect(box);
+		type = WindowType.DIALOG;
+
 /*
 		if(flash.Lib.current.getChildByName("bitmap")==null) {
 			var bmpd = new flash.display.BitmapData(this.stage.stageWidth, this.stage.stageHeight);
@@ -89,6 +91,11 @@ class Dialog extends Window {
 		super.init(opts);
 
 
+		box = new Size(220,180).toRect();
+		minSize = Size.fromRect(box);
+		type = WindowType.DIALOG;
+
+
 		xml.set("name", name);
 
 		// xml.elementsNamed("haxegui:controls:Label").next().set("text", name);
@@ -97,9 +104,9 @@ class Dialog extends Window {
 
 
 
-
+		// center
 		moveTo(.5*(this.stage.stageWidth-box.width), .5*(this.stage.stageHeight-box.height));
-		type = WindowType.MODAL;
+		type = WindowType.DIALOG;
 
 		// container = new Container(this);
 		// container.init();
@@ -110,7 +117,7 @@ class Dialog extends Window {
 		// label.init({text: Opts.optString(opts, "label", name)});
 		label = cast container.asComponent().firstChild().asComponent().firstChild();
 		label.text = Opts.optString(opts, "label", name);
-		label.align.horizontal = HorizontalAlign.CENTER;
+		label.align = { horizontal: HorizontalAlign.CENTER, vertical: VerticalAlign.CENTER };
 		// label.center();
 		// label.move(0, -20);
 

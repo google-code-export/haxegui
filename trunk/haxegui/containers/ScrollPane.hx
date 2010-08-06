@@ -146,40 +146,79 @@ class ScrollPane extends Component, implements IContainer {
 		//
 		if(!Std.is(parent, Divider)) {
 			if(fitH) box.width = (cast parent).box.width - x - ((vert!=null && vert.visible) ? 20 : 0);
+			else
+			box.width -= (vert!=null && vert.visible) ? 20 : 0;
+
 			if(fitV) box.height = (cast parent).box.height - y - ((horz!=null && horz.visible) ? 20 : 0);
+			else
+			box.height -= (horz!=null && horz.visible) ? 20 : 0;
+
 		}
 
-		if(Std.is(parent, haxegui.Window) && (cast parent).statusbar!=null)
-		box.height -= 20;
+		// if(Std.is(parent, haxegui.Window) && (cast parent).statusbar!=null)
+		// box.height -= 20;
 
 
-		var r = box.clone();
-		r.x = content.scrollRect.x;
-		r.y = content.scrollRect.y;
-		content.scrollRect = r.clone();
-
+		// var r = box.clone();
+		// r.x = content.scrollRect.x;
+		// r.y = content.scrollRect.y;
+		// content.scrollRect = r.clone();
+		adjustContentScrollRect();
 		content.dispatchEvent(e);
 		dispatchEvent(e);
 	}
 	//}}}
 
 
-
+	//{{{ onResize
 	public override function onResize(e:ResizeEvent) {
-		dirty = true;
-		var r = box.clone();
-		r.x = content.scrollRect.x;
-		r.y = content.scrollRect.y;
-		// r.width += r.x;
-		// r.height += r.y;
-		content.scrollRect = r.clone();
-		content.dispatchEvent(e);
-
 		/** @todo use a scroll policy */
 		horz.visible = horz.handle.visible;
 		vert.visible = vert.handle.visible;
-	}
 
+		dirty = true;
+
+		//
+		if(!Std.is(parent, Divider)) {
+			if(fitH) box.width = (cast parent).box.width - x - ((vert!=null && vert.visible) ? 20 : 0);
+			if(fitV) box.height = (cast parent).box.height - y - ((horz!=null && horz.visible) ? 20 : 0);
+		}
+
+		// should probably replace this also
+		if(Std.is(vert.scrollee, flash.text.TextField)) {
+		vert.visible = vert.scrollee.numLines > 2;
+		}
+
+		// var r = box.clone();
+		// r.x = content.scrollRect.x;
+		// r.y = content.scrollRect.y;
+		// r.width -= vert.visible ? vert.box.width : 0;
+		// r.height -= horz.visible ? horz.box.width : 0;
+		// content.scrollRect = r.clone();
+
+
+		adjustContentScrollRect();
+
+		content.dispatchEvent(e);
+	}
+	//}}}
+
+
+	//{{{ aBarIsVisible
+	public function aBarIsVisible() : Bool {
+		return (vert!=null && vert.visible) || (horz!=null && horz.visible);
+	}
+	//}}}
+
+
+	//{{{ adjustContentScrollRect
+	private inline function adjustContentScrollRect() {
+		var r = box.clone();
+		r.x = content.scrollRect.x;
+		r.y = content.scrollRect.y;
+		content.scrollRect = r.clone();
+	}
+	//}}}
 
 
 	//{{{ __init__

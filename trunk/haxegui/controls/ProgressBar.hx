@@ -132,7 +132,7 @@ class ProgressBar extends Component, implements IAdjustable {
 		animate = true;
 		box = new Size(140,20).toRect();
 		color = DefaultStyle.BACKGROUND;
-		progress = .5;
+		progress = 1;
 
 
 		super.init(opts);
@@ -153,15 +153,13 @@ class ProgressBar extends Component, implements IAdjustable {
 		// bar.init({disabled: this.disabled});
 
 		bar = getElementsByClass(ProgressBarIndicator).next();
-		// bar = cast firstChild();
-		bar.cacheAsBitmap = true;
 		bar.filters = [new flash.filters.DropShadowFilter (4, 0, DefaultStyle.DROPSHADOW, 0.5, 4, 4, disabled ? .35 : .75, flash.filters.BitmapFilterQuality.LOW, false, false, false)];
 
 
 		//
 		mazk = cast addChild(new Shape());
 		mazk.graphics.beginFill(0xFF00FF);
-		mazk.graphics.drawRect(0,0,progress*box.width,box.height);
+		mazk.graphics.drawRect(0,0,box.width,box.height);
 		mazk.graphics.endFill();
 		bar.mask = mazk;
 
@@ -193,7 +191,7 @@ class ProgressBar extends Component, implements IAdjustable {
 
 
 	//{{{ onChanged
-	private function onChanged(e:Event)	{progress = adjustment.getValue()/100;
+	private function onChanged(e:Event)	{
 		progress = adjustment.getValue()/100;
 		update();
 	}
@@ -209,6 +207,7 @@ class ProgressBar extends Component, implements IAdjustable {
 
 	//{{{ update
 	public function update() {
+		if(Math.isNaN(progress)) progress = 0;
 		progress = Math.max(0, Math.min(1, progress));
 
 
@@ -216,7 +215,7 @@ class ProgressBar extends Component, implements IAdjustable {
 		label.tf.text = Math.round(100*progress) + "%";
 
 
-		if(mask!=null) {
+		if(mazk==null) {
 			mazk = cast addChild(new Shape());
 			mazk.graphics.clear();
 			mazk.graphics.beginFill(0xFF00FF);

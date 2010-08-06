@@ -52,8 +52,8 @@ class Color
 
 	//{{{ toHex
 	/**
-	 * @return Flash formatted hex string (0xRRGGBB)
-	 */
+	* @return Flash formatted hex string (0xRRGGBB)
+	*/
 	public static inline function toHex(color:UInt) : String {
 		return "0x"+StringTools.hex(color, 6);
 	}
@@ -71,7 +71,31 @@ class Color
 	* </pre>
 	**/
 	public static inline function grayHex( v:UInt ) : UInt {
-		return ( v << 16 | v << 8 | v );
+		return rgb(v,v,v);
+	}
+	//}}}
+
+
+	//{{{ max
+	public static function max(col1:UInt, col2:UInt ) : UInt {
+		var c1:Dynamic = toRGB(col1);
+		var c2:Dynamic = toRGB(col2);
+		var r:UInt = cast Math.max( c1[0] , c2[0] );
+		var g:UInt = cast Math.max( c1[1] , c2[1] );
+		var b:UInt = cast Math.max( c1[2] , c2[2] );
+		return r << 16 | g << 8 | b;
+	}
+	//}}}
+
+
+	//{{{ min
+	public static function min(col1:UInt, col2:UInt ) : UInt {
+		var c1:Dynamic = toRGB(col1);
+		var c2:Dynamic = toRGB(col2);
+		var r:UInt = cast Math.min( c1[0] , c2[0] );
+		var g:UInt = cast Math.min( c1[1] , c2[1] );
+		var b:UInt = cast Math.min( c1[2] , c2[2] );
+		return r << 16 | g << 8 | b;
 	}
 	//}}}
 
@@ -88,6 +112,7 @@ class Color
 	**/
 	public static inline function clamp( color:UInt ) : UInt {
 		return cast (Math.max(BLACK, Math.min(WHITE, color)));
+		// return min(max(color, BLACK), WHITE);
 	}
 	//}}}
 
@@ -117,7 +142,7 @@ class Color
 	* @return output color
 	*/
 	public static inline function tint( color:UInt, tint:Float ) : UInt	{
-		var r = color >> 16 ;
+		var r = color >> 16 & 0xFF ;
 		var g = color >> 8 & 0xFF ;
 		var b = color & 0xFF ;
 
@@ -161,11 +186,11 @@ class Color
 	* @param input color
 	* @return Dynamic object with r,g,b fields
 	*/
-	public static inline function toRGB(color:UInt) : Dynamic {
-		var r = (color >> 16) & 0xFF ;
-		var g = (color >> 8) & 0xFF ;
-		var b = color & 0xFF ;
-		return { r: r, g: g, b: b };
+	public static inline function toRGB(color:UInt) : Array<UInt> {
+		var r : UInt = (color >> 16) & 0xFF ;
+		var g : UInt = (color >> 8) & 0xFF ;
+		var b : UInt = color & 0xFF ;
+		return [r,g, b];
 	}
 	//}}}
 

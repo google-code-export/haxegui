@@ -84,6 +84,18 @@ class Stack extends Component, implements IContainer {
 	public function onParentResize(e:ResizeEvent) {
 		// dirty = true;
 
+		var size = Size.fromRect(box);
+
+			// size = Size.fromRect(parent.transform.pixelBounds);
+			// size.setAtLeastZero();
+
+			if(parent.parent!=null && Std.is(parent.parent, ScrollPane))
+			size = Size.fromRect((cast parent.parent).box);
+
+		var b = size.toRect();
+		b.offset(x, y);
+		box = b;
+
 		for(i in this) {
 			if(Std.is(i, Component)) {
 				if(!Math.isNaN((cast i).left)) {

@@ -45,7 +45,7 @@ class Alert extends Window
 	//{{{ init
 	public override function init(opts:Dynamic=null) {
 		box = new Size(320,160).toRect();
-		type = WindowType.MODAL;
+		type = WindowType.DIALOG;
 
 		if(flash.Lib.current.getChildByName("bitmap")==null) {
 			var bmpd = new flash.display.BitmapData(this.stage.stageWidth, this.stage.stageHeight);
@@ -64,7 +64,7 @@ class Alert extends Window
 		super.init(opts);
 
 		moveTo(.5*(this.stage.stageWidth-box.width), .5*(this.stage.stageHeight-box.height));
-		type = WindowType.MODAL;
+		type = WindowType.DIALOG;
 
 		var container = new Container(this);
 		container.init();

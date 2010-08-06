@@ -72,6 +72,9 @@ class Transformer extends Component {
 
 	/** true to resize the [box], false to resize width & height **/
 	public static var transformBoxes : Bool = true;
+
+	public var limits : Rectangle;
+	public var min : Rectangle;
 	//}}}
 
 
@@ -91,7 +94,9 @@ class Transformer extends Component {
 	override public function init(?opts:Dynamic=null) {
 		color = cast Math.random() * 0xFFFFFF;
 		handles = [];
-
+		limits = new Rectangle();
+		min = new Rectangle();
+		// limits = new Rectangle(0,0,stage.stageWidth, stage.stageHeight);
 
 		if(target.box==null || target.box.isEmpty())
 		size = Size.fromRect(target.getBounds(this));
@@ -230,161 +235,230 @@ class Transformer extends Component {
 		switch(dragging) {
 			// TopLeft
 			case handles[0]:
-			dragging.x = mp.x;
-			dragging.y = mp.y;
+				dragging.x = mp.x;
+				dragging.y = mp.y;
+				dragging.y = Math.min(dragging.y, size.height-handleSize);
+				if(Haxegui.gridSnapping) {
+					dragging.x -= smp.x;
+					dragging.y -= smp.y;
+				}
 
-			if(Haxegui.gridSnapping) {
-				dragging.x -= smp.x;
-				dragging.y -= smp.y;
-			}
+				if(dragging.localToGlobal(new Point()).x < limits.x - handleSize) dragging.x = 0;
+				if(dragging.localToGlobal(new Point()).y < limits.y-handleSize) dragging.y = 0;
 
-			size.subtract(new Size(dragging.x, dragging.y));
+				if(size.width - dragging.x < min.width) dragging.x = 0;
+				if(size.height - dragging.y < min.height) dragging.y = 0;
 
-			x += dragging.x;
-			y += dragging.y;
+				size.subtract(new Size(dragging.x, dragging.y));
 
-			dragging.x = dragging.y = 0;
+				size.height = cast Math.max(size.height, min.height);
+				size.width = cast Math.max(size.width, min.width);
 
+				x += dragging.x;
+				y += dragging.y;
 
-			handles[2].x = handles[3].x = handles[4].x = size.width - handleSize;
-			handles[1].x = handles[5].x = mid.x - midHandle;
-			handles[3].y = handles[7].y = mid.y - midHandle;
-			handles[4].y = handles[5].y = handles[6].y = size.height - handleSize;
+				dragging.x = dragging.y = 0;
+
+				handles[2].x = handles[3].x = handles[4].x = size.width - handleSize;
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[4].y = handles[5].y = handles[6].y = size.height - handleSize;
 			// Top
 			case handles[1]:
-			dragging.y = mp.y;
 
-			if(Haxegui.gridSnapping)
-			dragging.y -= smp.y;
+				dragging.y = mp.y;
 
-			y += dragging.y;
-			size.height -= Std.int(dragging.y);
-			dragging.y = 0;
+				if(dragging.localToGlobal(mp).y < limits.y-handleSize) dragging.y = 0;
 
-			handles[3].y = handles[7].y = mid.y - midHandle;
-			handles[4].y = handles[5].y = handles[6].y = size.height - handleSize;
+				if(Haxegui.gridSnapping)
+				dragging.y -= smp.y;
+
+				//size.height = cast Math.max (size.height, min.height);
+				if(size.height-dragging.y<min.height) dragging.y = 0;
+
+				y += dragging.y;
+				size.height -= Std.int(dragging.y);
+				dragging.y = 0;
+
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[4].y = handles[5].y = handles[6].y = size.height - handleSize;
+
 
 			// TopRight
 			case handles[2]:
-			dragging.x = mp.x + handleSize;
-			dragging.y = mp.y;
+				dragging.x = mp.x + handleSize;
+				dragging.y = mp.y;
 
-			if(Haxegui.gridSnapping) {
-				dragging.x -= mp.x % Haxegui.gridSpacing;
-				dragging.y -= mp.y % Haxegui.gridSpacing;
-			}
+				if(dragging.localToGlobal(new Point()).x > limits.x + limits.width + handleSize) dragging.x = size.width - handleSize;
+				if(dragging.localToGlobal(mp).y < limits.y-handleSize) dragging.y = 0;
+				trace(dragging.localToGlobal(new Point()).x+"\t"+(limits.x+limits.width));
 
-			y += dragging.y;
+				if(size.height-dragging.y<min.height) dragging.y = 0;
 
-			size.width = dragging.x + handleSize;
-			size.height -= Std.int(dragging.y);
+				dragging.x = cast Math.max (dragging.x, min.width);
 
-			dragging.y = 0;
+				if(Haxegui.gridSnapping) {
+					dragging.x -= mp.x % Haxegui.gridSpacing;
+					dragging.y -= mp.y % Haxegui.gridSpacing;
+				}
 
-			handles[3].x = handles[4].x = dragging.x;
-			handles[1].x = handles[5].x = mid.x - midHandle;
-			handles[3].y = handles[7].y = mid.y - midHandle;
-			handles[4].y = handles[5].y = handles[6].y = size.height - handleSize;
+				y += dragging.y;
+
+				size.width = dragging.x + handleSize;
+				size.height -= Std.int(dragging.y);
+
+				dragging.y = 0;
+
+				handles[3].x = handles[4].x = dragging.x;
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[4].y = handles[5].y = handles[6].y = size.height - handleSize;
 
 			// Right
 			case handles[3]:
-			dragging.x = mp.x - mp.x % Haxegui.gridSpacing + handleSize;
-			size.width = dragging.x + handleSize;
-			handles[1].x = handles[5].x = mid.x - midHandle;
-			handles[2].x = handles[4].x = dragging.x;
+				//dragging.x = mp.x - mp.x % Haxegui.gridSpacing + handleSize;
+				dragging.x = mp.x - handleSize;
+
+				if(dragging.localToGlobal(new Point()).x > limits.x + limits.width + handleSize) dragging.x = size.width;
+				dragging.x = cast Math.max (dragging.x, min.width);
+
+				size.width = dragging.x;
+
+				dragging.x = size.width - handleSize;
+
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[2].x = handles[4].x = dragging.x;
 
 			// BottomRight
 			case handles[4]:
-			dragging.x = mp.x - handleSize + Haxegui.gridSpacing;
-			dragging.y = mp.y - handleSize + Haxegui.gridSpacing;
+				dragging.x = mp.x - handleSize + Haxegui.gridSpacing;
+				dragging.y = mp.y - handleSize + Haxegui.gridSpacing;
 
-			if(Haxegui.gridSnapping) {
-				dragging.x -= mp.x % Haxegui.gridSpacing;
-				dragging.y -= mp.y % Haxegui.gridSpacing;
-			}
+				if(dragging.localToGlobal(new Point()).x > limits.x + limits.width + handleSize) dragging.x = size.width;
+				if(dragging.localToGlobal(new Point()).y > limits.y + limits.height + handleSize) dragging.y = size.height;
+				dragging.x = cast Math.max (dragging.x, min.width);
+				dragging.y = cast Math.max (dragging.y, min.height);
 
-			size = new Size(dragging.x, dragging.y);
+				if(Haxegui.gridSnapping) {
+					dragging.x -= mp.x % Haxegui.gridSpacing;
+					dragging.y -= mp.y % Haxegui.gridSpacing;
+				}
 
-			dragging.x = size.width - handleSize;
-			dragging.y = size.height - handleSize;
+				size = new Size(dragging.x, dragging.y);
+
+				dragging.x = size.width - handleSize;
+				dragging.y = size.height - handleSize;
 
 
-			handles[1].x = handles[5].x = mid.x - midHandle;
-			handles[2].x = handles[3].x = dragging.x;
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[2].x = handles[3].x = dragging.x;
 
-			handles[3].y = handles[7].y = mid.y - midHandle;
-			handles[5].y = handles[6].y = dragging.y;
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[5].y = handles[6].y = dragging.y;
 
 			// Bottom
 			case handles[5]:
 
-			if(Haxegui.gridSnapping)
-			dragging.y = mp.y - mp.y % Haxegui.gridSpacing - handleSize + Haxegui.gridSpacing;
-			else
-			dragging.y = mp.y - handleSize + Haxegui.gridSpacing;
+				if(Haxegui.gridSnapping)
+				dragging.y = mp.y - mp.y % Haxegui.gridSpacing - handleSize + Haxegui.gridSpacing;
+				else
+				dragging.y = mp.y - handleSize + Haxegui.gridSpacing;
 
-			size.height = dragging.y;
-			dragging.y = size.height - handleSize;
-			handles[3].y = handles[7].y = mid.y - midHandle;
-			handles[4].y = handles[6].y = dragging.y;
+				if(dragging.localToGlobal(new Point()).y > limits.y + limits.height + handleSize) dragging.y = size.height;
+				dragging.y = cast Math.max (dragging.y, min.height);
+
+				size.height = dragging.y;
+				dragging.y = size.height - handleSize;
+
+
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[4].y = handles[6].y = dragging.y;
+
+
 
 			// BottomLeft
 			case handles[6]:
-			dragging.x = mp.x;
-			dragging.y = mp.y - handleSize + Haxegui.gridSpacing;
+				dragging.x = mp.x;
+				dragging.y = mp.y;// - handleSize + Haxegui.gridSpacing;
 
-			if(Haxegui.gridSnapping) {
-				dragging.x -= smp.x;
-				dragging.y -= smp.y;
-			}
+				// if(Haxegui.gridSnapping) {
+				// 	dragging.x -= smp.x;
+				// 	dragging.y -= smp.y;
+				// }
 
-			x += dragging.x;
-			size.width  -= Std.int(dragging.x);
-			size.height  = Std.int(dragging.y);
+				if(dragging.localToGlobal(new Point()).x > limits.x + limits.width + handleSize) dragging.x = size.width;
+				if(dragging.localToGlobal(new Point()).x < limits.x - handleSize) dragging.x = 0;
+				if(dragging.localToGlobal(new Point()).y > limits.y + limits.height + handleSize) dragging.y = size.height;
 
+				if(size.width - dragging.x < min.width) dragging.x = 0;
 
-			dragging.x   = 0;
-			dragging.y   = size.height - handleSize;
+				x += dragging.x;
 
-			handles[1].x = handles[5].x = mid.x - midHandle;
-			handles[2].x = handles[3].x = handles[4].x = size.width - midHandle;
-			handles[3].y = handles[7].y = mid.y - midHandle;
-			handles[4].y = handles[5].y = dragging.y;
+				size.width = cast Math.max(size.width - dragging.x, min.width);
+				size.height = cast Math.max(dragging.y, min.height);
+
+				dragging.x   = 0;
+				dragging.y   = size.height - handleSize;
+
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[2].x = handles[3].x = handles[4].x = size.width - midHandle;
+				handles[3].y = handles[7].y = mid.y - midHandle;
+				handles[4].y = handles[5].y = dragging.y;
 
 			// Left
 			case handles[7]:
-			dragging.x = mp.x;
+				dragging.x = mp.x;
 
-			if(Haxegui.gridSnapping)
-			dragging.x -= smp.x;
+				if(Haxegui.gridSnapping)
+				dragging.x -= smp.x;
 
-			x += dragging.x;
-			size.width -= Std.int(dragging.x);
+				if(dragging.localToGlobal(new Point()).x < limits.x - handleSize) dragging.x = 0;
+				if(size.width - dragging.x < min.width) dragging.x = 0;
 
-			dragging.x = 0;
-			dragging.y = mid.y - midHandle;
+				size.subtract(new Size(dragging.x, 0));
 
-			handles[1].x = handles[5].x = mid.x - midHandle;
-			handles[2].x = handles[3].x = handles[4].x = size.width - handleSize;
+				x += dragging.x;
+				//size.width -= Std.int(dragging.x);
+				size.width = cast Math.max (size.width, min.width);
+
+				dragging.x = 0;
+				dragging.y = mid.y - midHandle;
+
+				handles[1].x = handles[5].x = mid.x - midHandle;
+				handles[2].x = handles[3].x = handles[4].x = size.width - handleSize;
+
 
 			// Center
 			case pivot:
-			// move the transformer
-			x += mp.x - mid.x;
-			y += mp.y - mid.y;
+//			if(x>=limits.x && x<=(limits.width-size.width) && y>=limits.y && y<=limits.height) {
+				// move the transformer
+				x += mp.x - mid.x;
+				y += mp.y - mid.y;
 
+				if(limits!=null && !limits.isEmpty()) {
+				if(x <= limits.x-handleSize) x=limits.x - handleSize;
+				if(x >= handleSize+limits.x+limits.width - size.width) x=handleSize+limits.x+limits.width-size.width;
 
-			pivot.x = mid.x;
-			pivot.y = mid.y;
-			// snapping without snap() to avoid dispatching MoveEvent.
-			if(Haxegui.gridSnapping) {
-				x -= (x-handleSize) % Haxegui.gridSpacing;
-				y -= (y-handleSize-midHandle) % Haxegui.gridSpacing;
-			}
+				if(y <= limits.y - handleSize) y = limits.y - handleSize;
+				if(y >= handleSize + limits.y + limits.height - size.height) y=handleSize + limits.y+limits.height-size.height;
+				}
+
+				pivot.x = mid.x;
+				pivot.y = mid.y;
+				// snapping without snap() to avoid dispatching MoveEvent.
+				if(Haxegui.gridSnapping) {
+					x -= (x-handleSize) % Haxegui.gridSpacing;
+					y -= (y-handleSize-midHandle) % Haxegui.gridSpacing;
+				}
+//			}
 		}
 
 		if(size.width <= target.minSize.width) size.width = target.minSize.width + 2*handleSize;
 		if(size.height <= target.minSize.height) size.height = target.minSize.height + 2*handleSize;
+
+
+		if(size.width > limits.width + 2*handleSize) size.width = Std.int(limits.width  + 2*handleSize);
+		if(size.height > limits.height + 2*handleSize) size.height = Std.int(limits.height + 2*handleSize);
 
 		// resize
 		if(dragging!=pivot) {

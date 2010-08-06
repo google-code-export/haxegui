@@ -28,6 +28,7 @@ import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.events.TextEvent;
 import flash.geom.Rectangle;
 import haxegui.DataSource;
 import haxegui.XmlParser;
@@ -72,10 +73,10 @@ class ComboBoxDropButton extends PushButton, implements IComposite {
 
 	static var xml = Xml.parse('
 	<haxegui:Layout name="ComboBoxDropButton">
-		<haxegui:toys:Arrow
-			width="8" height="8"
-			x="10" y="11"
-			rotation="90" color="{Color.darken(parent.color, 10)}"/>
+	<haxegui:toys:Arrow
+	width="8" height="8"
+	x="10" y="11"
+	rotation="90" color="{Color.darken(parent.color, 10)}"/>
 	</haxegui:Layout>
 	').firstElement();
 	//}}}
@@ -111,50 +112,16 @@ class ComboBoxDropButton extends PushButton, implements IComposite {
 	public override function onAdded(e:Event) {}
 	//}}}
 
+	// public override function onMouseDown(e:MouseEvent) {}
+	// public override function onMouseUp(e:MouseEvent) {}
 
 	//{{{ onMouseClick
 	public override function onMouseClick(e:MouseEvent) {
-		if(this.disabled) return;
+		if(this.disabled || (cast parent).menuOpen() ) return;
 
-		var p = new flash.geom.Point( parent.x, parent.y );
-		p = parent.parent.localToGlobal(p);
-
-
-		(cast parent).menu = new PopupMenu();
-
-		var menu = (cast parent).menu;
-
-		menu.dataSource = (cast parent).dataSource;
-
-		menu.addEventListener(MenuEvent.MENU_SHOW, (cast parent).onMenuShow, false, 0, true);
-		menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
-
-		menu.init({width:(cast parent).box.width - 22, color: DefaultStyle.INPUT_BACK});
-
-
-		menu.x = p.x + 1;
-		menu.y = p.y;
-		// menu.box.width = (cast parent).box.width - 22;
+		(cast parent).openMenu();
 
 		super.onMouseClick(e);
-	}
-	//}}}
-
-
-	//{{{ onMenuShow
-	public function onMenuShow(e:MenuEvent) {
-		parent.dispatchEvent(e);
-		//(cast parent).menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
-	}
-	//}}}
-
-
-	//{{{ onMenuHide
-	public function onMenuHide(e:MenuEvent) {
-		selected = false;
-		//dirty = true;
-		redraw();
-		//trace(selected);
 	}
 	//}}}
 
@@ -230,7 +197,7 @@ class ComboBoxBackground extends Component, implements IComposite {
 		//if(.hasNext())
 		for(child in parent.asComponent().getElementsByClass(ComboBoxBackground))
 		if(child!=null && child!=this)
-			throw "ComboBoxBackground is composited, and should be singular";
+		throw "ComboBoxBackground is composited, and should be singular";
 	}
 	//}}}
 
@@ -291,7 +258,8 @@ class ComboBox extends Component, implements IDataSource, implements IAdjustable
 		adjustment = new Adjustment({ value: 0, min: 0, max: 1, step:null, page: null});
 		box = new Size(140,20).toRect();
 		color = DefaultStyle.BACKGROUND;
-		menu = new PopupMenu();
+		menu = null;
+		// menu = new PopupMenu();
 
 
 		super.init(opts);
@@ -327,13 +295,13 @@ class ComboBox extends Component, implements IDataSource, implements IAdjustable
 		Opts.removeFields(bOpts, ["x", "y"]);
 		dropButton.init(bOpts);
 		dropButton.box = new Size(20,20).toRect();
-		dropButton.moveTo(box.width-box.height,-1);
+		dropButton.place(box.width-box.height,-1);
 
 
 		// Slot
 		slot = new haxegui.toys.Socket(this);
 		slot.init({visible: false});
-		slot.moveTo(-14,Std.int(this.box.height)>>1);
+		slot.place(-14,Std.int(this.box.height)>>1);
 		slot.color = Color.tint(slot.color, .5);
 
 
@@ -342,22 +310,101 @@ class ComboBox extends Component, implements IDataSource, implements IAdjustable
 		input.addEventListener(MoveEvent.MOVE, onInputMoved, false, 0, true);
 		input.addEventListener(ResizeEvent.RESIZE, onInputResized, false, 0, true);
 		input.addEventListener(Event.CHANGE, onInputChanged, false, 0, true);
+		input.addEventListener(TextEvent.TEXT_INPUT, onInputChanged, false, 0, true);
+
+
+		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
 
 
+	//{{{ __setDisabled
 	private override function __setDisabled(b:Bool) : Bool {
 		if(input!=null)
 		input.disabled = b;
 		if(dropButton!=null)
 		dropButton.disabled = b;
 		return super.__setDisabled(b);
-	}	
+	}
+	//}}}
 
+
+	//{{{ closeMenu
+	public function closeMenu() {
+		if(menu==null) return;
+
+		menu.dispatchEvent(new MenuEvent(MenuEvent.MENU_HIDE));
+		menu.destroy();
+		menu = null;
+
+		dropButton.selected = false;
+		dropButton.redraw();
+	}
+	//}}}
+
+
+	//{{{ menuOpen
+	public function menuOpen() : Bool {
+		return menu!=null;
+	}
+	//}}}
+
+
+	//{{{ openMenu
+	public function openMenu() {
+		if(menu!=null) return;
+
+		// dropButton.selected = false;
+		// dropButton.redraw();
+
+		var p = localToGlobal(new flash.geom.Point());
+
+
+		menu = new PopupMenu();
+
+		// menu.nonDestroyingObjects = [ input, input.tf, dropButton ];
+
+		menu.dataSource = dataSource;
+
+		menu.addEventListener(MenuEvent.MENU_SHOW, onMenuShow, false, 0, true);
+		menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
+
+		menu.init({width:box.width - 22, color: DefaultStyle.INPUT_BACK});
+
+		menu.place(p.x + 1, p.y);
+		// menu.box.width = (cast parent).box.width - 22;
+	}
+	//}}}
+
+
+	//{{{ onMenuHide
+	public function onMenuHide(e:MenuEvent) {
+		menu.removeEventListener(MenuEvent.MENU_SHOW, onMenuShow);
+		menu.removeEventListener(MenuEvent.MENU_HIDE, onMenuHide);
+		menu.destroy();
+		menu = null;
+		dropButton.selected = false;
+		// dropButton.__setSelected(false);
+		dropButton.redraw();
+	}
+	//}}}
 
 	//{{{ onInputChanged
 	public function onInputChanged(e:Event) {
 		dispatchEvent(e);
+		// if(menu==null)
+
+		// openMenu();
+
+		// // isValid();
+		// var s : String = "";
+		// if(Std.is(dataSource.data, Array))
+		// s = dataSource.data.join("|");
+		// s = "(" + s + ")";
+		// var c = Color.BLUE;
+		// var r : EReg = new EReg(s, "");
+		// input.tf.setTextFormat(DefaultStyle.getTextFormat(8, r.match(input.getText()) ? DefaultStyle.LABEL_TEXT : c ));
+
 	}
 	//}}}
 
@@ -384,9 +431,7 @@ class ComboBox extends Component, implements IDataSource, implements IAdjustable
 	private function onInputMoved(e:MoveEvent) {
 		if(input==null) return;
 		move(input.x, input.y);
-		e.target.removeEventListener(MoveEvent.MOVE, onInputMoved);
-		e.target.moveTo(0,0);
-		e.target.addEventListener(MoveEvent.MOVE, onInputMoved, false, 0, true);
+		e.target.place(0,0);
 	}
 	//}}}
 

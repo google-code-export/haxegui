@@ -99,7 +99,7 @@ class Container extends Component, implements IContainer {
 		if(Std.is(parent, haxegui.Window) && x==0 && y==0) move(10,20);
 
 
-		parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
+		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 	}
 	//}}}
@@ -107,67 +107,118 @@ class Container extends Component, implements IContainer {
 
 	//{{{ onParentResize
 	private function onParentResize(e:ResizeEvent) {
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
 		var size = Size.fromRect(box);
 
-
 		if(Std.is(parent, Component)) {
-		if(!Std.is(parent, Grid))
-		size = new Size((cast parent).box.width - x, (cast parent).box.height - y);
+			if(!Std.is(parent, Grid))
+			size = new Size((cast parent).box.width - x, (cast parent).box.height - y);
 		}
 		else {
-		// size = new Size(parent.width, parent.height);
-		size = Size.fromRect(parent.transform.pixelBounds);
-		// if(size==null) size = new Size();
-		size.subtract(Size.square(1));
-		size.setAtLeastZero();
+			// size = new Size(parent.width, parent.height);
+			size = Size.fromRect(parent.transform.pixelBounds);
+			// if(size==null) size = new Size();
+			size.subtract(Size.square(1));
+			size.setAtLeastZero();
 
-		if(parent.parent!=null && Std.is(parent.parent, ScrollPane))
-		size = Size.fromRect((cast parent.parent).box);
+			if(parent.parent!=null && Std.is(parent.parent, ScrollPane))
+			size = Size.fromRect((cast parent.parent).box);
 		}
 
 		if(!fitV) size.height = Std.int(box.height);
 		if(!fitH) size.width = Std.int(box.width);
 
-		box = size.toRect();
+		var b = size.toRect();
+		b.offset(x, y);
+
+		// if(box.equals(b)) return;
+		// if(box.containsRect(b))
+		this.graphics.clear();
+
+		// box = size.toRect();
+		box = b;
 
 
 		for(i in this) {
 			if(Std.is(i, Component)) {
 				if(!Math.isNaN((cast i).left)) {
-				i.x = (cast i).left;
+					i.x = (cast i).left;
 				}
 				else
 				if(!Math.isNaN((cast i).right)) {
-				i.x = box.width - (cast i).box.width - (cast i).right;
+					i.x = box.width - (cast i).box.width - (cast i).right;
 				}
 
 				if(!Math.isNaN((cast i).left) && !Math.isNaN((cast i).right)) {
-				i.x = (cast i).left;
-				(cast i).box.width = box.width - (cast i).right - i.x;
-				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+					i.x = (cast i).left;
+					(cast i).box.width = box.width - (cast i).right - i.x;
+					(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 				}
 
 
 				if(!Math.isNaN((cast i).top)) {
-				i.y = (cast i).top;
+					i.y = (cast i).top;
 				}
 				else
 				if(!Math.isNaN((cast i).bottom)) {
-				i.y = box.height - (cast i).box.height - (cast i).bottom;
+					i.y = box.height - (cast i).box.height - (cast i).bottom;
 				}
 
 				if(!Math.isNaN((cast i).top) && !Math.isNaN((cast i).bottom)) {
-				i.y = (cast i).top;
-				(cast i).box.height = box.height - (cast i).bottom - i.y;
-				(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+					i.y = (cast i).top;
+					(cast i).box.height = box.height - (cast i).bottom - i.y;
+					(cast i).dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 				}
 			}
 		}
 
 		redraw();
 		dirty = false;
+		// dirty = true;
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+
+		haxegui.Profiler.end();
+	}
+	//}}}
+
+
+	//{{{ onResize
+	public override function onResize(e:ResizeEvent) {
+		// if(!Math.isNaN(e.oldWidth) && !Math.isNaN(e.oldHeight)) {
+		// 	var b = new flash.geom.Rectangle(x,y,e.oldWidth,e.oldHeight);
+		// 	if(box.equals(b)) return;
+		// 	if(box.containsRect(b))
+		// 	this.graphics.clear();
+		// }
+
+		super.onResize(e);
+
+		// redraw();
+		// dirty = false;
+
+	}
+	//}}]
+
+
+	//{{{ redraw
+	public override function redraw(opts:Dynamic=null) {
+		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
+		ScriptManager.exec(this,"redraw", opts);
+
+		haxegui.Profiler.end();
+	}
+	//}}}
+
+
+	//{{{ destroy
+	public override function destroy() {
+		if(parent!=null)
+		parent.removeEventListener(ResizeEvent.RESIZE, onParentResize);
+
+		super.destroy();
 	}
 	//}}}
 

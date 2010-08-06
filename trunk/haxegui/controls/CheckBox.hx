@@ -27,6 +27,7 @@ import haxegui.Haxegui;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Button;
 import haxegui.controls.IAdjustable;
+import haxegui.events.ResizeEvent;
 import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
 import haxegui.managers.StyleManager;
@@ -94,7 +95,7 @@ class CheckBox extends PushButton {
 		super.init(opts);
 
 		box = Size.square(20).toRect();
-
+		minSize = Size.square(10);
 
 		layoutXml.set("name", name);
 

@@ -29,6 +29,7 @@ import flash.events.MouseEvent;
 import flash.geom.Rectangle;
 import flash.ui.Keyboard;
 import flash.ui.Mouse;
+import haxegui.Window;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
 import haxegui.events.DragEvent;
@@ -42,8 +43,8 @@ import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
 import haxegui.managers.WindowManager;
 import haxegui.utils.Color;
-import haxegui.utils.Size;
 import haxegui.utils.Opts;
+import haxegui.utils.Size;
 import haxegui.windowClasses.TitleBar;
 import haxegui.windowClasses.WindowFrame;
 //}}}
@@ -78,8 +79,8 @@ class WindowFrame extends Component {
 
 		description = null;
 
-		// Exclude modal windows from resizing
-		if(!(cast parent).isModal()) {
+		// Exclude dialog and non resizeable windows from resizing
+		if((cast parent).type!=WindowType.DIALOG || (cast parent).sizeable!=false) {
 			this.setAction("mouseDown",
 			"
 			CursorManager.getInstance().lock = true;
@@ -92,7 +93,7 @@ class WindowFrame extends Component {
 			// Event for stopping the interval
 			this.stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, this.onStageMouseUp, false, 0, true);
 
-			this.startInterval(12);
+			this.startInterval(20);
 
 
 			this.filters = [new flash.filters.DropShadowFilter (4, 45, DefaultStyle.DROPSHADOW, 0.5, 12, 12, 0.75, flash.filters.BitmapFilterQuality.LOW, false, false, false)];
@@ -226,21 +227,21 @@ class WindowFrame extends Component {
 
 	//{{{ redraw
 	override public function redraw(?opts:Dynamic=null):Void {
-
+		if(parent==null) return;
 		parent.dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
 		// ScriptManager.exec(this,"redraw", null);
-		super.redraw();
+		super.redraw(opts);
 	}
 	//}}}
 
-	//{{{ onRollOut
+
+	//{{{ destroy
 	public override function destroy() {
 		this.stopInterval();
 		super.destroy();
 	}
 	//}}}
-
 
 
 	//{{{ __init__

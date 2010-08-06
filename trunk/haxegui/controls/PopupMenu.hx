@@ -29,20 +29,22 @@ import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.Rectangle;
+import flash.ui.Keyboard;
 import haxegui.DataSource;
+import haxegui.Window;
 import haxegui.controls.AbstractButton;
 import haxegui.controls.Component;
 import haxegui.controls.Label;
+import haxegui.controls.MenuBar;
+import haxegui.controls.Seperator;
 import haxegui.controls.UiList;
 import haxegui.events.MenuEvent;
+import haxegui.events.ResizeEvent;
 import haxegui.managers.CursorManager;
 import haxegui.managers.StyleManager;
 import haxegui.utils.Color;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
-import haxegui.events.ResizeEvent;
-import haxegui.controls.Seperator;
-import haxegui.controls.MenuBar;
 //}}}
 
 /**
@@ -55,7 +57,13 @@ class PopupMenu extends Component, implements IDataSource {
 	//{{{ Members
 	public var items : List<ListItem>;
 
+	public var index : Int;
+
 	public var dataSource(default, setDataSource) : DataSource;
+
+	public var ownerWindow : Window;
+
+	public var nonDestroyingObjects : Array<Dynamic>;
 	//}}}
 
 
@@ -63,7 +71,8 @@ class PopupMenu extends Component, implements IDataSource {
 	//{{{ init
 	override public function init(?opts:Dynamic=null) {
 		box = new Size(100,20).toRect();
-		color = DefaultStyle.INPUT_BACK;
+		// color = DefaultStyle.INPUT_BACK;
+		color = Color.tint(DefaultStyle.BACKGROUND, .2);
 		// if(data==null) data = [""];
 		items = new List<ListItem>();
 
@@ -100,6 +109,10 @@ class PopupMenu extends Component, implements IDataSource {
 	//{{{ shutDown
 	public function shutDown(e:MouseEvent) {
 		//~ dispatchEvent (new MenuEvent(MenuEvent.MENU_HIDE))
+		if(nonDestroyingObjects!=null)
+		for(o in nonDestroyingObjects)
+			if(e.target==o) return;
+
 		if(!Std.is(e.target, flash.text.TextField))
 		destroy();
 	}
@@ -134,7 +147,16 @@ class PopupMenu extends Component, implements IDataSource {
 
 
 	//{{{ onKeyDown
-	override public function onKeyDown (e:KeyboardEvent) {
+	public override function onKeyDown (e:KeyboardEvent) {
+		trace(e);
+		switch(e.keyCode) {
+			case Keyboard.UP:
+				index--;
+				cast(getChildAt(index), ListItem).selected = true;
+			case Keyboard.DOWN:
+				index++;
+				cast(getChildAt(index), ListItem).selected = true;
+		}
 	}
 	//}}}
 
@@ -163,7 +185,10 @@ class PopupMenu extends Component, implements IDataSource {
 	//{{{ onData
 	public function onData(?e:Event) {
 	if(dataSource==null) return;
-		if(Std.is(dataSource.data, Array)) {
+
+	haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+
+	if(Std.is(dataSource.data, Array)) {
 			var data = cast(dataSource.data, Array<Dynamic>);
 			for (i in 0...data.length) {
 				if(data[i]=="") {
@@ -235,8 +260,10 @@ class PopupMenu extends Component, implements IDataSource {
 			var makeMenu = null;
 			makeMenu = function(o:DisplayObjectContainer, x:Xml) : Int {
 				var j=0;
+
 				for(i in x.elements()) {
-					if(i.nodeName=="separator" || i.get("type")=="separator") {
+				var type =  i.get("type");
+					if(i.nodeName=="separator" || type=="separator") {
 						var s = new MenuSeperator(o, 0, 20+20*j+1);
 						s.init({
 							color: self.color,
@@ -251,6 +278,20 @@ class PopupMenu extends Component, implements IDataSource {
 							color: self.color,
 							label: i.get("label")
 						});
+						item.setAction("mouseDown", i.exists("action") ? i.get("action") : "");
+
+						if(type=="check") {
+							var chkbox = new CheckBox(item);
+							chkbox.init({
+								color: self.color,
+								width: 16,
+								height: 16,
+								x: self.box.width + 16,
+								y: 2,
+								right: 4,
+								selected: i.exists("toggled") && i.get("toggled")=="true"
+							});
+						}
 
 						var txt = i.get("label");
 						var r = ~/_(.)/;
@@ -266,6 +307,10 @@ class PopupMenu extends Component, implements IDataSource {
 							a.init({x: 2, y: 10, right:4, width:6, height: 6, color: DefaultStyle.BACKGROUND});
 							//var c = makeMenu(o, i);
 							//j+=c;
+							self.graphics.beginFill(Color.MAGENTA, 0);
+							self.graphics.drawRect(self.box.width,20,10,self.box.height);
+							self.graphics.endFill();
+
 							var p = new PopupMenu(self);
 							p.init({
 								color: item.color,
@@ -278,10 +323,10 @@ class PopupMenu extends Component, implements IDataSource {
 							item.addEventListener(MouseEvent.MOUSE_OVER, function(e) {
 							p.visible=true;
 							});
-							item.addEventListener(MouseEvent.MOUSE_OUT, function(e) {
-							if(!p.visible) return;
-							p.visible = false;
-							});
+							// item.addEventListener(MouseEvent.MOUSE_OUT, function(e) {
+							// if(!p.visible) return;
+							// p.visible = false;
+							// });
 						}
 						self.box.width = Math.max( self.box.width, item.label.tf.width + 8 );
 					}
@@ -309,7 +354,7 @@ class PopupMenu extends Component, implements IDataSource {
 
 		// for(i in this)
 			// (cast i).dirty=true;
-
+		haxegui.Profiler.end();
 	}
 	//}}}
 

@@ -33,6 +33,7 @@ import haxegui.managers.CursorManager;
 import haxegui.managers.FocusManager;
 import haxegui.managers.ScriptManager;
 import haxegui.managers.StyleManager;
+import haxegui.utils.Align;
 import haxegui.utils.Opts;
 import haxegui.utils.Size;
 //}}}
@@ -116,6 +117,7 @@ class RadioButton extends Button {
 				valign: "center",
 				disabled: this.disabled
 			});
+			label.align.vertical = VerticalAlign.CENTER;
 		}
 
 		// dropshadow filter
@@ -129,10 +131,11 @@ class RadioButton extends Button {
 	public override function onResize(e:ResizeEvent) {
 		super.onResize(e);
 
-		label.box = box.clone();
-		label.onResize(e);
-		// label.x = Math.min(box.width, box.height) + 4;
-		// label.y = .5*box.height;
+		// var _x = Math.min(box.width, box.height) + 4;
+
+		// label.box = new flash.geom.Rectangle(0,0,box.width -_x,box.height);
+		// label.onResize(e);
+		// label.x = _x;
 	}
 	//}}}
 

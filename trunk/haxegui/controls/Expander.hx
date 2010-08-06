@@ -114,24 +114,24 @@ class Expander extends AbstractButton {
 
 	static var styleXml = Xml.parse('
 	<haxegui:Style name="Expander">
-		<haxegui:controls:Expander>
-			<events>
-				<script type="text/hscript" action="mouseClick">
-				<![CDATA[
-				if(this.disabled) return;
-				event.stopImmediatePropagation();
-				this.__setExpanded(!this.__getExpanded());
-				this.dispatchEvent(new flash.events.Event(flash.events.Event.CHANGE));
-				]]>
-				</script>
-			</events>
-		</haxegui:controls:Expander>
+	<haxegui:controls:Expander>
+	<events>
+	<script type="text/hscript" action="mouseClick">
+	<![CDATA[
+	if(this.disabled) return;
+	event.stopImmediatePropagation();
+	this.__setExpanded(!this.__getExpanded());
+	this.dispatchEvent(new flash.events.Event(flash.events.Event.CHANGE));
+	]]>
+	</script>
+	</events>
+	</haxegui:controls:Expander>
 	</haxegui:Style>
 	').firstElement();
 
 	static var layoutXml = Xml.parse('
 	<haxegui:Layout name="Expander">
-		<haxegui:controls:Label text="{parent.name}"/>
+	<haxegui:controls:Label text="{parent.name}"/>
 	</haxegui:Layout>
 	').firstElement();
 
@@ -223,7 +223,10 @@ class Expander extends AbstractButton {
 		if(v == this.expanded) return v;
 
 		var self = this;
-		var r = new Size(this.stage.stageWidth,expanded?this.stage.stageHeight:0).toRect();
+
+		var r = this.transform.pixelBounds.clone();
+		if(this.stage!=null)
+		r = new Size(this.stage.stageWidth,expanded?this.stage.stageHeight:0).toRect();
 
 		if(scrollTween!=null)
 		scrollTween.stop();
@@ -248,7 +251,7 @@ class Expander extends AbstractButton {
 
 			case ExpanderStyle.ICON :
 			if(this.button!=null)
-				swapChildrenVisible(button.collapsedIcon, button.expandedIcon);
+			swapChildrenVisible(button.collapsedIcon, button.expandedIcon);
 
 			case ExpanderStyle.ARROW_AND_ICON:
 			if(this.arrowTween!=null)
@@ -256,7 +259,7 @@ class Expander extends AbstractButton {
 			this.arrowTween = new Tween(expanded?0:90, expanded?90:0, 150, button.firstChild(), "rotation", feffects.easing.Linear.easeNone);
 			this.arrowTween.start();
 			if(this.button!=null)
-				swapChildrenVisible(button.collapsedIcon, button.expandedIcon);
+			swapChildrenVisible(button.collapsedIcon, button.expandedIcon);
 
 		}
 
@@ -288,6 +291,25 @@ class Expander extends AbstractButton {
 		expanded = !expanded;
 	}
 	//}}}
+
+	public override function onRollOver(e:MouseEvent) {
+
+		if(button.arrow!=null) {
+			button.arrow.color = Color.WHITE;
+			button.arrow.redraw();
+		}
+
+		super.onRollOver(e);
+	}
+
+	public override function onRollOut(e:MouseEvent) {
+		if(button.arrow!=null) {
+			button.arrow.color = Color.darken(DefaultStyle.BACKGROUND, 16);
+			button.arrow.redraw();
+		}
+
+		super.onRollOver(e);
+	}
 
 	//{{{ __init__
 	static function __init__() {

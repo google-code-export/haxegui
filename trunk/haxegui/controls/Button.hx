@@ -121,8 +121,8 @@ class Button extends AbstractButton, implements IAdjustable {
 
 	//{{{ Functions
 	//{{{ init
-	override public function init(opts:Dynamic=null) {
-		box = new Size(90,30).toRect();
+	override public function init(?opts:Dynamic=null) {
+		box = new Size(Opts.optFloat(opts, "width", 90), Opts.optFloat(opts, "height", 30)).toRect();
 		color = DefaultStyle.BACKGROUND;
 		minSize = new Size(24,24);
 		mouseChildren = false;
@@ -134,7 +134,6 @@ class Button extends AbstractButton, implements IAdjustable {
 
 		super.init(opts);
 
-
 		// tooltip
 		description = Opts.optString(opts, "tooltip", name);
 
@@ -144,10 +143,13 @@ class Button extends AbstractButton, implements IAdjustable {
 			label = new Label(this);
 			label.init({
 			text : Opts.optString(opts, "label", name),
-			color: disabled ? Color.darken(DefaultStyle.BACKGROUND,30) : DefaultStyle.LABEL_TEXT
+			color: disabled ? Color.darken(DefaultStyle.BACKGROUND,30) : DefaultStyle.LABEL_TEXT,
+			// valign: "center",
+			// halign: "center"
 			});
 			label.center();
 			minSize.width = Std.int(Math.max( minSize.width, label.tf.width ));
+			addEventListener(haxegui.events.ResizeEvent.RESIZE,	function(e) e.target.label.resize(Size.fromRect(e.target.box)));
 		}
 
 
@@ -179,6 +181,7 @@ class Button extends AbstractButton, implements IAdjustable {
 				icon.alpha = 1;
 			}
 		}
+
 	}
 	//}}}
 
@@ -309,7 +312,7 @@ class PushButton extends Button {
 class Swatch extends Button {
 
 	public var sprite : Sprite;
-	public var _color: UInt;
+	public var _color : UInt;
 
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
