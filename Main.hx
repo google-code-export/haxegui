@@ -178,20 +178,20 @@ class Main extends Sprite, implements haxe.rtti.Infos {
 		// var colorpicker = new ColorPicker2(flash.Lib.current, 100,100);
 		// colorpicker.init();
 
-		var filedialog = new haxegui.FileDialog(flash.Lib.current, 100, 100);
-		 filedialog.init();
+		// var filedialog = new haxegui.FileDialog(flash.Lib.current, 100, 100);
+		 // filedialog.init();
 
 		// rte
-		var rte = new RichTextEditor(flash.Lib.current, 120,120);
-		rte.init();
+		// var rte = new RichTextEditor(flash.Lib.current, 120,120);
+		// rte.init();
 
 		// style
-		var appearance = new Appearance(flash.Lib.current, 180,180);
-		appearance.init();
+		// var appearance = new Appearance(flash.Lib.current, 180,180);
+		// appearance.init();
 
 		// debugger
-		//var introspect = new Introspector(flash.Lib.current, 150,150);
-		//introspect.init();
+		// var introspect = new Introspector(flash.Lib.current, 150,150);
+		// introspect.init();
 
 		// Analog Clock
 		//var clock = new haxegui.toys.AnalogClock(flash.Lib.current, 210,88);
@@ -327,14 +327,14 @@ class Main extends Sprite, implements haxe.rtti.Infos {
 
 			// try and grab the base url from flashvars first
 			var baseURL = Reflect.field(fvars, "baseURL");
-			if(baseURL==null) baseURL = Haxegui.loader.elementsNamed("domain").next().get("baseurl");
+			if(baseURL==null) baseURL = Haxegui.loader.node.domain.att.baseurl;
 			if(baseURL==null) baseURL = "";
 			Haxegui.baseURL = baseURL;
 
 			// try layout from flash vars
 			layout = Reflect.field(fvars, "layout");
 			if(layout==null)
-			layout = Haxegui.loader.elementsNamed("layout").next().get("url");
+			layout = Haxegui.loader.node.layout.att.url;
 
 		} catch (e:Dynamic) {
 			trace(here.methodName + " " + e);
