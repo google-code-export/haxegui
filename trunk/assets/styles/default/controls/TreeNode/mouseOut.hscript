@@ -1,0 +1,5 @@
+if(this.disabled) return;
+if(event.target == this.expander.button)
+this.expander.button.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 300, feffects.easing.Expo.easeOut ) );
+event.stopImmediatePropagation();
+this.redraw();
