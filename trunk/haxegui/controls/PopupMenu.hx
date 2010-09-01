@@ -186,7 +186,9 @@ class PopupMenu extends Component, implements IDataSource {
 	public function onData(?e:Event) {
 	if(dataSource==null) return;
 
+	#if PROFILE
 	haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+	#end
 
 	if(Std.is(dataSource.data, Array)) {
 			var data = cast(dataSource.data, Array<Dynamic>);
@@ -354,7 +356,9 @@ class PopupMenu extends Component, implements IDataSource {
 
 		// for(i in this)
 			// (cast i).dirty=true;
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 	}
 	//}}}
 

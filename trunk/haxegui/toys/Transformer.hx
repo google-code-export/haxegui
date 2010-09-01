@@ -94,7 +94,7 @@ class Transformer extends Component {
 	override public function init(?opts:Dynamic=null) {
 		color = cast Math.random() * 0xFFFFFF;
 		handles = [];
-		limits = new Rectangle();
+		limits = new Rectangle(Math.NEGATIVE_INFINITY,Math.NEGATIVE_INFINITY,Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY);
 		min = new Rectangle();
 		// limits = new Rectangle(0,0,stage.stageWidth, stage.stageHeight);
 

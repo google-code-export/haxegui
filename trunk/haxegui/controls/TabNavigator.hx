@@ -254,7 +254,9 @@ class TabNavigator extends Component, implements IAdjustable {
 		i.destroy();
 
 		var w = transform.pixelBounds.width;
-		if(box.width < w) {
+		//!TODO: arrows when tab's too small
+		//if(box.width < w) {
+		if(false) {
 			//left button
 			var button = new haxegui.controls.Button(this);
 			button.init({width: 24, height:box.height});
@@ -274,10 +276,8 @@ class TabNavigator extends Component, implements IAdjustable {
 			arrow.init({color : Color.darken(this.color, 20)});
 			arrow.place(12,12);
 		}
-		// else
-		// for(i in this)
-		// if(Std.is(i, haxegui.toys.Arrow)
-
+	//! TODO: 
+//		else for(i in this) if(Std.is(i, haxegui.toys.Arrow)) removeChild(i);
 
 
 		// dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));

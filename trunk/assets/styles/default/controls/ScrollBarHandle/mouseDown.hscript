@@ -9,14 +9,16 @@ if(this.disabled) return;
 	this.updatePositionTween();
 
 	this.startDrag(false, new flash.geom.Rectangle( 0, 20-2, 0, this.parent.box.height - this.box.height + 4 - 40));
+	CursorManager.getInstance().lock = true;
 
 	this.stage.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove, false, 0, true);
 
-	var self = this;
 	function stop(e) {
-		self.stopDrag();
-		self.stage.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);
-		self.stage.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, stop);
+		this.stopDrag();
+		this.stage.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);
+		this.stage.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, stop);
+		CursorManager.getInstance().lock = false;
+		this.updateColorTween( new feffects.Tween(-50, 0, 500, feffects.easing.Expo.easeOut) );
 	}
 
 	this.stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, stop, false, 0, true);

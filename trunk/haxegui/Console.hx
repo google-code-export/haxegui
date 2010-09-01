@@ -152,7 +152,7 @@ class Console extends Window, implements ILogger {
 	static var xml = Xml.parse(	'
 	<haxegui:Layout name="Console">
 	<haxegui:controls:MenuBar x="10" y="20" color="0x444444">
-		<haxegui:controls:Menu name="_Edit">
+		<haxegui:controls:Menu name="_Edit" color="0x444444">
 			<haxegui:DataSource>
 				<Xml><![CDATA[
 				<root>
@@ -166,7 +166,7 @@ class Console extends Window, implements ILogger {
 				</Xml>
 			</haxegui:DataSource>
 		</haxegui:controls:Menu>
-		<haxegui:controls:Menu name="_View">
+		<haxegui:controls:Menu name="_View" color="0x444444">
 			<haxegui:DataSource>
 				<Xml><![CDATA[
 				<root>

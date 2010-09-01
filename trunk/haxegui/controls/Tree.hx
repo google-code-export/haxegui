@@ -218,7 +218,9 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		color = DefaultStyle.INPUT_BACK;
 		box = new Size(140, 24).toRect();
@@ -241,7 +243,9 @@ class TreeNode extends Component, implements IAggregate, implements IData {
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 	}
 	//}}}
 
