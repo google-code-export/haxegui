@@ -93,7 +93,8 @@ class Haxegui {
 		trace("complete");
 
 
-		dirtyInterval = 300;
+		//dirtyInterval = 300;
+		dirtyInterval = Std.parseInt( Haxegui.loader.node.dirty.att.interval );
 	}
 	//}}}
 

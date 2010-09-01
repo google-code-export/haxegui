@@ -94,6 +94,7 @@ class Label extends Component, implements IText {
 			align.vertical = VerticalAlign.TOP;
 			case "bottom":
 			align.vertical = VerticalAlign.BOTTOM;
+			case "center":
 			default:
 			align.vertical = VerticalAlign.CENTER;
 		}

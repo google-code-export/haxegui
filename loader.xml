@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <loader>
+	<dirty interval="100"/>
 	<layout url="samples/Example1.xml"/>
 	<style name="default"/>
 <!--	<domain baseurl="http://haxegui.googlecode.com/svn/trunk/"/>-->

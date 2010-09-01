@@ -70,17 +70,17 @@
 					flash.media.SoundMixer.computeSpectrum(ba, true, 0);
 
 
-					var mat =
-							[ 1,0,0,0,0,
-							  0,1,0,0,0,
-							  0,0,1,0,0,
-							  0,0,0,.9,0 ];
+					// var mat =
+					// 		[ 1,0,0,0,0,
+					// 		  0,1,0,0,0,
+					// 		  0,0,1,0,0,
+					// 		  0,0,0,.9,0 ];
 
 					//bmpd.fillRect(new flash.geom.Rectangle(0,0,w,h), Color.WHITE);
 
 					var p = new flash.geom.Point();
-					bmpd.applyFilter(bmpd, parent.box, p, new flash.filters.ColorMatrixFilter(mat));
-					bmpd.applyFilter(bmpd, parent.box, p, new flash.filters.BlurFilter(0, 3, flash.filters.BitmapFilterQuality.LOW));
+					// bmpd.applyFilter(bmpd, parent.box, p, new flash.filters.ColorMatrixFilter(mat));
+					// bmpd.applyFilter(bmpd, parent.box, p, new flash.filters.BlurFilter(0, 3, flash.filters.BitmapFilterQuality.LOW));
 
 
 					var matrix = new flash.geom.Matrix();
@@ -90,8 +90,7 @@
 
 					var a = [];
 					for (i in 0...64) {
-						var v = 0;
-						v = ba.readFloat();
+						var v = ba.readFloat();
 						ba.position += 4*7;
 						a.push(v);
 
@@ -104,8 +103,6 @@
 						bmpd.setPixel32(x,j,c);
 						}
 						bmpd.setPixel32(x,y,0xFFFFFFFF);
-
-
 					}
 
 
@@ -114,7 +111,8 @@
 					for(i in 0...a.length) {
 					var x = w*i/128;
 					var y = h*(1-a[i]);
-					bmpd.setPixel32(x,y-v,0xFF000000);
+					// bmpd.setPixel32(x,y-v,0xFF000000);
+					bmpd.setPixel32(x,y,0xFF000000);
 					}}, 1000);
 
 
@@ -201,26 +199,29 @@
 
 				var t = new feffects.Tween(1, 0, BPM_TO_MS / (2*step1.adjustment.getValue()), feffects.easing.Expo.easeIn);
 				t.setTweenHandlers(
-				function(v) {
-				circle.filters = [new flash.filters.GlowFilter(Color.GREEN,v,8,8,3,flash.filters.BitmapFilterQuality.HIGH)];
-				},
-				function(v){
+				function(q)
+				circle.filters = [new flash.filters.GlowFilter(Color.GREEN,q,8,8,3,flash.filters.BitmapFilterQuality.HIGH)],
+				function(p) {
 				circle.redraw();
 				circle.filters = [new flash.filters.DropShadowFilter(1,45,DefaultStyle.DROPSHADOW,.75,2,2,.85,flash.filters.BitmapFilterQuality.HIGH, true, false, false)];
-				} );
+				});
 				t.start();
 
+
+				var matrix = new flash.geom.Matrix ();
+				matrix.createGradientBox (10,16,.5*Math.PI, 0, 0);
+
+
+				var step = step2.adjustment.getValue();
 				for(i in 0...samples.length) {
-				var chkbox = container.getChildByName("CheckBox_"+i+"_"+step2.adjustment.getValue());
+				var chkbox = container.getChildByName("CheckBox_"+i+"_"+step);
 				if(chkbox!=null) {
 					var sample = samples[i];
 					var selected = chkbox.__getSelected();
 					var s = container.getChildByName("button"+i).getChildByName("volume");
 
 					if(selected) {
-						// Profiler.begin("Sound.play");
 						var channel = sample.play();
-						// Profiler.end();
 						var vol = container.getChildByName("volume"+i);
 						var pan = container.getChildByName("pan"+i);
 
@@ -231,19 +232,16 @@
 
 						s.graphics.clear();
 						s.graphics.lineStyle(1, 0x4D4D4D, 0);
-						//s.graphics.beginFill(selected ? Color.tint(Color.GREEN, .5) : 0x666666);
-						//s.graphics.beginFill(Color.tint(Color.GREEN, .5), .5);
-						var matrix = new flash.geom.Matrix ();
-						matrix.createGradientBox (10,16,.5*Math.PI, 0, 0);
 						s.graphics.beginGradientFill( flash.display.GradientType.LINEAR, [Color.tint(Color.GREEN, .5), Color.darken(Color.tint(Color.GREEN, .75), 35)], [1, 1], [0, 0xFF], matrix );
 						s.graphics.drawRect(0,0,10,16);
 						s.graphics.endFill();
 
 
 						var t = new feffects.Tween(transform.volume, 1, sample.length, feffects.easing.Expo.easeNone);
-						t.setTweenHandlers(function(v) {
-						s.graphics.beginFill(0x666666, v);
-						s.graphics.drawRect(0,0,10,16*v);
+						t.setTweenHandlers(
+						function(k) {
+						s.graphics.beginFill(0x666666, k);
+						s.graphics.drawRect(0,0,10,16*k);
 						s.graphics.endFill();
 						});
 						t.start();
@@ -262,7 +260,7 @@
 						chkbox.graphics.lineStyle(2,Color.GREEN);
 						chkbox.graphics.moveTo(4,5);
 						chkbox.graphics.lineTo(10,5);
-						//Timer.delay( chkbox.redraw, sample.length );
+
 						Timer.delay( function() {
 						chkbox.graphics.lineStyle(2,Color.darken(this.color, 50));
 						chkbox.graphics.moveTo(4,5);
@@ -351,7 +349,7 @@
 			vol.color = 0x666666;
 			vol.init();
 			vol.description = "Volume";
-			vol.move(24, 50+30*i);
+			vol.place(24, 50+30*i);
 			vol.adjustment.setValue(155);
 			if(vol.slot!=null) vol.slot.visible=false;
 
@@ -361,7 +359,7 @@
 			pan.init();
 			pan.description = "Pan";
 			pan.color = this.color;
-			pan.move(52, 50+30*i);
+			pan.place(52, 50+30*i);
 			pan.adjustment.setValue(155);
 			if(pan.slot!=null) pan.slot.visible=false;
 
@@ -369,14 +367,14 @@
 			mute.init();
 			mute.color = this.color;
 			mute.box = new haxegui.utils.Size(12,12).toRect();
-			mute.move(74, 44+30*i);
+			mute.place(74, 44+30*i);
 			mute.firstChild().destroy();
 
 			var solo = new haxegui.controls.RadioButton(container);
 			solo.init();
 			solo.color = this.color;
 			solo.box = new haxegui.utils.Size(12,12).toRect();
-			solo.move(94, 44+30*i);
+			solo.place(94, 44+30*i);
 			solo.firstChild().destroy();
 
 
@@ -384,7 +382,7 @@
 			btn.init();
 			btn.color = rowColor;
 			btn.resize(new haxegui.utils.Size(100, 20));
-			btn.move(444, 40+30*i);
+			btn.place(444, 40+30*i);
 			btn.label = new haxegui.controls.Label(btn);
 			btn.label.init();
 			btn.label.setText(sampleFiles[i].split(".mp3").shift());
@@ -413,20 +411,19 @@
 				lbl.box = rect.box.clone();
 				lbl.setText("MP3 Sampler");
 				lbl.tf.setTextFormat(new flash.text.TextFormat("FFF_Manager_Bold", 24, Color.BLACK));
-				//lbl.center();
-				lbl.moveTo(50,0);
+				lbl.place(50,0);
 
 				var combo = new haxegui.controls.ComboBox(c);
 				combo.init();
 				combo.dropButton.color = w.color;
 				combo.dropButton.arrow.color = w.color;
 				combo.resize(new haxegui.utils.Size(240,20));
-				combo.move(20,60);
+				combo.place(20,60);
 				combo.dataSource = new haxegui.DataSource();
 				combo.dataSource.data = sampleFiles;
 				combo.input.setText(sampleFiles[i]);
 
-
+				// indicator
 				var s = new flash.display.Sprite();
 				s.graphics.beginFill(Color.tint(Color.BLACK, .5));
 				s.graphics.drawRect(0,0,w.box.width-30, 100);

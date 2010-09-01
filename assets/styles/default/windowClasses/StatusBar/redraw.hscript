@@ -10,4 +10,3 @@ this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, [1,1
 this.graphics.drawRect(0,0,this.parent.box.width-10, 20);
 this.graphics.endFill();
 
-this.y = this.parent.box.height - 20;

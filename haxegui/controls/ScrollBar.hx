@@ -500,7 +500,9 @@ class ScrollBar extends Component, implements IAdjustable {
 		if(scrollee==null) return scroll;
 		if(handle==null || handle.visible==false) return scroll;
 
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		if(v<0 || scroll<0 || handle.y < 20) {
 			adjustment.setValue(scroll=0);
@@ -508,7 +510,9 @@ class ScrollBar extends Component, implements IAdjustable {
 			handle.x = 0;
 			handle.y = 20;
 
+			#if PROFILE
 			haxegui.Profiler.end();
+			#end
 			return scroll;
 		}
 
@@ -518,7 +522,9 @@ class ScrollBar extends Component, implements IAdjustable {
 			handle.x = 0;
 			handle.y = box.height - handle.box.height - 20;
 
+			#if PROFILE
 			haxegui.Profiler.end();
+			#end
 			return scroll;
 		}
 
@@ -546,14 +552,18 @@ class ScrollBar extends Component, implements IAdjustable {
 				scroll=0;
 			}
 
+			#if PROFILE
 			haxegui.Profiler.end();
+			#end
 
 			return scroll;
 		}
 
 
 		if(scrollee.scrollRect==null || scrollee.scrollRect.isEmpty()) {
+			#if PROFILE
 			haxegui.Profiler.end();
+			#end
 
 			return scroll;
 		}
@@ -574,7 +584,9 @@ class ScrollBar extends Component, implements IAdjustable {
 		// dispatchEvent(new Event(Event.CHANGE));
 
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 
 		return scroll;
 	}

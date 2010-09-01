@@ -145,7 +145,7 @@ class Button extends AbstractButton, implements IAdjustable {
 			text : Opts.optString(opts, "label", name),
 			color: disabled ? Color.darken(DefaultStyle.BACKGROUND,30) : DefaultStyle.LABEL_TEXT,
 			// valign: "center",
-			// halign: "center"
+			//halign: "center"
 			});
 			label.center();
 			minSize.width = Std.int(Math.max( minSize.width, label.tf.width ));

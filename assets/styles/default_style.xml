@@ -15,7 +15,7 @@
 		<events>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
-				this.graphics.clear();
+				// this.graphics.clear();
 				this.graphics.beginFill(this.color);
 				//this.graphics.lineStyle(1, Color.darken(this.color, 20));
 				this.graphics.drawRect(0, 0, this.box.width, this.box.height);
@@ -219,8 +219,6 @@
 				this.graphics.beginGradientFill( flash.display.GradientType.LINEAR, colors, [1,1], [0,0xFF], matrix );
 				this.graphics.drawRect(0,0,this.parent.box.width-10, 20);
 				this.graphics.endFill();
-				
-				this.y = this.parent.box.height - 20;
 			]]>
 			</script>
 		</events>
@@ -476,20 +474,52 @@
 
 	<haxegui:controls:TreeLeaf>
 		<events>
+			<script type="text/hscript" action="mouseOut">
+			<![CDATA[
+				if(this.disabled) return;
+				// event.stopImmediatePropagation();
+				// if(event.target == this.expander || this.expander.contains(event.target))
+				// this.expander.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 300, feffects.easing.Expo.easeOut ) );
+				this.redraw();
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseUp">
+			<![CDATA[
+				if(this.disabled) return;
+				// event.target.updateColorTween( new feffects.Tween(-50, 0, 150, feffects.easing.Expo.easeOut) );
+				this.redraw();
+			]]>
+			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
-				/*
 				this.graphics.clear();
 				
-				var i = parent.getChildIndex(this) ;
-				var c = (i%2==0) ? Color.darken(this.color, 10) : this.color;
-				if(this.selected) c = DefaultStyle.FOCUS;
-				
-				this.graphics.beginFill (c);
-				this.graphics.drawRect (-this.x, 0, this.x+this.box.width, this.box.height);
+				this.graphics.beginFill (this.color, this.selected ? 1 : 0);
+				this.graphics.drawRect (12, 0, this.box.width, this.box.height);
 				this.graphics.endFill ();
 				
-				*/
+				// if(parent.getChildIndex(this)
+				// if(parent.numChildren<=3) return;
+				
+				// this.graphics.lineStyle(1, Color.BLACK, .5, false, flash.display.LineScaleMode.NONE);
+				// this.graphics.moveTo(12, 12);
+				// this.graphics.lineTo(12, 24);
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseOver">
+			<![CDATA[
+				if(this.disabled) return;
+				// event.stopImmediatePropagation();
+				// if(event.target == this.expander || this.expander.contains(event.target))
+				// this.expander.updateColorTween( new feffects.Tween(0, 50, 200, feffects.easing.Expo.easeOut ) );
+				this.redraw();
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseDown">
+			<![CDATA[
+				if(this.disabled) return;
+				// event.target.updateColorTween( new feffects.Tween(50, -50, 75, feffects.easing.Expo.easeOut) );
+				this.redraw();
 			]]>
 			</script>
 		</events>
@@ -571,8 +601,13 @@
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
 				this.graphics.clear();
-				this.graphics.lineStyle(1, Color.darken(this.parent.color, 20));
-				this.graphics.beginFill(Color.darken(this.parent.color, 10));
+				
+				var colors = [this.color, Color.darken(this.color, 30)];
+				var matrix = new flash.geom.Matrix ();
+				matrix.createGradientBox (8, this.parent.box.height - 16, .5*Math.PI, 0, 0);
+				
+				this.graphics.lineStyle(1, Color.darken(this.parent.color, 20), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND);
+				this.graphics.beginGradientFill (flash.display.GradientType.LINEAR, colors, [1, 1], [0, 0xFF], matrix);
 				this.graphics.drawRoundRect(0, 0, 8, this.parent.box.height - 16, 4, 4);
 				this.graphics.endFill();
 			]]>
@@ -951,7 +986,7 @@
 				var matrix = new flash.geom.Matrix();
 				matrix.createGradientBox(this.box.width, this.box.height, Math.PI, 0, 0);
 				
-				this.graphics.lineStyle(1, Color.darken(this.color, 16), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND );
+				this.graphics.lineStyle(1, Color.darken(this.color, 24), 1, true, flash.display.LineScaleMode.NONE, flash.display.CapsStyle.ROUND, flash.display.JointStyle.ROUND );
 				this.graphics.beginGradientFill(flash.display.GradientType.LINEAR, colors, [1, 1], [0, 0xFF], matrix );
 				this.graphics.drawRect(0, 0, this.box.width, this.box.height );
 				this.graphics.endFill();
@@ -976,14 +1011,16 @@
 					this.updatePositionTween();
 				
 					this.startDrag(false, new flash.geom.Rectangle( 0, 20-2, 0, this.parent.box.height - this.box.height + 4 - 40));
+					CursorManager.getInstance().lock = true;
 				
 					this.stage.addEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove, false, 0, true);
 				
-					var self = this;
 					function stop(e) {
-						self.stopDrag();
-						self.stage.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);
-						self.stage.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, stop);
+						this.stopDrag();
+						this.stage.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, parent.onMouseMove);
+						this.stage.removeEventListener(flash.events.MouseEvent.MOUSE_MOVE, stop);
+						CursorManager.getInstance().lock = false;
+						this.updateColorTween( new feffects.Tween(-50, 0, 500, feffects.easing.Expo.easeOut) );
 					}
 				
 					this.stage.addEventListener(flash.events.MouseEvent.MOUSE_UP, stop, false, 0, true);
@@ -1503,20 +1540,71 @@
 
 	<haxegui:controls:TreeNode>
 		<events>
+			<script type="text/hscript" action="mouseOut">
+			<![CDATA[
+				if(this.disabled) return;
+				if(event.target == this.expander.button)
+				this.expander.button.updateColorTween( new feffects.Tween(event.buttonDown ? -50 : 50, 0, 300, feffects.easing.Expo.easeOut ) );
+				event.stopImmediatePropagation();
+				this.redraw();
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseUp">
+			<![CDATA[
+				if(this.disabled) return;
+				event.stopImmediatePropagation();
+				if(event.target == this.expander.button)
+				this.expander.button.updateColorTween( new feffects.Tween(-50, 0, 150, feffects.easing.Expo.easeOut) );
+				this.redraw();
+			]]>
+			</script>
 			<script type="text/hscript" action="redraw">
 			<![CDATA[
-				/*
 				this.graphics.clear();
 				
-				var i = parent.getChildIndex(this) ;
-				var c = (i%2==0) ? Color.darken(this.color, 10) : this.color;
-				if(this.selected) c = DefaultStyle.FOCUS;
 				
-				this.graphics.beginFill (c);
-				this.graphics.drawRect (-this.x, 0, this.x+this.box.width, this.box.height);
+				this.graphics.beginFill (this.color, this.selected ? 1 : 0);
+				this.graphics.drawRect (0, 0, this.box.width, this.box.height);
 				this.graphics.endFill ();
 				
-				*/
+				if(this.expander.expanded) {
+					var y = this.expander.numChildren - 2;
+					// var y = this.transform.pixelBounds.height;
+				
+					this.graphics.lineStyle(1, Color.BLACK, .5, false, flash.display.LineScaleMode.NONE);
+					this.graphics.moveTo(12, 12);
+					this.graphics.lineTo(12, 12 + y*24);
+					// this.graphics.lineTo(12, y);
+				
+					if(this.expander.numChildren>2)
+					for(i in 1...(y+1)) {
+					// for(i in 0...Math.round(y/24)) {
+						// if(i>this.numChildren) return;
+						this.graphics.moveTo(12, 12+24*i);
+						this.graphics.lineTo(24, 12+24*i);
+						this.graphics.beginFill(this.color);
+						this.graphics.drawCircle(12.5,12.5+24*i, 2);
+						this.graphics.endFill();
+					}
+				}
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseOver">
+			<![CDATA[
+				if(this.disabled) return;
+				if(event.target == this.expander.button)
+				this.expander.button.updateColorTween( new feffects.Tween(0, 50, 200, feffects.easing.Expo.easeOut ) );
+				event.stopImmediatePropagation();
+				this.redraw();
+			]]>
+			</script>
+			<script type="text/hscript" action="mouseDown">
+			<![CDATA[
+				if(this.disabled) return;
+				event.stopImmediatePropagation();
+				if(event.target == this.expander.button)
+				this.expander.button.updateColorTween( new feffects.Tween(50, -50, 75, feffects.easing.Expo.easeOut) );
+				this.redraw();
 			]]>
 			</script>
 		</events>

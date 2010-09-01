@@ -164,7 +164,7 @@ class Menu extends AbstractButton, implements IDataSource, implements IAggregate
 
 		var self = this;
 		var onMenuHide = function(e) {
-			self.color = (cast self.parent).color;
+			self.color = self.parent.asComponent().color;
 			self.redraw();
 		}
 		menu.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);
@@ -220,7 +220,6 @@ class MenuBar extends Component, implements IRubberBand {
 		// assuming parent is a window
 		box = new Size(parent.asComponent().box.width - 10, 24).toRect();
 		color = parent.asComponent().color;
-		// color = (cast parent).color;
 		items = [];
 		_menu = 0;
 
@@ -345,7 +344,7 @@ class MenuBar extends Component, implements IRubberBand {
 
 		var self = this;
 		var onMenuHide = function(e) {
-			self.color = (cast self.parent).color;
+			self.color = self.parent.asComponent().color;
 			self.redraw();
 		}
 		popup.addEventListener(MenuEvent.MENU_HIDE, onMenuHide, false, 0, true);

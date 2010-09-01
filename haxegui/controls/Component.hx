@@ -301,7 +301,9 @@ implements haxe.rtti.Infos
 	* @param opts Initial options object
 	*/
 	public function init(opts:Dynamic=null) {
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		if(opts == null || !Reflect.isObject(opts)) opts = {};
 
@@ -341,7 +343,9 @@ implements haxe.rtti.Infos
 		// request a redraw
 		dirty = true;
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 	}
 	//}}}
 
@@ -556,12 +560,16 @@ implements haxe.rtti.Infos
 	* @param y offset relative to parent
 	**/
 	public inline function place(x : Float, y : Float) : Void	{
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		this.x = box.x = x;
 		this.y = box.y = y;
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 	}
 	//}}}
 
@@ -573,7 +581,9 @@ implements haxe.rtti.Infos
 	* @param y offset relative to parent
 	**/
 	public inline function moveTo(x : Float, y : Float) : Void	{
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		var event = new MoveEvent(MoveEvent.MOVE, this.x, this.y);
 
@@ -591,7 +601,9 @@ implements haxe.rtti.Infos
 		if(!isTweening)
 		dispatchEvent(event);
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 	}
 	//}}}
 
@@ -640,7 +652,10 @@ implements haxe.rtti.Infos
 		if(parent==flash.Lib.current)
 		moveTo(Std.int(stage.stageWidth-box.width)>>1, Std.int(stage.stageHeight-box.height)>>1);
 		else
-		moveTo(Std.int((cast parent).box.width-box.width)>>1, Std.int((cast parent).box.height-box.height)>>1);
+		{
+			var pbox = (cast parent).box;
+			moveTo(Std.int(pbox.width-box.width)>>1, Std.int(pbox.height-box.height)>>1);
+		}
 	}
 	//}}}
 
@@ -651,7 +666,9 @@ implements haxe.rtti.Infos
 	* @return Rectangle new size
 	**/
 	public function resize(b:Size) : Rectangle	{
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		var event = new ResizeEvent(ResizeEvent.RESIZE);
 
@@ -667,7 +684,9 @@ implements haxe.rtti.Infos
 
 		dispatchEvent(event);
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 
 		return box;
 	}
@@ -797,7 +816,9 @@ implements haxe.rtti.Infos
 	//{{{ nextSibling
 	/** @return The next sibling in the display list **/
 	public function nextSibling() : DisplayObject {
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		// var p = Component.asComponent(parent);
 		var i = parent.getChildIndex(this);
@@ -808,7 +829,9 @@ implements haxe.rtti.Infos
 
 		// return null;
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 
 		return parent.getChildAt(i+1);
 	}
@@ -946,7 +969,9 @@ implements haxe.rtti.Infos
 	* @todo rgb color transformation
 	**/
 	public function updateColorTween(?t : Tween = null) : Void {
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		var me = this;
 		var colorTrans = new ColorTransform();
@@ -970,7 +995,9 @@ implements haxe.rtti.Infos
 		);
 		colorTween.start();
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 	}
 	//}}}
 
@@ -985,7 +1012,9 @@ implements haxe.rtti.Infos
 	* @todo rgb color transformation
 	**/
 	public function updateSaturationTween(?t : Tween = null) : Void {
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 
 		var me = this;
@@ -1016,7 +1045,9 @@ implements haxe.rtti.Infos
 		);
 		saturationTween.start();
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 	}
 	//}}}
 
@@ -1348,11 +1379,15 @@ implements haxe.rtti.Infos
 	* @param opts to pass the redrawing script
 	**/
 	public function redraw(opts:Dynamic=null) {
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		ScriptManager.exec(this,"redraw", opts);
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 	}
 	//}}}
 	//}}}

@@ -253,7 +253,9 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 	//{{{ init
 	override public function init(opts:Dynamic=null) {
 		if(!Std.is(parent, UiList) && !Std.is(parent, PopupMenu)) throw parent+" not a UiList";
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		box = new Size(140, 24).toRect();
 		color = DefaultStyle.INPUT_BACK;
@@ -285,7 +287,9 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 
 		parent.addEventListener(ResizeEvent.RESIZE, onParentResize, false, 0, true);
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 	}
 	//}}}
 
@@ -320,7 +324,9 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 	* @todo when inside a grid, being a DataGrid no need to redraw all listitems...
 	*/
 	public function onParentResize(e:ResizeEvent) {
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		if(Std.is(parent, UiList))
 		box.width = Std.int((cast parent).box.width);
@@ -367,7 +373,9 @@ class ListItem extends AbstractButton, implements IData, implements IRubberBand,
 		haxe.Timer.delay(function() self.dirty=true, 20);
 
 		// dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 	}
 	//}}}
 
@@ -708,7 +716,9 @@ class UiList extends Component, implements IDataSource, implements ArrayAccess<L
 	*/
 	public function onData(?e:DataEvent) {
 		// if(dataSource==null) return;
+		#if PROFILE
 		haxegui.Profiler.begin(here.className.split(".").pop()+"."+here.methodName);
+		#end
 
 		if(Std.is(dataSource.data, Array)) {
 			var data = cast(dataSource.data, Array<Dynamic>);
@@ -751,7 +761,9 @@ class UiList extends Component, implements IDataSource, implements ArrayAccess<L
 
 		dispatchEvent(new ResizeEvent(ResizeEvent.RESIZE));
 
+		#if PROFILE
 		haxegui.Profiler.end();
+		#end
 	}
 	//}}}
 
